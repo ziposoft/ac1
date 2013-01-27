@@ -196,7 +196,7 @@ function MouseWheelHandler(e) {
     // cross-browser wheel delta
     var e = window.event || e; // old IE support
     var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-    var scale = 1 - .30 * delta;
+    var scale = 1 - .10 * delta;
     Zoom(e, scale);
 }
 

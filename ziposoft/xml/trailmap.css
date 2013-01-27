@@ -1,17 +1,18 @@
 text,tspan
 {
-    font-size: 35px;
-    font-style:  normal;
-    font-weight:  normal;
+    font-size: 30px;
+   
+    font-weight:   700;
     line-height: 125%;
     letter-spacing: 0px;
     word-spacing: 0px;
     fill: dimgray;
     fill-opacity: 1;
     stroke:  none;
-	font-family:  Sans;
+	font-family:   Arial Black;
 	text-rendering: optimizeLegibility;
-	font-variant:small-caps;
+	font-variant: normal;
+	-webkit-font-smoothing: antialiased;
 
     user-select: none;
 }

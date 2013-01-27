@@ -13,6 +13,11 @@
 	          background-color: #888;
             cursor: pointer;
 	        color: White;
+               -webkit-touch-callout: none;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;   
         }
         td.zs_menutop
         {
@@ -41,6 +46,12 @@
 	          position: absolute;
 	          display: none; /* width:100%; */
 	          z-index:1;
+            
+      -webkit-touch-callout: none;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;         
         }
         .zs_menu_item_sub,.zs_menu_item_sub_hi
         {
@@ -75,7 +86,7 @@
 	        display: inline-block;
 	        overflow: visible;
 	        white-space: nowrap;
-        }
+     }
         .menu_bar_item
         {
         }
@@ -93,8 +104,13 @@
     </style>
   </xsl:template>
 
-  
-   <xsl:template match="zs:menu_bar_item">
+     <xsl:template match="zs:menu_bar_text">
+      <td class="zs_menutop" >
+       <xsl:copy-of select="@*"/>
+      <xsl:apply-templates/>
+      </td>
+  </xsl:template> 
+   <xsl:template match="zs:menu_bar_button">
       <td class="zs_menutop" >
         <a class="menu_bar_item" >
        <xsl:copy-of select="@*"/>

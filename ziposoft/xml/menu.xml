@@ -1,23 +1,36 @@
 <?xml version='1.0' encoding='utf-8'?>
 
-	<menu_bar  xmlns="http://ziposoft.com/ns">
-	<menu title="View">
-      <menu_item onclick="document.getElementById('debug_table').style.display='none'">hide debug </menu_item>
-      <menu_item onclick="document.getElementById('debug_table').style.display='block'">show debug </menu_item>
-		<menu_sub title="submenu">
+<menu_bar  xmlns="http://ziposoft.com/ns">
+  <menu_bar_text>Umstead State Park Map</menu_bar_text>
+
+  <menu title="View">
+    <menu_item onclick="document.getElementById('debug_table').style.display='none'">hide debug </menu_item>
+    <menu_item onclick="document.getElementById('debug_table').style.display='block'">show debug </menu_item>
+    <menu_sub title="submenu">
       <menu_item >subitem #1 </menu_item>
       <menu_item >subitem #2 </menu_item>
-	</menu_sub>	
-	</menu>
-	  	<menu title="Edit">
-      <menu_item >menu 1 #1 </menu_item>
-      <menu_item >menu 2 #1 </menu_item>
-		<menu_sub title="submenu">
+    </menu_sub>
+  </menu>
+  <menu title="Edit">
+    <menu_item >menu 1 #1 </menu_item>
+    <menu_item >menu 2 #1 </menu_item>
+    <menu_sub title="submenu">
       <menu_item >subitem #1 </menu_item>
       <menu_item >subitem #2 </menu_item>
-	</menu_sub>	
-	</menu>
-      <menu_bar_item onclick="viewBox_reset()">Reset Zoom </menu_bar_item>
+    </menu_sub>
+  </menu>
+   <menu title="Options">
+    <menu_item >menu 1 #1 </menu_item>
+    <menu_item >menu 2 #1 </menu_item>
+    <menu_sub title="submenu">
+      <menu_item >subitem #1 </menu_item>
+      <menu_item >subitem #2 </menu_item>
+    </menu_sub>
+  </menu> 
+  <menu_bar_button onclick="viewBox_reset()">Reset Zoom </menu_bar_button>
+  <menu_bar_text >Total Distance:</menu_bar_text>
+  <menu_bar_text id="total_distance">0</menu_bar_text>
+
 </menu_bar>
-	
+
 

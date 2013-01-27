@@ -32,28 +32,11 @@ omit-xml-declaration="yes"
 
       <body onload="init()" >
         <!-- status/menu bar-->
-         <xsl:apply-templates select="document('menu.xml')"/>
         
-        <div id="header">
-          <table id="menu_table"  rules="all" style="border: solid 1px black">
-            <tr>
-              <td>Interactive Umstead State Park Map</td>
-              <td>
-                Total:
-              </td>
-              <td  id="total_distance">
-                0
-              </td>
-              <td>
-                Debug Bar:
-                <input type="checkbox" onclick="input_debug_click()"/>
-              </td>
-              <td>
-                <button type="button" onclick="viewBox_reset()">Reset Zoom</button>
-              </td>
-            </tr>
-          </table>
-          <table id="debug_table" visibility="hidden" rules="all" style="border: solid 1px black">
+        <div id="header" style="background-color:#888">
+         <xsl:apply-templates select="document('menu.xml')"/>
+       
+          <table id="debug_table" visibility="hidden" rules="all" style="display: none;border: solid 1px black">
             <tr>
               <td>window=</td>
               <td id="stat_window">--</td>
