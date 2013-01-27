@@ -4,7 +4,7 @@
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
  xmlns:zs="http://ziposoft.com/ns"                 
 >  	
-  <xsl:include  href="test_ns_inc.xsl"/>
+  <xsl:include  href="xsl_include_ns_inc.xsl"/>
 
 	<xsl:template match="zs:testpage">
 		<html >
