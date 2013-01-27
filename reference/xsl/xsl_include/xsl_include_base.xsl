@@ -2,7 +2,7 @@
 <xsl:stylesheet  version="1.1"
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >  	
-  <xsl:include      href="test.xsl"/>
+  <xsl:include      href="xsl_include_other.xsl"/>
 
 	<xsl:template match="testpage">
 		<html >
