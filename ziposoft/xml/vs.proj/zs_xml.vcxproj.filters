@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Xml Include="..\test\zs_test_menu.xsl" />
+    <Xml Include="..\test\zs_test_menu.xml" />
+    <Xml Include="..\zs_menu.xsl" />
+    <Xml Include="..\..\..\..\aczs\zs\zipobase.com\zb\com\zb.xsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\zs_menu.js" />
+    <None Include="..\..\..\..\aczs\zs\zipobase.com\zb\com\zb.ff3.css" />
+    <None Include="..\..\..\..\aczs\zs\zipobase.com\zb\com\zb.ff3.js" />
+    <None Include="..\..\..\..\aczs\zs\zipobase.com\zb\com\zb.js" />
+    <None Include="..\..\..\..\aczs\zs\zipobase.com\zb\com\zb.css" />
+  </ItemGroup>
+</Project>

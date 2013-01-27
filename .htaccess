@@ -1,0 +1,10 @@
+AddType text/xml .xml
+AddType text/xml .xsl
+AddType text/xml .svg
+
+Options Includes Indexes MultiViews
+AddHandler server-parsed .html .xml .svg
+
+
+
+
