@@ -1,0 +1,97 @@
+text,tspan
+{
+    font-size: 35px;
+    font-style:  normal;
+    font-weight:  normal;
+    line-height: 125%;
+    letter-spacing: 0px;
+    word-spacing: 0px;
+    fill: dimgray;
+    fill-opacity: 1;
+    stroke:  none;
+	font-family:  Sans;
+	text-rendering: optimizeLegibility;
+	font-variant:small-caps;
+
+    user-select: none;
+}
+
+h1
+{
+	color: green;
+	border:outset;
+}
+
+path
+{
+    opacity: 1;stroke: green;
+    fill: none;
+    stroke-width: 8;
+    stroke-miterlimit: 4;
+    stroke-dasharray: none;stroke-linejoin:round;stroke-linecap:butt;
+}
+path.path_mouse   {  opacity: .00;stroke-width: 80;      }
+path.sel0   {   stroke: dimgray;      }
+path.sel1  { stroke: blue;  }
+path.sel2 { stroke: purple;  }
+
+
+path.highlight    {   stroke: red;      }
+.trail_st {stroke-dasharray:15px,5px; }
+
+
+
+.hide
+{
+	visibility: hidden;
+	fill: none;
+	stroke: none;
+}
+svg {
+  
+	border:inset;
+	
+}
+body {
+    margin: 0;
+}
+
+.arrow1 path, .arrow2 path{ stroke-width: 8; stroke:green; fill: green; opacity:.6 ;visibility:hidden; }
+.arrow1 , .arrow2   {  
+ visibility:hidden; }
+.dir1 .arrow1   {visibility:visible; }
+.dir2 .arrow2   { visibility:visible; }
+.highlight text { fill:red; }
+
+
+table.info_table_show
+{
+display:block;
+z-index:3;
+top:200px;
+left:400px;
+position: fixed;
+opacity: .8;
+color:black;
+ background-color:#eeeeee; 
+border-radius:15px;
+border: 1px solid gray;
+   
+}
+table.info_table_hide
+{
+display:none;
+position: fixed;
+z-index:3;
+}
+
+
+.arrow
+{
+    stroke: red;
+    opacity: 1;
+    fill: none;
+    stroke-width: 8;
+    stroke-miterlimit: 4;
+    stroke-dasharray: none;
+}  

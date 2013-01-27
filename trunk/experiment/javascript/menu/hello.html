@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello World Example</title>
+    <style>
+        .zs_menu_item_low
+        {
+            color: red;
+        }
+
+        .zs_menu_item_hi
+        {
+            color: blue;
+        }
+    </style>
+    <script type="text/javascript">
+        function init() {
+        }
+    </script>
+</head>
+<body onload="init()">
+      <p class="zs_menu_item_low" 
+           onmouseover="this.className='zs_menu_item_hi'" 
+          onmouseout="this.className='zs_menu_item_low'">fred!!!</p>
+    
+          <p class="zs_menu_item zs_menu_item_low" 
+           onmouseover="this.className=this.className.replace('zs_menu_item_low', 'zs_menu_item_hi')" 
+          onmouseout="this.className=this.className.replace('zs_menu_item_hi', 'zs_menu_item_low')">LARRY!!!</p>
+      <p class="zs_menu_item zs_menu_item_low" 
+           onmouseover="this.class=this.class.replace('zs_menu_item_low', 'zs_menu_item_hi')" 
+          onmouseout="this.class.replace('zs_menu_item_hi', 'zs_menu_item_low')">LARRY!!!</p>
+</body>
+
+</html>
