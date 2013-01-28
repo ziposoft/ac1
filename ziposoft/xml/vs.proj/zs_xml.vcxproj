@@ -63,8 +63,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Xml Include="..\..\..\..\aczs\zs\zipobase.com\zb\com\zb.xsl" />
+    <Xml Include="..\menu.xml" />
     <Xml Include="..\test\zs_test_menu.xml" />
     <Xml Include="..\test\zs_test_menu.xsl" />
+    <Xml Include="..\Umstead.xml" />
     <Xml Include="..\zs_menu.xsl" />
   </ItemGroup>
   <ItemGroup>

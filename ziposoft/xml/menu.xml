@@ -4,27 +4,27 @@
   <menu_bar_text>Umstead State Park Map</menu_bar_text>
 
   <menu title="View">
-    <menu_item onclick="document.getElementById('debug_table').style.display='none'">hide debug </menu_item>
-    <menu_item onclick="document.getElementById('debug_table').style.display='block'">show debug </menu_item>
+    <menu_link onclick="document.getElementById('debug_table').style.display='none'">hide debug </menu_link>
+    <menu_link onclick="document.getElementById('debug_table').style.display='block'">show debug </menu_link>
     <menu_sub title="submenu">
-      <menu_item >subitem #1 </menu_item>
-      <menu_item >subitem #2 </menu_item>
+      <menu_link >subitem #1 </menu_link>
+      <menu_link >subitem #2 </menu_link>
     </menu_sub>
   </menu>
   <menu title="Edit">
-    <menu_item >menu 1 #1 </menu_item>
-    <menu_item >menu 2 #1 </menu_item>
+    <menu_link >menu 1 #1 </menu_link>
+    <menu_link >menu 2 #1 </menu_link>
     <menu_sub title="submenu">
-      <menu_item >subitem #1 </menu_item>
-      <menu_item >subitem #2 </menu_item>
+      <menu_link >subitem #1 </menu_link>
+      <menu_link >subitem #2 </menu_link>
     </menu_sub>
   </menu>
    <menu title="Options">
-    <menu_item >menu 1 #1 </menu_item>
-    <menu_item >menu 2 #1 </menu_item>
+    <menu_link >menu 1 #1 </menu_link>
+    <menu_link >menu 2 #1 </menu_link>
     <menu_sub title="submenu">
-      <menu_item >subitem #1 </menu_item>
-      <menu_item >subitem #2 </menu_item>
+      <menu_link >subitem #1 </menu_link>
+      <menu_link >subitem #2 </menu_link>
     </menu_sub>
   </menu> 
   <menu_bar_button onclick="viewBox_reset()">Reset Zoom </menu_bar_button>
