@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-stylesheet type="text/xsl" href="zs_menu_test.xsl"?>
+
+<testpage  xmlns="http://ziposoft.com/ns" xmlns:html="http://www.w3.org/1999/xhtml" >
+  
+  <module  name="menu"/>
+  <script src="zs_menu_test.js"/>
+  
+	<menu_bar  >
+	<menu title="File">
+      <menu_bool id="booltest1">bool1 </menu_bool>
+      <menu_bool id="booltest2">bool2 </menu_bool>
+      <menu_bool id="booltest3">bool3 </menu_bool>
+		<menu_sub title="submenu">
+      <menu_link >subitem #2 </menu_link>
+	</menu_sub>	
+	</menu>
+	  	<menu title="Edit">
+      <menu_link >menu 1 #1 </menu_link>
+      <menu_link >menu 2 #1 </menu_link>
+		<menu_sub title="submenu">
+      <menu_link >subitem #1 </menu_link>
+      <menu_link >subitem #2 </menu_link>
+	</menu_sub>	
+	</menu>
+</menu_bar>
+  <html:p id="elm1">hello?</html:p>
+	
+</testpage>

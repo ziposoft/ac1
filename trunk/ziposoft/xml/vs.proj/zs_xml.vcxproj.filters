@@ -5,6 +5,8 @@
     <Xml Include="..\test\zs_test_menu.xml" />
     <Xml Include="..\zs_menu.xsl" />
     <Xml Include="..\..\..\..\aczs\zs\zipobase.com\zb\com\zb.xsl" />
+    <Xml Include="..\Umstead.xml" />
+    <Xml Include="..\menu.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\zs_menu.js" />
