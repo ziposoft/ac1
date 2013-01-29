@@ -3,6 +3,7 @@
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:zs="http://ziposoft.com/ns"
   xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:html="http://www.w3.org/1999/xhtml"
 >
 
 
@@ -15,7 +16,7 @@ omit-xml-declaration="yes"
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
         <title>test</title>
-        <xsl:apply-templates select="zs:modules" mode="module"/>
+        <xsl:apply-templates select="/" mode="module"/>
       <xsl:apply-templates select="zs:script" mode="fixed"/>
       </head>
       <body onload="init()" >
@@ -24,15 +25,23 @@ omit-xml-declaration="yes"
     </html>
   </xsl:template>
  
-  <xsl:template match="zs:modules" mode="module"/>
+  <xsl:template match="/" mode="module">
+		what the fuck
+		</xsl:template>
   <xsl:template match="zs:script"/>
   <xsl:template match="zs:script" mode="fixed">
     <script  type="text/javascript"><xsl:copy-of select="@src"/><xsl:value-of select="."/></script>
   </xsl:template>
-  
+  <!--
     <xsl:template match="@*|node()">
       <xsl:copy>
         <xsl:apply-templates select="@*|node()"/>
       </xsl:copy>
   </xsl:template>
+	
+
+  <xsl:template match="html:*">
+		<xsl:copy-of select="."/>
+		</xsl:template>	-->
+	
 </xsl:stylesheet>
