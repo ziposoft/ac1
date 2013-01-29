@@ -15,7 +15,7 @@ omit-xml-declaration="yes"
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
         <title>test</title>
-        <xsl:apply-templates select="zs:module" mode="head"/>
+        <xsl:apply-templates select="zs:modules" mode="module"/>
       <xsl:apply-templates select="zs:script" mode="fixed"/>
       </head>
       <body onload="init()" >
@@ -23,6 +23,8 @@ omit-xml-declaration="yes"
       </body>
     </html>
   </xsl:template>
+ 
+  <xsl:template match="zs:modules" mode="module"/>
   <xsl:template match="zs:script"/>
   <xsl:template match="zs:script" mode="fixed">
     <script  type="text/javascript"><xsl:copy-of select="@src"/><xsl:value-of select="."/></script>

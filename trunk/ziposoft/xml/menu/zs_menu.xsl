@@ -1,15 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 
-<xsl:stylesheet  version="1.0"
+<xsl:stylesheet  version="1.1"
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:zs="http://ziposoft.com/ns"
 >
+
+
+  
   <xsl:param name="rootdir">.</xsl:param>
   <xsl:template match="zs:module[@name='menu']"   mode="head">
     <script type="text/javascript" src="{$rootdir}/menu/zs_menu.js"/>
     <style>@import url(<xsl:value-of select="$rootdir"/>/menu/zs_menu.css);</style>
   </xsl:template>
 
+  
+    <xsl:template match="zs:modules"   mode="module">
+    <script type="text/javascript" src="{$rootdir}/menu/zs_menu.js"/>
+    <style>@import url(<xsl:value-of select="$rootdir"/>/menu/zs_menu.css);</style>
+    <xsl:apply-imports /> 
+  </xsl:template>
   <xsl:template match="zs:menu_bar_text">
     <td class="zs_menutop" >
       <xsl:copy-of select="@*"/>

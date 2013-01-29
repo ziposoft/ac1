@@ -8,9 +8,9 @@
                  
 >
   
- <xsl:include href="zs_menu.xsl"/>
+ <xsl:import href="../menu/zs_menu.xsl"/>
   
-
+<xsl:param name="rootdir">..</xsl:param> 
   <xsl:output
   method="html"
 omit-xml-declaration="yes"
