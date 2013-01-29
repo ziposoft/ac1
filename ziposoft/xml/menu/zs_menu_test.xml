@@ -2,8 +2,8 @@
 <?xml-stylesheet type="text/xsl" href="zs_menu_test.xsl"?>
 
 <testpage  xmlns="http://ziposoft.com/ns" xmlns:html="http://www.w3.org/1999/xhtml" >
-  
-  <module  name="menu"/>
+  <modules/>
+
   <script src="zs_menu_test.js"/>
   
 	<menu_bar  >
