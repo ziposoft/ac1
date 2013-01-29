@@ -1,12 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?xml-stylesheet type="text/xsl" href="zs_menu_test.xsl"?>
-
-<testpage  xmlns="http://ziposoft.com/ns" xmlns:html="http://www.w3.org/1999/xhtml" >
-  <modules/>
-
-  <script src="zs_menu_test.js"/>
   
-	<menu_bar  >
+	<menu_bar xmlns:zs="http://ziposoft.com/ns" >
 	<menu title="File">
       <menu_bool id="booltest1">bool1 </menu_bool>
       <menu_bool id="booltest2">bool2 </menu_bool>
@@ -24,6 +18,3 @@
 	</menu_sub>	
 	</menu>
 </menu_bar>
-  <html:p id="elm1">hello?</html:p>
-	
-</testpage>

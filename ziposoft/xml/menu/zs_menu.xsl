@@ -14,10 +14,10 @@
   </xsl:template>
 
   
-    <xsl:template match="zs:modules"   mode="module">
+    <xsl:template match="/"   mode="module">
     <script type="text/javascript" src="{$rootdir}/menu/zs_menu.js"/>
     <style>@import url(<xsl:value-of select="$rootdir"/>/menu/zs_menu.css);</style>
-    <xsl:apply-imports /> 
+   
   </xsl:template>
   <xsl:template match="zs:menu_bar_text">
     <td class="zs_menutop" >
