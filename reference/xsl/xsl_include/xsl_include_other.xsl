@@ -2,7 +2,7 @@
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
      <xsl:template match="simple">
-  what in the  simple!!!!??!?!?!?!?
+ simple include XSL
   </xsl:template>	
 </xsl:stylesheet>
  	 

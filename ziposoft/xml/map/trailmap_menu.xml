@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?xml-stylesheet type="text/xsl" href="zs_menu_test.xsl"?>
-<testpage>
+
 <menu_bar  xmlns="http://ziposoft.com/ns">
   <menu_bar_text>Umstead State Park Map</menu_bar_text>
 
@@ -33,5 +32,4 @@
   <menu_bar_text id="total_distance">0</menu_bar_text>
 
 </menu_bar>
-</testpage>
 

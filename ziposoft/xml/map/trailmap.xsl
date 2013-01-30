@@ -7,10 +7,11 @@
  xmlns:zs="http://ziposoft.com/ns"
                  
 >
+	<xsl:param name="rootdir">..</xsl:param> 
+ <xsl:include href="../menu/zs_menu.xsl"/>
+
   
- <xsl:import href="../menu/zs_menu.xsl"/>
   
-<xsl:param name="rootdir">..</xsl:param> 
   <xsl:output
   method="html"
 omit-xml-declaration="yes"
@@ -34,8 +35,8 @@ omit-xml-declaration="yes"
         <!-- status/menu bar-->
         
         <div id="header" style="background-color:#888">
-         <xsl:apply-templates select="document('menu.xml')"/>
-       
+         <xsl:apply-templates select="document('trailmap_menu.xml')"/>
+   
           <table id="debug_table" visibility="hidden" rules="all" style="display: none;border: solid 1px black">
             <tr>
               <td>window=</td>
@@ -190,6 +191,5 @@ omit-xml-declaration="yes"
   <xsl:template match="svg:use">
     <xsl:copy-of select="."/>
   </xsl:template>
-  <xsl:template match="*"></xsl:template>
 
 </xsl:stylesheet>

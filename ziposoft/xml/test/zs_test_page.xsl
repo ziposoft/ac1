@@ -32,16 +32,6 @@ omit-xml-declaration="yes"
   <xsl:template match="zs:script" mode="fixed">
     <script  type="text/javascript"><xsl:copy-of select="@src"/><xsl:value-of select="."/></script>
   </xsl:template>
-  <!--
-    <xsl:template match="@*|node()">
-      <xsl:copy>
-        <xsl:apply-templates select="@*|node()"/>
-      </xsl:copy>
-  </xsl:template>
-	
 
-  <xsl:template match="html:*">
-		<xsl:copy-of select="."/>
-		</xsl:template>	-->
 	
 </xsl:stylesheet>

@@ -4,11 +4,17 @@
     <None Include="..\menu\zs_menu_test.js" />
     <None Include="..\menu\zs_menu.css" />
     <None Include="..\menu\zs_menu.js" />
+    <None Include="..\map\Umstead.svg" />
+    <None Include="..\map\trailmap.css" />
+    <None Include="..\map\trailmap.js" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\menu\zs_menu_test.xml" />
     <Xml Include="..\menu\zs_menu_test.xsl" />
     <Xml Include="..\menu\zs_menu.xsl" />
     <Xml Include="..\test\zs_test_page.xsl" />
+    <Xml Include="..\map\trailmap.xsl" />
+    <Xml Include="..\map\Umstead.xml" />
+    <Xml Include="..\map\menu.xml" />
   </ItemGroup>
 </Project>
