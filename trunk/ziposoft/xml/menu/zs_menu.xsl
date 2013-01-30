@@ -7,7 +7,6 @@
 
 
   
-  <xsl:param name="rootdir">.</xsl:param>
   <xsl:template name="zs:module_menu_css" >
     <style>@import url(<xsl:value-of select="$rootdir"/>/menu/zs_menu.css);</style>
   </xsl:template>

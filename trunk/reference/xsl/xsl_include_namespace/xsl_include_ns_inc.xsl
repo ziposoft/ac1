@@ -20,8 +20,8 @@
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
  xmlns:zs="http://ziposoft.com/ns"                 
 >
-     <xsl:template match="zs:fuck">
-  what in the mother zs::fuck!!!!??!?!?!?!?
-  </xsl:template>	
+<xsl:template match="zs:test">
+ test test
+</xsl:template>	
 </xsl:stylesheet>
  	 
