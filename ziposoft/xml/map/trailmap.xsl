@@ -20,7 +20,7 @@ omit-xml-declaration="yes"
     <html >
       <head>
         <title>Umstead Trail Map</title>
-        <xsl:call-template name="zs:module_menu" />
+        <xsl:call-template name="zs:module_menu_css" />
 
         <script type="text/javascript" src="trailmap.js" ></script>
         <!--
@@ -122,7 +122,9 @@ omit-xml-declaration="yes"
           <xsl:apply-templates select="//svg:g[@inkscape:label='Trails_ST']/svg:path" mode="html"/>
         </div>
       </body>
-       <script type="text/javascript" src="BrowserDetect.js"/>
+        <xsl:call-template name="zs:module_menu_script" />
+      
+       <script type="text/javascript" src="../util/BrowserDetect.js"/>
     </html>
   </xsl:template>
 
