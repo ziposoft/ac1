@@ -49,7 +49,10 @@
             elm.className = 'zs_menu_item_sub_hi';
             show(elm, ev);
         }
-        function bool_toggle(elm, ev) {
+        function show_hide_elm(elm_id,val) {
+            document.getElementById(elm_id).style.display = (val ? 'block' : 'none');
+        }
+        function bool_toggle(elm, bool_func,target_elm) {
 
             if (elm.boolval) {
                 elm.boolval = 0;
@@ -61,13 +64,17 @@
             }
             if(this.option_set_callback)
                 this.option_set_callback(elm.id, elm.boolval);
+            if (bool_func) {
+                bool_func(target_elm, elm.boolval);
+
+            }
             options[elm.id] = 0;
             options[elm.id] = elm.boolval;
        
         }
         return {
             option_set_callback: option_set_callback,
-            bool_toggle: bool_toggle,
+            show_hide_elm: show_hide_elm,
             bool_toggle: bool_toggle,
             hide_sub: hide_sub,
             show_sub: show_sub,

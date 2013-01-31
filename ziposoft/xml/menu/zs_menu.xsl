@@ -31,8 +31,10 @@
   <xsl:template match="zs:menu_bool">
     <tr>
       <td class="zs_menu_link" >
-          <a class="zs_menu_link" onclick="zs.menu.bool_toggle(this,event)" >
-          <xsl:copy-of select="@*"/>
+          <a class="zs_menu_link"  >
+            <xsl:attribute name="onclick">
+              zs.menu.bool_toggle(this,zs.menu.<xsl:value-of select="@func"/>,'<xsl:value-of select="@target"/>')
+            </xsl:attribute>
         <xsl:value-of select="."/><span style="display:none">&#x2713;</span>
         </a>     
       </td>
