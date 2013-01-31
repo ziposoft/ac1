@@ -15,6 +15,6 @@
     <Xml Include="..\test\zs_test_page.xsl" />
     <Xml Include="..\map\trailmap.xsl" />
     <Xml Include="..\map\Umstead.xml" />
-    <Xml Include="..\map\menu.xml" />
+    <Xml Include="..\map\trailmap_menu.xml" />
   </ItemGroup>
 </Project>

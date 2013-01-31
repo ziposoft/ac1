@@ -4,8 +4,8 @@ var segment_template;
 var gSvgDoc;
 var svgdoc_width;
 var svgdoc_height;
-var svgdoc_offset_x=0;
-var svgdoc_offset_y=30;
+var svgdoc_offset_x = 0;
+var svgdoc_offset_y = 30;
 
 var vb_width_max = 3000;
 var vb_height_max = 3500;
@@ -16,7 +16,7 @@ var vb_height = vb_height_max;
 
 
 function create_mouse_paths() {
-    
+
     var path_group = document.getElementById("path_group")
     var paths = path_group.getElementsByTagName("svg:path");
     if (paths.length == 0)
@@ -26,9 +26,9 @@ function create_mouse_paths() {
     var len = paths.length;
 
     for (i = 0; i < len ; i++) {
-        var new_path=paths[i].cloneNode();
+        var new_path = paths[i].cloneNode();
         new_path.setAttribute("id", paths[i].id + "-mouse");
-        new_path.setAttribute("data-path-id", paths[i].id );
+        new_path.setAttribute("data-path-id", paths[i].id);
         path_mouse_group.appendChild(new_path);
         new_path.setAttribute("class", "path_mouse");
 
@@ -36,8 +36,12 @@ function create_mouse_paths() {
 
     }
 
+}
+function on_menu_set(opt_name, opt_val) {
+    if (opt_name=='show_debug') {
+        document.getElementById('debug_table').style.display = (opt_val ? 'block' : 'none');
     }
-
+}
 function init() {
     if ((BrowserDetect.browser != "Chrome") && (BrowserDetect.browser != "Firefox")) {
         window.alert("Trail Map has only been tested in the latest versions of Chrome and Firefox.\nIt probably will not work in your browser");
@@ -52,10 +56,12 @@ function init() {
     window.ondblclick= OnDoubleClick;
     */
     gSvgDoc = document.getElementById("svgdoc");
-    
-    
+
+
     window.onmousemove = MouseMoveHandler;
     window.onresize = onWindowResize;
+
+    zs.menu.option_set_callback = on_menu_set;
 
     onWindowResize();
     if (window.addEventListener) {
@@ -73,21 +79,21 @@ var dbl_click_toggle = 0;
 function OnDoubleClick(e) {
     // cross-browser wheel delta
     var e = window.event || e; // old IE support
-    var scale = .30 ;
+    var scale = .30;
     if (dbl_click_toggle) {
         dbl_click_toggle = 0;
         viewBox_reset();
     }
     else {
         dbl_click_toggle = 1;
-       Zoom(e, scale);
+        Zoom(e, scale);
     }
 
 }
 
 function calcSvgPoint(x, y) {
-    var scale_x =  vb_width / svgdoc_width;
-    var scale_y = vb_height/svgdoc_height  ;
+    var scale_x = vb_width / svgdoc_width;
+    var scale_y = vb_height / svgdoc_height;
     var actual_vb_width = vb_width;
     var actual_vb_height = vb_height;
     var scale = scale_x;
@@ -102,13 +108,13 @@ function calcSvgPoint(x, y) {
     x = x - svgdoc_offset_x;
     y = y - svgdoc_offset_y;
 
-    offset_x = Math.round(x * scale + vb_x-(actual_vb_width-vb_width)/2);
+    offset_x = Math.round(x * scale + vb_x - (actual_vb_width - vb_width) / 2);
     offset_y = Math.round(y * scale + vb_y - (actual_vb_height - vb_height) / 2);
 
 
     document.getElementById("stat_viewXY").innerHTML = offset_x + " " + offset_y;
-    document.getElementById("stat_scale").innerHTML = Math.round(scale*100)/100;
-    return {'x' : offset_x, 'y':offset_y};
+    document.getElementById("stat_scale").innerHTML = Math.round(scale * 100) / 100;
+    return { 'x': offset_x, 'y': offset_y };
 
 }
 function onViewBoxSet() {
@@ -127,7 +133,7 @@ function setViewBox() {
     var vb_string = String(vb_x) + " " + String(vb_y) + " " + String(vb_width) + " " + String(vb_height);
 
     gSvgDoc.setAttribute("viewBox", vb_string);
-    var v=document.getElementById("stat_viewBox");
+    var v = document.getElementById("stat_viewBox");
     v.value = vb_string;
 }
 function getSvgRect() {
@@ -151,7 +157,7 @@ function onWindowResize() {
     gSvgDoc.setAttribute("height", svgdoc_height);
     gSvgDoc.setAttribute("visibility", "visible");
     getSvgRect();
-    
+
 
 }
 function viewBox_reset() {
@@ -167,7 +173,7 @@ function MouseMoveHandler(e) {
     calcSvgPoint(x, y);
     document.getElementById("stat_mouse").innerHTML = String(x) + ":" + String(y);
 }
-function Zoom(e,scale) {
+function Zoom(e, scale) {
     var e = window.event || e; // old IE support
     var x = e.pageX;
     var y = e.pageY;
@@ -191,7 +197,7 @@ function Zoom(e,scale) {
 
 
 
-    }
+}
 function MouseWheelHandler(e) {
     // cross-browser wheel delta
     var e = window.event || e; // old IE support
@@ -255,31 +261,31 @@ function on_over(elm, e) {
     var cl = elm.getAttribute('class');
     cl = cl + " highlight";
     elm.setAttribute('class', cl);
-    var info_id="info-"+elm.getAttribute('id')
-    popup_table=document.getElementById(info_id);
+    var info_id = "info-" + elm.getAttribute('id')
+    popup_table = document.getElementById(info_id);
     popup_table.className = "info_table_show";
-    
+
     if (e.clientX > window.innerWidth / 2)
-        offsetX =  - popup_table.clientWidth-30;
+        offsetX = -popup_table.clientWidth - 30;
     if (e.clientY > window.innerHeight / 2)
         offsetY = -popup_table.clientHeight - 30;
 
     var x = e.clientX + document.body.scrollLeft + offsetX;
     var y = e.clientY + document.body.scrollTop + offsetY;
 
-    
+
     popup_table.style.left = x + 'px';
     popup_table.style.top = y + 'px';
-   
-    
-    
+
+
+
 }
 function on_out(elm) {
     elm = get_target_path(elm);
     var cl = elm.getAttribute('class');
-    cl=cl.replace("highlight","")
+    cl = cl.replace("highlight", "")
     elm.setAttribute('class', cl);
-    popup_table.className="info_table_hide";
+    popup_table.className = "info_table_hide";
 }
 
 function toggle1(elm) {
@@ -289,8 +295,8 @@ function toggle1(elm) {
     var class_state_old = "sel" + state;
     var total_distance_elm = document.getElementById("total_distance");
     var distance = Number(elm.getAttribute('data-trail-length'));
-    total_distance =  Number(total_distance_elm.innerHTML);
-    
+    total_distance = Number(total_distance_elm.innerHTML);
+
     state = state + 1;
     if (state > 3) {
         state = 0;
@@ -302,7 +308,7 @@ function toggle1(elm) {
     }
     var class_state_new = "sel" + state;
 
-    total_distance_elm.innerHTML = Math.round(total_distance*100)/100;
+    total_distance_elm.innerHTML = Math.round(total_distance * 100) / 100;
 
 
     var cl = elm.getAttribute('class');
@@ -312,8 +318,8 @@ function toggle1(elm) {
     elm.setAttribute('class', cl);
 
     elm.setAttribute('data-trail-state', state);
-    var len=elm.getTotalLength();
-    var point=elm.getPointAtLength(len/2);
+    var len = elm.getTotalLength();
+    var point = elm.getPointAtLength(len / 2);
     var x = point.x;
 }
 

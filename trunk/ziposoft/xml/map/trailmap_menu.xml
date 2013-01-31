@@ -3,7 +3,8 @@
 <menu_bar  xmlns="http://ziposoft.com/ns">
   <menu_bar_text>Umstead State Park Map</menu_bar_text>
 
-  <menu title="View">
+  <menu title="View">   
+    <menu_bool target="debug_table" func="show_hide_elm">Show Debug Bar </menu_bool>
     <menu_link onclick="document.getElementById('debug_table').style.display='none'">hide debug </menu_link>
     <menu_link onclick="document.getElementById('debug_table').style.display='block'">show debug </menu_link>
     <menu_sub title="submenu">

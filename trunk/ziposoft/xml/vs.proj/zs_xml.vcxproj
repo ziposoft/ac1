@@ -19,8 +19,8 @@
     <None Include="..\menu\zs_menu_test.js" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\map\menu.xml" />
     <Xml Include="..\map\trailmap.xsl" />
+    <Xml Include="..\map\trailmap_menu.xml" />
     <Xml Include="..\map\Umstead.xml" />
     <Xml Include="..\menu\zs_menu.xsl" />
     <Xml Include="..\menu\zs_menu_test.xml" />
