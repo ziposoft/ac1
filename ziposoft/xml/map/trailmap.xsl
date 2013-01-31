@@ -178,6 +178,7 @@ omit-xml-declaration="yes"
     </path>
   </xsl:template>
 
+   <xsl:template match="svg:g[@inkscape:label]" ></xsl:template>   
   <xsl:template match="svg:g[@inkscape:label='Trails_BB']" >
     <xsl:apply-templates select="svg:path" mode="svg">
       <xsl:with-param name="trail_type" select="'trail_bb'"/>
@@ -188,8 +189,19 @@ omit-xml-declaration="yes"
       <xsl:with-param name="trail_type" select="'trail_st'"/>
     </xsl:apply-templates>
   </xsl:template>
+  <xsl:template match="svg:g[@inkscape:label='Water']" >
+    <xsl:apply-templates/>
+  </xsl:template>  
+
   <xsl:template match="svg:use">
     <xsl:copy-of select="."/>
   </xsl:template>
-
+  <!--
+  
+  <xsl:template match="@*|node()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
+  </xsl:template>  
+-->
 </xsl:stylesheet>
