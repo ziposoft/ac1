@@ -578,7 +578,23 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
   </g>
-  <g
+    <g
+     inkscape:label="layer_border"
+     inkscape:groupmode="layer"
+     id="decoration"
+     style="display:inline"
+     sodipodi:insensitive="true">
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="svgborder"
+       width="3000"
+       height="3500"
+       x="0"
+       y="0" />			
+			
+			</g>
+	
+	<g
      inkscape:label="map"
      inkscape:groupmode="layer"
      id="decoration"
@@ -960,13 +976,7 @@
        d="m 476.84207,2136.9885 21.11792,20.9386"
        id="path4170"
        inkscape:connector-curvature="0" />
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="svgborder"
-       width="3000"
-       height="3500"
-       x="0"
-       y="0" />
+
     <rect
        style="fill:#999999;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="CampLapihioIcon"
