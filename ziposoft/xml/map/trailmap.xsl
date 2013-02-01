@@ -8,7 +8,6 @@
                  
 >
 	<xsl:param name="rootdir">..</xsl:param> 
- <xsl:include href="../menu/zs_menu.xsl"/>
 
   
   
@@ -17,6 +16,19 @@
 omit-xml-declaration="yes"
 	encoding="UTF-8"
 	indent="yes" />
+  
+      <xsl:template match="@*|node()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
+  </xsl:template>
+  <!--
+    <xsl:template match="@*|node()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
+  </xsl:template>   -->
+  
   <xsl:template match="svg:svg">
     <html >
       <head>
@@ -101,16 +113,14 @@ omit-xml-declaration="yes"
           >
               <xsl:copy-of select="@viewBox"/>
               <xsl:copy-of select="@height"/>
-
+              <g >
+                 <xsl:apply-templates  mode="layer_groups" />
+              </g>
               <g id="path_mouse_group"/>
               <g id="path_group">
-                <xsl:apply-templates/>
+                <xsl:apply-templates  mode="path_groups" />
               </g>
-              <g >
-                <xsl:copy-of select="svg:g[@inkscape:label='map']"/>
-                <xsl:copy-of select="svg:g[@inkscape:label='Text']"/>
 
-              </g>
 
             </svg>
           </div>
@@ -118,7 +128,6 @@ omit-xml-declaration="yes"
 
 
         <div >
-
           <xsl:apply-templates select="//svg:g[@inkscape:label='Trails_BB']/svg:path" mode="html"/>
           <xsl:apply-templates select="//svg:g[@inkscape:label='Trails_ST']/svg:path" mode="html"/>
         </div>
@@ -172,6 +181,7 @@ omit-xml-declaration="yes"
       <xsl:copy-of select="@id"/>
       <xsl:copy-of select="@transform"/>
       <xsl:copy-of select="@d"/>
+    
       <xsl:attribute name="data-trail-length">
         <xsl:value-of select="document('Umstead.xml')//segment[@name=$segname]/@length"/>
       </xsl:attribute>
@@ -179,29 +189,50 @@ omit-xml-declaration="yes"
   </xsl:template>
 
    <xsl:template match="svg:g[@inkscape:label]" ></xsl:template>   
-  <xsl:template match="svg:g[@inkscape:label='Trails_BB']" >
+   <xsl:template match="svg:style" ></xsl:template>   
+  
+  
+  
+  <xsl:template match="svg:g[@inkscape:label='Trails_BB']" mode="path_groups" >
     <xsl:apply-templates select="svg:path" mode="svg">
       <xsl:with-param name="trail_type" select="'trail_bb'"/>
     </xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="svg:g[@inkscape:label='Trails_ST']" >
+  <xsl:template match="svg:g[@inkscape:label='Trails_ST']" mode="path_groups" >
     <xsl:apply-templates select="svg:path" mode="svg">
       <xsl:with-param name="trail_type" select="'trail_st'"/>
     </xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="svg:g[@inkscape:label='Water']" >
-    <xsl:apply-templates/>
+  <xsl:template match="svg:g[@inkscape:label='Water']"  mode="layer_groups"  >
+    <svg:g id="layer_water" visibility="hidden">
+      <xsl:apply-templates/>
+    </svg:g>
   </xsl:template>  
-
+  <xsl:template match="svg:g[@inkscape:label='map']"  mode="layer_groups"  >
+    <svg:g id="layer_map" visibility="hidden">
+      <xsl:apply-templates/>
+    </svg:g>
+  </xsl:template> 
+    <xsl:template match="svg:g[@inkscape:label='Text']"  mode="layer_groups"  >
+    <svg:g id="layer_text" visibility="hidden">
+      <xsl:apply-templates/>
+    </svg:g>
+  </xsl:template>  
+  <xsl:template match="svg:g[@inkscape:label='Outline']"  mode="layer_groups"  >
+    <svg:g id="layer_outline" visibility="hidden">
+      <xsl:apply-templates/>
+    </svg:g>
+  </xsl:template> 
+  
+  
   <xsl:template match="svg:use">
     <xsl:copy-of select="."/>
   </xsl:template>
+  
+   <xsl:include href="../menu/zs_menu.xsl"/>
+
   <!--
   
-  <xsl:template match="@*|node()">
-    <xsl:copy>
-      <xsl:apply-templates select="@*|node()"/>
-    </xsl:copy>
-  </xsl:template>  
+
 -->
 </xsl:stylesheet>
