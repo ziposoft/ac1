@@ -52,6 +52,9 @@
         function show_hide_elm(elm_id,val) {
             document.getElementById(elm_id).style.display = (val ? 'block' : 'none');
         }
+        function show_hide_svg(elm_id, val) {
+            document.getElementById(elm_id).setAttribute("visibility", (val ? 'visible' : 'hidden'));
+        }
         function bool_toggle(elm, bool_func,target_elm) {
 
             if (elm.boolval) {
@@ -74,6 +77,7 @@
         }
         return {
             option_set_callback: option_set_callback,
+            show_hide_svg: show_hide_svg,
             show_hide_elm: show_hide_elm,
             bool_toggle: bool_toggle,
             hide_sub: hide_sub,
