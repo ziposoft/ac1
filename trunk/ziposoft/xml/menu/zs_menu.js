@@ -55,30 +55,29 @@
         function show_hide_svg(elm_id, val) {
             document.getElementById(elm_id).setAttribute("visibility", (val ? 'visible' : 'hidden'));
         }
-        function bool_toggle(elm, bool_func,target_elm) {
-
-            if (elm.boolval) {
+        function bool_set(elm, val) {
+            elm.boolval = 1;
+            if ((val==0 )||( val == 'false'))
                 elm.boolval = 0;
-                elm.firstElementChild.style.display = "none";
-            }
-            else {
+            elm.firstElementChild.style.display = (elm.boolval ? "inline" : "none");
+        }
+
+        function bool_toggle(elm) {
+            if (!elm.boolval)
                 elm.boolval = 1;
-                elm.firstElementChild.style.display = "inline";
-            }
+            else
+                elm.boolval = 0;
+            bool_set(elm, elm.boolval);
+
             if(this.option_set_callback)
                 this.option_set_callback(elm.id, elm.boolval);
-            if (bool_func) {
-                bool_func(target_elm, elm.boolval);
 
-            }
-            options[elm.id] = 0;
-            options[elm.id] = elm.boolval;
-       
         }
         return {
             option_set_callback: option_set_callback,
             show_hide_svg: show_hide_svg,
             show_hide_elm: show_hide_elm,
+            bool_set: bool_set,
             bool_toggle: bool_toggle,
             hide_sub: hide_sub,
             show_sub: show_sub,

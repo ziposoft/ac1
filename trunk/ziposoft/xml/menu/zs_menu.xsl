@@ -12,6 +12,7 @@
   </xsl:template>
   <xsl:template name="zs:module_menu_script" >
     <script type="text/javascript" src="{$rootdir}/menu/zs_menu.js"/>
+    <script type="text/javascript" src="{$rootdir}/util/util.js"/>
   </xsl:template>
   
   <xsl:template match="zs:menu_bar_text">
@@ -31,9 +32,10 @@
   <xsl:template match="zs:menu_bool">
     <tr>
       <td class="zs_menu_link" >
-          <a class="zs_menu_link"  >
+          <a class="zs_menu_link" data-mi-type="bool" >
+             <xsl:copy-of select="@*"/>
             <xsl:attribute name="onclick">
-              zs.menu.bool_toggle(this,zs.menu.<xsl:value-of select="@func"/>,'<xsl:value-of select="@target"/>')
+              zs.menu.bool_toggle(this)
             </xsl:attribute>
         <xsl:value-of select="."/><span style="display:none">&#x2713;</span>
         </a>     

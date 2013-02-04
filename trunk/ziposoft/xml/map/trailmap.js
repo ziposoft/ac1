@@ -14,7 +14,48 @@ var vb_width = vb_width_max;
 var vb_y = 0;
 var vb_height = vb_height_max;
 
+function show_hide_svg(elm_id, val) {
+    document.getElementById(elm_id).setAttribute("visibility", (val ? 'visible' : 'hidden'));
+}
 
+var trailmap_options = new HashTable({
+    show_water: { def: 1, arg: 'layer_water', func: show_hide_svg },
+    show_map: { def: 1, arg: 'layer_map', func: show_hide_svg },
+    show_text: { def: 1, arg: 'layer_text', func: show_hide_svg },
+    show_outline: { def: 1, arg: 'layer_outline', func: show_hide_svg },
+    /*
+    two: { def: 2, func: function () { return "function two!" } },
+    */
+});
+
+function init_menu_item(opt_item_key, opt_item) {
+    var opt_val = getCookie(opt_item_key);
+    var opt_val_number = Number(opt_val);
+    if (opt_val_number != NaN)
+        opt_val = opt_val_number;
+
+    
+    if (opt_val==null)
+        opt_val = opt_item.def;
+    var menu_item = document.getElementById(opt_item_key);
+    if (menu_item) {
+        var func_name = menu_item.getAttribute('data-mi-type') + "_set";
+        var func = zs.menu[func_name];
+        if (func) {
+            func(menu_item, opt_val);
+        }
+    }
+    opt_item.func(opt_item.arg, opt_val);
+
+
+
+}
+function init_menu() {
+    trailmap_options.each(init_menu_item);
+
+
+
+}
 function create_mouse_paths() {
 
     var path_group = document.getElementById("path_group")
@@ -38,8 +79,11 @@ function create_mouse_paths() {
 
 }
 function on_menu_set(opt_name, opt_val) {
-    if (opt_name=='show_debug') {
-        document.getElementById('debug_table').style.display = (opt_val ? 'block' : 'none');
+    var opt = trailmap_options.getItem(opt_name);
+    if (opt) {
+        opt.val = opt_val;
+        opt.func(opt.arg, opt_val);
+        setCookie(opt_name, opt_val);
     }
 }
 function init() {
@@ -72,6 +116,7 @@ function init() {
     } else window.attachEvent("onmousewheel", MouseWheelHandler);
     setViewBox();
     create_mouse_paths();
+    init_menu();
 
     document.getElementById("browser_info").innerHTML = BrowserDetect.browser + " " + BrowserDetect.version + " " + BrowserDetect.OS;
 }
@@ -323,7 +368,8 @@ function toggle1(elm) {
     var x = point.x;
 }
 
-function setCookie(c_name, value, exdays) {
+function setCookie(c_name, value) {
+    var exdays = 999;
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + exdays);
     var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
@@ -336,9 +382,15 @@ function getCookie(c_name) {
         y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
         x = x.replace(/^\s+|\s+$/g, "");
         if (x == c_name) {
-            return unescape(y);
+            var val = unescape(y);
+            if (val == 'false')
+                val = 0;
+            if (val == 'true')
+                val = 1;
+            return val;
         }
     }
+    return null;
 }
 
 function routename_change(entry) {

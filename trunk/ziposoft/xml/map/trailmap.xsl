@@ -35,7 +35,6 @@ omit-xml-declaration="yes"
         <title>Umstead Trail Map</title>
         <xsl:call-template name="zs:module_menu_css" />
 
-        <script type="text/javascript" src="trailmap.js" ></script>
         <!--
 			  <link rel="stylesheet" type="text/css" href="trailmap.css"/>    
         <style>
@@ -133,8 +132,10 @@ omit-xml-declaration="yes"
         </div>
       </body>
         <xsl:call-template name="zs:module_menu_script" />
-      
        <script type="text/javascript" src="../util/BrowserDetect.js"/>
+        <script type="text/javascript" src="trailmap.js" ></script>
+
+      
     </html>
   </xsl:template>
 
