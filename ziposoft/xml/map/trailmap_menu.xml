@@ -4,14 +4,14 @@
   <menu_bar_text>Umstead State Park Map</menu_bar_text>
 
   <menu title="View">   
-    <menu_bool target="debug_table" func="show_hide_elm">Show Debug Bar </menu_bool>
-    <menu_bool target="layer_water" func="show_hide_svg">Show Water </menu_bool>
-    <menu_bool target="layer_map" func="show_hide_svg">Show Map </menu_bool>
-    <menu_bool target="layer_text" func="show_hide_svg">Show Text </menu_bool>
-    <menu_bool target="layer_outline" func="show_hide_svg">Show Outline </menu_bool>
+    <menu_bool opt="debug_table" func="show_hide_elm">Show Debug Bar </menu_bool>
+    <menu_bool id="show_water">Show Water </menu_bool>
+    <menu_bool id="show_map" >Show Map </menu_bool>
+    <menu_bool id="show_text">Show Text </menu_bool>
+    <menu_bool id="show_outline">Show Outline </menu_bool>
     <menu_link onclick="document.getElementById('debug_table').style.display='none'">hide debug </menu_link>
     <menu_link onclick="document.getElementById('debug_table').style.display='block'">show debug </menu_link>
-    <menu_sub title="submenu">
+    <menu_sub title="zoom">
       <menu_link >subitem #1 </menu_link>
       <menu_link >subitem #2 </menu_link>
     </menu_sub>
