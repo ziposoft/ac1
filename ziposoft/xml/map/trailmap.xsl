@@ -17,6 +17,8 @@ omit-xml-declaration="yes"
 	encoding="UTF-8"
 	indent="yes" />
   
+  
+  
       <xsl:template match="@*|node()">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>
@@ -112,7 +114,7 @@ omit-xml-declaration="yes"
           >
               <xsl:copy-of select="@viewBox"/>
               <xsl:copy-of select="@height"/>
-              <g >
+              <g id="layer_group">
                  <xsl:apply-templates  mode="layer_groups" />
               </g>
               <g id="path_mouse_group"/>
@@ -191,6 +193,9 @@ omit-xml-declaration="yes"
 
    <xsl:template match="svg:g[@inkscape:label]" ></xsl:template>   
    <xsl:template match="svg:style" ></xsl:template>   
+   <xsl:template match="style" ></xsl:template>   
+   <xsl:template match="*"  mode="path_groups" ></xsl:template>   
+   <xsl:template match="*"  mode="layer_groups" ></xsl:template>   
   
   
   
@@ -204,10 +209,10 @@ omit-xml-declaration="yes"
       <xsl:with-param name="trail_type" select="'trail_st'"/>
     </xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="svg:g[@inkscape:label='Water']"  mode="layer_groups"  >
-    <svg:g id="layer_water" visibility="hidden">
+  <xsl:template match="svg:g[@inkscape:label='Water']"  mode="layer_groups"    >
+    <g xmlns="http://www.w3.org/2000/svg"  id="layer_water" visibility="hidden">
       <xsl:apply-templates/>
-    </svg:g>
+    </g>
   </xsl:template>  
   <xsl:template match="svg:g[@inkscape:label='map']"  mode="layer_groups"  >
     <svg:g id="layer_map" visibility="hidden">
