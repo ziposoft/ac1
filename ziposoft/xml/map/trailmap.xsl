@@ -209,28 +209,16 @@ omit-xml-declaration="yes"
       <xsl:with-param name="trail_type" select="'trail_st'"/>
     </xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="svg:g[@inkscape:label='Water']"  mode="layer_groups"    >
-    <g xmlns="http://www.w3.org/2000/svg"  id="layer_water" visibility="hidden">
+
+  <xsl:template match="svg:g[contains(@inkscape:label,'layer_')]"  mode="layer_groups"  >
+    <g  xmlns="http://www.w3.org/2000/svg"   visibility="hidden">
+			    
+      <xsl:attribute name="id">
+        <xsl:value-of select="@inkscape:label"/>
+      </xsl:attribute>
       <xsl:apply-templates/>
     </g>
-  </xsl:template>  
-  <xsl:template match="svg:g[@inkscape:label='map']"  mode="layer_groups"  >
-    <svg:g id="layer_map" visibility="hidden">
-      <xsl:apply-templates/>
-    </svg:g>
-  </xsl:template> 
-    <xsl:template match="svg:g[@inkscape:label='Text']"  mode="layer_groups"  >
-    <svg:g id="layer_text" visibility="hidden">
-      <xsl:apply-templates/>
-    </svg:g>
-  </xsl:template>  
-  <xsl:template match="svg:g[@inkscape:label='Outline']"  mode="layer_groups"  >
-    <svg:g id="layer_outline" visibility="hidden">
-      <xsl:apply-templates/>
-    </svg:g>
-  </xsl:template> 
-  
-  
+  </xsl:template>   
   <xsl:template match="svg:use">
     <xsl:copy-of select="."/>
   </xsl:template>
