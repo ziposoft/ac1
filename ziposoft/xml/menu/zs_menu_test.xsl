@@ -25,10 +25,11 @@ omit-xml-declaration="yes"
         <xsl:call-template name="zs:module_menu_css" />
 
       </head>
-      <body onload="init()" >
+      <body onload="init()" id="elm1">
         <xsl:apply-templates/>
       </body>
         <xsl:call-template name="zs:module_menu_script" />
+       <script  type="text/javascript" src="zs_menu_test.js"></script>
     </html>
   </xsl:template>
  

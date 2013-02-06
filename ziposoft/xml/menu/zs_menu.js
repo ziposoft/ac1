@@ -56,22 +56,21 @@
             document.getElementById(elm_id).setAttribute("visibility", (val ? 'visible' : 'hidden'));
         }
         function bool_set(elm, val) {
-            elm.boolval = 1;
-            if ((val==0 )||( val == 'false'))
-                elm.boolval = 0;
-            elm.firstElementChild.style.display = (elm.boolval ? "inline" : "none");
+            if ( val == 'false')
+                val = 0;
+            elm.firstElementChild.style.display = (val ? "inline" : "none");
         }
 
         function bool_toggle(elm) {
-            if (!elm.boolval)
-                elm.boolval = 1;
-            else
-                elm.boolval = 0;
-            bool_set(elm, elm.boolval);
+            var boolval = ((elm.firstElementChild.style.display == "inline") ? 0 : 1);
+
+
+            bool_set(elm, boolval);
+            if (console)
+                console.log("boolval=" + boolval);
 
             if(this.option_set_callback)
-                this.option_set_callback(elm.id, elm.boolval);
-
+                this.option_set_callback(elm.id, boolval);
         }
         return {
             option_set_callback: option_set_callback,
