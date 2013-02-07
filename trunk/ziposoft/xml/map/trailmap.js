@@ -39,7 +39,7 @@ function init_menu_item(opt_item_key, opt_item) {
         opt_val = opt_item.def;
     var menu_item = document.getElementById(opt_item_key);
     if (menu_item) {
-        var func_name = menu_item.getAttribute('data-mi-type') + "_set";
+        var func_name = "valset_"+menu_item.getAttribute('data-mi-type') ;
         var func = zs.menu[func_name];
         if (func) {
             func(menu_item, opt_val);

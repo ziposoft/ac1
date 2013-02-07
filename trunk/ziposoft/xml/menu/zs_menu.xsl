@@ -42,6 +42,29 @@
       </td>
     </tr>
   </xsl:template>
+  <xsl:template match="zs:menu_opt">
+    <tr>
+      <td class="zs_menu_link" >
+          <a class="zs_menu_link" data-mi-type="opt" >
+             <xsl:copy-of select="@*"/>
+            <xsl:attribute name="onclick">
+              zs.menu.opt_sel(this)
+            </xsl:attribute>
+        <xsl:value-of select="."/><span style="display:none">&#x2713;</span>
+        </a>     
+      </td>
+    </tr>
+  </xsl:template>	
+	  <xsl:template match="zs:menu_opt_sel">
+    <tr>
+      <td  data-mi-type="opt_sel" class="zs_menu_item_sub" onmouseover="zs.menu.show_sub(this,event);" onmouseout="zs.menu.hide_sub(this,event);">
+        <xsl:copy-of select="@id"/>
+				<xsl:value-of select="@title"/>:<span />&#9658;<table class="zs_menu_sub" cellspacing="0" cellpadding="0">
+          <xsl:apply-templates/>
+        </table>
+      </td>
+    </tr>
+  </xsl:template>		
   <xsl:template match="zs:menu_link">
     <tr>
       <td class="zs_menu_link" >
@@ -59,6 +82,7 @@
       </tr>
     </table>
   </xsl:template>
+
   <xsl:template match="zs:menu_sub">
     <tr>
       <td class="zs_menu_item_sub" onmouseover="zs.menu.show_sub(this,event);" onmouseout="zs.menu.hide_sub(this,event);">
