@@ -55,13 +55,42 @@
         function show_hide_svg(elm_id, val) {
             document.getElementById(elm_id).setAttribute("visibility", (val ? 'visible' : 'hidden'));
         }
-        function bool_set(elm, val) {
+        function valset_bool(elm, val) {
             if ( val == 'false')
                 val = 0;
             elm.firstElementChild.style.display = (val ? "inline" : "none");
         }
-
+        function valset_opt_sel(elm, val) {
+            elm.firstElementChild.innerHtml=val;
+        }
+        
         function bool_toggle(elm) {
+            var boolval = ((elm.firstElementChild.style.display == "inline") ? 0 : 1);
+
+
+            bool_set(elm, boolval);
+            if (console)
+                console.log("boolval=" + boolval);
+
+            if (this.option_set_callback)
+                this.option_set_callback(elm.id, boolval);
+        }
+        function opt_sel(elm) {
+            var e = document.getElementById('t');
+            var p;
+            do {
+                p = e.parentElement;
+                if (!p) {
+                    console.log('error');
+                    return 0;
+                }
+
+                if (p.className == 'zs_menu_opt_sel')
+                    break;
+            } while (1);
+            
+
+
             var boolval = ((elm.firstElementChild.style.display == "inline") ? 0 : 1);
 
 
@@ -76,7 +105,8 @@
             option_set_callback: option_set_callback,
             show_hide_svg: show_hide_svg,
             show_hide_elm: show_hide_elm,
-            bool_set: bool_set,
+            valset_opt_sel: valset_opt_sel,
+            valset_bool: valset_bool,
             bool_toggle: bool_toggle,
             hide_sub: hide_sub,
             show_sub: show_sub,
