@@ -5,6 +5,7 @@
  xmlns:svg="http://www.w3.org/2000/svg"
  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
  xmlns:zs="http://ziposoft.com/ns"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
                  
 >
 	<xsl:param name="rootdir">..</xsl:param> 
@@ -108,6 +109,7 @@ omit-xml-declaration="yes"
             <svg
                 id="svgdoc"
                 xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
                 version="1.1"
                 visibility="hidden"
                 preserveAspectRatio="xMidYMid meet"
@@ -131,6 +133,12 @@ omit-xml-declaration="yes"
         <div >
           <xsl:apply-templates select="//svg:g[@inkscape:label='Trails_BB']/svg:path" mode="html"/>
           <xsl:apply-templates select="//svg:g[@inkscape:label='Trails_ST']/svg:path" mode="html"/>
+          
+          
+        </div>
+        <div id="context_menu">
+          
+          
         </div>
       </body>
         <xsl:call-template name="zs:module_menu_script" />
@@ -180,7 +188,11 @@ omit-xml-declaration="yes"
     <xsl:param name="trail_type" select="'trail_bb'"/>
     <xsl:variable name="segname" select="@id" />
 
-    <path xmlns="http://www.w3.org/2000/svg"  class="{$trail_type} sel0" onclick="toggle1(this)" onmouseover="on_over(this,evt)" onmouseout="on_out(this,evt)" data-trail-state="0">
+    <path xmlns="http://www.w3.org/2000/svg"  class="{$trail_type} sel0" 
+          onclick="toggle1(this)" onmouseover="on_over(this,evt)" 
+          onmouseout="on_out(this,evt)" data-trail-state="0"
+          
+          >
       <xsl:copy-of select="@id"/>
       <xsl:copy-of select="@transform"/>
       <xsl:copy-of select="@d"/>
