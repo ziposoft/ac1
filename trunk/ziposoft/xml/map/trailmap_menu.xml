@@ -9,6 +9,7 @@
     <menu_bool id="show_map" >Show Map </menu_bool>
     <menu_bool id="show_text">Show Text </menu_bool>
     <menu_bool id="show_outline">Show Outline </menu_bool>
+    <menu_bool id="show_satellite">Show Satellite </menu_bool>
     <menu_link onclick="document.getElementById('debug_table').style.display='none'">hide debug </menu_link>
     <menu_link onclick="document.getElementById('debug_table').style.display='block'">show debug </menu_link>
     <menu_sub title="zoom">

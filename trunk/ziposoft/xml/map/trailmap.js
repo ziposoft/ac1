@@ -13,6 +13,7 @@ var vb_x = 0;
 var vb_width = vb_width_max;
 var vb_y = 0;
 var vb_height = vb_height_max;
+var g_path_highlighted = 0;
 
 function show_hide_svg(elm_id, val) {
     document.getElementById(elm_id).setAttribute("visibility", (val ? 'visible' : 'hidden'));
@@ -23,6 +24,7 @@ var trailmap_options = new HashTable({
     show_map: { def: 1, arg: 'layer_map', func: show_hide_svg },
     show_text: { def: 1, arg: 'layer_text', func: show_hide_svg },
     show_outline: { def: 1, arg: 'layer_outline', func: show_hide_svg },
+    show_satellite: { def: 0, arg: 'layer_satellite', func: show_hide_svg },
     /*
     two: { def: 2, func: function () { return "function two!" } },
     */
@@ -56,6 +58,7 @@ function init_menu() {
 
 
 }
+
 function create_mouse_paths() {
 
     var path_group = document.getElementById("path_group")
@@ -73,7 +76,9 @@ function create_mouse_paths() {
         path_mouse_group.appendChild(new_path);
         new_path.setAttribute("class", "path_mouse");
 
-
+        //new_path.addEventListener("oncontextmenu", path_right_click, true);
+        new_path.oncontextmenu = path_right_click;
+        paths[i].oncontextmenu = path_right_click;
 
     }
 
@@ -85,6 +90,21 @@ function on_menu_set(opt_name, opt_val) {
         opt.func(opt.arg, opt_val);
         setCookie(opt_name, opt_val);
     }
+}
+
+
+
+function on_key_press(e) {
+    var e = window.event || e;
+    if (g_path_highlighted) {
+        var val = e.charCode - 48;
+        if (val < 0 || val > 9)
+            return;
+        path_set_selection(g_path_highlighted, val);
+
+    }
+
+
 }
 function init() {
     if ((BrowserDetect.browser != "Chrome") && (BrowserDetect.browser != "Firefox")) {
@@ -102,6 +122,9 @@ function init() {
     gSvgDoc = document.getElementById("svgdoc");
 
 
+
+
+    window.onkeypress = on_key_press;
     window.onmousemove = MouseMoveHandler;
     window.onresize = onWindowResize;
 
@@ -306,6 +329,8 @@ function on_over(elm, e) {
     var cl = elm.getAttribute('class');
     cl = cl + " highlight";
     elm.setAttribute('class', cl);
+
+    g_path_highlighted = elm;
     var info_id = "info-" + elm.getAttribute('id')
     popup_table = document.getElementById(info_id);
     popup_table.className = "info_table_show";
@@ -331,8 +356,41 @@ function on_out(elm) {
     cl = cl.replace("highlight", "")
     elm.setAttribute('class', cl);
     popup_table.className = "info_table_hide";
-}
+    g_path_highlighted = 0;
 
+}
+function path_right_click( e) {
+    if (!e) e = event;
+
+    return false;
+}
+function path_set_selection(elm,count_new) {
+
+    var count_old = Number(elm.getAttribute('data-trail-state'));
+    var class_state_old = "sel" + count_old;
+    var total_distance_elm = document.getElementById("total_distance");
+    var distance = Number(elm.getAttribute('data-trail-length'));
+    total_distance = Number(total_distance_elm.innerHTML);
+
+    total_distance = total_distance +(count_new- count_old )* distance;
+
+
+    var class_state_new = "sel" + count_new;
+
+    total_distance_elm.innerHTML = Math.round(total_distance * 100) / 100;
+
+
+    var cl = elm.getAttribute('class');
+    cl = cl.replace(class_state_old, class_state_new)
+    cl = cl.replace("highlight", "")
+
+    elm.setAttribute('class', cl);
+
+    elm.setAttribute('data-trail-state', count_new);
+    var len = elm.getTotalLength();
+    var point = elm.getPointAtLength(len / 2);
+    var x = point.x;
+}
 function toggle1(elm) {
     elm = get_target_path(elm);
 
