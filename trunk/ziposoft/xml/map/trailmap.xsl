@@ -144,6 +144,7 @@ omit-xml-declaration="yes"
         <xsl:call-template name="zs:module_menu_script" />
        <script type="text/javascript" src="../util/BrowserDetect.js"/>
         <script type="text/javascript" src="trailmap.js" ></script>
+       <script  type="text/javascript" src="../util/jquery.dev.js"/>
 
       
     </html>
