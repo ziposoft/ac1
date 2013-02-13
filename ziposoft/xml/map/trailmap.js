@@ -14,6 +14,7 @@ var vb_width = vb_width_max;
 var vb_y = 0;
 var vb_height = vb_height_max;
 var g_path_highlighted = 0;
+var g_popup_table;
 
 function show_hide_svg(elm_id, val) {
     document.getElementById(elm_id).setAttribute("visibility", (val ? 'visible' : 'hidden'));
@@ -25,6 +26,7 @@ var trailmap_options = new HashTable({
     show_text: { def: 1, arg: 'layer_text', func: show_hide_svg },
     show_outline: { def: 1, arg: 'layer_outline', func: show_hide_svg },
     show_satellite: { def: 0, arg: 'layer_satellite', func: show_hide_svg },
+    show_popup: { def: 1 },
     zoom: { def: 2 },
     /*
     two: { def: 2, func: function () { return "function two!" } },
@@ -276,7 +278,9 @@ function MouseWheelHandler(e) {
     var e = window.event || e; // old IE support
     var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
     var zoom = trailmap_options.getItem('zoom').value;
-    var scale = 1 - .10 * delta*zoom;
+    var scale = 1 - .10 * zoom;
+    if (delta < 0)
+        scale = 1 / scale;
     Zoom(e, scale);
 }
 
@@ -316,7 +320,6 @@ function seg_add(elm) {
     dist = dist + Number(elm.getAttribute("data-section_dist"));
     cells[2].textContent = dist;
 }
-var popup_table;
 
 function get_target_path(elm) {
     var cl = elm.getAttribute('class');
@@ -337,21 +340,25 @@ function on_over(elm, e) {
     elm.setAttribute('class', cl);
 
     g_path_highlighted = elm;
+
+
+    if (trailmap_options.getItem('show_popup').value == 0)
+        return;
     var info_id = "info-" + elm.getAttribute('id')
-    popup_table = document.getElementById(info_id);
-    popup_table.className = "info_table_show";
+    g_popup_table = document.getElementById(info_id);
+    g_popup_table.className = "info_table_show";
 
     if (e.clientX > window.innerWidth / 2)
-        offsetX = -popup_table.clientWidth - 30;
+        offsetX = -g_popup_table.clientWidth - 30;
     if (e.clientY > window.innerHeight / 2)
-        offsetY = -popup_table.clientHeight - 30;
+        offsetY = -g_popup_table.clientHeight - 30;
 
     var x = e.clientX + document.body.scrollLeft + offsetX;
     var y = e.clientY + document.body.scrollTop + offsetY;
 
 
-    popup_table.style.left = x + 'px';
-    popup_table.style.top = y + 'px';
+    g_popup_table.style.left = x + 'px';
+    g_popup_table.style.top = y + 'px';
 
 
 
@@ -361,7 +368,8 @@ function on_out(elm) {
     var cl = elm.getAttribute('class');
     cl = cl.replace("highlight", "")
     elm.setAttribute('class', cl);
-    popup_table.className = "info_table_hide";
+    if(g_popup_table)
+        g_popup_table.className = "info_table_hide";
     g_path_highlighted = 0;
 
 }
@@ -369,6 +377,15 @@ function path_right_click( e) {
     if (!e) e = event;
 
     return false;
+}
+
+function route_reset() {
+    $("#path_group").children().each(function (index) {
+        path_set_selection(this, 0);
+
+    });
+
+
 }
 function path_set_selection(elm,count_new) {
 

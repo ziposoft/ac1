@@ -50,7 +50,7 @@ path.highlight    {   stroke: red;      }
 }
 svg {
   
-	border:inset;
+	border:none;
 	
 }
 body {

@@ -104,7 +104,7 @@ omit-xml-declaration="yes"
 				</div>         -->
 
 
-          <div style="position:fixed;top:30px;left:0px;width:500px" id="svgwindow" >
+          <div style="position:fixed;top:30px;left:0px;border:0" id="svgwindow" >
 
             <svg
                 id="svgdoc"
