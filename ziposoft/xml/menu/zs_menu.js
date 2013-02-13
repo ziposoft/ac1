@@ -64,42 +64,31 @@
             elm.firstElementChild.innerHtml=val;
         }
         
-        function bool_toggle(elm) {
+        function onclk_bool(elm) {
             var boolval = ((elm.firstElementChild.style.display == "inline") ? 0 : 1);
-
-
-            bool_set(elm, boolval);
+            valset_bool(elm, boolval);
             if (console)
                 console.log("boolval=" + boolval);
 
             if (this.option_set_callback)
                 this.option_set_callback(elm.id, boolval);
         }
-        function opt_sel(elm) {
-            var e = document.getElementById('t');
-            var p;
+        function onclk_opt(elm) {
+            var p=elm;
             do {
-                p = e.parentElement;
+                p = p.parentElement;
                 if (!p) {
                     console.log('error');
                     return 0;
                 }
 
-                if (p.className == 'zs_menu_opt_sel')
+                if (p.getAttribute("data-mi-type") == 'opt_sel')
                     break;
             } while (1);
-            
-
-
-            var boolval = ((elm.firstElementChild.style.display == "inline") ? 0 : 1);
-
-
-            bool_set(elm, boolval);
-            if (console)
-                console.log("boolval=" + boolval);
+            valset_opt_sel=
 
             if(this.option_set_callback)
-                this.option_set_callback(elm.id, boolval);
+                this.option_set_callback(p.id, elm.getAttribute("data-mi-val"));
         }
         return {
             option_set_callback: option_set_callback,
@@ -107,7 +96,8 @@
             show_hide_elm: show_hide_elm,
             valset_opt_sel: valset_opt_sel,
             valset_bool: valset_bool,
-            bool_toggle: bool_toggle,
+            onclk_bool: onclk_bool,
+            onclk_opt: onclk_opt,
             hide_sub: hide_sub,
             show_sub: show_sub,
             options: options,

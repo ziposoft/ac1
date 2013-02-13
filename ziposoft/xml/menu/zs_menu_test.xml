@@ -6,7 +6,7 @@
       <menu_bool id="booltest1">bool1 </menu_bool>
       <menu_bool id="booltest2">bool2 </menu_bool>
       <menu_bool id="booltest3">bool3 </menu_bool>
-		<menu_opt_sel title="submenu">
+		<menu_opt_sel title="option" id="option_id" val="3">
       <menu_opt val="1">opt1</menu_opt>
       <menu_opt val="2">opt2</menu_opt>
       <menu_opt val="3">opt3</menu_opt>

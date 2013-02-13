@@ -82,6 +82,8 @@ a.zs_menu_link
 
 .menu_bar_item
 {
+	padding: 2px;
+	margin: 0px;
 }
 
 a.zs_menu_link:hover, a.menu_bar_item:hover
