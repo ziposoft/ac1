@@ -23,10 +23,10 @@
   </xsl:template>
   <xsl:template match="zs:menu_bar_button">
     <td class="zs_menutop" >
-      <a class="menu_bar_item" >
+      <button class="menu_bar_item" >
         <xsl:copy-of select="@*"/>
         <xsl:apply-templates/>
-      </a>
+      </button>
     </td>
   </xsl:template>
   <xsl:template match="zs:menu_bool">
@@ -35,7 +35,7 @@
           <a class="zs_menu_link" data-mi-type="bool" >
              <xsl:copy-of select="@*"/>
             <xsl:attribute name="onclick">
-              zs.menu.bool_toggle(this)
+              zs.menu.onclk_bool(this)
             </xsl:attribute>
         <xsl:value-of select="."/><span style="display:none">&#x2713;</span>
         </a>     
@@ -46,9 +46,11 @@
     <tr>
       <td class="zs_menu_link" >
           <a class="zs_menu_link" data-mi-type="opt" >
-             <xsl:copy-of select="@*"/>
+             <xsl:attribute name="data-mi-val">
+              <xsl:value-of select="@val"/>
+            </xsl:attribute> 
             <xsl:attribute name="onclick">
-              zs.menu.opt_sel(this)
+              zs.menu.onclk_opt(this)
             </xsl:attribute>
         <xsl:value-of select="."/><span style="display:none">&#x2713;</span>
         </a>     
