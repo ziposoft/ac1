@@ -52,8 +52,8 @@
             <xsl:attribute name="onclick">
               zs.menu.onclk_opt(this)
             </xsl:attribute>
-        <xsl:value-of select="."/><span style="display:none">&#x2713;</span>
-        </a>     
+        <xsl:value-of select="."/>
+        </a><span style="display:none">&#x2713;</span>     
       </td>
     </tr>
   </xsl:template>	

@@ -30,6 +30,9 @@ omit-xml-declaration="yes"
       </body>
         <xsl:call-template name="zs:module_menu_script" />
        <script  type="text/javascript" src="zs_menu_test.js"></script>
+       <script  type="text/javascript" src="../util/jquery.dev.js">
+				 
+			 </script>
     </html>
   </xsl:template>
  

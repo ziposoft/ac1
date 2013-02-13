@@ -25,6 +25,7 @@ var trailmap_options = new HashTable({
     show_text: { def: 1, arg: 'layer_text', func: show_hide_svg },
     show_outline: { def: 1, arg: 'layer_outline', func: show_hide_svg },
     show_satellite: { def: 0, arg: 'layer_satellite', func: show_hide_svg },
+    zoom: { def: 2 },
     /*
     two: { def: 2, func: function () { return "function two!" } },
     */
@@ -32,13 +33,14 @@ var trailmap_options = new HashTable({
 
 function init_menu_item(opt_item_key, opt_item) {
     var opt_val = getCookie(opt_item_key);
-    var opt_val_number = Number(opt_val);
-    if (opt_val_number != NaN)
-        opt_val = opt_val_number;
-
-    
-    if (opt_val==null)
+    if (opt_val == null)
         opt_val = opt_item.def;
+    else {
+        var opt_val_number = Number(opt_val);
+        if (opt_val_number != NaN)
+            opt_val = opt_val_number;
+    }
+
     var menu_item = document.getElementById(opt_item_key);
     if (menu_item) {
         var func_name = "valset_"+menu_item.getAttribute('data-mi-type') ;
@@ -47,7 +49,9 @@ function init_menu_item(opt_item_key, opt_item) {
             func(menu_item, opt_val);
         }
     }
-    opt_item.func(opt_item.arg, opt_val);
+    if(opt_item.func)
+        opt_item.func(opt_item.arg, opt_val);
+    opt_item.value = opt_val;
 
 
 
@@ -86,8 +90,9 @@ function create_mouse_paths() {
 function on_menu_set(opt_name, opt_val) {
     var opt = trailmap_options.getItem(opt_name);
     if (opt) {
-        opt.val = opt_val;
-        opt.func(opt.arg, opt_val);
+        opt.value = opt_val;
+        if(opt.func)
+            opt.func(opt.arg, opt_val);
         setCookie(opt_name, opt_val);
     }
 }
@@ -270,7 +275,8 @@ function MouseWheelHandler(e) {
     // cross-browser wheel delta
     var e = window.event || e; // old IE support
     var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-    var scale = 1 - .10 * delta;
+    var zoom = trailmap_options.getItem('zoom').value;
+    var scale = 1 - .10 * delta*zoom;
     Zoom(e, scale);
 }
 

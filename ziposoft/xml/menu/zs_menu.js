@@ -61,7 +61,11 @@
             elm.firstElementChild.style.display = (val ? "inline" : "none");
         }
         function valset_opt_sel(elm, val) {
-            elm.firstElementChild.innerHtml=val;
+            var opt = jQuery(elm).find("a[data-mi-val="+val+"]");
+            if (opt.length > 0) {
+                elm.firstElementChild.innerHTML = opt[0].innerHTML;
+            }
+            
         }
         
         function onclk_bool(elm) {
@@ -73,22 +77,15 @@
             if (this.option_set_callback)
                 this.option_set_callback(elm.id, boolval);
         }
-        function onclk_opt(elm) {
-            var p=elm;
-            do {
-                p = p.parentElement;
-                if (!p) {
-                    console.log('error');
-                    return 0;
-                }
+        function onclk_opt(elm_opt) {
+            var val = elm_opt.getAttribute("data-mi-val");
+            var p = $(elm_opt).parents("[data-mi-type= 'opt_sel']")[0];
+            if (p) {
+                valset_opt_sel(p, val);
 
-                if (p.getAttribute("data-mi-type") == 'opt_sel')
-                    break;
-            } while (1);
-            valset_opt_sel=
-
-            if(this.option_set_callback)
-                this.option_set_callback(p.id, elm.getAttribute("data-mi-val"));
+                if (this.option_set_callback)
+                    this.option_set_callback(p.id, val);
+            }
         }
         return {
             option_set_callback: option_set_callback,
