@@ -4,7 +4,7 @@ var segment_template;
 var gSvgDoc;
 var svgdoc_width;
 var svgdoc_height;
-var svgdoc_offset_x = 0;
+var svgdoc_offset_x = 200;
 var svgdoc_offset_y = 30;
 
 var vb_width_max = 3000;
@@ -19,6 +19,7 @@ var g_popup_table;
 function show_hide_svg(elm_id, val) {
     document.getElementById(elm_id).setAttribute("visibility", (val ? 'visible' : 'hidden'));
 }
+var current_route = new HashTable();
 
 var trailmap_options = new HashTable({
     show_water: { def: 1, arg: 'layer_water', func: show_hide_svg },
@@ -67,6 +68,7 @@ function init_menu() {
 
 function create_mouse_paths() {
 
+    var path_ol_group = document.getElementById("path_ol_group")
     var path_group = document.getElementById("path_group")
     var paths = path_group.getElementsByTagName("svg:path");
     if (paths.length == 0)
@@ -76,15 +78,21 @@ function create_mouse_paths() {
     var len = paths.length;
 
     for (i = 0; i < len ; i++) {
-        var new_path = paths[i].cloneNode();
-        new_path.setAttribute("id", paths[i].id + "-mouse");
-        new_path.setAttribute("data-path-id", paths[i].id);
-        path_mouse_group.appendChild(new_path);
-        new_path.setAttribute("class", "path_mouse");
+        var mouse_path = paths[i].cloneNode();
+        mouse_path.setAttribute("id", paths[i].id + "-mouse");
+        mouse_path.setAttribute("data-path-id", paths[i].id);
+        path_mouse_group.appendChild(mouse_path);
+        mouse_path.setAttribute("class", "path_mouse");
+        mouse_path.oncontextmenu = path_right_click;
+        paths[i].oncontextmenu = path_right_click;
+        /*
+        var outline = paths[i].cloneNode();
+        outline.setAttribute("class", "path_ol");
+        outline.setAttribute("id", "");
+        path_ol_group.appendChild(outline);
+        */
 
         //new_path.addEventListener("oncontextmenu", path_right_click, true);
-        new_path.oncontextmenu = path_right_click;
-        paths[i].oncontextmenu = path_right_click;
 
     }
 
@@ -387,6 +395,20 @@ function route_reset() {
 
 
 }
+function make_route_string() {
+    var route="";
+    $("#path_group").children().each(function (index) {
+        var s = this.getAttribute('data-trail-state');
+        if (s > 0) {
+            route = route + this.id + ':' + s + '.';
+           
+        }
+
+    });
+    return route;
+
+}
+
 function path_set_selection(elm,count_new) {
 
     var count_old = Number(elm.getAttribute('data-trail-state'));
@@ -413,40 +435,22 @@ function path_set_selection(elm,count_new) {
     var len = elm.getTotalLength();
     var point = elm.getPointAtLength(len / 2);
     var x = point.x;
+    var route = make_route_string();
+    if (console)
+        console.log(route);
+
+
+
 }
 function toggle1(elm) {
     elm = get_target_path(elm);
 
     var state = Number(elm.getAttribute('data-trail-state'));
-    var class_state_old = "sel" + state;
-    var total_distance_elm = document.getElementById("total_distance");
-    var distance = Number(elm.getAttribute('data-trail-length'));
-    total_distance = Number(total_distance_elm.innerHTML);
-
     state = state + 1;
-    if (state > 3) {
+    if (state > 2) {
         state = 0;
-        total_distance = total_distance - 3 * distance;
     }
-    else {
-        total_distance = total_distance + 1 * distance;
-
-    }
-    var class_state_new = "sel" + state;
-
-    total_distance_elm.innerHTML = Math.round(total_distance * 100) / 100;
-
-
-    var cl = elm.getAttribute('class');
-    cl = cl.replace(class_state_old, class_state_new)
-    cl = cl.replace("highlight", "")
-
-    elm.setAttribute('class', cl);
-
-    elm.setAttribute('data-trail-state', state);
-    var len = elm.getTotalLength();
-    var point = elm.getPointAtLength(len / 2);
-    var x = point.x;
+    path_set_selection(elm, state);
 }
 
 function setCookie(c_name, value) {

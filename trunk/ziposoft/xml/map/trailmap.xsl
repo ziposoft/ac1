@@ -104,7 +104,7 @@ omit-xml-declaration="yes"
 				</div>         -->
 
 
-          <div style="position:fixed;top:30px;left:0px;border:0" id="svgwindow" >
+          <div style="position:fixed;top:30px;left:200px;border:0" id="svgwindow" >
 
             <svg
                 id="svgdoc"
@@ -119,6 +119,8 @@ omit-xml-declaration="yes"
               <g id="layer_group">
                  <xsl:apply-templates  mode="layer_groups" />
               </g>
+
+              <g id="path_ol_group"/>
               <g id="path_mouse_group"/>
               <g id="path_group">
                 <xsl:apply-templates  mode="path_groups" />

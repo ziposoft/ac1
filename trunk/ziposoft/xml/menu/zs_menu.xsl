@@ -77,6 +77,13 @@
       </td>
     </tr>
   </xsl:template>
+   <xsl:template match="zs:menu_content">
+    <tr>
+      <td class="zs_menu_link" >
+          <xsl:copy-of select="."/>
+      </td>
+    </tr>
+  </xsl:template> 
   <xsl:template match="zs:menu_bar">
     <table class="zs_menu_bar" cellspacing="0" cellpadding="0">
       <tr>

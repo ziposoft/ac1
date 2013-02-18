@@ -40,6 +40,13 @@
   <menu_bar_button onclick="route_reset()">Clear Route </menu_bar_button>
   <menu_bar_text >Total Distance:</menu_bar_text>
   <menu_bar_text id="total_distance">0</menu_bar_text>
+  <menu title="Help">
+    <menu_content >
+      <p>Click the trail section once to inlucde it in the route.</p>
+      <p>For an out-an-back section, click it twice. It will turn purple, indicating it is counted twice</p>
+      <p>To include a section more than twice, highlight the section, then press the number on your keyboard for the # of times to include it</p>
 
+    </menu_content>
+  </menu>
 </menu_bar>
 

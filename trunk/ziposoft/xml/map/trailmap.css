@@ -32,12 +32,15 @@ path
     stroke-dasharray: none;stroke-linejoin:round;stroke-linecap:butt;
 }
 path.path_mouse   {  opacity: .00;stroke-width: 80;      }
-path.sel0   {   stroke: dimgray;      }
-path.sel1  { stroke: blue;  }
-path.sel2 { stroke: purple;  }
+path.sel0   {   stroke: dimgray;  stroke-width: 8;      }
+path.sel1  { stroke: blue; stroke-width: 12; }
+path.sel2 { stroke: blueviolet;stroke-width: 12;  }
+path.path_ol {
+    stroke: dimgray;
+    stroke-width: 12;
+}
 
-
-path.highlight    {   stroke: red;      }
+path.highlight    {   stroke: red;stroke-width: 12;       }
 .trail_st {stroke-dasharray:15px,5px; }
 
 
