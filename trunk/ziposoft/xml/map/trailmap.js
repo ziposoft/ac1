@@ -16,6 +16,8 @@ var vb_height = vb_height_max;
 var g_path_highlighted = 0;
 var g_popup_table;
 
+
+
 function show_hide_svg(elm_id, val) {
     document.getElementById(elm_id).setAttribute("visibility", (val ? 'visible' : 'hidden'));
 }
@@ -121,7 +123,10 @@ function on_key_press(e) {
 
 
 }
-function init() {
+$(document).ready(function ()
+{
+    // initialization code goes here
+
     if ((BrowserDetect.browser != "Chrome") && (BrowserDetect.browser != "Firefox")) {
         window.alert("Trail Map has only been tested in the latest versions of Chrome and Firefox.\nIt probably will not work in your browser");
     }
@@ -157,7 +162,9 @@ function init() {
     init_menu();
 
     document.getElementById("browser_info").innerHTML = BrowserDetect.browser + " " + BrowserDetect.version + " " + BrowserDetect.OS;
-}
+
+});
+
 var dbl_click_toggle = 0;
 function OnDoubleClick(e) {
     // cross-browser wheel delta

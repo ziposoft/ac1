@@ -45,7 +45,7 @@ omit-xml-declaration="yes"
         <style   type="text/css">  @import url(trailmap.css); </style>
       </head>
 
-      <body onload="init()" >
+      <body  >
         <!-- status/menu bar-->
         
         <div id="header" style="background-color:#888">
@@ -77,8 +77,8 @@ omit-xml-declaration="yes"
 
 
         <div>
-          <!-- 
-				<div style="display:inline; "   >
+         
+				<div style="position:fixed;top:30px;left:0px;width:200px;border:0 "  id="leftpane" >
           <h1  style="display:inline;">Total:</h1>
           <h1  style="display:inline;" id="total_distance">0</h1>
     
@@ -101,7 +101,7 @@ omit-xml-declaration="yes"
 
 
 					</table> 
-				</div>         -->
+				</div>        
 
 
           <div style="position:fixed;top:30px;left:200px;border:0" id="svgwindow" >
@@ -144,9 +144,9 @@ omit-xml-declaration="yes"
         </div>
       </body>
         <xsl:call-template name="zs:module_menu_script" />
+       <script  type="text/javascript" src="../util/jquery.dev.js"/>
        <script type="text/javascript" src="../util/BrowserDetect.js"/>
         <script type="text/javascript" src="trailmap.js" ></script>
-       <script  type="text/javascript" src="../util/jquery.dev.js"/>
 
       
     </html>
