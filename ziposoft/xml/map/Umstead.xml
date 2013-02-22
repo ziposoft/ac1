@@ -1,133 +1,130 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <trails>
   <trail name="Company Mill">
-    <segment name="cm1" length="1" >
+    <segment name="cm1" length="1">
       From trail head to bridge
     </segment>
-    <segment name="cm2" length="0.9" >
+    <segment name="cm2" length="0.9">
       West side, from bridge to Reedy Creek Trail
     </segment>
-    <segment name="cm3" length="1.1" >
+    <segment name="cm3" length="1.1">
       North side, from Company Mill Spur to Reedy Creek Trail
     </segment>
-    <segment name="cm4" length="0.4" >
+    <segment name="cm4" length="0.4">
       East side, from Reedy Creek Trail to Company Mill Spur
     </segment>
-    <segment name="cm5" length="1.47" >
+    <segment name="cm5" length="1.47">
       East side, from bridge to Reedy Creek Trail
     </segment>
-    <segment name="cm6" length="0.024" >
+    <segment name="cm6" length="0.024">
       Company Mill Spur. Short trail to connect Company Mill to Graylyn
     </segment>
-  </trail>
-  
-      <trail name="Sycamore">
-    <segment name="syc1" length="1.1" >
+  </trail> 
+  <trail name="Sycamore">
+    <segment name="syc1" length="1.1">
       Sycamore West from Graylyn to fork
     </segment>
-      <segment name="syc2" length="0.12" >
+    <segment name="syc2" length="0.12">
       Sycamore fork to Graylyn
     </segment>
-          <segment name="syc3" length="2.6" >
+    <segment name="syc3" length="2.6">
       Sycamore
     </segment>
-                <segment name="syc4" length="0.59" >
+    <segment name="syc4" length="0.59">
       Sycamore
     </segment>
   </trail>
-  
-           <trail name="Black Creek Greenway">
-    <segment name="BCG1" length="1.4" >
-    from house to overpass
+
+  <trail name="Black Creek Greenway">
+    <segment name="BCG1" length="1.4">
+      from house to overpass
     </segment>
   </trail>
-       <trail name="Lapihio">
-    <segment name="Lapihio" length="0.66" >
-    from Reedy Creek to Lapihio
+  <trail name="Lapihio">
+    <segment name="Lapihio" length="0.66">
+      from Reedy Creek to Lapihio
     </segment>
   </trail>
-    
-    <trail name="Horse">
-    <segment name="horse1" length="0.29" >
-     from Graylyn To Fountain
+
+  <trail name="Horse">
+    <segment name="horse1" length="0.29">
+      from Graylyn To Fountain
     </segment>
   </trail>
   <trail name="North Turkey Creek">
-    <segment name="ntc" length="2.6" >
+    <segment name="ntc" length="2.6">
       North Turkey Creek
       From Cedar Ridge To Graylyn
     </segment>
   </trail>
-    <trail name="Graylyn">
-    <segment name="gray1" length="0.19" >
-         Graylyn
+  <trail name="Graylyn">
+    <segment name="gray1" length="0.19">
+      Graylyn
     </segment>
-        <segment name="gray2" length="0.18" >
-         Graylyn
+    <segment name="gray2" length="0.18">
+      Graylyn
     </segment>
-          <segment name="gray3" length="0.65" >
-         Graylyn
+    <segment name="gray3" length="0.65">
+      Graylyn
     </segment>
-      <segment name="gray4" length="0.025" >
-         Graylyn
+    <segment name="gray4" length="0.025">
+      Graylyn
     </segment>
-        <segment name="gray5" length="0.28" >
-         Graylyn
+    <segment name="gray5" length="0.28">
+      Graylyn
     </segment>
-          <segment name="gray6" length="0.29" >
-         Graylyn
-    </segment>  
+    <segment name="gray6" length="0.29">
+      Graylyn
+    </segment>
   </trail>
   <trail name="Cedar Ridge">
-    <segment name="crt1" length="1.38" >
+    <segment name="crt1" length="1.38">
       From
     </segment>
   </trail>
   <trail name="South Turkey Creek">
-    <segment name="stc" length="1.7" >
+    <segment name="stc" length="1.7">
       From
     </segment>
   </trail>
-    <trail name="Old Reedy Creek Road">
-    <segment name="orc1" length="0.56" >
-     West Gate to overpass
+  <trail name="Old Reedy Creek Road">
+    <segment name="orc1" length="0.56">
+      West Gate to overpass
     </segment>
-
   </trail>
   <trail name="Reedy Creek Lake Trail">
-    <segment name="rclt" length="1.2" >
+    <segment name="rclt" length="1.2">
       From Harrison Lot down Reedy Creek Lake Trail to Reedy Creek
     </segment>
-
   </trail>
   <trail name="Reedy Creek">
-    <segment name="rc1" length="1.04" >
-      West Gate to Airport Overlook 
+    <segment name="rc1" length="1.04">
+      West Gate to Airport Overlook
     </segment>
-    <segment name="rc2" length="0.50" >
+    <segment name="rc2" length="0.50">
       Airport Fountain to West Company Mill.
     </segment>
-    <segment name="rc3" length="0.67" >
+    <segment name="rc3" length="0.67">
       West Company Mill to East Company Mill
     </segment>
-    <segment name="rc4" length="0.12" >
+    <segment name="rc4" length="0.12">
       East Company Mill to Graylyn
     </segment>
-    <segment name="rc5" length="0.13" >
+    <segment name="rc5" length="0.13">
       Graylyn to Cedar Ridge
     </segment>
-    <segment name="rc6" length="0.84" >
+    <segment name="rc6" length="0.84">
       Corkscrew. [Cedar Ridge to Reedy Creek Lake]
     </segment>
-    <segment name="rc7" length="0.9" >
+    <segment name="rc7" length="0.9">
       RC Lake Road to South Turkey Creek
     </segment>
-    <segment name="rc8" length="0.1" >
+    <segment name="rc8" length="0.1">
       South Turkey Creek to East Gate
     </segment>
-  
-    <segment name="rc9" length="0.39" >
-      Fountain to Airport Overlook 
+
+    <segment name="rc9" length="0.39">
+      Fountain to Airport Overlook
       Marathon turnaround
     </segment>
   </trail>
