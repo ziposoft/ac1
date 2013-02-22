@@ -7,6 +7,7 @@
     <None Include="..\map\Umstead.svg" />
     <None Include="..\map\trailmap.css" />
     <None Include="..\map\trailmap.js" />
+    <None Include="..\map\dir.php" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\menu\zs_menu_test.xml" />
