@@ -2,8 +2,9 @@ AddType text/xml .xml
 AddType text/xml .xsl
 AddType text/xml .svg
 
-Options Includes Indexes MultiViews
+Options Includes Indexes MultiViews ExecCGI
 AddHandler server-parsed .html .xml .svg
+AddHandler cgi-script .cgi .py
 
 
 
