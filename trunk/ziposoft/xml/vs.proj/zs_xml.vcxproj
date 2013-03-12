@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\.htaccess" />
     <None Include="..\map\dir.php" />
     <None Include="..\map\trailmap.css" />
     <None Include="..\map\trailmap.js" />
