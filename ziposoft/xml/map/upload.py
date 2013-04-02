@@ -1,4 +1,5 @@
-#!c:/Python27/python
+#!/Python27/python
+#!/usr/bin/python
 # Import modules for CGI handling 
 import cgi, cgitb, os
 
@@ -13,19 +14,20 @@ def savefile( name,path ):
 	try:
 		if(path == None):
 			os.remove(name)
-		return
+		return false;
 	
 		f = open(name, 'w')
 		f.write(path)
 		f.close()
+		return true;
 	except os.error as e:
-		#print "I/O error({0}): {1}".format(e.errno, e.strerror)
+		print ("I/O error({0}): {1}".format(e.errno, e.strerror))
 		pass
 		
 	except IOError as e:
-		#print "I/O error({0}): {1}".format(e.errno, e.strerror)
+		print ("I/O error({0}): {1}".format(e.errno, e.strerror))
 		pass
-	return
+	return false;
 
 
 # Create instance of FieldStorage 
@@ -45,8 +47,10 @@ print ('Content-type:text/html\r\n\r\n'
 
 print ( "</head><body><pre>")
 
+
 cgi.print_arguments();
-cgi.print_environ();
+
+#cgi.print_environ();
 cgi.print_directory();
 
 
@@ -54,8 +58,10 @@ if (name == None):
 	print ('no name given')
 	exit
 else:
-	savefile(name,path)
-	print ("saved!")
+	if(savefile(name,path)):
+		print ("saved!")
+	else:
+		print("error!")
 
 
 
