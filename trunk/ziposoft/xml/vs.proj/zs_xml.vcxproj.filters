@@ -9,6 +9,7 @@
     <None Include="..\map\trailmap.js" />
     <None Include="..\map\dir.php" />
     <None Include="..\..\..\.htaccess" />
+    <None Include="..\map\upload.py" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\menu\zs_menu_test.xml" />
