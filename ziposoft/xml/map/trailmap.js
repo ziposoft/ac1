@@ -415,7 +415,11 @@ function make_route_string() {
     return route;
 
 }
+function savefile() {
+    
+    return route;
 
+}
 function path_set_selection(elm,count_new) {
 
     var count_old = Number(elm.getAttribute('data-trail-state'));

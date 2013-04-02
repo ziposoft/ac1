@@ -1,7 +1,14 @@
 #!/Python27/python
 #!/usr/bin/python
 # Import modules for CGI handling 
+
+
+
+
 import cgi, cgitb, os
+
+
+
 
 
 def zerror():
@@ -13,13 +20,14 @@ def zerror():
 def savefile( name,path ):
 	try:
 		if(path == None):
+			print("remove!")
 			os.remove(name)
-		return false;
+			return True;
 	
 		f = open(name, 'w')
 		f.write(path)
 		f.close()
-		return true;
+		return True;
 	except os.error as e:
 		print ("I/O error({0}): {1}".format(e.errno, e.strerror))
 		pass
@@ -27,7 +35,11 @@ def savefile( name,path ):
 	except IOError as e:
 		print ("I/O error({0}): {1}".format(e.errno, e.strerror))
 		pass
-	return false;
+	return False;
+
+
+
+
 
 
 # Create instance of FieldStorage 
@@ -67,3 +79,6 @@ else:
 
 print ("</pre></body>")
 print ("</html>")
+
+
+
