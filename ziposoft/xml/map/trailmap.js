@@ -416,6 +416,11 @@ function make_route_string() {
 
 }
 function savefile() {
+    var path = window.location.hostname + window.location.pathname;
+
+    var route = make_route_string();
+
+    make_http_req()
     
     return route;
 
