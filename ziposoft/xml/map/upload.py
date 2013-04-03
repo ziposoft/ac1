@@ -1,4 +1,4 @@
-#!/Python27/python
+#!c:/Python27/python.exe
 #!/usr/bin/python
 # Import modules for CGI handling 
 
@@ -8,8 +8,12 @@
 import cgi, cgitb, os
 
 
+dbg = None
 
-
+def dbgprint(x):
+	if(dbg):
+		print(x)
+	return
 
 def zerror():
 	
@@ -49,26 +53,29 @@ form = cgi.FieldStorage()
 
 # Get data from fields
 name = form.getvalue('name')
+dbg = form.getvalue('dbg')
 path  = form.getvalue('path')
+if(name):
+	name="../data/"+os.path.basename(name)
+
 
 
 print ('Content-type:text/html\r\n\r\n'
- "<html>"
- "<head>"
- "<title>Hello - Second CGI Program</title>")
-
-print ( "</head><body><pre>")
-
-
+	"<html>"
+	"<head>"
+	"<title>Hello - Second CGI Program</title></head><body><pre>")
 cgi.print_arguments();
-
-#cgi.print_environ();
+cgi.print_environ();
 cgi.print_directory();
+
+
+
+
 
 
 if (name == None):
 	print ('no name given')
-	exit
+	
 else:
 	if(savefile(name,path)):
 		print ("saved!")
@@ -77,8 +84,7 @@ else:
 
 
 
-print ("</pre></body>")
-print ("</html>")
+print ("</pre></body></html>")
 
 
 
