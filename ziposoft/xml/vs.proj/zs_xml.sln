@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zs_xml", "zs_xml.vcxproj", "{EC7D01BF-745D-4AF9-81ED-6DC0CCB9BE13}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonApplication1", "..\PythonApplication1\PythonApplication1.pyproj", "{61CF3F45-D531-44F8-B7B4-89DA900360FC}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "zs.python", "..\..\python\zs.python\zs.python.pyproj", "{63EB17E1-5D8E-48DF-B36E-58B02B664171}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,12 +27,12 @@ Global
 		{EC7D01BF-745D-4AF9-81ED-6DC0CCB9BE13}.Release|Mixed Platforms.Deploy.0 = Release|Win32
 		{EC7D01BF-745D-4AF9-81ED-6DC0CCB9BE13}.Release|Win32.ActiveCfg = Release|Win32
 		{EC7D01BF-745D-4AF9-81ED-6DC0CCB9BE13}.Release|Win32.Build.0 = Release|Win32
-		{61CF3F45-D531-44F8-B7B4-89DA900360FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61CF3F45-D531-44F8-B7B4-89DA900360FC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{61CF3F45-D531-44F8-B7B4-89DA900360FC}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{61CF3F45-D531-44F8-B7B4-89DA900360FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61CF3F45-D531-44F8-B7B4-89DA900360FC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{61CF3F45-D531-44F8-B7B4-89DA900360FC}.Release|Win32.ActiveCfg = Release|Any CPU
+		{63EB17E1-5D8E-48DF-B36E-58B02B664171}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63EB17E1-5D8E-48DF-B36E-58B02B664171}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{63EB17E1-5D8E-48DF-B36E-58B02B664171}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{63EB17E1-5D8E-48DF-B36E-58B02B664171}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63EB17E1-5D8E-48DF-B36E-58B02B664171}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{63EB17E1-5D8E-48DF-B36E-58B02B664171}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

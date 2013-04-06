@@ -18,7 +18,6 @@
     <None Include="..\map\Umstead.svg">
       <SubType>Designer</SubType>
     </None>
-    <None Include="..\map\upload.py" />
     <None Include="..\menu\zs_menu.css" />
     <None Include="..\menu\zs_menu.js" />
     <None Include="..\menu\zs_menu_test.js" />
