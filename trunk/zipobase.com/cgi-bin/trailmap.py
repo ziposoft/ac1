@@ -1,4 +1,3 @@
-#!c:/Python27/python.exe
 #!/usr/bin/python
 # Import modules for CGI handling 
 
@@ -14,6 +13,17 @@ def dbgprint(x):
 	if(dbg):
 		print(x)
 	return
+
+def listroutes():
+	list=os.listdir("../map/routes/");
+	for file in list:
+		print( file)
+	return
+
+
+
+
+
 
 def zerror():
 	
@@ -52,11 +62,19 @@ form = cgi.FieldStorage()
 
 
 # Get data from fields
+act = form.getvalue('act')
 name = form.getvalue('name')
 dbg = form.getvalue('dbg')
 path  = form.getvalue('path')
+
+if(act == 'listroutes'):
+	listroutes()
+	exit()
+
+
+
 if(name):
-	name="../data/"+os.path.basename(name)
+	name="../map/routes/"+os.path.basename(name)
 
 
 
