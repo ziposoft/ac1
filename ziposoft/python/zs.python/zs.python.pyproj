@@ -9,10 +9,11 @@
     </StartupFile>
     <SearchPath>
     </SearchPath>
-    <WorkingDirectory>.</WorkingDirectory>
+    <WorkingDirectory>C:\ac1\zipobase.com\cgi-bin</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>zs.python</Name>
     <RootNamespace>zs.python</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,7 +24,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="upload.py" />
+    <Compile Include="C:\ac1\zipobase.com\cgi-bin\trailmap.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
 </Project>
