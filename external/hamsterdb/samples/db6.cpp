@@ -59,28 +59,12 @@ int create(int size,int keysize) {
 	hamsterdb::db db;      /* hamsterdb database object */
 	hamsterdb::key key;      /* a key */
 	hamsterdb::record record;  /* a record */
-
 	if(keysize==0)
 		keysize=21;
-
-	/* Create a new environment file and a database in this environment */
 	 ham_parameter_t param=		  { HAM_PARAM_KEYSIZE, keysize };
 	env.create(db_name);
-
-
 	db = env.create_db(1,0,&param);
-
-
-
-	/*
-	* Now we can insert, delete or lookup values in the database
-	*
-	* for our test program, we just insert a few values, then look them
-	* up, then delete them and try to look them up again (which will fail).
-	*/
 	char buf[12];
-	
-
 	for (i = 0; i < size; i++)
 	{
 		key.set_size(sizeof(i));
@@ -90,23 +74,68 @@ int create(int size,int keysize) {
 		for(j=0;j<len;j++)
 			buf[j]=get_rand_char();
 		buf[j]=0;
-
-		
-		/*
-		std::string s;
-		s="anthony";
-		s.append(_itoa(i,buf,10));
-		*/
-
 		record.set_size(len+1);
 		record.set_data((void*)buf);
-
 		db.insert(&key, &record);
 	}
 	db.close();
 	env.close();
 	return 0;
 }
+int sort() {
+	
+	hamsterdb::env env;      /* hamsterdb environment object */
+	hamsterdb::db db_list,db_sort;      /* hamsterdb database object */
+	hamsterdb::key key;      /* a key */
+	hamsterdb::record record;  /* a record */
+	hamsterdb::cursor cursor;
+
+	env.open(db_name);
+	db_list = env.open_db(1);
+
+	cursor.create(&db);
+	while (1) 
+	{
+		try 
+		{
+			cursor.move_next(&key, &record);
+			if(strcmp((char*)record.get_data(),str)==0)
+			{
+				printf("data=%s found at key %d\n",str,*(int*)key.get_data());
+
+			}
+		}
+		catch (hamsterdb::error &e) 
+		{
+			/* reached end of the database? */
+			if (e.get_errno() == HAM_KEY_NOT_FOUND)
+			{
+				printf("reached end \n");
+				break;
+			}
+			else 
+			{
+				std::cerr << "cursor.move_next() failed: " << e.get_string()
+					<< std::endl;
+				return (-1);
+			}
+		}
+	}
+
+	/* Check if the value is ok */
+
+
+	/*
+	* close the database handle, then re-open it (just to demonstrate how
+	* to open a database file)
+	*/
+	cursor.close();
+	db.close();
+	env.close();
+	return 0;
+
+}
+
 int find(char* str) {
 	
 	hamsterdb::env env;      /* hamsterdb environment object */
