@@ -525,6 +525,15 @@ function make_http_req(url) {
     }
     request.open("GET", url);
     request.send();
+    return request.responseText;
 }
 
+function get_route_list() {
+    var site = window.location.hostname + "/cgi-bin/trailmap.py?act=list";
+    make_http_req(site);
+
+
+
+
+}
 

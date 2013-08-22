@@ -2,10 +2,11 @@ AddType text/xml .xml
 AddType text/xml .xsl
 AddType text/xml .svg
 
-Options Includes Indexes MultiViews ExecCGI
+Options Includes Indexes MultiViews ExecCGI FollowSymLinks
 AddHandler server-parsed .html .xml .svg
 AddHandler cgi-script .cgi .py
 
-
+RewriteEngine on
+RewriteRule (.*)/(.*)\.html$ index.php?id=$1&title=$2  
 
 

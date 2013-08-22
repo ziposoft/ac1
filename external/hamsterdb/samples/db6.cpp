@@ -17,6 +17,7 @@
 #include <string>
 #include <ham/hamsterdb.hpp>
 
+char*  db_name="test.db";
 char get_rand_char()
 {
 	int r=rand()%26;
@@ -30,7 +31,7 @@ int add(int ikey,char* data) {
 	hamsterdb::record record;  /* a record */
 
 	/* Create a new environment file and a database in this environment */
-	env.open("test.db");
+	env.open(db_name);
 	db = env.open_db(1);
 
 
@@ -52,16 +53,22 @@ int add(int ikey,char* data) {
 	env.close();
 	return 0;
 }
-int create(int size) {
+int create(int size,int keysize) {
 	int i;
 	hamsterdb::env env;      /* hamsterdb environment object */
 	hamsterdb::db db;      /* hamsterdb database object */
 	hamsterdb::key key;      /* a key */
 	hamsterdb::record record;  /* a record */
 
+	if(keysize==0)
+		keysize=21;
+
 	/* Create a new environment file and a database in this environment */
-	env.create("test.db");
-	db = env.create_db(1);
+	 ham_parameter_t param=		  { HAM_PARAM_KEYSIZE, keysize };
+	env.create(db_name);
+
+
+	db = env.create_db(1,0,&param);
 
 
 
@@ -108,7 +115,7 @@ int find(char* str) {
 	hamsterdb::record record;  /* a record */
 	hamsterdb::cursor cursor;
 
-	env.open("test.db");
+	env.open(db_name);
 	db = env.open_db(1);
 
 	cursor.create(&db);
@@ -169,7 +176,7 @@ int test(int iter,int show) {
 	hamsterdb::record record;  /* a record */
 
 
-	env.open("test.db");
+	env.open(db_name);
 	db = env.open_db(1);
 	int record_count=(UINT32)db.get_key_count();
 	
@@ -213,7 +220,7 @@ int get(int i) {
 	hamsterdb::record record;  /* a record */
 
 
-	env.open("test.db");
+	env.open(db_name);
 	db = env.open_db(1);
 	/*
 	* Now lookup all values
@@ -286,25 +293,31 @@ main(int argc, char **argv)
 	int count=1;
 	int param2=0;
 	try {
-		if(argc>2)
-		{	
-			sscanf_s(argv[2],"%x",&count);
+		if(argc<2)
+		{
+			printf("%s [db name] [command] ...\n",argv[0]);
+			return -1;
 		}
+		db_name=argv[1];
 		if(argc>3)
 		{	
-			sscanf_s(argv[3],"%d",&param2);
+			sscanf_s(argv[3],"%x",&count);
 		}
-		if(argc>1)
+		if(argc>4)
+		{	
+			sscanf_s(argv[4],"%d",&param2);
+		}
+		if(argc>2)
 		{
-			if(*argv[1]=='c')
-				create(count);
-			if(*argv[1]=='f')
-				find(argv[2]);
-			if(*argv[1]=='g')
+			if(*argv[2]=='c')
+				create(count,param2);
+			if(*argv[2]=='f')
+				find(argv[3]);
+			if(*argv[2]=='g')
 				get(count);
-			if(*argv[1]=='t')
+			if(*argv[2]=='t')
 				test(count,param2);
-			if(*argv[1]=='a')
+			if(*argv[2]=='a')
 				add(count,argv[3]);
 		}
 
