@@ -67,7 +67,7 @@ name = form.getvalue('name')
 dbg = form.getvalue('dbg')
 path  = form.getvalue('path')
 
-if(act == 'listroutes'):
+if(act == 'list'):
 	listroutes()
 	exit()
 

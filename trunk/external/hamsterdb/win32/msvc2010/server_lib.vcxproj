@@ -176,12 +176,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\server\os.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="3rdparty_mongoose.vcxproj">
-      <Project>{ab99816e-52c4-4420-b8dd-63892a380173}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

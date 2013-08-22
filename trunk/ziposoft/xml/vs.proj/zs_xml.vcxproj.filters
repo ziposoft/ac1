@@ -1,22 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <None Include="..\menu\zs_menu_test.js" />
-    <None Include="..\menu\zs_menu.css" />
-    <None Include="..\menu\zs_menu.js" />
-    <None Include="..\map\Umstead.svg" />
-    <None Include="..\map\trailmap.css" />
-    <None Include="..\map\trailmap.js" />
-    <None Include="..\map\dir.php" />
-    <None Include="..\..\..\.htaccess" />
+    <Xml Include="..\..\..\zipobase.com\map\Umstead.xml" />
+    <Xml Include="..\..\..\zipobase.com\map\trailmap.xsl" />
+    <Xml Include="..\..\..\zipobase.com\map\trailmap_menu.xml" />
+    <Xml Include="..\..\..\zipobase.com\menu\zs_menu.xsl">
+      <Filter>menu</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\menu\zs_menu_test.xml" />
-    <Xml Include="..\menu\zs_menu_test.xsl" />
-    <Xml Include="..\menu\zs_menu.xsl" />
-    <Xml Include="..\test\zs_test_page.xsl" />
-    <Xml Include="..\map\trailmap.xsl" />
-    <Xml Include="..\map\Umstead.xml" />
-    <Xml Include="..\map\trailmap_menu.xml" />
+    <None Include="..\..\..\zipobase.com\map\Umstead.svg" />
+    <None Include="..\..\..\zipobase.com\map\trailmap.css" />
+    <None Include="..\..\..\zipobase.com\map\trailmap.js" />
+    <None Include="..\..\..\zipobase.com\menu\zs_menu.css">
+      <Filter>menu</Filter>
+    </None>
+    <None Include="..\..\..\zipobase.com\menu\zs_menu.js">
+      <Filter>menu</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="menu">
+      <UniqueIdentifier>{a097431a-9da0-4b72-a7d6-a197ddb9d015}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
