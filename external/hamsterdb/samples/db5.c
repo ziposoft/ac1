@@ -21,16 +21,20 @@
 
 #define DATABASE_NAME     1
 
+char* words[]=
+{
+	"fred","larry","ant","tod","1234","3445","1" 
+};
+
 int
 main(int argc, char **argv) {
   ham_status_t st;          /* status variable */
   ham_env_t *env;           /* hamsterdb environment object */
   ham_db_t *db;             /* hamsterdb database object */
   ham_cursor_t *cursor;     /* a database cursor */
-  char line[1024 * 4];      /* a buffer for reading lines */
-  unsigned lineno = 0;      /* the current line number */
   ham_key_t key;
   ham_record_t record;
+  int i;
 
   memset(&key, 0, sizeof(key));
   memset(&record, 0, sizeof(record));
@@ -46,40 +50,29 @@ main(int argc, char **argv) {
     return (-1);
   }
   st = ham_env_create_db(env, &db, DATABASE_NAME,
-          HAM_ENABLE_EXTENDED_KEYS | HAM_ENABLE_DUPLICATES, 0);
+      0,    
+	  //HAM_ENABLE_EXTENDED_KEYS | HAM_ENABLE_DUPLICATES,
+		  0);
   if (st != HAM_SUCCESS) {
     printf("ham_env_create_db() failed with error %d\n", st);
     return (-1);
   }
 
-  /*
-   * Now read each line from stdin and split it in words; then each
-   * word is inserted into the database
-   */
-  while (fgets(line, sizeof(line), stdin)) {
-    char *start = line, *p;
-    lineno++;
-
-    /*
-     * strtok is not the best function because it's not threadsafe
-     * and not flexible, but it's good enough for this example.
-     */
-    while ((p = strtok(start, " \t\r\n"))) {
-      key.data = p;
-      key.size = (ham_size_t)strlen(p) + 1; /* also store the terminating
+	for(i=0;i<sizeof(words)/sizeof(char*);i++)
+	{
+      key.data = words[i];
+      key.size = (ham_size_t)strlen(words[i]) + 1; /* also store the terminating
                                              * 0-byte */
-      record.data = &lineno;
-      record.size = sizeof(lineno);
+      record.data = &i;
+      record.size = sizeof(i);
 
-      st = ham_db_insert(db, 0, &key, &record, HAM_DUPLICATE);
+      st = ham_db_insert(db, 0, &key, &record, 0 /* HAM_DUPLICATE*/);
       if (st != HAM_SUCCESS) {
         printf("ham_db_insert() failed with error %d\n", st);
         return (-1);
       }
-      printf(".");
 
-      start = 0;
-    }
+    
   }
 
   /* Create a cursor */
