@@ -88,12 +88,15 @@ int sort() {
 	hamsterdb::db db_list,db_sort;      /* hamsterdb database object */
 	hamsterdb::key key;      /* a key */
 	hamsterdb::record record;  /* a record */
-	hamsterdb::cursor cursor;
+	hamsterdb::cursor cursor_list;
+	hamsterdb::cursor cursor_sort;
 
 	env.open(db_name);
+		  db_list.operator=
 	db_list = env.open_db(1);
+ 	db_sort = env.create_db(2);
 
-	cursor.create(&db);
+	cursor.create(&db_sort);
 	while (1) 
 	{
 		try 
