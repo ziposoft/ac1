@@ -92,21 +92,16 @@ int sort() {
 	hamsterdb::cursor cursor_sort;
 
 	env.open(db_name);
-		  db_list.operator=
 	db_list = env.open_db(1);
- 	db_sort = env.create_db(2);
+ 	db_sort = env.create_db(2,HAM_ENABLE_DUPLICATES);
 
-	cursor.create(&db_sort);
+	cursor_list.create(&db_list);
+	cursor_sort.create(&db_sort);
 	while (1) 
 	{
 		try 
 		{
-			cursor.move_next(&key, &record);
-			if(strcmp((char*)record.get_data(),str)==0)
-			{
-				printf("data=%s found at key %d\n",str,*(int*)key.get_data());
-
-			}
+			cursor_list.move_next(&key, &record);
 		}
 		catch (hamsterdb::error &e) 
 		{
@@ -132,13 +127,53 @@ int sort() {
 	* close the database handle, then re-open it (just to demonstrate how
 	* to open a database file)
 	*/
+	env.close(HAM_AUTO_CLEANUP);
+	return 0;
+
+}
+
+int dump(int db_num) {
+	
+	hamsterdb::env env;      /* hamsterdb environment object */
+	hamsterdb::db db;      /* hamsterdb database object */
+	hamsterdb::key key;      /* a key */
+	hamsterdb::record record;  /* a record */
+	hamsterdb::cursor cursor;
+
+	env.open(db_name);
+	db = env.open_db(db_num);
+
+	cursor.create(&db);
+
+	while (1) 
+	{
+		try 
+		{
+			cursor.move_next(&key, &record);
+			printf("[%d]=%s\n",*(int*)key.get_data(),record.get_data());
+		}
+		catch (hamsterdb::error &e) 
+		{
+			/* reached end of the database? */
+			if (e.get_errno() == HAM_KEY_NOT_FOUND)
+			{
+				printf("reached end \n");
+				break;
+			}
+			else 
+			{
+				std::cerr << "cursor.move_next() failed: " << e.get_string()
+					<< std::endl;
+				return (-1);
+			}
+		}
+	}
 	cursor.close();
 	db.close();
 	env.close();
 	return 0;
 
 }
-
 int find(char* str) {
 	
 	hamsterdb::env env;      /* hamsterdb environment object */
@@ -343,6 +378,8 @@ main(int argc, char **argv)
 		{
 			if(*argv[2]=='c')
 				create(count,param2);
+			if(*argv[2]=='d')
+				dump(count);
 			if(*argv[2]=='f')
 				find(argv[3]);
 			if(*argv[2]=='g')
