@@ -17,6 +17,37 @@
 #include <string>
 #include <ham/hamsterdb.hpp>
 
+
+#define U32 unsigned int
+
+static int
+	my_string_compare(ham_db_t *db, const ham_u8_t *lhs, ham_size_t lhs_length,
+	const ham_u8_t *rhs, ham_size_t rhs_length) 
+
+{
+
+
+	int s = strncmp((const char *)lhs, (const char *)rhs,
+		lhs_length < rhs_length ? lhs_length : rhs_length);
+	if (s < 0)
+		return -1;
+	if (s > 0)
+		return +1;
+	return 0;
+}
+
+static int	my_int_compare(ham_db_t *db, const ham_u8_t *lhs, ham_size_t lhs_length,
+						   const ham_u8_t *rhs, ham_size_t rhs_length) {
+
+	U32 left=*(U32*)lhs;
+	U32 right=*(U32*)rhs;
+	if (left < right)
+		return -1;
+	if (left > right)
+		return +1;
+	return 0;
+}
+
 char*  db_name="test.db";
 char get_rand_char()
 {
@@ -61,9 +92,11 @@ int create(int size,int keysize) {
 	hamsterdb::record record;  /* a record */
 	if(keysize==0)
 		keysize=21;
-	 ham_parameter_t param=		  { HAM_PARAM_KEYSIZE, keysize };
+	ham_parameter_t param=		  { HAM_PARAM_KEYSIZE, keysize };
 	env.create(db_name);
-	db = env.create_db(1,0,&param);
+	//db = env.create_db(1,0,&param);
+	db = env.create_db(1,0,0);
+	db.set_compare_func(my_int_compare);
 	char buf[12];
 	for (i = 0; i < size; i++)
 	{
@@ -83,7 +116,7 @@ int create(int size,int keysize) {
 	return 0;
 }
 int sort() {
-	
+
 	hamsterdb::env env;      /* hamsterdb environment object */
 	hamsterdb::db db_list,db_sort;      /* hamsterdb database object */
 	hamsterdb::key key;      /* a key */
@@ -93,7 +126,7 @@ int sort() {
 
 	env.open(db_name);
 	db_list = env.open_db(1);
- 	db_sort = env.create_db(2,HAM_ENABLE_DUPLICATES);
+	db_sort = env.create_db(2,HAM_ENABLE_DUPLICATES);
 
 	cursor_list.create(&db_list);
 	cursor_sort.create(&db_sort);
@@ -133,7 +166,7 @@ int sort() {
 }
 
 int dump(int db_num) {
-	
+
 	hamsterdb::env env;      /* hamsterdb environment object */
 	hamsterdb::db db;      /* hamsterdb database object */
 	hamsterdb::key key;      /* a key */
@@ -175,7 +208,7 @@ int dump(int db_num) {
 
 }
 int find(char* str) {
-	
+
 	hamsterdb::env env;      /* hamsterdb environment object */
 	hamsterdb::db db;      /* hamsterdb database object */
 	hamsterdb::key key;      /* a key */
@@ -236,7 +269,7 @@ int find(char* str) {
 
 }
 int test(int iter,int show) {
-	
+
 	hamsterdb::env env;      /* hamsterdb environment object */
 	hamsterdb::db db;      /* hamsterdb database object */
 	hamsterdb::key key;      /* a key */
@@ -246,7 +279,7 @@ int test(int iter,int show) {
 	env.open(db_name);
 	db = env.open_db(1);
 	int record_count=(UINT32)db.get_key_count();
-	
+
 	/*
 	* Now lookup all values
 	*
@@ -280,7 +313,7 @@ int test(int iter,int show) {
 
 }
 int get(int i) {
-	
+
 	hamsterdb::env env;      /* hamsterdb environment object */
 	hamsterdb::db db;      /* hamsterdb database object */
 	hamsterdb::key key;      /* a key */
@@ -355,7 +388,7 @@ return (0);
 #endif
 
 int
-main(int argc, char **argv)
+	main(int argc, char **argv)
 {
 	int count=1;
 	int param2=0;
