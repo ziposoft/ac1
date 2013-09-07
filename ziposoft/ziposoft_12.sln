@@ -1,18 +1,39 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zipolib_c", "zipolib_c\zipolib_c.vcxproj", "{547309F3-E79A-49EE-841B-684DB97F356A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zbase_lib", "zbase_lib\windows\zbase_lib.vcxproj", "{CDE73D09-C930-468C-B421-F1F2D017AB23}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zipolib_c", "zipolib_c\windows\zipolib_c.vcxproj", "{9296B73D-D94E-4724-907F-E1766D6A575C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_NoTrace|Win32 = Debug_NoTrace|Win32
 		Debug|Win32 = Debug|Win32
+		dll_release|Win32 = dll_release|Win32
+		release_trace|Win32 = release_trace|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{547309F3-E79A-49EE-841B-684DB97F356A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{547309F3-E79A-49EE-841B-684DB97F356A}.Debug|Win32.Build.0 = Debug|Win32
-		{547309F3-E79A-49EE-841B-684DB97F356A}.Release|Win32.ActiveCfg = Release|Win32
-		{547309F3-E79A-49EE-841B-684DB97F356A}.Release|Win32.Build.0 = Release|Win32
+		{CDE73D09-C930-468C-B421-F1F2D017AB23}.Debug_NoTrace|Win32.ActiveCfg = Debug_NoTrace|Win32
+		{CDE73D09-C930-468C-B421-F1F2D017AB23}.Debug_NoTrace|Win32.Build.0 = Debug_NoTrace|Win32
+		{CDE73D09-C930-468C-B421-F1F2D017AB23}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CDE73D09-C930-468C-B421-F1F2D017AB23}.Debug|Win32.Build.0 = Debug|Win32
+		{CDE73D09-C930-468C-B421-F1F2D017AB23}.dll_release|Win32.ActiveCfg = dll_release|Win32
+		{CDE73D09-C930-468C-B421-F1F2D017AB23}.dll_release|Win32.Build.0 = dll_release|Win32
+		{CDE73D09-C930-468C-B421-F1F2D017AB23}.release_trace|Win32.ActiveCfg = release_trace|Win32
+		{CDE73D09-C930-468C-B421-F1F2D017AB23}.release_trace|Win32.Build.0 = release_trace|Win32
+		{CDE73D09-C930-468C-B421-F1F2D017AB23}.Release|Win32.ActiveCfg = Release|Win32
+		{CDE73D09-C930-468C-B421-F1F2D017AB23}.Release|Win32.Build.0 = Release|Win32
+		{9296B73D-D94E-4724-907F-E1766D6A575C}.Debug_NoTrace|Win32.ActiveCfg = Debug|Win32
+		{9296B73D-D94E-4724-907F-E1766D6A575C}.Debug_NoTrace|Win32.Build.0 = Debug|Win32
+		{9296B73D-D94E-4724-907F-E1766D6A575C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9296B73D-D94E-4724-907F-E1766D6A575C}.Debug|Win32.Build.0 = Debug|Win32
+		{9296B73D-D94E-4724-907F-E1766D6A575C}.dll_release|Win32.ActiveCfg = Debug|Win32
+		{9296B73D-D94E-4724-907F-E1766D6A575C}.dll_release|Win32.Build.0 = Debug|Win32
+		{9296B73D-D94E-4724-907F-E1766D6A575C}.release_trace|Win32.ActiveCfg = Release|Win32
+		{9296B73D-D94E-4724-907F-E1766D6A575C}.release_trace|Win32.Build.0 = Release|Win32
+		{9296B73D-D94E-4724-907F-E1766D6A575C}.Release|Win32.ActiveCfg = Release|Win32
+		{9296B73D-D94E-4724-907F-E1766D6A575C}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -143,16 +143,6 @@ public:
 	virtual z_strlist & operator << (ctext s) { push_back(s); return *this; }
 
 };
-/*
-template <class ITEM_CLASS,bool OWNER=true> class z_named_list : public z_objmap<ITEM_CLASS,z_string,OWNER>
-{
-public:
-	ITEM_CLASS*  operator [] (const char* id) { return z_objmap<ITEM_CLASS,z_string,OWNER>::objFind(id); }
-       
-	ITEM_CLASS*  operator [] (int i) {  return z_objmap<ITEM_CLASS,z_string,OWNER>::GetItemByIndex(i); }
-
-};
-*/
 
 int z_parse_url_query(ctext buff,size_t len,z_str_map& vars);
 
