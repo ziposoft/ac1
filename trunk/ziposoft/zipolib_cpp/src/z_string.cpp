@@ -1,11 +1,11 @@
-#include "zipolib/include/z_string.h"
-#include "zipolib/include/z_type_converter.h"
-#include "zipolib/include/z_utility.h"
-#include <stdarg.h>
-#include "zipolib/include/z_file.h"
-#ifdef UNIX
-#include <stdio.h>
-#endif
+#include "zipolib_cpp.h"
+#include "z_file.h"
+
+
+#define TEMP_BUFF_SIZE 100 //TODO fix this
+char g_temp_buff[  TEMP_BUFF_SIZE];		 //TODO fix this terrible
+
+
 const z_string z_string_null;
 //TODO FIX THIS
 ctext STR(U32 i)
@@ -25,10 +25,8 @@ ctext HEXSTR(U32 i)
 //TODO FIX THIS
 bool z_string::FormatV(ctext pFormat,va_list ArgList) 
 {
-	char *buff=z_temp_buffer_get();
-    vsnprintf(buff,z_temp_buffer_size(),pFormat,ArgList);
-    assign(buff);
-	z_temp_buffer_release();
+    vsnprintf(g_temp_buff,TEMP_BUFF_SIZE,pFormat,ArgList);
+    assign(g_temp_buff);
 	return true;
 }
 
@@ -43,10 +41,8 @@ bool z_string::Format(ctext pFormat,...)
 }
 void z_string::operator <<  (z_file &stream)
 {
-	char *buff=z_temp_buffer_get();
-    stream.getline(buff,z_temp_buffer_size());
-    *this=buff;
-	z_temp_buffer_release();
+    stream.getline(g_temp_buff,TEMP_BUFF_SIZE);
+    *this=g_temp_buff;
 }
 z_string & z_string::append_int (const int i)
 {
