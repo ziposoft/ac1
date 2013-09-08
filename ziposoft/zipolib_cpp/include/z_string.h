@@ -10,7 +10,7 @@
 // Basic defines 
 //
 //________________________________________________________________________/////////////////////////
-#include "zipolib/include/zipo.h"
+#include "zipolib_c/include/zipo.h"
 #include <string>
 #include <map>
 #include <vector>
@@ -19,7 +19,6 @@
 #include <stdarg.h>
 #define stricmp strcasecmp
 #endif
-#include "zipolib/include/z_objlist.h"
 
 class z_file;
 //TODO BUG BUG

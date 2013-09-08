@@ -49,7 +49,7 @@
       <AdditionalIncludeDirectories>../include;../../</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeaderFile>zipo.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>zipo.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)zipo.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -78,11 +78,13 @@
   <ItemGroup>
     <ClInclude Include="..\include\Windows_zipo.h" />
     <ClInclude Include="..\include\zipo.h" />
+    <ClInclude Include="..\include\z_utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\pch.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\src\z_utility.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
