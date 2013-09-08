@@ -1,12 +1,13 @@
 #ifndef ZB_H
 #define ZB_H
-#include "zipolib/include/zipo.h"
-#include "zipolib/include/z_string.h"
-#include "zipolib/include/z_time.h"
-#include "zipolib/include/z_obj.h"
-#include "sqlite/include/sqlite3.h"
+#include "zipolib_cpp/include/z_string.h"
+//#include "zipolib_cpp/include/z_time.h"
+//#include "zipolib/include/z_obj.h"
+//#include "sqlite/include/sqlite3.h"
 #define Z_PROFILING
-#include "zipolib/include/z_trace.h"
+//#include "zipolib/include/z_trace.h"
+
+
 typedef U64 zb_key_size;
 typedef zb_key_size zb_key;
 class zb_recp;

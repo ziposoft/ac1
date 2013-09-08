@@ -5,7 +5,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zbase_lib", "zbase_lib\wind
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zipolib_c", "zipolib_c\windows\zipolib_c.vcxproj", "{9296B73D-D94E-4724-907F-E1766D6A575C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zipolib_cpp", "zipolib_cpp\windows\zipolib_cpp.vcxproj", "{61770672-CA7E-41A4-894F-76A1511CEDB0}"
+EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_NoTrace|Win32 = Debug_NoTrace|Win32
 		Debug|Win32 = Debug|Win32
@@ -34,6 +40,16 @@ Global
 		{9296B73D-D94E-4724-907F-E1766D6A575C}.release_trace|Win32.Build.0 = Release|Win32
 		{9296B73D-D94E-4724-907F-E1766D6A575C}.Release|Win32.ActiveCfg = Release|Win32
 		{9296B73D-D94E-4724-907F-E1766D6A575C}.Release|Win32.Build.0 = Release|Win32
+		{61770672-CA7E-41A4-894F-76A1511CEDB0}.Debug_NoTrace|Win32.ActiveCfg = Debug|Win32
+		{61770672-CA7E-41A4-894F-76A1511CEDB0}.Debug_NoTrace|Win32.Build.0 = Debug|Win32
+		{61770672-CA7E-41A4-894F-76A1511CEDB0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{61770672-CA7E-41A4-894F-76A1511CEDB0}.Debug|Win32.Build.0 = Debug|Win32
+		{61770672-CA7E-41A4-894F-76A1511CEDB0}.dll_release|Win32.ActiveCfg = Debug|Win32
+		{61770672-CA7E-41A4-894F-76A1511CEDB0}.dll_release|Win32.Build.0 = Debug|Win32
+		{61770672-CA7E-41A4-894F-76A1511CEDB0}.release_trace|Win32.ActiveCfg = Release|Win32
+		{61770672-CA7E-41A4-894F-76A1511CEDB0}.release_trace|Win32.Build.0 = Release|Win32
+		{61770672-CA7E-41A4-894F-76A1511CEDB0}.Release|Win32.ActiveCfg = Release|Win32
+		{61770672-CA7E-41A4-894F-76A1511CEDB0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,7 +9,7 @@ class zb_field :  public z_obj
 	zb_key   _key;
 	int _index; //TODO-ugly, make private or something
 public:
-	ZO_OBJ_H;
+	
 	zb_field(zb_key key,ctext name);
 	//virtual zb_status get_data_text(zb_recp* rec,ctext& text)=0;
 	virtual zb_status get_data_text(zb_recset* rs,z_string& text)=0;
