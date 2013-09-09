@@ -13,8 +13,8 @@ ________________________________________________________________________*/
 
 
 \*_______________________________________________________________________*/
-#include "zipolib_cpp.h"
-#include "z_string.h"
+#include "zipolib_cpp/include/zipolib_cpp.h"
+#include "zipolib_cpp/include/z_string.h"
 
 
 class z_strmap : public std::map<z_string,z_string>
@@ -56,6 +56,7 @@ public:
 	virtual z_strlist & operator << (ctext s) { push_back(s); return *this; }
 
 };
+int z_parse_url_query(ctext buff,size_t len,z_strmap& vars);
 
 
 #endif

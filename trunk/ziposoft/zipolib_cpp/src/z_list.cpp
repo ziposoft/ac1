@@ -32,7 +32,7 @@ int z_strlist::break_string(ctext s,char break_char)
 }
 
 
-int z_parse_url_query(ctext buff,size_t len,z_str_map& vars)
+int z_parse_url_query(ctext buff,size_t len,z_strmap& vars)
 {
 	char *newstr;
 	size_t iCoded=0;
