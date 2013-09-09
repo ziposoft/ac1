@@ -3,7 +3,7 @@
 // z_utility_h
 //
 //________________________________________________________________________/////////////////////////
-#include "zipo.h"
+#include "zipolib_c/include/zipo.h"
 #ifndef z_utility_h
 #define z_utility_h
 #ifdef	__cplusplus
@@ -25,6 +25,8 @@ I64 z_stringtoi(const char* p);
 U64 z_stringtoue(const char* str, int base);
 char* z_itobase(I64 value, char* buf, int base, int* buff_length, int _signed);
 void z_itobase2(char* buf, I64 value, int base, int buff_length, char padchar, int _signed);
+
+
 
 #define I64_MIN (LLCONST(-9223372036854775807)-1)
 #define I64_MAX (LLCONST(9223372036854775807))
