@@ -1,4 +1,4 @@
-#include <kcpolydb.h>
+#include <kchashdb.h>
 
 using namespace std;
 using namespace kyotocabinet;
@@ -44,6 +44,7 @@ int main(int argc, char** argv) {
   if (!db.close()) {
     cerr << "close error: " << db.error().name() << endl;
   }
+  
 
   return 0;
 }
