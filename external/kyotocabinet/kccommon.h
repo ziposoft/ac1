@@ -66,6 +66,8 @@ extern "C" {
 
 #if defined(_MSC_VER)
 #define snprintf  _snprintf
+
+#pragma warning( disable : 4244 4996 4351 4800)
 #endif
 
 #if defined(__CYGWIN__)
