@@ -20,7 +20,7 @@ void   z_temp_buffer_release()
 {
 	//TODO release semaphore
 }
-
+//TODO make Unicode
 char z_to_upper(char c) {if ((c>='a')&&(c<='z')) c=c-'a'+'A'; return c; }
 
 
