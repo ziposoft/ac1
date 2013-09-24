@@ -1,25 +1,6 @@
 #include "zipo.h"
 #include "z_utility.h"
 
-//TODO make thread safe!!
-
-#define TEMP_BUFFER_SIZE 0x1000
-char temp_buff[TEMP_BUFFER_SIZE];
-char* z_temp_buffer_get()
-{
-	//TODO acquire semaphore
-	return  temp_buff;
-
-}
-int   z_temp_buffer_size()
-{
-	return TEMP_BUFFER_SIZE;
-
-}
-void   z_temp_buffer_release()
-{
-	//TODO release semaphore
-}
 //TODO make Unicode
 char z_to_upper(char c) {if ((c>='a')&&(c<='z')) c=c-'a'+'A'; return c; }
 
