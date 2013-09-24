@@ -30,7 +30,7 @@
     <ClInclude Include="..\include\z_file.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\aczs\zs\zipolib\include\z_type_converter.h">
+    <ClInclude Include="..\include\z_type_converter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,7 +47,7 @@
     <ClCompile Include="..\src\z_file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\aczs\zs\zipolib\src\z_type_converter.cpp">
+    <ClCompile Include="..\src\z_type_converter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

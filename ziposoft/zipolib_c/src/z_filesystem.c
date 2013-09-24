@@ -1,21 +1,9 @@
-#include "zipolib/include/z_filesystem.h"
-#include "zipolib/include/z_utility.h"
-#include "zipolib/include/z_debug.h"
-#include <stdio.h>
-#include <stdlib.h>
-#ifdef BUILD_VSTUDIO
-#include  <direct.h>
-#else
-#include  <string.h>
-#include  <errno.h>
-#define MAX_PATH 2048
-#include  <unistd.h>
-#include  <dirent.h>
-#include  <sys/stat.h>
-#endif
-#if UNIX
+#include "zipo.h"
+#include "zipolib_c/include/z_filesystem.h"
+#include "zipolib_c/include/z_utility.h"
+//#include "zipolib_c/include/z_debug.h"
 
-#endif
+
 int z_fopen(z_fileh* filep,ctext _Filename,ctext _Mode)
 {
 #ifdef BUILD_VSTUDIO

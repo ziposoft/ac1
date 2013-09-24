@@ -77,20 +77,20 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\aczs\zs\zipolib\include\z_type_converter.h" />
     <ClInclude Include="..\include\zipolib_cpp.h" />
     <ClInclude Include="..\include\z_file.h" />
     <ClInclude Include="..\include\z_list.h" />
     <ClInclude Include="..\include\z_string.h" />
+    <ClInclude Include="..\include\z_type_converter.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\aczs\zs\zipolib\src\z_type_converter.cpp" />
     <ClCompile Include="..\src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\src\z_file.cpp" />
     <ClCompile Include="..\src\z_list.cpp" />
     <ClCompile Include="..\src\z_string.cpp" />
+    <ClCompile Include="..\src\z_type_converter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
