@@ -1,6 +1,8 @@
 #include "zipo.h"
 #include "zipolib_c/include/z_filesystem.h"
+#include "zipolib_c/include/z_temp_buff.h"
 #include "zipolib_c/include/z_utility.h"
+#include "zipolib_c/include/z_windows.h"
 //#include "zipolib_c/include/z_debug.h"
 
 
@@ -17,20 +19,28 @@ int z_fopen(z_fileh* filep,utf8 _Filename,ascii _Mode)
 
 
 
-char* z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  )
+U8* z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  )
 {
 #ifdef BUILD_VSTUDIO
 	SECURITY_ATTRIBUTES sa;
 	int size;
-	char* code;
+	U8* data;
+	HANDLE handle;
+
+
+	WCHAR *out_Dst=
+
+
+	AnsiToUnicode16(
+
 	HANDLE handle= CreateFile(in_filepath, GENERIC_READ,
 		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL /*&sa*/, OPEN_EXISTING, 
 		FILE_FLAG_SEQUENTIAL_SCAN, 0);	
 	memset(&sa,0,sizeof(SECURITY_ATTRIBUTES));
 	if(handle==INVALID_HANDLE_VALUE) return 0;
 	size=GetFileSize(handle,NULL);
-	code=(char*)malloc (size+1);
-	if(ReadFile(handle,code,size,bytesread,NULL)) return code;
+	data=(U8*)malloc (size+1);
+	if(ReadFile(handle,data,size,bytesread,NULL)) return data;
 	return 0;
 
 #else
@@ -53,7 +63,7 @@ char* z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  )
 #endif
 
 }
-int z_file_open_and_write(utf8 in_filepath,const char* data,unsigned long length  )
+int z_file_open_and_write(utf8 in_filepath,U8* data,unsigned long length  )
 {
 	U32 byteswritten=0;
 #ifdef BUILD_VSTUDIO
@@ -242,4 +252,13 @@ void   z_dir_close(z_directory_h h)
 	zdir->handleDirectory=0;
 
 	free(zdir);
+}
+
+
+utf8 z_get_filename_from_path(utf8 fullpath)
+{
+	utf8 filename=strrchr(fullpath,'\\');
+	if(filename) filename++;
+	else filename=fullpath;
+	return filename;
 }

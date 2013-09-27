@@ -17,11 +17,6 @@ extern "C" {
 #define BUILD_GCC
 #define BUILD_MINGW
 
-#define OS_WIN
-#define OS_UNIX
-#define OS_LINUX
-#define OS_INTEGRITY
-#define OS_VXWORKS
 
 #define TARGET_X86
 #define TARGET_X86_32
@@ -44,6 +39,7 @@ typedef   unsigned char  U8;
 
 typedef const char* utf8;
 typedef const char* ascii;
+typedef const char* ctext;
 typedef char const *STRPTR;
 #  define LLCONST(a) (a##ll)
 
@@ -99,7 +95,7 @@ ________________________________________________________________________*/
 #ifdef BUILD_VSTUDIO
 	#pragma warning (disable :4355)//warning C4355: 'this' : used in base member initializer list
 	#pragma warning (disable :4800)//forcing value to bool 'true' or 'false' (performance warning)
-
+	#define OS_WINDOWS 1
 	#define UNUSED 
 #ifdef INTEL_COMPILIER
 	#pragma warning (disable :1684)//conversion from pointer to same-sized integral type (potential portability problem)
@@ -146,7 +142,12 @@ ________________________________________________________________________*/
 /*________________________________________________________________________
 
 	OS specific defines
-________________________________________________________________________*/
+_#define OS_WINDOWS
+#define OS_UNIX
+#define OS_LINUX
+#define OS_INTEGRITY
+#define OS_VXWORKS
+_______________________________________________________________________*/
 
 
 
