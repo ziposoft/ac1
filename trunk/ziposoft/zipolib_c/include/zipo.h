@@ -13,7 +13,6 @@ extern "C" {
 
 #define BUILD_VSTUDIO
 #define BUILD_INTEGRITY
-
 #define BUILD_VXWORKS
 #define BUILD_GCC
 #define BUILD_MINGW
@@ -32,10 +31,10 @@ ________________________________________________________________________*/
 
 
 
+/*________________________________________________________________________
 
-//
-// Basic defines 
-//
+ Basic defines 
+________________________________________________________________________*/
 typedef   unsigned long long U64;
 typedef   long long I64;
 typedef   unsigned int  U32;
@@ -44,7 +43,7 @@ typedef   unsigned char  U8;
 
 
 typedef const char* utf8;
-typedef const char* ctext;
+typedef const char* ascii;
 typedef char const *STRPTR;
 #  define LLCONST(a) (a##ll)
 
@@ -59,12 +58,10 @@ typedef char const *STRPTR;
 
 
 
+/*________________________________________________________________________
 
-
-
-
-
-//Check for build type
+Set the build type
+________________________________________________________________________*/
 #ifdef _MSC_VER 
 #define BUILD_VSTUDIO
 #elif __GNUC__
@@ -76,9 +73,10 @@ typedef char const *STRPTR;
 #error "You must define BUILD_VXWORKS,BUILD_GCC,BUILD_VSTUDIO, or BUILD_INTEGRITY"
 #endif
 
-#define SINGLE_THREADED
-#define BREAKPOINT
-#define znew new
+/*________________________________________________________________________
+
+	Build Specific Options
+________________________________________________________________________*/
 
 #ifdef BUILD_INTEGRITY
 #pragma ghs nowarning 228 //extra ;
@@ -87,20 +85,17 @@ typedef char const *STRPTR;
 #pragma ghs nowarning 620 //unnamed member 
 #endif
 
+/*________________________________________________________________________*/
 
 #ifdef BUILD_GCC
-
 #define UNUSED  __attribute__ ((unused))
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stddef.h>
 #endif
+/*________________________________________________________________________*/
 
-#ifdef BUILD_VSTUDIO
-#else
-
-#endif
 #ifdef BUILD_VSTUDIO
 	#pragma warning (disable :4355)//warning C4355: 'this' : used in base member initializer list
 	#pragma warning (disable :4800)//forcing value to bool 'true' or 'false' (performance warning)
@@ -121,7 +116,7 @@ typedef char const *STRPTR;
     #define _CRT_SECURE_NO_DEPRECATE 1
     #define _CRT_NONSTDC_NO_DEPRECATE 1
     #ifdef DEBUG_MEM
-        #include <stdlib.h>/* have to put this hear or you get compile errors*/
+        #include <stdlib.h>/* have to put this here or you get compile errors*/
         #define _CRTDBG_MAP_ALLOC
 	   #define DEBUG_CLIENTBLOCK   new( _CLIENT_BLOCK, __FILE__, __LINE__)
 
@@ -144,6 +139,16 @@ typedef char const *STRPTR;
 
 
 #endif
+
+
+
+
+/*________________________________________________________________________
+
+	OS specific defines
+________________________________________________________________________*/
+
+
 
 #ifdef OS_UNIX
 #define Sleep(_x_) usleep(_x_*1000)

@@ -4,7 +4,7 @@
 //#include "zipolib_c/include/z_debug.h"
 
 
-int z_fopen(z_fileh* filep,ctext _Filename,ctext _Mode)
+int z_fopen(z_fileh* filep,utf8 _Filename,ascii _Mode)
 {
 #ifdef BUILD_VSTUDIO
 	return fopen_s((FILE**)filep,_Filename,_Mode);
@@ -17,7 +17,7 @@ int z_fopen(z_fileh* filep,ctext _Filename,ctext _Mode)
 
 
 
-char* z_file_open_and_read(ctext in_filepath,unsigned long *bytesread  )
+char* z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  )
 {
 #ifdef BUILD_VSTUDIO
 	SECURITY_ATTRIBUTES sa;
@@ -53,7 +53,7 @@ char* z_file_open_and_read(ctext in_filepath,unsigned long *bytesread  )
 #endif
 
 }
-int z_file_open_and_write(ctext in_filepath,const char* data,unsigned long length  )
+int z_file_open_and_write(utf8 in_filepath,const char* data,unsigned long length  )
 {
 	U32 byteswritten=0;
 #ifdef BUILD_VSTUDIO
@@ -121,7 +121,7 @@ int z_file_delete(const char* name)
 	return -1;
 }
 
-int    z_make_dir(ctext dir_name)
+int    z_make_dir(utf8 dir_name)
 {
 #ifdef BUILD_VSTUDIO
 	return (mkdir(dir_name)) ;
@@ -133,7 +133,7 @@ int    z_make_dir(ctext dir_name)
 
 #endif
 }
-int    z_change_dir(ctext dir_name,int create)
+int    z_change_dir(utf8 dir_name,int create)
 {
 	if(chdir(dir_name)==0) return 0;
 	if(!create) return -1;
@@ -153,7 +153,7 @@ typedef struct _z_directory_t
 	char* buff;
 
 } _z_directory;
-int    z_dir_open(ctext name,z_directory_h* h)
+int    z_dir_open(utf8 name,z_directory_h* h)
 {
 	_z_directory* zdir=malloc(sizeof(_z_directory));
 	zdir->buff=malloc(MAX_PATH);
@@ -173,7 +173,7 @@ int    z_dir_open(ctext name,z_directory_h* h)
 }
 
 
-int     z_dir_get_next(z_directory_h h,ctext* currentfile,int type)
+int     z_dir_get_next(z_directory_h h,utf8* currentfile,int type)
 {
 	int isDir;
 	int handle_dir=0;

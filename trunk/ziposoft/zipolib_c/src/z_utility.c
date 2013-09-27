@@ -47,7 +47,7 @@ int z_ipower(int val,int power)
 	return i;
 }
 
-int z_str_same(ctext s1,ctext s2)
+int z_str_same(utf8 s1,utf8 s2)
 {
 	if(!s1) return 0;
 	if(!s2) return 0;
@@ -55,7 +55,7 @@ int z_str_same(ctext s1,ctext s2)
 		return 0;
 	return (strcmp(s1,s2)==0);
 };
-int z_str_check3(ctext id,ctext s1,ctext s2,ctext s3)
+int z_str_check3(ctext id,utf8 s1,utf8 s2,utf8 s3)
 {
 	size_t len;
 	if(!id) return 0;
@@ -76,9 +76,9 @@ int z_str_check3(ctext id,ctext s1,ctext s2,ctext s3)
 	return 0;
 };
 
-ctext z_get_filename_from_path(ctext fullpath)
+utf8 z_get_filename_from_path(utf8 fullpath)
 {
-	ctext filename=strrchr(fullpath,'\\');
+	utf8 filename=strrchr(fullpath,'\\');
 	if(filename) filename++;
 	else filename=fullpath;
 	return filename;
