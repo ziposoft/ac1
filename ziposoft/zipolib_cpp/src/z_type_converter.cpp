@@ -1,7 +1,6 @@
-#include "zipolib_cpp.h"
-#include "zipolib_cpp/include/z_string.h"
-#include "zipolib_cpp/include/z_type_converter.h"
-#include "zipolib_c/include/z_utility.h"
+#include "zipolib/include/z_string.h"
+#include "zipolib/include/z_type_converter.h"
+#include "zipolib/include/z_utility.h"
 #include "zipolib_c/include/z_str.h"
 #include <stdlib.h>
 #ifdef UNIX

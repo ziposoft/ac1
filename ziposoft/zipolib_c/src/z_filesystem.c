@@ -4,8 +4,21 @@
 #include "zipolib_c/include/z_utility.h"
 #include "zipolib_c/include/z_os_specific.h"
 #include "zipolib_c/include/z_debug.h"
+#include <stdio.h>
+#include <stdlib.h>
+#ifdef BUILD_VSTUDIO
+#include  <direct.h>
+#else
+#include  <string.h>
+#include  <errno.h>
+#define MAX_PATH 2048
+#include  <unistd.h>
+#include  <dirent.h>
+#include  <sys/stat.h>
+#endif
+#if UNIX
 
-
+#endif
 int z_fopen(z_fileh* filep,utf8 _Filename,ascii _Mode)
 {
 #ifdef BUILD_VSTUDIO
