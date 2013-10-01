@@ -23,6 +23,9 @@ zb_status zb_recset::ptr_increment()
 {
 	return _ds_recset->ptr_increment();
 }
+
+#ifdef ZB_SQLITE
+
 zb_status zb_src_set_sl3::ds_create_desc_from_source(zb_desc* desc)
 {
 	ZTF;
@@ -158,6 +161,6 @@ void zb_src_set_sl3::dump(z_file* fp)
         }
     }	
 }
-
+#endif
 
 

@@ -1,6 +1,7 @@
 #ifndef ZB_H
 #define ZB_H
 #include "zipolib_cpp/include/z_string.h"
+#include "zipolib_cpp/include/z_stl_map.h"
 //#include "zipolib_cpp/include/z_time.h"
 //#include "zipolib/include/z_obj.h"
 //#include "sqlite/include/sqlite3.h"

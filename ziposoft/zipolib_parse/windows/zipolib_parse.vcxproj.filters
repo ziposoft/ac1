@@ -15,36 +15,54 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\z_string.h">
+    <ClInclude Include="..\include\z_objlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\z_list.h">
+    <ClInclude Include="..\include\z_parse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\zipolib_cpp.h">
+    <ClInclude Include="..\include\z_parse_obj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\z_file.h">
+    <ClInclude Include="..\include\z_parse_text.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\z_type_converter.h">
+    <ClInclude Include="..\include\z_obj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\z_obj_cmd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\z_obj_macro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\z_obj_man.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\z_string.cpp">
+    <ClCompile Include="..\src\z_parse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\z_list.cpp">
+    <ClCompile Include="..\src\z_parse_item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\pch.cpp">
+    <ClCompile Include="..\src\z_parse_misc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\z_file.cpp">
+    <ClCompile Include="..\src\z_parse_objs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\z_type_converter.cpp">
+    <ClCompile Include="..\src\z_parse_text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\z_obj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\z_obj_cmd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\z_obj_man.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
