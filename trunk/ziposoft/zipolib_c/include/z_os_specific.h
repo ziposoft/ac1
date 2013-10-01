@@ -14,14 +14,15 @@ extern "C" {
 #ifdef OS_WINDOWS
 
 
-utf8 Unicode16ToAnsi(WCHAR * in_Src, utf8 out_Dst, INT in_MaxLen);
 
 BOOL AnsiToUnicode16(utf8 in_Src, WCHAR *out_Dst, INT in_MaxLen);
 BOOL AnsiToUnicode16L(utf8 in_Src, INT in_SrcLen, WCHAR *out_Dst, INT in_MaxLen);
 int WCHAR_str_deallocate(WCHAR* in);
+WCHAR* WCHAR_str_allocate(utf8 in_Src,size_t MaxLen);
 
-WCHAR* WCHAR_str_allocate(const utf8 in_Src,size_t MaxLen);
-utf8 UTF8_str_allocate(WCHAR* in_src);
+char* UTF8_str_allocate(WCHAR* in_src);
+int UTF8_str_deallocate(char* in_src);
+BOOL Unicode16ToAnsi(WCHAR * in_Src, char* out_Dst, INT in_MaxLen);
 
 #endif
 

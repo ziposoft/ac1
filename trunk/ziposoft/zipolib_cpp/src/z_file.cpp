@@ -221,7 +221,7 @@ int z_debug::write(const char* buf, size_t count )
 #ifdef WIN32
 	WCHAR* wc=WCHAR_str_allocate(buf,count);
 	 OutputDebugString(wc);
-	 WCHAR_str_deallocate((char*)wc);
+	 WCHAR_str_deallocate(wc);
 #else
 	z_file::write(buf,count);
 #endif

@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{61770672-CA7E-41A4-894F-76A1511CEDB0}</ProjectGuid>
+    <ProjectGuid>{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>zipolib_cpp</RootNamespace>
+    <RootNamespace>zipolib_parse</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -73,22 +73,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\include\zipolib_cpp.h" />
-    <ClInclude Include="..\include\z_file.h" />
-    <ClInclude Include="..\include\z_list.h" />
-    <ClInclude Include="..\include\z_string.h" />
-    <ClInclude Include="..\include\z_type_converter.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\src\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\src\z_file.cpp" />
-    <ClCompile Include="..\src\z_list.cpp" />
-    <ClCompile Include="..\src\z_string.cpp" />
-    <ClCompile Include="..\src\z_type_converter.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
