@@ -11,7 +11,7 @@
 //
 //________________________________________________________________________/////////////////////////
 #include "zipolib_cpp/include/zipolib_cpp.h"
-
+class z_file;
 static const char* empty_cstr="";
 class z_string : public std::string
 {

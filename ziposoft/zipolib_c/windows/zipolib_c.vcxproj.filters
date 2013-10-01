@@ -39,6 +39,9 @@
     <ClInclude Include="..\include\z_str.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\z_debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\pch.c">
@@ -57,6 +60,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\z_str.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\z_debug.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -48,7 +48,7 @@ typedef char const *STRPTR;
 #define U64_MAX (LLCONST(18446744073709551615u))
 
 
-
+#define Z_MAX_PATH_LENGTH 2048
 
 
 

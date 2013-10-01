@@ -78,6 +78,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\Windows_zipo.h" />
     <ClInclude Include="..\include\zipo.h" />
+    <ClInclude Include="..\include\z_debug.h" />
     <ClInclude Include="..\include\z_filesystem.h" />
     <ClInclude Include="..\include\z_str.h" />
     <ClInclude Include="..\include\z_temp_buff.h" />
@@ -88,6 +89,7 @@
     <ClCompile Include="..\src\pch.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\src\z_debug.c" />
     <ClCompile Include="..\src\z_filesystem.c" />
     <ClCompile Include="..\src\z_str.c" />
     <ClCompile Include="..\src\z_temp_buff.c" />
