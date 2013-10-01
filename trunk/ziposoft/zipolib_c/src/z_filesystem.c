@@ -2,8 +2,8 @@
 #include "zipolib_c/include/z_filesystem.h"
 #include "zipolib_c/include/z_temp_buff.h"
 #include "zipolib_c/include/z_utility.h"
-#include "zipolib_c/include/z_windows.h"
-//#include "zipolib_c/include/z_debug.h"
+#include "zipolib_c/include/z_os_specific.h"
+#include "zipolib_c/include/z_debug.h"
 
 
 int z_fopen(z_fileh* filep,utf8 _Filename,ascii _Mode)
@@ -161,22 +161,24 @@ typedef struct _z_directory_t
 #ifdef BUILD_VSTUDIO
 	WIN32_FIND_DATA FindFileData;
 	HANDLE handleDirectory ;
+	WCHAR* wc_path;
 #else
     DIR* handleDirectory ;
 	struct dirent* entry;
 #endif
-	char* buff;
+	utf8 path;
 
 } _z_directory;
 int    z_dir_open(utf8 name,z_directory_h* h)
 {
 	_z_directory* zdir=(_z_directory*)malloc(sizeof(_z_directory));
-	zdir->buff=malloc(MAX_PATH);
-	snprintf(zdir->buff,MAX_PATH,"%s//*",name);
+	zdir->path=(char*)malloc(MAX_PATH);
+	snprintf(zdir->path,MAX_PATH,"%s//*",name);
 	zdir->handleDirectory=0;
 	DBG_OUT(("z_dir_open %s\n",name));
 	*h=(z_directory_h)zdir;
 #ifdef BUILD_VSTUDIO
+	zdir->wc_path= WCHAR_str_allocate( zdir->path,MAX_PATH);
 	return 0;
 #else
 	zdir->handleDirectory=opendir(name);
@@ -199,7 +201,7 @@ int     z_dir_get_next(z_directory_h h,utf8* currentfile,int type)
 #ifdef BUILD_VSTUDIO
 		if(zdir->handleDirectory==0)
 		{
-			zdir->handleDirectory = FindFirstFile(zdir->buff, &(zdir->FindFileData));
+			zdir->handleDirectory = FindFirstFile(zdir->wc_path, &(zdir->FindFileData));
 			if(INVALID_HANDLE_VALUE==zdir->handleDirectory)
 			{
 				zdir->handleDirectory=0;
@@ -246,14 +248,20 @@ void   z_dir_close(z_directory_h h)
 {
 	_z_directory* zdir=(_z_directory*)h;
 	if(!zdir) return;
-	if(zdir->buff) free(zdir->buff);
+	if(zdir->path) 
+	{
+		free(zdir->path);
+		zdir->path=0;
+	}
 
 	if(zdir->handleDirectory) 
+	{
 #ifdef BUILD_VSTUDIO	
 		FindClose(zdir->handleDirectory);
 #else
 		closedir(zdir->handleDirectory);
 #endif
+	}
 	zdir->handleDirectory=0;
 
 	free(zdir);
