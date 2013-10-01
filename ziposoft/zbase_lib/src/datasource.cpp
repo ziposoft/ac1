@@ -8,6 +8,9 @@ zb_source::zb_source()
 
 
 }
+
+#ifdef ZB_SQLITE
+
 bool zb_src_sl3::is_open()
 {
 	if(!_handle)
@@ -264,7 +267,7 @@ zb_status zb_src_sl3::get_table_info()
 	return zb_ok;
 }
 
-
+#endif
 /*
 
 act_rtn zb_src_sl3::get_data_test()

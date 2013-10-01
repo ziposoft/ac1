@@ -93,7 +93,7 @@ public:
 
 };
 
-
+#ifdef ZB_SQLITE
 class zb_src_set_sl3 : public zb_src_set
 {
 	sqlite3_stmt *_stmt;
@@ -127,7 +127,6 @@ public:
 	virtual zb_status ds_get_val_string(z_string& val,zb_field* field);
 	virtual void  dump(z_file* fp); 
 
-
-
 };
+#endif
 #endif

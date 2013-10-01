@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zipolib_c", "zipolib_c\wind
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zipolib_cpp", "zipolib_cpp\windows\zipolib_cpp.vcxproj", "{61770672-CA7E-41A4-894F-76A1511CEDB0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zipolib_parse", "zipolib_parse\windows\zipolib_parse.vcxproj", "{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -50,6 +52,16 @@ Global
 		{61770672-CA7E-41A4-894F-76A1511CEDB0}.release_trace|Win32.Build.0 = Release|Win32
 		{61770672-CA7E-41A4-894F-76A1511CEDB0}.Release|Win32.ActiveCfg = Release|Win32
 		{61770672-CA7E-41A4-894F-76A1511CEDB0}.Release|Win32.Build.0 = Release|Win32
+		{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}.Debug_NoTrace|Win32.ActiveCfg = Debug|Win32
+		{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}.Debug_NoTrace|Win32.Build.0 = Debug|Win32
+		{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}.Debug|Win32.Build.0 = Debug|Win32
+		{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}.dll_release|Win32.ActiveCfg = Debug|Win32
+		{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}.dll_release|Win32.Build.0 = Debug|Win32
+		{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}.release_trace|Win32.ActiveCfg = Release|Win32
+		{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}.release_trace|Win32.Build.0 = Release|Win32
+		{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}.Release|Win32.ActiveCfg = Release|Win32
+		{7DFEB237-87B6-4425-A52D-E8D5E892D6F4}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

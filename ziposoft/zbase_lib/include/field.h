@@ -3,7 +3,7 @@
 #include "zbase_lib/include/zb.h"
 
 
-class zb_field :  public z_obj
+class zb_field //:  public z_obj
 {
 	z_string _name;
 	zb_key   _key;

@@ -134,7 +134,7 @@ returns
 '1' if it cant find the file
 '-1' if it cannot delete the file
 */
-int z_file_delete(const char* name)
+int z_file_delete(utf8 name)
 {
 #ifdef BUILD_VSTUDIO
 	ULONG error;
@@ -179,7 +179,7 @@ typedef struct _z_directory_t
     DIR* handleDirectory ;
 	struct dirent* entry;
 #endif
-	utf8 path;
+	char* path;
 
 } _z_directory;
 int    z_dir_open(utf8 name,z_directory_h* h)
@@ -226,7 +226,9 @@ int     z_dir_get_next(z_directory_h h,utf8* currentfile,int type)
 		{
 			return -1;
 		}
-		*currentfile=zdir->FindFileData.cFileName;
+
+		Unicode16ToAnsi(zdir->FindFileData.cFileName,zdir->path,MAX_PATH);
+		*currentfile=zdir->path;
 		isDir=(zdir->FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
 #else
 		struct stat status;
