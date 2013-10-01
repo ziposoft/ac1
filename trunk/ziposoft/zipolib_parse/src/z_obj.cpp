@@ -1,7 +1,7 @@
-#include "zipolib/include/z_obj.h"
-#include "zipolib/include/z_file.h"
-#include "zipolib/include/z_parse.h"
-#include "zipolib/include/z_obj_man.h"
+#include "zipolib_parse/include/z_obj.h"
+#include "zipolib_cpp/include/z_file.h"
+#include "zipolib_parse/include/z_parse.h"
+#include "zipolib_parse/include/z_obj_man.h"
 
 
 z_obj_man_data::z_obj_man_data()

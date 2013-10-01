@@ -77,6 +77,8 @@
     <ClInclude Include="..\include\zipolib_cpp.h" />
     <ClInclude Include="..\include\z_file.h" />
     <ClInclude Include="..\include\z_list.h" />
+    <ClInclude Include="..\include\z_stl_list.h" />
+    <ClInclude Include="..\include\z_stl_map.h" />
     <ClInclude Include="..\include\z_string.h" />
     <ClInclude Include="..\include\z_type_converter.h" />
   </ItemGroup>

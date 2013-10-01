@@ -5,14 +5,14 @@
 
 
 
-class zb_table_base : public z_obj
+class zb_table_base // : public z_obj
 {
 protected:
 	z_string _name;
 	zb_desc _desc;
 	zb_source* _ds;
 public:
-	ZO_OBJ_H;
+	
 	zb_table_base(zb_source* ds,ctext name)
 	{
 		_ds=ds;
@@ -37,7 +37,7 @@ class zb_table : public zb_table_base
 {
 protected:
 public:
-	ZO_OBJ_H;
+	
 	zb_table(zb_source* ds,ctext name) : zb_table_base(ds,name)
 	{
 	}
@@ -49,7 +49,6 @@ class zb_table_static : public zb_table_base
 {
 protected:
 public:
-	ZO_OBJ_H;
 	zb_table_static(zb_source* ds,ctext name) : zb_table_base(ds,name)
 	{
 	}

@@ -45,7 +45,7 @@ public:
 };
 
 
-class zb_desc : public z_obj_map<zb_field>
+class zb_desc : public z_map<zb_field>
 {
 public:
 	zb_desc(){}

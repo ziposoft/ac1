@@ -11,7 +11,7 @@ ctext zb_status_text[]=
 	"zb_data_source_not_open",//zb_data_source_not_open,
 
 };
-
+#if 0
 #define Z_MODULE _Z_MODULE(zipobase)
 #define ZO_OBJ_LIST \
 	OBJV(zb_source,z_obj,0,"Data source", 0 , \
@@ -42,3 +42,4 @@ ctext zb_status_text[]=
 
 
 #include "zipolib/include/z_obj_macro.h"
+#endif

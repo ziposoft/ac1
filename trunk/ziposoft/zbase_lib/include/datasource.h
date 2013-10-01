@@ -2,14 +2,13 @@
 #define DATASOURCE_H
 #include "zbase_lib/include/zb.h"
 #include "zbase_lib/include/table_static.h"
-#include "zipolib/include/z_stl_map.h"
+#include "zipolib_cpp/include/z_stl_map.h"
 
 
 
-class zb_source : public z_obj
+class zb_source //: public z_obj
 {
 public:
-	ZO_OBJ_H;
 	zb_source();
 	z_string _name;
 	virtual ~zb_source(){};
@@ -23,7 +22,7 @@ public:
 	virtual zb_table* get_tbl(ctext ds_table_name)=0;
 
 
-	z_obj_map<zb_table> _tables;
+	z_map<zb_table> _tables;
 
 };
 class zb_ds_text
@@ -35,6 +34,7 @@ public:
 	virtual zb_status close();
 	virtual bool is_open();
 };
+#ifdef ZB_SQLITE
 
 zb_status get_zb_status_sqlite(int sql_status);
 
@@ -82,4 +82,6 @@ public:
 
 
 };
+#endif
+
 #endif
