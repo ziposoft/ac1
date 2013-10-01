@@ -37,8 +37,8 @@ typedef   unsigned short  U16;
 typedef   unsigned char  U8;
 
 
-typedef const char* utf8;
-typedef const char* ascii;
+typedef char* utf8;
+typedef char* ascii;
 typedef const char* ctext;
 typedef char const *STRPTR;
 #  define LLCONST(a) (a##ll)
