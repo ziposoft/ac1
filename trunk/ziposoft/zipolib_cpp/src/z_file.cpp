@@ -1,5 +1,8 @@
 #include "zipolib_cpp.h"
 #include "z_file.h"
+#include "zipolib_c/include/z_filesystem.h"
+#include "zipolib_c/include/z_os_specific.h"
+
 using namespace std;
 #ifdef WIN32
 #include <io.h>
@@ -14,6 +17,7 @@ z_file::z_file()
 {
 	_file_handle=0;
 	_log_file_handle=0;
+	_max_line_length=0x1000;
 }
 z_file::z_file(ctext filename)
 {
@@ -126,14 +130,14 @@ char z_file::get(char& c)
 
 const char* z_file::getline(z_string& s)
 {
-	char* tb=z_temp_buffer_get();
-	fgets( tb, z_temp_buffer_size(), (FILE*)_file_handle );
+	char* tb=z_temp_buffer_get(_max_line_length);
+	fgets( tb, _max_line_length, (FILE*)_file_handle );
 	size_t l=strlen(tb);
 	if(tb[l-1]=='\n')
 		tb[l-1]=0;
 
 	s=tb;
-	z_temp_buffer_release();
+	z_temp_buffer_release(tb);
 	return  s.c_str();
 }
 
@@ -181,12 +185,12 @@ int z_file::putf(const char*  lpszFormat,  ...  )
 {
     int c;
     va_list ap;
-	char* tempbuf=z_temp_buffer_get();
+	char* tempbuf=(char*)z_temp_buffer_get(_max_line_length);
     va_start (ap, lpszFormat);
-    c=vsnprintf (tempbuf,z_temp_buffer_size(), lpszFormat, ap);
+    c=vsnprintf (tempbuf,_max_line_length, lpszFormat, ap);
     va_end (ap);
     write(tempbuf,strlen(tempbuf));
-	z_temp_buffer_release();
+	z_temp_buffer_release(tempbuf);
     return c;
 }
 void z_file::flush()
@@ -215,7 +219,9 @@ z_file gz_out((size_t)stdout);
 int z_debug::write(const char* buf, size_t count )
 {
 #ifdef WIN32
-	 OutputDebugString(buf);
+	WCHAR* wc=WCHAR_str_allocate(buf,count);
+	 OutputDebugString(wc);
+	 WCHAR_str_deallocate((char*)wc);
 #else
 	z_file::write(buf,count);
 #endif
@@ -232,9 +238,9 @@ int z_debug::putfline(const char*  lpszFormat,  ...  )
 {
     int c;
     va_list ap;
-	char* tempbuf=z_temp_buffer_get();
+	char* tempbuf=z_temp_buffer_get(_max_line_length);
     va_start (ap, lpszFormat);
-    c=vsnprintf (tempbuf,z_temp_buffer_size(), lpszFormat, ap);
+    c=vsnprintf (tempbuf,_max_line_length, lpszFormat, ap);
     va_end (ap);
 	int d=_depth;
 	while(d--)
@@ -242,7 +248,7 @@ int z_debug::putfline(const char*  lpszFormat,  ...  )
 		write("  ",2);
 	}
     write(tempbuf,strlen(tempbuf));
-	z_temp_buffer_release();
+	z_temp_buffer_release(tempbuf);
 
     return c;
 }
@@ -250,12 +256,12 @@ int z_debug::putf(const char*  lpszFormat,  ...  )
 {
     int c;
     va_list ap;
-	char* tempbuf=z_temp_buffer_get();
+	char* tempbuf=z_temp_buffer_get(_max_line_length);
     va_start (ap, lpszFormat);
-    c=vsnprintf (tempbuf,z_temp_buffer_size(), lpszFormat, ap);
+    c=vsnprintf (tempbuf,_max_line_length, lpszFormat, ap);
     va_end (ap);
     write(tempbuf,strlen(tempbuf));
-	z_temp_buffer_release();
+	z_temp_buffer_release(tempbuf);
     return c;
 }
 int z_debug:: trace(ctext text,ctext fullpath,ctext func,int line)

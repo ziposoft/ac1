@@ -5,18 +5,26 @@ z_utility.c
 ________________________________________________________________________*/
 #include "zipo.h"
 #include "z_windows.h"
-#include "z_utility.h"
+#include "z_temp_buff.h"
 
 #ifdef OS_WINDOWS
 
-WCHAR* Allocate_WCHAR_str(utf8 in_Src,size_t MaxLen)
+WCHAR* WCHAR_str_allocate(utf8 in_Src,size_t MaxLen)
 {
 	WCHAR* buff =(WCHAR*)z_temp_buffer_get( MaxLen);
 	BOOL result=AnsiToUnicode16(in_Src, buff, MaxLen);
+	if(result)
+		return buff;
+
+	WCHAR_str_deallocate(buff);
+	return 0;
 
 
 }
-
+ int WCHAR_str_deallocate(WCHAR* in)
+{
+	return z_temp_buffer_release((char*) in);
+}
 
 BOOL AnsiToUnicode16(utf8 in_Src, WCHAR *out_Dst, INT in_MaxLen)
 {

@@ -1,6 +1,6 @@
 /*________________________________________________________________________
 
-z_windows.h
+z_os_specific.h
 
 ________________________________________________________________________*/
 
@@ -15,9 +15,8 @@ extern "C" {
 
 BOOL AnsiToUnicode16(utf8 in_Src, WCHAR *out_Dst, INT in_MaxLen);
 BOOL AnsiToUnicode16L(utf8 in_Src, INT in_SrcLen, WCHAR *out_Dst, INT in_MaxLen);
-
-
-WCHAR* Allocate_WCHAR_str(utf8 in,size_t MaxLen);
+int WCHAR_str_deallocate(WCHAR* in);
+WCHAR* WCHAR_str_allocate(utf8 in_Src,size_t MaxLen);
 #endif
 
 

@@ -27,15 +27,14 @@ U8* z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  )
 	U8* data;
 	HANDLE handle;
 
+	WCHAR* w_filepath=WCHAR_str_allocate(in_filepath,Z_MAX_PATH_LENGTH);
 
-	WCHAR *out_Dst=
-
-
-	AnsiToUnicode16(
-
-	HANDLE handle= CreateFile(in_filepath, GENERIC_READ,
+	handle= CreateFile(w_filepath, GENERIC_READ,
 		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL /*&sa*/, OPEN_EXISTING, 
-		FILE_FLAG_SEQUENTIAL_SCAN, 0);	
+		FILE_FLAG_SEQUENTIAL_SCAN, 0);
+
+	WCHAR_str_deallocate(w_filepath);
+
 	memset(&sa,0,sizeof(SECURITY_ATTRIBUTES));
 	if(handle==INVALID_HANDLE_VALUE) return 0;
 	size=GetFileSize(handle,NULL);
@@ -68,9 +67,13 @@ int z_file_open_and_write(utf8 in_filepath,U8* data,unsigned long length  )
 	U32 byteswritten=0;
 #ifdef BUILD_VSTUDIO
 	//SECURITY_ATTRIBUTES sa;
-	HANDLE handle= CreateFile(in_filepath, GENERIC_WRITE,
+
+	WCHAR* w_filepath=WCHAR_str_allocate(in_filepath,Z_MAX_PATH_LENGTH);
+
+	HANDLE handle= CreateFile(w_filepath, GENERIC_WRITE,
 		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL /*&sa*/, CREATE_ALWAYS, 
 		FILE_FLAG_SEQUENTIAL_SCAN, 0);	
+	WCHAR_str_deallocate(w_filepath);
 
 	//memset(&sa,0,sizeof(SECURITY_ATTRIBUTES));
 
@@ -122,7 +125,9 @@ int z_file_delete(const char* name)
 {
 #ifdef BUILD_VSTUDIO
 	ULONG error;
-	if(DeleteFile(name)==TRUE) return 0;
+	WCHAR* w_filepath=WCHAR_str_allocate(name,Z_MAX_PATH_LENGTH);
+	if(DeleteFile(w_filepath)==TRUE) return 0;
+	WCHAR_str_deallocate(w_filepath);
 	error=GetLastError();
 	if(error==ERROR_FILE_NOT_FOUND) return 1;
 #else
@@ -165,7 +170,7 @@ typedef struct _z_directory_t
 } _z_directory;
 int    z_dir_open(utf8 name,z_directory_h* h)
 {
-	_z_directory* zdir=malloc(sizeof(_z_directory));
+	_z_directory* zdir=(_z_directory*)malloc(sizeof(_z_directory));
 	zdir->buff=malloc(MAX_PATH);
 	snprintf(zdir->buff,MAX_PATH,"%s//*",name);
 	zdir->handleDirectory=0;

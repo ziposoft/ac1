@@ -7,15 +7,19 @@
 #define z_file_h
 #include "zipolib_cpp/include/zipolib_cpp.h"
 #include "zipolib_cpp/include/z_string.h"
+#include "zipolib_c/include/z_temp_buff.h"
 #include "zipolib_cpp/include/z_type_converter.h"
 #ifndef WIN32
 #define	HANDLE size_t
 #endif
+
 class z_file
 {
 	size_t  _file_handle;	
 	z_string _file_name;
 	void* _log_file_handle;
+protected:
+	int _max_line_length;
 public:
 	static const int 
 		flag_write=0x001,
@@ -58,11 +62,11 @@ public:
 	bool read_all(char*& data,size_t& size);
 	template <class TYPE>  z_file  &put(TYPE data)
 	{ 
-		char* tb=z_temp_buffer_get();
+		char* tb=(char*)z_temp_buffer_get(0x100);
 		
-		z_convert(data,tb,z_temp_buffer_size());
+		z_convert(data,tb,0x100);
 		write(tb,strlen(tb));
-		z_temp_buffer_release();
+		z_temp_buffer_release(tb);
 		return *this;
 	}	
 

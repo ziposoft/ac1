@@ -6,8 +6,8 @@ extern "C" {
 #endif
 
 
-U8* z_temp_buffer_get(size_t size);
-void  z_temp_buffer_release(char* ptr);
+char* z_temp_buffer_get(size_t size);
+int  z_temp_buffer_release(char* ptr);
 void  z_temp_buffer_cleanup();
 
 
