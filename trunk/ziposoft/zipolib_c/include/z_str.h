@@ -29,7 +29,6 @@ char * z_strstrcase (
         );
 
 
-int z_ipower(int val,int power);
 #ifdef	__cplusplus
 }
 #endif
