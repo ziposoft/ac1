@@ -4,15 +4,12 @@
   <menu_bar_text>Umstead State Park Map</menu_bar_text>
 
   <menu title="View">   
-    <menu_bool opt="debug_table" func="show_hide_elm">Show Debug Bar </menu_bool>
     <menu_bool id="show_water">Show Water </menu_bool>
     <menu_bool id="show_map" >Show Map </menu_bool>
     <menu_bool id="show_text">Show Text </menu_bool>
     <menu_bool id="show_outline">Show Outline </menu_bool>
     <menu_bool id="show_satellite">Show Satellite </menu_bool>
     <menu_bool id="show_popup">Show Trail Info Popup </menu_bool>
-    <menu_link onclick="document.getElementById('debug_table').style.display='none'">hide debug </menu_link>
-    <menu_link onclick="document.getElementById('debug_table').style.display='block'">show debug </menu_link>
 		<menu_opt_sel title="Zoom" id="zoom" val="2">
       <menu_opt val="1">slow</menu_opt>
       <menu_opt val="2">medium</menu_opt>
@@ -31,7 +28,13 @@
       <menu_link >subitem #2 </menu_link>
     </menu_sub>
   </menu>
-   <menu title="Options">
+  <menu title="Debug">
+    <menu_bool opt="debug_table" func="show_hide_elm">Show Debug Bar </menu_bool>
+    <menu_link onclick="document.getElementById('debug_table').style.display='none'">hide debug </menu_link>
+    <menu_link onclick="document.getElementById('debug_table').style.display='block'">show debug </menu_link>
+    <menu_link onclick="route_string_show()">route_string_show</menu_link>
+  </menu>
+  <menu title="Options">
     <menu_link >menu 1 #1 </menu_link>
     <menu_link >menu 2 #1 </menu_link>
     <menu_sub title="submenu">

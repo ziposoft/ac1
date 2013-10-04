@@ -5,17 +5,10 @@
    zipolib_cpp.h
 
 \*_______________________________________________________________________*/
-#include "zipolib_c/include/zipo.h"
-#include "zipolib_c/include/z_utility.h"
-
-#include <string>
-#include <map>
-#include <vector>
-#include <algorithm>
-#ifdef UNIX
-#include <stdarg.h>
-#define stricmp strcasecmp
+#include "zipolib_cpp/include/zipolib_cpp_pch.h"
+#include "zipolib_cpp/include/z_string.h"
+#include "zipolib_cpp/include/z_type_converter.h"
+#include "zipolib_cpp/include/z_file.h"
+#include "zipolib_cpp/include/z_stl_list.h"
+#include "zipolib_cpp/include/z_list.h"
 #endif
-#endif
-#include <stdarg.h>
-#include <stdio.h>

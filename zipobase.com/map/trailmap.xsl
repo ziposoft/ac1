@@ -71,6 +71,12 @@ omit-xml-declaration="yes"
               <td id="browser_info">--</td>
 
             </tr>
+            <tr>
+              <td>route=</td>
+              <td id="stat_route_string">--</td>
+              
+
+            </tr>            
           </table>
         </div>
 

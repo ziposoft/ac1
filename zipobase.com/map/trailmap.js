@@ -402,23 +402,21 @@ function route_reset() {
 
 
 }
-function make_route_string() {
-    var route="";
+function route_string_make() {
+    var route = "";
     $("#path_group").children().each(function (index) {
         var s = this.getAttribute('data-trail-state');
         if (s > 0) {
             route = route + this.id + ':' + s + '.';
-           
         }
-
     });
     return route;
-
 }
+
 function savefile() {
     var path = window.location.hostname + window.location.pathname;
 
-    var route = make_route_string();
+    var route = route_string_make();
 
     make_http_req()
     
@@ -451,10 +449,11 @@ function path_set_selection(elm,count_new) {
     var len = elm.getTotalLength();
     var point = elm.getPointAtLength(len / 2);
     var x = point.x;
-    var route = make_route_string();
+    var route = route_string_make();
     if (console)
         console.log(route);
-
+    $("#stat_route_string").innerHTML = route;
+    
 
 
 }
