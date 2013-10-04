@@ -18,6 +18,7 @@
     <ClInclude Include="..\include\z_obj_man.h" />
     <ClInclude Include="..\include\z_parse.h" />
     <ClInclude Include="..\include\z_parse_obj.h" />
+    <ClInclude Include="..\include\z_parse_pch.h" />
     <ClInclude Include="..\include\z_parse_text.h" />
   </ItemGroup>
   <ItemGroup>
@@ -28,6 +29,7 @@
     <ClCompile Include="..\src\z_parse_item.cpp" />
     <ClCompile Include="..\src\z_parse_misc.cpp" />
     <ClCompile Include="..\src\z_parse_objs.cpp" />
+    <ClCompile Include="..\src\z_parse_pch.cpp" />
     <ClCompile Include="..\src\z_parse_text.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -66,7 +68,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderFile>zipolib_cpp.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>z_parse_pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>../../;../include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>

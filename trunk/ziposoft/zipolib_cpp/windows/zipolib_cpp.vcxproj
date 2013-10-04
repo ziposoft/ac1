@@ -46,7 +46,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderFile>zipolib_cpp.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>zipolib_cpp_pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>../../;../include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -75,6 +75,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\zipolib_cpp.h" />
+    <ClInclude Include="..\include\zipolib_cpp_pch.h" />
     <ClInclude Include="..\include\z_file.h" />
     <ClInclude Include="..\include\z_list.h" />
     <ClInclude Include="..\include\z_stl_list.h" />
