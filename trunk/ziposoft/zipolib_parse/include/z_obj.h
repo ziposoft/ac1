@@ -2,6 +2,8 @@
 #define z_obj_h
 
 #include "zipolib_parse/include/z_parse_pch.h"
+#include "zipolib_parse/include/z_parse_def.h"
+
 
 class z_obj;
 class zo_manipulator;

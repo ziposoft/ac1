@@ -1,8 +1,6 @@
 #include "z_parse_pch.h"
 
 #include "zipolib_parse/include/z_obj.h"
-#include "zipolib_cpp/include/z_file.h"
-#include "zipolib_parse/include/z_parse.h"
 #include "zipolib_parse/include/z_obj_man.h"
 
 
@@ -223,7 +221,7 @@ ctext z_obj_fact_get_name(const z_obj_fact* fact)
 }
 
 
-
+#if 0
 
 const z_obj_fact*  zo_get_factory_by_name_and_length(ctext name,size_t len)
 {
@@ -260,7 +258,7 @@ const z_obj_fact*  zo_get_factory(ctext name)
 	}
 	return 0;
 }
-
+#endif
 void zo_str_container::copy(zo_str_container& other)
 {
 	other.reset_iter();
