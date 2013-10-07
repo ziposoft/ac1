@@ -9,8 +9,8 @@
   <ItemGroup>
     <None Include="..\trailmap.js" />
     <None Include="..\dir.php" />
-    <None Include="..\upload.py" />
     <None Include="..\Umstead.svg" />
     <None Include="..\trailmap.css" />
+    <None Include="..\..\cgi-bin\trailmap.cgi" />
   </ItemGroup>
 </Project>

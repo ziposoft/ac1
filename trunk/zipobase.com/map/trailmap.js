@@ -556,7 +556,7 @@ function make_http_req(url) {
 }
 
 function get_route_list() {
-    var site = window.location.hostname + "/cgi-bin/trailmap.py?act=list";
+    var site = window.location.hostname + "/cgi-bin/trailmap.cgi?act=list";
     make_http_req(site);
 
 

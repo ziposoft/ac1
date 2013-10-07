@@ -16,13 +16,10 @@ def dbgprint(x):
 
 def listroutes():
 	list=os.listdir("../map/routes/");
+	print ('Content-type:text/html\r\n\r\n');
 	for file in list:
 		print( file)
 	return
-
-
-
-
 
 
 def zerror():
@@ -33,11 +30,6 @@ def zerror():
 # Function definition is here
 def savefile( name,path ):
 	try:
-		if(path == None):
-			print("remove!")
-			os.remove(name)
-			return True;
-	
 		f = open(name, 'w')
 		f.write(path)
 		f.close()
@@ -71,38 +63,33 @@ if(act == 'list'):
 	listroutes()
 	exit()
 
+if(act == 'debug'):
+	print ('Content-type:text/html\r\n\r\n'
+		"<html>"
+		"<head>"
+		"<title>Hello - Second CGI Program</title></head><body><pre>")
+	cgi.print_arguments();
+	cgi.print_environ();
+	cgi.print_directory();
+	exit()
 
-
-if(name):
-	name="../map/routes/"+os.path.basename(name)
-
+if(act == 'save'):
+	dbgprint('Content-type:text/html\r\n\r\n');
+	if (name == None):
+		dbgprint ("no name!")
+		exit();
+	if(name):
+		name="../map/routes/"+os.path.basename(name)
+	if(savefile(name,path)):
+		dbgprint ("saved!")
+	else:
+		dbgprint("error!")
+	exit();
 
 
 print ('Content-type:text/html\r\n\r\n'
 	"<html>"
 	"<head>"
-	"<title>Hello - Second CGI Program</title></head><body><pre>")
-cgi.print_arguments();
-cgi.print_environ();
-cgi.print_directory();
+	"<title>Trail Map</title></head><body><pre>")
 
-
-
-
-
-
-if (name == None):
-	print ('no name given')
-	
-else:
-	if(savefile(name,path)):
-		print ("saved!")
-	else:
-		print("error!")
-
-
-
-print ("</pre></body></html>")
-
-
-
+print ("No arguments</pre></body></html>")

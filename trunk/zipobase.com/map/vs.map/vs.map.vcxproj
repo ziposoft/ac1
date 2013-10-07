@@ -70,11 +70,11 @@
     <Xml Include="..\Umstead.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\cgi-bin\trailmap.cgi" />
     <None Include="..\dir.php" />
     <None Include="..\trailmap.css" />
     <None Include="..\trailmap.js" />
     <None Include="..\Umstead.svg" />
-    <None Include="..\upload.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
