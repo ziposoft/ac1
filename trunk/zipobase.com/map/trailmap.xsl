@@ -51,7 +51,7 @@ omit-xml-declaration="yes"
         <div id="header" style="background-color:#888">
          <xsl:apply-templates select="document('trailmap_menu.xml')"/>
    
-          <table id="debug_table" visibility="hidden" rules="all" style="display: none;border: solid 1px black">
+          <table id="debug_table" visibility="hidden" rules="all" style="display: block;border: solid 1px black">
             <tr>
               <td>window=</td>
               <td id="stat_window">--</td>
@@ -73,7 +73,8 @@ omit-xml-declaration="yes"
             </tr>
             <tr>
               <td>route=</td>
-              <td id="stat_route_string">--</td>
+							<td><input onchange="route_string_change()"  id="stat_route_string"  value="--" type="text"/> 
+								</td>
               
 
             </tr>            
@@ -84,7 +85,7 @@ omit-xml-declaration="yes"
 
         <div>
          
-				<div style="position:fixed;top:30px;left:0px;width:200px;border:0 "  id="leftpane" >
+				<div style="position:fixed;top:100px;left:0px;width:200px;border:0 "  id="leftpane" >
           <h1  style="display:inline;">Total:</h1>
           <h1  style="display:inline;" id="total_distance">0</h1>
     
