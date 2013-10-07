@@ -1,12 +1,8 @@
 #ifndef z_parse_obj_h
 #define z_parse_obj_h
-#include "zipolib/include/z_utility.h"
-#include "zipolib/include/z_file.h"
-#include "zipolib/include/z_obj.h"
-#include "zipolib/include/z_stl_map.h"
-#include <vector>
+#include "zipolib_parse/include/z_obj.h"
 
-Z_MODULE_DEF(parse);
+//Z_MODULE_DEF(parse);
 
 /*
 enum type_memvar_oper
@@ -96,7 +92,7 @@ public:
 	zp_obj_base* get_child_by_offset(int &index,size_t off,int si);
 
 	void dump(int level,z_file& outf,int flags);
-	//virtual z_status feature_manipulate(type_memvar_oper set,size_t *index,ctext name,zp_obj_parser* p);
+	//virtual zp_status feature_manipulate(type_memvar_oper set,size_t *index,ctext name,zp_obj_parser* p);
 	virtual ctext get_name();
 	virtual ctext get_template();
 	int compare_id(ctext id)
@@ -160,13 +156,13 @@ zp_obj* new_##_CLASS_() {\
 	return obj; }\
 ctext _CLASS_##PARSE=_PARSE_;\
 ctext _CLASS_##NAME=_NAME_;\
-z_status _CLASS_::feature_manipulate(type_memvar_oper oper,size_t* p_size,ctext var_name,zp_obj_parser* p) {\
+zp_status _CLASS_::feature_manipulate(type_memvar_oper oper,size_t* p_size,ctext var_name,zp_obj_parser* p) {\
    __VA_ARGS__ ;	return _BASE_::feature_manipulate(oper,p_size,var_name,p);} \
 const z_obj_fact  _CLASS_::ENTRY=  {_CLASS_##NAME,_CLASS_##PARSE,new_##_CLASS_};\
 	const z_obj_fact* _CLASS_::get_fact() { return &_CLASS_::ENTRY;} 
 
 #define ZP_OBJ_H \
-	public:virtual z_status feature_manipulate(type_memvar_oper set,size_t* i,ctext var_name,zp_obj_parser* p); \
+	public:virtual zp_status feature_manipulate(type_memvar_oper set,size_t* i,ctext var_name,zp_obj_parser* p); \
 	static const z_obj_fact ENTRY;\
 	virtual const z_obj_fact* get_fact();
 

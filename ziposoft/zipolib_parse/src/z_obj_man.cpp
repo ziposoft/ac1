@@ -1,6 +1,6 @@
-#include "zipolib/include/z_obj_man.h"
-#include "zipolib/include/z_parse.h"
-#include "zipolib/include/z_trace.h"
+#include "z_parse_pch.h"
+#include "z_obj_man.h"
+
 
 zo_fet_man_context::zo_fet_man_context(zo_manipulator* man,type_zo_memvar_oper oper,ctext name,zo_ftr_entry* fet_ent)
 {
@@ -20,7 +20,7 @@ void zo_manipulator::feature_capture_action_return_value(size_t act_rtn_val)
 
 }
 
-z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options, bool& val)
+zp_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options, bool& val)
 {
 	ZTFP("bool& val");
 	switch(context->_oper)
@@ -45,7 +45,7 @@ z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt
 	}
 	return zs_ok;
 }
-z_status zo_manipulator::access_obj_child(zo_fet_man_context* context, z_obj* pchild)
+zp_status zo_manipulator::access_obj_child(zo_fet_man_context* context, z_obj* pchild)
 {
 	ZTFP("z_obj* pchild");
 
@@ -63,7 +63,7 @@ z_status zo_manipulator::access_obj_child(zo_fet_man_context* context, z_obj* pc
 	}
 	return zs_ok;
 }
-z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options, void* member_var)
+zp_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options, void* member_var)
 {
 	ZTFP("void* member_var");
 	switch(context->_oper)
@@ -92,7 +92,7 @@ z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt
 	}
 	return zs_ok;
 }
-z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options, int& member_var)
+zp_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options, int& member_var)
 {
 	ZTFP("int& member_var");
 	switch(context->_oper)
@@ -121,7 +121,7 @@ z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt
 	return zs_ok;
 }
 
-z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options,z_string& member_var)
+zp_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options,z_string& member_var)
 {
 	ZTFP("z_string& member_var");
 	switch(context->_oper)
@@ -155,7 +155,7 @@ z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt
 	return zs_ok;
 }
 
-z_status zo_manipulator::access_action_params(const zo_action_params* params)
+zp_status zo_manipulator::access_action_params(const zo_action_params* params)
 {
 	ZTFP("zo_action_params* params");
 	_p_member_action_params=	params;
@@ -165,7 +165,7 @@ z_status zo_manipulator::access_action_params(const zo_action_params* params)
 
 }
 
-z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options,z_obj& Obj)
+zp_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options,z_obj& Obj)
 {
 	ZTFP("z_obj& Obj");
 	switch(context->_oper)
@@ -204,7 +204,7 @@ z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt
 	return zs_ok;
 }
 
-z_status zo_manipulator::feature_callback_pchild(zo_fet_man_context* context,zo_fet_opt options,z_obj* p_child_obj)
+zp_status zo_manipulator::feature_callback_pchild(zo_fet_man_context* context,zo_fet_opt options,z_obj* p_child_obj)
 {
 	ZTFP("z_obj* pObj");
 	switch(context->_oper)
@@ -243,7 +243,7 @@ z_status zo_manipulator::feature_callback_pchild(zo_fet_man_context* context,zo_
 	};
 	return zs_ok;
 }
-z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options,zo_str_container& member_var)
+zp_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options,zo_str_container& member_var)
 {
 	ZTFP("zo_str_container& member_var");
 	switch(context->_oper)
@@ -299,7 +299,7 @@ z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt
 
 }
 
-z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options,z_obj_container& member_var)
+zp_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options,z_obj_container& member_var)
 {
 	ZTFP("z_obj_container& member_var");
 	switch(context->_oper)
@@ -436,7 +436,7 @@ z_obj* zo_manipulator::get_child_obj(ctext name,z_obj* parent)
 	if(!fe) return 0;
 	_p_member_var_obj=0;
 	zo_fet_man_context con( this,zo_mvo_get_child_obj,name,fe);
-	z_status status=parent->feature_manipulate(&con);
+	zp_status status=parent->feature_manipulate(&con);
 
 	if(status)
 		return 0;
@@ -449,123 +449,123 @@ int zo_manipulator::feature_get_num_children(z_obj* p_obj,ctext var_id /* 0 for 
 {
 	_member_var_int_data=0;
 	zo_fet_man_context con( this,zo_mvo_get_num_obj,var_id,0);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	return _member_var_int_data;
 }
 
-z_status zo_manipulator::feature_dump(z_obj* p_obj,ctext var_id)
+zp_status zo_manipulator::feature_dump(z_obj* p_obj,ctext var_id)
 {
 	zo_fet_man_context con( this,zo_mvo_dump,var_id,0);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	return s;
 }
 
-z_status zo_manipulator::feature_set_integer(z_obj* p_obj,ctext fet_name,int val)
+zp_status zo_manipulator::feature_set_integer(z_obj* p_obj,ctext fet_name,int val)
 {
 	ZTF;
 	_member_var_int_data=val;
 	zo_fet_man_context con( this,zo_mvo_set,fet_name,0);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	return s;
 }
-z_status zo_manipulator::feature_objlist_get(z_obj* p_obj,ctext fet_name,z_obj_container** pp_list)
+zp_status zo_manipulator::feature_objlist_get(z_obj* p_obj,ctext fet_name,z_obj_container** pp_list)
 {
 	ZTF;
 	*pp_list=0;
 	zo_fet_man_context con( this,zo_mvo_get,fet_name,0);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	*pp_list=_member_obj_container;
 	return s;
 }
-z_status zo_manipulator::feature_objlist_get_next(z_obj* p_obj,ctext fet_name,z_obj** pp_obj)
+zp_status zo_manipulator::feature_objlist_get_next(z_obj* p_obj,ctext fet_name,z_obj** pp_obj)
 {
 	ZTF;
 	*pp_obj=0;
 	zo_fet_man_context con( this,zo_mvo_get_next_from_list,fet_name,0);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	*pp_obj=_p_member_var_obj;
 	return s;
 }
-z_status zo_manipulator::feature_set_string(z_obj* p_obj,ctext fet_name,ctext val,size_t len)
+zp_status zo_manipulator::feature_set_string(z_obj* p_obj,ctext fet_name,ctext val,size_t len)
 {
 	ZTF;
 	_member_var_string_data.assign(val,len);
 	zo_fet_man_context con( this,zo_mvo_set,fet_name,0);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	return s;
 }
 
-z_status zo_manipulator::feature_get_string(z_obj* p_obj,ctext fet_name ,ctext& val)
+zp_status zo_manipulator::feature_get_string(z_obj* p_obj,ctext fet_name ,ctext& val)
 {
 	ZTF;
 	_member_var_string_data="";
 	zo_fet_man_context con( this,zo_mvo_get,fet_name,0);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	if(!s)
 		val=_member_var_string_data.c_str();
 	return s;
 }
-z_status zo_manipulator::feature_objlist_add(z_obj* p_obj,ctext fet_name,z_obj* p_obj_child)
+zp_status zo_manipulator::feature_objlist_add(z_obj* p_obj,ctext fet_name,z_obj* p_obj_child)
 {
 	ZTF;
 	_p_member_var_obj=p_obj_child;
 	zo_fet_man_context con( this,zo_mvo_set,fet_name,0);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	return s;
 }
 
-z_status zo_manipulator::feature_execute(z_obj* p_obj,zo_ftr_entry* fe)
+zp_status zo_manipulator::feature_execute(z_obj* p_obj,zo_ftr_entry* fe)
 {
 	ZTF;
 	zo_fet_man_context con( this,zo_mvo_exec,zo_ftr_get_name(fe),fe);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	return s;
 }
-z_status zo_manipulator::feature_display(z_obj* p_obj,zo_ftr_entry* fe)
+zp_status zo_manipulator::feature_display(z_obj* p_obj,zo_ftr_entry* fe)
 {
 	ZTF;
 	zo_fet_man_context con( this,zo_mvo_display,zo_ftr_get_name(fe),fe);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	return s;
 }
 ctext zo_manipulator::feature_get_as_string(z_obj* p_obj,zo_ftr_entry* fe)
 {
 	ZTF;
 	zo_fet_man_context con( this,zo_mvo_get_to_string,zo_ftr_get_name(fe),fe);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	if(s==zs_ok)
 		return _member_var_string_data;
 	return "[error]";
 }
-z_status zo_manipulator::feature_reset_iter(z_obj* p_obj,ctext name)
+zp_status zo_manipulator::feature_reset_iter(z_obj* p_obj,ctext name)
 {
 	ZTF;
 	zo_fet_man_context con( this,zo_mvo_reset_iter,name,0);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	return s;
 }
-z_status zo_manipulator::feature_clear(z_obj* p_obj,ctext name)
+zp_status zo_manipulator::feature_clear(z_obj* p_obj,ctext name)
 {
 	ZTF;
 	zo_fet_man_context con( this,zo_mvo_clear,name,0);
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	return s;
 }
-z_status zo_manipulator::feature_set_from_value(z_obj* p_obj,zp_value* p_value_obj,zo_ftr_entry* fe)
+zp_status zo_manipulator::feature_set_from_value(z_obj* p_obj,zp_value* p_value_obj,zo_ftr_entry* fe)
 {
 	ZTF;
 	zo_fet_man_context con( this,zo_mvo_set_from_value,zo_ftr_get_name(fe),fe);
 	con._p_assignment_value=p_value_obj;
-	z_status s=p_obj->feature_manipulate(&con);
+	zp_status s=p_obj->feature_manipulate(&con);
 	return s;
 }
 /*
-z_status zo_manipulator::var_set_from_text(z_obj* p_obj,ctext var_id,ctext txt)
+zp_status zo_manipulator::var_set_from_text(z_obj* p_obj,ctext var_id,ctext txt)
 {
 	_member_var_string_data=txt;
 	return var_set_from_string(p_obj,var_id);
 }
-z_status zo_manipulator::var_set_from_string(z_obj* p_obj,ctext var_id)
+zp_status zo_manipulator::var_set_from_string(z_obj* p_obj,ctext var_id)
 {
 	return p_obj->feature_manipulate(zo_mvo_set_from_string,var_id,this);
 }
@@ -658,7 +658,7 @@ void zo_manipulator::dump_newline()
 
 }
 
-z_status zo_manipulator::dump_obj(z_file* fp,z_obj* obj)
+zp_status zo_manipulator::dump_obj(z_file* fp,z_obj* obj)
 {
 	_dump_fp=fp;
 	_dump_depth=0;
@@ -668,7 +668,7 @@ z_status zo_manipulator::dump_obj(z_file* fp,z_obj* obj)
 }
 
 
-z_status zo_manipulator::dump_obj(z_obj* obj)
+zp_status zo_manipulator::dump_obj(z_obj* obj)
 {
 	ZTF;
 	if(!obj)
@@ -712,7 +712,7 @@ z_status zo_manipulator::dump_obj(z_obj* obj)
 	return zs_ok;
 }
 
-z_status zo_manipulator::load_obj(z_obj* obj,zp_obj_parse* p)
+zp_status zo_manipulator::load_obj(z_obj* obj,zp_obj_parse* p)
 {
 	ZTF;
 	if(!obj)

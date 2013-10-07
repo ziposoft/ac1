@@ -10,7 +10,7 @@
 // Basic defines 
 //
 //________________________________________________________________________/////////////////////////
-#include "zipolib_cpp/include/zipolib_cpp.h"
+#include "zipolib_cpp/include/zipolib_cpp_pch.h"
 class z_file;
 static const char* empty_cstr="";
 class z_string : public std::string

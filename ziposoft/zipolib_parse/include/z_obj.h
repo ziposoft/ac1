@@ -1,11 +1,7 @@
 #ifndef z_obj_h
 #define z_obj_h
 
-#include "zipolib/include/z_status.h"
-#include "zipolib/include/z_string.h"
-#include "zipolib/include/z_stl_map.h"
-#include "zipolib/include/z_error.h"
-//#include "zipolib/include/z_module.h"
+#include "zipolib_parse/include/z_parse_pch.h"
 
 class z_obj;
 class zo_manipulator;
@@ -117,7 +113,7 @@ const z_obj_fact*  zo_get_factory(ctext name); //gets the factory from the maste
 
 
 #define ZO_OBJ_H \
-	public:virtual z_status feature_manipulate(zo_fet_man_context* context); \
+	public:virtual zp_status feature_manipulate(zo_fet_man_context* context); \
 	static const z_obj_fact FACT;\
 	virtual const z_obj_fact* get_fact();
 
@@ -158,8 +154,8 @@ class z_obj
 public:
 	z_obj();
 
-	virtual z_status feature_manipulate(zo_fet_man_context* context) {
-		return ZS_RET(feature_not_found);
+	virtual zp_status feature_manipulate(zo_fet_man_context* context) {
+		return zs_feature_not_found;
 	};
 	virtual const z_obj_fact* get_fact();
 	z_obj* get_parent_obj();
@@ -178,7 +174,7 @@ public:
 
 	virtual zo_ftr_entry* get_feature(ctext f);
 	static zo_ftr_entry* get_feature(const z_obj_fact* fact,ctext f);
-	virtual z_status get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias);
+	virtual zp_status get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias);
 
 
 };	
@@ -281,9 +277,9 @@ public:
 	virtual void clear_objs()=0;
 	virtual void reset_iter()=0;
 	virtual void get_current_iter_as_string(z_string &s)=0;
-	virtual z_status get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias);
+	virtual zp_status get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias);
 	virtual zo_ftr_entry* get_feature(ctext f);
-	virtual z_status feature_manipulate(zo_fet_man_context* context);
+	virtual zp_status feature_manipulate(zo_fet_man_context* context);
 
 
 };

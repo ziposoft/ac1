@@ -5,7 +5,6 @@
 #ifndef z_objlist_h
 #define z_objlist_h
 #include <stddef.h>
-#include "z_debug.h"
 
 
 

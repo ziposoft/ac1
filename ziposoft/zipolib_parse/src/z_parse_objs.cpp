@@ -1,5 +1,5 @@
-#include "zipolib/include/z_trace.h"
-#include "zipolib/include/z_parse.h"
+#include "z_parse_pch.h"
+#include "z_parse.h"
 
 
 
@@ -280,6 +280,6 @@ ctext zp_feature::get_full_name(z_string& fullname)
 //	OBJ(zp_pair,z_obj,"pair","pair desc",ZPS("{_name}ident:'=':{_val}ident:#','"),VAR(_name),VAR(_val))
 //ZP_OBJ(zp_pair,zp_obj,"pair",,ZPV(_name),ZPV(_val));
 #define Z_MODULE _Z_MODULE(parse)
-#include "zipolib/include/z_obj_macro.h"
+#include "zipolib_parse/include/z_obj_macro.h"
 
 

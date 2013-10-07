@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\ptypes_cset.h" />
     <ClInclude Include="..\include\zipolib_cpp.h" />
     <ClInclude Include="..\include\zipolib_cpp_pch.h" />
     <ClInclude Include="..\include\z_file.h" />

@@ -1,10 +1,9 @@
-#include "zipolib/include/z_trace.h"
-#include "zipolib/include/z_file.h"
-#include "zipolib/include/z_parse.h"
+#include "z_parse_pch.h"
+#include "z_parse.h"
 
 
 
-z_status zp_obj_parser::get_flags(zp_flags& flags)
+zp_status zp_obj_parser::get_flags(zp_flags& flags)
 {
 	//zp_flags& flags=_ctx_current->_flags;
 	zp_text_parser& tmpl=context_get_current_template_parser();
@@ -95,12 +94,12 @@ z_status zp_obj_parser::get_flags(zp_flags& flags)
 
 }
 
-z_status zp_obj_parser::_process_template(zp_mode mode)
+zp_status zp_obj_parser::_process_template(zp_mode mode)
 {
 	zp_flags flags;
 	flags.as_u32=0;
 	flags.required=1;
-	z_status s= _process_group(flags,mode);
+	zp_status s= _process_group(flags,mode);
 	if(s) 
 		return s;
 	skip_ws();
@@ -113,12 +112,12 @@ z_status zp_obj_parser::_process_template(zp_mode mode)
 
 }
 
-z_status zp_obj_parser::_process_group(zp_flags flags,zp_mode mode)
+zp_status zp_obj_parser::_process_group(zp_flags flags,zp_mode mode)
 {
 	//ZTF;
 	zp_group_type group_type=zp_group_single;
-	z_status group_status=zs_no_match;
-	z_status status=zs_no_match;
+	zp_status group_status=zs_no_match;
+	zp_status status=zs_no_match;
 
 
 
@@ -370,9 +369,9 @@ struct item_process
 
 };
 
-z_status zp_obj_parser::test_white_space(zp_mode mode)
+zp_status zp_obj_parser::test_white_space(zp_mode mode)
 {
-	z_status status=test_cset(*cset_white_space);
+	zp_status status=test_cset(*cset_white_space);
 	if (status==zs_matched)
 	{
 		ctext match;
@@ -389,10 +388,10 @@ z_status zp_obj_parser::test_white_space(zp_mode mode)
 	}
 	return status;
 }
-z_status zp_obj_parser::_process_stage(zp_mode mode,zp_flags* pflags)
+zp_status zp_obj_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 {
 	//ZTF;
-	z_status status;
+	zp_status status;
 	zp_flags flags;
 	status=get_flags(flags);
 	if(status)
@@ -596,7 +595,7 @@ z_status zp_obj_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 }
 
 
-z_status zp_obj_parser::_process_sub_item(zp_obj* sub_obj,
+zp_status zp_obj_parser::_process_sub_item(zp_obj* sub_obj,
 										  const z_obj_fact* ie,
 										  zp_mode mode,zp_flags flags)
 {
@@ -612,7 +611,7 @@ z_status zp_obj_parser::_process_sub_item(zp_obj* sub_obj,
 
 
 	
-	z_status status=_process_group(flags,mode);
+	zp_status status=_process_group(flags,mode);
 	mode.nested_group=ng;
 
 	ZT(("<- %s=%s",z_obj_fact_get_name(ie),z_status_get_text(status)));
