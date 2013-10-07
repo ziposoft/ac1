@@ -402,6 +402,31 @@ function route_reset() {
 
 
 }
+
+function route_string_change() {
+    route = document.getElementById("stat_route_string").value;
+    route_string_set(route);
+
+}
+function route_string_set(route) {
+    route_reset();
+    var array_paths = route.split('.');
+
+
+
+    for (var i = 0; i < array_paths.length;i++) {
+        var path_set = array_paths[i];
+        var path_pair=path_set.split(':');
+        var path = document.getElementById(path_pair[0]);
+
+        if (path) {
+            path_set_selection(path, path_pair[1]);
+        }
+        
+    }
+
+}
+
 function route_string_make() {
     var route = "";
     $("#path_group").children().each(function (index) {
@@ -411,6 +436,9 @@ function route_string_make() {
         }
     });
     return route;
+}
+function route_string_show() {
+
 }
 
 function savefile() {
@@ -454,7 +482,7 @@ function path_set_selection(elm,count_new) {
         console.log(route);
     $("#stat_route_string").innerHTML = route;
     
-
+    document.getElementById("stat_route_string").value = route;
 
 }
 function toggle1(elm) {
