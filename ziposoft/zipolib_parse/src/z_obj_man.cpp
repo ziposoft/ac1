@@ -393,12 +393,12 @@ zp_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_op
 				const z_obj_fact* fact=zo_get_factory(op->_name);
 				if(!fact)
 				{
-					Z_ERROR("Unknown class \"%s\"",op->_name.c_str())
+					Z_ERROR("Unknown class \"%s\"",op->_name.c_str());
 					return zs_no_entry_for_item;
 				}
 				if(!fact->create_func)
 				{
-					Z_ERROR("Cannot create virtual obj \"%s\"",op->_name.c_str())
+					Z_ERROR("Cannot create virtual obj \"%s\"",op->_name.c_str());
 					return zs_cannot_create_virtual_obj;
 
 				}

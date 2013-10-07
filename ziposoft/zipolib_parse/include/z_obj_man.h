@@ -1,7 +1,8 @@
 #ifndef z_obj_man_h
 #define z_obj_man_h
-#include "zipolib_parse/include/z_parse_obj.h"
+#include "zipolib_parse/include/z_obj.h"
 
+class zp_obj_parse;
 class zp_obj_parser;
 class zo_manipulator
 {
