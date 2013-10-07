@@ -7,6 +7,7 @@
 \*_______________________________________________________________________*/
 #include "zipolib_c/include/zipo.h"
 #include "zipolib_c/include/z_utility.h"
+#include "zipolib_c/include/z_debug.h"
 
 #include <string>
 #include <map>

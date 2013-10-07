@@ -17,6 +17,7 @@
     <ClInclude Include="..\include\z_obj_macro.h" />
     <ClInclude Include="..\include\z_obj_man.h" />
     <ClInclude Include="..\include\z_parse.h" />
+    <ClInclude Include="..\include\z_parse_def.h" />
     <ClInclude Include="..\include\z_parse_obj.h" />
     <ClInclude Include="..\include\z_parse_pch.h" />
     <ClInclude Include="..\include\z_parse_text.h" />
@@ -29,7 +30,9 @@
     <ClCompile Include="..\src\z_parse_item.cpp" />
     <ClCompile Include="..\src\z_parse_misc.cpp" />
     <ClCompile Include="..\src\z_parse_objs.cpp" />
-    <ClCompile Include="..\src\z_parse_pch.cpp" />
+    <ClCompile Include="..\src\z_parse_pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\src\z_parse_text.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

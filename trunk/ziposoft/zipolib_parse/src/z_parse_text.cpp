@@ -1,5 +1,5 @@
-#include "zipolib/include/z_trace.h"
-#include "zipolib/include/z_parse_text.h"
+#include "z_parse_pch.h"
+#include "z_parse_text.h"
 
 
 
@@ -32,7 +32,7 @@ zp_text_parser::zp_text_parser(ctext code,size_t len)
 	_options.as_u32=0;
 }
 
-z_status zp_text_parser::check_status(z_status status)
+zp_status zp_text_parser::check_status(zp_status status)
 {
 	if(status>zs_eof)
 	{
@@ -107,7 +107,7 @@ void zp_text_parser::set_ignore_whitespace()
 }
 
 
-z_status zp_text_parser::advance(size_t count)
+zp_status zp_text_parser::advance(size_t count)
 {
 	if(!_index_current) 
 		return check_status(zs_eof);
@@ -144,9 +144,9 @@ char zp_text_parser::inc()
 		*/
 	return c;
 }
-z_status zp_text_parser::skip_ws()
+zp_status zp_text_parser::skip_ws()
 {
-	z_status status=zs_no_match;
+	zp_status status=zs_no_match;
 	while(1)
 	{
 		if(eob())
@@ -164,7 +164,7 @@ z_status zp_text_parser::skip_ws()
 	}
 }
 
-z_status zp_text_parser::start_test()
+zp_status zp_text_parser::start_test()
 {
 	if(eob()) 
 		return check_status(zs_eof);
@@ -247,7 +247,7 @@ size_t zp_text_parser::debug(z_string &out,ctext pbuff,size_t before,size_t afte
 //
 // INTERNAL TESTS
 //________________________________________________________________
-z_status zp_text_parser::_test_char(char c)
+zp_status zp_text_parser::_test_char(char c)
 {
 	if(eob()) 
 		return check_status(zs_eof);
@@ -258,7 +258,7 @@ z_status zp_text_parser::_test_char(char c)
 	}
 	return zs_no_match;
 }
-z_status zp_text_parser::_test_end_char(char c) //  ~>(char) 
+zp_status zp_text_parser::_test_end_char(char c) //  ~>(char) 
 {
 	while(!eob()) 
 	{
@@ -276,9 +276,9 @@ z_status zp_text_parser::_test_end_char(char c) //  ~>(char)
 //
 // EXTERNAL TESTS
 //________________________________________________________________
-z_status zp_text_parser::test_chars(const cset &set)
+zp_status zp_text_parser::test_chars(const cset &set)
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) return status;
 
 
@@ -289,17 +289,17 @@ z_status zp_text_parser::test_chars(const cset &set)
 	}
 	return zs_no_match;
 }
-z_status zp_text_parser::test_to_eob()
+zp_status zp_text_parser::test_to_eob()
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) return status;
 	set_index(_end);
 	return zs_matched;
 }
 
-z_status zp_text_parser::test_char(char c)
+zp_status zp_text_parser::test_char(char c)
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) return status;
 	
 	if(current_ch() == c)
@@ -309,7 +309,7 @@ z_status zp_text_parser::test_char(char c)
 	}
 	return zs_no_match;
 }
-z_status zp_text_parser::test_file_path()
+zp_status zp_text_parser::test_file_path()
 {
 	return test_cset(*cset_path_string);
 }
@@ -321,13 +321,13 @@ size_t zp_text_parser::get_index_offset()
 	return _index_current-_start;
 }
 
-z_status zp_text_parser::test_any_identifier()
+zp_status zp_text_parser::test_any_identifier()
 {
 	return test_cset(*cset_identchars);
 }
-z_status zp_text_parser::test_identifier(const char* str)
+zp_status zp_text_parser::test_identifier(const char* str)
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) return status;
 
 	size_t match_len=0;
@@ -358,9 +358,9 @@ z_status zp_text_parser::test_identifier(const char* str)
 	return zs_no_match;
 }
 
-z_status zp_text_parser::test_single_quoted_string()
+zp_status zp_text_parser::test_single_quoted_string()
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) 
 		return status;
 
@@ -372,9 +372,9 @@ z_status zp_text_parser::test_single_quoted_string()
 	_match_end=get_index()-1;
 	return zs_matched;
 }
-z_status zp_text_parser::test_not_single_quoted_string(const void *dummy)
+zp_status zp_text_parser::test_not_single_quoted_string(const void *dummy)
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) 
 		return status;
 
@@ -391,9 +391,9 @@ z_status zp_text_parser::test_not_single_quoted_string(const void *dummy)
 }
 
 
-z_status zp_text_parser::test_code_string()
+zp_status zp_text_parser::test_code_string()
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) 
 		return status;
 
@@ -406,9 +406,9 @@ z_status zp_text_parser::test_code_string()
 	return zs_matched;
 
 }
-z_status zp_text_parser::test_cset(const cset &set,size_t limit)
+zp_status zp_text_parser::test_cset(const cset &set,size_t limit)
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) return status;
 
 	size_t match_len=0;
@@ -422,9 +422,9 @@ z_status zp_text_parser::test_cset(const cset &set,size_t limit)
 }
 
 
-z_status zp_text_parser::test_end_char(char c) //  ~>(char) 
+zp_status zp_text_parser::test_end_char(char c) //  ~>(char) 
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) 
 		return status;
 
@@ -432,9 +432,9 @@ z_status zp_text_parser::test_end_char(char c) //  ~>(char)
 }
 
 
-z_status zp_text_parser::test_not_char(char c) //  ~^(char)  ~^\n
+zp_status zp_text_parser::test_not_char(char c) //  ~^(char)  ~^\n
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) return status;
 
 	while(!eob()) 
@@ -447,9 +447,9 @@ z_status zp_text_parser::test_not_char(char c) //  ~^(char)  ~^\n
 	}
 	return zs_matched;
 }
-z_status zp_text_parser::test_any_chars(size_t n)// #5
+zp_status zp_text_parser::test_any_chars(size_t n)// #5
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) return status;
 
 	size_t len_left=_end-get_index();
@@ -461,9 +461,9 @@ z_status zp_text_parser::test_any_chars(size_t n)// #5
 }
 
 
-z_status zp_text_parser::test_not_string(const char* str)
+zp_status zp_text_parser::test_not_string(const char* str)
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) return status;
 
 	size_t match_len=0;
@@ -481,9 +481,9 @@ z_status zp_text_parser::test_not_string(const char* str)
 	}
 	return zs_matched;
 }
-z_status zp_text_parser::test_string(const char* str,size_t match_len)
+zp_status zp_text_parser::test_string(const char* str,size_t match_len)
 {
-	z_status status;
+	zp_status status;
 	if((status=start_test())) 
 		return status;
 
@@ -498,7 +498,7 @@ z_status zp_text_parser::test_string(const char* str,size_t match_len)
 	return zs_no_match;
 }
 
-z_status zp_text_parser::test_string(const char* str)
+zp_status zp_text_parser::test_string(const char* str)
 {
 	size_t match_len=strlen(str);
 	return test_string(str,match_len);
@@ -531,39 +531,39 @@ void zp_text_parser::get_match(ctext& match_start,size_t& len)
 
 
 
-z_status zp_text_parser::ft_digits  (const void* dummy) 
+zp_status zp_text_parser::ft_digits  (const void* dummy) 
 {
 	return test_cset(*cset_digits);
 }
 
-z_status zp_text_parser::ft_single_quoted_string(const void* dummy)
+zp_status zp_text_parser::ft_single_quoted_string(const void* dummy)
 {
 	return test_single_quoted_string();
 }
-z_status zp_text_parser::ft_file_path(const void* dummy)
+zp_status zp_text_parser::ft_file_path(const void* dummy)
 {
 	return test_file_path();
 }
 
-z_status zp_text_parser::ft_any_identifier(const void* dummy)
+zp_status zp_text_parser::ft_any_identifier(const void* dummy)
 {
 	return test_any_identifier();
 }
-z_status zp_text_parser::ft_scoped_identchars(const void* dummy)
+zp_status zp_text_parser::ft_scoped_identchars(const void* dummy)
 {
 	return test_cset(*cset_scoped_identchars);
 }
-z_status zp_text_parser::ft_to_eol(const void* dummy)
+zp_status zp_text_parser::ft_to_eol(const void* dummy)
 {
 	return  test_not_char('\n');
 }
 
-z_status zp_text_parser::ft_test_identifier(const void* str)
+zp_status zp_text_parser::ft_test_identifier(const void* str)
 {
 	return  test_identifier((ctext)str);
 
 }
-z_status zp_text_parser::ft_test_char(const void* c)
+zp_status zp_text_parser::ft_test_char(const void* c)
 {
 	return test_char((char)( (size_t)c & 0xFF));
 

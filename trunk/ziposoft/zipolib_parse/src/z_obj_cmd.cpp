@@ -1,5 +1,6 @@
-#include "zipolib/include/z_obj_cmd.h"
-#include "zipolib/include/z_error.h"
+#include "z_parse_pch.h"
+#include "z_obj_cmd.h"
+
 
 zo_man_cmd::zo_man_cmd(z_obj* root)
 {
@@ -9,9 +10,9 @@ zo_man_cmd::zo_man_cmd(z_obj* root)
 
 
 }
-z_status zo_man_cmd::parse_line(ctext text)
+zp_status zo_man_cmd::parse_line(ctext text)
 {
-	z_status status=_parser.parse_obj(&_cmd_line_obj,text);
+	zp_status status=_parser.parse_obj(&_cmd_line_obj,text);
 	if(status)
 	{
 		_parser.report_error(status);
@@ -20,9 +21,9 @@ z_status zo_man_cmd::parse_line(ctext text)
 	}
 	return status;
 }
-z_status zo_man_cmd::execute_feature(z_obj* obj)
+zp_status zo_man_cmd::execute_feature(z_obj* obj)
 {
-	z_status status=zs_ok;
+	zp_status status=zs_ok;
 	ctext feature=_cmd_line_obj._feature._name;
 	zo_ftr_entry* f=obj->get_feature(feature);
 	if(!f)
@@ -95,7 +96,7 @@ z_status zo_man_cmd::execute_feature(z_obj* obj)
 
 
 }
-z_status zo_man_cmd::navigate_feature(ctext name)
+zp_status zo_man_cmd::navigate_feature(ctext name)
 {
 	z_obj* child=get_child_obj(name,_obj_current_tmp);
 	if(!child)
@@ -110,9 +111,9 @@ z_status zo_man_cmd::navigate_feature(ctext name)
 	return zs_ok;
 
 }
-z_status zo_man_cmd::execute_line(ctext text)
+zp_status zo_man_cmd::execute_line(ctext text)
 {
-	z_status status=parse_line(text);
+	zp_status status=parse_line(text);
 	if(status)
 		return status;
 
@@ -162,7 +163,7 @@ z_status zo_man_cmd::execute_line(ctext text)
 		Z_ERROR("Unknown feature:\"%s\"",_cmd_line_obj._feature._name.c_str());
 	return status;
 }
-z_status zo_man_cmd::callback_feature_execute_obj(z_obj* pObj,zo_ftr_entry* fe)
+zp_status zo_man_cmd::callback_feature_execute_obj(z_obj* pObj,zo_ftr_entry* fe)
 {
 	//This is absolutely horrible code.
 	
@@ -173,7 +174,7 @@ z_status zo_man_cmd::callback_feature_execute_obj(z_obj* pObj,zo_ftr_entry* fe)
 	return zs_ok;
 }
 
-z_status zo_man_cmd::dump_features_by_type(z_file* fp,z_obj* obj,U32 feature_type)
+zp_status zo_man_cmd::dump_features_by_type(z_file* fp,z_obj* obj,U32 feature_type)
 {
 	_dump_fp=fp;
 	zo_feature_list list;
@@ -221,7 +222,7 @@ z_status zo_man_cmd::dump_features_by_type(z_file* fp,z_obj* obj,U32 feature_typ
 }
 
 
-z_status zo_man_cmd::dump_features(z_file* fp,z_obj* obj)
+zp_status zo_man_cmd::dump_features(z_file* fp,z_obj* obj)
 {
 	if(!obj)
 	{
