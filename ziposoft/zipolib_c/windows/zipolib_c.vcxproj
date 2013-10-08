@@ -86,6 +86,9 @@
     <ClCompile Include="..\src\pch.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\src\pstrconv.c" />
+    <ClCompile Include="..\src\pstrtoi.c" />
+    <ClCompile Include="..\src\strptime.c" />
     <ClCompile Include="..\src\z_debug.c" />
     <ClCompile Include="..\src\z_filesystem.c" />
     <ClCompile Include="..\src\z_str.c" />
