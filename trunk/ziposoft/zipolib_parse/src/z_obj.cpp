@@ -225,7 +225,7 @@ ctext z_obj_fact_get_name(const z_obj_fact* fact)
 }
 
 
-#if 0
+#if 1
 
 const z_obj_fact*  zo_get_factory_by_name_and_length(ctext name,size_t len)
 {

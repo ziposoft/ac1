@@ -2,7 +2,7 @@
 #define z_parse_obj_h
 #include "zipolib_parse/include/z_obj.h"
 
-//Z_MODULE_DEF(parse);
+Z_MODULE_DECLARE(parse);
 
 /*
 enum type_memvar_oper
