@@ -1,6 +1,7 @@
 #ifndef z_parse_text_h
 #define z_parse_text_h
 #include "zipolib_parse/include/z_parse_pch.h"
+#include "zipolib_parse/include/z_parse_def.h"
 
 
 /*

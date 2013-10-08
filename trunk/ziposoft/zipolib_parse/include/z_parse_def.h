@@ -17,6 +17,12 @@ enum zp_status
 	zs_end_of_list,
 	zs_cannot_create_virtual_obj,
 	zs_no_entry_for_item,
+	zs_child_not_found,
+	zs_syntax_error,
+	zs_tmpl_expected_closing_parenthesis,
+	zs_internal_error,
+	zs_bad_argument_2,
 
 };
+ctext z_status_get_text(zp_status status);
 #endif

@@ -1,5 +1,6 @@
 #include "z_parse_pch.h"
 #include "z_obj_man.h"
+#include "z_parse_obj.h"
 
 
 zo_fet_man_context::zo_fet_man_context(zo_manipulator* man,type_zo_memvar_oper oper,ctext name,zo_ftr_entry* fet_ent)
