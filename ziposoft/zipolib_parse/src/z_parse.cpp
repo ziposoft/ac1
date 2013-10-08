@@ -2,6 +2,34 @@
 #include "z_parse.h"
 
 
+ctext status_text[]=
+{
+	"zs_matched",
+	"zs_no_match",
+	"zs_skipped",
+	"zs_error",
+	"zs_template_syntax_error",
+	"zs_unparsed_data",
+	"zs_fatal_error",
+	"zs_eof",
+	"zs_feature_not_found",
+	"zs_operation_not_supported",
+	"zs_end_of_list",
+	"zs_cannot_create_virtual_obj",
+	"zs_no_entry_for_item",
+	"zs_child_not_found",
+	"zs_syntax_error",
+	"zs_tmpl_expected_closing_parenthesis",
+	"zs_internal_error",
+	"zs_bad_argument_2",
+
+};
+
+ctext z_status_get_text(zp_status status)
+{
+		return status_text[status];
+}
+
 
 zp_status zp_obj_parser::get_flags(zp_flags& flags)
 {

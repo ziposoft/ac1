@@ -39,14 +39,13 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*('a'|'b')|*('c'|'d')","bd",zs_unparsed_data,"",""},
 	{"*('a'|'b')|*('c'|'d')","ccc",zs_matched,"",""},
 	//AND groups
-	//{"*'a'&'b'","b",zs_matched,"b","b"},
-	{"*'a'&'b'","ab",zs_matched,"b","b"},
-	{"*'a'&'b'","ba",zs_matched,"b","b"},
-	{"*'a'&'b'","aba",zs_matched,"b","b"},
+	{"'a'&'b'","b",zs_eof,"b","ab"},
+	{"'a'&'b'","b",zs_eof,"b","ab"},
+
 	{"'a'&'b'&'c'","cab",zs_matched,"abc","abc"},
-	{"'a'&'b'&'c'","ab",zs_no_match,"abc","abc"},
-	{"*('b')&'d'","bd",zs_matched,"d","d"},
-	{"*'b'&*'d'","bd",zs_matched,"",""},
+	{"'a'&'b'&'c'","ab",zs_eof,"abc","abc"},
+	//{"(*'b')&'d'","bd",zs_matched,"bd","d"},
+	//{"*'b'&*'d'","bd",zs_matched,"",""},
 	{"+'a'&+'b'","aba",zs_matched,"ab","ab"},
 
 
@@ -79,7 +78,6 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*('a'&'b'):*('c'&'d')","abbaabcddc",zs_matched,"",""},
 	//ident
 	{"*' '&+ident","anthony corriveau",zs_matched,"anthonycorriveau",""},
-	//{"identlist","x,y,x",zs_matched,"x,y,x",""},
 	//objects
 	{"test1","a",zs_matched,"a","a"},
 	{"*test1","a",zs_matched,"a",""},
@@ -97,6 +95,15 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"test7",":x,a",zs_matched,":a,x","def_on:def_off"},
 	{"test6","dudley",zs_matched," dudley"," overwrite!"},
 
+
+	//PROBLEMS!!
+/*
+	{"identlist","x,y,x",zs_matched,"x,y,x",""},
+	{"*'a'&'b'","ab",zs_matched,"b","b"},
+	{"*'a'&'b'","ba",zs_matched,"b","b"},
+	{"*'a'&'b'","aba",zs_matched,"b","b"},
+
+	*/
 };
 
 

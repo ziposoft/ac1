@@ -1,8 +1,8 @@
 #include "test_parse.h"
-/*
-Z_MODULE_DEF(test);
-Z_MODULE_INCLUDE(Z_MOD(test),Z_MOD(parse),Z_MOD(trace));
-*/
+
+Z_MODULE_DECLARE(test);
+Z_MODULE_INCLUDE(Z_MOD(test),Z_MOD(parse));
+
 
 class zp_test1 : public zp_obj
 {

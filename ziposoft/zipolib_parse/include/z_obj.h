@@ -108,15 +108,20 @@ struct z_obj_fact
 struct z_module_obj_entry 
 {
 	ctext name;
-	const z_obj_fact* p_fact;
+	const z_obj_fact* fact;
 };
 struct z_module_entry 
 {
 	ctext name;
-	z_module_obj_entry *list;
-	const int list_size;
+	z_module_obj_entry *facts;
+	const int num_facts;
 
 };
+extern const z_module_entry *z_module_master_list[];
+extern const int z_module_master_list_size;
+#define Z_MODULE_DECLARE(_NAME_) extern const z_module_entry z_module_##_NAME_;
+#define Z_MOD(_NAME_) &z_module_##_NAME_
+#define Z_MODULE_INCLUDE(...) const z_module_entry *z_module_master_list[] = { __VA_ARGS__ };const int z_module_master_list_size=sizeof(z_module_master_list)/sizeof(void*);
 ctext z_obj_fact_get_name(const z_obj_fact* f);
 
 
