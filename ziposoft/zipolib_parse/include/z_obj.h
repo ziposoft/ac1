@@ -105,7 +105,18 @@ struct z_obj_fact
 	const z_obj_fact* base_fact;
 	ctext parse_string;
 };
+struct z_module_obj_entry 
+{
+	ctext name;
+	const z_obj_fact* p_fact;
+};
+struct z_module_entry 
+{
+	ctext name;
+	z_module_obj_entry *list;
+	const int list_size;
 
+};
 ctext z_obj_fact_get_name(const z_obj_fact* f);
 
 

@@ -4,6 +4,10 @@
 #include "zipolib_parse/include/z_obj_man.h"
 
 
+
+
+
+
 z_obj_man_data::z_obj_man_data()
 {
 	_parent_obj=0;

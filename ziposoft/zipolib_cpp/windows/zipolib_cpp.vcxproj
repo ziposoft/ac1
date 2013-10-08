@@ -82,6 +82,7 @@
     <ClInclude Include="..\include\z_stl_list.h" />
     <ClInclude Include="..\include\z_stl_map.h" />
     <ClInclude Include="..\include\z_string.h" />
+    <ClInclude Include="..\include\z_trace.h" />
     <ClInclude Include="..\include\z_type_converter.h" />
   </ItemGroup>
   <ItemGroup>

@@ -260,6 +260,7 @@ void zo_man_cmd::dump_features(z_obj* obj)
 
 void zo_man_cmd::dump()
 {
+	/*
 	int i_module;
 	for(i_module=0;i_module<z_module_master_list_size;i_module++)
 	{
@@ -275,7 +276,7 @@ void zo_man_cmd::dump()
 				gz_out<< "::"<< z_obj_fact_get_name(fact->base_fact);
 			gz_out<<"\n";
 		}
-	}
+	}*/
 }
 
 
@@ -283,4 +284,4 @@ void zo_man_cmd::dump()
 	OBJ(zo_man_cmd,z_obj,"generic","generic",0,NO_FTR)
 
 #define Z_MODULE _Z_MODULE(man)
-#include "zipolib/include/z_obj_macro.h"
+#include "zipolib_parse/include/z_obj_macro.h"
