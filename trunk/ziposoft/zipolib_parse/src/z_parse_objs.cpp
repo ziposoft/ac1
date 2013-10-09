@@ -266,7 +266,8 @@ ctext zp_feature::get_full_name(z_string& fullname)
 	OBJ(zp_cmdline,zp_obj,"cmdline","cmdline",\
 	"{_root}?'/':*({_path_list}ident:'/'):?({_object}ident:'.'):?{_feature}feat:"\
 	"?({_subscript}':':{_subscript_id}ident):?( ({_assignment}'=':{_assign_val}value)|{_params}params)",\
-	VAR(_feature) VAR(_subscript) VAR(_subscript_id) VAR(_root)  VAR(_object) VAR(_assign_val)  VAR(_assignment) VAR(_params) VAR(_path_list) )\
+	VAR(_feature) VAR(_subscript) VAR(_subscript_id)\
+    VAR(_root)  VAR(_object) VAR(_assign_val)  VAR(_assignment) VAR(_params) VAR(_path_list) )\
 	OBJ(zp_str_list,zp_obj,"strlist","strlist","'{':*(({_list}ident|{_list}string|{_list}string_sq):?','):'}'",VAR(_list) )\
 	OBJ(zp_params,zp_obj,"params","params","('(':*({_param_list}value:?','):')')",VAR(_param_list) )\
 	OBJ(zp_pair,zp_obj,"pair","pair desc","{_name}ident:'=':{_val}?ident:#','",VAR(_name) VAR(_val) )\

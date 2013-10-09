@@ -38,6 +38,44 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*('a'|'b')","bd",zs_unparsed_data,"",""},
 	{"*('a'|'b')|*('c'|'d')","bd",zs_unparsed_data,"",""},
 	{"*('a'|'b')|*('c'|'d')","ccc",zs_matched,"",""},
+
+
+	//sequence groups
+	{"'a':'b':'c'","abc",zs_matched,"abc","abc"},
+	{"'a':'b':'c'","acb",zs_no_match,"abc","abc"},
+	{"('a':'b':'c')","abc",zs_matched,"abc","abc"},
+	{"scoped:'[':*'a':']')","job[",zs_eof,"[]","[]"},
+	{"'a':whsp:'b'","a\t b",zs_matched,"a\t b","ab"},
+	//test
+	{"ident:'=':ident","x=2",zs_matched,"x=2","="},
+	{"ident:'=':ident","x=2",zs_matched,"x=2","="},
+	{"ident:'=':?ident","x=2",zs_matched,"x=2","="},
+	{"ident:'=':ident:#','","x=2 ",zs_matched,"x=2","="},
+	{"ident:'=':?ident:#','","x=2 ",zs_matched,"x=2","="},
+
+
+
+	//objects
+	{"test1","a",zs_matched,"a","a"},
+	{"*test1","a",zs_matched,"a",""},
+	{"+test1","a",zs_matched,"a","a"},
+	{"+test1","aaaa",zs_matched,"aaaa","a"},
+	{"test2","a",zs_matched,"a","a"},
+	{"test3","abc",zs_matched,"abc","abc"},
+	{"test4","b",zs_matched," b"," tired"},
+	{"+(test3:'x')","abcxabcxabcx",zs_matched,"abcx","abcx"},
+	{"pair","x=2",zs_matched,"x=2,","=,"},
+	{"test5","x y z",zs_matched," x y z"," tired tired tired"},
+	//ident
+	{"ident","anthony corriveau",zs_matched,"anthony",""},
+	{"*' '&+ident","anthony corriveau",zs_matched,"anthonycorriveau",""},
+
+	//random
+	{"%'a':'b':'c'","aabaac",zs_matched,"bc","bc"},
+	{"%'a'&'b'&'c'","acaab",zs_matched,"bc","bc"},
+	{"%('a'|' '):'b':'c'","a b aac",zs_matched,"bc","bc"},
+	{"%whsp:'b':'c'","b\tc",zs_matched,"\tbc","bc"},
+
 	//AND groups
 	{"'a'&'b'","b",zs_eof,"b","ab"},
 	{"'a'&'b'","b",zs_eof,"b","ab"},
@@ -47,22 +85,6 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	//{"(*'b')&'d'","bd",zs_matched,"bd","d"},
 	//{"*'b'&*'d'","bd",zs_matched,"",""},
 	{"+'a'&+'b'","aba",zs_matched,"ab","ab"},
-
-
-	//sequence groups
-	{"'a':'b':'c'","abc",zs_matched,"abc","abc"},
-	{"'a':'b':'c'","acb",zs_no_match,"abc","abc"},
-	{"('a':'b':'c')","abc",zs_matched,"abc","abc"},
-	{"scoped:'[':*'a':']')","job[",zs_eof,"[]","[]"},
-	{"'a':whsp:'b'","a\t b",zs_matched,"a\t b","ab"},
-
-
-	//random
-	{"%'a':'b':'c'","aabaac",zs_matched,"bc","bc"},
-	{"%'a'&'b'&'c'","acaab",zs_matched,"bc","bc"},
-	{"%('a'|' '):'b':'c'","a b aac",zs_matched,"bc","bc"},
-	{"%whsp:'b':'c'","b\tc",zs_matched,"\tbc","bc"},
-
 
 
 	//Mixed groups
@@ -76,19 +98,6 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"('a'&'b')|('c'&'d')","cdab",zs_matched,"ab","ab"},
 	{"*('a'&'b'):*('c'&'d')","cdab",zs_matched,"",""},
 	{"*('a'&'b'):*('c'&'d')","abbaabcddc",zs_matched,"",""},
-	//ident
-	{"*' '&+ident","anthony corriveau",zs_matched,"anthonycorriveau",""},
-	//objects
-	{"test1","a",zs_matched,"a","a"},
-	{"*test1","a",zs_matched,"a",""},
-	{"+test1","a",zs_matched,"a","a"},
-	{"+test1","aaaa",zs_matched,"aaaa","a"},
-	{"test2","a",zs_matched,"a","a"},
-	{"test3","abc",zs_matched,"abc","abc"},
-	{"test4","b",zs_matched," b"," tired"},
-	{"+(test3:'x')","abcxabcxabcx",zs_matched,"abcx","abcx"},
-	{"pair","x=2",zs_matched,"x=2,","=,"},
-	{"test5","x y z",zs_matched," x y z"," tired tired tired"},
 	//identlist
 	{"test7","z,x,y:",zs_matched,"x,y,z:","def_on:def_off"},
 	{"test7","z:x,a",zs_matched,"z:a,x","def_on:def_off"},
