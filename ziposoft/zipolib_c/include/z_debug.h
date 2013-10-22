@@ -24,9 +24,10 @@ void z_debug_logfile(ctext name);
 #endif
 
 
-void z_debug_out(const char*  lpszFormat,  ...  );
-
-#define	DBG_OUT(_X_)   z_debug_out _X_ ; 
+void z_debug_out(const char*  s  );
+void z_debug_printf(const char*  lpszFormat,  ...  );
+#define	ERROR(_X_)   z_debug_printf _X_ ; 
+#define	DBG_OUT(_X_)   z_debug_printf _X_ ; 
 #if WIN32
 #define Z_ASSERT(_X_) { if (!(_X_)) {  DBG_OUT(("ASSERTION FAILED _X_ %s(%d) ",__FILE__,__LINE__));Z_DEBUG_BREAK;}}
 #define Z_CHECK(_X_) _X_

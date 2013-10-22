@@ -660,12 +660,12 @@ void  z_trace::dump_profile()
 
 int z_trace::write(const char* buf, size_t count )
 {
+
+	z_debug_out(buf);
+
 	if(_output_file)
 		_output_file->write(buf,count);
-#ifdef WIN32
-	if(_output_os_debug)
-		OutputDebugString(buf);
-#endif
+
 	return 0;
 }
 
