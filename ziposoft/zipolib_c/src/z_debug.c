@@ -6,6 +6,7 @@ z_debug.c
 #include "zipo.h"
 #include "zipolib_c/include/z_debug.h"
 #include "zipolib_c/include/z_utility.h"
+#include "zipolib_c/include/z_os_specific.h"
 int g_z_dbg_trace_mask=0;
 
 #if DEBUG
@@ -14,6 +15,7 @@ int g_z_dbg_trace_mask=0;
 
 void z_debug_out(const char*  lpszFormat,  ...  )
 {
+		WCHAR* w_filepath=WCHAR_str_allocate(in_filepath,Z_MAX_PATH_LENGTH);
 
 
 
