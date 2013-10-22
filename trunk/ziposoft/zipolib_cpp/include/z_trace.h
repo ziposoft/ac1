@@ -8,19 +8,8 @@ ________________________________________________________________________*/
 #ifndef z_trace_h
 #define z_trace_h
 
-#define ZT_ENABLE() 
+#include "zipolib_cpp/include/zipolib_cpp.h"
 
-#define	ZTF  
-#define	ZFTO  
-#define	ZTFP(...)  
-#define	ZT(_X_)  
-#define	ZTL(_X_)  
-#define	ZT_AT(_X_)  
-#define	ZT_OUT(_X_)  
-#define	Z_ERROR(...)  
-
-
-#if 0
 class zt_src_file;
 
 void z_trace_enable();
@@ -35,23 +24,22 @@ enum ztp_setting{
 ztp_setting get_setting_from_text(ctext t);
 ctext get_text_from_setting(ztp_setting s);
 
-class zt_profile_list : public zp_obj
+class zt_profile_list 
 {
 public:
 	zt_profile_list() { 
 	}
-	ZO_OBJ_H;
-	zo_str_map _on_list;
-	zo_str_map _off_list;
+
+	//z_str_map _on_list;
+	//zo_str_map _off_list;
 	ztp_setting get_setting(ctext prf);
 
 };
-class zt_func: public zp_obj
+class zt_func
 {
 	z_string _func_name;
 	z_string _default;
 public:
-	ZO_OBJ_H;
 	ztp_setting _setting;
 	ctext get_name();
 	zt_profile_list _profiles;
@@ -69,7 +57,7 @@ public:
 };
 
 
-class zt_profile : public zp_obj
+class zt_profile 
 {
 public:
 	zt_profile() { 
@@ -83,7 +71,6 @@ public:
 	}
 	z_string _name;
 	z_string _default;
-	ZO_OBJ_H;
 	virtual ctext get_name() { return _name.c_str(); }
 	virtual ztp_setting get_setting() { return get_setting_from_text(_default); }
 };
@@ -106,15 +93,14 @@ public:
 
 	void dump_(int level);
 };
-class zt_src_file: public zp_obj
+class zt_src_file
 {
 	z_string _default;
 	z_string _name;
 	z_string _full_name;
 public:
-	ZO_OBJ_H;
 	zt_src_file();
-	z_obj_vect<zt_func> _funcs_v;
+	z_stl_obj_vector<zt_func> _funcs_v;
 	zt_profile_list _profiles;
 	zt_src_file(ctext name,ztp_setting setting);
     virtual ~zt_src_file(){}
@@ -126,14 +112,14 @@ public:
 	void init(ctext profile);
 
 
-	z_obj_map<zt_func> _funcs;
+	z_map<zt_func> _funcs;
 	zt_func*	get_or_add_func(ctext func_name);
 };
 
 
 
 
-class zt_module : public zp_obj
+class zt_module 
 {
 public:
 	zt_module() { 
@@ -146,8 +132,7 @@ public:
 	ztp_setting _setting;
 	z_string _name;//set in config file
 	z_string _default;//set in config file
-	ZO_OBJ_H;
-	z_obj_map<zt_src_file> _src_files;
+	z_map<zt_src_file> _src_files;
 	zt_profile_list _profiles;
 	zt_src_file* get_or_add_file(ctext file_name);
 
@@ -155,7 +140,7 @@ public:
 
 	virtual ctext get_name() { return _name.c_str(); }
 };
-class z_trace : public zt_func_call,public zp_obj
+class z_trace : public zt_func_call
 {
 	bool _b_tracing;
 	bool _b_profiling;
@@ -167,8 +152,7 @@ class z_trace : public zt_func_call,public zp_obj
 public:
 	z_trace();
 	~z_trace();
-	ZO_OBJ_H;
-	zp_obj_parser _parser;
+	//zp_obj_parser _parser;
 	bool _output_os_debug;
 
 	bool enabled;
@@ -216,8 +200,8 @@ public:
 
 
 
-	z_obj_map<zt_profile> _profiles;
-	z_obj_map<zt_module> _modules;
+	z_map<zt_profile> _profiles;
+	z_map<zt_module> _modules;
 
 
 	void set_output_to_stdout();
@@ -282,7 +266,6 @@ const ctext module_name=STRINGIZE(Z_TRACE_MODULE);
 #define	ZT_OUT(_X_)  
 
 
-#endif
 #endif
 #endif
 

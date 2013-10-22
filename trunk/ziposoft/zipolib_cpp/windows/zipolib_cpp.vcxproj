@@ -93,6 +93,7 @@
     <ClCompile Include="..\src\z_file.cpp" />
     <ClCompile Include="..\src\z_list.cpp" />
     <ClCompile Include="..\src\z_string.cpp" />
+    <ClCompile Include="..\src\z_trace.cpp" />
     <ClCompile Include="..\src\z_type_converter.cpp" />
     <ClCompile Include="..\src\z_utility.cpp" />
   </ItemGroup>

@@ -79,6 +79,7 @@
     <ClInclude Include="..\include\z_filesystem.h" />
     <ClInclude Include="..\include\z_str.h" />
     <ClInclude Include="..\include\z_temp_buff.h" />
+    <ClInclude Include="..\include\z_time.h" />
     <ClInclude Include="..\include\z_utility.h" />
     <ClInclude Include="..\include\z_os_specific.h" />
   </ItemGroup>
@@ -93,6 +94,7 @@
     <ClCompile Include="..\src\z_filesystem.c" />
     <ClCompile Include="..\src\z_str.c" />
     <ClCompile Include="..\src\z_temp_buff.c" />
+    <ClCompile Include="..\src\z_time.c" />
     <ClCompile Include="..\src\z_utility.c" />
     <ClCompile Include="..\src\z_os_specific.c" />
   </ItemGroup>

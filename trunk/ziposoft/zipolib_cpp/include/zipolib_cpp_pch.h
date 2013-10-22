@@ -8,7 +8,7 @@
 #include "zipolib_c/include/zipo.h"
 #include "zipolib_c/include/z_utility.h"
 #include "zipolib_c/include/z_debug.h"
-
+#include "zipolib_c/include/z_time.h"
 #include <string>
 #include <map>
 #include <vector>

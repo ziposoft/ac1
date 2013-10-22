@@ -26,6 +26,18 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*'a'","xyz",zs_no_match,"",""},
 	{"*('a')","",zs_eof,"",""},
 	{"#'a'","",zs_eof,"","a"},
+	//AND groups
+	{"'a'&'b'","b",zs_no_match,"b","ab"},
+
+	{"'a'&'b'&'c'","cab",zs_matched,"abc","abc"},
+	{"'a'&'b'&'c'","ab",zs_no_match,"abc","abc"},
+	//{"(*'b')&'d'","bd",zs_matched,"bd","d"},
+	//{"*'b'&*'d'","bd",zs_matched,"",""},
+	{"'a'&+'b'","aba",zs_unparsed_data,"ab","ab"},
+	{"'a'&'b'&'a'","aba",zs_matched,"aba","aba"},
+	{"'b'&+'a'","aba",zs_matched,"ba","ba"},
+	{"+'a'&'b'","aba",zs_matched,"ab","ab"},
+
 	//OR groups
 	{"('a'|'b')","ba",zs_unparsed_data,"a","a"},
 	{"('a'|'b')","b",zs_matched,"a","a"},
@@ -50,8 +62,8 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"ident:'=':ident","x=2",zs_matched,"x=2","="},
 	{"ident:'=':ident","x=2",zs_matched,"x=2","="},
 	{"ident:'=':?ident","x=2",zs_matched,"x=2","="},
-	{"ident:'=':ident:#','","x=2 ",zs_matched,"x=2","="},
-	{"ident:'=':?ident:#','","x=2 ",zs_matched,"x=2","="},
+	{"ident:'=':ident:#','","x=2 ",zs_matched,"x=2,","=,"},
+	{"ident:'=':?ident:#','","x=2 ",zs_matched,"x=2,","=,"},
 
 
 
@@ -65,9 +77,9 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"test4","b",zs_matched," b"," tired"},
 	{"+(test3:'x')","abcxabcxabcx",zs_matched,"abcx","abcx"},
 	{"pair","x=2",zs_matched,"x=2,","=,"},
-	{"test5","x y z",zs_matched," x y z"," tired tired tired"},
+	{"test5","x y z",zs_matched," tired tired tired x y z"," tired tired tired"},
 	//ident
-	{"ident","anthony corriveau",zs_matched,"anthony",""},
+	{"ident","anthony corriveau",zs_unparsed_data,"anthony",""},
 	{"*' '&+ident","anthony corriveau",zs_matched,"anthonycorriveau",""},
 
 	//random
@@ -76,19 +88,10 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"%('a'|' '):'b':'c'","a b aac",zs_matched,"bc","bc"},
 	{"%whsp:'b':'c'","b\tc",zs_matched,"\tbc","bc"},
 
-	//AND groups
-	{"'a'&'b'","b",zs_eof,"b","ab"},
-	{"'a'&'b'","b",zs_eof,"b","ab"},
-
-	{"'a'&'b'&'c'","cab",zs_matched,"abc","abc"},
-	{"'a'&'b'&'c'","ab",zs_eof,"abc","abc"},
-	//{"(*'b')&'d'","bd",zs_matched,"bd","d"},
-	//{"*'b'&*'d'","bd",zs_matched,"",""},
-	{"+'a'&+'b'","aba",zs_matched,"ab","ab"},
 
 
 	//Mixed groups
-	{"('a':'b')|'a')","a",zs_matched,"a","a"},
+	{"('a':'b')|'a'","a",zs_matched,"a","a"},
 	{"*'a':'b'","aaab",zs_matched,"b","b"},
 	{"*('a'|'b')&'d'","bd",zs_matched,"d","d"},
 	{"('a'|'b')&('c'|'d')","bd",zs_matched,"ac","ac"},

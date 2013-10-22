@@ -92,4 +92,4 @@ print ('Content-type:text/html\r\n\r\n'
 	"<head>"
 	"<title>Trail Map</title></head><body><pre>")
 
-print ("No arguments</pre></body></html>")
+print ("list, debug, save</pre></body></html>")

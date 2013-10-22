@@ -39,6 +39,9 @@
     <ClInclude Include="..\include\z_os_specific.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\z_time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\pch.c">
@@ -69,6 +72,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\pstrconv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\z_time.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
