@@ -64,8 +64,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Xml Include="..\menu.xml" />
-    <Xml Include="..\trailmap.xsl" />
+    <Xml Include="..\..\menu\zs_menu.xsl" />
+    <Xml Include="..\trailmap.xsl">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\trailmap_menu.xml" />
     <Xml Include="..\Umstead.xml" />
   </ItemGroup>

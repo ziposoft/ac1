@@ -3,8 +3,8 @@
   <ItemGroup>
     <Xml Include="..\Umstead.xml" />
     <Xml Include="..\trailmap.xsl" />
-    <Xml Include="..\menu.xml" />
     <Xml Include="..\trailmap_menu.xml" />
+    <Xml Include="..\..\menu\zs_menu.xsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\trailmap.js" />
