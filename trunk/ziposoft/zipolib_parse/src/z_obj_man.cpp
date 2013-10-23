@@ -326,7 +326,7 @@ zp_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_op
 	}
 	case zo_mvo_get:
 	{
-		Z_ERROR("calling get!!!")
+		Z_ERROR("calling get!!!");
 		_member_obj_container=&member_var;
 		return zs_ok;
 	}

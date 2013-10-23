@@ -2,7 +2,6 @@
 //
 // ZIPO Lib dbg
 //
-//________________________________________________________________________/////////////////////////
 #ifndef zipo_dbg_h
 #define zipo_dbg_h
 #include "zipo.h"
@@ -26,7 +25,7 @@ void z_debug_logfile(ctext name);
 
 void z_debug_out(const char*  s  );
 void z_debug_printf(const char*  lpszFormat,  ...  );
-#define	ERROR(_X_)   z_debug_printf _X_ ; 
+#define	Z_ERROR(...)   z_debug_printf (__VA_ARGS__ ); 
 #define	DBG_OUT(_X_)   z_debug_printf _X_ ; 
 #if WIN32
 #define Z_ASSERT(_X_) { if (!(_X_)) {  DBG_OUT(("ASSERTION FAILED _X_ %s(%d) ",__FILE__,__LINE__));Z_DEBUG_BREAK;}}
@@ -51,7 +50,7 @@ void z_debug_shutdown();
 #define	z_debug_shutdown(_X_)
 #define	z_debug_startup(_X_)
 #define	z_debug_logfile(_X_)
-
+#define	Z_ERROR(_X_)
 
 #endif//NO DEBUG
 

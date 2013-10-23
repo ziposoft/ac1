@@ -8,9 +8,11 @@
 
 int main()
 {
+	ZT_ENABLE();
+	ZTF;
 	z_string larry="fred";
 
-
+	ZT(("Testing trace...\n"));
 
 
 	gz_out << larry;

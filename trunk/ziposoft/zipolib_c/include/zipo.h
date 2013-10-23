@@ -107,6 +107,9 @@ ________________________________________________________________________*/
 
 	#ifdef _DEBUG
 		#define DEBUG 1
+		
+	#else
+		#error "Debug not defined??"
 	#endif
     #define WIN32_LEAN_AND_MEAN
     #define _CRT_SECURE_NO_DEPRECATE 1
