@@ -16,7 +16,27 @@ var vb_height = vb_height_max;
 var g_path_highlighted = 0;
 var g_popup_table;
 
-
+jQuery.extend
+(
+    {
+        getValues: function (url) {
+            var result = null;
+            $.ajax(
+                {
+                    url: url,
+                    type: 'get',
+                    dataType: 'html',
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        result = data;
+                    }
+                }
+            );
+            return result;
+        }
+    }
+);
 
 function show_hide_svg(elm_id, val) {
     document.getElementById(elm_id).setAttribute("visibility", (val ? 'visible' : 'hidden'));
@@ -162,7 +182,12 @@ $(document).ready(function ()
     init_menu();
 
     document.getElementById("browser_info").innerHTML = BrowserDetect.browser + " " + BrowserDetect.version + " " + BrowserDetect.OS;
+    //$("#scratch").load("http://localhost/cgi-bin/trailmap.cgi?act=list");
 
+    var list = $.getValues("http://localhost/cgi-bin/trailmap.cgi?act=list");
+    $("#scratch").html( list);
+    //var list = get_route_list();
+    //document.getElementById("scratch").innerHTML = list;
 });
 
 var dbl_click_toggle = 0;
@@ -556,9 +581,10 @@ function make_http_req(url) {
 }
 
 function get_route_list() {
-    var site = window.location.hostname + "/cgi-bin/trailmap.cgi?act=list";
-    make_http_req(site);
-
+    var site = "http://"+window.location.hostname;
+    site=site+ "/cgi-bin/trailmap.cgi?act=list";
+    var list= make_http_req(site);
+    return list;
 
 
 

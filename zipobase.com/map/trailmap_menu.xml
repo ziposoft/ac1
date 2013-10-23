@@ -2,7 +2,12 @@
 
 <menu_bar  xmlns="http://ziposoft.com/ns">
   <menu_bar_text>Umstead State Park Map</menu_bar_text>
-
+	<menu title="Routes">
+		<menu_link onclick="savefile()">Save</menu_link>
+	</menu>
+	<menu title="File">
+    <menu_link onclick="savefile()">Save</menu_link>
+  </menu> 
   <menu title="View">   
     <menu_bool id="show_water">Show Water </menu_bool>
     <menu_bool id="show_map" >Show Map </menu_bool>
@@ -17,9 +22,7 @@
       <menu_opt val="6">crazy</menu_opt>
 	</menu_opt_sel>	
   </menu>
-  <menu title="File">
-    <menu_link onclick="savefile()">Save</menu_link>
-  </menu> 
+
   <menu title="Edit">
     <menu_link >menu 1 #1 </menu_link>
     <menu_link >menu 2 #1 </menu_link>

@@ -51,6 +51,37 @@ omit-xml-declaration="yes"
         <div id="header" style="background-color:#888">
          <xsl:apply-templates select="document('trailmap_menu.xml')"/>
    
+        </div>
+
+
+
+        <div>
+         
+				<div style="position:fixed;top:100px;left:0px;width:200px;border:0 "  id="leftpane" >
+          <h1  style="display:inline;">Total:</h1>
+          <h1  style="display:inline;" id="total_distance">0</h1>
+    
+					<h1 id="routename">routename</h1>
+					<div id="scratch">scratch</div>
+					<input onchange="routename_change(this)" id="routename_input" type="text" name="routename" />
+					<table rules="all" style="border: solid 1px black">
+
+						<tbody id="route">
+							<tr>
+								<td>trail</td>
+								<td>section</td>
+								<td>distance</td>
+							</tr>
+							<tr id="segtmp" style="display: none">
+								<td>Company Mill</td>
+								<td>CM1</td>
+								<td>0</td>
+							</tr>
+						</tbody>
+
+
+					</table> 
+				
           <table id="debug_table" visibility="hidden" rules="all" style="display: block;border: solid 1px black">
             <tr>
               <td>window=</td>
@@ -79,35 +110,7 @@ omit-xml-declaration="yes"
 
             </tr>            
           </table>
-        </div>
-
-
-
-        <div>
-         
-				<div style="position:fixed;top:100px;left:0px;width:200px;border:0 "  id="leftpane" >
-          <h1  style="display:inline;">Total:</h1>
-          <h1  style="display:inline;" id="total_distance">0</h1>
-    
-					<h1 id="routename">routename</h1>
-					<input onchange="routename_change(this)" id="routename_input" type="text" name="routename" />
-					<table rules="all" style="border: solid 1px black">
-
-						<tbody id="route">
-							<tr>
-								<td>trail</td>
-								<td>section</td>
-								<td>distance</td>
-							</tr>
-							<tr id="segtmp" style="display: none">
-								<td>Company Mill</td>
-								<td>CM1</td>
-								<td>0</td>
-							</tr>
-						</tbody>
-
-
-					</table> 
+					
 				</div>        
 
 

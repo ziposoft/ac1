@@ -16,9 +16,12 @@ def dbgprint(x):
 
 def listroutes():
 	list=os.listdir("../map/routes/");
+	str = '';
 	print ('Content-type:text/html\r\n\r\n');
 	for file in list:
-		print( file)
+		str += file;
+		str += ';';
+	print (str);
 	return
 
 
