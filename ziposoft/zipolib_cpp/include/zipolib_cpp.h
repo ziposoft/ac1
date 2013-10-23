@@ -12,4 +12,5 @@
 #include "zipolib_cpp/include/z_stl_list.h"
 #include "zipolib_cpp/include/z_stl_map.h"
 #include "zipolib_cpp/include/z_list.h"
+#include "zipolib_cpp/include/z_trace.h"
 #endif

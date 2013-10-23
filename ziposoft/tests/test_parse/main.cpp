@@ -32,7 +32,7 @@ int func2()
 
 int main(int argc, char** argv)
 {
-
+		ZT_ENABLE();
 	//z_trace_enable();
 	//___________________________________________________________
 	//
