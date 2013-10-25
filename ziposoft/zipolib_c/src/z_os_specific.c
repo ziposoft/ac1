@@ -8,7 +8,28 @@ ________________________________________________________________________*/
 #include "z_temp_buff.h"
 
 #ifdef OS_WINDOWS
+U32 PrintWin32Error ()
+{
+	DWORD error, success;
 
+	LPVOID lpMsgBuf;
+	error = GetLastError ();
+	success = FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, error, MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),	// Default language
+				 (LPTSTR) & lpMsgBuf, 0, NULL);
+	// Process any inserts in lpMsgBuf.
+	// ...
+	// Display the string.
+	if (success)
+	{
+		printf("ERROR %lx: %s\n",error,(LPCTSTR)lpMsgBuf);
+		LocalFree( lpMsgBuf );
+	}
+	else
+		printf ("ERROR showing error\n");
+
+	// Free the buffer.
+	return error;
+}
 WCHAR* WCHAR_str_allocate(utf8 in_Src,size_t MaxLen)
 {
 	WCHAR* buff =(WCHAR*)z_temp_buffer_get( MaxLen);
