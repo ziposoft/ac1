@@ -10,7 +10,7 @@ ________________________________________________________________________*/
 #include "zipolib_c/include/z_time.h"
 
 
-int vsnprintf(char *str, size_t size, ctext format, va_list ap);
+
 
 /* GLOBALS */
 z_string g_file_data;

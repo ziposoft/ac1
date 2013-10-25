@@ -117,17 +117,29 @@ void zp_obj::output(z_file* fp)
 	*/
 }
 
-
+zo_manipulator g_man;
 void zp_obj::dump(int level, z_file& outf,int flags)
 {
-	
+	zo_ftr_entry* f;
 	int indent=level;
 	while(indent--)	outf<<"  ";	
 	//outf<<get_name()<<'['<<(int)_offset<<']'<< " ";
-	outf<<get_name()<< " ";
+	outf<<get_name()<< "[";
 	dump_custom(outf);
-	outf<<'\n';
+	/*
+	zo_feature_list full_list;
+	get_feature_map(&g_man,full_list,ZO_MT_PROP,false);
+	full_list.reset_iter();
+	while(f=full_list.get_next())
+	{
+		ctext name=full_list._internal_iter.key;
+		outf<<name<<',';
+		this->get_feature
 
+
+	}*/
+
+	outf<<"]\n";
 	if(!_children) return;
 	size_t size=_children->size();
 	size_t i;
@@ -265,7 +277,7 @@ ctext zp_feature::get_full_name(z_string& fullname)
 #define ZO_OBJ_LIST \
 	OBJ(zp_cmdline,zp_obj,"cmdline","cmdline",\
 	"{_root}?'/':*({_path_list}ident:'/'):?({_object}ident:'.'):?{_feature}feat:"\
-	"?({_subscript}':':{_subscript_id}ident):?( ({_assignment}'=':{_assign_val}value)|{_params}params)",\
+	"?({_subscript}'[':{_subscript_id}ident:']'):?( ({_assignment}'=':{_assign_val}value)|{_params}params)",\
 	VAR(_feature) VAR(_subscript) VAR(_subscript_id)\
     VAR(_root)  VAR(_object) VAR(_assign_val)  VAR(_assignment) VAR(_params) VAR(_path_list) )\
 	OBJ(zp_str_list,zp_obj,"strlist","strlist","'{':*(({_list}ident|{_list}string|{_list}string_sq):?','):'}'",VAR(_list) )\

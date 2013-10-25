@@ -211,6 +211,11 @@ zp_status z_console::execute_line(ctext text)
 	zp_status status=parse_line(text);
 	if(status)
 		return status;
+
+	zo_manipulator man;
+
+	man.dump_obj(&gz_out,&_cmd_line_obj);
+	
 #if 0
 //find path
 	if(_cmd_line_obj._root)

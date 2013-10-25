@@ -10,7 +10,6 @@ using namespace std;
 #include <sys/types.h>
 #include <sys/stat.h>
 #endif
-int vsnprintf(char *str, size_t size, ctext format, va_list ap);
 
 
 z_file::z_file()

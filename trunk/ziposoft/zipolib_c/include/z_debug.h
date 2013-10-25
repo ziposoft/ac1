@@ -12,7 +12,7 @@ extern "C" {
 
 
 
-
+void z_debug_out(const char*  s  );
 void z_debug_load_save_args(int* pargc, char*** pargv);
 //DEBUG MACROS
 #ifdef DEBUG
@@ -26,7 +26,7 @@ void z_debug_logfile(ctext name);
 #endif
 
 
-void z_debug_out(const char*  s  );
+
 void z_debug_printf(const char*  lpszFormat,  ...  );
 #define	Z_ERROR(...)   z_debug_printf (__VA_ARGS__ ); 
 #define	DBG_OUT(_X_)   z_debug_printf _X_ ; 
@@ -53,7 +53,7 @@ void z_debug_shutdown();
 #define	z_debug_shutdown(_X_)
 #define	z_debug_startup(_X_)
 #define	z_debug_logfile(_X_)
-#define	Z_ERROR(_X_)
+#define	Z_ERROR(...)
 
 #endif//NO DEBUG
 

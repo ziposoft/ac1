@@ -7,6 +7,7 @@ Z_MODULE_INCLUDE(Z_MOD(parse));
 z_console g_con;
 int main(int argc, char* argv[])
 {
+		ZT_ENABLE();
 	g_con.run();
 	return 0;
 }

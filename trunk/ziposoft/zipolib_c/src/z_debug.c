@@ -93,5 +93,14 @@ void z_debug_shutdown()
 	
 }
 #endif
+
+#else
+
+void z_debug_out(const char*  str  )
+{
+
+
+}
+
 #endif
 
