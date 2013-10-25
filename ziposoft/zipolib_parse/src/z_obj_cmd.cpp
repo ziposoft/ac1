@@ -160,7 +160,9 @@ zp_status zo_man_cmd::execute_line(ctext text)
 	if(status==zs_no_entry_for_item)
 		status=execute_feature(this);
 	if(status==zs_no_entry_for_item)
+	{
 		Z_ERROR("Unknown feature:\"%s\"",_cmd_line_obj._feature._name.c_str());
+	}
 	return status;
 }
 zp_status zo_man_cmd::callback_feature_execute_obj(z_obj* pObj,zo_ftr_entry* fe)

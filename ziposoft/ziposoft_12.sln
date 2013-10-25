@@ -20,6 +20,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_cpp", "tests\test_cpp\test_cpp.vcxproj", "{6A17DA71-50D6-46E2-AD7A-47A082D64F48}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_console", "tests\test_console\test_console.vcxproj", "{437042A0-FD63-434D-8578-D12A73703BF8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7DFEB237-87B6-4425-A52D-E8D5E892D6F4} = {7DFEB237-87B6-4425-A52D-E8D5E892D6F4}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
