@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\z_console.h" />
     <ClInclude Include="..\include\z_obj.h" />
     <ClInclude Include="..\include\z_objlist.h" />
     <ClInclude Include="..\include\z_obj_cmd.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="..\include\z_parse_text.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\z_console.cpp" />
     <ClCompile Include="..\src\z_obj.cpp" />
     <ClCompile Include="..\src\z_obj_cmd.cpp" />
     <ClCompile Include="..\src\z_obj_man.cpp" />

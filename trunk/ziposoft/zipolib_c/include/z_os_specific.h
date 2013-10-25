@@ -14,7 +14,7 @@ extern "C" {
 #ifdef OS_WINDOWS
 
 
-
+U32 PrintWin32Error ();
 BOOL AnsiToUnicode16(utf8 in_Src, WCHAR *out_Dst, INT in_MaxLen);
 BOOL AnsiToUnicode16L(utf8 in_Src, INT in_SrcLen, WCHAR *out_Dst, INT in_MaxLen);
 int WCHAR_str_deallocate(WCHAR* in);
