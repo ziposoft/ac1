@@ -207,6 +207,50 @@ int run_create_def_obj()
 
 --------------------------------------------------------------*/
 
+
+int run_parse_xml()
+{
+		if(parse_root)
+	{
+		delete parse_root;
+		parse_root=0;
+	}
+	zp_status status=zs_no_match;
+	p.set_source(g_arg_data_in);
+	if(g_template)
+		status=p.parse_template(parse_root,g_template);
+	else
+	{
+		if(g_arg_obj)
+			status=p.parse_item(parse_root,g_arg_obj);
+		else
+		{
+			printf("ERROR! no object or template specified.\n");
+			return -1;
+		}
+	}
+
+
+
+	if(status!=g_expected_result)
+	{
+		printf("TEST FAILED!\n");
+		printf("result=%s\n",z_status_get_text(status));
+		printf("expected result=%s\n",z_status_get_text(g_expected_result));
+		p.report_error(status);
+		return -1;
+	}
+	printf("TEST PASSED\n");
+	if(g_arg_dump=="on")
+		if(parse_root)
+		{
+			p.dump_obj(&gz_out,parse_root);
+		}
+
+	return 0;
+	return -1;
+}
+
 int run_parse_obj()
 {
 	if(g_test_type_function_to_run)

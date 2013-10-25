@@ -4,6 +4,23 @@ Z_MODULE_DECLARE(test);
 Z_MODULE_INCLUDE(Z_MOD(test),Z_MOD(parse));
 
 
+
+class zp_xml_file : public zp_obj
+{
+	ZO_OBJ_H;
+};
+class zp_xml_tcd : public zp_obj
+{
+	ZO_OBJ_H;
+};
+#define Z_MODULE _Z_MODULE(xml)
+#define ZO_OBJ_LIST \
+OBJ(zp_xml_file,zp_obj,"zp_xml_file",0,"('<?':^'?>'):zp_xml_tcd",NO_FTR)\
+OBJ(zp_xml_tcd,zp_obj,"zp_xml_tcd",0,"'a'",NO_FTR)
+
+#include "zipolib_parse/include/z_obj_macro.h"
+
+
 class zp_test1 : public zp_obj
 {
 	ZO_OBJ_H;

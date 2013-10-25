@@ -8,6 +8,7 @@
 int run_help();
 int run_parse_obj();
 int run_static_tests();
+int run_parse_xml();
 
 //opt_list_test_type
 int run_test_only();
