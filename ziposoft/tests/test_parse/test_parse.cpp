@@ -210,25 +210,14 @@ int run_create_def_obj()
 
 int run_parse_xml()
 {
-		if(parse_root)
-	{
-		delete parse_root;
-		parse_root=0;
-	}
+
+	zp_xml_file xml_file;
 	zp_status status=zs_no_match;
-	p.set_source(g_arg_data_in);
-	if(g_template)
-		status=p.parse_template(parse_root,g_template);
-	else
-	{
-		if(g_arg_obj)
-			status=p.parse_item(parse_root,g_arg_obj);
-		else
-		{
-			printf("ERROR! no object or template specified.\n");
-			return -1;
-		}
-	}
+
+	p.set_ignore_whitespace();
+
+	status=p.parse_obj(&xml_file,g_arg_data_in);
+
 
 
 

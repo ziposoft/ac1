@@ -90,7 +90,7 @@ public:
 	zp_status test_single_quoted_string(); //  ~>(char) 
 
 	zp_status test_end_char(char c); //  ~>(char) 
-	zp_status test_not_string(const char* str);
+	zp_status test_not_string(const char* str,size_t len);
 	zp_status test_string(const char* str,size_t len);
 	zp_status test_string(const char* str);
 
@@ -125,6 +125,7 @@ public:
 	//stream util
 	void index_reset();
 	size_t get_index_offset();
+	ctext get_index_skip_ignored_chars();
 	inline ctext get_index() { return _index_current;}
 	inline void set_index_under_test(ctext in) {  _index_under_test=in;}
 	inline ctext get_index_under_test() {  return _index_under_test;}

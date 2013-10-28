@@ -87,7 +87,24 @@ char zp_text_parser::current_ch()
 //	_index_under_test= _index_current;
 	return *_index_current; 
 }
-
+ctext zp_text_parser::get_index_skip_ignored_chars()
+{
+	while(1)
+	{
+		char c=*_index_current;
+		if(
+			(_options.ignore_tabs && (c=='\t')) ||
+			(_options.ignore_space && (c==' ')) ||
+			(_options.ignore_newline && (c=='\n')) ||
+			(_options.ignore_newline && (c=='\r')))
+		{
+			   _index_current++;
+			   continue;
+		}
+		break;
+	}
+	return _index_current;
+}
 void zp_text_parser::index_reset()
 {
 	_index_current=_start;
@@ -380,7 +397,7 @@ zp_status zp_text_parser::test_not_single_quoted_string(const void *dummy)
 
 	if((status=_test_char('^'))) 
 		return status;
-	inc();
+	//inc();
 	if((status=_test_char('\''))) 
 		return check_status(zs_template_syntax_error);
 	_match_start=get_index();
@@ -461,13 +478,12 @@ zp_status zp_text_parser::test_any_chars(size_t n)// #5
 }
 
 
-zp_status zp_text_parser::test_not_string(const char* str)
+zp_status zp_text_parser::test_not_string(const char* str,size_t match_len)
 {
 	zp_status status;
 	if((status=start_test())) return status;
 
-	size_t match_len=0;
-	match_len=strlen(str);
+
 	while(!eob())
 	{
 		size_t len=_end-get_index();

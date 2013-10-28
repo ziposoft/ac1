@@ -184,7 +184,7 @@ zp_status zp_obj_parser::_f_not_test_string_literal(const void* dummy)
 	size_t match_len=0;
 	zp_text_parser& tmpl=context_get_current_template_parser();
 	tmpl.get_match(match_start,match_len);
-	status= test_string(match_start,match_len);
+	status= test_not_string(match_start,match_len);
 	return status;
 }
 
@@ -257,13 +257,15 @@ zp_status zp_obj_parser::_process_single_item(zp_mode mode,zp_flags flags)
 	//ZTF;
 	zp_status item_result=zs_template_syntax_error;
 	zp_text_parser& tmpl=context_get_current_template_parser();
-	z_string debug_data;	
-	z_string debug_temp;
-	z_string debug_mode;
 	int list_item;
 	ctext match_start=0;
 	size_t match_len=0;
 	size_t template_offset=tmpl.get_index_offset();
+
+#if DEBUG
+	z_string debug_data;	
+	z_string debug_temp;
+	z_string debug_mode;
 
 	debug(debug_data);
 	tmpl.debug(debug_temp);
@@ -275,6 +277,8 @@ zp_status zp_obj_parser::_process_single_item(zp_mode mode,zp_flags flags)
 
 
 	ZT(("(%s) <%s> [%s]",debug_mode.c_str(),debug_temp.c_str(),debug_data.c_str()));
+
+#endif
 	item_type match_type=item_invalid_type;
 	_ctx_current->_mode=mode;
 	_ctx_current->_flags=flags;

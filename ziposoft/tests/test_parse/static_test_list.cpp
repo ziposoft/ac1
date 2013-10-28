@@ -26,6 +26,10 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*'a'","xyz",zs_no_match,"",""},
 	{"*('a')","",zs_eof,"",""},
 	{"#'a'","",zs_eof,"","a"},
+	{"('<?':^'?>':'?>')","<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>",zs_matched,"<??>",""},
+
+
+	
 	//AND groups
 	{"'a'&'b'","b",zs_no_match,"b","ab"},
 

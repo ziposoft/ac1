@@ -88,6 +88,9 @@ int run_help();
 extern zp_obj* parse_root;
 extern opt_func g_test_type_function_to_run;
 
-
+class zp_xml_file : public zp_obj
+{
+	ZO_OBJ_H;
+};
 
 #endif
