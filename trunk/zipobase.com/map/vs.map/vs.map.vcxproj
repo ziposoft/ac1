@@ -91,7 +91,9 @@
     <Xml Include="..\trailmap.xsl">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="..\trailmap_menu.xml" />
+    <Xml Include="..\trailmap_menu.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\Umstead.xml" />
   </ItemGroup>
   <ItemGroup>
