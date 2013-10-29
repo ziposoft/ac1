@@ -18,7 +18,6 @@
 #define SANITY_CHECK(_X_) 
 #endif
 
-#define TEST_RESULT_MAX 100 //TODO!!!
 
 
 

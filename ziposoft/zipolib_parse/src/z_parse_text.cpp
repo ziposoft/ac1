@@ -87,24 +87,7 @@ char zp_text_parser::current_ch()
 //	_index_under_test= _index_current;
 	return *_index_current; 
 }
-ctext zp_text_parser::get_index_skip_ignored_chars()
-{
-	while(1)
-	{
-		char c=*_index_current;
-		if(
-			(_options.ignore_tabs && (c=='\t')) ||
-			(_options.ignore_space && (c==' ')) ||
-			(_options.ignore_newline && (c=='\n')) ||
-			(_options.ignore_newline && (c=='\r')))
-		{
-			   _index_current++;
-			   continue;
-		}
-		break;
-	}
-	return _index_current;
-}
+
 void zp_text_parser::index_reset()
 {
 	_index_current=_start;
@@ -126,19 +109,35 @@ void zp_text_parser::set_ignore_whitespace()
 
 zp_status zp_text_parser::advance(size_t count)
 {
-	if(!_index_current) 
-		return check_status(zs_eof);
 
-	if( _index_current+count>_end)
-		return check_status(zs_eof);
 
-	while(count--)
+	while(count)
 	{
-		if(*_index_current=='\n')
+		if(!_index_current) 
+			return check_status(zs_eof);
+
+		if( _index_current+count>_end)
+			return check_status(zs_eof);
+		char c=*_index_current;
+		if(c=='\n')
 		{
 				n_newlines++;
+				if(n_newlines%100000 == 0)
+					printf("%d\r",n_newlines);
 		}
+		/*
+		if(
+			(_options.ignore_tabs && (c=='\t')) ||
+			(_options.ignore_space && (c==' ')) ||
+			(_options.ignore_newline && (c=='\n')) ||
+			(_options.ignore_newline && (c=='\r')))
+		{
+			   _index_current++;
+			   continue;
+		}*/
+
 		_index_current++;
+		count--;
 	}
 	/*
 	if(_index_current>_index_furthest)
@@ -150,16 +149,9 @@ zp_status zp_text_parser::advance(size_t count)
 
 char zp_text_parser::inc()
 {
-	if (eob()) return 0;
-	char c=current_ch();
-	if(c=='\n')
-		n_newlines++;
-	_index_current++;
-	/*
-	if(_index_current>_index_furthest)
-		_index_furthest=_index_current;
-		*/
-	return c;
+	if (advance(1)) return 0;
+	return current_ch();
+
 }
 zp_status zp_text_parser::skip_ws()
 {
@@ -482,7 +474,7 @@ zp_status zp_text_parser::test_not_string(const char* str,size_t match_len)
 {
 	zp_status status;
 	if((status=start_test())) return status;
-
+	int matched=0;
 
 	while(!eob())
 	{
@@ -491,8 +483,12 @@ zp_status zp_text_parser::test_not_string(const char* str,size_t match_len)
 			return zs_matched;
 		if(memcmp(str,get_index(),match_len)==0)
 		{
-			return zs_matched;
+			if(matched)
+				return zs_matched;
+			return zs_no_match;
+
 		}
+		matched++;
 		inc();
 	}
 	return zs_matched;

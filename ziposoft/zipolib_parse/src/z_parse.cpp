@@ -485,7 +485,7 @@ zp_status zp_obj_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 		_test_result_current_index++;
 		if(!mode.create)
 		{
-			U8 result=0;
+			U32 result=0;
 			U32 quanity_matched=0;
 			ZT(("TEST#%d START>>",testnum));
 			_results->set_result(testnum,zp_result_unknown);
@@ -577,11 +577,11 @@ zp_status zp_obj_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 		}
 		else//if(mode.create)
 		{
-			U8 test_result=_results->get_result(testnum);
-			U8 iterations=1;
+			U32 test_result=_results->get_result(testnum);
+			U32 iterations=1;
 
 			//quanity_matched=_results->get_result(testnum);
-			Z_ASSERT((  test_result<zp_result_unknown));
+			
 
 			SANITY_CHECK(
 			ctext tmpl_check=_results->_test_result_tmpl[testnum];
