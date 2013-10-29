@@ -17,11 +17,14 @@ class zp_xml_trackpoint : public zp_obj
 	ZO_OBJ_H;
 	zp_xml_trackpoint()
 	{
-		static int i=0;
-		i++;
-		if(i%100 == 0)
-			printf("\ntrackpoints=%d\n",i);
 
+	}
+};
+class zp_xml_activity : public zp_obj
+{
+	ZO_OBJ_H;
+	zp_xml_activity()
+	{
 
 	}
 };
@@ -33,6 +36,7 @@ class zp_xml_tcd : public zp_obj
 #define ZO_OBJ_LIST \
 	OBJ(zp_xml_file,zp_obj,"zp_xml_file",0,"%whsp:('<?':^'?>':'?>'):+zp_xml_elm:%whsp",NO_FTR)\
 OBJ(zp_xml_tcd,zp_obj,"zp_xml_tcd",0,"'a'",NO_FTR)\
+OBJ(zp_xml_activity,zp_obj,"zp_xml_activity",0,"%whsp:'<Trackpoint>':+zp_xml_elm:'</Trackpoint>'",NO_FTR)\
 OBJ(zp_xml_trackpoint,zp_obj,"zp_xml_trackpoint",0,"%whsp:'<Trackpoint>':+zp_xml_elm:'</Trackpoint>'",NO_FTR)\
 OBJ(zp_xml_elm,zp_obj,"zp_xml_elm",0,"%whsp:'<':ident:*zp_xml_atr:(('>': *(^'<'|zp_xml_trackpoint|zp_xml_elm):'</':ident:'>')|'/>')",NO_FTR)\
 OBJ(zp_xml_atr,zp_obj,"zp_xml_atr",0,"%whsp:scoped:'=':string",NO_FTR)
