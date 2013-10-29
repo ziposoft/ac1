@@ -48,14 +48,16 @@ public:
 
 
 const U8 zp_result_no_match=0;
-const U8 zp_result_extended_value=0xFD;
+
+const U8 zp_result_unknown=0xFD;
 const U8 zp_result_eof=0xFE;
-const U8 zp_result_unknown=0xFF;
+const U8 zp_result_extended_value=0xFF;
 
 class zp_test_result
 {
 	//TODO HANLDE results more than 254
 	std::vector<U8> _test_results;
+	std::map<U32,U32> _test_results_ex;
 
 public:
 	zp_test_result();
@@ -70,7 +72,6 @@ public:
 	U32 set_index(U32 index);
 	*/
 #ifdef SANITY_CHECKS
-	ctext _test_result_tmpl[TEST_RESULT_MAX];
 #endif
 };
 

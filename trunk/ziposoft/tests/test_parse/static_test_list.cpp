@@ -9,6 +9,19 @@ TODO AND Groups with multi/optional stages
 */
 const st_test_tmpl_entry test_tmpl_list[]=
 {
+//problems
+	{"^'c':'c'","aaaaac",zs_matched,"c","c"},
+	{"*(^'c'):'c'","aaaaac",zs_matched,"c","c"},
+	{"*(^'c'|'b'):'c'","aaaaac",zs_matched,"c","c"},
+
+	{"*('a'|' ')",
+	"aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa "
+	"aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa "
+	"aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa "
+	
+	
+	,zs_matched,"",""},
+
 	//strings
 	//single groups
 	{"string_sq","'a'",zs_matched,"a",""},
@@ -26,7 +39,6 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*'a'","xyz",zs_no_match,"",""},
 	{"*('a')","",zs_eof,"",""},
 	{"#'a'","",zs_eof,"","a"},
-	{"('<?':^'?>':'?>')","<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>",zs_matched,"<??>",""},
 
 
 	
@@ -47,7 +59,8 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"('a'|'b')","b",zs_matched,"a","a"},
 	{"*('a'|'b')","c",zs_no_match,"",""},
 	{"*('a'|'b')","b",zs_matched,"",""},
-	{"*('a'|'b')","ba",zs_matched,"",""},
+	{"*('a'|'b'):'c'","babbaaabababac",zs_matched,"c","c"},
+	{"*('a'|'b'):'c'","c",zs_matched,"c","c"},
 	{"'a'|'b'","c",zs_no_match,"a","a"},
 	{"'a'|'b'","b",zs_matched,"a","a"},
 	{"*'a'|'b'","b",zs_matched,"b","b"},
@@ -55,6 +68,7 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*('a'|'b')|*('c'|'d')","bd",zs_unparsed_data,"",""},
 	{"*('a'|'b')|*('c'|'d')","ccc",zs_matched,"",""},
 
+	{"('<?':^'?>':'?>')","<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>",zs_matched,"<??>",""},
 
 	//sequence groups
 	{"'a':'b':'c'","abc",zs_matched,"abc","abc"},

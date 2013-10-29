@@ -11,15 +11,18 @@ zp_test_result::zp_test_result()
 }
 U32 zp_test_result::add_result(U32 result)
 {
-	_test_results.push_back(result);
+	Z_ASSERT((0));
+
 	return 0;
 }
 U32 zp_test_result::set_result(U32 index,U32 result)
 {
-	Z_ASSERT((result<=zp_result_unknown));
-	if(_test_results.size()==index)
+	if(_test_results.size()<(index+5))
+		_test_results.resize(index+5);
+	if(result>zp_result_unknown)
 	{
-		_test_results.push_back(result);
+		_test_results_ex[index]=result;
+		_test_results[index]=zp_result_extended_value;
 		return 0;
 	}
 
@@ -31,31 +34,23 @@ U32 zp_test_result::set_result(U32 index,U32 result)
 }
 U32 zp_test_result::get_result(U32 index)
 {
-	Z_ASSERT((_test_results.size()>index));
-	if(_test_results.size()>index)
-		return _test_results[index];
+	Z_ASSERT((_test_results.size()>index+4));
+	if(_test_results.size()<=index+4)
+		return 0;
+	U32 result=_test_results[index];
+	if(result==zp_result_extended_value)
+	{
+		result=_test_results_ex[index];
+	}
 
-	return 0;
+	return result;
 }
 U32 zp_test_result::get_result_count()
 {
 	return (U32)(_test_results.size());
 }
 
-/*
 
-void zp_test_result::inc_index()
-{
-	_test_result_current_index++;
-}
-U32 zp_test_result::set_index(U32 index)
-{
-	Z_ASSERT((TEST_RESULT_MAX>index));
-	_test_result_current_index=index;
-	return index;
-}
-
-*/
 void zp_test_result::clear()
 {
 	return _test_results.resize(0);
