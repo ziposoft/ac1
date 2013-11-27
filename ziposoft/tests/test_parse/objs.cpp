@@ -4,41 +4,14 @@ Z_MODULE_DECLARE(test);
 Z_MODULE_DECLARE(xml);
 Z_MODULE_INCLUDE(Z_MOD(test),Z_MOD(parse),Z_MOD(xml));
 
-class zp_xml_atr : public zp_obj
-{
-	ZO_OBJ_H;
-};
-class zp_xml_elm : public zp_obj
-{
-	ZO_OBJ_H;
-};
-class zp_xml_trackpoint : public zp_obj
-{
-	ZO_OBJ_H;
-	zp_xml_trackpoint()
-	{
 
-	}
-};
-class zp_xml_activity : public zp_obj
-{
-	ZO_OBJ_H;
-	zp_xml_activity()
-	{
-
-	}
-};
-class zp_xml_tcd : public zp_obj
-{
-	ZO_OBJ_H;
-};
 #define Z_MODULE _Z_MODULE(xml)
 #define ZO_OBJ_LIST \
-	OBJ(zp_xml_file,zp_obj,"zp_xml_file",0,"%whsp:('<?':^'?>':'?>'):+zp_xml_elm:%whsp",NO_FTR)\
-OBJ(zp_xml_tcd,zp_obj,"zp_xml_tcd",0,"'a'",NO_FTR)\
-OBJ(zp_xml_activity,zp_obj,"zp_xml_activity",0,"%whsp:'<Trackpoint>':+zp_xml_elm:'</Trackpoint>'",NO_FTR)\
+	OBJ(zp_xml_file,zp_obj,"zp_xml_file",0,"%whsp:('<?':^'?>':'?>'):{_tcd}zp_xml_elm:%whsp",VAR(_tcd))\
+OBJ(zp_xml_tcd,zp_obj,"zp_xml_tcd",0,"%whsp:'<TrainingCenterDatabase>':+zp_xml_elm:'</TrainingCenterDatabase>'",NO_FTR)\
+OBJ(zp_xml_activity,zp_obj,"zp_xml_activity",0,"%whsp:'<Activity>':+zp_xml_elm:'</Activity>'",NO_FTR)\
 OBJ(zp_xml_trackpoint,zp_obj,"zp_xml_trackpoint",0,"%whsp:'<Trackpoint>':+zp_xml_elm:'</Trackpoint>'",NO_FTR)\
-OBJ(zp_xml_elm,zp_obj,"zp_xml_elm",0,"%whsp:'<':ident:*zp_xml_atr:(('>': *(^'<'|zp_xml_trackpoint|zp_xml_elm):'</':ident:'>')|'/>')",NO_FTR)\
+OBJ(zp_xml_elm,zp_obj,"zp_xml_elm",0,"%whsp:'<':{_name}ident:*zp_xml_atr:(('>': *(^'<'|zp_xml_trackpoint|zp_xml_elm):'</':ident:'>')|'/>')",VAR(_name))\
 OBJ(zp_xml_atr,zp_obj,"zp_xml_atr",0,"%whsp:scoped:'=':string",NO_FTR)
 
 #include "zipolib_parse/include/z_obj_macro.h"

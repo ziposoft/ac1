@@ -92,6 +92,7 @@ public:
 	zp_status feature_callback(zo_fet_man_context* context,zo_fet_opt options, z_obj_container& mem_var);
 	zp_status feature_callback(zo_fet_man_context* context,zo_fet_opt options, zo_str_container& mem_var);
 	zp_status feature_callback(zo_fet_man_context* context,zo_fet_opt options, z_obj& mem_var);
+	zp_status feature_callback(zo_fet_man_context* context,zo_fet_opt options, z_obj** mem_var);
 	zp_status feature_callback_pchild(zo_fet_man_context* context,zo_fet_opt options,z_obj* pObj);
 	zp_status access_obj_child(zo_fet_man_context* context, z_obj* pchild);
 

@@ -87,10 +87,47 @@ int run_help();
 //GLOBALS
 extern zp_obj* parse_root;
 extern opt_func g_test_type_function_to_run;
+class zp_xml_atr : public zp_obj
+{
+	ZO_OBJ_H;
+	z_string _name;
+	z_string _val;
 
+};
+class zp_xml_elm : public zp_obj
+{
+	ZO_OBJ_H;
+	z_string _name;
+};	
+class zp_xml_trackpoint : public zp_obj
+{
+	ZO_OBJ_H;
+	zp_xml_trackpoint()
+	{
+
+	}
+};
+class zp_xml_activity : public zp_obj
+{
+	ZO_OBJ_H;
+	zp_xml_activity()
+	{
+
+	}
+};
+class zp_xml_tcd : public zp_xml_elm
+{
+	ZO_OBJ_H;
+	
+};
 class zp_xml_file : public zp_obj
 {
 	ZO_OBJ_H;
+	zp_xml_file()
+	{
+		
+	}
+	zp_xml_tcd _tcd;
 };
 
 #endif
