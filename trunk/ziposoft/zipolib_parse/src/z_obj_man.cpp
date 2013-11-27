@@ -204,6 +204,47 @@ zp_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_op
 	};
 	return zs_ok;
 }
+zp_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt options,z_obj** p_child_obj)
+{
+	ZTFP("z_obj** pObj");
+	switch(context->_oper)
+	{
+	case zo_mvo_get_num_obj:
+		if(p_child_obj)
+			_member_var_int_data++;
+		break;		
+
+	case zo_mvo_reset_iter:
+		break;
+	case zo_mvo_clear:
+		if(*p_child_obj)
+		feature_clear(*p_child_obj);
+		break;
+	case zo_mvo_set:
+		//????
+		break;
+	case zo_mvo_get:
+	case zo_mvo_get_child_obj:
+		_p_member_var_obj=*p_child_obj;
+		/* TODO make sure man data is set here! */
+		break;
+	case zo_mvo_display:
+		break;
+	case zo_mvo_dump:
+		if(*p_child_obj)
+		dump_obj(*p_child_obj);
+		break;
+	case zo_mvo_set_from_value:
+		return load_obj(*p_child_obj,&context->_p_assignment_value->_obj);
+	case zo_mvo_exec:
+		_p_member_var_obj=*p_child_obj;
+		callback_feature_execute_obj(*p_child_obj,context->_p_fet_ent);
+		break;
+	default:
+		return zs_operation_not_supported;
+	};
+	return zs_ok;
+}
 
 zp_status zo_manipulator::feature_callback_pchild(zo_fet_man_context* context,zo_fet_opt options,z_obj* p_child_obj)
 {
@@ -218,6 +259,7 @@ zp_status zo_manipulator::feature_callback_pchild(zo_fet_man_context* context,zo
 	case zo_mvo_reset_iter:
 		break;
 	case zo_mvo_clear:
+		if(p_child_obj)
 		feature_clear(p_child_obj);
 		break;
 	case zo_mvo_set:
@@ -231,6 +273,7 @@ zp_status zo_manipulator::feature_callback_pchild(zo_fet_man_context* context,zo
 	case zo_mvo_display:
 		break;
 	case zo_mvo_dump:
+			if(p_child_obj)
 		dump_obj(p_child_obj);
 		break;
 	case zo_mvo_set_from_value:

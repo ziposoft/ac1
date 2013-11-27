@@ -231,10 +231,10 @@ int run_parse_xml()
 	}
 	printf("TEST PASSED\n");
 	if(g_arg_dump=="on")
-		if(parse_root)
-		{
-			p.dump_obj(&gz_out,parse_root);
-		}
+	{
+		printf("dumping...\n");
+			p.dump_obj(&gz_out,&xml_file);
+	}
 
 	return 0;
 	return -1;
