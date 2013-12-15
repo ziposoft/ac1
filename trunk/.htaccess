@@ -6,7 +6,7 @@ Options Includes Indexes MultiViews ExecCGI FollowSymLinks
 AddHandler server-parsed .html .xml .svg
 AddHandler cgi-script .cgi .py
 
-RewriteEngine on
-RewriteRule (.*)/(.*)\.html$ index.php?id=$1&title=$2  
+#RewriteEngine on
+#RewriteRule (.*)/(.*)\.html$ index.php?id=$1&title=$2
 
 
