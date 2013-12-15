@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>NC 2011 State Redistricting Map Overlays</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript" src="source/maps_lib2.js"></script>
+<script type="text/javascript" src="source/jquery.ezpz_hint.min.js"></script>
+
+<style>
+/*--------------------------------------------+
+ | Part: Internet Explorer styles             |
+ +--------------------------------------------+
+ | * html = Internet Explorer 5/6             |
+ | * + html = Internet Explorer 7             |
+ +--------------------------------------------*/
+
+
+/* Basics
+======================================================================*/
+* html hr { margin: 1em 0 0.833em; }
+* + html hr { margin: 1em 0 0.833em; }
+* html legend { margin-bottom: 1em; }
+* + html legend { margin-bottom: 1em; }
+* html ol { margin-left: 2em; }
+* + html ol { margin-left: 2em; }
+
+
+/* Core layout
+======================================================================*/
+/* Admin */
+* html #admin { border-bottom: 1px solid #999; }
+
+
+/* Content
+======================================================================*/
+
+/* Dedicated searches */
+* html #dedicated-search { height: 1%; }
+* + html #dedicated-search { height: 1%; }
+
+/* FAMT */
+	/* Edit */
+	* html #famt-edit .form-nav { margin-left: -12px; }
+
+/* Filters */
+* html #filters { height: 1%; }
+* + html #filters { height: 1%; }
+
+/* Footer */
+	/* Subfooter */
+	* html #subfooter { height: 1%; padding-bottom: 0; }
+	* + html #subfooter { height: 1%; padding-bottom: 0; }
+
+/* Forms */
+	/* Buttons */
+	* html .btn { padding: 0.2em 0.9em 0.3em; }
+	* + html .btn { padding: 0.2em 0.9em 0.3em; }
+	
+	/* Checklists */
+	* html .checklist { height: 20em; overflow-x: hidden; }
+	* + html .checklist { overflow-x: hidden; }
+	* html .checklist input { margin-bottom: -1px; }
+	* + html .checklist input { margin: 0; }
+	
+	/* New forms */
+	* html dl.form .label { margin-left: -20%; }
+	* + html dl.form .label { margin-left: -20%; }
+
+/* Header */
+* html #header { padding-bottom: 1em; }
+* + html #header { padding-bottom: 0.8em; }
+
+/* Navigation */
+	/* Secondary navigation */
+	* html #nav-secondary h2 { height: 1%; }
+	* + html #nav-secondary h2 { height: 1%; }
+	* html #nav-secondary li { height: 1%; }
+	* + html #nav-secondary li { height: 1%; margin-bottom: -3px; }
+	* html #nav-secondary li a { height: 1%; }
+
+/* Tabs */
+* + html .tabs { height: 1%; }
+* + html .tabs a { height: 1%; }
+
+
+/* Fonts
+======================================================================*/
+body, input, select, textarea { font-family: Calibri, Arial, sans-serif; }
+
+
+/* Basics
+======================================================================*/
+a { color: #366cb3; text-decoration: none; }
+a:hover { text-decoration: underline; }
+address { font-style: normal; }
+blockquote, dl, ol, p, table, ul { margin-bottom: 1em; font-size: 15px; }
+body { height: 100%; color: #58595b; font-size: 16px; line-height: 1.35; padding: 0; margin: 0;}
+cite, em { font-style: italic; }
+dt { margin-top: 1.35em; }
+dt:first-child { margin: 0; }
+fieldset { border: 1px solid #ddd; margin-bottom: 2em; padding: 1em 1.5em; }
+h1 { color: #4b58a6; font-size: 26px; font-weight: normal; line-height: 1.08; margin-bottom: 0.1em; margin-top: 0.3em; width: 65.5%; }
+h1 span, h2 span, h3 span, h4 span { font-size: 15px; font-weight: normal; margin-left: 0.5em; }
+h2 { color: #4b58a6; font-size: 18px; line-height: 1.3; margin-bottom: 7px; }
+h2, h3, h4, h5, h6, strong { font-weight: bold; }
+h3 { color: #4b58a6; margin-top: 0.25em; }
+h4 { margin: 0.25em 0 0 0; padding: 0; }
+hr { background: #ddd; border: 0; clear: both; color: #ddd; height: 5px; margin: .75em 0; }
+html { height: 100%; }
+img {padding-right: 15px; border: none; }
+legend { background: #fff; color: #352f8e; font-size: 1.7em; margin: 0 0 0 -0.5em; padding: 0.1em 0.75em 0.1em; }
+legend em { color: #777; font-size: 0.7em; font-style: normal; font-weight: normal; margin-left: 0.3em; }
+ol { list-style: decimal; margin-left: 1.5em; }
+ol ol { list-style: lower-alpha; }
+select { padding: 0.1em 0.2em; }
+sub { font-size: 10px; vertical-align: sub; }
+sup { font-size: 10px; vertical-align: super; }
+table { border-collapse: collapse; }
+table p { margin: 0; }
+td { vertical-align: top; }
+thead th { font-size: 1em; padding: 0 0.4em 0.25em; }
+ul { list-style: disc; margin-left: 0; }
+ul ol li { background: none; padding: 0; }
+
+/* Stock classes */
+.l { float: left; }
+.r { float: right; }
+.num { text-align: right; }
+ul.flat, ul.headlines { list-style: none; margin-left: 0; }
+ul.flat li, ul.headlines li { background: none; margin: 0; padding: 0; }
+ul.headlines li { margin-bottom: 10px; }
+
+
+/* Core layout
+======================================================================*/
+.clear { clear: both; }
+#frame { width: 100%; height: 100%; }
+#page { clear: both; margin: auto; padding: 10px 20px 0 20px; height: 90%; }
+
+/* Columns */
+.c2l, .c2r { width: 48%; }
+.c2l, .c3l, .c3m { float: left; }
+.c2r, .c3r { float: right; }
+.c3l { margin-right: 3%; }
+.c3l, .c3m, .c3r { width: 31%; }
+ul.c2l, ul.c2r { list-style: none; margin-left: 0; }
+.col4 .col { float: left; margin-right: 1%; width: 24%; }
+
+/* Content */
+#content {
+	height: 100%;
+	background: #fff;
+	border: 1px solid #dddddf;
+	border-bottom: 1px solid #90b1dc;
+	-moz-border-radius-topleft: 6px;
+	-moz-border-radius-topright: 6px;
+	-webkit-border-top-left-radius: 6px;
+	-webkit-border-top-right-radius: 6px;
+	padding: 25px;
+}
+
+.content-primary { float: right; padding-left: 10px; width: 70%; height: 95%; }
+.content-primary1 { float: left; padding-left: 10px; width: 48%; height: 95%; }
+.content-primary2 { float: right; padding-left: 10px; width: 48%; height: 95%; }
+.content-next { float: left; padding-left: 10px; width: 70%; height: 95%; }
+.content-secondary { float: left; width: 28%; }
+.content-home { margin: auto; padding: 50px 0; width: 710px; }
+.content-home h1 { width: 100%; }
+.home-left { float: left; width: 180px; padding: 0 5px; }
+.home-right { float: right; width: 500px; }
+.content-simple { margin: auto; width: 700px; }
+.content-simple  p { margin-top: .25em; }
+
+	/* Full layout (no secondary content) */
+	.full .content { background-image: none; }
+	.full .content-primary { float: none; margin: 0 auto; padding-top: 1em; width: 100%; }
+	.full .content-secondary { display: none; }
+
+#map_canvas { height: 90%; width:100%; }
+#map_canvas img { float: right; padding-bottom: 8px; }
+#map_canvas h5 { clear: both; }
+
+#map_canvas2 { height: 90%; width:100%; }
+#map_canvas2 img { float: left; padding-bottom: 8px; }
+#map_canvas2 h5 { clear: both; }
+
+/* Muted text */
+.mute { color: #77787b; font-size: 12px; }
+p.mute { margin: 0; }
+
+/* Text boxes */
+.ezpz-hint { color: #777; font-style: italic; }
+
+/* footer text */
+.footer { color: #77787b; font-size: 12px; }
+p.footer { margin-bottom: 0.4em; }
+
+/* search */
+input, select, textarea { color: #414042; font-size: 1em; }
+textarea { height: 10em; }
+#search { font-size: 16px; }
+#search .txt { width: 100%; }
+.input-addr { width: 70%; float: left; }
+.input-addr .txt { width: 100%; }
+.input-radius { width: 28%; float: right; }
+
+/* Options */
+.options-h, .options-v { list-style: none; margin: 0 0 1em 0; padding: 0; }
+td .options-h, td .options-v { margin: 0; }
+.options-h input, .options-v input { margin-bottom: -0.05em; }
+.options-h img { border-bottom: 3px solid #fff; padding: 5px; vertical-align: middle; }
+.options-h li, .options-v li { background: none; clear: both; margin-bottom: 0.3em; padding: 0; }
+.options-h li { display: inline; margin-right: 0.7em; white-space: nowrap; }
+.options-v li { padding-left: 25px; text-indent: -25px; }
+.options-v li p { margin: 0; text-indent: 0; }
+.options-days li { margin-right: 0.1em; }
+
+#amount-range, #year-range { margin: 0.5em 4em 0.5em 0.5em; width: 95%; }
+
+#layer-button-projects { color: #FF6666; font-weight: bold; }
+#layer-button-wards { color: #80B16A; font-weight: bold; }
+#layer-button-districts { color: #3D85C6; font-weight: bold; }
+
+.tagline { font-size: 15px; }
+
+.btn {
+	background: #4A7ABA;
+	background-image: -moz-linear-gradient(top, #4A7ABA, #274976); /* FF */
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #4A7ABA),color-stop(1, #274976)); /* Saf4+, Chrome */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#4A7ABA', EndColorStr='#274976'); /* IE6,IE7 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#4A7ABA', EndColorStr='#274976')"; /* IE8 */
+	border: 1px solid #274976;
+	color: #ffffff;
+	font-weight: bold;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	padding: 0.3em 1.1em;
+	margin-right: 0.5em;
+	text-shadow: 1px 1px 1px #58595B;
+}
+
+.ui-slider-horizontal { height: 0.4em;}
+.ui-slider .ui-slider-handle { height: 0.9em; width: 0.9em; }
+.yellow { color: #cccc33; }
+
+#label-yellow { color: #cccc33; }
+#label-green { color: #60c660; }
+#label-blue { color: #7575db; }
+#label-purple { color: #cc66cc; }
+#label-red { color: #d73e3e; }
+
+#resultCount { float: right; font-weight: bold; font-size: 15px; margin-top: 8px; }
+</style>
+
+<script type="text/javascript">
+	jQuery(document).ready(function () {
+		initialize();
+		//jQuery(".hint").ezpz_hint();
+		$(':checkbox').click(function () { doSearch(); });
+	});
+</script>
+</head>
+
+<body>
+	<div id="page">
+		<h1>NC 2011 State Redistricting Map Overlays</h1>
+		<hr />
+		<div class="content-secondary">This statewide map will show you boundry lines on any or all of the state district maps.<br /><br />
+			Click on any spot on the map for the district name. Currently this only works on one map layer (district) at a time.<br />
+			
+			<div id='search'>
+				<h4><br />2011 Statewide Redistrict Maps <span class='mute'>(<a href='http://www.ncga.state.nc.us/representation/redistricting.aspx' target="_blank">more info</a>)</span></h4>
+				<ul class='options-v'>
+					<li><span id="label-blue"><label for='cbType1'><input type='checkbox' id='cbType1' />Congressional Maps - (blue)</label></span> <span class='mute'>(<a href='http://www.ncga.state.nc.us/representation/Content/Plans/PlanPage_DB_2011.asp?Plan=Rucho-Lewis_Congress_3&Body=Congress' target="_blank">more info</a>)</span></li>
+					<li><span id="label-green"><label for='cbType2'><input type='checkbox' id='cbType2' />Senate Maps - (green)</label></span> <span class='mute'>(<a href='http://www.ncga.state.nc.us/representation/Content/Plans/PlanPage_DB_2011.asp?Plan=Rucho_Senate_2&Body=Senate' target="_blank">more info</a>)</span></li>
+					<li><span id="label-purple"><label for='cbType3'><input type='checkbox' id='cbType3' />House Maps - (purple)</label></span> <span class='mute'>(<a href='http://www.ncga.state.nc.us/representation/Content/Plans/PlanPage_DB_2011.asp?Plan=Lewis-Dollar-Dockham_4&Body=House ' target="_blank">more info</a>)</span></li>
+				</ul>
+				<div class='input-addr'>
+					<h4>Enter Address <span>(<a href='#' onclick="findMe(); return false;">find me</a>)</span></h4>
+					<p>
+						<input class='txt hint' type="text"	 value="104 redgate, cary"
+						 title="Enter an address or an intersection &hellip;"
+							 id="txtSearchAddress" onkeydown="if (event.keyCode == 13) document.getElementById('btnSearch').click()"/>
+
+					</p>
+				</div>
+				<div class='input-radius'>
+					<h4>&nbsp;<span class='mute'>within &hellip;</span></h4>
+					<p>
+						<select id='ddlRadius'>
+							<option value='200'>200 meters</option>
+							<option value='805'>&#189; mile</option>
+							<option value='1610'>1 mile</option>
+							<option value='3220' selected='selected'>2 miles</option>
+							<option value='8050'>5 miles</option>
+							<option value='16100'>10 miles</option>
+						</select>
+					</p>
+				</div>
+				<div class='clear'></div>
+				<input class="btn" type="button" id="btnSearch" value="Search" onclick="doSearch(goZoom);" />
+				<span class='mute'><a href='#' onclick="initialize();">reset map</a></span>
+				<span id='resultCount'>&nbsp;</span>
+				<hr />
+								       <div id="ft-data"></div>
+			</div>
+		</div>
+		<div class="content-primary">
+			<div id="map_canvas"></div>
+		</div>
+	</div>
+</body>
+</html>
+				<!--
+				<p class='mute'><br /><b>View or download the raw data:</b><br />
+					House  District Maps: <a href='http://www.google.com/fusiontables/DataSource?dsrcid=2491898' target="_blank">Google Tables</a> | <a href='http://www.google.com/fusiontables/exporttable?query=select+col4+from+2491898+&o=kmllink&g=col4'>KML</a><br />
+					Senate District Maps: <a href='http://www.google.com/fusiontables/DataSource?dsrcid=2491894' target="_blank">Google Tables</a> | <a href='http://www.google.com/fusiontables/exporttable?query=select+col4+from+2491894+&o=kmllink&g=col4'>KML</a><br />
+					Congressional District Maps: <a href='http://www.google.com/fusiontables/DataSource?dsrcid=2468608' target="_blank">Google Tables</a> | <a href='http://www.google.com/fusiontables/exporttable?query=select+col3+from+2468608+&o=kmllink&g=col3'>KML</a><br />
+					All 3 maps in a single file: <a href='http://www.google.com/fusiontables/DataSource?dsrcid=2492262' target="_blank">Google Tables</a> | <a href='http://www.google.com/fusiontables/exporttable?query=select+col5+from+2492262+&o=kmllink&g=col5'>KML</a><br />
+				</p>
+				-->

@@ -29,8 +29,9 @@ path
     stroke-miterlimit: 4;
     stroke-dasharray: none;stroke-linejoin:round;stroke-linecap:butt;
 }
-path.path_mouse   {  opacity: .00;stroke-width: 80;     cursor:pointer;
-     }
+path.path_mouse   {  opacity: 1.00;stroke-width: 80; fill: none; cursor:pointer;     }
+
+
 path.sel0   {   stroke: dimgray;  stroke-width: 8;      }
 path.sel1  { stroke: blue; stroke-width: 12; }
 path.sel2 { stroke: blueviolet;stroke-width: 12;  }
