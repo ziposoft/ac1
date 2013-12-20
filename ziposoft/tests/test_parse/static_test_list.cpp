@@ -68,7 +68,7 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*('a'|'b')|*('c'|'d')","bd",zs_unparsed_data,"",""},
 	{"*('a'|'b')|*('c'|'d')","ccc",zs_matched,"",""},
 
-	{"('<?':^'?>':'?>')","<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>",zs_matched,"<??>",""},
+	{"('<?':^'?>':'?>')","<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>",zs_matched,"<??>","<??>"},
 
 	//sequence groups
 	{"'a':'b':'c'","abc",zs_matched,"abc","abc"},
