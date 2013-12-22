@@ -170,10 +170,10 @@ class houseSpider(CrawlSpider):
        
         chamber=params['sChamber']
         if(chamber=='senate'):
-            member_id='S'
+            tool['chamber'] ='S'
         if(chamber=='House'):
-            member_id='H'   
-        member_id+=     params['nUserID']
+            tool['chamber'] ='H'   
+        member_id=     params['nUserID']
         tool['uid'] =  member_id
         print member_id    
         

@@ -6,7 +6,8 @@
 from scrapy.item import Item, Field
 
 class NclegItem(Item):
-    # define the fields for your item here like:
+    # define the fi Field() elds for your item here like:
+    chamber= Field() 
     uid=   Field() 
     district = Field()      
     name = Field()
@@ -25,6 +26,7 @@ class VoteItem(Item):
     mid=Field()
     vid = Field()
     vote = Field()
+    
     
       
     pass
