@@ -52,9 +52,7 @@ function doSearch(doZoom) {
 
 	searchRadius = 1;//$("#ddlRadius").val();
 	
-	var type1 = $("#cbType1").is(':checked');
-	var type2 = $("#cbType2").is(':checked');
-	var type3 = $("#cbType3").is(':checked');
+
 	
 	searchStr = "SELECT geometry FROM " + fusionTableId + " WHERE geometry not equal to ''";
 	
@@ -84,32 +82,7 @@ function doSearch(doZoom) {
 		       
 		            map.setCenter(results[0].geometry.location);
 		            map.setZoom(14);
-		            if (doZoom) {
-		                switch (searchRadius) {
-		                    case "200":
-		                        map.setZoom(17);
-		                        break;
-		                    case "805":
-		                        map.setZoom(15);
-		                        break;
-		                    case "1610":
-		                        map.setZoom(14);
-		                        break;
-		                    case "3220":
-		                        map.setZoom(13);
-		                        break;
-		                    case "8050":
-		                        map.setZoom(12);
-		                        break;
-		                    case "16100":
-		                        map.setZoom(11);
-		                        break;
-		                    default:
-		                        map.setZoom(14);
-		                }
-		            }
-		        
-
+		          
 				addrMarker = new google.maps.Marker({
 					position: results[0].geometry.location,
 					map: map,
@@ -232,91 +205,10 @@ function displaySearchCount(response) {
 	if (response.getDataTable().getNumberOfRows() > 0) { numRows = parseInt(response.getDataTable().getValue(0, 0)); }
 	var name = recordNamePlural;
 	if (numRows == 1) { name = recordName; }
-	$( "#resultCount" ).fadeOut(function() { $( "#resultCount" ).html(addCommas(numRows) + " " + name + " found"); } );
+	$( "#resultCount" ).fadeOut(function() { $( "#resultCount" ).html((numRows) + " " + name + " found"); } );
 	$( "#resultCount" ).fadeIn();
 }
 
-function addCommas(nStr) {
-	nStr += '';
-	x = nStr.split('.');
-	x1 = x[0];
-	x2 = x.length > 1 ? '.' + x[1] : '';
-	var rgx = /(\d+)(\d{3})/;
-	while (rgx.test(x1)) {
-		x1 = x1.replace(rgx, '$1' + ',' + '$2');
-	}
-	return x1 + x2;
-}
-
-
-// Poygon getBounds extension - google-maps-extensions
-// http://code.google.com/p/google-maps-extensions/source/browse/google.maps.Polygon.getBounds.js
-if (!google.maps.Polygon.prototype.getBounds) {
-    google.maps.Polygon.prototype.getBounds = function (latLng) {
-        var bounds = new google.maps.LatLngBounds();
-        var paths = this.getPaths();
-        var path;
-
-        for (var p = 0; p < paths.getLength() ; p++) {
-            path = paths.getAt(p);
-            for (var i = 0; i < path.getLength() ; i++) {
-                bounds.extend(path.getAt(i));
-            }
-        }
-
-        return bounds;
-    }
-}
-
-// Polygon containsLatLng - method to determine if a latLng is within a polygon
-google.maps.Polygon.prototype.containsLatLng = function (latLng) {
-    // Exclude points outside of bounds as there is no way they are in the poly
-
-    var lat, lng;
-
-    //arguments are a pair of lat, lng variables
-    if (arguments.length == 2) {
-        if (typeof arguments[0] == "number" && typeof arguments[1] == "number") {
-            lat = arguments[0];
-            lng = arguments[1];
-        }
-    } else if (arguments.length == 1) {
-        var bounds = this.getBounds();
-
-        if (bounds != null && !bounds.contains(latLng)) {
-            return false;
-        }
-        lat = latLng.lat();
-        lng = latLng.lng();
-    } else {
-        console.log("Wrong number of inputs in google.maps.Polygon.prototype.contains.LatLng");
-    }
-
-    // Raycast point in polygon method
-    var inPoly = false;
-
-    var numPaths = this.getPaths().getLength();
-    for (var p = 0; p < numPaths; p++) {
-        var path = this.getPaths().getAt(p);
-        var numPoints = path.getLength();
-        var j = numPoints - 1;
-
-        for (var i = 0; i < numPoints; i++) {
-            var vertex1 = path.getAt(i);
-            var vertex2 = path.getAt(j);
-
-            if (vertex1.lng() < lng && vertex2.lng() >= lng || vertex2.lng() < lng && vertex1.lng() >= lng) {
-                if (vertex1.lat() + (lng - vertex1.lng()) / (vertex2.lng() - vertex1.lng()) * (vertex2.lat() - vertex1.lat()) < lat) {
-                    inPoly = !inPoly;
-                }
-            }
-
-            j = i;
-        }
-    }
-
-    return inPoly;
-}
 
 function drawTable(searchStr) {
     // Construct query
