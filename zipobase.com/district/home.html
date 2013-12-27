@@ -1,0 +1,34 @@
+<?php
+include $header;
+include $root.'/inc/ncleg.php';
+ 
+$leglist=new leg_list();
+
+$filter="";
+
+if (array_key_exists ( "dist", $_GET )) {
+	
+	$leg_page = $leglist->get_leg ( $_GET ["dist"] );
+	
+	$leg_page->page_init ();
+	$leg_page->show_page ();
+} else {
+	
+
+	$leglist->get_list ($filter  );
+	$leglist->print_list ();
+}
+
+
+
+?>
+
+
+<div class="text_wrap">
+
+<H1>NCAVW</H1>
+	 
+</div>
+
+
+<?php include $footer; ?>
