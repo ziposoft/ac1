@@ -202,8 +202,7 @@ omit-xml-declaration="yes"
     <xsl:variable name="segname" select="@id" />
 
     <path xmlns="http://www.w3.org/2000/svg"  class="{$trail_type} sel0" 
-          onclick="toggle1(this)" onmouseover="on_over(this,evt)" 
-          onmouseout="on_out(this,evt)" data-trail-state="0"
+          data-trail-state="0"
           
           >
       <xsl:copy-of select="@id"/>

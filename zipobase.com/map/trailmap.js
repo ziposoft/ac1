@@ -16,6 +16,10 @@ var vb_height = vb_height_max;
 var g_path_highlighted = 0;
 var g_popup_table;
 
+/////////////////////    DATA   /////////////////////////////////////////////////////
+
+
+
 jQuery.extend
 (
     {
@@ -37,6 +41,167 @@ jQuery.extend
         }
     }
 );
+
+
+/////////////////////    EVENTS  /////////////////////////////////////////////////////
+function on_key_press(e) {
+    var e = window.event || e;
+    if (g_path_highlighted) {
+        var val = e.charCode - 48;
+        if (val < 0 || val > 9)
+            return;
+        path_set_selection(g_path_highlighted, val);
+
+    }
+}
+var dbl_click_toggle = 0;
+function OnDoubleClick(e) {
+    // cross-browser wheel delta
+    var e = window.event || e; // old IE support
+    var scale = .30;
+    if (dbl_click_toggle) {
+        dbl_click_toggle = 0;
+        viewBox_reset();
+    }
+    else {
+        dbl_click_toggle = 1;
+        Zoom(e, scale);
+    }
+}
+function onWindowResize() {
+    document.getElementById("stat_window").innerHTML = window.innerWidth + " x " + window.innerHeight;
+
+    svgwindow = document.getElementById("svgwindow");
+    svgdoc_width = window.innerWidth - svgdoc_offset_x;
+    svgdoc_height = window.innerHeight - svgdoc_offset_y;
+    var x = document.documentElement.clientWidth;
+    gSvgDoc.setAttribute("visibility", "hidden");
+    gSvgDoc.setAttribute("width", svgdoc_width);
+    var w = gSvgDoc.getAttribute("width");
+    gSvgDoc.setAttribute("height", svgdoc_height);
+    gSvgDoc.setAttribute("visibility", "visible");
+    getSvgRect();
+}
+
+function MouseMoveHandler(e) {
+    var x = e.pageX;
+    var y = e.pageY;
+    calcSvgPoint(x, y);
+    document.getElementById("stat_mouse").innerHTML = String(x) + ":" + String(y);
+}
+function MouseWheelHandler(e) {
+    // cross-browser wheel delta
+    var e = window.event || e; // old IE support
+    var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+    var zoom = trailmap_options.getItem('zoom').value;
+    var scale = 1 - .10 * zoom;
+    if (delta < 0)
+        scale = 1 / scale;
+    Zoom(e, scale);
+}
+function on_over( e) {
+    if (!e) e = event;
+    var offsetX = 35;
+    var offsetY = 35;
+    elm = get_target_path(this);
+    var cl = elm.getAttribute('class');
+    cl = cl + " highlight";
+    elm.setAttribute('class', cl);
+
+    g_path_highlighted = elm;
+
+
+    if (trailmap_options.getItem('show_popup').value == 0)
+        return;
+    var info_id = "info-" + elm.getAttribute('id')
+    g_popup_table = document.getElementById(info_id);
+    g_popup_table.className = "info_table_show";
+
+    if (e.clientX > window.innerWidth / 2)
+        offsetX = -g_popup_table.clientWidth - 30;
+    if (e.clientY > window.innerHeight / 2)
+        offsetY = -g_popup_table.clientHeight - 30;
+
+    var x = e.clientX + document.body.scrollLeft + offsetX;
+    var y = e.clientY + document.body.scrollTop + offsetY;
+
+
+    g_popup_table.style.left = x + 'px';
+    g_popup_table.style.top = y + 'px';
+
+
+
+}
+function on_out(e) {
+    elm = get_target_path(this);
+    var cl = elm.getAttribute('class');
+    cl = cl.replace("highlight", "")
+    elm.setAttribute('class', cl);
+    if (g_popup_table)
+        g_popup_table.className = "info_table_hide";
+    g_path_highlighted = 0;
+
+}
+function path_right_click(e) {
+    if (!e) e = event;
+
+    return false;
+}
+function path_click(e) {
+    toggle1(this)
+
+    return false;
+}
+
+/////////////////////    INIT   /////////////////////////////////////////////////////
+$(document).ready(function () {
+    // initialization code goes here
+
+    if ((BrowserDetect.browser != "Chrome") && (BrowserDetect.browser != "Firefox")) {
+        window.alert("Trail Map has only been tested in the latest versions of Chrome and Firefox.\nIt probably will not work in your browser");
+    }
+
+    /*
+    var rname = getCookie("route_name");
+    document.getElementById("routename").textContent = rname;
+    segment_template = document.getElementById("segtmp");
+    route_table = document.getElementById("route");
+    window.ondblclick = MouseWheelHandler;
+    window.ondblclick= OnDoubleClick;
+    */
+    gSvgDoc = document.getElementById("svgdoc");
+
+
+
+
+    window.onkeypress = on_key_press;
+    window.onmousemove = MouseMoveHandler;
+    window.onresize = onWindowResize;
+
+    zs.menu.option_set_callback = on_menu_set;
+
+    onWindowResize();
+    if (window.addEventListener) {
+        // IE9, Chrome, Safari, Opera
+        window.addEventListener("mousewheel", MouseWheelHandler, true);
+        // Firefox
+        window.addEventListener("DOMMouseScroll", MouseWheelHandler, true);
+    } else window.attachEvent("onmousewheel", MouseWheelHandler);
+    setViewBox();
+    create_mouse_paths();
+    init_menu();
+
+    document.getElementById("browser_info").innerHTML = BrowserDetect.browser + " " + BrowserDetect.version + " " + BrowserDetect.OS;
+    //$("#scratch").load("http://localhost/cgi-bin/trailmap.cgi?act=list");
+
+    var list = $.getValues("http://localhost/cgi-bin/trailmap.cgi?act=list");
+    $("#scratch").html(list);
+    //var list = get_route_list();
+    //document.getElementById("scratch").innerHTML = list;
+});
+
+
+
 
 function show_hide_svg(elm_id, val) {
     document.getElementById(elm_id).setAttribute("visibility", (val ? 'visible' : 'hidden'));
@@ -87,6 +252,9 @@ function init_menu() {
 
 
 }
+function nextChar(c) {
+    return String.fromCharCode(c.charCodeAt(0) -1);
+}
 
 function create_mouse_paths() {
 
@@ -98,7 +266,21 @@ function create_mouse_paths() {
     var path_mouse_group = document.getElementById("path_mouse_group");
     var i;
     var len = paths.length;
-
+    var width;
+    var set = 'D';
+    for (width = 1; width <4 ; width++)
+    {
+        for (i = 0; i < len ; i++)
+        {
+            var p = paths[i].cloneNode();
+            p.setAttribute("id", paths[i].id + set);
+            p.setAttribute("data-path-id", paths[i].id);
+            path_mouse_group.appendChild(p);
+            p.setAttribute("class", "path_" + set);
+           
+        }
+        set = nextChar(set);
+    }
     for (i = 0; i < len ; i++) {
         var mouse_path = paths[i].cloneNode();
         mouse_path.setAttribute("id", paths[i].id + "-mouse");
@@ -106,7 +288,10 @@ function create_mouse_paths() {
         path_mouse_group.appendChild(mouse_path);
         mouse_path.setAttribute("class", "path_mouse");
         mouse_path.oncontextmenu = path_right_click;
-        paths[i].oncontextmenu = path_right_click;
+   //     paths[i].oncontextmenu = path_right_click;
+        mouse_path.onmouseover = on_over;
+        mouse_path.onmouseout = on_out;
+        mouse_path.onclick = path_click;
         /*
         var outline = paths[i].cloneNode();
         outline.setAttribute("class", "path_ol");
@@ -117,6 +302,7 @@ function create_mouse_paths() {
         //new_path.addEventListener("oncontextmenu", path_right_click, true);
 
     }
+
 
 }
 function on_menu_set(opt_name, opt_val) {
@@ -131,80 +317,7 @@ function on_menu_set(opt_name, opt_val) {
 
 
 
-function on_key_press(e) {
-    var e = window.event || e;
-    if (g_path_highlighted) {
-        var val = e.charCode - 48;
-        if (val < 0 || val > 9)
-            return;
-        path_set_selection(g_path_highlighted, val);
 
-    }
-
-
-}
-$(document).ready(function ()
-{
-    // initialization code goes here
-
-    if ((BrowserDetect.browser != "Chrome") && (BrowserDetect.browser != "Firefox")) {
-        window.alert("Trail Map has only been tested in the latest versions of Chrome and Firefox.\nIt probably will not work in your browser");
-    }
-
-    /*
-    var rname = getCookie("route_name");
-    document.getElementById("routename").textContent = rname;
-    segment_template = document.getElementById("segtmp");
-    route_table = document.getElementById("route");
-    window.ondblclick = MouseWheelHandler;
-    window.ondblclick= OnDoubleClick;
-    */
-    gSvgDoc = document.getElementById("svgdoc");
-
-
-
-
-    window.onkeypress = on_key_press;
-    window.onmousemove = MouseMoveHandler;
-    window.onresize = onWindowResize;
-
-    zs.menu.option_set_callback = on_menu_set;
-
-    onWindowResize();
-    if (window.addEventListener) {
-        // IE9, Chrome, Safari, Opera
-        window.addEventListener("mousewheel", MouseWheelHandler, true);
-        // Firefox
-        window.addEventListener("DOMMouseScroll", MouseWheelHandler, true);
-    } else window.attachEvent("onmousewheel", MouseWheelHandler);
-    setViewBox();
-    create_mouse_paths();
-    init_menu();
-
-    document.getElementById("browser_info").innerHTML = BrowserDetect.browser + " " + BrowserDetect.version + " " + BrowserDetect.OS;
-    //$("#scratch").load("http://localhost/cgi-bin/trailmap.cgi?act=list");
-
-    var list = $.getValues("http://localhost/cgi-bin/trailmap.cgi?act=list");
-    $("#scratch").html( list);
-    //var list = get_route_list();
-    //document.getElementById("scratch").innerHTML = list;
-});
-
-var dbl_click_toggle = 0;
-function OnDoubleClick(e) {
-    // cross-browser wheel delta
-    var e = window.event || e; // old IE support
-    var scale = .30;
-    if (dbl_click_toggle) {
-        dbl_click_toggle = 0;
-        viewBox_reset();
-    }
-    else {
-        dbl_click_toggle = 1;
-        Zoom(e, scale);
-    }
-
-}
 
 function calcSvgPoint(x, y) {
     var scale_x = vb_width / svgdoc_width;
@@ -259,22 +372,7 @@ function getSvgRect() {
     svgdoc_Y2 = Math.round(rect.bottom);
     document.getElementById("stat_svgrect").innerHTML = svgdoc_X + " " + svgdoc_Y + " " + svgdoc_X2 + " " + svgdoc_Y2;
 }
-function onWindowResize() {
-    document.getElementById("stat_window").innerHTML = window.innerWidth + " x " + window.innerHeight;
 
-    svgwindow = document.getElementById("svgwindow");
-    svgdoc_width = window.innerWidth - svgdoc_offset_x;
-    svgdoc_height = window.innerHeight - svgdoc_offset_y;
-    var x = document.documentElement.clientWidth;
-    gSvgDoc.setAttribute("visibility", "hidden");
-    gSvgDoc.setAttribute("width", svgdoc_width);
-    var w = gSvgDoc.getAttribute("width");
-    gSvgDoc.setAttribute("height", svgdoc_height);
-    gSvgDoc.setAttribute("visibility", "visible");
-    getSvgRect();
-
-
-}
 function viewBox_reset() {
     vb_x = 0;
     vb_width = vb_width_max;
@@ -282,12 +380,7 @@ function viewBox_reset() {
     vb_height = vb_height_max;
     setViewBox();
 }
-function MouseMoveHandler(e) {
-    var x = e.pageX;
-    var y = e.pageY;
-    calcSvgPoint(x, y);
-    document.getElementById("stat_mouse").innerHTML = String(x) + ":" + String(y);
-}
+
 function Zoom(e, scale) {
     var e = window.event || e; // old IE support
     var x = e.pageX;
@@ -312,16 +405,6 @@ function Zoom(e, scale) {
 
 
 
-}
-function MouseWheelHandler(e) {
-    // cross-browser wheel delta
-    var e = window.event || e; // old IE support
-    var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-    var zoom = trailmap_options.getItem('zoom').value;
-    var scale = 1 - .10 * zoom;
-    if (delta < 0)
-        scale = 1 / scale;
-    Zoom(e, scale);
 }
 
 
@@ -370,54 +453,6 @@ function get_target_path(elm) {
     return elm;
 }
 
-function on_over(elm, e) {
-    if (!e) e = event;
-    var offsetX = 35;
-    var offsetY = 35;
-    elm = get_target_path(elm);
-    var cl = elm.getAttribute('class');
-    cl = cl + " highlight";
-    elm.setAttribute('class', cl);
-
-    g_path_highlighted = elm;
-
-
-    if (trailmap_options.getItem('show_popup').value == 0)
-        return;
-    var info_id = "info-" + elm.getAttribute('id')
-    g_popup_table = document.getElementById(info_id);
-    g_popup_table.className = "info_table_show";
-
-    if (e.clientX > window.innerWidth / 2)
-        offsetX = -g_popup_table.clientWidth - 30;
-    if (e.clientY > window.innerHeight / 2)
-        offsetY = -g_popup_table.clientHeight - 30;
-
-    var x = e.clientX + document.body.scrollLeft + offsetX;
-    var y = e.clientY + document.body.scrollTop + offsetY;
-
-
-    g_popup_table.style.left = x + 'px';
-    g_popup_table.style.top = y + 'px';
-
-
-
-}
-function on_out(elm) {
-    elm = get_target_path(elm);
-    var cl = elm.getAttribute('class');
-    cl = cl.replace("highlight", "")
-    elm.setAttribute('class', cl);
-    if(g_popup_table)
-        g_popup_table.className = "info_table_hide";
-    g_path_highlighted = 0;
-
-}
-function path_right_click( e) {
-    if (!e) e = event;
-
-    return false;
-}
 
 function route_reset() {
     $("#path_group").children().each(function (index) {
@@ -479,24 +514,72 @@ function savefile() {
 function path_set_selection(elm,count_new) {
 
     var count_old = Number(elm.getAttribute('data-trail-state'));
-    var class_state_old = "sel" + count_old;
-    var total_distance_elm = document.getElementById("total_distance");
+     var total_distance_elm = document.getElementById("total_distance");
     var distance = Number(elm.getAttribute('data-trail-length'));
     total_distance = Number(total_distance_elm.innerHTML);
 
     total_distance = total_distance +(count_new- count_old )* distance;
-
-
-    var class_state_new = "sel" + count_new;
-
     total_distance_elm.innerHTML = Math.round(total_distance * 100) / 100;
 
+    var id = elm.id;
+    var elmB = document.getElementById(id + 'B');
+    var elmC = document.getElementById(id + 'C');
+    var elmD = document.getElementById(id + 'D');
 
-    var cl = elm.getAttribute('class');
-    cl = cl.replace(class_state_old, class_state_new)
-    cl = cl.replace("highlight", "")
 
-    elm.setAttribute('class', cl);
+    switch (count_new) {
+        case 0:
+            elmB.style.opacity = 0;
+            elmC.style.opacity = 0;
+            elmD.style.opacity = 0;
+            elm.style.stroke = "dimgray";
+
+
+            break;
+        case 1:
+            elmB.style.opacity = 0;
+            elmC.style.opacity = 0;
+            elmD.style.opacity = 0;
+            elm.style.stroke = "blue";
+
+            break;
+        case 2:
+            elmB.style.opacity = 100;
+            elmB.style.stroke = "blue";
+            elmC.style.opacity = 0;
+            elmD.style.opacity = 0;
+            elm.style.stroke = "white";
+        
+            break;
+        case 3:
+            elmB.style.opacity = 100;
+            elmB.style.stroke = "white";
+            elmC.style.opacity = 100;
+            elmC.style.stroke = "blue";
+            elmD.style.opacity = 0;
+            elm.style.stroke = "blue";
+
+            break;
+        case 4:
+            elmB.style.opacity = 100;
+            elmB.style.stroke = "blue";
+            elmC.style.opacity = 100;
+            elmC.style.stroke = "white";
+            elmD.style.opacity = 100;
+            elmD.style.stroke = "blue";
+            elm.style.stroke = "white";
+
+            break;
+
+            break;
+        default:
+            break;
+    }
+        
+   
+
+ 
+
 
     elm.setAttribute('data-trail-state', count_new);
     var len = elm.getTotalLength();
@@ -515,7 +598,7 @@ function toggle1(elm) {
 
     var state = Number(elm.getAttribute('data-trail-state'));
     state = state + 1;
-    if (state > 2) {
+    if (state > 4) {
         state = 0;
     }
     path_set_selection(elm, state);
@@ -589,4 +672,6 @@ function get_route_list() {
 
 
 }
+
+
 
