@@ -21,16 +21,30 @@ h1
 {
 }
 
+/*
+all= DCBABCD
+1 =  ...|...  
+2 =  ..|:|..     
+3 =  .|:|:|.
+4 =  |:|:|:|
+   
+    
+    
+    
+    */
+
 path
 {
-    opacity: 1;stroke: green;
+    opacity: 1;stroke: dimgray;
     fill: none;
     stroke-width: 8;
     stroke-miterlimit: 4;
     stroke-dasharray: none;stroke-linejoin:round;stroke-linecap:butt;
 }
-path.path_mouse   {  opacity: 1.00;stroke-width: 80; fill: none; cursor:pointer;     }
-
+path.path_mouse   {  opacity: 0;stroke-width: 80; fill: none; cursor:pointer;     }
+path.path_B  {   opacity: 0;stroke-width: 24; fill: none; cursor:pointer;     }
+path.path_C  {    opacity: 0;stroke-width: 40; fill: none; cursor:pointer;     }
+path.path_D  {   opacity: 0;stroke-width: 56; fill: none; cursor:pointer;     }
 
 path.sel0   {   stroke: dimgray;  stroke-width: 8;      }
 path.sel1  { stroke: blue; stroke-width: 12; }
