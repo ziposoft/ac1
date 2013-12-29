@@ -52,7 +52,9 @@ function doSearch(doZoom) {
 
 	searchRadius = 1;//$("#ddlRadius").val();
 	
-
+	var type1 = $("#cbType1").is(':checked');
+	var type2 = $("#cbType2").is(':checked');
+	var type3 = $("#cbType3").is(':checked');
 	
 	searchStr = "SELECT geometry FROM " + fusionTableId + " WHERE geometry not equal to ''";
 	
