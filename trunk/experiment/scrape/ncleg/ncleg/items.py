@@ -25,6 +25,7 @@ class VoteItem(Item):
     # define the fields for your item here like:
     mid=Field()
     vid = Field()
+    doc = Field()
     vote = Field()
     
     

@@ -7,7 +7,7 @@ from ncleg.items import NclegItem,VoteItem
 from scrapy.exceptions import CloseSpider
 from urlparse import urlparse,parse_qsl
 
-bills = [ 'HB66',]
+bills = [ 'HB 66','HB 33','HB 612','HB 930','HB 905','HB 956','SB 626','SB 689','SB 648']
 class voteSpider(CrawlSpider):
     name = "votes"
     count = 0
@@ -54,6 +54,9 @@ class voteSpider(CrawlSpider):
         for row in rows:
            
             rcs = row.xpath('./td[1]/text()').extract()[0]
+            doc = row.xpath('./td[2]/a/text()');
+            if(doc) :
+                doc=doc.extract()[0]
             v = row.xpath('./td[5]/text()').extract()[0]
             vid=''
             mid=chamber+member_id;            
@@ -62,16 +65,18 @@ class voteSpider(CrawlSpider):
             if(year=='2013'):
                 vid='13'
             if(year=='2011'):
-                vid='11' 
+                vid='11'
+                continue;
             
             vid+=chamber
             vid+=rcs
-            if(vid=='13H36'):
+            if(doc in bills):
                 vote=VoteItem()    
                 vote['mid'] =  mid                
                 vote['vid'] =  vid
+                vote['doc'] =  doc
                 vote['vote'] = v               
-                print mid,vid,v    
+                print doc,mid,vid,v
                 votes.append(vote)  
         self.count+=1       
         return votes
