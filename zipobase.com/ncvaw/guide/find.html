@@ -1,0 +1,56 @@
+<?php
+
+
+
+array_push($zs_foot_jsfile,
+	"http://maps.google.com/maps/api/js?sensor=false",
+	"http://www.google.com/jsapi",
+	"/inc/maps_lib2.js");
+
+array_push($zs_foot_script,
+	"jQuery(document).ready(function () {initialize();	});");
+
+include $header;
+include $root.'/inc/ncleg.php';
+?>
+
+
+	<div id="page" style="clear: both; margin: auto; padding: 10px 20px 0 20px; height: 90%;">
+			<div id="map_canvas" style="height: 300px; width:500px;"  ></div>
+		<h1>Find your districts</h1>
+		<hr />
+		<div >This statewide map will show you boundry lines on any or all of the state district maps.<br /><br /></div>
+			
+			<div >	
+				<!-- 
+				<ul class='options-v'>
+					<li><span id="label-blue"><label for='cbType1'><input type='checkbox' id='cbType1' />Congressional Maps - (blue)</label></span> <span class='mute'>(<a href='http://www.ncga.state.nc.us/representation/Content/Plans/PlanPage_DB_2011.asp?Plan=Rucho-Lewis_Congress_3&Body=Congress' target="_blank">more info</a>)</span></li>
+					<li><span id="label-green"><label for='cbType2'><input type='checkbox' id='cbType2' />Senate Maps - (green)</label></span> <span class='mute'>(<a href='http://www.ncga.state.nc.us/representation/Content/Plans/PlanPage_DB_2011.asp?Plan=Rucho_Senate_2&Body=Senate' target="_blank">more info</a>)</span></li>
+					<li><span id="label-purple"><label for='cbType3'><input type='checkbox' id='cbType3' />House Maps - (purple)</label></span> <span class='mute'>(<a href='http://www.ncga.state.nc.us/representation/Content/Plans/PlanPage_DB_2011.asp?Plan=Lewis-Dollar-Dockham_4&Body=House ' target="_blank">more info</a>)</span></li>
+				</ul> -->
+				<form action="">
+				<div class='input-addr'>
+					<h4>Enter Address <span>(<a href='#' onclick="findMe(); return false;">find me</a>)</span></h4>
+					<p>
+						<input class='txt hint' type="search"	 value=""
+						 title="Enter an address or an intersection &hellip;"
+							 id="txtSearchAddress" onkeydown="if (event.keyCode == 13) document.getElementById('btnSearch').click()"/>
+
+					</p>
+				</div>
+	
+				<div class='clear'></div>
+				<input class="btn" type="button" id="btnSearch" value="Search" onclick="doSearch(goZoom);" />
+				</form>
+				<span class='mute'><a href='#' onclick="initialize();">reset map</a></span>
+				<div id='resultCount'>&nbsp;</div>
+				<hr />
+								       
+			</div><div id='resultCount'>&nbsp;</div>
+<div id="ft-data"></div>
+<div id="legislators"></div>
+	</div>
+
+
+<?php include $footer; ?>
+				
