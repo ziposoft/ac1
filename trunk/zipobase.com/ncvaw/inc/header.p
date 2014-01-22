@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
+    <link href='/inc/ncvaw.css' rel='stylesheet' type='text/css'>
     <?php 
     include $root.'/inc/headscripts.p';
     include $root.'/inc/zs_menu.php';
@@ -10,7 +10,7 @@
     ?>
 
 
-<link href='/inc/ncvaw.css' rel='stylesheet' type='text/css'>
+
 
 
 

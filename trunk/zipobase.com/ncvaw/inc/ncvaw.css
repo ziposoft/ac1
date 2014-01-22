@@ -96,3 +96,20 @@ h4 {
 h5 {
 	font-size: 30px
 }
+
+
+/* legislators */
+
+
+table.votes 
+{
+	padding: 10px;	
+}
+table.votes td
+{
+	padding: 10px;	
+}
+table.votes tr:nth-of-type(even) {
+
+	background-color: #ddd;
+}
