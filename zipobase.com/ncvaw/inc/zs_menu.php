@@ -23,6 +23,21 @@ class zs_menu_item  {
 }
 function z_mi($text,$link,$help) { return new zs_menu_item($text,$link,$help); }
 
+class zs_menubar_item  {
+	var $link;
+	var $help;
+	var $text;
+	public function __construct($text,$link,$help) {
+		$this->text=$text;
+		$this->link=$link;
+		$this->help=$help;
+	}
+	public function out() {
+		echo("<td class='menu_bar_item' ><a class='zs_menu_link' href='$this->link' >$this->text</a></td>");
+
+	}
+}
+function z_mbi($text,$link,$help) { return new zs_menubar_item($text,$link,$help); }
 
 class zs_menu extends zs_menu_base {
 	public $items; // array

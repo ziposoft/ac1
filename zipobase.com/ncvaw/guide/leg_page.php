@@ -10,8 +10,7 @@ else
 
 
 $g_leg_list=new leg_list();
-$g_bill_list=new bill_list();
-$g_vote_data=new vote_data();
+
 
 
 $leg=$g_leg_list->get_leg_by_id($legid);
@@ -36,7 +35,7 @@ $leg->print_list_row();
 
 <?php 
 
-$g_vote_data->print_list_votes($leg->id);
+$leg->print_list_votes();
 
 ?>
 

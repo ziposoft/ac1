@@ -31,14 +31,14 @@
 
 make_menu([
 	z_menu("About Us",[
-		z_mi("Home","/home.html","HOME"),
+		z_mi("About Us","/aboutus.html","HOME"),
 		z_mi("map","/map.html","MAP")]),
 	z_menu("News",[
 		z_mi("Home2","/home.html","HOME"),
 		z_mi("map2","/map.html","MAP")]),
-	z_menu("Donate",[
-		z_mi("Home2","/home.html","HOME"),
-		z_mi("map2","/map.html","MAP")]),
+	z_mbi("Donate","/donate.html","Support Animal Welfare in NC"),
+	
+
 	z_menu("Get Involved",[
 		z_mi("Home2","/home.html","HOME"),
 		z_mi("map2","/map.html","MAP")]),		

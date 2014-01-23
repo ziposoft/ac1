@@ -1,6 +1,7 @@
 <?php
 
-
+$g_bill_list=0;
+$g_vote_data=0;
 
 $refresh_data=array_key_exists ( "refresh", $_GET );
 
@@ -48,6 +49,23 @@ class vote extends json_obj{
 	public function __construct($data_in)
 	{
 		$this->data = $data_in;
+	}
+	public function print_vote_tr()
+	{
+	
+		$vid=$this->get('vid');
+		$doc= $this->get('doc');
+		$vote= $this->get('vote');	
+
+		$bill=get_bill_list()->get_bill($doc);
+		
+
+		echo "<tr>";
+		echo "<td>$vid</td>";
+		echo "<td>$doc</td>";
+		echo "<td>$bill->official</td>";
+		echo "<td>$vote</td>";
+		echo "</tr>";
 	}
 }
 class bill extends json_obj{
@@ -104,27 +122,22 @@ class vote_data extends data_source
 		{
 			if($legid == $row->{	'gsx$mid' }->{'$t' })
 			{
-				$vid= $row->{	'gsx$vid' }->{'$t' };
-				$doc= $row->{	'gsx$doc' }->{'$t' };
-				$vote= $row->{	'gsx$vote' }->{'$t' };
-				echo "<tr>";
-				echo "<td>$vid</td>";
-				echo "<td>$doc</td>";
-				echo "<td>$vote</td>";
-				echo "</tr>";
-	
+				$vote=new vote($row);
+				$vote->print_vote_tr();
 			}
-				
 		}
 		echo "</table>";
 	}	
 }
-function get_vote_list($leg_id)
+function get_vote_data()
 {
-	
-	
-	
+	global $g_vote_data;
+	if(!$g_vote_data)
+		$g_vote_data=new vote_data();
+	return $g_vote_data;
 }
+
+
 class bill_list extends data_source
 {
 	public $list;
@@ -133,17 +146,24 @@ class bill_list extends data_source
 		$this->list=array();
 		foreach ( $this->rows as $row )
 		{
-			$vid =$row->{	'gsx$vid' }->{'$t' };
-			$this->list [$vid] = new bill ( $row );
+			$doc =$row->{	'gsx$doc' }->{'$t' };
+			$this->list [$doc] = new bill ( $row );
 		}		
 	}	
-	public function get_bill($vid)
+	public function get_bill($doc)
 	{
 
-		return $this->list [$vid];
+		return $this->list [$doc];
 	}
 }
 
+function get_bill_list()
+{
+	global $g_bill_list;
+	if(!$g_bill_list)
+		$g_bill_list=new bill_list();
+	return $g_bill_list;
+}
 class legislator extends json_obj{
 	
 	public $name;
@@ -172,28 +192,12 @@ class legislator extends json_obj{
 		
 		
 	}	
-	public function print_list_votes() {
-		global $leg_data_file_votes;
-		$leg_data_votes = json_decode (  file_get_contents ( $leg_data_file_votes ) );
-		$rows = $leg_data_votes->{'feed' }->{'entry' };
-		echo "<table class='votes'>";
-		foreach ( $rows as $row ) 
-		{
-			if($this->id == $row->{	'gsx$mid' }->{'$t' })
-			{
-				$vid= $row->{	'gsx$vid' }->{'$t' };
-				$doc= $row->{	'gsx$doc' }->{'$t' };
-				$vote= $row->{	'gsx$vote' }->{'$t' };
-				echo "<tr>";
-				echo "<td>$vid</td>";
-				echo "<td>$doc</td>";
-				echo "<td>$vote</td>";
-				echo "</tr>";
-				
-			}
-			
-		}
-		echo "</table>";
+	public function print_list_votes() 
+	{
+
+		get_vote_data()->print_list_votes($this->id);
+		
+
 	}
 	public function print_table_val($label, $field) {
 		$val = $this->data->{	'gsx$' . $field }->{'$t' };
