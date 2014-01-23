@@ -4,7 +4,7 @@
 
 $refresh_data=array_key_exists ( "refresh", $_GET );
 
-function getj(&$row,&$id)
+function getj(&$row,$id)
 {
 	return $row->{	'gsx$'.$id }->{'$t' };
 }
@@ -32,7 +32,7 @@ class data_source
 		if($refresh_data)
 		{
 			
-			$url = "https://spreadsheets.google.com/feeds/list/0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc/$tab/public/values?alt=json";
+			$url = "http://spreadsheets.google.com/feeds/list/0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc/$tab/public/values?alt=json";
 			$file = file_get_contents ( $url );
 			$fp = fopen ( $filename, 'w' );
 			fwrite ( $fp, $file );
@@ -213,8 +213,11 @@ class legislator extends json_obj{
 		
 		
 		echo "<tr class='leg_list'><td class='leg_thumb' >";
-		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/>";
+		echo "<a href='/guide/leg_page.php?id=$this->id'>";
+				
 
+		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";
+		
 		echo "</td><td class='td_doglist_info' ><h2 >$this->name</h2><table class='doginfo'>";
 		
 		$this->print_table_val ( 'District', 'district' );		

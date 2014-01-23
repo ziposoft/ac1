@@ -43,8 +43,8 @@ make_menu([
 		z_mi("Home2","/home.html","HOME"),
 		z_mi("map2","/map.html","MAP")]),		
 	z_menu("Voters Guide",[
-		z_mi("LEGISLATIVE REPORT CARD","/home.html","HOME"),
-		z_mi("map2","/map.html","MAP")])
+		z_mi("LEGISLATIVE REPORT CARD","/guide/leg_list.html","HOME"),
+		z_mi("Find your district","/guide/find.html","")])
 		
 		
 ]);
