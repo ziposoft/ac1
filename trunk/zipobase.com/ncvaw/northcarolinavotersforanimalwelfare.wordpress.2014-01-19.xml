@@ -4255,7 +4255,9 @@ Susie's Law!</span></strong>
 		<dc:creator><![CDATA[Admin]]></dc:creator>
 		<guid isPermaLink="false">http://ncvaw.org/?page_id=2628</guid>
 		<description></description>
-		<content:encoded><![CDATA[<a href="http://ncvaw.org/monthly-giving"><img class="wp-image-3069 aligncenter" alt="" src="http://ncvaw.org/wp-content/uploads/2012/09/donate_banner.jpg" width="535" height="215" /></a>
+		<content:encoded><![CDATA[
+    
+    <a href="http://ncvaw.org/monthly-giving"><img class="wp-image-3069 aligncenter" alt="" src="http://ncvaw.org/wp-content/uploads/2012/09/donate_banner.jpg" width="535" height="215" /></a>
 
 &nbsp;
 <table style="width: 507px;height: 373px" border="0" cellspacing="5" cellpadding="5" align="center">
@@ -4305,7 +4307,8 @@ Wrightsville Beach, NC 28480</td>
 </tr>
 </tbody>
 </table>
-<p style="text-align: center"><span style="font-size: x-small"> ** NC law requires that all PACs must report specific info to the State Board of Elections. <strong>Therefore, you must submit</strong> 1) your name 2) your address 3) your profession/job title and 4) your employer's name or your specific field of work. ** NCVAW PAC cannot accept contributions from corporations, business entities, labor unions, professional associations or insurance companies. Donations and/or contributions are not tax deducible.</span></p>]]></content:encoded>
+<p style="text-align: center"><span style="font-size: x-small"> ** NC law requires that all PACs must report specific info to the State Board of Elections. <strong>Therefore, you must submit</strong> 1) your name 2) your address 3) your profession/job title and 4) your employer's name or your specific field of work. ** NCVAW PAC cannot accept contributions from corporations, business entities, labor unions, professional associations or insurance companies. Donations and/or contributions are not tax deducible.</span></p>
+]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>2628</wp:post_id>
 		<wp:post_date>2012-05-25 14:23:11</wp:post_date>
