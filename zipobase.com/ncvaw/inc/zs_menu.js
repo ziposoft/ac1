@@ -11,11 +11,11 @@
                 (ev.target.className == 'zs_menutop') ||
                 (ev.target.className == 'zs_menu') ||
                 (ev.target.className == 'zs_menu_sub') ||
-                (ev.target.className == 'zs_menu_item_sub') ||
-                (ev.target.className == 'zs_menu_item_sub_hi') ||
+                (ev.target.className == 'zs_menu_item') ||
+              
                 (ev.target.className == 'zs_menu_link')
             ) {
-                var lists = elm.getElementsByTagName('table');
+                var lists = elm.getElementsByTagName('ul');
 
                 if (lists.length > 0) {
                     lists[0].style.display = "none";
@@ -36,17 +36,17 @@
             for (var i = 0; i < othermenus.length; i++) {
                 othermenus[i].style.display = "none";
             }
-            var lists = elm.getElementsByTagName('table');
+            var lists = elm.getElementsByTagName('ul');
             if (lists.length > 0) {
-                lists[0].style.display = "inline";
+                lists[0].style.display = "block";
             }
         }
         function hide_sub(elm, ev) {
-            elm.className = 'zs_menu_item_sub';
+            //elm.className = 'zs_menu_item_sub';
             hide(elm, ev);
         }
         function show_sub(elm, ev) {
-            elm.className = 'zs_menu_item_sub_hi';
+            //elm.className = 'zs_menu_item_sub_hi';
             show(elm, ev);
         }
         function show_hide_elm(elm_id,val) {

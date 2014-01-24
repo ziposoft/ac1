@@ -179,8 +179,7 @@ class legislator extends json_obj{
 	
 	public function __construct($data_in) {
 		$this->data = $data_in;
-		$this->name = $this->get('name');
-		$this->url =$this->get('url');
+		$this->name = $this->get('title').' ' .$this->get('first').' '.$this->get('last') ;
 		$this->uid =$this->get('uid');
 		$this->id = $this->get('id');
 		$this->chamberId = $this->get('chamber');
@@ -189,7 +188,7 @@ class legislator extends json_obj{
 			else
 			$this->chamber='Senate';
 			
-		
+		$this->url ="http://www.ncleg.net/gascripts/members/viewMember.pl?sChamber=$this->chamber&nUserID=$this->uid";
 		
 	}	
 	public function print_list_votes() 
@@ -216,13 +215,13 @@ class legislator extends json_obj{
 			return $this->print_list_row_phone();
 		
 		
-		echo "<tr class='leg_list'><td class='leg_thumb' >";
+		echo "<tr ><td class='leg_thumb' >";
 		echo "<a href='/guide/leg_page.php?id=$this->id'>";
 				
 
 		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";
 		
-		echo "</td><td class='td_doglist_info' ><h2 >$this->name</h2><table class='doginfo'>";
+		echo "</td><td class='leg_info' ><h2 >$this->name</h2><table>";
 		
 		$this->print_table_val ( 'District', 'district' );		
 		$this->print_table_val ( 'County', 'county' );		
@@ -245,7 +244,7 @@ class legislator extends json_obj{
 class leg_list extends data_source{
 	public $list;
 	public function print_list() {
-		echo "<table class='tbl_doglist' border='1'>";
+		echo "<table class='tbl_leglist' >";
 		foreach ( $this->list as $d ) {
 			$d->print_list_row ();
 		}
@@ -277,12 +276,12 @@ class leg_list extends data_source{
 		$this->list = array ();
 		
 		foreach ( $this->rows as $row ) {
-			$name = $row->{	'gsx$name' }->{'$t' };
-			if (($name == 'name') || ($name == ''))
+			$ch = $row->{	'gsx$chamber' }->{'$t' };
+			if (($ch == 'chamber') || ($ch == ''))
 				continue;
 			if($chamber)
 			{
-				if($chamber != $row->{	'gsx$chamber' }->{'$t' })
+				if($chamber != $ch)
 					continue;
 			
 			}
@@ -298,6 +297,7 @@ class leg_list extends data_source{
 				if (! in_array ( $status, $status_filter ))
 					continue;
 				*/
+			$name = $row->{	'gsx$last' }->{'$t' };
 			$this->list [$name] = new legislator ( $row );
 		}
 		ksort ( $this->list );
