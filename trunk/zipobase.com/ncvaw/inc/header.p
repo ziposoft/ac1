@@ -23,9 +23,9 @@
 	?>
   
 <div id="wrapper">
-<a href="http://www.ncvaw.org/"><img style="float: left" src="/NCVAW_paw.png" alt="North Carolina Voters for Animal Welfare"></a>
+<a href="/"><img style="float: left" src="/img/NCVAW_paw.png" alt="North Carolina Voters for Animal Welfare"></a>
  
-<a href="http://www.ncvaw.org/"><img style="clear:right;margin-top:10px" src="/NCVAW_txt.png" alt="North Carolina Voters for Animal Welfare"></a>
+<a href="/"><img style="clear:right;margin-top:10px" src="/img/NCVAW_txt.png" alt="North Carolina Voters for Animal Welfare"></a>
   	
 <?php
 
@@ -43,9 +43,14 @@ make_menu([
 		z_mi("Home2","/home.html","HOME"),
 		z_mi("map2","/map.html","MAP")]),		
 	z_menu("Voters Guide",[
-		z_mi("LEGISLATIVE REPORT CARD","/guide/leg_list.html","HOME"),
-		z_mi("Find your district","/guide/find.html","")])
-		
+		z_mi("LEGISLATIVE REPORT CARD","/guide/leglist.html","HOME"),
+		z_mi("Find your district","/guide/find.html",""),
+		z_menu_sub("Search Legislature",[
+			z_mi("LEGISLATIVE REPORT CARD","/guide/leglist.html","HOME"),
+			z_mi("Find your district","/guide/find.html",""),	
+			]),	
+		]),
+	
 		
 ]);
 

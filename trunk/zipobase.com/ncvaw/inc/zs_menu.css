@@ -1,4 +1,58 @@
 
+.zs_menu_bar,.zs_menu, .zs_menu_sub,.zs_menu_bar
+{
+margin: 0;
+padding: 0;
+list-style: none;	
+box-sizing: border-box;	
+	
+}
+
+.zs_menu_bar a:hover
+{
+	text-decoration: none;
+	color: #fff;
+	background-color: #8ae;		
+}
+.zs_menu_bar a
+{
+	background-color: #68c;
+	cursor: pointer;
+	color: #eee;
+	user-select: none;
+	font-weight: 300;
+	font-size: 18px;	
+	border-spacing: 0px;
+	text-align: center;	
+	padding: 10px;	
+	display: inline-block;		
+}
+
+.zs_menu_bar li
+{
+	display: inline-block;	
+	border-right: 1px groove White;	
+	
+}
+.zs_menu, .zs_menu_sub
+{
+	clear: both;
+	position: absolute;
+	display: none; 
+	z-index: 1;
+
+}
+.zs_menu a,.zs_menu li
+{
+		display: block;	
+	
+}
+.zs_menu_item 
+{
+		display: list-item;	
+	
+}
+/*
 .zs_menu_bar,.zs_menu, .zs_menu_sub,.zs_menu_bar a
 {
 	background-color: #68c;
@@ -38,13 +92,15 @@
 }
 td.zs_menutop
 {
+	margin-right: 4px;
 	padding: 6px;
 	border-right: 1px groove White;
 }
 .menu_bar_item
 {
-	padding: 0px;
 	margin: 0px;
+	margin-right: 4px;
+	padding: 6px;
 	border-right: 1px groove White;	
 }
 
@@ -53,9 +109,7 @@ td.zs_menutop
 	
 	
 	border-collapse: separate;
-	-moz-border-radius: 5px;
 	clear: both;
-	border-radius: 5px;
 
 
 	border-style: solid;
@@ -70,7 +124,7 @@ td.zs_menutop
 	-ms-user-select: none;
 	user-select: none;
 }
-/*
+
 .zs_menu_item_sub, .zs_menu_item_sub_hi
 {
 
@@ -108,7 +162,7 @@ a.zs_menu_link
 	overflow: visible;
 	white-space: nowrap;
 
-	padding: 5px 0 5px;	
+	padding: 6px;
 	cursor: pointer;
 }
 
@@ -125,4 +179,5 @@ a.zs_menu_link:active, a.zs_menu_link:visited,a.menu_bar_item:active
 	color: #fff;
 
 }
+
 */
