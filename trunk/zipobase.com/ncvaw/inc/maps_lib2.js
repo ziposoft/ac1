@@ -42,21 +42,24 @@ function initialize() {
 	//$("#cbType3").attr("checked", "checked");
 	
 	searchrecords = null;
-	//$("#txtSearchAddress").val("");
+	$("#txtSearchAddress").val("");
+	$("#legislators").html("")
 	doSearch();
 }
 
 function get_legislator(chamber,dist) {
 $.ajax({
 	  type: 'GET',
-	  url: '/getleg.php',
+	  url: '/guide/getleg.php',
 	  data: { ch: chamber, dist: dist },
 	  beforeSend:function(){
 	    // this is where we append a loading image
-	    $('#legislators').html('<div>Loading...</div>');
+	    //$('#legislators').html('<div>Loading...</div>');
 	  },
 	  success:function(data){
 	    // successful request; do something with the data
+		  var text="<h3 style='margin:0;padding:0;'>Your " + (chamber=='H'? 'House' : 'Senate')+" district: "+ dist+"</h3>";
+		  $('#legislators').append(text);
 		  $('#legislators').append(data);
 	    
 	  },
@@ -254,15 +257,17 @@ function drawTable(searchStr) {
     gvizQuery.send(function (response) {
         var numRows = response.getDataTable().getNumberOfRows();
         var numCols = response.getDataTable().getNumberOfColumns();
-
+        /*
         var ftdata = ['<table><thead><tr>'];
         for (var i = 0; i < numCols; i++) {
             var columnTitle = response.getDataTable().getColumnLabel(i);
             ftdata.push('<th>' + columnTitle + '</th>');
         }
         ftdata.push('</tr></thead><tbody>');
-
+*/
         for (var i = 0; i < numRows; i++) {
+            /*
+              
             ftdata.push('<tr>');
             for (var j = 0; j < numCols; j++) 
             {
@@ -270,6 +275,7 @@ function drawTable(searchStr) {
                 ftdata.push('<td>' + rowValue + '</td>');
             }
             ftdata.push('</tr>');
+            */
             var chamber=response.getDataTable().getValue(i, 1);
             var district=response.getDataTable().getValue(i, 0);
             if(chamber=='House')
@@ -279,7 +285,7 @@ function drawTable(searchStr) {
             
             get_legislator(chamber,district);
         }
-        ftdata.push('</tbody></table>');
-        document.getElementById('ft-data').innerHTML = ftdata.join('');
+       // ftdata.push('</tbody></table>');
+        //document.getElementById('ft-data').innerHTML = ftdata.join('');
     });
 }

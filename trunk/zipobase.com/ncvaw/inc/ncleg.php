@@ -216,7 +216,7 @@ class legislator extends json_obj{
 		
 		
 		echo "<tr ><td class='leg_thumb' >";
-		echo "<a href='/guide/leg_page.php?id=$this->id'>";
+		echo "<a href='/guide/legpage.php?id=$this->id'>";
 				
 
 		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";

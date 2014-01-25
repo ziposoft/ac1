@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
     <link href='/inc/ncvaw.css' rel='stylesheet' type='text/css'>
     <?php 
     include $root.'/inc/headscripts.p';
@@ -23,32 +24,41 @@
 	?>
   
 <div id="wrapper">
+<a href="/"><img style="float: left" src="/img/NCVAW_logo.png" alt="North Carolina Voters for Animal Welfare"></a>
+<div style="float: right"><small style="color:#46a;font:">Follow us on Facebook</small>
+	<div style="display:block;padding:0;margin:0;" class="fb-like-box" data-href="http://www.facebook.com/ncvaw" data-width="300" data-height="70" data-colorscheme="light" data-show-faces="false" data-header="false" data-stream="false" data-show-border="false"></div>
+</div>
+
+<!--  
 <a href="/"><img style="float: left" src="/img/NCVAW_paw.png" alt="North Carolina Voters for Animal Welfare"></a>
  
 <a href="/"><img style="clear:right;margin-top:10px" src="/img/NCVAW_txt.png" alt="North Carolina Voters for Animal Welfare"></a>
+-->
   	
 <?php
 
 make_menu([
-	z_menu("About Us",[
-		z_mi("About Us","/aboutus.html","HOME"),
-		z_mi("map","/map.html","MAP")]),
-	z_menu("News",[
-		z_mi("Home2","/home.html","HOME"),
-		z_mi("map2","/map.html","MAP")]),
-	z_mbi("Donate","/donate.html","Support Animal Welfare in NC"),
+	z_menu("About",[
+		z_mi("About Us","/about/aboutus.html","HOME"),
+		z_mi("Who We Are","/about/who.html","MAP"),
+		z_mi("Contact","/about/contact.html","MAP")]),
+
+		
+	z_menu("News",[]),
+	z_mbi("Donate","/about/donate.html","Support Animal Welfare in NC"),
 	
 
 	z_menu("Get Involved",[
-		z_mi("Home2","/home.html","HOME"),
-		z_mi("map2","/map.html","MAP")]),		
+		z_mi("Lobbying 101","/about/lobbying101.html",""),
+		z_mi("How You Can Help","/about/getinvolved.html","")]),		
 	z_menu("Voters Guide",[
+		//z_menu_sub("Search Legislature",[
+		z_mi("Senate List","/guide/senate.html","HOME"),
+		z_mi("House List","/guide/house.html",""),
+		//]),	
 		z_mi("LEGISLATIVE REPORT CARD","/guide/leglist.html","HOME"),
 		z_mi("Find your district","/guide/find.html",""),
-		z_menu_sub("Search Legislature",[
-			z_mi("LEGISLATIVE REPORT CARD","/guide/leglist.html","HOME"),
-			z_mi("Find your district","/guide/find.html",""),	
-			]),	
+
 		]),
 	
 		

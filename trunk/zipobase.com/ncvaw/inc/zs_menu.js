@@ -28,17 +28,9 @@
         }
         function show(elm, ev) {
 
-            var othermenus = document.getElementsByClassName('menu');
-
-            
-
-            var oElement;
-            for (var i = 0; i < othermenus.length; i++) {
-                othermenus[i].style.display = "none";
-            }
             var lists = elm.getElementsByTagName('ul');
             if (lists.length > 0) {
-                lists[0].style.display = "block";
+            		lists[0].style.display = "block";
             }
         }
         function hide_sub(elm, ev) {
@@ -46,8 +38,16 @@
             hide(elm, ev);
         }
         function show_sub(elm, ev) {
-            //elm.className = 'zs_menu_item_sub_hi';
-            show(elm, ev);
+        	 show(elm, ev);
+        	 /*
+            var lists = elm.getElementsByTagName('ul');
+            if (lists.length > 0)
+            	lists[0].style.display = "inline";   
+            lists = elm.getElementsByTagName('a');
+            if (lists.length > 0) 
+               	lists[0].style.display = "inline-block";  
+               	*/
+            
         }
         function show_hide_elm(elm_id,val) {
             document.getElementById(elm_id).style.display = (val ? 'block' : 'none');
