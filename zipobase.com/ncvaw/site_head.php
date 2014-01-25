@@ -1,7 +1,7 @@
 <?php
 
 
-$zs_foot_jsfile=["/inc/jquery.js","/inc/lfd.js","/inc/zs_menu.js"];
+$zs_foot_jsfile=["/inc/jquery.js","/inc/ncvaw.js","/inc/zs_menu.js"];
 $zs_head_jsfile=array();
 $zs_foot_script=array();
 
@@ -22,7 +22,7 @@ $isPhone = ($detect->isMobile() && (!$detect->isTablet()));
 $deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
 if(array_key_exists("m",$_GET))
     $isPhone=1;
-
+$isPhone=0;
 if($isPhone)
 {
     $header=$root.'/inc/mheader.p';
