@@ -18,9 +18,9 @@ include $root.'/inc/ncleg.php';
 	<div id="page" style="clear: both; margin: auto; padding: 10px 20px 0 20px; height: 90%;">
 	<div id="map_canvas" style="display:inline;float:right;height: 300px; width:500px;"  ></div>
 	<h1>Who represents me?</h1>
-	<h4>Type in your address below to find your districts:</h4>
-			
-			
+	<div>Please type in your <b>FULL</b> address below to find your districts. </div>
+	<div>(district boundaries do <i>not</i> follow zip codes)</div>			
+	<div>Or you can try the "Auto-Locate" button to allow Google to find you.</div>			
 			<div >	
 
 				<form action=""  autocomplete="on" >
@@ -35,9 +35,10 @@ include $root.'/inc/ncleg.php';
 				</div>
 	
 				<div class='clear'></div>
-				<input class="btn" type="button" id="btnSearch" value="Search" onclick="doSearch(goZoom);" />
+	
 				<input class="btn" type="button" id="" value="Auto-locate" onclick="findMe(); return false;" />
-				<input class="btn" type="button" id="" value="Reset" onclick="initialize(); return false;" />
+				<input class="btn" type="button" id="" value="Reset" onclick="mapreset(); return false;" />
+			     <input class="btn" type="button" id="btnSearch" value="Search" onclick="doSearch(goZoom);" />				
 				</form>
 				
 				

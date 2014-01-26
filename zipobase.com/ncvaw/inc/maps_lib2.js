@@ -23,6 +23,12 @@ var searchRadiusCircle;
 
 google.load('visualization', '1', {}); //used for custom SQL call to get count
 
+function mapreset() {
+	setCookie("address","");
+	initialize();
+
+}
+
 function initialize() {
 	$( "#resultCount" ).html("");
 	
@@ -42,7 +48,8 @@ function initialize() {
 	//$("#cbType3").attr("checked", "checked");
 	
 	searchrecords = null;
-	$("#txtSearchAddress").val("");
+	var address=getCookie("address");
+	$("#txtSearchAddress").val(address);
 	$("#legislators").html("")
 	doSearch();
 }
@@ -53,6 +60,7 @@ $.ajax({
 	  url: '/guide/getleg.php',
 	  data: { ch: chamber, dist: dist },
 	  beforeSend:function(){
+			
 	    // this is where we append a loading image
 	    //$('#legislators').html('<div>Loading...</div>');
 	  },
@@ -73,6 +81,8 @@ $.ajax({
 function doSearch(doZoom) {
 	clearSearch();
 	var address = $("#txtSearchAddress").val();
+	setCookie("address",address);
+	$("#legislators").html("");
 
 	searchRadius = 100; //meters
 	
