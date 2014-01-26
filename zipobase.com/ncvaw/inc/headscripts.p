@@ -15,7 +15,7 @@
 <meta property="og:image:height" content="600">
 <meta property="og:description"  content="<?php echo $fb_description ?>" />
     <?php echo $meta_extra ?>
-    <title>North Carolina Voters For Animal Welfate<?php if($page_title)  echo ' - '.$page_title ?></title>
+    <title>North Carolina Voters For Animal Welfare<?php if($page_title)  echo ' - '.$page_title ?></title>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:600,400,300' rel='stylesheet' type='text/css'>
 <link href='/inc/zs_menu.css' rel='stylesheet' type='text/css'>
     
