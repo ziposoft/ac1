@@ -1,0 +1,16 @@
+<?php
+include $header;
+include $root.'/inc/ncleg.php';
+ 
+$leglist=new leg_list();
+
+$chamber='H';
+
+$leglist->get_list ($chamber,""  );
+$leglist->print_list ();
+
+?>
+
+
+
+<?php include $footer; ?>

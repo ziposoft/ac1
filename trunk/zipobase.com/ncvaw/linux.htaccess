@@ -1,0 +1,24 @@
+DirectoryIndex home.html
+Options -MultiViews
+# Use PHP54CGI as default
+AddHandler fcgid54-script .php .html 
+
+#AddHandler x-httpd-php .html .htm .css
+#AddHandler application/x-httpd-php .php .html .css
+
+#AddHandler headered .html
+#Action headered /global_head.php
+#RewriteEngine on
+#RewriteBase /
+
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{ENV:REDIRECT_STATUS} ^$
+#RewriteRule ^([^/]+)/(.+).html$ index.php?dir=$1&page=$2 [L,QSA]
+
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{ENV:REDIRECT_STATUS} ^$
+#RewriteRule (.+).html$ index.php?page=$1 [L,QSA]
+#RewriteRule ^([a-zA-Z]+)/?$ index.php?area=$1 [NC,L]
+ErrorDocument 404 /home.html
