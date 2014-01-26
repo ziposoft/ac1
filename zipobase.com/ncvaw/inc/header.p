@@ -52,12 +52,13 @@ make_menu([
 		z_mi("Lobbying 101","/about/lobbying101.html",""),
 		z_mi("How You Can Help","/about/getinvolved.html","")]),		
 	z_menu("Voters Guide",[
+		z_mi("Find your district","/guide/find.html",""),	
 		//z_menu_sub("Search Legislature",[
 		z_mi("Senate List","/guide/senate.html","HOME"),
 		z_mi("House List","/guide/house.html",""),
 		//]),	
-		z_mi("LEGISLATIVE REPORT CARD","/guide/leglist.html","HOME"),
-		z_mi("Find your district","/guide/find.html",""),
+		//z_mi("LEGISLATIVE REPORT CARD","/guide/leglist.html","HOME"),
+
 
 		]),
 	

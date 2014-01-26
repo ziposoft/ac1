@@ -2,7 +2,7 @@
 
 $g_bill_list=0;
 $g_vote_data=0;
-
+$g_leg_list=0;
 $refresh_data=array_key_exists ( "refresh", $_GET );
 
 function getj(&$row,$id)
@@ -58,33 +58,69 @@ class vote extends json_obj{
 		$vote= $this->get('vote');	
 
 		$bill=get_bill_list()->get_bill($doc);
-		
+		if($vid)
+		{
+			if(!(($vid==$bill->svid)||($vid==$bill->hvid)))
+				return;
+		}
 
 		echo "<tr>";
-		echo "<td>$vid</td>";
-		echo "<td>$doc</td>";
-		echo "<td>$bill->official</td>";
-		echo "<td>$vote</td>";
-		echo "</tr>";
+		//echo "<td>$vid</td>";
+
+		echo "<td><a href='/guide/billpage.php?doc=$doc'>$doc</a></td>";
+		echo "<td><div><a href='/guide/billpage.php?doc=$doc'>$bill->official</a></div>";
+		if($bill->desc)
+			echo "<div>$bill->desc</div>";
+		echo "</td>";
+		$class='';
+		if(
+			(($vote=='Aye')&&($bill->stance=='pro'))||
+			(($vote=='No')&&($bill->stance=='anti'))
+			)
+		{
+			$class='votegood';
+		}
+		if(
+		(($vote=='Aye')&&($bill->stance=='anti'))||
+		(($vote=='No')&&($bill->stance=='pro'))
+		)
+		{
+			$class='votebad';
+		}		
+		echo "<td><span class='$class'>$vote</span></td>";
+		echo "</td></tr>";
 	}
 }
 class bill extends json_obj{
 	public $name;
 	public $stance;
 	public $official;
-	public $vid;
+	public $svid;
+	public $hvid;	
 	public $desc;
-
+	public $year;
+	public $doc;	
 	public function __construct($data_in)
 	{
 		$this->data = $data_in;
 		$this->name =$this->get('name');
 		$this->stance =$this->get('stance');
 		$this->official =$this->get('official');
-		$this->vid =$this->get('vid');
+		$this->svid =$this->get('svid');
+		$this->hvid =$this->get('hvid');		
 		$this->desc =$this->get('desc');
-		
+		$this->year =$this->get('year');		
+		$this->doc =$this->get('doc');		
 	}
+	public function print_page()
+	{
+		echo "<H1>$this->year - $this->doc</H1>";
+		echo "<H2>$this->name </H2>";
+		
+		
+
+	
+	}	
 }
 class vote_data extends data_source
 {
@@ -113,6 +149,36 @@ class vote_data extends data_source
 			}
 		}
 		return $list;
+	}	
+	public function print_bill_votes($doc,$vote,$vid) {
+	
+	
+		//echo "<table class='votes'>";
+		$comma=0;
+		foreach ( $this->rows as $row )
+		{
+			if($vid && ($vid!=getj( $row,'vid')))
+				continue;
+			if(($doc ==getj( $row,'doc'))&&
+				($vote==getj( $row,'vote'))
+				)
+				
+			
+			{
+				
+				
+				if($comma)
+					echo (", ");
+					
+				$mid= $row->{	'gsx$mid' }->{'$t' };
+				$leg=get_leg_list()->get_leg_by_id($mid);
+				if($leg)
+				echo "<a href='/guide/legpage.php?id=$leg->id'>$leg->name</a>";
+				
+				$comma=1;
+			}
+		}
+		//echo "</table>";
 	}	
 	public function print_list_votes($legid) {
 
@@ -155,6 +221,16 @@ class bill_list extends data_source
 
 		return $this->list [$doc];
 	}
+	public function print_bills()
+	{
+		echo "<table class='bills'>";
+		foreach ( $this->list as $bill )
+		{
+			$bill->print_tr();
+		}
+		echo "</table>";	
+		
+	}	
 }
 
 function get_bill_list()
@@ -179,7 +255,7 @@ class legislator extends json_obj{
 	
 	public function __construct($data_in) {
 		$this->data = $data_in;
-		$this->name = $this->get('title').' ' .$this->get('first').' '.$this->get('last') ;
+		$this->name = $this->get('first').' '.$this->get('last') ;
 		$this->uid =$this->get('uid');
 		$this->id = $this->get('id');
 		$this->chamberId = $this->get('chamber');
@@ -220,8 +296,8 @@ class legislator extends json_obj{
 				
 
 		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";
-		
-		echo "</td><td class='leg_info' ><h2 >$this->name</h2><table>";
+		$title=$this->get('title') ;
+		echo "</td><td class='leg_info' ><a href='/guide/legpage.php?id=$this->id'><h2>$title $this->name</h2></a><table>";
 		
 		$this->print_table_val ( 'District', 'district' );		
 		$this->print_table_val ( 'County', 'county' );		
@@ -304,7 +380,13 @@ class leg_list extends data_source{
 		return $this->list;
 	}
 }
-
+function get_leg_list()
+{
+	global $g_leg_list;
+	if(!$g_leg_list)
+		$g_leg_list=new leg_list();
+	return $g_leg_list;
+}
 
 
 ?>
