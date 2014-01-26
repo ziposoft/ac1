@@ -8,7 +8,7 @@ include $header;
 
 include $root.'/inc/ncleg.php';
  
-$leglist=new leg_list();
+$g_leg_list=get_leg_list();
 
 $chamber=0;
 $district=0;
@@ -19,8 +19,8 @@ if (array_key_exists ( "ch", $_GET ))
 
 	
 
-$leglist->get_list ($chamber,$district  );
-$leglist->print_list ();
+$g_leg_list->get_list ($chamber,$district  );
+$g_leg_list->print_list ();
 
 
 

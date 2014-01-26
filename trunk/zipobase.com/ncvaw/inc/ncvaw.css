@@ -146,6 +146,15 @@ td.leg_info table {
 }
 
 /* vote history */
+.votegood
+{
+	color: green;
+}
+
+.votebad
+{
+	color: red;
+}
 table.votes 
 {
 	padding: 10px;	
