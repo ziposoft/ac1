@@ -1,0 +1,38 @@
+<?php
+include $header;
+
+
+
+
+
+
+include $root.'/inc/ncleg.php';
+ 
+$g_leg_list=get_leg_list();
+
+$chamber=0;
+$district=0;
+if (array_key_exists ( "dist", $_GET )) 
+	$district= $_GET ["dist"];
+if (array_key_exists ( "ch", $_GET )) 
+	$chamber= $_GET ["ch"];
+
+	
+
+$g_leg_list->get_list ($chamber,$district  );
+$g_leg_list->print_list ();
+
+
+
+
+?>
+
+
+<div class="text_wrap">
+
+
+	 
+</div>
+
+
+<?php include $footer; ?>
