@@ -87,13 +87,24 @@ class vote extends json_obj{
 		{
 			$class='votebad';
 		}		
-		echo "<td><span class='$class'>$vote</span></td>";
+		echo "<td><span class='$class'>$vote</span></td><td>";
+		if($class=='votebad')
+		{
+			echo "<img style='width:50px' src='/img/badvote.jpg'/>";
+			
+		}
+		if($class=='votegood')
+		{
+			echo "<img style='width:50px' src='/img/goodvote.png'/>";
+				
+		}		
 		echo "</td></tr>";
 	}
 }
 class bill extends json_obj{
-	public $name;
+	public $nickname;
 	public $stance;
+	public $effect;
 	public $official;
 	public $svid;
 	public $hvid;	
@@ -103,8 +114,12 @@ class bill extends json_obj{
 	public function __construct($data_in)
 	{
 		$this->data = $data_in;
-		$this->name =$this->get('name');
+		$this->nickname =$this->get('nickname');
 		$this->stance =$this->get('stance');
+		if($this->stance == 'pro')
+			$this->effect= "Supports animal welfare";
+		else 
+			$this->effect= 	"Harmful to animal welfare";
 		$this->official =$this->get('official');
 		$this->svid =$this->get('svid');
 		$this->hvid =$this->get('hvid');		
@@ -112,10 +127,23 @@ class bill extends json_obj{
 		$this->year =$this->get('year');		
 		$this->doc =$this->get('doc');		
 	}
-	public function print_page()
+	public function get_stance()
+	{
+		if($this->stance == 'pro')
+			return "Supports animal welfare";
+		return 	"Harmful to animal welfare";
+					
+		
+	}
+	public function print_page()	
 	{
 		echo "<H1>$this->year - $this->doc</H1>";
-		echo "<H2>$this->name </H2>";
+		echo "<H2>$this->official </H2>";
+		
+		
+		echo "<p>$this->effect </p>";		
+		echo "<p><a target='_blank' href='http://www.ncleg.net/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->doc&submitButton=Go' >Link to $this->doc on NCLEG.NET</a> </p>";
+		echo "<p>$this->desc </p>";
 		
 		
 
@@ -126,7 +154,7 @@ class vote_data extends data_source
 {
 	public $list;
 	public function __construct() {
-		$this->get_data(2);
+		$this->get_data(3);
 
 	}
 	public function get_bill($vid)
@@ -246,6 +274,7 @@ class legislator extends json_obj{
 	public $displayname;
 	public $id;
 	public $uid;
+	public $party;	
 	public $chamberId;
 	public $chamber;
 	public $url_cover_jpg;
@@ -299,8 +328,9 @@ class legislator extends json_obj{
 		$title=$this->get('title') ;
 		echo "</td><td class='leg_info' ><a href='/guide/legpage.php?id=$this->id'><h2>$title $this->name</h2></a><table>";
 		
-		$this->print_table_val ( 'District', 'district' );		
-		$this->print_table_val ( 'County', 'county' );		
+		$this->print_table_val ( 'District', 'district' );	
+		$this->print_table_val ( 'Party', 'party' );			
+		$this->print_table_val ( 'Counties', 'county' );		
 		$this->print_table_val ( 'Email', 'email' );		
 		$this->print_table_val ( 'Phone', 'phone' );		
 				
@@ -327,11 +357,12 @@ class leg_list extends data_source{
 		echo '</table>';
 	}
 	public function __construct() {
-		$this->get_data(3);
+		$this->get_data(2);
 		
 	}
 	public function get_leg_by_id($id) {
 		foreach ( $this->rows as $row ) {
+			
 			$i = $row->{	'gsx$id' }->{'$t' };
 			if ($i == $id) {
 				return new legislator ( $row );
