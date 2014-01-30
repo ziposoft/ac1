@@ -30,14 +30,14 @@ $leg=$g_leg_list->get_leg_by_id($legid);
 $leg->print_list_row();
 ?>
 </table>
+<H2>Bills Sponsored</H2>
+
+<?php $leg->print_list_sponsorship(); ?>
+
 
 <H2>Voting Record</H2>
 
-<?php 
-
-$leg->print_list_votes();
-
-?>
+<?php $leg->print_list_votes(); ?>
 
 
 	 
