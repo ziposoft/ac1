@@ -245,7 +245,6 @@ class vote_data extends data_source
 	public function print_list_votes($legid,$sponsors) {
 
 
-		echo "<table class='votes'>";
 		foreach ( $this->rows as $row )
 		{
 
@@ -256,7 +255,6 @@ class vote_data extends data_source
 					$vote->print_vote_tr();
 				}
 		}
-		echo "</table>";
 	}	
 }
 function get_vote_data()
