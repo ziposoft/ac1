@@ -63,39 +63,73 @@ class vote extends json_obj{
 			if(!(($vid==$bill->svid)||($vid==$bill->hvid)))
 				return;
 		}
-
+		//echo "<img style='width:50px' src='/img/x.jpg'/>";
+		
 		echo "<tr>";
 		//echo "<td>$vid</td>";
 
-		echo "<td><a href='/guide/billpage.php?doc=$doc'>$doc</a></td>";
+		$picture=0;
+		$class="";
+		$title="Voted ".($vote=='Aye'? "for" :"against")." bill that ". $bill->effect;
+		if(($vote=='Aye') xor($vote=='No'))
+		{
+			if(($vote=='Aye') xor ($bill->stance=='pro'))
+			{
+				$class='votebad';
+				$picture='bill_bad.gif';
+			}
+			else
+			{
+				$class='votegood';
+				$picture='bill_good.png';
+			}
+		}
+
+		if(($vote=='psp') xor($vote=='sp'))
+		{
+			$title='Bill ' . $bill->effect;
+			if($bill->stance=='anti')
+			{
+				$class='votebad';
+				$picture='bill_bad.gif';
+			}
+			else
+			{
+				$class='votegood';
+				$picture='bill_good.png';
+			}
+		}			
+		if($vote=='psp')
+			$vote='Primary Sponsor';
+		if($vote=='sp')
+			$vote='Sponsor';		
+		if($vote=='N/V')
+			$vote='Did Not Vote';
+		echo "<td>";
+		if($picture) 
+			echo "<img style='width:60px' title='$title' src='/img/$picture'/>";
+		
+		echo "</td><td><a href='/guide/billpage.php?doc=$doc'>$doc</a></td>";	
 		echo "<td><div><a href='/guide/billpage.php?doc=$doc'>$bill->official</a></div>";
+		echo "<div class='$class'>$title</div>";
 		if($bill->desc)
 			echo "<div>$bill->desc</div>";
 		echo "</td>";
-		$class='';
-		if(
-			(($vote=='Aye')&&($bill->stance=='pro'))||
-			(($vote=='No')&&($bill->stance=='anti'))
-			)
-		{
-			$class='votegood';
-		}
-		if(
-		(($vote=='Aye')&&($bill->stance=='anti'))||
-		(($vote=='No')&&($bill->stance=='pro'))
-		)
-		{
-			$class='votebad';
-		}		
+
+		
+		$title="Voted ".($vote=='Aye'? "for" :"against")." bill that ". $bill->effect; 
+	
+			
 		echo "<td><span class='$class'>$vote</span></td><td>";
+
 		if($class=='votebad')
 		{
-			echo "<img style='width:50px' src='/img/badvote.jpg'/>";
+			echo "<img title='$title' src='/img/x.png'/>";
 			
 		}
 		if($class=='votegood')
 		{
-			echo "<img style='width:50px' src='/img/goodvote.png'/>";
+			echo "<img  title='$title' src='/img/check.png'/>";
 				
 		}		
 		echo "</td></tr>";
@@ -117,9 +151,9 @@ class bill extends json_obj{
 		$this->nickname =$this->get('nickname');
 		$this->stance =$this->get('stance');
 		if($this->stance == 'pro')
-			$this->effect= "Supports animal welfare";
+			$this->effect= "supports animal welfare";
 		else 
-			$this->effect= 	"Harmful to animal welfare";
+			$this->effect= 	"is harmful to animal welfare";
 		$this->official =$this->get('official');
 		$this->svid =$this->get('svid');
 		$this->hvid =$this->get('hvid');		
@@ -208,17 +242,19 @@ class vote_data extends data_source
 		}
 		//echo "</table>";
 	}	
-	public function print_list_votes($legid) {
+	public function print_list_votes($legid,$sponsors) {
 
 
 		echo "<table class='votes'>";
 		foreach ( $this->rows as $row )
 		{
-			if($legid == $row->{	'gsx$mid' }->{'$t' })
-			{
-				$vote=new vote($row);
-				$vote->print_vote_tr();
-			}
+
+			if(getj($row,'vid') xor $sponsors)
+				if($legid == getj($row,'mid'))
+				{
+					$vote=new vote($row);
+					$vote->print_vote_tr();
+				}
 		}
 		echo "</table>";
 	}	
@@ -298,11 +334,14 @@ class legislator extends json_obj{
 	}	
 	public function print_list_votes() 
 	{
-
-		get_vote_data()->print_list_votes($this->id);
-		
+		get_vote_data()->print_list_votes($this->id,0);
 
 	}
+	public function print_list_sponsorship()
+	{
+		get_vote_data()->print_list_votes($this->id,1);
+	
+	}	
 	public function print_table_val($label, $field) {
 		$val = $this->data->{	'gsx$' . $field }->{'$t' };
 		if(!$val)

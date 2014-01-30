@@ -167,3 +167,7 @@ table.votes tr:nth-of-type(even) {
 
 	background-color: #ddd;
 }
+table.votes tr:nth-of-type(odd) {
+
+	background-color: #eeeef8;
+}

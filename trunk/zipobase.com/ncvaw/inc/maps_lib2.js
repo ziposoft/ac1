@@ -84,7 +84,7 @@ function doSearch(doZoom) {
 	setCookie("address",address);
 	$("#legislators").html("");
 
-	searchRadius = 100; //meters
+	searchRadius = 1; //meters
 	
 	var type1 = 0; //$("#cbType1").is(':checked');
 	var type2 = 1; //$("#cbType2").is(':checked');
@@ -116,6 +116,7 @@ function doSearch(doZoom) {
 		       
 		            map.setCenter(results[0].geometry.location);
 		            map.setZoom(14);
+		            //map.setZoom(9);
 		          
 				addrMarker = new google.maps.Marker({
 					position: results[0].geometry.location,
@@ -148,7 +149,7 @@ function doSearch(doZoom) {
 				});
 
 			} else {
-				alert("We could not find your address: " + status);
+				$('#legislators').html('<p class="error"><strong>Oops!</strong> We could not find your address. Make sure it is the </p>');
 			}
 		});
 	} else {
