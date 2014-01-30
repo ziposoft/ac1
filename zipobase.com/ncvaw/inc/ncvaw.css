@@ -83,11 +83,19 @@ h1 {
 }
 
 h2 {
-	font-size: 26px
+	font-size: 26px;
+	text-transform: uppercase;
+	color: #68c;	
+}
+h2 {
+	font-size: 26px;
+	
 }
 
 h3 {
-	font-size: 22px
+	font-size: 22px;
+	text-transform: uppercase;
+	color: #68c;	
 }
 
 h4 {
