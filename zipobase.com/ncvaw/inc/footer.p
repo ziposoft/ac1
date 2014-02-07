@@ -14,6 +14,6 @@
 ?>
 
 <script>
-set_href();
+//set_href();
 </script>
 </html>

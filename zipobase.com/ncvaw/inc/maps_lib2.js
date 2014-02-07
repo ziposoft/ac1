@@ -178,28 +178,70 @@ function refreshrecords() {
 	}
 }
 
-function findMe() {
+function geoFindMe() {
+	  var output = document.getElementById("map_find_msg");
+
+	  if (!navigator.geolocation){
+	    output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+	    return;
+	  }
+
+	  function mapsFindMeSuccess(position) {
+	    var latitude  = position.coords.latitude;
+	    var longitude = position.coords.longitude;
+
+	    output.innerHTML = '<p>Latitude is ' + latitude + '° <br>Longitude is ' + longitude + '°</p>';
+
+		var foundLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+		addrFromLatLng(foundLocation);	
+	  };
+
+	  function error() {
+	    output.innerHTML = "Unable to retrieve your location";
+	  };
+
+	  output.innerHTML = "<p>Locating…</p>";
+
+	  navigator.geolocation.getCurrentPosition(mapsFindMeSuccess, error);
+	}
+function mapsFindMeSuccess2(position) 
+{
+	var foundLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+	addrFromLatLng(foundLocation);	
+
+}
+function mapsFindMeFail(err) 
+{
+	$('#map_find_msg').html('Cound not find address automatically. Please type address above');
+
+}
+function mapsFindMe() {
 	// Try W3C Geolocation (Preferred)
 	var foundLocation;
+	$('#map_find_msg').html('Trying to locate you automatically. You browser may first ask you to allow this.');
 	
-	if(navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(function(position) {
-			foundLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-			addrFromLatLng(foundLocation);
-		}, null);
-	} else {
-		alert("Sorry, we could not find your location.");
+	if(navigator.geolocation) 
+	{
+		 var options = {timeout:3000};
+		navigator.geolocation.getCurrentPosition(mapsFindMeSuccess,mapsFindMeFail);
 	}
+	else
+		mapsFindMeFail();
 }
 
 function addrFromLatLng(latLngPoint) {
 	geocoder.geocode({'latLng': latLngPoint}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
-			if (results[1]) {
-				$('#txtSearchAddress').val(results[1].formatted_address);
+			if (results[0]) {
+				$('#txtSearchAddress').val(results[0].formatted_address);
 				$('.hint').focus();
 				doSearch();
 			}
+			else
+				{
+				
+				alert("Geocoder failed due to: " + status);
+				}
 		} else {
 			alert("Geocoder failed due to: " + status);
 		}
@@ -243,8 +285,40 @@ function displaySearchCount(response) {
 	$( "#resultCount" ).fadeOut(function() { $( "#resultCount" ).html((numRows) + " " + name + " found"); } );
 	$( "#resultCount" ).fadeIn();
 }
+function map_setbounds(searchStr) {
+	var queryText = encodeURIComponent("SELECT Latitude,Longitude FROM 345328");
+	var query = new google.visualization.Query(
+			'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 
+	query.send(function(response) {
+		var numRows = response.getDataTable().getNumberOfRows();
 
+		// create the list of lat/long coordinates
+		var coordinates = [];
+		for (i = 0; i < numRows; i++) {
+			var lat = response.getDataTable().getValue(i, 0);
+			var lng = response.getDataTable().getValue(i, 1);
+			coordinates.push(new google.maps.LatLng(lat, lng));
+		}
+
+		var map = new google.maps.Map(document.getElementById('map-canvas'), {
+			mapTypeId : google.maps.MapTypeId.ROADMAP
+		});
+		var bounds = new google.maps.LatLngBounds();
+		for (var i = 0; i < coordinates.length; i++) {
+			bounds.extend(coordinates[i]);
+		}
+		map.fitBounds(bounds);
+
+		var layer = new google.maps.FusionTablesLayer({
+			query : {
+				select : 'Latitude',
+				from : 345328
+			}
+		});
+		layer.setMap(map);
+	});
+}
 function drawTable(searchStr) {
     // Construct query
 

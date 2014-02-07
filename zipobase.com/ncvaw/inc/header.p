@@ -25,6 +25,9 @@
   
 <div id="wrapper">
 <a href="/"><img style="float: left" src="/img/NCVAW_logo.png" alt="North Carolina Voters for Animal Welfare"></a>
+<span style="	font-size: 30px;">2014 ELECTION CENTRAL</h1>
+</span>
+
 <div style="float: right"><small style="color:#46a;font:">Follow us on Facebook</small>
 	<div style="display:block;padding:0;margin:0;" class="fb-like-box" data-href="http://www.facebook.com/ncvaw" data-width="300" data-height="70" data-colorscheme="light" data-show-faces="false" data-header="false" data-stream="false" data-show-border="false"></div>
 </div>
