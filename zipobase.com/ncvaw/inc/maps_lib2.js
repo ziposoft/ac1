@@ -3,7 +3,7 @@
  | Requires jQuery                                                  |
  +-------------------------------------------------------------------*/
 
-var map;
+var gMap;
 var geocoder;
 var addrMarker;
 var addrMarkerImage = 'blue-pushpin.png';
@@ -20,6 +20,8 @@ var goZoom = new Boolean(1);
 var setzoom = 0;
 var searchStr;
 var searchRadiusCircle;
+var district_state_house;
+var district_state_senate;
 
 google.load('visualization', '1', {}); //used for custom SQL call to get count
 
@@ -28,9 +30,7 @@ function mapreset() {
 	initialize();
 
 }
-
-function initialize() {
-	$( "#resultCount" ).html("");
+function map_init() {
 	
 	geocoder = new google.maps.Geocoder();
 	var raleigh = new google.maps.LatLng(35.487511,-79.782715);
@@ -39,13 +39,14 @@ function initialize() {
 		center: raleigh,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-	map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
+	gMap = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
 	
-	//$("#ddlRadius").val("3220");
+}
+function map_init_find_address() {
 	
-	//$("#cbType1").attr("checked", "checked");
-	//$("#cbType2").attr("checked", "checked");
-	//$("#cbType3").attr("checked", "checked");
+	map_init()
+	$( "#resultCount" ).html("");
+
 	
 	searchrecords = null;
 	var address=getCookie("address");
@@ -114,13 +115,13 @@ function doSearch(doZoom) {
 		    {
 		        console.log("found address: " + results[0].geometry.location.toString());
 		       
-		            map.setCenter(results[0].geometry.location);
-		            map.setZoom(14);
-		            //map.setZoom(9);
+		            gMap.setCenter(results[0].geometry.location);
+		            gMap.setZoom(14);
+		            //gMap.setZoom(9);
 		          
 				addrMarker = new google.maps.Marker({
 					position: results[0].geometry.location,
-					map: map,
+					map: gMap,
 					icon: addrMarkerImage,
 					animation: google.maps.Animation.DROP
 				});
@@ -134,18 +135,19 @@ function doSearch(doZoom) {
 				console.log(searchStr);
 				searchrecords = new google.maps.FusionTablesLayer(fusionTableId, { query: searchStr } );
 				
-				searchrecords.setMap(map);
+				searchrecords.setMap(gMap);
 				displayCount(searchStr);
+				map_setbounds(searchStr);
 				drawTable(searchStr);
 
-				var contentString = '<b>ADDRESS:</b><br>' + address;
+				var contentString = '<b>ADDRESS:</b>' + address;
 
 				var infowindow = new google.maps.InfoWindow({
     					content: contentString
 				});
 
 				google.maps.event.addListener(addrMarker, 'mouseover', function() {
-  					infowindow.open(map,addrMarker);
+  					infowindow.open(gMap,addrMarker);
 				});
 
 			} else {
@@ -157,7 +159,7 @@ function doSearch(doZoom) {
 		console.log(searchStr);
 		searchrecords = new google.maps.FusionTablesLayer(fusionTableId, { query: searchStr } );
 		
-		searchrecords.setMap(map);
+		searchrecords.setMap(gMap);
 		//displayCount(searchStr);
 		//drawTable(searchStr);
 	}
@@ -172,9 +174,9 @@ function clearSearch() {
 
 function refreshrecords() {
 	if (searchrecords != null) {
-		searchrecords.setMap(map);
+		searchrecords.setMap(gMap);
 	} else {
-		records.setMap(map);
+		records.setMap(gMap);
 	}
 }
 
@@ -194,6 +196,7 @@ function geoFindMe() {
 
 		var foundLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 		addrFromLatLng(foundLocation);	
+		
 	  };
 
 	  function error() {
@@ -229,23 +232,29 @@ function mapsFindMe() {
 		mapsFindMeFail();
 }
 
-function addrFromLatLng(latLngPoint) {
-	geocoder.geocode({'latLng': latLngPoint}, function(results, status) {
-		if (status == google.maps.GeocoderStatus.OK) {
-			if (results[0]) {
-				$('#txtSearchAddress').val(results[0].formatted_address);
-				$('.hint').focus();
-				doSearch();
-			}
-			else
+function addrFromLatLng(latLngPoint) 
+{
+	geocoder.geocode({ 'latLng' : latLngPoint}, 
+		function(results, status) 
+		{
+			var address=0;
+			if (status == google.maps.GeocoderStatus.OK)
+			{
+				address=results[0]; /* TODO give more generic address to not freak people out */
+				if(!address)
+					address=results[0];
+				if (address) 
 				{
-				
-				alert("Geocoder failed due to: " + status);
-				}
-		} else {
-			alert("Geocoder failed due to: " + status);
+					$('#txtSearchAddress').val(address.formatted_address);
+					 $('.hint').focus();
+				} 
+			}
+			if(!address)
+				$('#txtSearchAddress').val('Cound not find address');
+			doSearch();
+			
 		}
-	});
+	);
 }
 
 function drawSearchRadiusCircle(point) {
@@ -255,7 +264,7 @@ function drawSearchRadiusCircle(point) {
 		strokeWeight: 1,
 		fillColor: "#4b58a6",
 		fillOpacity: 0.05,
-		map: map,
+		map: gMap,
 		center: point,
 		radius: parseInt(searchRadius)
 	};
@@ -286,54 +295,51 @@ function displaySearchCount(response) {
 	$( "#resultCount" ).fadeIn();
 }
 function map_setbounds(searchStr) {
-	var queryText = encodeURIComponent("SELECT Latitude,Longitude FROM 345328");
-	var query = new google.visualization.Query(
+	
+	
+    //var query = searchStr.replace("SELECT geometry ", "SELECT Latitude,Longitude");
+	
+	var queryText = encodeURIComponent(searchStr);
+	query = new google.visualization.Query(
 			'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 
-	query.send(function(response) {
+	query.send(function(response) 
+	{
 		var numRows = response.getDataTable().getNumberOfRows();
-
-		// create the list of lat/long coordinates
-		var coordinates = [];
-		for (i = 0; i < numRows; i++) {
-			var lat = response.getDataTable().getValue(i, 0);
-			var lng = response.getDataTable().getValue(i, 1);
-			coordinates.push(new google.maps.LatLng(lat, lng));
-		}
-
-		var map = new google.maps.Map(document.getElementById('map-canvas'), {
-			mapTypeId : google.maps.MapTypeId.ROADMAP
-		});
 		var bounds = new google.maps.LatLngBounds();
-		for (var i = 0; i < coordinates.length; i++) {
-			bounds.extend(coordinates[i]);
-		}
-		map.fitBounds(bounds);
-
-		var layer = new google.maps.FusionTablesLayer({
-			query : {
-				select : 'Latitude',
-				from : 345328
+		// create the list of lat/long coordinates
+	
+		for (i = 0; i < numRows; i++) {
+			var polygon = response.getDataTable().getValue(i, 0);
+			var a= polygon.search('<coordinates>');
+			var b=polygon.search('</coordinates>');
+			var c=polygon.substr(a+13,b-a-13);
+			var points=c.split(' ');
+			for (j = 0; j < points.length; j++) {
+				var p=points[j];
+				var ll=p.split(',');
+				var c=new google.maps.LatLng(Number(ll[1]),Number( ll[0]));
+				
+				bounds.extend(c);
+				
 			}
-		});
-		layer.setMap(map);
+			
+			
+			
+			
+		}
+
+
+		gMap.fitBounds(bounds);
+
+	
 	});
 }
 function drawTable(searchStr) {
     // Construct query
 
-    query = searchStr.replace("SELECT geometry ", "SELECT 'District' as District,'typedesc'");
+    var query = searchStr.replace("SELECT geometry ", "SELECT 'District' as District,'typedesc'");
 
-   // var query = "SELECT 'District' as District,'typedesc' FROM 1D2YQGiGiPPHfcIAAV6CxedB6eTP_Njqbrgq0z1E   WHERE geometry not equal to ''		AND ST_INTERSECTS(geometry, CIRCLE(LATLNG(35.824523, -78.780505),200))";
-
-
-
- 
-    /*
-    var team = document.getElementById('team').value;
-    if (team) {
-        query += " WHERE 'Scoring Team' = '" + team + "'";
-    }	*/
     var queryText = encodeURIComponent(query);
     var gvizQuery = new google.visualization.Query(
         'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
@@ -364,13 +370,42 @@ function drawTable(searchStr) {
             var chamber=response.getDataTable().getValue(i, 1);
             var district=response.getDataTable().getValue(i, 0);
             if(chamber=='House')
+            	{
+            	setCookie("dist_state_house",district);
             	chamber='H';
+            	}
             else
+            	{
+            	setCookie("dist_state_senate",district);
             	chamber='S';
+            	}
             
             get_legislator(chamber,district);
         }
        // ftdata.push('</tbody></table>');
         //document.getElementById('ft-data').innerHTML = ftdata.join('');
     });
+}
+
+
+
+function map_show_district(chamber, district) {
+
+	
+
+	
+	searchStr = "SELECT geometry FROM " + fusionTableId + " WHERE District = "+district+" AND type =";
+	
+	//-----filter by type-------
+	//remove this if you don't have any types to filter
+	
+	//best way to filter results by a type is to create a 'type' column and assign each row a number (strings work as well, but numbers are faster). then we can use the 'IN' operator and return all that are selected
+
+	if (chamber=='S') { searchStr += "2"; } // senate
+	if (chamber=='H') { searchStr += "3"; } // house
+
+	searchrecords = new google.maps.FusionTablesLayer(fusionTableId, { query: searchStr } );
+	searchrecords.setMap(gMap);
+	map_setbounds(searchStr);
+
 }
