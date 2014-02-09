@@ -39,7 +39,21 @@
 -->
   	
 <?php
+$dist_state_house_menu=0;
+$dist_state_senate_menu=0;
 
+if($dist_state_house)
+{
+	$dist_state_house_menu=z_mbi("Your House District #".$dist_state_house,"/guide/district.php?ch=H&dist=$dist_state_house","","");
+	
+}
+if($dist_state_senate)
+{
+
+	$dist_state_senate=z_mbi("Your Senate District #".$dist_state_senate,"/guide/district.php?ch=S&dist=$dist_state_senate","","");
+	
+
+}
 make_menu([
 	z_menu("About",[
 		z_mi("About Us","/about/aboutus.html","HOME"),
@@ -48,7 +62,10 @@ make_menu([
 
 		
 	z_menu("News",[]),
-	z_mbi("Donate","/about/donate.html","Support Animal Welfare in NC"),
+	z_mbi("Donate","/about/donate.html","Support Animal Welfare in NC",0),
+	
+	$dist_state_house_menu,$dist_state_senate,
+	
 	
 
 	z_menu("Get Involved",[

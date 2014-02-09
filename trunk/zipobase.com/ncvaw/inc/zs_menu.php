@@ -28,18 +28,20 @@ class zs_menubar_item  {
 	var $link;
 	var $help;
 	var $text;
-	public function __construct($text,$link,$help) {
+	var $id;	
+	public function __construct($text,$link,$help,$id) {
+		$this->id=$id;		
 		$this->text=$text;
 		$this->link=$link;
 		$this->help=$help;
 	}
 	public function out() {
 		//echo("<td class='menu_bar_item' ><a class='zs_menu_link' href='$this->link' >$this->text</a></td>");
-		echo("<li class='menu_bar_item' ><a class='zs_menu_item' href='$this->link' >$this->text</a></li>");
+		echo("<li class='menu_bar_item' id='$this->id'><a class='zs_menu_item' href='$this->link' >$this->text</a></li>");
 		
 	}
 }
-function z_mbi($text,$link,$help) { return new zs_menubar_item($text,$link,$help); }
+function z_mbi($text,$link,$help,$id) { return new zs_menubar_item($text,$link,$help,$id); }
 
 class zs_menu extends zs_menu_base {
 	public $items; // array
@@ -49,7 +51,8 @@ class zs_menu extends zs_menu_base {
 	}
 	public function out_ch() {
 		foreach ( $this->items as $item ) {
-			$item->out ();
+			if($item)
+				$item->out ();
 		}
 	}
 	public function out() {
