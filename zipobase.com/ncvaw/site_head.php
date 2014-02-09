@@ -31,7 +31,9 @@ $detect = new Mobile_Detect;
 $isPhone = ($detect->isMobile() && (!$detect->isTablet()));
 $deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
 
+/*
 $isPhone=getParam("m");
+
 $isPhone=0;
 if($isPhone)
 {
@@ -43,11 +45,12 @@ else
     $header=$root.'/inc/header.p';
     $footer=$root.'/inc/footer.p';
 }
-
-
+*/
+$header=$root.'/inc/header.p';
+$footer=$root.'/inc/footer.p';
 $dist_state_senate=getCookie('dist_state_senate');
 $dist_state_house=getCookie('dist_state_house');
-
+$debug=getCookie('debug');
 
 
 ?>
