@@ -24,8 +24,8 @@
 	?>
   
 <div id="wrapper">
-<a href="/"><img style="float: left" src="/img/NCVAW_logo.png" alt="North Carolina Voters for Animal Welfare"></a>
-<span style="	font-size: 30px;">2014 ELECTION CENTRAL</h1>
+<a href="http://www.ncvaw.org/"><img style="float: left" src="/img/NCVAW_logo.png" alt="North Carolina Voters for Animal Welfare"></a>
+<span style="color:#46a;font-size: 30px;">2014 ELECTION CENTRAL</h1>
 </span>
 
 <div style="float: right"><small style="color:#46a;font:">Follow us on Facebook</small>
@@ -60,8 +60,7 @@ make_menu([
 		z_mi("Who We Are","/about/who.html","MAP"),
 		z_mi("Contact","/about/contact.html","MAP")]),
 
-		
-	z_menu("News",[]),
+	z_mbi("News","http://www.ncvaw.org/news/","Support Animal Welfare in NC",0),
 	z_mbi("Donate","/about/donate.html","Support Animal Welfare in NC",0),
 	
 	$dist_state_house_menu,$dist_state_senate,
