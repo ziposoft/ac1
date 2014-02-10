@@ -38,7 +38,7 @@ box-sizing: border-box;
 
 .zs_menu_bar li
 {
-	display: inline-block;	
+	
 	border-right: 1px groove White;	
 	
 }
@@ -50,15 +50,55 @@ box-sizing: border-box;
 	z-index: 1;
 
 }
-.zs_menu a,.zs_menu li
-{
-		display: block;	
-	
-}
 
 .zs_menu_item 
 {
 		display: list-item;	
-	
+
 }
 
+@media all and  (min-width: 600px) {
+	.zs_menu_bar >li
+	{
+	display: inline-block;	
+	}	
+	
+	.zs_menu_bar 
+	{
+		width:100%;	
+		display: block;	
+		clear: both;
+	}
+.zs_menu a,.zs_menu li
+{
+		display: block;	
+		
+}
+
+
+}
+
+@media all and  (max-width: 600px) {
+	.zs_menu_bar >li
+	{
+	    z-index: 10;
+	    position: relative;
+		display: block;		
+	}
+	.zs_menu_item 
+	{
+	    z-index: 12;
+	    position: absolute;	
+	    display: block;	
+	    width: 100%;
+	}	
+	.zs_menu, .zs_menu_sub
+	{
+	
+		position: absolute;
+		z-index: 12;
+	
+	}	
+	
+	
+}
