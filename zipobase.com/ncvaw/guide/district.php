@@ -21,8 +21,19 @@ include $root.'/inc/ncleg.php';
 
 	<div id="page" style="clear: both; margin: auto; padding: 10px 20px 0 20px; height: 90%;">
 	<div id="map_canvas" style="display:inline;float:right;height: 300px; width:500px;"  ></div>
-	<h1>Who represents me?</h1>
+	<h1><?php 
+	echo(($chamber=='H' ? 'House' : 'Senate') . ' District #' . $district);
 	
+
+		?>
+	</h1>
+<?php 
+ 
+$leglist=new leg_list();
+
+$leglist->get_list ($chamber,$district  );
+$leglist->print_list ();
+?>	
 	
 	</div>
 
