@@ -1,10 +1,11 @@
 DirectoryIndex home.html
 Options -MultiViews
 # Use PHP54CGI as default
-AddHandler fcgid54-script .php .html 
+#AddHandler fcgid54-script .php .html 
 
-#MacOSX
+#MacOS
 AddType application/x-httpd-php .php .html
+
 
 
 #AddHandler x-httpd-php .html .htm .css
