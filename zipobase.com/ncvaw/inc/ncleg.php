@@ -265,7 +265,34 @@ function get_vote_data()
 	return $g_vote_data;
 }
 
+class districts extends data_source
+{
+	public $list;
+	public function __construct() {
+		$this->get_data(4);
+		$this->list=array();
+		foreach ( $this->rows as $row )
+		{
+			$doc =$row->{	'gsx$doc' }->{'$t' };
+			$this->list [$doc] = new bill ( $row );
+		}		
+	}	
+	public function get_bill($doc)
+	{
 
+		return $this->list [$doc];
+	}
+	public function print_bills()
+	{
+		echo "<table class='bills'>";
+		foreach ( $this->list as $bill )
+		{
+			$bill->print_tr();
+		}
+		echo "</table>";	
+		
+	}	
+}
 class bill_list extends data_source
 {
 	public $list;
