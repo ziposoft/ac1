@@ -1,8 +1,24 @@
 <?php
 
-$g_bill_list=0;
-$g_vote_data=0;
-$g_leg_list=0;
+
+$obj_array=array();
+
+function getobj($type) {
+	global $obj_array;
+	if(!array_key_exists($type,$obj_array))
+	{
+		if (class_exists($type)) {
+			$obj_array[$type]= new $type();
+		}
+		else {
+			throw new Exception("Invalid product type given.");
+		}
+
+	}
+	return $obj_array[$type];
+}
+
+
 $refresh_data=array_key_exists ( "refresh", $_GET );
 
 function getj(&$row,$id)
@@ -57,7 +73,7 @@ class vote extends json_obj{
 		$doc= $this->get('doc');
 		$vote= $this->get('vote');	
 
-		$bill=get_bill_list()->get_bill($doc);
+		$bill=getobj("bill_list")->get_bill($doc);
 		if($vid)
 		{
 			if(!(($vid==$bill->svid)||($vid==$bill->hvid)))
@@ -233,7 +249,7 @@ class vote_data extends data_source
 					echo (", ");
 					
 				$mid= $row->{	'gsx$mid' }->{'$t' };
-				$leg=get_leg_list()->get_leg_by_id($mid);
+				$leg=getobj("leg_list")->get_leg_by_id($mid);
 				if($leg)
 				echo "<a href='/guide/legpage.php?id=$leg->id'>$leg->name</a>";
 				
@@ -257,41 +273,33 @@ class vote_data extends data_source
 		}
 	}	
 }
-function get_vote_data()
-{
-	global $g_vote_data;
-	if(!$g_vote_data)
-		$g_vote_data=new vote_data();
-	return $g_vote_data;
+class district extends json_obj{
+	public function __construct($data_in) {
+		$this->data = $data_in;
+	}	
+
 }
 
 class districts extends data_source
 {
-	public $list;
 	public function __construct() {
 		$this->get_data(4);
 		$this->list=array();
-		foreach ( $this->rows as $row )
-		{
-			$doc =$row->{	'gsx$doc' }->{'$t' };
-			$this->list [$doc] = new bill ( $row );
-		}		
-	}	
-	public function get_bill($doc)
-	{
-
-		return $this->list [$doc];
-	}
-	public function print_bills()
-	{
-		echo "<table class='bills'>";
-		foreach ( $this->list as $bill )
-		{
-			$bill->print_tr();
-		}
-		echo "</table>";	
 		
 	}	
+	public function get($ch,$num)
+	{
+
+		foreach ( $this->rows as $row )
+		{
+			if( (getj($row,'district')==$num) &&(getj($row,'chamber')==$ch))
+			{
+				return new district($row);
+			}	
+			
+		}
+		return 0;
+	}
 }
 class bill_list extends data_source
 {
@@ -322,13 +330,6 @@ class bill_list extends data_source
 	}	
 }
 
-function get_bill_list()
-{
-	global $g_bill_list;
-	if(!$g_bill_list)
-		$g_bill_list=new bill_list();
-	return $g_bill_list;
-}
 class legislator extends json_obj{
 	
 	public $name;
@@ -359,12 +360,12 @@ class legislator extends json_obj{
 	}	
 	public function print_list_votes() 
 	{
-		get_vote_data()->print_list_votes($this->id,0);
+		getobj("vote_data")->print_list_votes($this->id,0);
 
 	}
 	public function print_list_sponsorship()
 	{
-		get_vote_data()->print_list_votes($this->id,1);
+		getobj("vote_data")->print_list_votes($this->id,1);
 	
 	}	
 	public function print_table_val($label, $field) {
@@ -474,13 +475,6 @@ class leg_list extends data_source{
 		ksort ( $this->list );
 		return $this->list;
 	}
-}
-function get_leg_list()
-{
-	global $g_leg_list;
-	if(!$g_leg_list)
-		$g_leg_list=new leg_list();
-	return $g_leg_list;
 }
 
 

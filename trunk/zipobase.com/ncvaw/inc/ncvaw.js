@@ -22,3 +22,33 @@ function getCookie(c_name) {
     }
     return null;
 }
+
+var drag_startX=0;
+function dragstart(ev)
+{
+//ev.dataTransfer.setData("Text",ev.target.id);
+
+	drag_startX=ev.offsetX;
+	
+if (console) console.log("offsetX %d Y %d", ev.offsetX, ev.offsetY);
+}
+
+function dragend(ev)
+{
+	var offset=Math.abs(drag_startX-ev.offsetX);
+	var perc=offset*100/screen.width;
+	
+//ev.dataTransfer.setData("Text",ev.target.id);
+	if (console) console.log("offsetX %d  %d", offset, perc);
+	if(perc>20)
+		{
+		
+		window.location ="/"
+		}
+	
+
+
+
+
+
+}
