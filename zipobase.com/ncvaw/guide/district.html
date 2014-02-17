@@ -16,7 +16,9 @@ include $root.'/inc/ncleg.php';
 ?>
 
 
-	<div id="page" style="clear: both; margin: auto; padding: 10px 20px 0 20px; height: 90%;">
+	<div id="page"
+	draggable="true" ondragstart="dragstart(event)" ondragend="dragend(event)"
+	 style="clear: both; margin: auto; padding: 10px 20px 0 20px; height: 90%;">
 	<div id="map_canvas" style="display:inline;float:right;height: 300px; width:500px;"  ></div>
 	<h1>Who represents me?</h1>
 	<div>Please type in your <b>FULL</b> address below to find your districts. </div>
