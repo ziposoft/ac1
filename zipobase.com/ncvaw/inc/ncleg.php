@@ -273,6 +273,38 @@ class vote_data extends data_source
 		}
 	}	
 }
+
+class canidate extends json_obj{
+	public function __construct($data_in) {
+		$this->data = $data_in;
+	}
+
+}
+
+class canidates extends data_source
+{
+	public function __construct() {
+		$this->get_data(5);
+		$this->list=array();
+		
+	}	
+	public function get($ch,$num)
+	{
+		$set=array();
+		foreach ( $this->rows as $row )
+		{
+			if( (getj($row,'district')==$num) &&(getj($row,'chamber')==$ch))
+			{
+				$set [] = new canidate ( $row );
+				
+			}	
+			
+		}
+		return $set;
+	}
+}
+
+
 class district extends json_obj{
 	public function __construct($data_in) {
 		$this->data = $data_in;
@@ -294,6 +326,7 @@ class districts extends data_source
 		{
 			if( (getj($row,'district')==$num) &&(getj($row,'chamber')==$ch))
 			{
+				
 				return new district($row);
 			}	
 			
