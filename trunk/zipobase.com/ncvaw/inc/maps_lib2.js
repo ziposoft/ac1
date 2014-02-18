@@ -382,6 +382,7 @@ function drawTable(searchStr) {
             
             get_legislator(chamber,district);
         }
+        ncvaw_init_your_district_menu();
        // ftdata.push('</tbody></table>');
         //document.getElementById('ft-data').innerHTML = ftdata.join('');
     });

@@ -7,7 +7,7 @@ list-style: none;
 box-sizing: border-box;	
 	
 }
-ul.zs_menu_hide
+.zs_menu_hide
 {
 	display: none;	
 }

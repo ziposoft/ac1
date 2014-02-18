@@ -49,8 +49,7 @@ else
 */
 $header=$root.'/inc/head.php';
 $footer=$root.'/inc/foot.php';
-$dist_state_senate=getCookie('dist_state_senate');
-$dist_state_house=getCookie('dist_state_house');
+
 $admin=getParam('admin');
 if($admin)
 {
