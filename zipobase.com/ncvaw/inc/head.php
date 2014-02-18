@@ -39,21 +39,7 @@
 -->
   	
 <?php
-$dist_state_house_menu=0;
-$dist_state_senate_menu=0;
 $menu_admin=0;
-if($dist_state_house)
-{
-	$dist_state_house_menu=z_mbi("Your House District #".$dist_state_house,"/guide/district.php?ch=H&dist=$dist_state_house","","");
-	
-}
-if($dist_state_senate)
-{
-
-	$dist_state_senate=z_mbi("Your Senate District #".$dist_state_senate,"/guide/district.php?ch=S&dist=$dist_state_senate","","");
-	
-
-}
 
 if($admin)
 {
@@ -76,9 +62,10 @@ make_menu([
 		z_mi("Contact","/about/contact.html","MAP")
 		]),	
 		
-	z_menu("Your Districts",[		
-		z_mbi("Your Senate District #","","","z_mi_dist_senate"),
-		z_mbi("Your House District #","","","z_mi_dist_house"),],"z_mi_dist_your"),
+	z_menu("Your Districts",[	
+	    z_mi("Find your district","/guide/find.html",""),
+		z_mi(null,"","","z_mi_dist_senate"),
+		z_mi(null,"","","z_mi_dist_house"),]),
 	
 	
 

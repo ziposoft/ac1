@@ -6,9 +6,10 @@ function z_out_ch(&$str,$items) {
 			$str .=$item;
 	}
 }
-function z_mi($text,$link,$help=null) 
+function z_mi($text,$link,$help=null,$id=null) 
 { 
-	return "<li class='zs_menu_item' ><a class='zs_menu_item' href='$link' >$text</a></li>";
+	
+	return "<li  id='$id' class='zs_menu_item " . ($text==null? 'zs_menu_hide':'') ."' ><a class='zs_menu_item' href='$link' >$text</a></li>";
 }
 
 function z_mbi($text,$link,$help=null,$id=null) {
@@ -17,11 +18,9 @@ function z_mbi($text,$link,$help=null,$id=null) {
  }
  function z_menu($text,$items,$id=null)
  {
- 	$str="<li class='zs_menutop'";
- 	if($id)
- 		$str.="id='$id' style='display:none;'";
+ 	$str="<li class='" . ($text==null? 'zs_menu_hide':'zs_menutop');
  		
- 	$str.="onmouseover='zs.menu.show(this,event);' onmouseout='zs.menu.hide(this,event);'>
+ 	$str.="' id='$id' onmouseover='zs.menu.show(this,event);' onmouseout='zs.menu.hide(this,event);'>
  			<a class='zs_menu_link' >$text</a><ul class='zs_menu_hide'>";
  	z_out_ch($str,$items);
  	$str.="</ul></li>";
