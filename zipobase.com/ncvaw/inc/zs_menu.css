@@ -1,5 +1,5 @@
 
-.zs_menu_bar,.zs_menu, .zs_menu_sub,.zs_menu_bar
+.zs_menu_bar,.zs_menu_show, .zs_menu_sub
 {
 margin: 0;
 padding: 0;
@@ -7,14 +7,23 @@ list-style: none;
 box-sizing: border-box;	
 	
 }
+ul.zs_menu_hide
+{
+	display: none;	
+}
+ul.zs_menu_show
+{
+	clear: both;
+	position: absolute;
+	display: none; 
+	z-index: 10;
+	border: 1px groove White;		
+}
+
 .zs_menu_bar
 {
-	width:100%;
 	display: block;	
-	clear: both;
-	box-sizing: border-box;	
 	background-color: #68c;	
-	
 }
 .zs_menu_bar a:hover
 {
@@ -33,48 +42,41 @@ box-sizing: border-box;
 	border-spacing: 0px;
 	text-align: left;	
 	padding: 10px;	
-	display: inline-block;		
+	display: inline-block;	
+	box-sizing: border-box;		
 }
 
 .zs_menu_bar li
 {
-	
 	border-right: 1px groove White;	
-	
 }
-.zs_menu, .zs_menu_sub
+.zs_menu_show > li
 {
-	clear: both;
-	position: absolute;
-	display: none; 
-	z-index: 10;
-
+	box-sizing: border-box;	
 }
 
-.zs_menu_item 
+.zs_menu_show  a
 {
-		display: list-item;	
-
+	width:100%;	
 }
+
 
 @media all and  (min-width: 600px) {
 	.zs_menu_bar >li
 	{
 	display: inline-block;	
 	}	
-	
-	.zs_menu_bar 
+	ul.zs_menu_show
 	{
-		width:100%;	
+		display: block;	
+	}	
+	.zs_menu_bar
+	{
+		width:100%;
 		display: block;	
 		clear: both;
+		background-color: #68c;	
 	}
-.zs_menu a,.zs_menu li
-{
-		display: block;	
-		
-}
-
 
 }
 
@@ -88,13 +90,11 @@ box-sizing: border-box;
 	}	
 	.zs_menu_item 
 	{
-	 width:100%;	 
-	}	
-	.zs_menu
-	{
-	display: inline-block;	
-		
 	
+	}	
+	ul.zs_menu_show
+	{
+		display:inline-block;	
 	}			
 	.zs_menu_sub
 	{

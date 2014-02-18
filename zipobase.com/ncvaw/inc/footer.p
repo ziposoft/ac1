@@ -14,6 +14,11 @@
 ?>
 
 <script>
-//set_href();
+jQuery(document).ready(function () 
+		{
+		<?php 
+		foreach ( $funcs_init as $item ) {echo("$item;");	}	
+		?>
+		});
 </script>
 </html>

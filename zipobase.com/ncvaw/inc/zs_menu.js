@@ -9,7 +9,7 @@
         function hide(elm, ev) {
             if (
                 (ev.target.className == 'zs_menutop') ||
-                (ev.target.className == 'zs_menu') ||
+                (ev.target.className == 'zs_menu_show') ||
                 (ev.target.className == 'zs_menu_sub') ||
                 (ev.target.className == 'zs_menu_item') ||
               
@@ -18,7 +18,7 @@
                 var lists = elm.getElementsByTagName('ul');
 
                 if (lists.length > 0) {
-                    lists[0].style.display = "none";
+                    lists[0].className = "zs_menu_hide";
                     //  if(console)  console.log("hide %s %d %s ",elm.className,count++, ev.target.className);
                 }
             }
@@ -30,7 +30,7 @@
 
             var lists = elm.getElementsByTagName('ul');
             if (lists.length > 0) {
-            		lists[0].style.display = "block";
+            	lists[0].className = "zs_menu_show";
             }
         }
         function hide_sub(elm, ev) {

@@ -41,6 +41,9 @@ $leglist=new leg_list();
 
 $leglist->get_list ($chamber,$district  );
 $leglist->print_list ();
+
+$canidates=getobj('canidates')->getlist($chamber,$district);
+
 ?>	
 	
 	</div>
