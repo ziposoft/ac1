@@ -25,9 +25,9 @@ var district_state_senate;
 
 google.load('visualization', '1', {}); //used for custom SQL call to get count
 
-function mapreset() {
+function map_reset() {
 	setCookie("address","");
-	initialize();
+	map_init_find_address();
 
 }
 function map_init() {
@@ -180,7 +180,7 @@ function refreshrecords() {
 	}
 }
 
-function geoFindMe() {
+function map_geoFindMe() {
 	  var output = document.getElementById("map_find_msg");
 
 	  if (!navigator.geolocation){

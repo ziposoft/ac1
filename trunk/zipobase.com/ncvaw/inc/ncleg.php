@@ -288,7 +288,7 @@ class canidates extends data_source
 		$this->list=array();
 		
 	}	
-	public function get($ch,$num)
+	public function getlist($ch,$num)
 	{
 		$set=array();
 		foreach ( $this->rows as $row )

@@ -1,3 +1,19 @@
+
+
+function ncvaw_init() 
+{
+	
+	var dist_state_senate=getCookie('dist_state_senate');
+	var dist_state_house=getCookie('dist_state_house');	
+	if(dist_state_senate)
+		{
+		
+		}
+	
+
+}
+
+
 function setCookie(c_name, value) {
     var exdays = 999;
     var exdate = new Date();
@@ -30,7 +46,7 @@ function dragstart(ev)
 
 	drag_startX=ev.offsetX;
 	
-if (console) console.log("offsetX %d Y %d", ev.offsetX, ev.offsetY);
+	if (console) console.log("offsetX %d Y %d", ev.offsetX, ev.offsetY);
 }
 
 function dragend(ev)
@@ -45,10 +61,4 @@ function dragend(ev)
 		
 		window.location ="/"
 		}
-	
-
-
-
-
-
 }

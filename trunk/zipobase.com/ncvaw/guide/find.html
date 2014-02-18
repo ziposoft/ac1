@@ -8,8 +8,7 @@ array_push($zs_foot_jsfile,
 
 	"/inc/maps_lib2.js");
 
-array_push($zs_foot_script,
-	"jQuery(document).ready(function () {map_init_find_address();	});");
+array_push($funcs_init,"map_init_find_address()");
 
 include $header;
 include $root.'/inc/ncleg.php';
@@ -37,8 +36,8 @@ include $root.'/inc/ncleg.php';
 	
 				<div class='clear'></div>
 	
-				<input class="btn" type="button" id="" value="Auto-locate" onclick="geoFindMe(); return false;" />
-				<input class="btn" type="button" id="" value="Clear" onclick="mapreset(); return false;" />
+				<input class="btn" type="button" id="" value="Auto-locate" onclick="map_geoFindMe(); return false;" />
+				<input class="btn" type="button" id="" value="Clear" onclick="map_reset(); return false;" />
 			     <input class="btn" type="button" id="btnSearch" value="Search" onclick="doSearch(goZoom);" />				
 				</form>
 				<p id="map_find_msg"></p>

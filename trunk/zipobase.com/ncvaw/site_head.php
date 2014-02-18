@@ -4,13 +4,14 @@
 $zs_foot_jsfile=["/inc/jquery.js","/inc/ncvaw.js","/inc/zs_menu.js"];
 $zs_head_jsfile=array();
 $zs_foot_script=array();
-
+$funcs_init=["ncvaw_init()"];
 function getCookie( $name)
 {
 	if(array_key_exists($name,$_COOKIE))
 		return $_COOKIE[$name];
 	return 0;
 }
+
 function getParam( $name)
 {
 	if(array_key_exists($name,$_GET))
@@ -46,11 +47,29 @@ else
     $footer=$root.'/inc/footer.p';
 }
 */
-$header=$root.'/inc/header.p';
-$footer=$root.'/inc/footer.p';
+$header=$root.'/inc/head.php';
+$footer=$root.'/inc/foot.php';
 $dist_state_senate=getCookie('dist_state_senate');
 $dist_state_house=getCookie('dist_state_house');
-$debug=getCookie('debug');
+$admin=getParam('admin');
+if($admin)
+{
+	if($admin=='on')
+	{
+		setcookie('admin','on');
+	}	
+	if($admin=='off')
+	{
+		setcookie('admin');
+		$admin=0;
+	}	
+}
+else
+{
+	$admin=getCookie('admin');
+}
+
+
 
 
 ?>

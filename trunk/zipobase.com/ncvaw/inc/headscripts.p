@@ -32,17 +32,3 @@
   ga('send', 'pageview');
 </script>
 
- <?php
-function faq($question,$answer)
-{
-    echo("<p class='faq'><table>
-    <tr><td class='faq_bullet'>Q: </td><td class='faq_text' style='font-style:italic'>$question</td></tr>
-    <tr><td class='faq_bullet'>A: </td><td class='faq_text'>$answer</td></tr></table></p>");
-}
-
-function media_link($photo,$date,$source,$link,$title)
-{
-    echo("<div  style='margin:5px;padding:15px;border-top:solid 3px #aaa;display:block;clear:both' >
-    <a   target='_blank' href='$link'><img style='margin-right:5px; width:200px;float:left;' src='$photo'/></a><p>$date</p><p>$source</p><p ><a  target='_blank' href='$link'>$title</a></p></div>");
-}
- ?> 
