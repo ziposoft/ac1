@@ -55,12 +55,6 @@ make_menu([
 
 	z_mbi("News","http://www.ncvaw.org/news/","Support Animal Welfare in NC",0),
 	z_mbi("Donate","/about/donate.html","Support Animal Welfare in NC",0),
-	
-	z_menu("About",[
-		z_mi("About Us","/about/aboutus.html","HOME"),
-		z_mi("Who We Are","/about/who.html","MAP"),
-		z_mi("Contact","/about/contact.html","MAP")
-		]),	
 		
 	z_menu("Your Districts",[	
 	    z_mi("Find your district","/guide/find.html",""),

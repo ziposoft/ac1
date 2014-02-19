@@ -19,25 +19,18 @@ if (array_key_exists ( "doc", $_GET ))
 $bill=$list->get_bill ($doc  );
 $bill->print_page ();
 $votes=getobj("vote_data");
-?>
-<h3>Primary Sponsors</h3>
-<?php $votes->print_bill_votes( $bill->doc,'psp',0); ?>
-<h3>Sponsors</h3>
-<?php $votes->print_bill_votes( $bill->doc,'sp',0);
+$votes->print_bill_votes("Primary Sponsors", $bill->doc,'psp',0); 
+$votes->print_bill_votes( "Sponsors",$bill->doc,'sp',0);
 if($bill->svid)
 {
-	echo("<h3>Senate Votes For</h3>");
-	$votes->print_bill_votes( $bill->doc,'Aye',$bill->svid);
-	echo("<h3>Senate Votes Against</h3>");
-	$votes->print_bill_votes( $bill->doc,'No',$bill->svid);
+	$votes->print_bill_votes("Senate Votes For", $bill->doc,'Aye',$bill->svid);
+	$votes->print_bill_votes("Senate Votes Against", $bill->doc,'No',$bill->svid);
 		
 }
 if($bill->hvid)
 {
-	echo("<h3>House Votes For</h3>");
-	$votes->print_bill_votes( $bill->doc,'Aye',$bill->hvid);
-	echo("<h3>House Votes Against</h3>");
-	$votes->print_bill_votes( $bill->doc,'No',$bill->hvid);
+	$votes->print_bill_votes("House Votes For", $bill->doc,'Aye',$bill->hvid);
+	$votes->print_bill_votes("House Votes Against", $bill->doc,'No',$bill->hvid);
 
 }
 ?>

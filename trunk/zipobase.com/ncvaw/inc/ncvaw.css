@@ -125,7 +125,15 @@ h4 {
 }
 
 h5 {
-	font-size: 30px
+	font-size: 20px;
+
+	/* text-decoration: underline;;
+	
+	*/
+	text-transform: uppercase;	
+	color: #68c;
+	padding: 10px 0 0 0;
+	margin:10px 0 0 0;
 }
 
 

@@ -228,11 +228,15 @@ class vote_data extends data_source
 		}
 		return $list;
 	}	
-	public function print_bill_votes($doc,$vote,$vid) {
+	public function print_bill_votes($title,$doc,$vote,$vid) {
 	
 	
 		//echo "<table class='votes'>";
 		$comma=0;
+		$uid=$doc.$vote.$vid;
+		$display='block';
+		
+		$list=array();
 		foreach ( $this->rows as $row )
 		{
 			if($vid && ($vid!=getj( $row,'vid')))
@@ -240,23 +244,29 @@ class vote_data extends data_source
 			if(($doc ==getj( $row,'doc'))&&
 				($vote==getj( $row,'vote'))
 				)
-				
-			
 			{
-				
-				
-				if($comma)
-					echo (", ");
-					
 				$mid= $row->{	'gsx$mid' }->{'$t' };
 				$leg=getobj("leg_list")->get_leg_by_id($mid);
 				if($leg)
-				echo "<a href='/guide/legpage.php?id=$leg->id'>$leg->name</a>";
-				
-				$comma=1;
+					$list[]=$leg;
 			}
 		}
-		//echo "</table>";
+		$count=count($list);
+		if($count>6)
+			$display='none';
+		echo("<h5>$title:<a onclick='togglehide(\"$uid\")'>($count)</a></h5><div id='$uid' style='display:$display'>");
+		
+		
+		
+		foreach ( $list as $leg )
+		{
+		
+			if($comma)
+				echo (", ");
+			echo "<a href='/guide/legpage.php?id=$leg->id'>$leg->name</a>";
+			$comma=1;
+		}
+		echo("</div>");
 	}	
 	public function print_list_votes($legid,$sponsors) {
 
@@ -275,8 +285,35 @@ class vote_data extends data_source
 }
 
 class canidate extends json_obj{
+	public $displayname;
+
 	public function __construct($data_in) {
 		$this->data = $data_in;
+		$this->displayname=$this->get('nameonballot');
+	}
+	public function print_table_val($label, $field) {
+		$val = $this->data->{	'gsx$' . $field }->{'$t' };
+		if(!$val)
+			return;
+		$this->print_table_row ( $label, $val );
+	}	
+	public function print_table_row($label, $val) {
+		echo "<tr><td class='leg_info_label'>$label: </td><td class='leg_info_val'>$val</td></tr>";
+	}	
+	public function print_list_row() {
+	
+		echo "<tr ><td class='leg_thumb' >";
+		echo "<a href=''>";
+		echo "<img src=''/></a>";
+		echo "</td><td class='leg_info' ><a href=''><h2> $this->displayname</h2></a><table>";
+	
+		$this->print_table_val ( 'District', 'district' );
+		$this->print_table_val ( 'Party', 'party' );
+				//$this->print_table_val ( 'Counties', 'county' );
+				//$this->print_table_val ( 'Email', 'email' );
+				//$this->print_table_val ( 'Phone', 'phone' );
+		echo '</table>';
+		echo '</td></tr>';	
 	}
 
 }
@@ -302,7 +339,28 @@ class canidates extends data_source
 		}
 		return $set;
 	}
+	
+	public function printlist($ch,$num=null)
+	{
+		echo "<table class='tbl_leglist' >";
+	
+		foreach ( $this->rows as $row )
+		{
+			
+			if(getj($row,'chamber')==$ch)
+				if( getj($row,'district')==$num)
+				{
+					$x = new canidate ( $row );
+					$x->print_list_row();
+					
+					
+				}	
+			
+		}
+		echo '</table>';
+	}	
 }
+
 
 
 class district extends json_obj{
