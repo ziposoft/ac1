@@ -26,11 +26,16 @@ function setCookie(c_name, value) {
 	exdate.setDate(exdate.getDate() + exdays);
 	var c_value = escape(value)
 			+ ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
-	document.cookie = c_name + "=" + c_value;
+	document.cookie = c_name + "=" + c_value+"; path=/";
+	if(console)
+		console.log("setcookie %s %s",c_name,value);
 }
-function getCookie(c_name) {
+function getCookie(c_name) 
+{
+	var val=null;
 	var i, x, y, ARRcookies = document.cookie.split(";");
-	for (i = 0; i < ARRcookies.length; i++) {
+	for (i = 0; i < ARRcookies.length; i++) 
+	{
 		x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
 		y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
 		x = x.replace(/^\s+|\s+$/g, "");
@@ -40,10 +45,12 @@ function getCookie(c_name) {
 				val = 0;
 			if (val == 'true')
 				val = 1;
-			return val;
+			break;
 		}
 	}
-	return null;
+	if(console)
+		console.log("getCookie %s %s",c_name,val);	
+	return val;
 }
 
 var drag_startX = 0;
@@ -67,4 +74,11 @@ function dragend(ev) {
 
 		window.location = "/"
 	}
+}
+function togglehide(id) {
+	var e=$('#'+id);
+	if(e.css('display') =='none')
+		e.css('display','block');
+	else
+		e.css('display','none');
 }

@@ -5,6 +5,7 @@ margin: 0;
 padding: 0;
 list-style: none;	
 box-sizing: border-box;	
+-moz-box-sizing: border-box;	
 	
 }
 .zs_menu_hide
@@ -43,7 +44,8 @@ ul.zs_menu_show
 	text-align: left;	
 	padding: 10px;	
 	display: inline-block;	
-	box-sizing: border-box;		
+	box-sizing: border-box;	
+-moz-box-sizing: border-box;		
 }
 
 .zs_menu_bar li
