@@ -29,7 +29,7 @@ $next="/district.php?ch=$chamber&dist=$nextdist";
 	
 	style="clear: both; margin: auto; padding: 10px 20px 0 20px; height: 90%;">
 	<a href='<?php print $next; ?>'>Next District</a>
-	<div id="map_canvas" style="display:inline;float:right;height: 300px; width:500px;"  ></div>
+	<div id="map_canvas"   ></div>
 	<h1><?php 
 	echo(($chamber=='H' ? 'House' : 'Senate') . ' District #' . $district);
 	

@@ -1,23 +1,30 @@
-function ncvaw_init_your_district_menu() {
+function ncvaw_init_your_district_menu(cookie,menutext,id,ch) {
+	
+	var dist = getCookie(cookie);
 
-	var dist_state_senate = getCookie('dist_state_senate');
-	var dist_state_house = getCookie('dist_state_house');
-
-	if (dist_state_senate) {
-		var i=$('#z_mi_dist_senate');
+	if (dist) {
+		var i=$(id);
 		i.removeClass('zs_menu_hide');
-		$('#z_mi_dist_senate > a').text(
-				'Your Senate District #' + dist_state_senate);
-		$('#z_mi_dist_senate > a').attr('href',
-				'/district.php?ch=S&dist=' + dist_state_senate);
+		i=$(id+">a");
+		i.text(menutext + dist);
+		i.attr('href',
+				'/district.php?ch='+ch+'&dist=' + dist);
 	} else {
 
-		$('#z_mi_dist_senate').addClass('zs_menu_hide');
-	}
+		$(id).addClass('zs_menu_hide');
+	}	
+}
+
+function ncvaw_init_your_district_menus() {
+
+	ncvaw_init_your_district_menu('dist_state_senate','Your Senate District #','#z_mi_dist_senate','S')
+	ncvaw_init_your_district_menu('dist_state_house','Your House District #','#z_mi_dist_house','H')
+	
+
 }
 function ncvaw_init() {
 
-	ncvaw_init_your_district_menu();
+	ncvaw_init_your_district_menus();
 }
 
 function setCookie(c_name, value) {
