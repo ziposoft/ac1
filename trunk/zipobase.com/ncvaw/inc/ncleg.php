@@ -62,10 +62,47 @@ class data_source
 }
 
 class vote extends json_obj{
+	public $vid;	
+	public $doc;	
+	public $vote;	
+	public $score;	
+	public $grade; /* -1 bad vote, 0 neutral, 1 good */	
 	public function __construct($data_in)
 	{
 		$this->data = $data_in;
+		$this->vid=$this->get('vid');
+		$this->doc= $this->get('doc');
+		$this->vote= $this->get('vote');
 	}
+	public function get_score()
+	{
+		$bill=getobj("bill_list")->get_bill($this->doc);	
+		$this->grade=0;
+		if($this->vid)
+		{
+			if(!(($this->vid==$bill->svid)||($this->vid==$bill->hvid)))
+				return 0;
+		}		
+		if(($this->vote=='Aye') xor($this->vote=='No'))
+		{
+			if(($this->vote=='Aye') xor ($bill->stance=='pro'))
+				$this->grade=-1;
+			else
+				$this->grade=1;
+			return $this->grade;
+		}
+		
+		if(($this->vote=='psp') xor($this->vote=='sp'))
+		{
+			if($bill->stance=='anti')
+				$this->grade=-1;
+			else
+				$this->grade=1;
+			return $this->grade * 3;
+		}		
+		return $this->grade;
+	}
+	
 	public function print_vote_tr()
 	{
 	
@@ -123,16 +160,18 @@ class vote extends json_obj{
 			$vote='Did Not Vote';
 		echo "<td>";
 		if($picture) 
-			echo "<img style='width:60px' title='$title' src='/img/$picture'/>";
+			echo "<div class='$class'>$vote</div><img style='width:60px' title='$title' src='/img/$picture'/>";
 		
-		echo "</td><td><a href='/guide/billpage.php?doc=$doc'>$doc</a></td>";	
-		echo "<td><div><a href='/guide/billpage.php?doc=$doc'>$bill->official</a></div>";
+		echo "</td>";	
+		echo "<td><div><a href='/guide/billpage.php?doc=$doc'>$doc - $bill->official</a></div>";
 		echo "<div class='$class'>$title</div>";
 		if($bill->desc)
 			echo "<div>$bill->desc</div>";
-		echo "</td>";
-
 		
+		
+			/*echo "</td>";
+
+	
 		$title="Voted ".($vote=='Aye'? "for" :"against")." bill that ". $bill->effect; 
 	
 			
@@ -147,7 +186,7 @@ class vote extends json_obj{
 		{
 			echo "<img  title='$title' src='/img/check.png'/>";
 				
-		}		
+		}		*/
 		echo "</td></tr>";
 	}
 }
@@ -267,6 +306,20 @@ class vote_data extends data_source
 			$comma=1;
 		}
 		echo("</div>");
+	}	
+	public function get_votes($legid,&$list) {
+		$score=0;
+		foreach ( $this->rows as $row )
+		{
+			if($legid == getj($row,'mid'))
+			{
+				$v=new vote($row);
+				$list[]=$v;
+				$score+=$v->get_score();
+				
+			}
+		}
+		return $score;
 	}	
 	public function print_list_votes($legid,$sponsors) {
 
@@ -421,6 +474,45 @@ class bill_list extends data_source
 	}	
 }
 
+function get_grade($score,&$grade,&$color)
+{
+	$grades = [
+	 [ -3,"F","#F00"],
+	 [ -2,"D-","#C04"],	 
+	 [ -1,"D","#808"],
+	 [ 0,"C","#00F"],
+	 [ 1,"C+","#02E"],	 
+	 [ 2,"B","#088"],	 	
+	 [ 3,"B+","#0c8"],	  
+	 [ 4,"A-","#0c0"],
+	 [ 5,"A","#0c0"],	 
+ 	 [ 6,"A+","#0c0"],	 
+/*
+	-2 => "D-",
+	-1 => "D",
+	0 => "C",
+	1 => "C+",
+	2 => "B",
+	3 => "B+",
+	4 => "A-",
+	5 => "A",
+	6 => "A+",*/
+	];	
+	$grade="A+";
+	$color="#0c0";
+	foreach ( $grades as $g )
+	{
+		if($score <= $g[0])
+		{
+			$grade=$g[1];
+			$color=$g[2];
+			return;
+		}
+	}
+	
+	
+	
+}
 class legislator extends json_obj{
 	
 	public $name;
@@ -434,7 +526,7 @@ class legislator extends json_obj{
 
 	public $jpg_path;
 	public $url;
-	
+
 	public function __construct($data_in) {
 		$this->data = $data_in;
 		$this->name = $this->get('first').' '.$this->get('last') ;
@@ -465,15 +557,25 @@ class legislator extends json_obj{
 			return;
 		$this->print_table_row ( $label, $val );
 	}
-	public function print_table_row($label, $val) {
-		echo "<tr><td class='leg_info_label'>$label: </td><td class='leg_info_val'>$val</td></tr>";
+	public function print_table_row($label, $val,$color=null) {
+		$style="";
+		if($color)
+			$style="style='color:$color;font-weight:bold'";
+			
+		echo "<tr><td class='leg_info_label'>$label: </td><td class='leg_info_val' $style>$val</td></tr>";
 	}	
 	public function print_list_row() {
 		global $isPhone;
 		
+		$votelist=array();
 		//$this->init ();
+		/*
 		if($isPhone)
 			return $this->print_list_row_phone();
+			*/
+		
+		$score=getobj("vote_data")->get_votes($this->id,$votelist);
+		
 		
 		
 		echo "<tr ><td class='leg_thumb' >";
@@ -483,12 +585,15 @@ class legislator extends json_obj{
 		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";
 		$title=$this->get('title') ;
 		echo "</td><td class='leg_info' ><a href='/guide/legpage.php?id=$this->id'><h2>$title $this->name</h2></a><table>";
-		
+		$grade="?";
+		$color="#000";
+		get_grade($score,$grade,$color);
 		$this->print_table_val ( 'District', 'district' );	
 		$this->print_table_val ( 'Party', 'party' );			
 		$this->print_table_val ( 'Counties', 'county' );		
 		$this->print_table_val ( 'Email', 'email' );		
-		$this->print_table_val ( 'Phone', 'phone' );		
+		$this->print_table_val ( 'Phone', 'phone' );	
+		$this->print_table_row ( 'Grade', $grade,$color );
 				
 
 		
