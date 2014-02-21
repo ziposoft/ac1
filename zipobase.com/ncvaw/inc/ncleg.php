@@ -516,6 +516,18 @@ class leg_list extends data_source{
 		$this->get_data(2);
 		
 	}
+	public function get_leg_by_name($first,$last) {
+		foreach ( $this->rows as $row ) {
+				
+			if(
+				(getj($row,'first')==$first)&&
+				(getj($row,'last')==$last))
+			{
+				return new legislator ( $row );
+			}
+		}
+		return 0;
+	}	
 	public function get_leg_by_id($id) {
 		foreach ( $this->rows as $row ) {
 			
