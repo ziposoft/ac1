@@ -172,6 +172,23 @@ h5 {
 {
 	
 }
+td.leg_thumb 
+{
+
+	max-width:5%;
+	
+	
+}
+td.leg_thumb img
+{
+
+	
+	/*
+	width:100px;
+	max-width:15%;
+	*/
+	
+}
 tr.leglist {
 	border: 0px;
 	border-top: 4px solid #ccc;
