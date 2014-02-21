@@ -24,14 +24,15 @@
 	?>
   
 <div id="wrapper">
-<a href="http://www.ncvaw.org/"><img style="float: left" src="/img/NCVAW_logo.png" alt="North Carolina Voters for Animal Welfare"></a>
+<a href="http://www.ncvaw.org/">
+<img style="float: left;max-width:30%" src="/img/NCVAW_logo.png" alt="North Carolina Voters for Animal Welfare"></a>
+
+
+<div style="float: right;max-width:30%"><small style="color:#46a;font:">Follow us on Facebook</small>
+	<div style="display:block;padding:0;margin:0;" class="fb-like-box" data-href="http://www.facebook.com/ncvaw" data-width="220" data-height="70" data-colorscheme="light" data-show-faces="false" data-header="false" data-stream="false" data-show-border="false"></div>
+</div>
 <span style="color:#46a;font-size: 30px;">2014 ELECTION CENTRAL</h1>
 </span>
-
-<div style="float: right"><small style="color:#46a;font:">Follow us on Facebook</small>
-	<div style="display:block;padding:0;margin:0;" class="fb-like-box" data-href="http://www.facebook.com/ncvaw" data-width="300" data-height="70" data-colorscheme="light" data-show-faces="false" data-header="false" data-stream="false" data-show-border="false"></div>
-</div>
-
 <!--  
 <a href="/"><img style="float: left" src="/img/NCVAW_paw.png" alt="North Carolina Voters for Animal Welfare"></a>
  
