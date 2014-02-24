@@ -25,9 +25,7 @@ $next="/district.php?ch=$chamber&dist=$nextdist";
 ?>
 
 
-	<div id="page" 
-	
-	style="clear: both; margin: auto; padding: 10px 20px 0 20px; height: 90%;">
+	<div id="page" >
 	<a href='<?php print $next; ?>'>Next District</a>
 	<div id="map_canvas"   ></div>
 	<h1><?php 

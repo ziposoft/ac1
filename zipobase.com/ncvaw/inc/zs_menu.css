@@ -1,13 +1,15 @@
 
-.zs_menu_bar,.zs_menu_show, .zs_menu_sub
+.zs_menu_bar,.zs_menu_show, .zs_menu_sub,.zs_menu_all
 {
 margin: 0;
 padding: 0;
 list-style: none;	
 box-sizing: border-box;	
--moz-box-sizing: border-box;	
+-moz-box-sizing: border-box;
+
 	
 }
+
 .zs_menu_hide
 {
 	display: none;	
@@ -23,7 +25,7 @@ ul.zs_menu_show
 
 .zs_menu_bar
 {
-	display: block;	
+
 	background-color: #68c;	
 }
 .zs_menu_bar a:hover
@@ -32,7 +34,7 @@ ul.zs_menu_show
 	color: #fff;
 	background-color: #8ae;		
 }
-.zs_menu_bar a
+.zs_menu_all a, .zs_menu_content
 {
 	background-color: #68c;
 	cursor: pointer;
@@ -45,12 +47,18 @@ ul.zs_menu_show
 	padding: 10px;	
 	display: inline-block;	
 	box-sizing: border-box;	
--moz-box-sizing: border-box;		
+-moz-box-sizing: border-box;			
+}
+.zs_menu_all a
+{
+	
+	
 }
 
 .zs_menu_bar li
 {
 	border-right: 1px groove White;	
+	
 }
 .zs_menu_show > li
 {
@@ -60,6 +68,7 @@ ul.zs_menu_show
 .zs_menu_show  a
 {
 	width:100%;	
+	min-width: 10em;
 }
 
 
@@ -79,6 +88,15 @@ ul.zs_menu_show
 		clear: both;
 		background-color: #68c;	
 	}
+		.zs_menu_content
+		{
+			display:none;
+		}
+	.zs_menu_all
+	{
+		
+		color:red;
+	}			
 
 }
 
@@ -87,9 +105,28 @@ ul.zs_menu_show
 	{
 	   
 	}
-	.zs_menu_bar 
+	.zs_mb_show 
 	{
+		display:inline-block;	
+		position: absolute;
+		z-index: 10;		
+	}
+	.zs_mb_hide 
+	{
+		display:none;	
+	
+	}		
+	.zs_menu_content
+	{
+		display:block;
+		clear:right;
+		
 	}	
+
+	.zs_menu_content:before
+	{
+		content: "Contents";
+	}
 	.zs_menu_item 
 	{
 	
