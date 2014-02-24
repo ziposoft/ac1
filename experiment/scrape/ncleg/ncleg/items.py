@@ -27,6 +27,7 @@ class VoteItem(Item):
     vid = Field()
     doc = Field()
     vote = Field()
+    nid=Field()
     
     
       
