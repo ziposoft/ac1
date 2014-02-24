@@ -1,9 +1,11 @@
 <?php
 
 function z_out_ch(&$str,$items) {
-	foreach ( $items as $item ) {
+	foreach ( $items as $item )
+	 {
 		if($item)
 			$str .=$item;
+		
 	}
 }
 function z_mi($text,$link,$help=null,$id=null) 
@@ -39,13 +41,26 @@ function z_mbi($text,$link,$help=null,$id=null) {
  
  function make_menu($items)
  {
- 	$str="<ul class='zs_menu_bar'>";
+ 	$str="<div  class='zs_menu_all'
+ 				onmouseover='zs.menu.show(this,event);'
+ 			onmouseout='zs.menu.hide(this,event);'	
+ 			><span class='zs_menu_content' 	></span>
+ 			<ul class='zs_menu_bar zs_mb_hide'>";
  	z_out_ch($str,$items);
- 	$str.="</ul>";
+ 	$str.="</ul></div>";
  	echo( $str);
  }
  
 /*
+ * 
+ * 
+ * 
+ * 
+ * <a  id='zs_menu_content'/>
+
+
+
+
 
 <ul class='zs_menu_bar'>
 	<li class='zs_menutop' ><a class='zs_menu_link'/ >
