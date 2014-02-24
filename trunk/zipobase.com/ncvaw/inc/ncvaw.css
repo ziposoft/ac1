@@ -172,17 +172,31 @@ h5 {
 {
 	
 }
-td.leg_thumb 
+div.leg_bio 
 {
-
+	clear:both;
+	display:block;
+	/*
 	max-width:5%;
+	*/
+	
 	
 	
 }
-td.leg_thumb img
+div.leg_thumb 
+{
+	float:left;
+	display:inline-block;
+	
+	max-width:20%;
+	
+	
+	
+}
+div.leg_thumb img
 {
 
-	
+	width:100%;
 	/*
 	width:100px;
 	max-width:15%;

@@ -35,7 +35,10 @@ function setCookie(c_name, value) {
 			+ ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
 	document.cookie = c_name + "=" + c_value+"; path=/";
 	if(console)
+		{
 		console.log("setcookie %s %s",c_name,value);
+		console.log(" document.cookie %s", document.cookie);			
+		}
 }
 function getCookie(c_name) 
 {
@@ -56,7 +59,11 @@ function getCookie(c_name)
 		}
 	}
 	if(console)
-		console.log("getCookie %s %s",c_name,val);	
+		{
+		console.log("getCookie %s %s",c_name,val);		
+		console.log(" document.cookie %s", document.cookie);		
+		}
+
 	return val;
 }
 

@@ -562,7 +562,7 @@ class legislator extends json_obj{
 		if($color)
 			$style="style='color:$color;font-weight:bold'";
 			
-		echo "<tr><td class='leg_info_label'>$label: </td><td class='leg_info_val' $style>$val</td></tr>";
+		echo "<tr><td class='leg_label'>$label: </td><td class='leg_val' $style>$val</td></tr>";
 	}	
 	public function print_list_row() {
 		global $isPhone;
@@ -578,13 +578,13 @@ class legislator extends json_obj{
 		
 		
 		
-		echo "<tr ><td class='leg_thumb' >";
+		echo "<hr/><div class='leg_bio' ><div class='leg_thumb' >";
 		echo "<a href='/guide/legpage.php?id=$this->id'>";
 				
 
 		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";
 		$title=$this->get('title') ;
-		echo "</td><td class='leg_info' ><a href='/guide/legpage.php?id=$this->id'><h2>$title $this->name</h2></a><table>";
+		echo "</div><div class='leg_info' ><a href='/guide/legpage.php?id=$this->id'><h2>$title $this->name</h2></a><table>";
 		$grade="?";
 		$color="#000";
 		get_grade($score,$grade,$color);
@@ -599,7 +599,7 @@ class legislator extends json_obj{
 		
 		echo '</table>';
 		echo ("<a target='_blank' href='$this->url'>Link to page on NCGA website</a>");
-		echo '</td></tr>';
+		echo "</div></div><div style='clear:both'></div>";
 	}	
 }
 
@@ -611,11 +611,11 @@ class legislator extends json_obj{
 class leg_list extends data_source{
 	public $list;
 	public function print_list() {
-		echo "<table class='tbl_leglist' >";
+		echo "<div class='tbl_leglist' >";
 		foreach ( $this->list as $d ) {
 			$d->print_list_row ();
 		}
-		echo '</table>';
+		echo '</div>';
 	}
 	public function __construct() {
 		$this->get_data(2);
