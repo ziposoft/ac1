@@ -185,7 +185,7 @@ div.leg_bio
 }
 div.leg_thumb 
 {
-	float:left;
+	
 	display:inline-block;
 	
 	max-width:20%;
@@ -223,23 +223,23 @@ tr.leglist {
 	padding: 0px;
 	vertical-align: top;
 }
-.tbl_leglist >tbody> tr {
-	border: 0px;
+.tbl_leglist hr {
 	border-top: 4px solid #ccc;
 }
 /* info page */
-td.leg_val {
+.leg_val {
 	padding:1px;	
 	padding-left: 20px;
 }
-td.leg_label {
+.leg_label {
 	color: #555;
 }
-td.leg_info {
-	width: 100%;
+.leg_info {
+	display:inline-block;
+		
 	padding: 10px;
 }
-td.leg_info table {
+.leg_info table {
 	margin:  10px 0 10px 0;
 }
 
@@ -256,6 +256,8 @@ td.leg_info table {
 table.votes 
 {
 	padding: 10px;	
+	margin:10px;
+	
 }
 table.votes td
 {

@@ -24,12 +24,10 @@ $leg=$g_leg_list->get_leg_by_id($legid);
 
 
 <div class="text_wrap">
-<table  >
 
 <?php 
 $leg->print_list_row();
 ?>
-</table>
 <H3>Bills Sponsored</H3>
 <table  class='votes'>
   <thead>
