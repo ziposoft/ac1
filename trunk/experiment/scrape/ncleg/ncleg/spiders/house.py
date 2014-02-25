@@ -26,7 +26,7 @@ class voteSpider(CrawlSpider):
 	]
 	rules = (
 			 
-			  Rule(SgmlLinkExtractor(allow=('viewMember\.pl', ))),    
+			  Rule(SgmlLinkExtractor(allow=('viewMember\.pl', ))),  
 			  Rule(SgmlLinkExtractor(allow=('introducedBills\.pl',)), callback='parse_bills', follow= True),
 			  Rule(SgmlLinkExtractor(allow=('MemberVoteHistory\.pl',)), callback='parse_votes', follow= True),
 
@@ -36,6 +36,10 @@ class voteSpider(CrawlSpider):
 	def stop(self):
 		raise CloseSpider('stop')
 		return
+	def parse_member(self, response):
+	
+		return response
+
 	def parse_bills(self, response):
 		
 		params= dict(parse_qsl(urlparse(response.url).query))

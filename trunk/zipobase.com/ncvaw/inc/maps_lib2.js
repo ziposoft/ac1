@@ -136,7 +136,7 @@ function doSearch(doZoom) {
 				searchrecords = new google.maps.FusionTablesLayer(fusionTableId, { query: searchStr } );
 				
 				searchrecords.setMap(gMap);
-				displayCount(searchStr);
+				//displayCount(searchStr);
 				map_setbounds(searchStr);
 				drawTable(searchStr);
 
@@ -192,7 +192,8 @@ function map_geoFindMe() {
 	    var latitude  = position.coords.latitude;
 	    var longitude = position.coords.longitude;
 
-	    output.innerHTML = '<p>Latitude is ' + latitude + '° <br>Longitude is ' + longitude + '°</p>';
+	    
+	    //output.innerHTML = '<p>Latitude is ' + latitude + '° <br>Longitude is ' + longitude + '°</p>';
 
 		var foundLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 		addrFromLatLng(foundLocation);	
@@ -277,7 +278,7 @@ function getFTQuery(sql) {
     console.log(q);
 	return new google.visualization.Query('http://www.google.com/fusiontables/gvizdata?tq='  + queryText);
 }
-
+/*
 function displayCount(searchStr) {
 	//set the query using the parameter
 	searchStr = searchStr.replace("SELECT geometry ","SELECT Count() ");
@@ -291,9 +292,11 @@ function displaySearchCount(response) {
 	if (response.getDataTable().getNumberOfRows() > 0) { numRows = parseInt(response.getDataTable().getValue(0, 0)); }
 	var name = recordNamePlural;
 	if (numRows == 1) { name = recordName; }
-	$( "#resultCount" ).fadeOut(function() { $( "#resultCount" ).html((numRows) + " " + name + " found"); } );
-	$( "#resultCount" ).fadeIn();
+	//$( "#resultCount" ).fadeOut(function() { $( "#resultCount" ).html((numRows) + " " + name + " found"); } );
+	//$( "#resultCount" ).fadeIn();
 }
+
+*/
 function map_setbounds(searchStr) {
 	
 	
