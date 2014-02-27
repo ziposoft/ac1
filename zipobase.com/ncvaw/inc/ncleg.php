@@ -221,8 +221,16 @@ class bill extends json_obj{
 		if($this->stance == 'pro')
 			return "Supports animal welfare";
 		return 	"Harmful to animal welfare";
-					
-		
+	}
+	public function print_tr()
+	{
+		echo "<tr><td>$this->year - $this->doc</td>";
+		echo "<td>$this->official </td><td>";
+	
+	
+		echo "<p>$this->effect </p>";
+		echo "<p><a target='_blank' href='http://www.ncleg.net/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->doc&submitButton=Go' >Link to $this->doc on NCLEG.NET</a> </p>";
+		echo "<p>$this->desc </p></td>";
 	}
 	public function print_page()	
 	{
@@ -233,10 +241,6 @@ class bill extends json_obj{
 		echo "<p>$this->effect </p>";		
 		echo "<p><a target='_blank' href='http://www.ncleg.net/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->doc&submitButton=Go' >Link to $this->doc on NCLEG.NET</a> </p>";
 		echo "<p>$this->desc </p>";
-		
-		
-
-	
 	}	
 }
 class vote_data extends data_source
