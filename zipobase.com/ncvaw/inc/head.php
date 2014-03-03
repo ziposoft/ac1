@@ -69,6 +69,9 @@ make_menu([
 		z_mi("How You Can Help","/about/getinvolved.html","")]),		
 	z_menu("Voters Guide",[
 		z_mi("Find your district","/guide/find.html",""),	
+		z_mi("Recent Legislation","/bills.php",""),	
+		z_mi("Canidates Survey","/guide/survey.html",""),
+		
 		//z_menu_sub("Search Legislature",[
 		z_mi("Senate List","/guide/senate.html","HOME"),
 		z_mi("House List","/guide/house.html",""),
@@ -81,6 +84,7 @@ make_menu([
 			z_menu("Admin",[
 				z_mi("Admin Off","/home.html?admin=off")	,
 				z_mi("PHP Info","/phpinfo.html")	,
+				z_mi("Refresh","$current_url?refresh")		,
 				]):
 			0)
 			

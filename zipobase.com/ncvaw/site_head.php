@@ -9,14 +9,14 @@ function getCookie( $name)
 {
 	if(array_key_exists($name,$_COOKIE))
 		return $_COOKIE[$name];
-	return 0;
+	return null;
 }
 
 function getParam( $name)
 {
 	if(array_key_exists($name,$_GET))
 		return $_GET[$name];
-	return 0;
+	return null;
 }
 $meta_extra='';
 $page_title='';
@@ -27,11 +27,23 @@ $fb_image= $fb_domain."/cover1.jpg";
 $fb_meta_images="";
 $fb_description="NCVAW";
 date_default_timezone_set('US/Eastern');
+
+/*
 include $root.'/inc/Mobile_Detect.php';
 $detect = new Mobile_Detect;
 $isPhone = ($detect->isMobile() && (!$detect->isTablet()));
 $deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
+*/
 
+$current_url =$_SERVER['PHP_SELF'];
+
+$refresh_data=getParam("refresh");
+
+if($refresh_data)
+{
+	array_map('unlink', glob("$root/data/*.json"));
+
+}
 /*
 $isPhone=getParam("m");
 

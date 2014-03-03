@@ -18,10 +18,15 @@ include $header;
 include $root.'/inc/ncleg.php';
 
 $distobj=getobj('districts')->get($chamber,$district);
-$counties=$distobj->get('counties');
-
-$nextdist=intval ($district)+1;
-$next="/district.php?ch=$chamber&dist=$nextdist";
+$next="";
+$counties="";
+if($distobj)
+{
+	$counties=$distobj->get('counties');
+	
+	$nextdist=intval ($district)+1;
+	$next="/district.php?ch=$chamber&dist=$nextdist";
+}
 ?>
 
 
