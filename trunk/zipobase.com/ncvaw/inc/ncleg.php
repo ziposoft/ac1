@@ -19,7 +19,6 @@ function getobj($type) {
 }
 
 
-$refresh_data=array_key_exists ( "refresh", $_GET );
 
 function getj(&$row,$id)
 {
@@ -36,20 +35,25 @@ class json_obj
 }
 class data_source
 {
-	public static $id = '0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc';
 	public $rows;
 
-	function get_data($tab) 
+	function get_data($tab,$id=null) 
 	{
 		global $root;
 		global $refresh_data;
-		$filename=$root."/data/ncleg.json".$tab;
+		$cn=get_class($this);
+		$filename=$root."/data/$cn.json";
 		if(! file_exists ( $filename ))	
 			$refresh_data=1;
 		if($refresh_data)
 		{
+			if(!$id)
+			{
+				$id = '0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc';
+				
+			}
 			
-			$url = "http://spreadsheets.google.com/feeds/list/0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc/$tab/public/values?alt=json";
+			$url = "http://spreadsheets.google.com/feeds/list/$id/$tab/public/values?alt=json";
 			$file = file_get_contents ( $url );
 			$fp = fopen ( $filename, 'w' );
 			fwrite ( $fp, $file );
@@ -224,13 +228,13 @@ class bill extends json_obj{
 	}
 	public function print_tr()
 	{
-		echo "<tr><td>$this->year - $this->doc</td>";
-		echo "<td>$this->official </td><td>";
+		echo "<tr><td>$this->year</td>";
+		echo "<td><h3><a href='/guide/billpage.php?doc=$this->doc'>$this->doc</a></h3>";
 	
-	
+		echo "<div><a href='/guide/billpage.php?doc=$this->doc'>$this->official</a> </div>";
 		echo "<p>$this->effect </p>";
 		echo "<p><a target='_blank' href='http://www.ncleg.net/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->doc&submitButton=Go' >Link to $this->doc on NCLEG.NET</a> </p>";
-		echo "<p>$this->desc </p></td>";
+		echo "<p>$this->desc </p></td></tr>";
 	}
 	public function print_page()	
 	{
@@ -374,7 +378,82 @@ class canidate extends json_obj{
 	}
 
 }
+class survey_questions extends data_source
+{
+	public function __construct() {
+		$this->get_data(7);
 
+	}
+	public function getquestion($num)
+	{
+
+		return  getj($this->rows[$num-1],"question");
+	}
+}
+class survey_data extends data_source
+{
+	public function __construct() {
+		$this->get_data(1,"0AonA9tFgf4zjdE45M0MyZTR0UUYxXzNzRjBuNWFnMGc");
+
+	}
+	
+	public function getrow($first,$last)
+	{
+	
+		foreach ( $this->rows as $row )
+		{
+			$f=getj($row,'firstname');
+			$l=getj($row,'lastname');
+			if( ($l==$last) &&($f==$first))
+			{
+				return $row;
+			}
+			
+				
+		}
+		return null;
+
+	
+	}	
+	public function printresp($first,$last)
+	{
+		$row = $this->getrow($first,$last);
+		if(!$row)
+			return;
+		
+		for ($x=1; $x<=5; $x++)
+		{
+			
+			$q=getobj("survey_questions")->getquestion($x);
+			if(!$q)
+				$q="could not get question";
+			$a=getj($row,"a$x");
+			if(!$a)
+				$a="could not get answer";			
+			echo("<div>Question #$x</div>");
+			echo("<div>$q</div>");
+			echo("<div>Answer:</div>");
+			echo("<div>$a</div>");
+		}
+
+	}
+
+	public function printlist()
+	{
+		foreach ( $this->rows as $row )
+		{
+			$first=getj($row,'firstname');
+			$last=getj($row,'lastname');
+				
+			$leg=getobj("leg_list")->get_leg_by_name($first,$last);
+			if($leg)
+			{
+				
+				$leg->print_list_row();
+			}
+		}
+	}
+}
 class canidates extends data_source
 {
 	public function __construct() {
@@ -520,6 +599,8 @@ function get_grade($score,&$grade,&$color)
 class legislator extends json_obj{
 	
 	public $name;
+	public $first;
+	public $last;		
 	public $displayname;
 	public $id;
 	public $uid;
@@ -533,7 +614,12 @@ class legislator extends json_obj{
 
 	public function __construct($data_in) {
 		$this->data = $data_in;
-		$this->name = $this->get('first').' '.$this->get('last') ;
+		$this->first = $this->get('first');
+		$this->last = $this->get('last');
+		
+		
+		
+		$this->name = $this->first.' '.$this->last;
 		$this->uid =$this->get('uid');
 		$this->id = $this->get('id');
 		$this->chamberId = $this->get('chamber');
@@ -544,6 +630,10 @@ class legislator extends json_obj{
 			
 		$this->url ="http://www.ncleg.net/gascripts/members/viewMember.pl?sChamber=$this->chamber&nUserID=$this->uid";
 		
+	}	
+	
+	public function print_survey() {
+		getobj("survey_data")->printresp($this->first ,$this->last);
 	}	
 	public function print_list_votes() 
 	{
@@ -625,6 +715,7 @@ class leg_list extends data_source{
 		$this->get_data(2);
 		
 	}
+	
 	public function get_leg_by_name($first,$last) {
 		foreach ( $this->rows as $row ) {
 				
