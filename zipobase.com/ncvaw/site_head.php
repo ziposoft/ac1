@@ -1,5 +1,16 @@
 <?php
 
+$options=[
+'grades'=>1,
+'legpages'=>0
+];
+function option( $name)
+{
+	global $options;
+	if(array_key_exists($name,$options))
+		return $options[$name];
+	return null;
+}
 
 $zs_foot_jsfile=["/inc/jquery.js","/inc/ncvaw.js","/inc/zs_menu.js"];
 $zs_head_jsfile=array();
@@ -20,12 +31,14 @@ function getParam( $name)
 }
 $meta_extra='';
 $page_title='';
+/*
 $fb_domain="http://landfilldogs.com";
 $fb_link = $fb_domain.$_SERVER['REQUEST_URI'];
 $fb_title = "Shannon Johnstone";
 $fb_image= $fb_domain."/cover1.jpg";
 $fb_meta_images="";
 $fb_description="NCVAW";
+*/
 date_default_timezone_set('US/Eastern');
 
 /*

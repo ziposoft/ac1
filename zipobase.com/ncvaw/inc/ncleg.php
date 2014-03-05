@@ -687,7 +687,8 @@ class legislator extends json_obj{
 		$this->print_table_val ( 'Counties', 'county' );		
 		$this->print_table_val ( 'Email', 'email' );		
 		$this->print_table_val ( 'Phone', 'phone' );	
-		$this->print_table_row ( 'Grade', $grade,$color );
+		if(option('grades'))
+			$this->print_table_row ( 'Grade', $grade,$color );
 				
 
 		
