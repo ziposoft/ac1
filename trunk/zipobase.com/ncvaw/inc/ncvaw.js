@@ -22,6 +22,11 @@ function ncvaw_init_your_district_menus() {
 	
 
 }
+function name_filter_chage() {
+
+	$("div[data-name~='ALL'").hide();
+}
+
 function ncvaw_init() {
 
 	ncvaw_init_your_district_menus();

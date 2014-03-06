@@ -518,6 +518,21 @@ class districts extends data_source
 		$this->list=array();
 		
 	}	
+	
+	public function printlist($ch)
+	{
+	
+		foreach ( $this->rows as $row )
+		{
+			if( (getj($row,'district')==$num) &&(getj($row,'chamber')==$ch))
+			{
+	
+				return new district($row);
+			}
+				
+		}
+		return 0;
+	}	
 	public function get($ch,$num)
 	{
 
@@ -677,7 +692,7 @@ class legislator extends json_obj{
 		
 		
 		
-		echo "<hr/><div class='leg_bio' ><div class='leg_thumb' >";
+		echo "<hr/><div class='leg_bio' data-name='$this->last'><div class='leg_thumb' >";
 		echo "<a href='/guide/legpage.php?id=$this->id'>";
 				
 

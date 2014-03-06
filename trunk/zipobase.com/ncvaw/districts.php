@@ -1,16 +1,7 @@
 <?php
 
 $chamber=getParam("ch");
-$district=getParam("dist");
 
-array_push($zs_foot_jsfile,
-	"http://www.google.com/jsapi",
-	"http://maps.google.com/maps/api/js?sensor=false",
-
-	"/inc/maps_lib2.js");
-
-array_push($funcs_init,
-	"map_init();map_show_district('$chamber','$district'	);");
 
 
 
