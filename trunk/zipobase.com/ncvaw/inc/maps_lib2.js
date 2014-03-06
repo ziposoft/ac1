@@ -78,7 +78,17 @@ $.ajax({
 	  }
 	});
 }
+function map_copy() {
+	var canvas=document.getElementById("map_canvas");
 
+
+	 var url = canvas.toDataURL();
+	 
+	 var newImg = document.createElement("img");
+	 newImg.src = url;
+	 document.body.appendChild(newImg);	
+
+}
 function doSearch(doZoom) {
 	clearSearch();
 	var address = $("#txtSearchAddress").val();
