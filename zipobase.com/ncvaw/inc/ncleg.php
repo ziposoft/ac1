@@ -41,6 +41,7 @@ class data_source
 	{
 		global $root;
 		global $refresh_data;
+		$this->rows=null;
 		$cn=get_class($this);
 		$filename=$root."/data/$cn.json";
 		if(! file_exists ( $filename ))	
@@ -50,9 +51,11 @@ class data_source
 			if(!$id)
 			{
 				$id = '0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc';
+				//$id = '1pjXSrS-VfXiRknB6ymTqxhzuokY39tmBRDITwf_h5DM';
+				
 				
 			}
-			
+			//https://spreadsheets.google.com/feeds/list/0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc/1/public/values?alt=json
 			$url = "http://spreadsheets.google.com/feeds/list/$id/$tab/public/values?alt=json";
 			$file = file_get_contents ( $url );
 			$fp = fopen ( $filename, 'w' );
@@ -61,7 +64,9 @@ class data_source
 		}
 			
 		$json = json_decode (  file_get_contents ( $filename ) );
-		$this->rows = $json->{'feed' }->{'entry' };		
+		if($json)
+			$this->rows = $json->{'feed' }->{'entry' };	
+				
 	}
 }
 

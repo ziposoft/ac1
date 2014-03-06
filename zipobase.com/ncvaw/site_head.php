@@ -31,14 +31,14 @@ function getParam( $name)
 }
 $meta_extra='';
 $page_title='';
-/*
-$fb_domain="http://landfilldogs.com";
+
+$fb_domain="http://ncvaw.org";
 $fb_link = $fb_domain.$_SERVER['REQUEST_URI'];
-$fb_title = "Shannon Johnstone";
-$fb_image= $fb_domain."/cover1.jpg";
+$fb_title = "NCVAW";
+$fb_image= $fb_domain."/img/NCVAW_paw.png";
 $fb_meta_images="";
 $fb_description="NCVAW";
-*/
+
 date_default_timezone_set('US/Eastern');
 
 /*
@@ -80,7 +80,7 @@ if($admin)
 {
 	if($admin=='on')
 	{
-		setcookie('admin','on');
+		setcookie('admin','on',time()+90000000,'/');
 	}	
 	if($admin=='off')
 	{

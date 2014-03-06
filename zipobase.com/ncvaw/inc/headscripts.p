@@ -5,7 +5,9 @@
 
 
 <meta property="og:title"  content="<?php echo $fb_title ?>"/>
-<meta property="og:type"  content="Website"/>  
+<meta property="og:type"  content="Website"/> 
+
+
 <?php if(!$fb_meta_images)
 	$fb_meta_images="<meta property='og:image' content='$fb_image'/>";
 	echo("$fb_meta_images");
