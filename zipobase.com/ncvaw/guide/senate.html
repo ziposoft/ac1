@@ -6,9 +6,23 @@ $leglist=new leg_list();
 
 $chamber='S';
 
-$leglist->get_list ($chamber,""  );
-$leglist->print_list ();
-
 ?>
+ 		<form action=""  autocomplete="on" >
+	<input style="width:300px" type="search"	 value=""
+						 title="Enter an address or an intersection &hellip;"
+							 id="namefilter" 
+							
+							 onkeypress="this.onchange();"
+							 onpaste="this.onchange();" 
+							 oninput="this.onchange();"
+							 onchange="name_filter_chage()"/>
+					
+ 		</form>
+ 		<div id='namelist'>
+<?php
+$leglist->get_list ($chamber,""  );
+$leglist->print_list ();?>
+</div>
 
-<?php include $footer;  ?>
+<?php
+ include $footer;  ?>
