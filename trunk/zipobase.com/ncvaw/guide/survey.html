@@ -1,0 +1,12 @@
+<?php
+include $header;
+include $root.'/inc/ncleg.php';
+
+?>
+<p> The following canidates have replied to our survey </p>
+
+
+ 
+<?php 
+getobj("survey_data")->printlist();
+include $footer; ?>
