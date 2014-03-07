@@ -93,6 +93,7 @@ int create(int size,int keysize) {
 	if(keysize==0)
 		keysize=21;
 	ham_parameter_t param=		  { HAM_PARAM_KEYSIZE, keysize };
+	printf("running create %x %x\n",size,keysize);
 	env.create(db_name);
 	//db = env.create_db(1,0,&param);
 	db = env.create_db(1,0,0);
@@ -322,6 +323,8 @@ int get(int i) {
 
 	env.open(db_name);
 	db = env.open_db(1);
+	printf("get=%d\n",i);
+
 	/*
 	* Now lookup all values
 	*
