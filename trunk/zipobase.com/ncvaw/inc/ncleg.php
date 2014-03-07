@@ -522,15 +522,7 @@ class districts extends data_source
 	public function printlist($ch)
 	{
 	
-		foreach ( $this->rows as $row )
-		{
-			if( (getj($row,'district')==$num) &&(getj($row,'chamber')==$ch))
-			{
-	
-				return new district($row);
-			}
-				
-		}
+		
 		return 0;
 	}	
 	public function get($ch,$num)
