@@ -82,7 +82,25 @@ function getCookie(c_name)
 
 	return val;
 }
+function call_zipo() {
+	var url;
+	var ref = document.referrer;
+	var refs = ref.split('?');
 
+	url = "http://www.zipobase.com/cgi-bin/zb.cgi?T=logger&db=ncvaw&requested="
+			+ document.title + "&referer=" + escape(refs[0]);
+	$.get(url);
+	return;
+}
+
+function togglehide(id) {
+	var e=$('#'+id);
+	if(e.css('display') =='none')
+		e.css('display','block');
+	else
+		e.css('display','none');
+}
+/*
 var drag_startX = 0;
 function dragstart(ev) {
 	// ev.dataTransfer.setData("Text",ev.target.id);
@@ -105,10 +123,6 @@ function dragend(ev) {
 		window.location = "/"
 	}
 }
-function togglehide(id) {
-	var e=$('#'+id);
-	if(e.css('display') =='none')
-		e.css('display','block');
-	else
-		e.css('display','none');
-}
+
+
+*/

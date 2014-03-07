@@ -20,5 +20,6 @@ jQuery(document).ready(function ()
 		foreach ( $funcs_init as $item ) {echo("$item;");	}	
 		?>
 		});
+call_zipo();		
 </script>
 </html>
