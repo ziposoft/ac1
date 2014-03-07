@@ -70,8 +70,14 @@ ul.zs_menu_show
 	width:100%;	
 	min-width: 10em;
 }
-
-
+.zs_menutop a.zs_menu_link
+{
+	cursor:default;
+}
+.zs_menutop a.zs_menu_link:hover
+{
+	background-color: #68c;	
+}
 @media all and  (min-width: 600px) {
 	.zs_menu_bar >li
 	{

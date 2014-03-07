@@ -55,6 +55,7 @@ class data_source
 				
 				
 			}
+			//http://spreadsheets.google.com/feeds/list/xvzkey/1/public/values?alt=json
 			//https://spreadsheets.google.com/feeds/list/0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc/1/public/values?alt=json
 			$url = "http://spreadsheets.google.com/feeds/list/$id/$tab/public/values?alt=json";
 			$file = file_get_contents ( $url );
