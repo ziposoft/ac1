@@ -24,7 +24,18 @@ function ncvaw_init_your_district_menus() {
 }
 function name_filter_chage() {
 
-	$("div[data-name~='ALL'").hide();
+	var a=$("#namefilter").val();
+	a.toLowerCase();
+	
+	var select="[data-name*='"+a+ "']";
+	if(a == "")
+		$("div.leg_bio").show();
+	else
+		{
+		
+			$("div.leg_bio"+select).show();	
+			$("div.leg_bio:not("+select+")").hide();
+		}
 }
 
 function ncvaw_init() {
