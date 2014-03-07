@@ -1,46 +1,42 @@
 <?php
 include $header;
+include $root.'/inc/ncleg.php';
+ 
+$leglist=new leg_list();
 
+$chamber=getParam("ch");
+$chamberName="Senate";
+if($chamber=='H')
+{
+	$chamberName="House";
+}
+else
+	$chamber='S';
+	
+	
+?>
+<h2>List of $chamberName members</h2>
+</h2>
 
-
-
-
-
-include $root.'/inc/ncleg.php'; ?>
- 		<form action=""  autocomplete="on" >
+ 		<form  action="javascript:void(0);" autocomplete="on" >
+ 	<span>Search by last name: </span>	
 	<input style="width:300px" type="search"	 value=""
 						 title="Enter an address or an intersection &hellip;"
 							 id="namefilter" 
+							 
+							 onkeypress="this.onchange();"
+							 onpaste="this.onchange();" 
+							 oninput="this.onchange();"
 							 onchange="name_filter_chage()"/>
 					
  		</form>
- 
- <?php 
-$g_leg_list=get_leg_list();
-
-$chamber=0;
-$district=0;
-if (array_key_exists ( "dist", $_GET )) 
-	$district= $_GET ["dist"];
-if (array_key_exists ( "ch", $_GET )) 
-	$chamber= $_GET ["ch"];
-
-	
-
-$g_leg_list->get_list ($chamber,$district  );
-$g_leg_list->print_list ();
-
-
-
-
-?>
-
-
-<div class="text_wrap">
-
-
-	 
+ 		<a>Sort by </a>
+ 	
+ 		<div id='namelist'>
+<?php
+$leglist->get_list ($chamber,""  );
+$leglist->print_list ();?>
 </div>
 
-
-<?php include $footer; ?>
+<?php
+ include $footer;  ?>

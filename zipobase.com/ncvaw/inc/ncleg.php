@@ -763,7 +763,8 @@ class leg_list extends data_source{
 	}
 	public function get_list($chamber,$district) {
 		$this->list = array ();
-		
+		$sort=getParam("sort");
+
 		foreach ( $this->rows as $row ) {
 			$ch = $row->{	'gsx$chamber' }->{'$t' };
 			if (($ch == 'chamber') || ($ch == ''))
@@ -786,8 +787,14 @@ class leg_list extends data_source{
 				if (! in_array ( $status, $status_filter ))
 					continue;
 				*/
-			$name = $row->{	'gsx$last' }->{'$t' };
-			$this->list [$name] = new legislator ( $row );
+			$key=$id = $row->{	'gsx$district' }->{'$t' };
+			if($sort!='dist')
+			{
+				$key= $row->{	'gsx$last' }->{'$t' };
+				
+			}
+
+			$this->list [$key] = new legislator ( $row );
 		}
 		ksort ( $this->list );
 		return $this->list;
