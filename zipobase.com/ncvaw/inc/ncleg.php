@@ -691,8 +691,8 @@ class legislator extends json_obj{
 		$score=getobj("vote_data")->get_votes($this->id,$votelist);
 		
 		
-		
-		echo "<hr/><div class='leg_bio' data-name='$this->last'><div class='leg_thumb' >";
+		$lastname=strtolower($this->last);
+		echo "<div class='leg_bio' data-name='$lastname'><hr/><div class='leg_thumb' >";
 		echo "<a href='/guide/legpage.php?id=$this->id'>";
 				
 
