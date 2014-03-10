@@ -351,39 +351,7 @@ class vote_data extends data_source
 	}	
 }
 
-class canidate extends json_obj{
-	public $displayname;
 
-	public function __construct($data_in) {
-		$this->data = $data_in;
-		$this->displayname=$this->get('nameonballot');
-	}
-	public function print_table_val($label, $field) {
-		$val = $this->data->{	'gsx$' . $field }->{'$t' };
-		if(!$val)
-			return;
-		$this->print_table_row ( $label, $val );
-	}	
-	public function print_table_row($label, $val) {
-		echo "<tr><td class='leg_info_label'>$label: </td><td class='leg_info_val'>$val</td></tr>";
-	}	
-	public function print_list_row() {
-	
-		echo "<tr ><td class='leg_thumb' >";
-		echo "<a href=''>";
-		echo "<img src=''/></a>";
-		echo "</td><td class='leg_info' ><a href=''><h2> $this->displayname</h2></a><table>";
-	
-		$this->print_table_val ( 'District', 'district' );
-		$this->print_table_val ( 'Party', 'party' );
-				//$this->print_table_val ( 'Counties', 'county' );
-				//$this->print_table_val ( 'Email', 'email' );
-				//$this->print_table_val ( 'Phone', 'phone' );
-		echo '</table>';
-		echo '</td></tr>';	
-	}
-
-}
 class survey_questions extends data_source
 {
 	public function __construct() {
@@ -612,6 +580,60 @@ function get_grade($score,&$grade,&$color)
 	
 	
 }
+class canidate extends json_obj{
+	public $displayname;
+	public $key;
+	public $party;
+	public $first;
+	public $last;		
+
+	public $id;
+	public $uid;
+	public $party;	
+	public $chamberId;
+	public $chamber;
+	public $url_cover_jpg;
+
+	public $jpg_path;
+	public $url;
+	
+	
+	key	election	electiondt	chamber	district	party	nameonballot	endorsements	first	middle	last	namesuffix	addr	city	state	zip
+
+	
+	
+	public function __construct($data_in) {
+		$this->data = $data_in;
+		$this->displayname=$this->get('nameonballot');
+	}
+	public function print_table_val($label, $field) {
+		$val = $this->data->{	'gsx$' . $field }->{'$t' };
+		if(!$val)
+			return;
+		$this->print_table_row ( $label, $val );
+	}
+	public function print_table_row($label, $val) {
+		echo "<tr><td class='leg_info_label'>$label: </td><td class='leg_info_val'>$val</td></tr>";
+	}
+	public function print_list_row() {
+
+		echo "<tr ><td class='leg_thumb' >";
+		echo "<a href=''>";
+		echo "<img src=''/></a>";
+		echo "</td><td class='leg_info' ><a href=''><h2> $this->displayname</h2></a><table>";
+
+		$this->print_table_val ( 'District', 'district' );
+		$this->print_table_val ( 'Party', 'party' );
+		//$this->print_table_val ( 'Counties', 'county' );
+		//$this->print_table_val ( 'Email', 'email' );
+		//$this->print_table_val ( 'Phone', 'phone' );
+		echo '</table>';
+		echo '</td></tr>';
+	}
+
+}
+
+
 class legislator extends json_obj{
 	
 	public $name;

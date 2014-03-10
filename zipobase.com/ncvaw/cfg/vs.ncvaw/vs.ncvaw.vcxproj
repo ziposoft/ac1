@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{309F708D-3DAC-4907-9430-DBB28AE661C1}</ProjectGuid>
+    <RootNamespace>vsncvaw</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\..\about\aboutus.html" />
+    <None Include="..\..\about\contact.html" />
+    <None Include="..\..\about\donate.html" />
+    <None Include="..\..\about\getinvolved.html" />
+    <None Include="..\..\about\lobbying101.html" />
+    <None Include="..\..\about\who.html" />
+    <None Include="..\..\bills.php" />
+    <None Include="..\..\district.php" />
+    <None Include="..\..\districts.php" />
+    <None Include="..\..\global.php" />
+    <None Include="..\..\guide\bill.html" />
+    <None Include="..\..\guide\billpage.html" />
+    <None Include="..\..\guide\billpage.php" />
+    <None Include="..\..\guide\find.html" />
+    <None Include="..\..\guide\getleg.php" />
+    <None Include="..\..\guide\house.html" />
+    <None Include="..\..\guide\leglist.html" />
+    <None Include="..\..\guide\legpage.php" />
+    <None Include="..\..\guide\senate.html" />
+    <None Include="..\..\guide\survey.html" />
+    <None Include="..\..\home.html" />
+    <None Include="..\..\inc\fblike.p" />
+    <None Include="..\..\inc\fb_script.p" />
+    <None Include="..\..\inc\foot.php" />
+    <None Include="..\..\inc\head.php" />
+    <None Include="..\..\inc\headscripts.p" />
+    <None Include="..\..\inc\jquery.js" />
+    <None Include="..\..\inc\maps_lib2.js" />
+    <None Include="..\..\inc\mfooter.p" />
+    <None Include="..\..\inc\mgallery.p" />
+    <None Include="..\..\inc\mheader.p" />
+    <None Include="..\..\inc\mlfd.css" />
+    <None Include="..\..\inc\Mobile_Detect.php" />
+    <None Include="..\..\inc\ncleg.php" />
+    <None Include="..\..\inc\ncvaw.css" />
+    <None Include="..\..\inc\ncvaw.js" />
+    <None Include="..\..\inc\unused.js" />
+    <None Include="..\..\inc\zs_menu.css" />
+    <None Include="..\..\inc\zs_menu.js" />
+    <None Include="..\..\inc\zs_menu.php" />
+    <None Include="..\..\news.html" />
+    <None Include="..\..\phpinfo.php" />
+    <None Include="..\..\site_head.php" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\guide\blue-pushpin.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
