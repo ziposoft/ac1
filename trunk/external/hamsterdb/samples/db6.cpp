@@ -92,12 +92,13 @@ int create(int size,int keysize) {
 	hamsterdb::record record;  /* a record */
 	if(keysize==0)
 		keysize=21;
-	ham_parameter_t param=		  { HAM_PARAM_KEYSIZE, keysize };
+	//ham_parameter_t param=		  { HAM_PARAM_KEYSIZE, keysize };
+	ham_parameter_t param=		  { HAM_PARAM_KEY_TYPE, HAM_TYPE_UINT32   };
 	printf("running create %x %x\n",size,keysize);
 	env.create(db_name);
-	//db = env.create_db(1,0,&param);
-	db = env.create_db(1,0,0);
-	db.set_compare_func(my_int_compare);
+	db = env.create_db(1,0,&param);
+	//db = env.create_db(1,0,0);
+	//db.set_compare_func(my_int_compare);
 	char buf[12];
 	for (i = 0; i < size; i++)
 	{
