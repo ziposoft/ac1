@@ -13,12 +13,12 @@ if($chamber=='H')
 else
 	$chamber='S';
 	
-	
+$url="/guide/leglist.html?ch=".$chamber;
 ?>
-<h2>List of $chamberName members</h2>
+<h2>List of <?php echo("$chamberName"); ?> members</h2>
 
 
- 		<form  action="javascript:void(0);" autocomplete="on" >
+ 		<form  style="display:inline"   action="javascript:void(0);" autocomplete="on" >
  	<span>Search by last name: </span>	
 	<input style="width:300px" type="search"	 value=""
 						 title="Enter an address or an intersection &hellip;"
@@ -30,7 +30,8 @@ else
 							 onchange="name_filter_chage()"/>
 					
  		</form>
- 		<a>Sort by </a>
+ 		<a href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>&sort=dist'>Sort by District</a>
+ 		<a style="margin:20px" href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>'>Sort by Name</a>
  	
  		<div id='namelist'>
 <?php

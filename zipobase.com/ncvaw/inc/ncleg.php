@@ -168,9 +168,9 @@ class vote extends json_obj{
 			$vote='Sponsor';		
 		if($vote=='N/V')
 			$vote='Did Not Vote';
-		echo "<td>";
+		echo "<td><div class='$class'>$vote</div>";
 		if($picture) 
-			echo "<div class='$class'>$vote</div><img style='width:60px' title='$title' src='/img/$picture'/>";
+			echo "<img style='width:60px' title='$title' src='/img/$picture'/>";
 		
 		echo "</td>";	
 		echo "<td><div><a href='/guide/billpage.php?doc=$doc'>$doc - $bill->official</a></div>";
@@ -448,14 +448,17 @@ class survey_data extends data_source
 	{
 		foreach ( $this->rows as $row )
 		{
-			$first=getj($row,'firstname');
-			$last=getj($row,'lastname');
+			$key=getj($row,'key');
 				
-			$leg=getobj("leg_list")->get_leg_by_name($first,$last);
+			$leg=getobj("leg_list")->get_leg_by_key($key);
 			if($leg)
 			{
 				
 				$leg->print_list_row();
+			}
+			else {
+				echo("<div>$key </div>");
+				
 			}
 		}
 	}
@@ -659,7 +662,7 @@ class legislator extends json_obj{
 	
 	}	
 	public function print_table_val($label, $field) {
-		$val = $this->data->{	'gsx$' . $field }->{'$t' };
+		$val = $this->get( $field);
 		if(!$val)
 			return;
 		$this->print_table_row ( $label, $val );
@@ -695,7 +698,13 @@ class legislator extends json_obj{
 		$grade="?";
 		$color="#000";
 		get_grade($score,$grade,$color);
-		$this->print_table_val ( 'District', 'district' );	
+		/*
+		$district=
+		*/
+		$district=$this->get('district');
+		$district_url="'/district.php?dist=". $district . "&ch=" . $this->chamberId . "'"; 
+		$this->print_table_row ( 'District', "<a href=$district_url>$district</a>" );
+
 		$this->print_table_val ( 'Party', 'party' );			
 		$this->print_table_val ( 'Counties', 'county' );		
 		$this->print_table_val ( 'Email', 'email' );		
@@ -729,7 +738,17 @@ class leg_list extends data_source{
 		$this->get_data(2);
 		
 	}
+	public function get_leg_by_key($key) {
+		foreach ( $this->rows as $row ) {
 	
+			if(
+			(getj($row,'key')==$key))
+			{
+				return new legislator ( $row );
+			}
+		}
+		return 0;
+	}	
 	public function get_leg_by_name($first,$last) {
 		foreach ( $this->rows as $row ) {
 				

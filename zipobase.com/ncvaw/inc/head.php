@@ -73,8 +73,8 @@ make_menu([
 		z_mi("Canidates Survey","/guide/survey.html",""),
 		
 		//z_menu_sub("Search Legislature",[
-		z_mi("Senate List","/guide/senate.html","HOME"),
-		z_mi("House List","/guide/house.html",""),
+		z_mi("Senate List","/guide/leglist.html?ch=S","HOME"),
+		z_mi("House List","/guide/leglist.html?ch=H",""),
 		//]),	
 		//z_mi("LEGISLATIVE REPORT CARD","/guide/leglist.html","HOME"),
 
