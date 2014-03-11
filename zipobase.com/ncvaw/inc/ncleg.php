@@ -370,10 +370,19 @@ class survey_data extends data_source
 		$this->get_data(1,"0AonA9tFgf4zjdE45M0MyZTR0UUYxXzNzRjBuNWFnMGc");
 
 	}
-	
+	public function getrow_bykey($key)
+	{
+		foreach ( $this->rows as $row )
+		{
+			if (getj($row,'key')==$key)
+			{
+				return $row;
+			}
+		}
+		return null;
+	}	
 	public function getrow($first,$last)
 	{
-	
 		foreach ( $this->rows as $row )
 		{
 			$f=getj($row,'firstname');
@@ -382,19 +391,18 @@ class survey_data extends data_source
 			{
 				return $row;
 			}
-			
-				
 		}
 		return null;
-
-	
 	}	
-	public function printresp($first,$last)
+	public function printresp($key)
 	{
-		$row = $this->getrow($first,$last);
+		$row = $this->getrow_bykey($key);
 		if(!$row)
+        {
+            echo("<div>Did not respond to our survey.</div>");    
 			return;
-		
+        }
+		echo("<div  style='max-width:800px'><h3>Resposes to animal welfare survey:</h3>");    
 		for ($x=1; $x<=5; $x++)
 		{
 			
@@ -404,11 +412,12 @@ class survey_data extends data_source
 			$a=getj($row,"a$x");
 			if(!$a)
 				$a="could not get answer";			
-			echo("<div>Question #$x</div>");
+			echo("<div style='margin-top:30px' class='section_head'>Question #$x</div>");
 			echo("<div>$q</div>");
-			echo("<div>Answer:</div>");
+			echo("<div style='margin-top:10px' class='section_head'>Answer:</div>");
 			echo("<div>$a</div>");
 		}
+        echo("</div>");  
 
 	}
 
@@ -438,6 +447,15 @@ class canidates extends data_source
 		$this->list=array();
 		
 	}	
+	public function get_candiate($key)
+	{
+		foreach ( $this->rows as $row )
+		{
+			if($key==getj($row,'key'))
+				return new canidate ( $row );
+		}
+		return null;
+	}	
 	public function getlist($ch,$num)
 	{
 		$set=array();
@@ -446,9 +464,7 @@ class canidates extends data_source
 			if( (getj($row,'district')==$num) &&(getj($row,'chamber')==$ch))
 			{
 				$set [] = new canidate ( $row );
-				
 			}	
-			
 		}
 		return $set;
 	}
@@ -463,7 +479,9 @@ class canidates extends data_source
 			if(getj($row,'chamber')==$ch)
 				if( getj($row,'district')==$num)
 				{
+					
 					$x = new canidate ( $row );
+					
 					$x->print_list_row();
 					
 					
@@ -584,27 +602,44 @@ class canidate extends json_obj{
 	public $displayname;
 	public $key;
 	public $party;
+	public $party_id;
 	public $first;
 	public $last;		
 
 	public $id;
 	public $uid;
-	public $party;	
 	public $chamberId;
 	public $chamber;
 	public $url_cover_jpg;
 
 	public $jpg_path;
 	public $url;
-	
-	
-	key	election	electiondt	chamber	district	party	nameonballot	endorsements	first	middle	last	namesuffix	addr	city	state	zip
+	public $photo;	
+	public $website;
+	public $email;
+	public $election;	
 
 	
 	
 	public function __construct($data_in) {
 		$this->data = $data_in;
 		$this->displayname=$this->get('nameonballot');
+		$this->party_id = $this->get('party');		
+		$this->chamberId = $this->get('chamber');
+		$this->party=$this->party_id;
+		if($this->party_id=='DEM')
+		{
+			$this->party=='Democratic';
+		}
+		if($this->party_id=='REP')
+		{
+			$this->party=='Republican';
+		}		
+		if($this->chamberId=='H')
+			$this->chamber='House';
+		else
+			$this->chamber='Senate';
+					
 	}
 	public function print_table_val($label, $field) {
 		$val = $this->data->{	'gsx$' . $field }->{'$t' };
@@ -615,20 +650,53 @@ class canidate extends json_obj{
 	public function print_table_row($label, $val) {
 		echo "<tr><td class='leg_info_label'>$label: </td><td class='leg_info_val'>$val</td></tr>";
 	}
+	public function get_running() {
+		$running="Running in the ";
+		
+		if($this->get('election')=='gen')
+		{
+			$running.='general election 11/4/2014';
+			
+		}
+		else
+		{
+			$running.=$this->party . 'primary election 5/6/2014';
+		}
+		return $running;
+	}
 	public function print_list_row() {
+		
+		$leg=getobj("leg_list")->get_leg_by_key($this->key);
+		if($leg)
+		{
+			$leg->print_list_row();
+			return;
+		}
+		
+		$lastname=strtolower($this->get('last'));
+		echo "<div class='leg_bio' data-name='$lastname'><hr/>";
+		//thumbnail
+		$photo = $this->get('photo');
+		if($photo)
+		{
+		
+			echo "<div class='leg_thumb' ><a href='/guide/legpage.php?id=$this->id'>";
+			echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a></div>";
+		}
+	
+		echo "</div><div class='leg_info' ><a href='/guide/legpage.php?id=$this->id'><h2>$title $this->name</h2></a><table>";
+		 $district=$this->get('district');
+		 $district_url="'/district.php?dist=". $district . "&ch=" . $this->chamberId . "'";
+		 $this->print_table_row ( 'District', "<a href=$district_url>$district</a>" );
+		
+		 $this->print_table_row ( 'Party', $party );
+		
+		 $this->print_table_val ( 'Email', 'email' );
+		 $this->print_table_val ( 'Phone', 'phone' );
 
-		echo "<tr ><td class='leg_thumb' >";
-		echo "<a href=''>";
-		echo "<img src=''/></a>";
-		echo "</td><td class='leg_info' ><a href=''><h2> $this->displayname</h2></a><table>";
-
-		$this->print_table_val ( 'District', 'district' );
-		$this->print_table_val ( 'Party', 'party' );
-		//$this->print_table_val ( 'Counties', 'county' );
-		//$this->print_table_val ( 'Email', 'email' );
-		//$this->print_table_val ( 'Phone', 'phone' );
-		echo '</table>';
-		echo '</td></tr>';
+ 		echo '</table>';
+ 		
+ 		echo "</div></div><div style='clear:both'></div>";
 	}
 
 }
@@ -641,6 +709,7 @@ class legislator extends json_obj{
 	public $last;		
 	public $displayname;
 	public $id;
+	public $key;	
 	public $uid;
 	public $party;	
 	public $chamberId;
@@ -654,7 +723,7 @@ class legislator extends json_obj{
 		$this->data = $data_in;
 		$this->first = $this->get('first');
 		$this->last = $this->get('last');
-		
+		$this->key = $this->get('key');		
 		
 		
 		$this->name = $this->first.' '.$this->last;
@@ -671,7 +740,7 @@ class legislator extends json_obj{
 	}	
 	
 	public function print_survey() {
-		getobj("survey_data")->printresp($this->first ,$this->last);
+		getobj("survey_data")->printresp($this->key);
 	}	
 	public function print_list_votes() 
 	{
@@ -698,6 +767,9 @@ class legislator extends json_obj{
 	}	
 	public function print_list_row() {
 		global $isPhone;
+		
+		
+		$canidate=getobj("canidates")->get_candiate($this->key);
 		
 		$votelist=array();
 		//$this->init ();
@@ -726,7 +798,14 @@ class legislator extends json_obj{
 		$district=$this->get('district');
 		$district_url="'/district.php?dist=". $district . "&ch=" . $this->chamberId . "'"; 
 		$this->print_table_row ( 'District', "<a href=$district_url>$district</a>" );
-
+		$running="Not running for re-election.";
+		if($canidate)
+		{
+			$running=$canidate->get_running();
+	
+			
+		}
+		$this->print_table_row ( '2014 Election:', $running );
 		$this->print_table_val ( 'Party', 'party' );			
 		$this->print_table_val ( 'Counties', 'county' );		
 		$this->print_table_val ( 'Email', 'email' );		
