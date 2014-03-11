@@ -629,11 +629,11 @@ class canidate extends json_obj{
 		$this->party=$this->party_id;
 		if($this->party_id=='DEM')
 		{
-			$this->party=='Democratic';
+			$this->party='Democratic';
 		}
 		if($this->party_id=='REP')
 		{
-			$this->party=='Republican';
+			$this->party='Republican';
 		}		
 		if($this->chamberId=='H')
 			$this->chamber='House';
@@ -660,7 +660,7 @@ class canidate extends json_obj{
 		}
 		else
 		{
-			$running.=$this->party . 'primary election 5/6/2014';
+			$running.=$this->party . ' primary election 5/6/2014';
 		}
 		return $running;
 	}
@@ -674,7 +674,7 @@ class canidate extends json_obj{
 		}
 		
 		$lastname=strtolower($this->get('last'));
-		echo "<div class='leg_bio' data-name='$lastname'><hr/>";
+		echo "<div class='leg_bio' data-name='$lastname'><hr>";
 		//thumbnail
 		$photo = $this->get('photo');
 		if($photo)
@@ -684,12 +684,14 @@ class canidate extends json_obj{
 			echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a></div>";
 		}
 	
-		echo "</div><div class='leg_info' ><a href='/guide/legpage.php?id=$this->id'><h2>$title $this->name</h2></a><table>";
+		echo "<div class='leg_info' >
+			<a href='/guide/canidates.php?id=$this->key'><h2>$this->displayname</h2></a>
+			<!-- there is no div here --><table><tr><td/><td/></tr>";
 		 $district=$this->get('district');
 		 $district_url="'/district.php?dist=". $district . "&ch=" . $this->chamberId . "'";
 		 $this->print_table_row ( 'District', "<a href=$district_url>$district</a>" );
 		
-		 $this->print_table_row ( 'Party', $party );
+		 $this->print_table_row ( 'Party', $this->party );
 		
 		 $this->print_table_val ( 'Email', 'email' );
 		 $this->print_table_val ( 'Phone', 'phone' );
