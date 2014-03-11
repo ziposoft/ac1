@@ -44,10 +44,7 @@ if($distobj)
 	</p>
 <?php 
  
-$leglist=new leg_list();
 
-$leglist->get_list ($chamber,$district  );
-$leglist->print_list ();
 
 getobj('canidates')->printlist($chamber,$district);
 
