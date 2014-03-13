@@ -26,14 +26,14 @@ public:
 	zb_source();
 	z_string _name;
 	virtual ~zb_source(){};
-	virtual zb_status open()=0;
-	virtual zb_status get_tables()=0;
-	virtual zb_status close()=0;
-	virtual zb_status get_table_desc(ctext ds_table_name,zb_desc& desc)=0;
-	virtual bool is_open()=0;
+	virtual zb_status open(){ return zb_not_implemented;};
+	virtual zb_status get_tables(){ return zb_not_implemented;};
+	virtual zb_status close(){ return zb_not_implemented;};
+	virtual zb_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return zb_not_implemented;};
+	virtual bool is_open(){ return false;};
 	//virtual int get_record()=0;
-	virtual zb_st_master* get_tbl_master()=0;
-	virtual zb_ds_table* get_tbl(ctext ds_table_name)=0;
+	virtual zb_st_master* get_tbl_master(){ return 0;};
+	virtual zb_ds_table* get_tbl(ctext ds_table_name){ return 0;};
 
 
 	z_map<zb_table> _tables;
