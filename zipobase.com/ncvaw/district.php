@@ -42,14 +42,15 @@ if($distobj)
 	<p>
 	<?php echo($counties);?>
 	</p>
-<?php 
- 
-
-
-getobj('canidates')->printlist($chamber,$district);
-
-?>	
 	
+	<h2>Primary Election 5/6/2014</h2>
+<?php 
+getobj('canidates')->printlist($chamber,$district,"primary");
+?>		
+<h2>General Election 11/4/2014</h2>
+<?php	
+	getobj('canidates')->printlist($chamber,$district,"gen");
+	?>
 	</div>
 
 
