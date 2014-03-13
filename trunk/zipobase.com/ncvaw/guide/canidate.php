@@ -3,27 +3,22 @@ include $header;
 
 include $root.'/inc/ncleg.php';
 $key=getParam( "key");
-
-if (!$legid)
-	echo '<h2>No id selected</h2>';
-
-
-
-$leg=getobj("canidates")->get_candiate($key);
-
-?>
+$canidate=null;
+if ($key)
+{
+	$canidate=getobj("canidates")->get_candiate($key);
+}
+echo("<div class='text_wrap'>");
 
 
-<div class="text_wrap">
-<?php 
-$leg->print_list_row();
+if($canidate)
+{
+	$canidate->print_list_row();
+	//$canidate->print_survey();	
+	
+}
+else
+	echo ("<h2>Canidate $key not found</h2>");
+echo("</div>");
 
-$leg->print_survey();
-
-
-
-?>
-
-
-
-<?php include $footer; ?>
+ include $footer; ?>
