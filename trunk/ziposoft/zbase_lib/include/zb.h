@@ -32,6 +32,8 @@ enum zb_status
 {
 	zb_ok,
 	zb_end_of_data,
+	zb_not_supported,
+	zb_not_implemented,
 	zb_bad_param,
 	zb_cant_open_file,
 	zb_unknown_data_error,
