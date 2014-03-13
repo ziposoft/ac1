@@ -228,6 +228,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\datasource.cpp" />
+    <ClCompile Include="..\src\ds_hamster.cpp" />
+    <ClCompile Include="..\src\ds_metakit.cpp" />
+    <ClCompile Include="..\src\ds_sqlite.cpp" />
+    <ClCompile Include="..\src\ds_text.cpp" />
     <ClCompile Include="..\src\field.cpp" />
     <ClCompile Include="..\src\record.cpp" />
     <ClCompile Include="..\src\table.cpp" />
@@ -236,6 +240,10 @@
   <ItemGroup>
     <ClInclude Include="..\include\datasource.h" />
     <ClInclude Include="..\include\db_file.h" />
+    <ClInclude Include="..\include\ds_hamster.h" />
+    <ClInclude Include="..\include\ds_metakit.h" />
+    <ClInclude Include="..\include\ds_sqlite.h" />
+    <ClInclude Include="..\include\ds_text.h" />
     <ClInclude Include="..\include\field.h" />
     <ClInclude Include="..\include\field_static.h" />
     <ClInclude Include="..\include\record.h" />

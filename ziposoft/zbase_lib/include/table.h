@@ -11,8 +11,8 @@ protected:
 	z_string _name;
 	zb_desc _desc;
 	zb_source* _ds;
+	zb_ds_table* _ds_table;
 public:
-	
 	zb_table_base(zb_source* ds,ctext name)
 	{
 		_ds=ds;
