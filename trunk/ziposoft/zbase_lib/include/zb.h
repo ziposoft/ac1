@@ -11,10 +11,17 @@
 
 typedef U64 zb_key_size;
 typedef zb_key_size zb_key;
-class zb_recp;
+
+
+class zb_ds_record;
 class zb_record;
 class zb_recset;
+
 class zb_table;
+class zb_ds_table;
+class zb_ds_field;
+
+
 class zb_zipobase;
 class zb_source;
 class zb_src_sl3;
