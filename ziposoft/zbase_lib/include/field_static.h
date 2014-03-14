@@ -11,6 +11,10 @@ enum zk_static_field
 	zk_sf_1_label,
 	zk_sf_1_desc,
 
+	zk_sf_test_key,
+	zk_sf_test_str,
+
+
 
 	zk_sf_dynamic_start=1000,
 };

@@ -25,6 +25,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_parse", "tests\test_pa
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_c", "tests\test_c\test_c.vcxproj", "{D576507B-50F0-4E89-A86E-BD436AED597F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9296B73D-D94E-4724-907F-E1766D6A575C} = {9296B73D-D94E-4724-907F-E1766D6A575C}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_cpp", "tests\test_cpp\test_cpp.vcxproj", "{6A17DA71-50D6-46E2-AD7A-47A082D64F48}"
 EndProject

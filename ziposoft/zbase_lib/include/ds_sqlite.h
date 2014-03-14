@@ -6,8 +6,49 @@
 #include "zbase_lib/include/datasource.h"
 
 
+class zb_record_sqlite3: public zb_record
+{
+public:
+	zb_record_sqlite3() :zb_record()
+	{
+
+	}
+};
+
+class zb_ds_recordset_sl3 : public zb_ds_recordset
+{
+	sqlite3_stmt *_stmt;
+	zb_src_sl3 *_file_sqlite;
+public:
+	zb_ds_recordset_sl3() :zb_ds_recordset()
+	{
+		_stmt=0;
+		_file_sqlite=0;
+	}
+	zb_ds_recordset_sl3(zb_src_sl3* ds) :zb_ds_recordset()
+	{
+		_stmt=0;
+		_file_sqlite=ds;
+	}
+
+	//-------------------------------
+	//sqlite specific
+	zb_status exec_sql(ctext sqltext);
+	ctext get_column_name(int index);
+	ctext ptr_get_column_text(int index);
+	ctext ptr_get_column_type(int index);
 
 
+	//-------------------------------
+	//zb_ds_recordset - implements
+	virtual zb_key_size get_num_records(); 
+	virtual int get_num_cols(); 
+	virtual zb_status ptr_increment();
+	virtual zb_status ds_create_desc_from_source(zb_desc* desc);
+	virtual zb_status ds_get_val_string(z_string& val,zb_field* field);
+	virtual void  dump(z_file* fp); 
+
+};
 
 zb_status get_zb_status_sqlite(int sql_status);
 
@@ -47,14 +88,14 @@ public:
 	//sqlite specific
 	sqlite3* get_handle();
 
-	zb_status _get_sql_recset_sql(zb_src_set_sl3*& recset,ctext sqltext);
-	zb_status _get_sql_recset(zb_src_set_sl3*& recset,ctext tbl_name,ctext where_clause);
+	zb_status _get_sql_recset_sql(zb_ds_recordset_sl3*& recset,ctext sqltext);
+	zb_status _get_sql_recset(zb_ds_recordset_sl3*& recset,ctext tbl_name,ctext where_clause);
 
 	ctext get_last_error_msg();
 
 
 
 };
-#endif
 
+#endif
 #endif

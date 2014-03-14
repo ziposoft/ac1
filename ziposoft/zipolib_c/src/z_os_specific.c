@@ -155,6 +155,7 @@ BOOL Unicode16ToAnsi(WCHAR * in_Src, char* out_Dst, INT in_MaxLen)
 		out_Dst, 
 		in_MaxLen,
 		NULL, NULL ); // Unrepresented char replacement - Use Default
+	out_Dst[nLenUnicode]=0;
 	return TRUE;
 
 

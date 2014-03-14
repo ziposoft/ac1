@@ -11,6 +11,26 @@ ctext zb_status_text[]=
 	"zb_data_source_not_open",//zb_data_source_not_open,
 
 };
+
+
+z_obj::z_obj()
+{
+	_ref_count=1;
+}
+void z_obj::ref_inc()
+{
+	_ref_count++;
+}
+
+int z_obj::ref_dec()
+{
+	_ref_count--;
+	return _ref_count;
+}
+z_obj*  z_obj_ptr_copy(z_obj* p) { p->ref_inc(); return p; }
+void z_obj_ptr_delete(z_obj* p) { if(p->ref_dec()==0) delete p; }
+
+
 #if 0
 #define Z_MODULE _Z_MODULE(zipobase)
 #define ZO_OBJ_LIST \

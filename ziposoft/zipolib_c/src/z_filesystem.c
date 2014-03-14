@@ -175,33 +175,54 @@ typedef struct _z_directory_t
 	WIN32_FIND_DATA FindFileData;
 	HANDLE handleDirectory ;
 	WCHAR* wc_path;
+	char* path;
 #else
     DIR* handleDirectory ;
 	struct dirent* entry;
 #endif
-	char* path;
+
 
 } _z_directory;
+
+#ifdef BUILD_VSTUDIO
+int    z_dir_open(utf8 name,z_directory_h* h)
+{
+	U32 temp;
+	int result=-1;
+	WCHAR* wc_path;
+	_z_directory* zdir;
+	DBG_OUT(("z_dir_open %s\n",name));
+	wc_path= WCHAR_str_allocate( name,MAX_PATH);
+	temp=GetFileAttributes(wc_path);
+	if((temp==INVALID_FILE_ATTRIBUTES) || ((FILE_ATTRIBUTE_DIRECTORY&temp)==0))
+	{
+		WCHAR_str_deallocate(wc_path);
+		return -1;
+	}
+
+	zdir=(_z_directory*)malloc(sizeof(_z_directory));
+	 _snwprintf_s( wc_path, MAX_PATH/2, MAX_PATH, L"%S//*", name);
+	zdir->handleDirectory=0;
+	zdir->wc_path=wc_path;
+	zdir->path=(char*)malloc(MAX_PATH);
+
+	*h=(z_directory_h)zdir;
+	return 0;
+}
+#else 
 int    z_dir_open(utf8 name,z_directory_h* h)
 {
 	_z_directory* zdir=(_z_directory*)malloc(sizeof(_z_directory));
-	zdir->path=(char*)malloc(MAX_PATH);
-	snprintf(zdir->path,MAX_PATH,"%s//*",name);
 	zdir->handleDirectory=0;
 	DBG_OUT(("z_dir_open %s\n",name));
 	*h=(z_directory_h)zdir;
-#ifdef BUILD_VSTUDIO
-	zdir->wc_path= WCHAR_str_allocate( zdir->path,MAX_PATH);
-	return 0;
-#else
 	zdir->handleDirectory=opendir(name);
 	DBG_OUT(("handleDirectory %x\n",zdir->handleDirectory));
 	if(!zdir->handleDirectory) 
 		return -1;
-#endif
 	return 0;
 }
-
+#endif
 
 int     z_dir_get_next(z_directory_h h,utf8* currentfile,int type)
 {
@@ -266,6 +287,7 @@ void   z_dir_close(z_directory_h h)
 	if(zdir->path) 
 	{
 		free(zdir->path);
+		WCHAR_str_deallocate(zdir->wc_path);
 		zdir->path=0;
 	}
 
