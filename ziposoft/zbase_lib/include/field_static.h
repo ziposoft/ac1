@@ -1,7 +1,7 @@
 #ifndef FIELD_STATIC_H
 #define FIELD_STATIC_H
 #include "zbase_lib/include/zb.h"
-
+#include "zbase_lib/include/field.h"
 
 enum zk_static_field
 {

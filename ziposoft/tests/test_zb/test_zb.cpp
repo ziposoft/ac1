@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 
 	zb_record rec;
 
-	table_test.record_create(&rec);
+	table_test.get_default_rec(&rec);
 
 
 

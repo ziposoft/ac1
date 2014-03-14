@@ -17,6 +17,7 @@ public:
 	{
 		_ds=ds;
 		_name=name;
+		_desc , &g_field_key;
 	}
 	zb_table_base()
 	{

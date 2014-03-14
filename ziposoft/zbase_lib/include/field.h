@@ -28,8 +28,9 @@ public:
 class zb_field_key : public zb_field_int32
 {
 public:
-	zb_field_key(zb_key key);
+	zb_field_key();
 };
+const zb_field_key g_field_key;
 class zb_field_int64: public zb_field
 {
 public:

@@ -2,7 +2,7 @@
 #define RECORD_H
 #include "zbase_lib/include/zb.h"
 
-#include "zbase_lib/include/field.h"
+#include "zbase_lib/include/field_static.h"
 
 
 class zb_record

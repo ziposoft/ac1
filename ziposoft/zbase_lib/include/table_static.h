@@ -19,7 +19,7 @@ class zb_st_test : public zb_table_static
 {//zk_st_master=1
 public:
 	zb_st_test(zb_source* ds);
-
+	zb_field_string* _f_name;
 
 };
 
