@@ -1,4 +1,4 @@
-#include "zbase_lib/include/field.h"
+#include "zbase_lib/include/field_static.h"
 #include "zbase_lib/include/record.h"
 zb_field::zb_field(zb_key key,ctext name)
 {
@@ -30,11 +30,11 @@ zb_status zb_field_int32::get_data_text(zb_recset* rec,z_string& text)
 }
 
 
-zb_field_key::zb_field_key(zb_key key):zb_field_int32(key,"Key")
+zb_field_key::zb_field_key():zb_field_int32(zk_sf_1_key,"Key")
 {
 
-
 }
+const zb_field_key g_field_key;
 
 zb_field_string::zb_field_string(zb_key key,ctext name):zb_field(key,name)
 {
