@@ -235,6 +235,7 @@
     <ClCompile Include="..\src\field.cpp" />
     <ClCompile Include="..\src\record.cpp" />
     <ClCompile Include="..\src\table.cpp" />
+    <ClCompile Include="..\src\table_static.cpp" />
     <ClCompile Include="..\src\zipobase.cpp" />
   </ItemGroup>
   <ItemGroup>

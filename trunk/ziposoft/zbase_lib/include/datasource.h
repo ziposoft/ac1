@@ -2,7 +2,7 @@
 #define DATASOURCE_H
 #include "zbase_lib/include/zb.h"
 #include "zbase_lib/include/table_static.h"
-#include "zipolib_cpp/include/z_stl_map.h"
+
 
 
 class zb_ds_table  
@@ -15,6 +15,9 @@ class zb_ds_field
 public:
 
 };
+
+
+
 class zb_ds_record  
 {
 public:
@@ -36,7 +39,7 @@ public:
 	virtual zb_ds_table* get_tbl(ctext ds_table_name){ return 0;};
 
 
-	z_map<zb_table> _tables;
+	z_map<zb_table_base> _tables;
 
 };
 

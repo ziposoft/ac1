@@ -7,6 +7,7 @@
 enum zk_st
 {
 	zk_st_master=1,
+	zk_st_test,
 	zk_st_users,
 	zk_st_fields,
 	zk_st_field_text,
@@ -14,6 +15,13 @@ enum zk_st
 	zk_st_dynamic_start=100,
 };
 
+class zb_st_test : public zb_table_static
+{//zk_st_master=1
+public:
+	zb_st_test(zb_source* ds);
+
+
+};
 
 
 class zb_st_master : public zb_table_static
@@ -22,7 +30,7 @@ public:
 	zb_st_master(zb_source* ds);
 
 
-	zb_table* get_table(zk_st id);
+	zb_table_base* get_table(zk_st id);
 };
 
 class zb_st_users : public zb_table_static
