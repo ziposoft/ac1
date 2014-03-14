@@ -3,8 +3,12 @@
 #include "zbase_lib/include/zb.h"
 #include "zbase_lib/include/record.h"
 
+class zb_record_set // : public z_obj
+{
 
 
+
+};
 class zb_table_base // : public z_obj
 {
 protected:
@@ -42,6 +46,19 @@ public:
 	{
 	}
 	zb_table() : zb_table_base()
+	{
+	}
+};
+
+class zb_table_dynamic : public zb_table_base
+{
+protected:
+public:
+	
+	zb_table_dynamic(zb_source* ds,ctext name) : zb_table_base(ds,name)
+	{
+	}
+	zb_table_dynamic() : zb_table_base()
 	{
 	}
 };
