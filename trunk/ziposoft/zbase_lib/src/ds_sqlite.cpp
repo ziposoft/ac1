@@ -1,8 +1,8 @@
+#include "zb_pch.h"
+#include "zbase_lib/include/zb.h"
 
 #ifdef ZB_SQLITE
-
 #include "zbase_lib/include/ds_sqlite.h"
-
 
 
 
@@ -45,7 +45,7 @@ zb_st_master* zb_src_sl3::get_tbl_master()
 	// tbl->_ds_recset
 	return 0;
 }
-zb_table* zb_src_sl3::get_tbl(ctext ds_table_name)
+zb_ds_table* zb_src_sl3::get_tbl(ctext ds_table_name)
 {
 	ZTF;
 	zb_ds_recordset_sl3* recset=new zb_ds_recordset_sl3(this);
@@ -55,7 +55,7 @@ zb_table* zb_src_sl3::get_tbl(ctext ds_table_name)
 	recset->exec_sql(sqltext);
 
 
-	zb_table* tbl=0;//new zb_table(this);
+	zb_ds_table* tbl=0;//new zb_table(this);
 
 
 	//	tbl->create_desc_from_source();
@@ -170,7 +170,7 @@ zb_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
 	status=recset.exec_sql(s);
 	ZT(("status=%s",zb_status_text[status]));
 
-	desc.clear_objs();
+	desc.clear_all();
 
 	// Read the number of rows fetched
 	int cols = recset.get_num_cols();

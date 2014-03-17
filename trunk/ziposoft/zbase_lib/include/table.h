@@ -4,7 +4,7 @@
 #include "zbase_lib/include/record.h"
 
 
-class zb_table_base : public z_obj
+class zb_table_base : public z_refcount
 {
 protected:
 	z_string _name;
@@ -34,6 +34,10 @@ public:
 	{
 		return _desc;
 	}
+
+	zb_status get_default_rec(zb_record *rec);
+	zb_status record_add(zb_record *rec);
+
 };
 
 

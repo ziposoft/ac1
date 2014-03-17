@@ -1,3 +1,5 @@
+#include "zb_pch.h"
+
 #include "zbase_lib/include/ds_text.h"
 
 zb_status zb_ds_text::open()

@@ -1,18 +1,38 @@
 #ifndef RECORD_H
 #define RECORD_H
-#include "zbase_lib/include/zb.h"
+
 
 #include "zbase_lib/include/field_static.h"
 
-
 class zb_record
 {
-public:
-	zb_record()
-	{
 
-	}
+	zb_desc* _p_desc;
+	zb_recset* _p_recset;
+public:
+	zb_record();
+	zb_record(zb_desc* desc);
+	zb_record(zb_recset* recset);
 };
+
+class zb_recset
+{
+	zb_ds_recordset* _ds_recset;
+protected:
+public:
+	zb_desc _desc;
+	zb_recset(zb_ds_recordset* ds_recset)
+	{
+		_ds_recset=ds_recset;
+	}
+	zb_status create_desc_from_source();
+	virtual zb_status ptr_increment(); 
+	virtual zb_status get_val_string(z_string& val,zb_field* field);
+	zb_field* get_field(ctext name);
+	zb_desc* get_desc();
+
+};
+
 
 class zb_ds_recordset
 {
@@ -47,21 +67,6 @@ public:
 };
 
 
-class zb_recset
-{
-	zb_ds_recordset* _ds_recset;
-protected:
-public:
-	zb_desc _desc;
-	zb_recset(zb_ds_recordset* ds_recset)
-	{
-		_ds_recset=ds_recset;
-	}
-	zb_status create_desc_from_source();
-	virtual zb_status ptr_increment(); 
-	virtual zb_status get_val_string(z_string& val,zb_field* field);
-	zb_field* get_field(ctext name);
 
-};
 
 #endif

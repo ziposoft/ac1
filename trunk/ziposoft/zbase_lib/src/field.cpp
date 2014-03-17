@@ -1,3 +1,5 @@
+#include "zb_pch.h"
+
 #include "zbase_lib/include/field_static.h"
 #include "zbase_lib/include/record.h"
 zb_field::zb_field(zb_key key,ctext name)
@@ -34,7 +36,6 @@ zb_field_key::zb_field_key():zb_field_int32(zk_sf_1_key,"Key")
 {
 
 }
-const zb_field_key g_field_key;
 
 zb_field_string::zb_field_string(zb_key key,ctext name):zb_field(key,name)
 {
