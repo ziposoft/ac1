@@ -1,3 +1,6 @@
+#include "zb_pch.h"
+
+
 #include "zbase_lib/include/zipobase.h"
 
 
@@ -13,22 +16,22 @@ ctext zb_status_text[]=
 };
 
 
-z_obj::z_obj()
+z_refcount::z_refcount()
 {
 	_ref_count=1;
 }
-void z_obj::ref_inc()
+void z_refcount::ref_inc()
 {
 	_ref_count++;
 }
 
-int z_obj::ref_dec()
+int z_refcount::ref_dec()
 {
 	_ref_count--;
 	return _ref_count;
 }
-z_obj*  z_obj_ptr_copy(z_obj* p) { p->ref_inc(); return p; }
-void z_obj_ptr_delete(z_obj* p) { if(p->ref_dec()==0) delete p; }
+z_refcount*  z_obj_ptr_copy(z_refcount* p) { p->ref_inc(); return p; }
+void z_obj_ptr_delete(z_refcount* p) { if(p->ref_dec()==0) delete p; }
 
 
 #if 0

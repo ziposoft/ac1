@@ -1,5 +1,20 @@
+#include "zb_pch.h"
+
 #include "zbase_lib/include/record.h"
 #include "zbase_lib/include/datasource.h"
+
+zb_record::zb_record(zb_desc* desc)
+{
+	_p_desc=desc;
+	_p_recset=0;
+}
+zb_record::zb_record(zb_recset* recset)
+{
+	_p_desc=recset->get_desc();
+	_p_recset=recset;
+}
+
+
 
 
 zb_status zb_recset::create_desc_from_source()

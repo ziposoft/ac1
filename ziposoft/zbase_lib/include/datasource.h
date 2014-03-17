@@ -39,7 +39,8 @@ public:
 	virtual zb_ds_table* get_tbl(ctext ds_table_name){ return 0;};
 
 
-	z_map<zb_table_base> _tables;
+	z_map<zb_ds_table> _ds_tables;
+
 
 };
 

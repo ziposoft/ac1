@@ -1,3 +1,6 @@
+#include "zb_pch.h"
+
+
 #include "zbase_lib/include/table_static.h"
 
 zb_st_master::zb_st_master(zb_source* ds):zb_table_static(ds,zk_st_master,"master")

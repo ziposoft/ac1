@@ -1,12 +1,8 @@
 #ifndef ZB_H
 #define ZB_H
-#include "zipolib_cpp/include/z_string.h"
-#include "zipolib_cpp/include/z_stl_map.h"
-//#include "zipolib_cpp/include/z_time.h"
-//#include "zipolib/include/z_obj.h"
-//#include "sqlite/include/sqlite3.h"
+#include "zbase_lib/include/zb_pch.h"
+
 #define Z_PROFILING
-//#include "zipolib/include/z_trace.h"
 
 
 typedef U32 zb_key_size;
@@ -14,6 +10,8 @@ typedef zb_key_size zb_key;
 
 
 class zb_ds_record;
+class zb_ds_recordset;
+
 class zb_record;
 class zb_recset;
 
@@ -46,7 +44,7 @@ extern ctext zb_status_text[];
 
 #ifdef ZB_NO_OBJ_CLEANUP
 
-class z_obj
+class z_refcount
 {
 };
 
@@ -55,17 +53,17 @@ class z_obj
 
 #else
 
-class z_obj
+class z_refcount
 {
 	int _ref_count;
 public:
-	z_obj();
-	virtual ~z_obj() {}
+	z_refcount();
+	virtual ~z_refcount() {}
 	void ref_inc();
 	int ref_dec();
 };
-inline z_obj*  z_obj_ptr_copy(z_obj* p) ;
-inline void z_obj_ptr_delete(z_obj* p) ;
+inline z_refcount*  z_obj_ptr_copy(z_refcount* p) ;
+inline void z_obj_ptr_delete(z_refcount* p) ;
 
 
 #define ZPTR_COPY(_PTR_) z_obj_ptr_copy(_PTR_);

@@ -108,7 +108,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../include;../../</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../../;../../../third/</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>Z_TRACE=1;WIN32;_DEBUG;_LIB;DEBUG=1;VISUALC=1;Z_MODULE=zbase_lib;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -116,9 +116,10 @@
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader />
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeaderFile>zb_pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Lib />
   </ItemDefinitionGroup>
@@ -236,6 +237,9 @@
     <ClCompile Include="..\src\record.cpp" />
     <ClCompile Include="..\src\table.cpp" />
     <ClCompile Include="..\src\table_static.cpp" />
+    <ClCompile Include="..\src\zb_pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\src\zipobase.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +255,7 @@
     <ClInclude Include="..\include\table.h" />
     <ClInclude Include="..\include\table_static.h" />
     <ClInclude Include="..\include\zb.h" />
+    <ClInclude Include="..\include\zb_pch.h" />
     <ClInclude Include="..\include\zb_sqlite.h" />
     <ClInclude Include="..\include\zipobase.h" />
   </ItemGroup>

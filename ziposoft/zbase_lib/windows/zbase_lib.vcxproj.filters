@@ -41,6 +41,9 @@
     <ClCompile Include="..\src\table_static.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\zb_pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\datasource.h">
@@ -64,9 +67,6 @@
     <ClInclude Include="..\include\table_static.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\zb.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\zipobase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -83,6 +83,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ds_hamster.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\zb_pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\zb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

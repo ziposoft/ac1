@@ -17,7 +17,10 @@ int main(int argc, char* argv[])
 
 	table_test.get_default_rec(&rec);
 
+	table_test._f_name->set(&rec,"hello?");
 
+
+	table_test.record_add(&rec);
 
 
 	test1ds.close();

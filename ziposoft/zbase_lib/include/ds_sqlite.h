@@ -2,8 +2,8 @@
 #ifndef DSSQL_H
 #define DSSQL_H
 
-#include "zbase_lib/include/zb.h"
 #include "zbase_lib/include/datasource.h"
+
 
 
 class zb_record_sqlite3: public zb_record
@@ -58,7 +58,6 @@ class zb_src_sl3 : public zb_source
 protected:
 	zb_status _read_stucture();
 public:
-	ZO_OBJ_H;
 	z_string _path;
 	z_string _param_table_name;
 
@@ -81,7 +80,7 @@ public:
 
 
 	virtual zb_st_master* get_tbl_master();
-	virtual zb_table* get_tbl(ctext ds_table_name);
+	virtual zb_ds_table* get_tbl(ctext ds_table_name);
 	virtual zb_status get_tables();
 
 

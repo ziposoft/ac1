@@ -152,7 +152,10 @@ public:
 		
 		return true;
 	}
-
+	void clear_all()
+	{ 
+		v::clear(); 
+	}
 	ITEM_CLASS* get_current(z_map_iter& iter)
 	{
 
