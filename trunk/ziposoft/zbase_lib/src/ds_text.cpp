@@ -8,7 +8,7 @@ zb_ds_text::zb_ds_text(ctext name)
 	_name=name;
 
 }
-zb_status zb_ds_text::open()
+z_status zb_ds_text::open()
 {
 
 
@@ -20,7 +20,7 @@ zb_status zb_ds_text::open()
 	return zb_not_implemented;
 
 }
-zb_status zb_ds_text::close()
+z_status zb_ds_text::close()
 {
 	return zb_not_implemented;
 

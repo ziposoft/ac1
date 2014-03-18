@@ -12,9 +12,15 @@ zb_table_base::zb_table_base(zb_source* ds,zb_key key,ctext name)
 }
 
 
+z_status zb_table_base::dump()
+{
 
 
-zb_status zb_table_base::dump()
+	return zb_ok;
+
+}
+
+z_status zb_table_base::get_default_rec(zb_record *rec)
 {
 
 

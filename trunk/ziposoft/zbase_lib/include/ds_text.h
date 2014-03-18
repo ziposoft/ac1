@@ -12,8 +12,8 @@ class zb_ds_text: public zb_source
 public:
 	zb_ds_text(ctext name);
 	virtual ~zb_ds_text();
-	virtual zb_status open();
-	virtual zb_status close();
+	virtual z_status open();
+	virtual z_status close();
 	virtual bool is_open();
 };
 

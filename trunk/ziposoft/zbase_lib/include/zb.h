@@ -28,7 +28,7 @@ class zb_src_sl3;
 class zb_ds_recordset_sl3;
 
 
-enum zb_status
+enum 
 {
 	zb_ok,
 	zb_end_of_data,

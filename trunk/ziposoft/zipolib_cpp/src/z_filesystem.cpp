@@ -5,39 +5,48 @@
 
 z_status z_directory::open(ctext path)
 {
+	z_status status;
+	if(_hDir==NULL)
+	{
+		status=z_dir_open(path,&_hDir); //current dir
+		if(status!=z_status_success) 
+			return Z_ERROR_RETURN(z_status_could_not_open_dir,"Could not open directory \"%s\"",path);
 
+	}
+	return status;
 
 }
 void z_directory::close()
 {
-
+	z_dir_close(_hDir);
+	_hDir=NULL;
 
 }
 z_directory::z_directory()
 {
-	hDir=NULL;
+	_hDir=NULL;
 
 }
 z_directory::~z_directory()
 {
-	if(hDir)
-		z_dir_close(hDir);
+	if(_hDir)
+		z_dir_close(_hDir);
 
 }
 z_status z_directory::get_files_by_extension(ctext ext,z_strlist &list)
 {
 	z_status status;
-	if(hDir==NULL)
+	if(_hDir==NULL)
 	{
-		status=z_dir_open(".",&hDir); //current dir
-		if(status==-1) 
+
+		if(open(".")) 
 			return Z_ERROR_RETURN(z_status_could_not_open_dir,"Could not open local directory");
 
 	}
 	z_string filename;
 	ctext pname;
 	list.clear();
-	while(z_dir_get_next(hDir,&pname,Z_DIR_TYPE_FILE)==0)
+	while(z_dir_get_next(_hDir,&pname,Z_DIR_TYPE_FILE)==0)
 	{
 		filename=pname;
 		size_t found=filename.find_last_of('.');
@@ -49,8 +58,7 @@ z_status z_directory::get_files_by_extension(ctext ext,z_strlist &list)
 			list << filename;
 		}
 	}
-	z_dir_close(hDir);
-	hDir=NULL;
+	close();
 	return z_status_success;
 
 }

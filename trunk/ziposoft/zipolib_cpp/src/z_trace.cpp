@@ -341,7 +341,7 @@ void zt_src_file::init(ctext prof)
 	if(_setting==ztp_inherit)
 		_setting=get_setting_from_text(_default);
 	ZT(("[src file] %s = %s\n",_name.c_str(),get_text_from_setting(_setting)));
-	z_map_iter iter=zmi_null;
+	z_map_iter iter;
 	zt_func* p_f=0;
 	while((p_f=_funcs.get_next(iter)))
 	{
@@ -369,7 +369,7 @@ void zt_module::init(ctext prof)
 	_setting=_profiles.get_setting(prof);
 	if(_setting==ztp_inherit)
 		_setting=get_setting_from_text(_default);
-	z_map_iter iter=zmi_null;
+	z_map_iter iter;
 	ZT(("[module] %s = %s\n",_name.c_str(),get_text_from_setting(_setting)));
 	zt_src_file* p_sf=0;
 	while((p_sf=_src_files.get_next(iter)))
@@ -422,7 +422,7 @@ z_trace::z_trace()
 -----------------------------------------------------------------------*/
 void  z_trace::init_modules()
 {
-	z_map_iter iter=zmi_null;
+	z_map_iter iter;
 	zt_module* p_mod=0;
 	while((p_mod=_modules.get_next(iter)))
 	{
@@ -449,7 +449,7 @@ void  z_trace::init()
 	_p_current_profile=_profiles.get(_str_profile);
 	if(!_p_current_profile)
 	{
-		z_map_iter iter=zmi_null;
+		z_map_iter iter;
 		_p_current_profile=_profiles.get_next(iter);
 	}
 	_current_profile_default_set=_p_current_profile->get_setting();
