@@ -297,8 +297,6 @@ z_debug:: ~z_debug()
 
 
 
-
-z_error gz_error;
 z_debug gz_debug;
 
 

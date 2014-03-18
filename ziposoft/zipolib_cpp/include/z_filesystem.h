@@ -1,0 +1,24 @@
+#ifndef z_filesystem_cpp_h
+#define z_filesystem_cpp_h
+#include "zipolib_cpp/include/zipolib_cpp.h"
+#include "zipolib_cpp/include/z_string.h"
+#include "zipolib_c/include/z_filesystem.h"
+
+
+class z_directory
+{
+	z_directory_h hDir;
+public:
+	z_directory(); //current directory.
+	virtual ~z_directory(); //current directory.
+	z_status open(ctext path);
+	void close();
+	 
+	z_status  get_files_by_extension(ctext ext,z_strlist &str);
+
+
+};
+
+
+#endif
+

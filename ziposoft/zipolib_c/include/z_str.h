@@ -16,7 +16,7 @@ int vsnprintf(char *str, size_t size, ctext format, va_list ap);
 char z_to_upper(char c);
 int z_str_same(utf8 s1,utf8 s2);
 int z_str_check3(utf8 id,utf8 s1,utf8 s2,utf8 s3);
-
+ctext z_int_to_ctext(int i);
 
 I64 z_stringtoi(const char* p);
 U64 z_stringtoue(const char* str, int base);

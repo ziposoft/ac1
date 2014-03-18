@@ -1,6 +1,15 @@
 #include "zipolib_cpp_pch.h"
 #include "z_list.h"
+void z_strlist::dump(z_file &out)
+{
+	int i;
+	for (i=0;i<size();i++)
+	{
+		out << (*this)[i] <<'\n';
+	}
 
+
+}
 
 int z_strlist::break_string(ctext s,char break_char)
 {

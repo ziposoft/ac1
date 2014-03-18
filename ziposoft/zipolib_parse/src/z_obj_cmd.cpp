@@ -10,9 +10,9 @@ zo_man_cmd::zo_man_cmd(z_obj* root)
 
 
 }
-zp_status zo_man_cmd::parse_line(ctext text)
+z_status zo_man_cmd::parse_line(ctext text)
 {
-	zp_status status=_parser.parse_obj(&_cmd_line_obj,text);
+	z_status status=_parser.parse_obj(&_cmd_line_obj,text);
 	if(status)
 	{
 		_parser.report_error(status);
@@ -21,9 +21,9 @@ zp_status zo_man_cmd::parse_line(ctext text)
 	}
 	return status;
 }
-zp_status zo_man_cmd::execute_feature(z_obj* obj)
+z_status zo_man_cmd::execute_feature(z_obj* obj)
 {
-	zp_status status=zs_ok;
+	z_status status=zs_ok;
 	ctext feature=_cmd_line_obj._feature._name;
 	zo_ftr_entry* f=obj->get_feature(feature);
 	if(!f)
@@ -53,13 +53,11 @@ zp_status zo_man_cmd::execute_feature(z_obj* obj)
 		const zo_action_params* ap=(const zo_action_params*)(f->_ftr_specific);
 		if(!ap)
 		{
-			Z_ERROR("feature has no param list");
-			return zs_error;
+			return Z_ERROR(zs_error,"feature has no param list");
 		}
 		if(num_params>ap->size)
 		{
-			Z_ERROR("Too many parameters for \"%s\"",feature);
-			return zs_error;
+			return Z_ERROR(zs_error,"Too many parameters for \"%s\"",feature);
 
 		}
 		U32 i;
@@ -70,14 +68,12 @@ zp_status zo_man_cmd::execute_feature(z_obj* obj)
 			ctext param_name=ap->list[i];
 			if(!param_name)
 			{
-				Z_ERROR("Action  \"%s\" has no parameters",feature);
-				return zs_error;
+				return Z_ERROR(zs_error,"Action  \"%s\" has no parameters",feature);
 			}
 			zo_ftr_entry* param_feature=obj->get_feature(param_name);
 			if(!param_feature)
 			{
-				Z_ERROR("Bad parameter \"%s\"",param_name);
-				return zs_error;
+				return Z_ERROR(zs_error,"Bad parameter \"%s\"",param_name);
 			}
 			status=feature_set_from_value(obj,_cmd_line_obj._params._param_list[i],param_feature);
 		}
@@ -96,13 +92,12 @@ zp_status zo_man_cmd::execute_feature(z_obj* obj)
 
 
 }
-zp_status zo_man_cmd::navigate_feature(ctext name)
+z_status zo_man_cmd::navigate_feature(ctext name)
 {
 	z_obj* child=get_child_obj(name,_obj_current_tmp);
 	if(!child)
 	{
-		Z_ERROR("Could not find child object \"%s\"",name);
-		return zs_child_not_found;
+		return Z_ERROR_RETURN(zs_child_not_found,"Could not find child object \"%s\"",name);
 	}
 	child->set_parent_obj(_obj_current_tmp);
 	_obj_current_tmp=child;
@@ -111,9 +106,9 @@ zp_status zo_man_cmd::navigate_feature(ctext name)
 	return zs_ok;
 
 }
-zp_status zo_man_cmd::execute_line(ctext text)
+z_status zo_man_cmd::execute_line(ctext text)
 {
-	zp_status status=parse_line(text);
+	z_status status=parse_line(text);
 	if(status)
 		return status;
 
@@ -146,8 +141,7 @@ zp_status zo_man_cmd::execute_line(ctext text)
 			z_obj* child=get_child_obj(name,_obj_current_tmp);
 			if(!child)
 			{
-				Z_ERROR("Could not find child object \"%s\"",name);
-				return zs_child_not_found;
+				return Z_ERROR_RETURN(zs_child_not_found,"Could not find child object \"%s\"",name);
 			}
 			_obj_current_tmp=child;
 		}
@@ -161,11 +155,11 @@ zp_status zo_man_cmd::execute_line(ctext text)
 		status=execute_feature(this);
 	if(status==zs_no_entry_for_item)
 	{
-		Z_ERROR("Unknown feature:\"%s\"",_cmd_line_obj._feature._name.c_str());
+		Z_ERROR(zs_no_entry_for_item,"Unknown feature:\"%s\"",_cmd_line_obj._feature._name.c_str());
 	}
 	return status;
 }
-zp_status zo_man_cmd::callback_feature_execute_obj(z_obj* pObj,zo_ftr_entry* fe)
+z_status zo_man_cmd::callback_feature_execute_obj(z_obj* pObj,zo_ftr_entry* fe)
 {
 	//This is absolutely horrible code.
 	
@@ -176,7 +170,7 @@ zp_status zo_man_cmd::callback_feature_execute_obj(z_obj* pObj,zo_ftr_entry* fe)
 	return zs_ok;
 }
 
-zp_status zo_man_cmd::dump_features_by_type(z_file* fp,z_obj* obj,U32 feature_type)
+z_status zo_man_cmd::dump_features_by_type(z_file* fp,z_obj* obj,U32 feature_type)
 {
 	_dump_fp=fp;
 	zo_feature_list list;
@@ -224,14 +218,13 @@ zp_status zo_man_cmd::dump_features_by_type(z_file* fp,z_obj* obj,U32 feature_ty
 }
 
 
-zp_status zo_man_cmd::dump_features(z_file* fp,z_obj* obj)
+z_status zo_man_cmd::dump_features(z_file* fp,z_obj* obj)
 {
 	if(!obj)
 	{
-		Z_ERROR("No object");
-		return zs_bad_argument_2;
+		return Z_ERROR(zs_bad_argument_2,"No object");
 	}
-	*fp<< "\nFeatures of \""<<obj->get_name()<<"\"\n";
+	*fp<< "\nFeatures of \""<<obj->get_key()<<"\"\n";
 	*fp<< "Properties:\n";
 	dump_features_by_type(fp,obj,ZO_MT_PROP);
 	*fp<< "\nActions:\n";

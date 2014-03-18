@@ -155,43 +155,43 @@ public:
 	//parsing
 
 
-	zp_status parse_template(zp_obj*& p_item_out,ctext tmpl);
-	zp_status parse_item(zp_obj*& p_item_out,ctext item_entry_name);
-	zp_status parse_obj(zp_obj* p_obj,z_string& data_in);
-	zp_status parse_obj(zp_obj* p_obj,ctext data);
-	zp_status create_empty_item(zp_obj*& p_item_out,ctext item_entry_name);
+	z_status parse_template(zp_obj*& p_item_out,ctext tmpl);
+	z_status parse_item(zp_obj*& p_item_out,ctext item_entry_name);
+	z_status parse_obj(zp_obj* p_obj,z_string& data_in);
+	z_status parse_obj(zp_obj* p_obj,ctext data);
+	z_status create_empty_item(zp_obj*& p_item_out,ctext item_entry_name);
 
 
 
-	zp_status report_error(zp_status status);
+	z_status report_error(z_status status);
 
 	//item table
 /*
-	zp_status feature_callback(type_memvar_oper oper,size_t* size,zp_obj*& ppObj);
-	zp_status feature_callback(type_memvar_oper oper,size_t* size,zp_obj_container& member_var);
-	zp_status feature_callback(type_memvar_oper oper,size_t* size,zo_str_map& member_var);
-	zp_status feature_callback(type_memvar_oper oper,size_t* size,zp_obj& ppObj);
-	zp_status feature_callback(type_memvar_oper oper,size_t* size,z_string& member_var);
+	z_status feature_callback(type_memvar_oper oper,size_t* size,zp_obj*& ppObj);
+	z_status feature_callback(type_memvar_oper oper,size_t* size,zp_obj_container& member_var);
+	z_status feature_callback(type_memvar_oper oper,size_t* size,zo_str_map& member_var);
+	z_status feature_callback(type_memvar_oper oper,size_t* size,zp_obj& ppObj);
+	z_status feature_callback(type_memvar_oper oper,size_t* size,z_string& member_var);
 */
 	zp_obj* create_new_obj(const z_obj_fact* ie);
-	zp_status create_obj(ctext item_entry_name,zp_obj* &p_item);
+	z_status create_obj(ctext item_entry_name,zp_obj* &p_item);
 
 
-	zp_status output_obj(z_file* fp,zp_obj* obj);
-	zp_status output_default_template(z_file* fp,ctext tmpl);
+	z_status output_obj(z_file* fp,zp_obj* obj);
+	z_status output_default_template(z_file* fp,ctext tmpl);
 	//context
 private:
 	const z_obj_fact* find_item(ctext item_name,size_t len=(size_t)-1);
 	zp_obj* add_new_child_item(zp_obj*& p_item_out,ctext item_entry_name,ctext data);
-	zp_status _process_stage(zp_mode mode ,zp_flags* pflags=0);
+	z_status _process_stage(zp_mode mode ,zp_flags* pflags=0);
 	void reset_results();
-	zp_status _process_template(zp_mode mode);
-	zp_status _process_group(zp_flags flags,zp_mode mode);
-	zp_status test_white_space(zp_mode mode);
-	zp_status _process_sub_item(zp_obj* obj,const z_obj_fact* ie,zp_mode mode,zp_flags flags);
-	zp_status _process_sub_obj(ctext start, size_t len,zp_mode mode,zp_flags flags);
-	zp_status _process_single_item(zp_mode mode,zp_flags flags);
-	zp_status get_flags(zp_flags& flags);
+	z_status _process_template(zp_mode mode);
+	z_status _process_group(zp_flags flags,zp_mode mode);
+	z_status test_white_space(zp_mode mode);
+	z_status _process_sub_item(zp_obj* obj,const z_obj_fact* ie,zp_mode mode,zp_flags flags);
+	z_status _process_sub_obj(ctext start, size_t len,zp_mode mode,zp_flags flags);
+	z_status _process_single_item(zp_mode mode,zp_flags flags);
+	z_status get_flags(zp_flags& flags);
 	zp_text_parser& context_get_current_template_parser();
 	void context_set_root(zp_obj* p_item,const z_obj_fact* ie, ctext parse_string);
 	void context_sub_item_push(zp_obj* obj,const z_obj_fact* ie);
@@ -199,37 +199,37 @@ private:
 	void context_sub_item_pop();
 public:
 	//String literal
-	zp_status _f_string_literal_output(zp_flags p1,zp_mode mode);
-	zp_status _f_test_string_literal(const void* dummy);
-	zp_status _f_string_literal_create(zp_flags p1,int type);
+	z_status _f_string_literal_output(zp_flags p1,zp_mode mode);
+	z_status _f_test_string_literal(const void* dummy);
+	z_status _f_string_literal_create(zp_flags p1,int type);
 
 	//NOT String literal
-	zp_status _f_not_test_string_literal(const void* dummy);
+	z_status _f_not_test_string_literal(const void* dummy);
 
 	//Simple strings
-	zp_status _f_output_string(zp_flags p1,zp_mode mode);
-	zp_status _f_test_ident(const void* dummy);
-	zp_status _f_create_string(zp_flags p1,int type);
-	zp_status _f_test_to_eob(const void* dummy);
-	zp_status _f_test_whsp(const void* dummy);
-	zp_status _f_test_path(const void* dummy);
+	z_status _f_output_string(zp_flags p1,zp_mode mode);
+	z_status _f_test_ident(const void* dummy);
+	z_status _f_create_string(zp_flags p1,int type);
+	z_status _f_test_to_eob(const void* dummy);
+	z_status _f_test_whsp(const void* dummy);
+	z_status _f_test_path(const void* dummy);
 
 	//ident list
-	zp_status _f_ident_list_test(const void* dummy);
-	zp_status _f_ident_list_create(zp_flags p1,int type);
-	zp_status _f_ident_list_output(zp_flags p1,zp_mode mode);
+	z_status _f_ident_list_test(const void* dummy);
+	z_status _f_ident_list_create(zp_flags p1,int type);
+	z_status _f_ident_list_output(zp_flags p1,zp_mode mode);
 	//quoted strings
 
-	zp_status _f_quoted_string_test(const void* dummy);
-	zp_status _f_squoted_string_test(const void* dummy);
+	z_status _f_quoted_string_test(const void* dummy);
+	z_status _f_squoted_string_test(const void* dummy);
 
 
 };
 
-typedef zp_status (zp_obj_parser::*type_obj_parser_fp)(const void* p1);
-typedef zp_status (zp_obj_parser::*type_obj_parser_fp_flags)(zp_flags p1);
-typedef zp_status (zp_obj_parser::*type_obj_parser_fp_create)(zp_flags p1,int type);
-typedef zp_status (zp_obj_parser::*type_obj_parser_fp_output)(zp_flags p1,zp_mode mode);
+typedef z_status (zp_obj_parser::*type_obj_parser_fp)(const void* p1);
+typedef z_status (zp_obj_parser::*type_obj_parser_fp_flags)(zp_flags p1);
+typedef z_status (zp_obj_parser::*type_obj_parser_fp_create)(zp_flags p1,int type);
+typedef z_status (zp_obj_parser::*type_obj_parser_fp_output)(zp_flags p1,zp_mode mode);
 
 struct keyword_item
 {

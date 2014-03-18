@@ -8,17 +8,13 @@ class zb_table_base : public z_refcount
 {
 protected:
 	z_string _name;
+	z_string _id;
 	zb_desc _desc;
 	zb_source* _ds;
 	zb_ds_table* _ds_table;
 	zb_key _key;
 public:
-	zb_table_base(zb_source* ds,zb_key key,ctext name)
-	{
-		_ds=ds;
-		_name=name;
-		_desc , &g_field_key;
-	}
+	zb_table_base(zb_source* ds,zb_key key,ctext name);
 	zb_table_base()
 	{
 		_ds=0;
@@ -26,9 +22,9 @@ public:
 		_key=-1;
 	}
 	zb_status dump();
-	virtual ctext get_name()
+	virtual ctext get_key()
 	{
-		return _name;
+		return _id;
 	}
 	zb_desc& get_desc()
 	{

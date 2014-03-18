@@ -22,24 +22,24 @@ public:
 	//void dump_obj(z_obj* obj);;
 	void dump_features(z_obj* obj);
 	void set_root(z_obj* root_obj) { _obj_current= _root_obj=root_obj; }
-	zp_status parse_line(ctext text);
-	zp_status execute_line(ctext text);
-	zp_status execute_feature(z_obj* obj);
-	zp_status navigate_feature(ctext text);
+	z_status parse_line(ctext text);
+	z_status execute_line(ctext text);
+	z_status execute_feature(z_obj* obj);
+	z_status navigate_feature(ctext text);
 
-	zp_status dump_features_by_type(z_file* fp,z_obj* obj,U32 feature_type);
-	zp_status dump_features(z_file* fp,z_obj* obj);
+	z_status dump_features_by_type(z_file* fp,z_obj* obj,U32 feature_type);
+	z_status dump_features(z_file* fp,z_obj* obj);
 
 
 
 	//Actions
-	zp_status act1();
+	z_status act1();
 
 
 	//properties
 	z_string startup; //operation to perform on startup
 
-	virtual zp_status callback_feature_execute_obj(z_obj* p_obj,zo_ftr_entry* fe);
+	virtual z_status callback_feature_execute_obj(z_obj* p_obj,zo_ftr_entry* fe);
 
 };
 

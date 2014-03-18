@@ -92,6 +92,7 @@ const z_string & z_string::operator = (U32 i)
 }
 z_string::z_string(U32 i) 
 {
+
 	assign(STR(i));
 }
 z_string::z_string(int i) 

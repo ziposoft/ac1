@@ -142,7 +142,7 @@ Z_MODULE //Expands to the z_module_entry definition
 
 #define OBJV OBJ
 #define OBJ(_CLASS_,_BASE_,_NAME_,_DESC_,_PARSE,EXTRA) \
-zp_status _CLASS_::feature_manipulate(zo_fet_man_context* context) { type_zo_memvar_oper   UNUSED oper=context->_oper;ctext UNUSED var_name=context->_name;zo_manipulator* UNUSED m=context->_man;\
+z_status _CLASS_::feature_manipulate(zo_fet_man_context* context) { type_zo_memvar_oper   UNUSED oper=context->_oper;ctext UNUSED var_name=context->_name;zo_manipulator* UNUSED m=context->_man;\
    EXTRA ;	return _BASE_::feature_manipulate(context);} \
 
 ZO_OBJ_LIST; //Expands to all the feature_manipulate() functions

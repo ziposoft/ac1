@@ -35,7 +35,12 @@ typedef   long long I64;
 typedef   unsigned int  U32;
 typedef   unsigned short  U16;
 typedef   unsigned char  U8;
+typedef   int   z_status;
 
+enum 
+{
+	z_status_success=0,
+};
 
 typedef const char* utf8;
 typedef char* ascii;

@@ -29,7 +29,11 @@ public:
 		}
 		return 0;
 	};	
-
+	virtual z_stl_list<ITEM_CLASS> & operator << (ITEM_CLASS *x)
+    {
+        push_back(x);
+        return *this;
+    };
 };
 
 template <class ITEM_CLASS> class z_stl_obj_vector : public std::vector<ITEM_CLASS*>

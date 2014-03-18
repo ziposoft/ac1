@@ -8,7 +8,9 @@
 class zb_ds_table  
 {
 public:
-
+	z_string _id;
+	ctext get_key();
+	zb_ds_table(ctext unique_id);
 };
 class zb_ds_field  
 {

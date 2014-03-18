@@ -24,8 +24,8 @@ protected:
 	U32  _tab_mode_line_index;
 	zp_obj_parser _parser;
 	zp_cmdline _cmd_line_obj;
-	zp_status parse_line(ctext text);
-	zp_status execute_line(ctext text);
+	z_status parse_line(ctext text);
+	z_status execute_line(ctext text);
     virtual void put_prompt();
 public:
 	z_console();
@@ -120,7 +120,7 @@ public:
 	z_trace		*_p_trace;
 	z_trace		*_p_child;
 
-	virtual ctext get_name();
+	virtual ctext get_key();
 
 
 
@@ -200,7 +200,7 @@ public:
 	z_trace		*_p_trace;
 	z_trace		*_p_child;
 
-	virtual ctext get_name();
+	virtual ctext get_key();
 
 
 

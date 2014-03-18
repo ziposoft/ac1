@@ -108,8 +108,11 @@
     <ClInclude Include="..\include\ptypes_cset.h" />
     <ClInclude Include="..\include\zipolib_cpp.h" />
     <ClInclude Include="..\include\zipolib_cpp_pch.h" />
+    <ClInclude Include="..\include\z_error.h" />
     <ClInclude Include="..\include\z_file.h" />
+    <ClInclude Include="..\include\z_filesystem.h" />
     <ClInclude Include="..\include\z_list.h" />
+    <ClInclude Include="..\include\z_logger.h" />
     <ClInclude Include="..\include\z_ntf.h" />
     <ClInclude Include="..\include\z_stl_list.h" />
     <ClInclude Include="..\include\z_stl_map.h" />
@@ -124,8 +127,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Trace|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\src\pcset.cpp" />
+    <ClCompile Include="..\src\z_error.cpp" />
     <ClCompile Include="..\src\z_file.cpp" />
+    <ClCompile Include="..\src\z_filesystem.cpp" />
     <ClCompile Include="..\src\z_list.cpp" />
+    <ClCompile Include="..\src\z_logger.cpp" />
     <ClCompile Include="..\src\z_ntf.cpp" />
     <ClCompile Include="..\src\z_string.cpp" />
     <ClCompile Include="..\src\z_terminal.cpp" />

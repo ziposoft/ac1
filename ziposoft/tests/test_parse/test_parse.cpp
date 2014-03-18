@@ -7,7 +7,7 @@ zp_obj* parse_root=0;
 ctext g_template=0;
 ctext g_expected_output=0;
 ctext g_expected_def_output=0;
-zp_status g_expected_result=zs_ok;
+z_status g_expected_result=zs_ok;
 opt_func g_test_type_function_to_run=0;
 
 /*--------------------------------------------------------------
@@ -23,7 +23,7 @@ int  run_test_only()
 		delete parse_root;
 		parse_root=0;
 	}
-	zp_status status=zs_no_match;
+	z_status status=zs_no_match;
 	p.set_source(g_arg_data_in);
 	if(g_template)
 		status=p.parse_template(parse_root,g_template);
@@ -78,7 +78,7 @@ int run_test_create_output()
 }
 int run_test_output()
 {
-	zp_status status=zs_no_match;
+	z_status status=zs_no_match;
 	z_file_string_buffer fp_output_buffer;
 	if(parse_root)
 	{
@@ -151,7 +151,7 @@ int run_test_output_def()
 		return -1;
 
 	}
-	zp_status status=zs_no_match;
+	z_status status=zs_no_match;
 	z_file_string_buffer fp_output_buffer;
 	status=p.output_default_template(&fp_output_buffer,g_template);
 
@@ -181,7 +181,7 @@ int run_test_output_def()
 int run_create_def_obj()
 {
 	printf("CREATE DEFAULT OBJECT\n");
-	zp_status status=zs_no_match;
+	z_status status=zs_no_match;
 	parse_root=0;
 	status=p.create_obj(g_arg_obj,parse_root);
 	if(status)
@@ -212,7 +212,7 @@ int run_parse_xml()
 {
 
 	zp_xml_file xml_file;
-	zp_status status=zs_no_match;
+	z_status status=zs_no_match;
 
 	p.set_ignore_whitespace();
 

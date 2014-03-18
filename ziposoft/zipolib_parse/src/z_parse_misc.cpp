@@ -182,7 +182,7 @@ zp_text_parser& zp_obj_parser::context_get_current_template_parser()
 }
 
 
-zp_status zp_obj_parser::report_error(zp_status status)
+z_status zp_obj_parser::report_error(z_status status)
 {
 	z_string data;
 	printf("status=%s\n",z_status_get_text(status));
@@ -224,7 +224,7 @@ zp_obj* zp_obj_parser::add_new_child_item(zp_obj*& parent,
 										  )
 {
 	///ZTF;
-	zp_status status;
+	z_status status;
 
 	zp_obj* item=0;
 
@@ -235,9 +235,9 @@ zp_obj* zp_obj_parser::add_new_child_item(zp_obj*& parent,
 
 	return item;
 }
-zp_status zp_obj_parser::parse_obj(zp_obj* p_obj,ctext data)
+z_status zp_obj_parser::parse_obj(zp_obj* p_obj,ctext data)
 {
-	zp_status status;
+	z_status status;
 	Z_ASSERT(p_obj);
 	set_source(data,strlen(data));
 	reset_results();
@@ -246,7 +246,7 @@ zp_status zp_obj_parser::parse_obj(zp_obj* p_obj,ctext data)
 	status=_process_template(zp_mode_parse_input);
 	if(status==zs_matched)
 	{
-		ZT(("==========ITEM[%s] MATCHED, CREATING=====\n",p_obj->get_name()));
+		ZT(("==========ITEM[%s] MATCHED, CREATING=====\n",p_obj->get_key()));
 		index_reset();
 		context_get_current_template_parser().index_reset();
 		reset_results();
@@ -254,19 +254,19 @@ zp_status zp_obj_parser::parse_obj(zp_obj* p_obj,ctext data)
 	}
 	return status;
 }
-zp_status zp_obj_parser::parse_obj(zp_obj* p_obj,z_string& data_in)
+z_status zp_obj_parser::parse_obj(zp_obj* p_obj,z_string& data_in)
 {
 
 	return parse_obj(p_obj,data_in.c_str());
 
 }
 
-zp_status zp_obj_parser::parse_item(zp_obj*& p_item,
+z_status zp_obj_parser::parse_item(zp_obj*& p_item,
 									ctext item_entry_name
 									)
 {
 	//ZTF;
-	zp_status status;
+	z_status status;
 	const z_obj_fact* ie=find_item(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
@@ -290,7 +290,7 @@ zp_status zp_obj_parser::parse_item(zp_obj*& p_item,
 	}
 	return status;
 }
-zp_status zp_obj_parser::create_obj(ctext item_entry_name,zp_obj* &p_obj)
+z_status zp_obj_parser::create_obj(ctext item_entry_name,zp_obj* &p_obj)
 {
 
 	//ZTF;
@@ -303,13 +303,13 @@ zp_status zp_obj_parser::create_obj(ctext item_entry_name,zp_obj* &p_obj)
 	return zs_ok;
 
 }
-zp_status zp_obj_parser::output_obj(z_file* fp,zp_obj* obj)
+z_status zp_obj_parser::output_obj(z_file* fp,zp_obj* obj)
 {
-	ZT(("==========TEMPLATE[%s] OUTPUT OBJ=====\n",obj->get_name()));
+	ZT(("==========TEMPLATE[%s] OUTPUT OBJ=====\n",obj->get_key()));
 
 	_file_out=fp;
 	//ZTF;
-	zp_status status;
+	z_status status;
 	context_set_root(obj,obj->get_fact(),0);
 	zp_mode mode=zp_mode_output_obj;
 
@@ -325,12 +325,12 @@ zp_status zp_obj_parser::output_obj(z_file* fp,zp_obj* obj)
 
 
 
-zp_status zp_obj_parser::create_empty_item(zp_obj*& p_item,
+z_status zp_obj_parser::create_empty_item(zp_obj*& p_item,
 										   ctext item_entry_name
 										   )
 {
 	//ZTF;
-	zp_status status;
+	z_status status;
 	const z_obj_fact* ie=find_item(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
@@ -344,9 +344,9 @@ zp_status zp_obj_parser::create_empty_item(zp_obj*& p_item,
 	return status;
 }
 
-zp_status zp_obj_parser::output_default_template(z_file* fp,ctext tmpl)
+z_status zp_obj_parser::output_default_template(z_file* fp,ctext tmpl)
 {
-	zp_status status;
+	z_status status;
 	//_append_mode=false;
 	ZT(("==========TEMPLATE[%s] OUTPUT DEFAULT=====\n",tmpl));
 
@@ -365,10 +365,10 @@ zp_status zp_obj_parser::output_default_template(z_file* fp,ctext tmpl)
 }
 
 
-zp_status zp_obj_parser::parse_template(zp_obj*& p_item,
+z_status zp_obj_parser::parse_template(zp_obj*& p_item,
 										ctext tmpl)
 {
-	zp_status status;
+	z_status status;
 	//_append_mode=false;
 
 	//TODO this is UGLY!
@@ -405,7 +405,7 @@ const z_obj_fact* zp_obj_parser::find_item(ctext item_name,size_t len)
 }
 
 #if 0
-zp_status zp_obj_parser::access_obj_member_map(type_memvar_oper oper,int* pindex,z_obj_map* member_var)
+z_status zp_obj_parser::access_obj_member_map(type_memvar_oper oper,int* pindex,z_obj_map* member_var)
 {
 	if(oper==mvo_clear)//clear
 	{
@@ -419,7 +419,7 @@ zp_status zp_obj_parser::access_obj_member_map(type_memvar_oper oper,int* pindex
 	}
 	if(oper==zo_mvo_set) //add an object
 	{
-		member_var->add(_p_member_var_obj->get_name(),_p_member_var_obj);
+		member_var->add(_p_member_var_obj->get_key(),_p_member_var_obj);
 		return zs_ok;
 	}
 	if(oper==zo_mvo_get)//get an object

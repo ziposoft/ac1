@@ -10,7 +10,12 @@ ________________________________________________________________________*/
 //TODO make Unicode
 char z_to_upper(char c) {if ((c>='a')&&(c<='z')) c=c-'a'+'A'; return c; }
 
+ctext z_int_to_ctext(int i)
+{
+	static char buff[15];
+	return itoa(i,buff,10);
 
+}
 int z_str_same(utf8 s1,utf8 s2)
 {
 	if(!s1) return 0;

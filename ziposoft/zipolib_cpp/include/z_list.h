@@ -16,7 +16,7 @@ ________________________________________________________________________*/
 #include "zipolib_cpp/include/zipolib_cpp.h"
 #include "zipolib_cpp/include/z_string.h"
 
-
+class z_file;
 class z_strmap : public std::map<z_string,z_string>
 {
 public:
@@ -52,6 +52,7 @@ public:
         return find(str.c_str());
     }
 	int break_string(ctext s,char c);
+	void dump(z_file &out);
 	virtual z_strlist & operator << (z_string& s) { push_back(s); return *this; }
 	virtual z_strlist & operator << (ctext s) { push_back(s); return *this; }
 

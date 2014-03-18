@@ -137,7 +137,7 @@ public:
     virtual z_map<ITEM_CLASS> & operator << (ITEM_CLASS *x)
     {
 		Z_ASSERT(x);
-        add(x->get_name(),x);
+        add(x->get_key(),x);
         return *this;
     };
 
@@ -154,7 +154,7 @@ public:
 	}
 	void clear_all()
 	{ 
-		v::clear(); 
+		m::clear(); 
 	}
 	ITEM_CLASS* get_current(z_map_iter& iter)
 	{

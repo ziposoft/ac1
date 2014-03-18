@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zbase_lib", "zbase_lib\windows\zbase_lib.vcxproj", "{CDE73D09-C930-468C-B421-F1F2D017AB23}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61770672-CA7E-41A4-894F-76A1511CEDB0} = {61770672-CA7E-41A4-894F-76A1511CEDB0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zipolib_c", "zipolib_c\windows\zipolib_c.vcxproj", "{9296B73D-D94E-4724-907F-E1766D6A575C}"
 EndProject
@@ -30,6 +33,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_c", "tests\test_c\test
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_cpp", "tests\test_cpp\test_cpp.vcxproj", "{6A17DA71-50D6-46E2-AD7A-47A082D64F48}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61770672-CA7E-41A4-894F-76A1511CEDB0} = {61770672-CA7E-41A4-894F-76A1511CEDB0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_console", "tests\test_console\test_console.vcxproj", "{437042A0-FD63-434D-8578-D12A73703BF8}"
 	ProjectSection(ProjectDependencies) = postProject

@@ -90,7 +90,7 @@ void z_obj::get_path(z_string& path)
 		o->get_path(path);
 		path<<'/';
 	}
-	path<<get_name();
+	path<<get_key();
 
 }
 
@@ -102,7 +102,7 @@ zo_ftr_entry* z_obj::get_feature(ctext f)
 	if(!fact) return 0;
 	return get_feature(fact,f);
 }
-zp_status z_obj::get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias)
+z_status z_obj::get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias)
 {
 	man->get_feature_map_by_fact(list,get_fact(),feature_type,include_alias);
 	return zs_ok;
@@ -158,7 +158,7 @@ void z_obj::init_man_data(z_obj* parent_obj)
 		
 	}
 }
-ctext z_obj::get_name() 
+ctext z_obj::get_key() 
 { 
 	if(_man_data)
 		if(_man_data->_name)
@@ -193,7 +193,7 @@ z_obj* z_obj::get_parent_obj()
 		return _man_data->_parent_obj;
 	return 0;
 }
-zp_status z_obj_container::feature_manipulate(zo_fet_man_context* context)
+z_status z_obj_container::feature_manipulate(zo_fet_man_context* context)
 {
 	type_zo_memvar_oper 	oper=context->_oper;
 	ctext var_name=context->_name;
@@ -290,7 +290,7 @@ zo_ftr_entry* z_obj_container::get_feature(ctext f)
 
 
 }
-zp_status z_obj_container::get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias)
+z_status z_obj_container::get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias)
 {
 	if (feature_type&ZO_MT_CHILD)
 	{
@@ -300,8 +300,8 @@ zp_status z_obj_container::get_feature_map(zo_manipulator* man,zo_feature_list& 
 		while((obj=get_next_obj()))
 		{
 			zo_ftr_entry* fe=new zo_ftr_entry();
-			fe->_internal_name=obj->get_name();
-			fe->_display_name=obj->get_name();
+			fe->_internal_name=obj->get_key();
+			fe->_display_name=obj->get_key();
 			fe->_short_id=0;
 			fe->_desc=0;
 			fe->_options=0;

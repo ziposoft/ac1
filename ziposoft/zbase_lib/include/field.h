@@ -13,7 +13,7 @@ public:
 	zb_field(zb_key key,ctext name);
 	//virtual zb_status get_data_text(zb_recp* rec,ctext& text)=0;
 	virtual zb_status get_data_text(zb_recset* rs,z_string& text)=0;
-	virtual ctext get_name();
+	virtual ctext get_key();
 	const z_string& get_name_str() { return _name; }
 	virtual int get_index() { return _index; }
 	virtual void set_index(int i) {  _index=i; }
