@@ -7,7 +7,7 @@
 
 class z_directory
 {
-	z_directory_h hDir;
+	z_directory_h _hDir;
 public:
 	z_directory(); //current directory.
 	virtual ~z_directory(); //current directory.

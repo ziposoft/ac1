@@ -379,7 +379,6 @@ template <class ITEM_CLASS > class z_obj_map : public z_map<ITEM_CLASS>, public 
 public:
 	z_obj_map()
 	{
-		iter=zmi_null;
 
 	}
 	virtual z_obj* add_new(ctext type)
@@ -405,7 +404,7 @@ public:
 	}
 	virtual size_t get_count() { reset_iter(); return z_map<ITEM_CLASS>::size(); }
 	virtual void clear_objs(){ z_map<ITEM_CLASS>::clear(); }
-	virtual void reset_iter(){ iter=zmi_null; }
+	virtual void reset_iter(){ iter.reset(); }
 	virtual void get_current_iter_as_string(z_string &s)
 	{
 		z_map<ITEM_CLASS>::get_current(iter);

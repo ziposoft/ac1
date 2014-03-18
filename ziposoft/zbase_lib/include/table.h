@@ -21,7 +21,7 @@ public:
 		_name="unknown";
 		_key=-1;
 	}
-	zb_status dump();
+	z_status dump();
 	virtual ctext get_key()
 	{
 		return _id;
@@ -31,8 +31,8 @@ public:
 		return _desc;
 	}
 
-	zb_status get_default_rec(zb_record *rec);
-	zb_status record_add(zb_record *rec);
+	z_status get_default_rec(zb_record *rec);
+	z_status record_add(zb_record *rec);
 
 };
 

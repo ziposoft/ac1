@@ -121,12 +121,20 @@ public:
 };
 
 typedef  std::map<ctext,void*,ctext_less_than>::iterator z_map_iterator;
-struct z_map_iter
+class z_map_iter
 {
+public:
+	z_map_iter()
+	{
+		key=0;
+	};
+	void reset()
+	{
+		key=0;
+	};
 	z_map_iterator i;
 	ctext key;
 };
-const z_map_iter zmi_null;
 
 template <class ITEM_CLASS > class z_map 
 : public std::map<ctext,void*,ctext_less_than> 
@@ -228,7 +236,7 @@ public:
 	}
 	void reset_iter()
 	{
-		_internal_iter=zmi_null;
+		_internal_iter.reset();
 	}
 	ITEM_CLASS* get_next(ctext& key)
 	{

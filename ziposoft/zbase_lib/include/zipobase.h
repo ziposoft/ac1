@@ -9,8 +9,8 @@ public:
 	{
 
 	}
-	virtual zb_status open(zb_source* ds);
-	virtual zb_status close();
+	virtual z_status open(zb_source* ds);
+	virtual z_status close();
 	z_map<zb_table_base> _tables;
 };
 
