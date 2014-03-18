@@ -1,7 +1,7 @@
 #ifndef z_parse_def_h
 #define z_parse_def_h
 
-enum zp_status
+enum 
 {
 	zs_ok=0,
 	zs_matched=0,
@@ -24,5 +24,5 @@ enum zp_status
 	zs_bad_argument_2,
 
 };
-ctext z_status_get_text(zp_status status);
+ctext z_status_get_text(z_status status);
 #endif

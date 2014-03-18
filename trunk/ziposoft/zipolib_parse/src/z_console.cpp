@@ -195,9 +195,9 @@ void z_console::put_prompt()
 }
 
 
-zp_status z_console::parse_line(ctext text)
+z_status z_console::parse_line(ctext text)
 {
-	zp_status status=_parser.parse_obj(&_cmd_line_obj,text);
+	z_status status=_parser.parse_obj(&_cmd_line_obj,text);
 	if(status)
 	{
 		_parser.report_error(status);
@@ -206,9 +206,9 @@ zp_status z_console::parse_line(ctext text)
 	}
 	return status;
 }
-zp_status z_console::execute_line(ctext text)
+z_status z_console::execute_line(ctext text)
 {
-	zp_status status=parse_line(text);
+	z_status status=parse_line(text);
 	if(status)
 		return status;
 
@@ -267,7 +267,7 @@ zp_status z_console::execute_line(ctext text)
 void z_console::OnEnter()
 {
 	int i;
-	zp_status result;
+	z_status result;
 	gz_out << '\n';
 	if(buff.size())
 	{
@@ -363,7 +363,7 @@ zo_root::zo_root()
 	_console.set_root(this);
 
 }
-ctext zo_root::get_name()
+ctext zo_root::get_key()
 {
 	return "";
 }

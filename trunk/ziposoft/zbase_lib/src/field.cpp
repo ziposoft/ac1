@@ -9,7 +9,7 @@ zb_field::zb_field(zb_key key,ctext name)
 	_index=-1;
 }
 
-ctext zb_field::get_name() 
+ctext zb_field::get_key() 
 { 
 	return _name; 
 }

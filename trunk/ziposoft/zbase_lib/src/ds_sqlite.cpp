@@ -131,11 +131,12 @@ zb_status zb_src_sl3::get_tables()
 		{
 			// SQLITE_ROW means fetched a row
 			const char *name = recset.ptr_get_column_text(1);
-			zb_table* tbl= new zb_table(this,name);
+			zb_ds_table* tbl= new zb_ds_table(name);
+			zb_desc desc; //TODO!!
 
-			get_table_desc(name,tbl->get_desc());
+			get_table_desc(name,desc);
 			
-			_tables<< tbl;
+			_ds_tables<< tbl;
 		}
 		else if(status == zb_end_of_data)
 		{

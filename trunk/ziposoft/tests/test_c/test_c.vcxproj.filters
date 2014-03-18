@@ -18,6 +18,9 @@
     <ClCompile Include="test_c.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_switch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />

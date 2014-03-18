@@ -126,17 +126,7 @@ public:
     virtual int putfline(const char*  lpszFormat,  ...  );
 };
 
-class z_error : public z_file
-{
-public:
-    z_error()
-    {
-    }
-    virtual ~z_error()
-    {
-    }
-};
-extern z_error gz_error;
+
 extern z_debug gz_debug;
 
 extern z_file gz_in;

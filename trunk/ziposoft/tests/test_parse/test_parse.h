@@ -24,7 +24,7 @@ struct st_test_obj_entry
 {
 	ctext item_name;
 	ctext input_data;
-	zp_status expected_result;
+	z_status expected_result;
 };
 
 
@@ -32,7 +32,7 @@ struct st_test_tmpl_entry
 {
 	ctext templ;
 	ctext input_data;
-	zp_status expected_result;
+	z_status expected_result;
 	ctext expected_output; //NOT the same as input_data!
 	ctext expected_default_output;
 	ctext desc;

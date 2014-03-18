@@ -15,6 +15,7 @@ int main()
 	z_directory_h hDir;
 	utf8 pname;
 
+
 //	Z_ERROR("Error test params %d %d",5,x);
 //	Z_ERROR("Error test",5);
 

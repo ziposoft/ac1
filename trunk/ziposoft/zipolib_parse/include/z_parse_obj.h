@@ -41,7 +41,7 @@ public:
 	}
 	size_t _templ_offset;
 	virtual void dump(int level,z_file& outf,int flags)=0;
-	virtual ctext get_name()=0;
+	virtual ctext get_key()=0;
 	virtual void output(z_file* fp)=0;
 	virtual void dump_custom(z_file& outf) {};
 };
@@ -93,12 +93,12 @@ public:
 	zp_obj_base* get_child_by_offset(int &index,size_t off,int si);
 
 	void dump(int level,z_file& outf,int flags);
-	//virtual zp_status feature_manipulate(type_memvar_oper set,size_t *index,ctext name,zp_obj_parser* p);
-	virtual ctext get_name();
+	//virtual z_status feature_manipulate(type_memvar_oper set,size_t *index,ctext name,zp_obj_parser* p);
+	virtual ctext get_key();
 	virtual ctext get_template();
 	int compare_id(ctext id)
 	{
-		return z_str_same(id,get_name());
+		return z_str_same(id,get_key());
 	}
 };
 class zp_obj_generic : public zp_obj
@@ -131,7 +131,7 @@ public:
 	zp_text();
 	~zp_text();
 
-	virtual ctext get_name();
+	virtual ctext get_key();
 	void set_text(ctext text,size_t len=0);
 	virtual ctext get_text();
 	//virtual const z_obj_fact* get_fact(){ return &entry_item_text; }
@@ -157,13 +157,13 @@ zp_obj* new_##_CLASS_() {\
 	return obj; }\
 ctext _CLASS_##PARSE=_PARSE_;\
 ctext _CLASS_##NAME=_NAME_;\
-zp_status _CLASS_::feature_manipulate(type_memvar_oper oper,size_t* p_size,ctext var_name,zp_obj_parser* p) {\
+z_status _CLASS_::feature_manipulate(type_memvar_oper oper,size_t* p_size,ctext var_name,zp_obj_parser* p) {\
    __VA_ARGS__ ;	return _BASE_::feature_manipulate(oper,p_size,var_name,p);} \
 const z_obj_fact  _CLASS_::ENTRY=  {_CLASS_##NAME,_CLASS_##PARSE,new_##_CLASS_};\
 	const z_obj_fact* _CLASS_::get_fact() { return &_CLASS_::ENTRY;} 
 
 #define ZP_OBJ_H \
-	public:virtual zp_status feature_manipulate(type_memvar_oper set,size_t* i,ctext var_name,zp_obj_parser* p); \
+	public:virtual z_status feature_manipulate(type_memvar_oper set,size_t* i,ctext var_name,zp_obj_parser* p); \
 	static const z_obj_fact ENTRY;\
 	virtual const z_obj_fact* get_fact();
 
@@ -252,7 +252,7 @@ public:
 	zp_obj_feature() : zp_obj()
 	{
 	}
-	virtual ctext get_name()
+	virtual ctext get_key()
 	{
 		return _name;
 	}
@@ -278,7 +278,7 @@ public:
 		_subscript=false;
 
 	}
-	virtual ctext get_name()
+	virtual ctext get_key()
 	{
 		return _name;
 	}

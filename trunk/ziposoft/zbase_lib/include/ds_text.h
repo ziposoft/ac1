@@ -7,6 +7,8 @@
 
 class zb_ds_text: public zb_source
 {
+	z_directory _dir;
+	z_string _name;
 public:
 	zb_ds_text(ctext name);
 	virtual ~zb_ds_text();

@@ -30,7 +30,7 @@ void zp_text::set_text(ctext t,size_t len)
 	else
 		_text=t;
 }
-ctext zp_text::get_name()
+ctext zp_text::get_key()
 {
 	return keyword_list[_type].desc;
 }
@@ -123,8 +123,8 @@ void zp_obj::dump(int level, z_file& outf,int flags)
 	zo_ftr_entry* f;
 	int indent=level;
 	while(indent--)	outf<<"  ";	
-	//outf<<get_name()<<'['<<(int)_offset<<']'<< " ";
-	outf<<get_name()<< "[";
+	//outf<<get_key()<<'['<<(int)_offset<<']'<< " ";
+	outf<<get_key()<< "[";
 	dump_custom(outf);
 	/*
 	zo_feature_list full_list;
@@ -240,7 +240,7 @@ zp_obj* zp_item::new_child(ctext name,ctext data)
 }*/
 
 
-ctext zp_obj::get_name()
+ctext zp_obj::get_key()
 {
 	const z_obj_fact* ei=get_fact();
 	Z_ASSERT((ei));

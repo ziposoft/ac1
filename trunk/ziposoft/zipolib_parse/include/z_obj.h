@@ -131,7 +131,7 @@ const z_obj_fact*  zo_get_factory(ctext name); //gets the factory from the maste
 
 
 #define ZO_OBJ_H \
-	public:virtual zp_status feature_manipulate(zo_fet_man_context* context); \
+	public:virtual z_status feature_manipulate(zo_fet_man_context* context); \
 	static const z_obj_fact FACT;\
 	virtual const z_obj_fact* get_fact();
 
@@ -172,14 +172,14 @@ class z_obj
 public:
 	z_obj();
 
-	virtual zp_status feature_manipulate(zo_fet_man_context* context) {
+	virtual z_status feature_manipulate(zo_fet_man_context* context) {
 		return zs_feature_not_found;
 	};
 	virtual const z_obj_fact* get_fact();
 	z_obj* get_parent_obj();
 	void set_parent_obj(z_obj* obj);
 	virtual void get_path(z_string& path);
-	virtual ctext get_name();
+	virtual ctext get_key();
 	//virtual bool compare_id(ctext id_to_compare);
 	virtual ctext get_type();
 	virtual ctext get_id();
@@ -192,7 +192,7 @@ public:
 
 	virtual zo_ftr_entry* get_feature(ctext f);
 	static zo_ftr_entry* get_feature(const z_obj_fact* fact,ctext f);
-	virtual zp_status get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias);
+	virtual z_status get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias);
 
 
 };	
@@ -295,9 +295,9 @@ public:
 	virtual void clear_objs()=0;
 	virtual void reset_iter()=0;
 	virtual void get_current_iter_as_string(z_string &s)=0;
-	virtual zp_status get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias);
+	virtual z_status get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias);
 	virtual zo_ftr_entry* get_feature(ctext f);
-	virtual zp_status feature_manipulate(zo_fet_man_context* context);
+	virtual z_status feature_manipulate(zo_fet_man_context* context);
 
 
 };
@@ -401,7 +401,7 @@ public:
 	}
 	virtual void add_obj(z_obj* obj)
 	{
-		add(obj->get_name(),(ITEM_CLASS*)obj);
+		add(obj->get_key(),(ITEM_CLASS*)obj);
 	}
 	virtual size_t get_count() { reset_iter(); return z_map<ITEM_CLASS>::size(); }
 	virtual void clear_objs(){ z_map<ITEM_CLASS>::clear(); }

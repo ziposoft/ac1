@@ -42,10 +42,10 @@ keyword_item keyword_list[]={
 
 };
 #define keyword_list_count (sizeof(keyword_list)/sizeof(keyword_item))
-zp_status zp_obj_parser::_f_ident_list_test(const void* dummy)
+z_status zp_obj_parser::_f_ident_list_test(const void* dummy)
 {
-	zp_status result; 
-	zp_status result_total=zs_no_match; 
+	z_status result; 
+	z_status result_total=zs_no_match; 
 
 
 	while(1)
@@ -62,7 +62,7 @@ zp_status zp_obj_parser::_f_ident_list_test(const void* dummy)
 				ctext match;
 				size_t match_len;
 				get_match(match,match_len);
-				zp_status i_result=feature_set_string(
+				z_status i_result=feature_set_string(
 					_ctx_current->_obj,
 					_ctx_current->_member_var_name,match,match_len);
 
@@ -78,14 +78,14 @@ zp_status zp_obj_parser::_f_ident_list_test(const void* dummy)
 	}
 }
 
-zp_status zp_obj_parser::_f_ident_list_create(zp_flags flags,int type)
+z_status zp_obj_parser::_f_ident_list_create(zp_flags flags,int type)
 {
 	return zs_matched;
 
 }
-zp_status zp_obj_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
+z_status zp_obj_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
 {
-	zp_status result=zs_ok;
+	z_status result=zs_ok;
 	bool need_comma=false;
 
 	if((_ctx_current->_obj)&&(flags.parent_data))
@@ -109,35 +109,35 @@ zp_status zp_obj_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
 		return result;
 	return zs_matched;
 }
-zp_status zp_obj_parser::_f_squoted_string_test(const void* dummy)
+z_status zp_obj_parser::_f_squoted_string_test(const void* dummy)
 {
 	return test_single_quoted_string();
 }
-zp_status zp_obj_parser::_f_quoted_string_test(const void* dummy)
+z_status zp_obj_parser::_f_quoted_string_test(const void* dummy)
 {
 	return test_code_string();
 }
-zp_status zp_obj_parser::_f_test_ident(const void* dummy)
+z_status zp_obj_parser::_f_test_ident(const void* dummy)
 {
 	return test_any_identifier();
 }
-zp_status zp_obj_parser::_f_test_whsp(const void* dummy)
+z_status zp_obj_parser::_f_test_whsp(const void* dummy)
 {
 	return test_cset(*cset_white_space);
 }
-zp_status zp_obj_parser::_f_test_path(const void* dummy)
+z_status zp_obj_parser::_f_test_path(const void* dummy)
 {
 	return test_cset(*cset_path_string);
 
 }
-zp_status zp_obj_parser::_f_test_to_eob(const void* dummy)
+z_status zp_obj_parser::_f_test_to_eob(const void* dummy)
 {
 	return test_to_eob();
 }
 
-zp_status zp_obj_parser::_f_create_string(zp_flags flags,int type)
+z_status zp_obj_parser::_f_create_string(zp_flags flags,int type)
 {
-	zp_status status=zs_matched;
+	z_status status=zs_matched;
 	ctext match_start=0;
 	size_t match_len=0;
 
@@ -165,9 +165,9 @@ zp_status zp_obj_parser::_f_create_string(zp_flags flags,int type)
 	return status;
 }
 
-zp_status zp_obj_parser::_f_test_string_literal(const void* dummy)
+z_status zp_obj_parser::_f_test_string_literal(const void* dummy)
 {
-	zp_status status=zs_no_match;
+	z_status status=zs_no_match;
 	ctext match_start=0;
 	size_t match_len=0;
 	zp_text_parser& tmpl=context_get_current_template_parser();
@@ -175,10 +175,10 @@ zp_status zp_obj_parser::_f_test_string_literal(const void* dummy)
 	status= test_string(match_start,match_len);
 	return status;
 }
-zp_status zp_obj_parser::_f_not_test_string_literal(const void* dummy)
+z_status zp_obj_parser::_f_not_test_string_literal(const void* dummy)
 {
 	//TODO!!!
-	zp_status status=zs_no_match;
+	z_status status=zs_no_match;
 	ctext match_start=0;
 	size_t match_len=0;
 	zp_text_parser& tmpl=context_get_current_template_parser();
@@ -187,9 +187,9 @@ zp_status zp_obj_parser::_f_not_test_string_literal(const void* dummy)
 	return status;
 }
 
-zp_status zp_obj_parser::_f_string_literal_create(zp_flags flags,int type)
+z_status zp_obj_parser::_f_string_literal_create(zp_flags flags,int type)
 {
-	zp_status status=zs_ok;
+	z_status status=zs_ok;
 	if(flags.parent_data)
 	{
 		if(_ctx_current->_obj)
@@ -199,9 +199,9 @@ zp_status zp_obj_parser::_f_string_literal_create(zp_flags flags,int type)
 	}
 	return status;
 }
-zp_status zp_obj_parser::_f_string_literal_output(zp_flags flags,zp_mode mode)
+z_status zp_obj_parser::_f_string_literal_output(zp_flags flags,zp_mode mode)
 {
-	zp_status status=zs_ok;
+	z_status status=zs_ok;
 	ctext match_start=0;
 	size_t match_len=0;
 	if(!(flags.required || flags.create_default))
@@ -216,9 +216,9 @@ zp_status zp_obj_parser::_f_string_literal_output(zp_flags flags,zp_mode mode)
 #endif
 	return status;
 }
-zp_status zp_obj_parser::_f_output_string(zp_flags flags,zp_mode mode)
+z_status zp_obj_parser::_f_output_string(zp_flags flags,zp_mode mode)
 {
-	zp_status status=zs_ok;
+	z_status status=zs_ok;
 	if(_ctx_current->_obj)
 	{
 		if(flags.parent_data)
@@ -251,10 +251,10 @@ zp_status zp_obj_parser::_f_output_string(zp_flags flags,zp_mode mode)
 	return zs_no_match;
 }
 
-zp_status zp_obj_parser::_process_single_item(zp_mode mode,zp_flags flags)
+z_status zp_obj_parser::_process_single_item(zp_mode mode,zp_flags flags)
 {
 	//ZTF;
-	zp_status item_result=zs_template_syntax_error;
+	z_status item_result=zs_template_syntax_error;
 	zp_text_parser& tmpl=context_get_current_template_parser();
 	int list_item;
 	ctext match_start=0;
@@ -287,7 +287,7 @@ zp_status zp_obj_parser::_process_single_item(zp_mode mode,zp_flags flags)
 	//----------------------------------------------
 	if(tmpl.test_char('(')==zs_matched)
 	{
-		zp_status result;
+		z_status result;
 		mode.nested_group=1;
 		if(mode.output)
 		{
@@ -303,7 +303,7 @@ zp_status zp_obj_parser::_process_single_item(zp_mode mode,zp_flags flags)
 		return result;
 	}
 
-	zp_status identify_result=zs_no_match;
+	z_status identify_result=zs_no_match;
 	for(list_item=0;list_item<keyword_list_count;list_item++)
 	{
 		keyword_item& ip= keyword_list[list_item];
