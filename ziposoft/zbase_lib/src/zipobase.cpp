@@ -31,7 +31,11 @@ int z_refcount::ref_dec()
 	return _ref_count;
 }
 z_refcount*  z_obj_ptr_copy(z_refcount* p) { p->ref_inc(); return p; }
-void z_obj_ptr_delete(z_refcount* p) { if(p->ref_dec()==0) delete p; }
+void z_obj_ptr_delete(z_refcount* p) 
+{ 
+	if(p->ref_dec()==0) 
+		delete p; 
+}
 
 
 #if 0

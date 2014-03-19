@@ -18,13 +18,18 @@ public:
 
 };
 
-
-
 class zb_ds_record  
 {
 public:
 
 };
+class zb_ds_record_native  
+{
+	z_map<zb_datum> _data;
+public:
+
+};
+
 class zb_source 
 {
 public:

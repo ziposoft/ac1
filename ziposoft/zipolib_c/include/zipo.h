@@ -33,6 +33,7 @@ ________________________________________________________________________*/
 typedef   unsigned long long U64;
 typedef   long long I64;
 typedef   unsigned int  U32;
+typedef   int  I32;
 typedef   unsigned short  U16;
 typedef   unsigned char  U8;
 typedef   int   z_status;

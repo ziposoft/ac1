@@ -15,6 +15,7 @@ public:
 	zb_record(zb_recset* recset);
 };
 
+
 class zb_recset
 {
 	zb_ds_recordset* _ds_recset;
