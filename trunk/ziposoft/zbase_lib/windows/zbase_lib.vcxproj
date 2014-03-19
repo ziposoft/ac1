@@ -229,6 +229,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\datasource.cpp" />
+    <ClCompile Include="..\src\datum.cpp" />
     <ClCompile Include="..\src\ds_hamster.cpp" />
     <ClCompile Include="..\src\ds_metakit.cpp" />
     <ClCompile Include="..\src\ds_sqlite.cpp" />
@@ -244,6 +245,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\datasource.h" />
+    <ClInclude Include="..\include\datum.h" />
     <ClInclude Include="..\include\db_file.h" />
     <ClInclude Include="..\include\ds_hamster.h" />
     <ClInclude Include="..\include\ds_metakit.h" />

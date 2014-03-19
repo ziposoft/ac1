@@ -16,7 +16,7 @@ enum zk_static_field
 
 
 
-	zk_sf_dynamic_start=1000,
+	zk_sf_dynamic_start=0x1000,
 };
 
 #endif

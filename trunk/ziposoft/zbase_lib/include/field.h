@@ -1,9 +1,10 @@
 #ifndef FIELD_H
 #define FIELD_H
 #include "zbase_lib/include/zb.h"
+#include "zbase_lib/include/datum.h"
 
 
-class zb_field //:  public z_obj
+class zb_field : public z_refcount
 {
 	z_string _name;
 	zb_key   _key;
@@ -21,6 +22,16 @@ public:
 	virtual z_status set_default(zb_record *rec);
 
 };
+class zb_field_view
+{
+	zb_field* _feild;
+public:
+
+
+
+
+};
+
 
 class zb_field_int32 : public zb_field
 {
@@ -30,6 +41,7 @@ public:
 	virtual ctext  get_type_name() { return "int32"; }
 	virtual z_status set_default(zb_record *rec);
 };
+
 class zb_field_key : public zb_field_int32
 {
 public:
@@ -37,7 +49,7 @@ public:
 	virtual ctext  get_type_name() { return "key"; }
 	virtual z_status set_default(zb_record *rec);
 };
-const zb_field_key g_field_key;
+
 class zb_field_int64: public zb_field
 {
 public:
