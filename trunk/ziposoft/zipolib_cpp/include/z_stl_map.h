@@ -141,13 +141,14 @@ template <class ITEM_CLASS > class z_map
 {
 public:
 	typedef typename std::map<ctext,void*,ctext_less_than> m;
-	
+	/*
     virtual z_map<ITEM_CLASS> & operator << (ITEM_CLASS *x)
     {
 		Z_ASSERT(x);
         add(x->get_key(),x);
         return *this;
     };
+	*/
 
 	bool add(ctext key_in,ITEM_CLASS* item)
 	{
@@ -197,7 +198,12 @@ public:
 		return true;
 	}
 };
-
+template <class ITEM_CLASS> z_map<ITEM_CLASS>& operator<< (z_map< ITEM_CLASS>& out,  ITEM_CLASS* obj) // output
+{
+ 	Z_ASSERT(obj);
+    out.add(obj->get_key(),obj); 
+    return out;
+}
 
 
 /*
