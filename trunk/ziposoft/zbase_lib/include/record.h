@@ -4,7 +4,16 @@
 
 #include "zbase_lib/include/field_static.h"
 
-class zb_record
+class zb_recp
+{
+public:
+	zb_recp();
+	virtual ~zb_recp();
+
+
+};
+
+class zb_record : public zb_recp
 {
 
 	zb_desc* _p_desc;
