@@ -6,7 +6,7 @@
 
 ctext zb_status_text[]=
 {
-	"ok",//zb_ok,
+	"ok",//zb_status_ok,
 	"zb_end_of_data",//zb_end_of_data,
 	"zb_bad_param",//zb_bad_param,
 	"zb_cant_open_file",//zb_cant_open_file,

@@ -8,11 +8,15 @@
 
 class zb_ds_metakit: public zb_source
 {
+
+    c4_Storage      *_pStore;
+	z_string		_filename;
 public:
-	zb_ds_metakit();
+	zb_ds_metakit(ctext name);
 	virtual ~zb_ds_metakit();
-	virtual z_status open(ctext name);
+	virtual z_status open(bool writable);
 	virtual z_status close();
+	virtual z_status commit();
 	virtual bool is_open();
 };
 

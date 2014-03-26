@@ -30,14 +30,17 @@ class zb_ds_recordset_sl3;
 
 enum 
 {
-	zb_ok,
-	zb_end_of_data,
-	zb_not_supported,
-	zb_not_implemented,
-	zb_bad_param,
-	zb_cant_open_file,
-	zb_unknown_data_error,
-	zb_data_source_not_open
+	zb_status_ok,
+	zb_status_end_of_data,
+	zb_status_not_supported,
+	zb_status_not_implemented,
+	zb_status_bad_param,
+	zb_status_cant_open_file,
+	zb_status_unknown_data_error,
+	zb_status_ds_not_open,
+	zb_status_ds_open_read,
+	zb_status_ds_open_write,
+	zb_status_ds_open_needs_commit,
 
 };
 extern ctext zb_status_text[];
