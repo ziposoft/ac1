@@ -4,7 +4,12 @@
 #ifdef ZB_SQLITE
 #include "zbase_lib/include/ds_sqlite.h"
 
-
+zb_src_sl3::zb_src_sl3(ctext  path) : zb_source(path)
+{
+	_path=path;
+	_last_error=SQLITE_OK;
+	_handle=0;
+}
 
 
 bool zb_src_sl3::is_open()
@@ -20,7 +25,7 @@ z_status zb_src_sl3::_read_stucture()
 {
 	//   get_data_test( "SELECT * FROM sqlite_master WHERE type='table' ORDER BY name;");
 
-	return zb_ok;
+	return zb_status_ok;
 }
 
 z_status zb_src_sl3::_get_sql_recset_sql(zb_ds_recordset_sl3*&  recset,ctext sqltext)
@@ -29,12 +34,12 @@ z_status zb_src_sl3::_get_sql_recset_sql(zb_ds_recordset_sl3*&  recset,ctext sql
 	recset=new zb_ds_recordset_sl3(this);
 	recset->exec_sql(sqltext);
 
-	return zb_ok;
+	return zb_status_ok;
 }
 z_status zb_src_sl3::_get_sql_recset(zb_ds_recordset_sl3*&  recset,ctext tbl_name,ctext where_clause)
 {
 
-	return zb_ok;
+	return zb_status_ok;
 }
 zb_st_master* zb_src_sl3::get_tbl_master()
 {
@@ -70,12 +75,6 @@ z_status get_zb_status_sqlite(int sql_status)
 
 }
 
-zb_src_sl3::zb_src_sl3(): zb_source()
-{
-	_last_error=SQLITE_OK;
-	_handle=0;
-
-}
 
 z_status zb_src_sl3::open()
 {
@@ -127,7 +126,7 @@ z_status zb_src_sl3::get_tables()
 		// fetch a row's status
 		status = recset.ptr_increment();
     
-		if(status == zb_ok)
+		if(status == zb_status_ok)
 		{
 			// SQLITE_ROW means fetched a row
 			const char *name = recset.ptr_get_column_text(1);
@@ -138,7 +137,7 @@ z_status zb_src_sl3::get_tables()
 			
 			_ds_tables<< tbl;
 		}
-		else if(status == zb_end_of_data)
+		else if(status == zb_status_end_of_data)
 		{
 			// All rows finished
 			break;
@@ -154,7 +153,7 @@ z_status zb_src_sl3::get_tables()
 		}
 	}
 
-	return zb_ok;
+	return zb_status_ok;
 }
 
 z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
@@ -181,7 +180,7 @@ z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
 		// fetch a row's status
 		status = recset.ptr_increment();
     
-		if(status == zb_ok)
+		if(status == zb_status_ok)
 		{
 			// SQLITE_ROW means fetched a row
         
@@ -193,7 +192,7 @@ z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
 			//printf("%s = %s\t",recset.get_column_name(col),val);
 			//printf("\n");
 		}
-		else if(status == zb_end_of_data)
+		else if(status == zb_status_end_of_data)
 		{
 			// All rows finished
 			break;
@@ -204,10 +203,10 @@ z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
 			//printf("status=%s",zb_status_text[status]);
 			//printf("Some error encountered %d\n",status);
 			//TODO!! handle error
-			return zb_unknown_data_error;
+			return zb_status_unknown_data_error;
 		}
 	}
-	return zb_ok;
+	return zb_status_ok;
 
 }
 z_status zb_src_sl3::get_table_info()
@@ -232,7 +231,7 @@ z_status zb_src_sl3::get_table_info()
 		// fetch a row's status
 		status = recset.ptr_increment();
     
-		if(status == zb_ok)
+		if(status == zb_status_ok)
 		{
 			// SQLITE_ROW means fetched a row
         
@@ -244,7 +243,7 @@ z_status zb_src_sl3::get_table_info()
 			}
 			printf("\n");
 		}
-		else if(status == zb_end_of_data)
+		else if(status == zb_status_end_of_data)
 		{
 			// All rows finished
 			printf("All rows fetched\n");
@@ -261,7 +260,7 @@ z_status zb_src_sl3::get_table_info()
 		}
 	}
 
-	return zb_ok;
+	return zb_status_ok;
 }
 
 z_status zb_ds_recordset_sl3::ds_create_desc_from_source(zb_desc* desc)
@@ -293,7 +292,7 @@ z_status zb_ds_recordset_sl3::ds_create_desc_from_source(zb_desc* desc)
 		//ZT(("%s,%s,%d\n",get_column_name(i),,int_type));
 
 	}
-   return zb_ok;
+   return zb_status_ok;
 }
 
 
@@ -316,10 +315,10 @@ z_status zb_ds_recordset_sl3::ptr_increment()
 {
 	int retval=sqlite3_step(_stmt);
 	if(retval==SQLITE_ROW) 
-		return zb_ok;
+		return zb_status_ok;
 	if(retval==SQLITE_DONE) 
-		return zb_end_of_data;
-	return zb_unknown_data_error;
+		return zb_status_end_of_data;
+	return zb_status_unknown_data_error;
 }
 int zb_ds_recordset_sl3::get_num_cols()
 {
@@ -333,14 +332,14 @@ z_status zb_ds_recordset_sl3::exec_sql(ctext sqltext)
 	ZTF;
 	int retval;
 	if(!_file_sqlite) 
-		return zb_data_source_not_open;
+		return zb_status_ds_not_open;
 	if(!_file_sqlite->is_open()) 
-		return zb_data_source_not_open;
+		return zb_status_ds_not_open;
 	retval = sqlite3_prepare_v2(_file_sqlite->get_handle(),sqltext,-1,&_stmt,0);
 	if(0==retval)
-		return zb_ok;
+		return zb_status_ok;
 	_file_sqlite->_last_error=retval;
-	return zb_unknown_data_error;
+	return zb_status_unknown_data_error;
 }
 ctext zb_ds_recordset_sl3::get_column_name(int i)
 {
@@ -359,7 +358,7 @@ ctext zb_ds_recordset_sl3::ptr_get_column_type(int i)
 z_status zb_ds_recordset_sl3::ds_get_val_string(z_string& val,zb_field* field)
 {
 	val=(ctext)sqlite3_column_text(_stmt,field->get_index());
-	return zb_ok;
+	return zb_status_ok;
 }
 void zb_ds_recordset_sl3::dump(z_file* fp)
 {
@@ -426,7 +425,7 @@ act_rtn zb_src_sl3::get_data_test()
 			// fetch a row's status
 			retval = recset.ptr_increment();
         
-			if(retval == ZB_OK)
+			if(retval == zb_status_ok)
 			{
 				// SQLITE_ROW means fetched a row
             

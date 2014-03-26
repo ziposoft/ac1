@@ -62,14 +62,8 @@ public:
 	z_string _param_table_name;
 
 
-	zb_src_sl3();
 	int _last_error;
-	zb_src_sl3(ctext  path) : zb_source()
-	{
-		_path=path;
-		_last_error=SQLITE_OK;
-		_handle=0;
-	}
+	zb_src_sl3(ctext  path);
 	virtual z_status open();
 	virtual z_status close();
 	z_status dump_master();

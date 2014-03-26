@@ -16,7 +16,7 @@ z_status zb_table_base::dump()
 {
 
 
-	return zb_ok;
+	return zb_status_ok;
 
 }
 
@@ -24,6 +24,6 @@ z_status zb_table_base::get_default_rec(zb_record *rec)
 {
 
 
-	return zb_ok;
+	return zb_status_ok;
 
 }

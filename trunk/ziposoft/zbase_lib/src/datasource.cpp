@@ -10,12 +10,13 @@ ctext zb_ds_table::get_key()
 zb_ds_table::zb_ds_table(ctext unique_id)
 {
 	_id=unique_id;
+
 }
 
 
 
-zb_source::zb_source()
+zb_source::zb_source(ctext name)
 {
-
-
+	_name=name;
+	_status=status_closed;
 }

@@ -28,7 +28,7 @@ zb_field_int32::zb_field_int32(zb_key key,ctext name):zb_field(key,name)
 z_status zb_field_int32::get_data_text(zb_recset* rec,z_string& text)
 {
 	
-	return zb_ok;
+	return zb_status_ok;
 }
 
 
@@ -58,7 +58,7 @@ z_status zb_desc::get_default_rec(zb_record *rec)
 
 	}
 
-	return zb_ok;
+	return zb_status_ok;
 }
 
 
