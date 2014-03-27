@@ -1,7 +1,7 @@
 #ifndef FIELD_H
 #define FIELD_H
 #include "zbase_lib/include/zb.h"
-#include "zbase_lib/include/datum.h"
+//#include "zbase_lib/include/datum.h"
 
 
 class zb_field : public z_refcount
@@ -67,6 +67,7 @@ public:
 	virtual z_status get_data_text(zb_recset* rec,z_string& text);
 	virtual ctext  get_type_name() { return "string"; }
 	virtual z_status set_default(zb_record *rec);
+	//virtual z_status
 };
 
 

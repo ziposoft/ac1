@@ -12,6 +12,7 @@ typedef zb_key_size zb_key;
 class zb_ds_record;
 class zb_ds_recordset;
 
+class zb_datum;
 class zb_record;
 class zb_recset;
 
