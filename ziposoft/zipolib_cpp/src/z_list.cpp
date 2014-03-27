@@ -2,7 +2,7 @@
 #include "z_list.h"
 void z_strlist::dump(z_file &out)
 {
-	int i;
+	size_t  i;
 	for (i=0;i<size();i++)
 	{
 		out << (*this)[i] <<'\n';

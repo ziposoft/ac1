@@ -35,7 +35,7 @@ z_directory::~z_directory()
 }
 z_status z_directory::get_files_by_extension(ctext ext,z_strlist &list)
 {
-	z_status status;
+	
 	if(_hDir==NULL)
 	{
 
