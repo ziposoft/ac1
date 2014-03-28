@@ -12,11 +12,7 @@ public:
 	ctext get_key();
 	zb_ds_table(ctext unique_id);
 };
-class zb_ds_field  
-{
-public:
 
-};
 
 class zb_ds_record  
 {
@@ -29,7 +25,6 @@ class zb_ds_record_native
 public:
 
 };
-
 
 class zb_source 
 {
@@ -60,6 +55,8 @@ public:
 	virtual zb_st_master* get_tbl_master(){ return 0;};
 	virtual zb_ds_table* get_tbl(ctext ds_table_name){ return 0;};
 
+	virtual zb_ds_field* get_ds_field_string(ctext id){ return 0;};
+	virtual zb_ds_field* get_ds_field_int32(ctext id){ return 0;};
 
 	z_map<zb_ds_table> _ds_tables;
 

@@ -11,6 +11,9 @@ class zb_ds_metakit: public zb_source
 
     c4_Storage      *_pStore;
 	z_string		_filename;
+
+	z_status GetViewString(zb_desc& desc,z_string &str,bool blocked);
+
 public:
 	zb_ds_metakit(ctext name);
 	virtual ~zb_ds_metakit();
@@ -18,7 +21,45 @@ public:
 	virtual z_status close();
 	virtual z_status commit();
 	virtual bool is_open();
+	virtual zb_ds_field* get_ds_field_string(ctext id);
+
 };
+class zb_ds_field_mk  : public zb_ds_field
+{
+protected:
+	z_string		_id;
+public:
+	zb_ds_field_mk(ctext id);
 
+    virtual const c4_Property& GetProperty()=0;
+	virtual void MakeDesc(z_string &str)=0;
 
+};
+class zb_ds_field_mk_string  : public zb_ds_field_mk
+{
+
+    c4_StringProp* _pStrProp;
+public:
+	zb_ds_field_mk_string(ctext id);
+	virtual ~zb_ds_field_mk_string();
+	//For creating temp row, for filtering
+	c4_Row operator[] (ctext i) const
+	{
+		return (*_pStrProp)[i];
+	};
+	//For creating temp row, for filtering
+	c4_Row row(ctext i) const
+	{
+		return (*_pStrProp)[i];
+	};
+	//For creating sorts
+    const c4_Property& GetProperty() { return *_pStrProp ; };
+    const c4_StringProp& GetStrProp() { return *_pStrProp ; };
+
+	virtual void MakeDesc(z_string &str) { 
+        str+=_id; 
+        str+=":S"; 
+    };
+
+};
 #endif

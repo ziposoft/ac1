@@ -1,12 +1,17 @@
 #include "zb_pch.h"
 
-#include "zbase_lib/include/field_static.h"
-#include "zbase_lib/include/record.h"
+#include "zbase_lib/include/datasource.h"
 zb_field::zb_field(zb_key key,ctext name)
 {
 	_key=key;
+	
 	_name=name;
 	_index=-1;
+}
+zb_ds_field * zb_field::get_ds_field()
+{
+	Z_ASSERT((_ds_field));
+	return _ds_field;
 }
 
 ctext zb_field::get_key() 
@@ -37,10 +42,10 @@ zb_field_key::zb_field_key():zb_field_int32(zk_sf_1_key,"Key")
 
 }
 
-zb_field_string::zb_field_string(zb_key key,ctext name):zb_field(key,name)
+zb_field_string::zb_field_string(zb_source* ds,zb_key key,ctext name):zb_field(key,name)
 {
-
-
+	_id='s'+key;
+	ds->get_ds_field_string(get_id());
 }
 z_status zb_field_string::get_data_text(zb_recset* rec,z_string& text)
 {
