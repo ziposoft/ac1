@@ -186,7 +186,7 @@ z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
         
 			// sqlite3_column_text returns a const void* , typecast it to const char*
 			const char *val = recset.ptr_get_column_text(1); //name of field
-			zb_field_string* field=new zb_field_string(0,val);
+			zb_field_string* field=new zb_field_string(this,0,val);
 			desc.add(val,field); 
 
 			//printf("%s = %s\t",recset.get_column_name(col),val);
@@ -283,7 +283,7 @@ z_status zb_ds_recordset_sl3::ds_create_desc_from_source(zb_desc* desc)
 		}
 		//if(strcmp(col_type,"text")==0)
 		if(!fld)
-			fld=new zb_field_string(-1,col_name);
+			fld=new zb_field_string(this->_file_sqlite,-1,col_name);
 
 		fld->set_index(i);
 
