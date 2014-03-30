@@ -38,7 +38,7 @@ public:
 
 #define	Z_LOG_ERROR(status,...)  gz_logger.add_msg (__FILE__,__FUNCTION__,__LINE__,status, __VA_ARGS__);
 
-
+void z_logger_dump();
 
 extern z_logger gz_logger;
 #endif
