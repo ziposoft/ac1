@@ -145,7 +145,7 @@ public:
     virtual z_map<ITEM_CLASS> & operator << (ITEM_CLASS *x)
     {
 		Z_ASSERT(x);
-        add(x->get_key(),x);
+        add(x->get_map_key(),x);
         return *this;
     };
 	*/
@@ -201,7 +201,7 @@ public:
 template <class ITEM_CLASS> z_map<ITEM_CLASS>& operator<< (z_map< ITEM_CLASS>& out,  ITEM_CLASS* obj) // output
 {
  	Z_ASSERT(obj);
-    out.add(obj->get_key(),obj); 
+    out.add(obj->get_map_key(),obj); 
     return out;
 }
 

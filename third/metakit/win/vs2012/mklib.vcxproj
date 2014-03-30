@@ -90,8 +90,8 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>C:\acv\code\lib.dbg\win32\mk4.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>../../../lib/debug/mk4.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -124,7 +124,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>C:\acv\code\lib\win32\mk4.lib</OutputFile>
+      <OutputFile>../../lib/release/mk4.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
   </ItemDefinitionGroup>

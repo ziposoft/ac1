@@ -363,7 +363,7 @@ zo_root::zo_root()
 	_console.set_root(this);
 
 }
-ctext zo_root::get_key()
+ctext zo_root::get_map_key()
 {
 	return "";
 }

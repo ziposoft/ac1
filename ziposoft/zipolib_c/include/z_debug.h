@@ -21,6 +21,7 @@ void z_debug_logfile(ctext name);
 #ifdef BUILD_VSTUDIO  
 
 #define Z_DEBUG_BREAK  __debugbreak();
+#define Z_TODO         __debugbreak();
 #else
 #define Z_DEBUG_BREAK
 #endif
@@ -31,7 +32,7 @@ void z_debug_printf(const char*  lpszFormat,  ...  );
 
 #define	DBG_OUT(_X_)   z_debug_printf _X_ ; 
 #if WIN32
-#define Z_ASSERT(_X_) { if (!(_X_)) {  DBG_OUT(("ASSERTION FAILED _X_ %s(%d) ",__FILE__,__LINE__));Z_DEBUG_BREAK;}}
+#define Z_ASSERT(_X_) { if (!(_X_)) {  DBG_OUT(("ASSERTION FAILED \"" #_X_"\" %s(%d) ",__FILE__,__LINE__));Z_DEBUG_BREAK;}}
 #define Z_CHECK(_X_) _X_
 #else//LINUX
 

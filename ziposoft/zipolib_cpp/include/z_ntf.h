@@ -25,7 +25,7 @@ class z_ntf_action
 	z_ntf_member_func* _func;
 public:
 	z_ntf_action(z_ntf_obj* parent,z_ntf_member_func* func);
-	ctext get_key() { return _name; }
+	ctext get_map_key() { return _name; }
 
 };
 class z_ntf_obj
@@ -36,7 +36,7 @@ class z_ntf_obj
 public:
 
 	
-	ctext get_key() { return _name; }
+	ctext get_map_key() { return _name; }
 
 };
 

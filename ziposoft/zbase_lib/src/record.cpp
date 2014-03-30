@@ -2,7 +2,11 @@
 
 #include "zbase_lib/include/record.h"
 #include "zbase_lib/include/datasource.h"
-
+ zb_record::zb_record()
+{
+	_p_desc=0;
+	_p_recset=0;
+}
 zb_record::zb_record(zb_desc* desc)
 {
 	_p_desc=desc;

@@ -3,7 +3,7 @@
 #include "zbase_lib/include/datasource.h"
 #include "zbase_lib/include/record.h"
 
-ctext zb_ds_table::get_key()
+ctext zb_ds_table::get_map_key()
 {
 	return _id;
 }
@@ -19,4 +19,10 @@ zb_source::zb_source(ctext name)
 {
 	_name=name;
 	_status=status_closed;
+}
+bool zb_source::is_open()
+{ 
+
+	Z_TODO;
+	return false;
 }

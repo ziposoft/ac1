@@ -179,7 +179,7 @@ public:
 	z_obj* get_parent_obj();
 	void set_parent_obj(z_obj* obj);
 	virtual void get_path(z_string& path);
-	virtual ctext get_key();
+	virtual ctext get_map_key();
 	//virtual bool compare_id(ctext id_to_compare);
 	virtual ctext get_type();
 	virtual ctext get_id();
@@ -400,7 +400,7 @@ public:
 	}
 	virtual void add_obj(z_obj* obj)
 	{
-		add(obj->get_key(),(ITEM_CLASS*)obj);
+		add(obj->get_map_key(),(ITEM_CLASS*)obj);
 	}
 	virtual size_t get_count() { reset_iter(); return z_map<ITEM_CLASS>::size(); }
 	virtual void clear_objs(){ z_map<ITEM_CLASS>::clear(); }

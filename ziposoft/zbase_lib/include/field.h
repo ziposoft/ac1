@@ -14,24 +14,26 @@ public:
 };
 class zb_field : public z_refcount
 {
-	zb_ds_field* _ds_field;
 	z_string _name;
+	z_string _id;
 	zb_key   _key;
 	int _index; //TODO-ugly, make private or something
 protected:
-	z_string _id;
+	zb_ds_field* _ds_field;
 public:
 	
 	zb_field(zb_key key,ctext name);
 	//virtual z_status get_data_text(zb_recp* rec,ctext& text)=0;
 	virtual z_status get_data_text(zb_recset* rs,z_string& text)=0;
-	virtual ctext get_key();
+	virtual ctext get_map_key();
 	virtual const z_string& get_id();
 	const z_string& get_name_str() { return _name; }
 	virtual int get_index() { return _index; }
 	virtual void set_index(int i) {  _index=i; }
 	virtual ctext  get_type_name() =0;
-	virtual z_status set_default(zb_record *rec);
+	virtual z_status set_default(zb_record *rec)=0;
+
+	virtual ctext get_id_prefix()=0;
 
 	zb_ds_field * get_ds_field();
 
@@ -49,11 +51,14 @@ public:
 
 class zb_field_int32 : public zb_field
 {
+	int _default;
 public:
 	zb_field_int32(zb_key key,ctext name);
 	virtual z_status get_data_text(zb_recset* rec,z_string& text);
 	virtual ctext  get_type_name() { return "int32"; }
 	virtual z_status set_default(zb_record *rec);
+	virtual ctext get_id_prefix() { return "I"; }
+
 };
 
 class zb_field_key : public zb_field_int32
@@ -62,6 +67,7 @@ public:
 	zb_field_key();
 	virtual ctext  get_type_name() { return "key"; }
 	virtual z_status set_default(zb_record *rec);
+	virtual ctext get_id_prefix() { return "K"; }
 };
 
 class zb_field_int64: public zb_field
@@ -71,6 +77,7 @@ public:
 	virtual z_status get_data_text(zb_recset* rec,z_string& text);
 	virtual ctext  get_type_name() { return "int64"; }
 	virtual z_status set_default(zb_record *rec);
+	virtual ctext get_id_prefix() { return "I64_"; }
 };
 
 
@@ -84,6 +91,7 @@ public:
 	virtual ctext  get_type_name() { return "string"; }
 	virtual z_status set_default(zb_record *rec);
 	virtual z_status set(zb_record *rec,ctext s);
+	virtual ctext get_id_prefix() { return "S"; }
 	//virtual z_status
 };
 

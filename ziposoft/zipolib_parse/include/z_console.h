@@ -120,7 +120,7 @@ public:
 	z_trace		*_p_trace;
 	z_trace		*_p_child;
 
-	virtual ctext get_key();
+	virtual ctext get_map_key();
 
 
 
@@ -200,7 +200,7 @@ public:
 	z_trace		*_p_trace;
 	z_trace		*_p_child;
 
-	virtual ctext get_key();
+	virtual ctext get_map_key();
 
 
 

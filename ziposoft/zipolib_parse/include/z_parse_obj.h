@@ -41,7 +41,7 @@ public:
 	}
 	size_t _templ_offset;
 	virtual void dump(int level,z_file& outf,int flags)=0;
-	virtual ctext get_key()=0;
+	virtual ctext get_map_key()=0;
 	virtual void output(z_file* fp)=0;
 	virtual void dump_custom(z_file& outf) {};
 };
@@ -94,11 +94,11 @@ public:
 
 	void dump(int level,z_file& outf,int flags);
 	//virtual z_status feature_manipulate(type_memvar_oper set,size_t *index,ctext name,zp_obj_parser* p);
-	virtual ctext get_key();
+	virtual ctext get_map_key();
 	virtual ctext get_template();
 	int compare_id(ctext id)
 	{
-		return z_str_same(id,get_key());
+		return z_str_same(id,get_map_key());
 	}
 };
 class zp_obj_generic : public zp_obj
@@ -131,7 +131,7 @@ public:
 	zp_text();
 	~zp_text();
 
-	virtual ctext get_key();
+	virtual ctext get_map_key();
 	void set_text(ctext text,size_t len=0);
 	virtual ctext get_text();
 	//virtual const z_obj_fact* get_fact(){ return &entry_item_text; }
@@ -252,7 +252,7 @@ public:
 	zp_obj_feature() : zp_obj()
 	{
 	}
-	virtual ctext get_key()
+	virtual ctext get_map_key()
 	{
 		return _name;
 	}
@@ -278,7 +278,7 @@ public:
 		_subscript=false;
 
 	}
-	virtual ctext get_key()
+	virtual ctext get_map_key()
 	{
 		return _name;
 	}

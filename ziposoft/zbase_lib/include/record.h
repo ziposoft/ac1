@@ -11,6 +11,7 @@ class zb_record
 	zb_desc* _p_desc;
 	zb_recset* _p_recset;
 public:
+	//zb_record();
 	zb_record();
 	zb_record(zb_desc* desc);
 	zb_record(zb_recset* recset);

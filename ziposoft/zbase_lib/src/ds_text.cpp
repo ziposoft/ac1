@@ -7,17 +7,18 @@ zb_ds_text::zb_ds_text(ctext name) : zb_source(name)
 {
 
 }
-z_status zb_ds_text::open()
+
+
+zb_ds_text::~zb_ds_text()
 {
 
-
+}
+z_status zb_ds_text::open()
+{
 	z_strlist list;
-
 	_dir.open(_name);
 	_dir.get_files_by_extension("txt",list);
-
 	return zb_status_not_implemented;
-
 }
 z_status zb_ds_text::close()
 {

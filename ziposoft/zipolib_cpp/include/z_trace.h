@@ -41,7 +41,7 @@ class zt_func
 	z_string _default;
 public:
 	ztp_setting _setting;
-	ctext get_key();
+	ctext get_map_key();
 	zt_profile_list _profiles;
 
 	int _line_number;
@@ -71,7 +71,7 @@ public:
 	}
 	z_string _name;
 	z_string _default;
-	virtual ctext get_key() { return _name.c_str(); }
+	virtual ctext get_map_key() { return _name.c_str(); }
 	virtual ztp_setting get_setting() { return get_setting_from_text(_default); }
 };
 class zt_func_call
@@ -80,7 +80,7 @@ public:
 	zt_func* _function;
 	zt_func_call* _parent;
 	U32 _count;
-	ctext get_key();
+	ctext get_map_key();
     z_time _start_time;
     U64 _total_time;
 	z_stl_map<zt_func*,zt_func_call*> _funcs_calls;
@@ -107,7 +107,7 @@ public:
 	ztp_setting _setting;
 	ctext get_full_name();
 	ctext get_short_name();
-	virtual ctext get_key() { return _full_name;}
+	virtual ctext get_map_key() { return _full_name;}
 
 	void init(ctext profile);
 
@@ -138,7 +138,7 @@ public:
 
 	void init(ctext prof);
 
-	virtual ctext get_key() { return _name.c_str(); }
+	virtual ctext get_map_key() { return _name.c_str(); }
 };
 class z_trace : public zt_func_call
 {

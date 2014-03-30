@@ -42,6 +42,7 @@ enum
 	zb_status_ds_open_read,
 	zb_status_ds_open_write,
 	zb_status_ds_open_needs_commit,
+	zb_status_ds_data_error,
 
 };
 extern ctext zb_status_text[];
