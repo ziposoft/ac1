@@ -224,7 +224,7 @@ z_status zo_man_cmd::dump_features(z_file* fp,z_obj* obj)
 	{
 		return Z_ERROR(zs_bad_argument_2,"No object");
 	}
-	*fp<< "\nFeatures of \""<<obj->get_key()<<"\"\n";
+	*fp<< "\nFeatures of \""<<obj->get_map_key()<<"\"\n";
 	*fp<< "Properties:\n";
 	dump_features_by_type(fp,obj,ZO_MT_PROP);
 	*fp<< "\nActions:\n";

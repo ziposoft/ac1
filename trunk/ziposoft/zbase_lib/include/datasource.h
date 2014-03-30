@@ -9,7 +9,7 @@ class zb_ds_table
 {
 public:
 	z_string _id;
-	ctext get_key();
+	ctext get_map_key();
 	zb_ds_table(ctext unique_id);
 };
 
@@ -50,7 +50,7 @@ public:
 	virtual z_status get_tables(){ return zb_status_not_implemented;};
 	virtual z_status close(){ return zb_status_not_implemented;};
 	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return zb_status_not_implemented;};
-	virtual bool is_open(){ return false;};
+	virtual bool is_open();
 	//virtual int get_record()=0;
 	virtual zb_st_master* get_tbl_master(){ return 0;};
 	virtual zb_ds_table* get_tbl(ctext ds_table_name){ return 0;};

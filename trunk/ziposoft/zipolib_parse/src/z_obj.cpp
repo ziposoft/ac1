@@ -90,7 +90,7 @@ void z_obj::get_path(z_string& path)
 		o->get_path(path);
 		path<<'/';
 	}
-	path<<get_key();
+	path<<get_map_key();
 
 }
 
@@ -158,7 +158,7 @@ void z_obj::init_man_data(z_obj* parent_obj)
 		
 	}
 }
-ctext z_obj::get_key() 
+ctext z_obj::get_map_key() 
 { 
 	if(_man_data)
 		if(_man_data->_name)
@@ -300,8 +300,8 @@ z_status z_obj_container::get_feature_map(zo_manipulator* man,zo_feature_list& l
 		while((obj=get_next_obj()))
 		{
 			zo_ftr_entry* fe=new zo_ftr_entry();
-			fe->_internal_name=obj->get_key();
-			fe->_display_name=obj->get_key();
+			fe->_internal_name=obj->get_map_key();
+			fe->_display_name=obj->get_map_key();
 			fe->_short_id=0;
 			fe->_desc=0;
 			fe->_options=0;

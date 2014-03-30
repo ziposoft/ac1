@@ -150,10 +150,10 @@ double zt_func_call::get_d_total_time()
 #endif
 	return d_total_time;
 }
-ctext zt_func_call::get_key()
+ctext zt_func_call::get_map_key()
 {
 
-	return _function->get_key();
+	return _function->get_map_key();
 }
 
 zt_func_call*	zt_func_call::get_or_add_func_call(zt_func* fp)
@@ -244,7 +244,7 @@ double zt_func::get_d_total_time()
 	return d_total_time;
 }
 
-ctext zt_func::get_key()
+ctext zt_func::get_map_key()
 {
 
 	return _func_name;
@@ -494,7 +494,7 @@ void  z_trace::save_config(ctext file_name)
 	enabled=false;
 	z_status status;
 	if(_p_current_profile)
-		_str_profile=_p_current_profile->get_key();
+		_str_profile=_p_current_profile->get_map_key();
 	//Z_ASSERT(0); //TODO
 	//_parser.set_obj_table(PARSE_TABLE(trace_obj_list));
 	z_file file_cfg(file_name,"wb");
@@ -545,7 +545,7 @@ zt_func_call*  z_trace::in(ctext module,ctext full_file_name,ctext func_name,int
 	z_set_start_time(&fc._start_time);
 
 	if(ouput)
-		putfline("> %s",fc.get_key());
+		putfline("> %s",fc.get_map_key());
 	_depth++;
 	return _current_func_call;
 
@@ -629,7 +629,7 @@ void  z_trace::err(bool output)
 	_depth--;
 	if(output)
 	{
-		//putfline("< %s",fc.get_key());
+		//putfline("< %s",fc.get_map_key());
 		putfline("<");
 	}
 	_current_func_call=fc._parent;
@@ -647,7 +647,7 @@ void  z_trace::out(bool output)
 	_depth--;
 	if(output)
 	{
-		//putfline("< %s",fc.get_key());
+		//putfline("< %s",fc.get_map_key());
 		putfline("<");
 	}
 	_current_func_call=fc._parent;

@@ -6,6 +6,7 @@
 
 #include "zipolib_cpp/include/z_string.h"
 #include "zipolib_cpp/include/z_trace.h"
+#include "zipolib_cpp/include/z_error.h"
 #include "zipolib_cpp/include/z_stl_map.h"
 #include "zipolib_cpp/include/z_filesystem.h"
 #ifdef ZB_SQLITE

@@ -22,7 +22,7 @@ public:
 		_key=-1;
 	}
 	z_status dump();
-	virtual ctext get_key()
+	virtual ctext get_map_key()
 	{
 		return _id;
 	}
@@ -30,7 +30,15 @@ public:
 	{
 		return _desc;
 	}
-
+	virtual zb_key get_key()
+	{
+		return _id;
+	}
+	virtual ctext get_name()
+	{
+		return _name;
+	}
+	zb_record* new_default_rec();
 	z_status get_default_rec(zb_record *rec);
 	z_status record_add(zb_record *rec);
 

@@ -246,7 +246,7 @@ z_status zp_obj_parser::parse_obj(zp_obj* p_obj,ctext data)
 	status=_process_template(zp_mode_parse_input);
 	if(status==zs_matched)
 	{
-		ZT(("==========ITEM[%s] MATCHED, CREATING=====\n",p_obj->get_key()));
+		ZT(("==========ITEM[%s] MATCHED, CREATING=====\n",p_obj->get_map_key()));
 		index_reset();
 		context_get_current_template_parser().index_reset();
 		reset_results();
@@ -305,7 +305,7 @@ z_status zp_obj_parser::create_obj(ctext item_entry_name,zp_obj* &p_obj)
 }
 z_status zp_obj_parser::output_obj(z_file* fp,zp_obj* obj)
 {
-	ZT(("==========TEMPLATE[%s] OUTPUT OBJ=====\n",obj->get_key()));
+	ZT(("==========TEMPLATE[%s] OUTPUT OBJ=====\n",obj->get_map_key()));
 
 	_file_out=fp;
 	//ZTF;
@@ -419,7 +419,7 @@ z_status zp_obj_parser::access_obj_member_map(type_memvar_oper oper,int* pindex,
 	}
 	if(oper==zo_mvo_set) //add an object
 	{
-		member_var->add(_p_member_var_obj->get_key(),_p_member_var_obj);
+		member_var->add(_p_member_var_obj->get_map_key(),_p_member_var_obj);
 		return zs_ok;
 	}
 	if(oper==zo_mvo_get)//get an object

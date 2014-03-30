@@ -12,24 +12,35 @@ class zb_ds_metakit: public zb_source
     c4_Storage      *_pStore;
 	z_string		_filename;
 
-	z_status GetViewString(zb_desc& desc,z_string &str,bool blocked);
+ 	z_status _get_view_for_table(c4_View& view,zb_table_base* tbl);
 
 public:
 	zb_ds_metakit(ctext name);
-	virtual ~zb_ds_metakit();
+	virtual ~zb_ds_metakit(void);
 	virtual z_status open(bool writable);
 	virtual z_status close();
 	virtual z_status commit();
-	virtual bool is_open();
 	virtual zb_ds_field* get_ds_field_string(ctext id);
 
 };
+class zb_ds_recordset_mk  : public zb_ds_recordset
+{
+public:
+ 	c4_View _mk_view;
+	c4_View& get_mk_view() { return _mk_view;}
+
+
+};
+
+
+
 class zb_ds_field_mk  : public zb_ds_field
 {
 protected:
 	z_string		_id;
 public:
 	zb_ds_field_mk(ctext id);
+	virtual ~zb_ds_field_mk();
 
     virtual const c4_Property& GetProperty()=0;
 	virtual void MakeDesc(z_string &str)=0;

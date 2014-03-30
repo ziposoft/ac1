@@ -14,7 +14,6 @@ public:
 	virtual ~zb_ds_text();
 	virtual z_status open();
 	virtual z_status close();
-	virtual bool is_open();
 };
 
 
