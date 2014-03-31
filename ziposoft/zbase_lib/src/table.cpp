@@ -34,7 +34,7 @@ z_status zb_table_base::record_add(zb_record *rec)
 z_status zb_table_base::get_default_rec(zb_record *rec)
 {
 
-
+	
 	return zb_status_not_implemented;
 
 }
