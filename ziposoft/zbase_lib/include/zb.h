@@ -39,13 +39,11 @@ enum
 	zb_status_cant_open_file,
 	zb_status_unknown_data_error,
 	zb_status_ds_not_open,
-	zb_status_ds_open_read,
-	zb_status_ds_open_write,
-	zb_status_ds_open_needs_commit,
 	zb_status_ds_data_error,
 
 };
 extern ctext zb_status_text[];
+#define	ZB_ERROR(status)   gz_logger.add_msg (__FILE__,__FUNCTION__,__LINE__,status,zb_status_text[status]);
 
 #ifdef ZB_NO_OBJ_CLEANUP
 

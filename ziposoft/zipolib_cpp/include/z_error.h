@@ -31,6 +31,7 @@ public:
 };
 
 extern z_error gz_error;
+
 #define	Z_ERROR(status, ...)   gz_logger.add_msg (__FILE__,__FUNCTION__,__LINE__,status,__VA_ARGS__);
 #define	Z_ERROR_RETURN(status, ...)  gz_logger.add_msg( __FILE__,__FUNCTION__,__LINE__,status,__VA_ARGS__);
 #define Z_ERROR_THROW(_error_no_,_error_msg_) {zb_error* e=new  zb_error(_error_no_);e->_error_msg.Format _error_msg_; throw e;}

@@ -4,12 +4,15 @@
 
 #include "zbase_lib/include/field_static.h"
 
-
-class zb_record 
+class zb_rec_ptr
+{
+	zb_recset* _p_recset;
+public:
+};
+class zb_record : public zb_rec_ptr
 {
 
 	zb_desc* _p_desc;
-	zb_recset* _p_recset;
 public:
 	//zb_record();
 	zb_record();

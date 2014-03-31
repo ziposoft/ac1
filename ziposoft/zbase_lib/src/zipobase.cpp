@@ -8,10 +8,13 @@ ctext zb_status_text[]=
 {
 	"ok",//zb_status_ok,
 	"zb_end_of_data",//zb_end_of_data,
-	"zb_bad_param",//zb_bad_param,
-	"zb_cant_open_file",//zb_cant_open_file,
-	"zb_unknown_data_error",//zb_unknown_data_error,
-	"zb_data_source_not_open",//zb_data_source_not_open,
+	"zb_status_not_supported",//zb_status_not_supported,
+	"zb_status_not_implemented",//zb_status_not_implemented,
+	"zb_bad_param",//zb_status_bad_param,
+	"zb_cant_open_file",//zb_status_cant_open_file,
+	"zb_unknown_data_error",//zb_status_unknown_data_error,
+	"zb_data_source_not_open",//zb_status_ds_not_open,
+	"zb_status_ds_data_error",//zb_status_ds_data_error,
 
 };
 

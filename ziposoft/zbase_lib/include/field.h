@@ -6,10 +6,10 @@
 class zb_ds_field  
 {
 public:
-	virtual z_status set_string(zb_record *rec,ctext s){ return zb_status_not_implemented;};
-	virtual z_status get_string(zb_record *rec,z_string& s){ return zb_status_not_implemented;};
-	virtual z_status set_int32(zb_record *rec,I32 i){ return zb_status_not_implemented;};
-	virtual z_status get_int32(zb_record *rec,I32& i){ return zb_status_not_implemented;};
+	virtual z_status set_string(zb_record *rec,ctext s);
+	virtual z_status get_string(zb_record *rec,z_string& s);
+	virtual z_status set_int32(zb_record *rec,I32 i);
+	virtual z_status get_int32(zb_record *rec,I32& i);
 
 };
 class zb_field : public z_refcount
