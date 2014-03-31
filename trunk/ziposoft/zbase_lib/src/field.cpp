@@ -3,6 +3,12 @@
 #include "zbase_lib/include/datasource.h"
 
 
+
+z_status zb_ds_field::set_string(zb_record *rec,ctext s){ return ZB_ERROR(zb_status_not_implemented);}
+z_status zb_ds_field::get_string(zb_record *rec,z_string& s){ return ZB_ERROR(zb_status_not_implemented);}
+z_status zb_ds_field::set_int32(zb_record *rec,I32 i){ return ZB_ERROR(zb_status_not_implemented);}
+z_status zb_ds_field::get_int32(zb_record *rec,I32& i){ return ZB_ERROR(zb_status_not_implemented);}
+
 /*____________________________________________________________________________
 
 	zb_field
@@ -58,7 +64,7 @@ z_status zb_field_int32::get_data_text(zb_recset* rec,z_string& text)
 z_status zb_field_int32::set_default(zb_record* rec)
 {
 	
-	return zb_status_not_implemented;
+	return ZB_ERROR(zb_status_not_implemented);
 }
 
  /*____________________________________________________________________________
@@ -74,7 +80,7 @@ zb_field_key::zb_field_key():zb_field_int32(zk_sf_1_key,"Key")
 z_status zb_field_key::set_default(zb_record* rec)
 {
 	
-	return zb_status_not_implemented;
+	return ZB_ERROR(zb_status_not_implemented);
 }
 
 
@@ -95,7 +101,7 @@ z_status zb_field_string::get_data_text(zb_recset* rec,z_string& text)
 z_status zb_field_string::set_default(zb_record* rec)
 {
 	
-	return zb_status_not_implemented;
+	return ZB_ERROR(zb_status_not_implemented);
 }
 z_status zb_field_string::set(zb_record *rec,ctext s)
 {

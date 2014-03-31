@@ -45,11 +45,11 @@ public:
 
 	zb_source(ctext name);
 	virtual ~zb_source(){};
-	virtual z_status commit(){ return zb_status_not_implemented;};
-	virtual z_status open(bool writable){ return zb_status_not_implemented;};
-	virtual z_status get_tables(){ return zb_status_not_implemented;};
-	virtual z_status close(){ return zb_status_not_implemented;};
-	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return zb_status_not_implemented;};
+	virtual z_status commit(){ return ZB_ERROR(zb_status_not_implemented);};
+	virtual z_status open(bool writable){ return ZB_ERROR(zb_status_not_implemented);};
+	virtual z_status get_tables(){ return ZB_ERROR(zb_status_not_implemented);};
+	virtual z_status close(){ return ZB_ERROR(zb_status_not_implemented);};
+	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return ZB_ERROR(zb_status_not_implemented);};
 	virtual bool is_open();
 	//virtual int get_record()=0;
 	virtual zb_st_master* get_tbl_master(){ return 0;};

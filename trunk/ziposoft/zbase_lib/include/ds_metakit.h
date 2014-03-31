@@ -23,6 +23,15 @@ public:
 	virtual zb_ds_field* get_ds_field_string(ctext id);
 
 };
+
+class zb_record_mk  : public zb_record
+{
+public:
+ 	c4_View _mk_view;
+	c4_View& get_mk_view() { return _mk_view;}
+
+
+};
 class zb_ds_recordset_mk  : public zb_ds_recordset
 {
 public:

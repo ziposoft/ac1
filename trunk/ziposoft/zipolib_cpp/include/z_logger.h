@@ -22,17 +22,17 @@ public:
 
 	z_logger_msg(ctext file,ctext func,int line,z_status status,const char*  msg=0);
 
-
+	void dump(z_file *fp);
 
 };
 
 
 class z_logger
 {
-	z_stl_list<z_logger_msg> _log;
+	z_stl_obj_vector<z_logger_msg> _log;
 public:
 	z_status add_msg(ctext file,ctext func,int line,z_status status,const char*  lpszFormat,   ... );
-
+	void dump();
 
 };
 
