@@ -541,9 +541,7 @@ class canidate extends json_obj{
 			echo ("<img src='$photo'/></a></div>");
 		}
 
-		echo ("<div class='leg_info' >
-				<a href='/guide/canidate.php?key=$this->key'><h2>$this->displayname</h2></a>
-				<!-- there is no div here --><table><tr><td/><td/></tr>");
+		echo ("<div class='leg_info' ><a href='/guide/canidate.php?key=$this->key'><h2>$this->displayname</h2></a><table><tr><td/><td/></tr>");
 		$district=$this->get('district');
 		$district_url="'/district.php?dist=". $district . "&ch=" . $this->chamberId . "'";
 		$this->print_table_row ( 'District', "<a href=$district_url>$district</a>" );
@@ -562,6 +560,15 @@ class canidate extends json_obj{
 		}
 		
 		$this->print_table_row ( '2014 Election', $running );
+		$website= $this->get('website');
+		if($website)
+		{
+			$link="<a href='".$website."' target='_blank'>".$website."</a>";
+			$this->print_table_row ( 'Webiste', $link );
+				
+		}
+		
+		
 		$this->print_table_val ( 'Email', 'email' );
 		$this->print_table_val ( 'Phone', 'phone' );
 
