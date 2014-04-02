@@ -6,6 +6,7 @@
 
 \*_______________________________________________________________________*/
 #include "zipolib_cpp/include/zipolib_cpp_pch.h"
+#include "zipolib_cpp/include/z_debug.h"
 #include "zipolib_cpp/include/z_string.h"
 #include "zipolib_cpp/include/z_type_converter.h"
 #include "zipolib_cpp/include/z_file.h"

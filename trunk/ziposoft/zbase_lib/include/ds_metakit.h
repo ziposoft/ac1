@@ -21,14 +21,17 @@ public:
 	virtual z_status close();
 	virtual z_status commit();
 	virtual zb_ds_field* get_ds_field_string(ctext id);
+	virtual zb_record* get_solo_record(zb_table_base* tbl);
 
 };
 
 class zb_record_mk  : public zb_record
 {
 public:
- 	c4_View _mk_view;
-	c4_View& get_mk_view() { return _mk_view;}
+	zb_record_mk();
+ 	virtual ~zb_record_mk(){};
+
+ 	c4_Row _row;
 
 
 };
@@ -37,6 +40,9 @@ class zb_ds_recordset_mk  : public zb_ds_recordset
 public:
  	c4_View _mk_view;
 	c4_View& get_mk_view() { return _mk_view;}
+
+	z_status record_add(zb_record* rec);
+
 
 
 };
@@ -53,6 +59,7 @@ public:
 
     virtual const c4_Property& GetProperty()=0;
 	virtual void MakeDesc(z_string &str)=0;
+
 
 };
 class zb_ds_field_mk_string  : public zb_ds_field_mk
@@ -81,5 +88,9 @@ public:
         str+=":S"; 
     };
 
+// Overrides 
+
+ 	virtual z_status set_string(zb_record *rec,ctext s);
+	virtual z_status get_string(zb_record *rec,z_string& s);
 };
 #endif

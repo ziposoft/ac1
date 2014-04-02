@@ -2,6 +2,10 @@
 
 #include "zbase_lib/include/record.h"
 #include "zbase_lib/include/datasource.h"
+
+/*____________________________________________________________________________
+	zb_record
+____________________________________________________________________________*/
  zb_record::zb_record()
 {
 	_p_desc=0;
@@ -18,7 +22,14 @@ zb_record::zb_record(zb_recset* recset)
 	_p_recset=recset;
 }
 
+/*____________________________________________________________________________
+	zb_recset
+____________________________________________________________________________*/
 
+zb_desc* zb_recset::get_desc()
+{
+	return &_desc;
+}
 
 
 z_status zb_recset::create_desc_from_source()

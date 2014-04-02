@@ -831,7 +831,9 @@ class legislator extends json_obj{
 		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";
 		$title=$this->get('title') ;
 		echo "</div><div class='leg_info' ><a href='/guide/legpage.php?id=$this->id'><h2>$title $this->name</h2></a><table>";
-		$grade="?";
+		$grade=$this->get("grade");
+		//if(!$grade)
+			
 		$color="#000";
 		get_grade($score,$grade,$color);
 		/*
@@ -854,6 +856,12 @@ class legislator extends json_obj{
 		$this->print_table_val ( 'Phone', 'phone' );	
 		if(option('grades'))
 			$this->print_table_row ( 'Grade', $grade,$color );
+
+		$comment=$this->get("comment");
+		if(!$comment)
+			$comment="Voting/Sponsorship Record";
+			
+		$this->print_table_row ( 'Reason For Grade', $comment );
 				
 
 		

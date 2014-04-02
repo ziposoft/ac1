@@ -57,6 +57,7 @@ public:
 
 	virtual zb_ds_field* get_ds_field_string(ctext id){ return 0;};
 	virtual zb_ds_field* get_ds_field_int32(ctext id){ return 0;};
+	virtual zb_record* get_solo_record(zb_table_base* tbl){ return 0;};
 
 	z_map<zb_ds_table> _ds_tables;
 

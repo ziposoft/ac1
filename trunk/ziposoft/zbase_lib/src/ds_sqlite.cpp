@@ -31,7 +31,7 @@ z_status zb_src_sl3::_read_stucture()
 z_status zb_src_sl3::_get_sql_recset_sql(zb_ds_recordset_sl3*&  recset,ctext sqltext)
 {
 	ZTF;
-	recset=new zb_ds_recordset_sl3(this);
+	recset=z_new zb_ds_recordset_sl3(this);
 	recset->exec_sql(sqltext);
 
 	return zb_status_ok;
@@ -43,8 +43,8 @@ z_status zb_src_sl3::_get_sql_recset(zb_ds_recordset_sl3*&  recset,ctext tbl_nam
 }
 zb_st_master* zb_src_sl3::get_tbl_master()
 {
-	// zb_ds_recordset_sl3* recset=new zb_ds_recordset_sl3(this);
-	zb_st_master* tbl= new zb_st_master(this);
+	// zb_ds_recordset_sl3* recset=z_new zb_ds_recordset_sl3(this);
+	zb_st_master* tbl= z_new zb_st_master(this);
 
 
 	// tbl->_ds_recset
@@ -53,14 +53,14 @@ zb_st_master* zb_src_sl3::get_tbl_master()
 zb_ds_table* zb_src_sl3::get_tbl(ctext ds_table_name)
 {
 	ZTF;
-	zb_ds_recordset_sl3* recset=new zb_ds_recordset_sl3(this);
+	zb_ds_recordset_sl3* recset=z_new zb_ds_recordset_sl3(this);
 
 	z_string sqltext="SELECT * FROM ";
 	sqltext<<ds_table_name;
 	recset->exec_sql(sqltext);
 
 
-	zb_ds_table* tbl=0;//new zb_table(this);
+	zb_ds_table* tbl=0;//z_new zb_table(this);
 
 
 	//	tbl->create_desc_from_source();
@@ -130,7 +130,7 @@ z_status zb_src_sl3::get_tables()
 		{
 			// SQLITE_ROW means fetched a row
 			const char *name = recset.ptr_get_column_text(1);
-			zb_ds_table* tbl= new zb_ds_table(name);
+			zb_ds_table* tbl= z_new zb_ds_table(name);
 			zb_desc desc; //TODO!!
 
 			get_table_desc(name,desc);
@@ -186,7 +186,7 @@ z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
         
 			// sqlite3_column_text returns a const void* , typecast it to const char*
 			const char *val = recset.ptr_get_column_text(1); //name of field
-			zb_field_string* field=new zb_field_string(this,0,val);
+			zb_field_string* field=z_new zb_field_string(this,0,val);
 			desc.add(val,field); 
 
 			//printf("%s = %s\t",recset.get_column_name(col),val);
@@ -278,12 +278,12 @@ z_status zb_ds_recordset_sl3::ds_create_desc_from_source(zb_desc* desc)
 		if(col_type)
 		{
 			if(strcmp(col_type,"integer")==0)
-				fld=new zb_field_int32(-1,col_name);
+				fld=z_new zb_field_int32(-1,col_name);
 
 		}
 		//if(strcmp(col_type,"text")==0)
 		if(!fld)
-			fld=new zb_field_string(this->_file_sqlite,-1,col_name);
+			fld=z_new zb_field_string(this->_file_sqlite,-1,col_name);
 
 		fld->set_index(i);
 
