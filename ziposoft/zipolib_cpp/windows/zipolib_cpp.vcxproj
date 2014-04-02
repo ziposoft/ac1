@@ -108,6 +108,7 @@
     <ClInclude Include="..\include\ptypes_cset.h" />
     <ClInclude Include="..\include\zipolib_cpp.h" />
     <ClInclude Include="..\include\zipolib_cpp_pch.h" />
+    <ClInclude Include="..\include\z_debug.h" />
     <ClInclude Include="..\include\z_error.h" />
     <ClInclude Include="..\include\z_file.h" />
     <ClInclude Include="..\include\z_filesystem.h" />

@@ -6,16 +6,19 @@
 
 class zb_rec_ptr
 {
+protected:
 	zb_recset* _p_recset;
 public:
 };
 class zb_record : public zb_rec_ptr
 {
+protected:
 
 	zb_desc* _p_desc;
 public:
 	//zb_record();
 	zb_record();
+	virtual ~zb_record(){};
 	zb_record(zb_desc* desc);
 	zb_record(zb_recset* recset);
 

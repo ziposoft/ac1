@@ -60,6 +60,9 @@
     <ClInclude Include="..\include\z_filesystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\z_debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\z_string.cpp">

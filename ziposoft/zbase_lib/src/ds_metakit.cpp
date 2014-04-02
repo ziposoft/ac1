@@ -36,18 +36,26 @@ zb_ds_metakit:: ~zb_ds_metakit(void)
 	{   delete _pStore;  }
 
 }
+zb_record* zb_ds_metakit::get_solo_record(zb_table_base* tbl)
+{
+	zb_record_mk* pRec=	z_new zb_record_mk();
+	return pRec;
+
+
+
+}
 
 
 zb_ds_field* zb_ds_metakit::get_ds_field_string(ctext id)
 {
-	return new zb_ds_field_mk_string(id);
+	return z_new zb_ds_field_mk_string(id);
 }
 
 
 
 z_status zb_ds_metakit::open(bool writable) 
 {
-	_pStore= new c4_Storage(_filename,(writable?1:0));
+	_pStore= z_new c4_Storage(_filename,(writable?1:0));
 	if(_pStore->Strategy().IsValid())
 	{
 		_status=status_opened_read;
@@ -175,17 +183,54 @@ zb_ds_field_mk::~zb_ds_field_mk()
 }
 zb_ds_field_mk_string::zb_ds_field_mk_string(ctext id) :zb_ds_field_mk(id)
 {
-	_pStrProp=new c4_StringProp(id);
+	_pStrProp=z_new c4_StringProp(id);
 
 }
 zb_ds_field_mk_string::~zb_ds_field_mk_string()
 {
 }
+z_status zb_ds_field_mk_string::set_string(zb_record *rec,ctext s)
+{ 
+	
+	zb_record_mk* mk_rec=dynamic_cast<zb_record_mk*>(rec);
+	if(!mk_rec)
+		return ZB_ERROR(zb_status_bad_param);
+ 	(*_pStrProp).Set(mk_rec->_row,s);
 
+	return zb_status_ok;
+}
+z_status zb_ds_field_mk_string::get_string(zb_record *rec,z_string& s)
+{ 
+	zb_record_mk* mk_rec=dynamic_cast<zb_record_mk*>(rec);
+	if(!mk_rec)
+		return ZB_ERROR(zb_status_bad_param);
+	s=(*_pStrProp).Get(mk_rec->_row);
+
+	return zb_status_ok;
+}
+
+/*____________________________________________________________________________
+
+	 Metakit zb_record_mk
+____________________________________________________________________________*/
+zb_record_mk::zb_record_mk()   :	 zb_record()
+{
+
+
+}
 
 /*____________________________________________________________________________
 
 	 Metakit Recordsets
 ____________________________________________________________________________*/
 
+z_status zb_ds_recordset_mk::record_add(zb_record* rec)
+{
 
+	zb_record_mk* mk_rec=dynamic_cast<zb_record_mk*>(rec);
+
+	int index=_mk_view.Add(mk_rec->_row);
+	return zb_status_ok;
+
+
+}

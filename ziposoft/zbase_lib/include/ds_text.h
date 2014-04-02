@@ -14,6 +14,7 @@ public:
 	virtual ~zb_ds_text();
 	virtual z_status open();
 	virtual z_status close();
+	//virtual zb_record* get_solo_record(zb_table_base* tbl)=0;
 };
 
 
