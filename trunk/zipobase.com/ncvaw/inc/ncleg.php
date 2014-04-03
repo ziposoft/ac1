@@ -716,29 +716,34 @@ function get_grade($score,&$grade,&$color)
 	 [ 4,"A-","#0c0"],
 	 [ 5,"A","#0c0"],	 
  	 [ 6,"A+","#0c0"],	 
-/*
-	-2 => "D-",
-	-1 => "D",
-	0 => "C",
-	1 => "C+",
-	2 => "B",
-	3 => "B+",
-	4 => "A-",
-	5 => "A",
-	6 => "A+",*/
+
 	];	
-	$grade="A+";
-	$color="#0c0";
+	
+	if(!$grade)
+	{
+	
+		$grade="A+";
+		$color="#0c0";
+		foreach ( $grades as $g )
+		{
+			if($score <= $g[0])
+			{
+				$grade=$g[1];
+				$color=$g[2];
+				return;
+			}
+		}
+		return;
+	}
 	foreach ( $grades as $g )
 	{
-		if($score <= $g[0])
+		if($grade == $g[1])
 		{
-			$grade=$g[1];
+			
 			$color=$g[2];
 			return;
 		}
-	}
-	
+	}	
 	
 	
 }
@@ -832,7 +837,7 @@ class legislator extends json_obj{
 		$title=$this->get('title') ;
 		echo "</div><div class='leg_info' ><a href='/guide/legpage.php?id=$this->id'><h2>$title $this->name</h2></a><table>";
 		$grade=$this->get("grade");
-		//if(!$grade)
+		
 			
 		$color="#000";
 		get_grade($score,$grade,$color);
