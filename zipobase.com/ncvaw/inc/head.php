@@ -84,7 +84,7 @@ make_menu([
 			z_menu("Admin",[
 				z_mi("Admin Off","/home.html?admin=off")	,
 				z_mi("PHP Info","/phpinfo.html")	,
-				z_mi("Refresh","$current_url?refresh")		,
+				z_mi("Refresh","$current_url?refresh=true")		,
 				]):
 			0)
 			
