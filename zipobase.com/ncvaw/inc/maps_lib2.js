@@ -27,6 +27,8 @@ google.load('visualization', '1', {}); //used for custom SQL call to get count
 
 function map_reset() {
 	setCookie("address","");
+	setCookie("dist_state_senate","");
+	setCookie("dist_state_house","");
 	map_init_find_address();
 
 }
@@ -203,7 +205,7 @@ function map_geoFindMe() {
 	    var longitude = position.coords.longitude;
 
 	    
-	    //output.innerHTML = '<p>Latitude is ' + latitude + '° <br>Longitude is ' + longitude + '°</p>';
+	    //output.innerHTML = '<p>Latitude is ' + latitude + 'ï¿½ <br>Longitude is ' + longitude + 'ï¿½</p>';
 
 		var foundLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 		addrFromLatLng(foundLocation);	
@@ -214,7 +216,7 @@ function map_geoFindMe() {
 	    output.innerHTML = "Unable to retrieve your location";
 	  };
 
-	  output.innerHTML = "<p>Locating…</p>";
+	  output.innerHTML = "<p>Locating...</p>";
 
 	  navigator.geolocation.getCurrentPosition(mapsFindMeSuccess, error);
 	}
@@ -396,6 +398,7 @@ function drawTable(searchStr) {
             get_legislator(chamber,district);
         }
         ncvaw_init_your_district_menus();
+        $("#map_find_msg").html("");
        // ftdata.push('</tbody></table>');
         //document.getElementById('ft-data').innerHTML = ftdata.join('');
     });

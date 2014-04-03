@@ -885,7 +885,12 @@ class legislator extends json_obj{
 
 
 
-
+function grade_sort_func($a, $b) {
+	if ($a->score == $b->score) {
+		return 0;
+	}
+	return ($a->score < $b->score) ? 1 : -1;
+}
 
 
 class leg_list extends data_source{
@@ -978,15 +983,15 @@ class leg_list extends data_source{
 				
 				
 			}
-			if($sort=='grade')
-			{
-				$key=$legr->grade;
-				
-			
-			}
+
 			$this->list [$key] = $legr;
 		}
-		ksort ( $this->list );
+		if($sort=='grade')
+		{
+			uasort($this->list, 'grade_sort_func');
+		}
+		else
+			ksort ( $this->list );
 		return $this->list;
 	}
 }

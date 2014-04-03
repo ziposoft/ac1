@@ -16,6 +16,9 @@ else
 $url="/guide/leglist.html?ch=".$chamber;
 ?>
 <h2>List of <?php echo("$chamberName"); ?> members</h2>
+ 		<a href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>&sort=dist'>Sort by District</a>
+ 		<a style="margin:20px" href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>'>Sort by Name</a>
+ 		<a style="margin:20px" href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>&sort=grade'>Sort by Grade</a>
 
 
  		<form  style="display:inline"   action="javascript:void(0);" autocomplete="on" >
@@ -30,8 +33,6 @@ $url="/guide/leglist.html?ch=".$chamber;
 							 onchange="name_filter_chage()"/>
 					
  		</form>
- 		<a href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>&sort=dist'>Sort by District</a>
- 		<a style="margin:20px" href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>'>Sort by Name</a>
  	
  		<div id='namelist'>
 <?php
