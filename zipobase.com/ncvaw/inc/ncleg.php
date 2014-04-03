@@ -703,7 +703,7 @@ class bill_list extends data_source
 	}	
 }
 
-function get_grade($score,&$grade,&$color)
+function get_grade(&$score,&$grade,&$color)
 {
 	$grades = [
 	 [ -3,"F","#F00"],
@@ -739,7 +739,7 @@ function get_grade($score,&$grade,&$color)
 	{
 		if($grade == $g[1])
 		{
-			
+			$score=$g[0];
 			$color=$g[2];
 			return;
 		}
@@ -757,6 +757,10 @@ class legislator extends json_obj{
 	public $displayname;
 	public $id;
 	public $key;	
+	public $grade;
+	public $score;
+	
+	public $grade_color;		
 	public $uid;
 	public $party;	
 	public $chamberId;
@@ -783,7 +787,7 @@ class legislator extends json_obj{
 			$this->chamber='Senate';
 			
 		$this->url ="http://www.ncleg.net/gascripts/members/viewMember.pl?sChamber=$this->chamber&nUserID=$this->uid";
-		
+		$this->create_grade();
 	}	
 	
 	public function print_survey() {
@@ -796,9 +800,24 @@ class legislator extends json_obj{
 	}
 	public function print_list_sponsorship()
 	{
+
 		getobj("vote_data")->print_list_votes($this->id,1);
 	
-	}	
+	}
+	public function create_grade()
+	{
+		$votelist=array();
+		$score=getobj("vote_data")->get_votes($this->id,$votelist);
+		$grade=$this->get("grade");
+		
+			
+		$color="#000";
+		get_grade($score,$grade,$color);	
+		$this->grade=$grade;	
+		$this->grade_color=$color;
+		$this->score=$score;
+			
+	}		
 	public function print_table_val($label, $field) {
 		$val = $this->get( $field);
 		if(!$val)
@@ -818,15 +837,7 @@ class legislator extends json_obj{
 		
 		$canidate=getobj("canidates")->get_candiate($this->key);
 		
-		$votelist=array();
-		//$this->init ();
-		/*
-		if($isPhone)
-			return $this->print_list_row_phone();
-			*/
-		
-		$score=getobj("vote_data")->get_votes($this->id,$votelist);
-		
+
 		
 		$lastname=strtolower($this->last);
 		echo "<div class='leg_bio' data-name='$lastname'><hr/><div class='leg_thumb' >";
@@ -836,11 +847,7 @@ class legislator extends json_obj{
 		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";
 		$title=$this->get('title') ;
 		echo "</div><div class='leg_info' ><a href='/guide/legpage.php?id=$this->id'><h2>$title $this->name</h2></a><table>";
-		$grade=$this->get("grade");
-		
-			
-		$color="#000";
-		get_grade($score,$grade,$color);
+
 		/*
 		$district=
 		*/
@@ -860,7 +867,7 @@ class legislator extends json_obj{
 		$this->print_table_val ( 'Email', 'email' );		
 		$this->print_table_val ( 'Phone', 'phone' );	
 		if(option('grades'))
-			$this->print_table_row ( 'Grade', $grade,$color );
+			$this->print_table_row ( 'Grade', $this->grade,$this->grade_color );
 
 		$comment=$this->get("comment");
 		if(!$comment)
@@ -955,21 +962,29 @@ class leg_list extends data_source{
 				if($district != $row->{	'gsx$district' }->{'$t' })
 					continue;
 					
-			}			
+			}	
+			$legr=new legislator ( $row );
+			
 				/*
 			$status = $row->{'gsx$status' }->{	'$t' };
 			if ($status_filter)
 				if (! in_array ( $status, $status_filter ))
 					continue;
 				*/
-			$key=$id = $row->{	'gsx$district' }->{'$t' };
-			if($sort!='dist')
+			$key= $row->{	'gsx$last' }->{'$t' };
+			if($sort=='dist')
 			{
-				$key= $row->{	'gsx$last' }->{'$t' };
+				$key=$id = $row->{	'gsx$district' }->{'$t' };
+				
 				
 			}
-
-			$this->list [$key] = new legislator ( $row );
+			if($sort=='grade')
+			{
+				$key=$legr->grade;
+				
+			
+			}
+			$this->list [$key] = $legr;
 		}
 		ksort ( $this->list );
 		return $this->list;
