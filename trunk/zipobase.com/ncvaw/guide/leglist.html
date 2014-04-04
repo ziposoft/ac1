@@ -1,5 +1,5 @@
 <?php
-include $header;
+
 include $root.'/inc/ncleg.php';
  
 $leglist=new leg_list();
@@ -12,10 +12,12 @@ if($chamber=='H')
 }
 else
 	$chamber='S';
-	
+
+$page_title="List of $chamberName members";
+include $header;	
 $url="/guide/leglist.html?ch=".$chamber;
 ?>
-<h2>List of <?php echo("$chamberName"); ?> members</h2>
+<h2><?php echo("$page_title"); ?></h2>
  		<a href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>&sort=dist'>Sort by District</a>
  		<a style="margin:20px" href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>'>Sort by Name</a>
  		<a style="margin:20px" href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>&sort=grade'>Sort by Grade</a>

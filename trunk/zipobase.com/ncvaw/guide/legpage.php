@@ -1,15 +1,17 @@
 <?php
-include $header;
 
 include $root.'/inc/ncleg.php';
 $legid=getParam( "id");
 
 if (!$legid)
 	echo '<h2>No id selected</h2>';
-
-
-
 $leg=getobj("leg_list")->get_leg_by_key($legid);
+
+if($leg)
+	$page_title=$leg->name;
+
+include $header;
+
 
 ?>
 
