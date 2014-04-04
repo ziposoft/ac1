@@ -3,6 +3,8 @@
 $chamber=getParam("ch");
 $district=getParam("dist");
 
+$page_title=($chamber=='H' ? 'House' : 'Senate') . ' District #' . $district;
+
 array_push($zs_foot_jsfile,
 	"http://www.google.com/jsapi",
 	"http://maps.google.com/maps/api/js?sensor=false",
@@ -11,7 +13,6 @@ array_push($zs_foot_jsfile,
 
 array_push($funcs_init,
 	"map_init();map_show_district('$chamber','$district'	);");
-
 
 
 include $header;
@@ -34,7 +35,7 @@ if($distobj)
 	<a href='<?php print $next; ?>'>Next District</a>
 	<div id="map_canvas"   ></div>
 	<h1><?php 
-	echo(($chamber=='H' ? 'House' : 'Senate') . ' District #' . $district);
+	echo($page_title);
 	
 
 		?>

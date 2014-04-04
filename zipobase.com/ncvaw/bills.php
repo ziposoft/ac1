@@ -1,4 +1,5 @@
 <?php
+$page_title='List Of Bills';
 include $header;
 
 include $root.'/inc/ncleg.php';

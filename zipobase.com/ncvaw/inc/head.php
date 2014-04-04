@@ -28,26 +28,17 @@
 <link href='/inc/ncvaw.css' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:600,400,300' rel='stylesheet' type='text/css'>
 <link href='/inc/zs_menu.css' rel='stylesheet' type='text/css'>
- 
-
-
-<title>NC Voters For Animal Welfare<?php if($page_title)  echo ' - '.$page_title ?></title>
-   
-
+<title>
+<?php 
+	if($page_title)
+		echo("NCVAW - $page_title");
+	else
+		echo("NC Voters For Animal Welfare");
+			
+?></title>
     
-    
-    
-    <?php
-				include $root . '/inc/headscripts.p';
-				include $root . '/inc/zs_menu.php';
-				
-				?>
-
-
-
-
-
-
+    <?php	include $root . '/inc/headscripts.p';
+				include $root . '/inc/zs_menu.php';	 ?>
 </head>
 
 <body>
