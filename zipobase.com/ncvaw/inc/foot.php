@@ -20,6 +20,8 @@ jQuery(document).ready(function ()
 		foreach ( $funcs_init as $item ) {echo("$item;");	}	
 		?>
 		});
-call_zipo();		
+
+<?php echo("call_zipo('$current_url');"); ?>
+	
 </script>
 </html>
