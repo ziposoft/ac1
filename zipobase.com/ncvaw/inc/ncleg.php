@@ -281,6 +281,17 @@ class vote_data extends data_source
 			$this->list [$vid] = new bill ( $row );
 		}
 	}
+	public function get_votes_by_mkey($legid) {
+		$list=array();
+		foreach ( $this->rows as $row )
+		{
+			if($legid ==  getj($row,'key'))
+			{
+				$list[getj($row,'vid')]=new vote($row);
+			}
+		}
+		return $list;
+	}	
 	public function get_votes_by_mid($legid) {
 		$list=array();
 		foreach ( $this->rows as $row )
@@ -309,8 +320,8 @@ class vote_data extends data_source
 				($vote==getj( $row,'vote'))
 				)
 			{
-				$mid= $row->{	'gsx$mid' }->{'$t' };
-				$leg=getobj("leg_list")->get_leg_by_id($mid);
+				$mid= $row->{	'gsx$key' }->{'$t' };
+				$leg=getobj("leg_list")->get_leg_by_key($mid);
 				if($leg)
 					$list[]=$leg;
 			}
@@ -327,7 +338,7 @@ class vote_data extends data_source
 		
 			if($comma)
 				echo (", ");
-			echo "<a href='/guide/legpage.php?id=$leg->id'>$leg->name</a>";
+			echo "<a href='/guide/legpage.php?id=$leg->key'>$leg->name</a>";
 			$comma=1;
 		}
 		echo("</div>");
@@ -336,7 +347,7 @@ class vote_data extends data_source
 		$score=0;
 		foreach ( $this->rows as $row )
 		{
-			if($legid == getj($row,'mid'))
+			if($legid == getj($row,'key'))
 			{
 				$v=new vote($row);
 				$list[]=$v;
@@ -807,7 +818,7 @@ class legislator extends json_obj{
 	public function create_grade()
 	{
 		$votelist=array();
-		$score=getobj("vote_data")->get_votes($this->id,$votelist);
+		$score=getobj("vote_data")->get_votes($this->key,$votelist);
 		$grade=$this->get("grade");
 		
 			
@@ -841,12 +852,12 @@ class legislator extends json_obj{
 		
 		$lastname=strtolower($this->last);
 		echo "<div class='leg_bio' data-name='$lastname'><hr/><div class='leg_thumb' >";
-		echo "<a href='/guide/legpage.php?id=$this->id'>";
+		echo "<a href='/guide/legpage.php?id=$this->key'>";
 				
 
 		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";
 		$title=$this->get('title') ;
-		echo "</div><div class='leg_info' ><a href='/guide/legpage.php?id=$this->id'><h2>$title $this->name</h2></a><table>";
+		echo "</div><div class='leg_info' ><a href='/guide/legpage.php?id=$this->key'><h2>$title $this->name</h2></a><table>";
 
 		/*
 		$district=

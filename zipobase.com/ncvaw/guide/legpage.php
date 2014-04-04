@@ -9,7 +9,7 @@ if (!$legid)
 
 
 
-$leg=getobj("leg_list")->get_leg_by_id($legid);
+$leg=getobj("leg_list")->get_leg_by_key($legid);
 
 ?>
 
