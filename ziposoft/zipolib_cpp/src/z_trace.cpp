@@ -6,6 +6,7 @@ ________________________________________________________________________*/
 #include "zipolib_cpp_pch.h"
 #include "z_trace.h"
 #include "z_string.h"
+#include "z_logger.h"
 #include "z_file.h"
 #include "zipolib_c/include/z_time.h"
 
@@ -397,9 +398,9 @@ z_trace::~z_trace()
 }
 z_trace::z_trace()
 {
-	enabled=false;
+	enabled=true;
 	_save_cfg_file=false;
-	_b_tracing=false;
+	_b_tracing=true;
 	_b_profiling=false;
 	_b_outputing=false;
 	_depth=0;

@@ -11,11 +11,13 @@ int test_table(zb_source* p_ds)
 	zb_record* pRec=0;
 	zb_st_test table_test(p_ds);
 
+
 	do
 	{
 		status=p_ds->open(true);
 		if(status)
 			break;
+		table_test.load_from_ds();
 		zb_record* pRec= table_test.new_default_rec();
 		if(!pRec)
 			break;
@@ -33,7 +35,6 @@ int test_table(zb_source* p_ds)
 	p_ds->close();
 	if(pRec)
 		delete pRec;
-	z_logger_dump();
 
 
 
@@ -57,11 +58,7 @@ int main(int argc, char* argv[])
 	____________________________________________________________________________*/
 
 	zb_ds_metakit test_ds_mk("test");
-
 	test_table(&test_ds_mk);
-
-
-
 
  	/*____________________________________________________________________________
 
@@ -69,7 +66,8 @@ int main(int argc, char* argv[])
 	____________________________________________________________________________*/
 
 	zb_ds_text test_ds_text("test");
-	test_table(&test_ds_mk);
+	test_table(&test_ds_text);
+	z_logger_dump();
 
 
 }

@@ -5,13 +5,6 @@
 
 
 
-class zb_ds_table  
-{
-public:
-	z_string _id;
-	ctext get_map_key();
-	zb_ds_table(ctext unique_id);
-};
 
 
 class zb_ds_record  
@@ -53,7 +46,7 @@ public:
 	virtual bool is_open();
 	//virtual int get_record()=0;
 	virtual zb_st_master* get_tbl_master(){ return 0;};
-	virtual zb_ds_table* get_tbl(ctext ds_table_name){ return 0;};
+	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_desc& desc){ return 0;};
 
 	virtual zb_ds_field* get_ds_field_string(ctext id){ return 0;};
 	virtual zb_ds_field* get_ds_field_int32(ctext id){ return 0;};

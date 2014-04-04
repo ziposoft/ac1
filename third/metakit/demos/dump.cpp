@@ -4,7 +4,10 @@
 #include "mk4str.h"
 
 #include <stdio.h>
-
+bool g_notify_on=true;	//TODO: metakit performance experiment 
+void  d4_assert(bool a)
+{
+}
 #if defined (unix)
 #define try
 #define catch(x)  if (0)
