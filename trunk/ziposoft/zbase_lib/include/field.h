@@ -96,7 +96,7 @@ public:
 };
 
 
-class zb_desc : public z_map<zb_field>,public z_refcount
+class zb_desc : public z_map_obj<zb_field>,public z_refcount
 {
 public:
 	zb_desc(){}

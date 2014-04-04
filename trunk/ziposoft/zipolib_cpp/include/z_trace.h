@@ -240,7 +240,7 @@ const ctext module_name=STRINGIZE(Z_TRACE_MODULE);
 
 #define ZTF z_trace_func_tracer ZFT_OBJ( module_name,__FILE__,__FUNCTION__,__LINE__) ;
 #define	ZTFP(...)  z_trace_func_tracer ZFT_OBJ( module_name,__FILE__,__FUNCTION__,__LINE__,__VA_ARGS__) ;
-#define	ZT(_X_)  {if(g_z_trace.enabled&&g_z_trace.lookup(module_name,__FILE__,__FUNCTION__,__LINE__,0)) g_z_trace.putfline _X_;}
+//#define	ZT(_X_)  {if(g_z_trace.enabled&&g_z_trace.lookup(module_name,__FILE__,__FUNCTION__,__LINE__,0)) g_z_trace.putfline _X_;}
 #define	ZT_AT(_X_)  { if(g_z_trace.enabled) g_z_trace.at( module_name,__FILE__,__FUNCTION__,__LINE__); }
 #define	ZT_IN(_X_)  { if(g_z_trace.enabled) g_z_trace.in(module_name,__FILE__,__FUNCTION__,__LINE__); }
 #define	ZT_OUT(_X_)  { if(g_z_trace.enabled) g_z_trace.out( module_name,__FILE__,__FUNCTION__,__LINE__); }
@@ -260,7 +260,7 @@ const ctext module_name=STRINGIZE(Z_TRACE_MODULE);
 #define	ZTF  
 #define	ZFTO  
 #define	ZTFP(...)  
-#define	ZT(_X_)  
+//#define	ZT(_X_)  
 #define	ZTL(_X_)  
 #define	ZT_AT(_X_)  
 #define	ZT_OUT(_X_)  

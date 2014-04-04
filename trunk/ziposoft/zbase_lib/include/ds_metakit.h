@@ -13,6 +13,7 @@ class zb_ds_metakit: public zb_source
 	z_string		_filename;
 
  	z_status _get_view_for_table(c4_View& view,zb_table_base* tbl);
+	z_status _get_view(c4_View& view,ctext viewid,zb_desc & desc);
 
 public:
 	zb_ds_metakit(ctext name);
@@ -22,6 +23,9 @@ public:
 	virtual z_status commit();
 	virtual zb_ds_field* get_ds_field_string(ctext id);
 	virtual zb_record* get_solo_record(zb_table_base* tbl);
+	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_desc& desc);
+
+
 
 };
 
@@ -35,13 +39,22 @@ public:
 
 
 };
+class zb_ds_table_mk  : public zb_ds_table
+{
+ 	c4_View _mk_view;
+
+public:
+	zb_ds_metakit* _ds;
+	c4_View& get_mk_view() { return _mk_view;}
+
+	virtual z_status record_add(zb_record* rec);
+	zb_ds_table_mk(zb_ds_metakit* ds,ctext unique_id);
+};
+
 class zb_ds_recordset_mk  : public zb_ds_recordset
 {
 public:
  	c4_View _mk_view;
-	c4_View& get_mk_view() { return _mk_view;}
-
-	z_status record_add(zb_record* rec);
 
 
 

@@ -3,6 +3,14 @@
 #include "zbase_lib/include/zb.h"
 #include "zbase_lib/include/record.h"
 
+class zb_ds_table  
+{
+public:
+	z_string _id;
+	ctext get_map_key();
+	zb_ds_table(ctext unique_id);
+	virtual z_status record_add(zb_record* rec);
+};
 
 class zb_table_base : public z_refcount
 {
@@ -15,12 +23,7 @@ protected:
 	zb_key _key;
 public:
 	zb_table_base(zb_source* ds,zb_key key,ctext name);
-	zb_table_base()
-	{
-		_ds=0;
-		_name="unknown";
-		_key=-1;
-	}
+	zb_table_base();
 	z_status dump();
 	virtual ctext get_map_key()
 	{
@@ -41,6 +44,7 @@ public:
 	zb_record* new_default_rec();
 	z_status get_default_rec(zb_record *rec);
 	z_status record_add(zb_record *rec);
+	virtual z_status load_from_ds();
 
 };
 

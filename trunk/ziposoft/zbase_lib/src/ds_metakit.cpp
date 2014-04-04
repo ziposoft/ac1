@@ -44,7 +44,13 @@ zb_record* zb_ds_metakit::get_solo_record(zb_table_base* tbl)
 
 
 }
+zb_ds_table* zb_ds_metakit::get_tbl(ctext ds_table_name,zb_desc& desc)
+{
 
+	zb_ds_table_mk* tbl=z_new zb_ds_table_mk(this,ds_table_name);
+	_get_view(tbl->get_mk_view(),ds_table_name,desc);
+	return  tbl;
+}
 
 zb_ds_field* zb_ds_metakit::get_ds_field_string(ctext id)
 {
@@ -101,25 +107,64 @@ z_status zb_ds_metakit::close()
 	Metakit private functions 
 ____________________________________________________________________________*/
 
+z_status zb_ds_metakit::_get_view(c4_View& view,ctext viewid,zb_desc & desc)
+{
+
+	bool metakit_blocked_view=false; //TODO: metakit blocked views
+    z_string str=viewid;
+
+	if(metakit_blocked_view) str+="[_B";
+	str+="[";
+
+	z_map_iter i;
+	zb_field* f=0;
+	bool comma=false;
+	while(f=desc.get_next(i))
+	{
+        if(comma) str+=",";
+		zb_ds_field_mk * mkf=(zb_ds_field_mk*)f->get_ds_field();
+
+        mkf->MakeDesc(str);
+		comma=true;
+	}
+    str+="]";
+	if(metakit_blocked_view) str+="]";
+
+
+	
+	ZT(("metakit view: %s, viewstr=%s",viewid ,str.c_str()));	
+
+	c4_View temp_view;
+	try
+	{
+#if BLOCKED		
+		temp_view=GetFile()->_pStore->GetAs(str); //get_mk_view(str); //TODO catch assertions HERE, for corrupt databases.
+		if(_use_blocked_view) 
+		{
+			view=temp_view.Blocked();
+		}
+#else
+		view=_pStore->GetAs(str); //TODO catch assertions HERE, for corrupt databases.
+
+#endif
+	}
+
+	catch(...)
+	{
+		_status=status_corrupt;
+		//Z_ASSERT(0);
+		return Z_ERROR_RETURN(	zb_status_ds_data_error,"Error accessing %s",viewid);
+
+	}
+	return zb_status_ok;
+}
 
 z_status zb_ds_metakit::_get_view_for_table(c4_View& view,zb_table_base* tbl)
 {
-	
-
-
-	//Z_ASSERT(GetFile()->is_open());
-	/*
-	if(!GetFile()->is_open()) Z_ERROR_RETURN(zb_status_data_error);
-	if(_status==statusGotData) return zb_status_ok;
-	if(_status==statusError) ZB_TRACE_RETURN(zb_status_data_error);
-
-	*/
 
 	bool metakit_blocked_view=false; //TODO: metakit blocked views
     z_string str="T";
 	str+=tbl->get_key();
-
-
 
 	if(metakit_blocked_view) str+="[_B";
 	str+="[";
@@ -224,13 +269,21 @@ zb_record_mk::zb_record_mk()   :	 zb_record()
 	 Metakit Recordsets
 ____________________________________________________________________________*/
 
-z_status zb_ds_recordset_mk::record_add(zb_record* rec)
+
+/*____________________________________________________________________________
+
+	 Metakit Tables
+____________________________________________________________________________*/
+
+zb_ds_table_mk::zb_ds_table_mk(zb_ds_metakit* ds,ctext unique_id):zb_ds_table(unique_id)
 {
-
+	_ds=ds;
+}
+z_status zb_ds_table_mk::record_add(zb_record* rec)
+{
 	zb_record_mk* mk_rec=dynamic_cast<zb_record_mk*>(rec);
-
 	int index=_mk_view.Add(mk_rec->_row);
+
+	_ds->_status=zb_ds_metakit::status_opened_need_commit;
 	return zb_status_ok;
-
-
 }
