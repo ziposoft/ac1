@@ -88,7 +88,7 @@ function call_zipo(request) {
 	var refs = ref.split('?');
 
 	url = "http://www.zipobase.com/cgi-bin/zb.cgi?T=logger&db=ncvaw&requested="
-			+ escape(request) + "&referer=" + escape(refs[0]);
+			+ escape(document.URL) + "&referer=" + escape(refs[0]);
 	$.get(url);
 	return;
 }

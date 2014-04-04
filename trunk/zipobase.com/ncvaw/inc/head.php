@@ -78,11 +78,13 @@ if($admin)
 }
 make_menu ( [ 
 		z_menu ( "About", [ 
+			
 				z_mi ( "About Us", "/about/aboutus.html", "HOME" ),
 				z_mi ( "Who We Are", "/about/who.html", "MAP" ),
 		z_mi("Contact","/about/contact.html","MAP")]),
 		
 		z_mbi ( "News", "/news.html", "Support Animal Welfare in NC", 0 ),
+		z_mbi ( "Facebook Feed", "/facebook.html", "Support Animal Welfare in NC", 0 ),
 		z_mbi ( "Donate", "http://www.ncvaw.org/donate/", "Support Animal Welfare in NC", 0 ),
 		
 		z_menu ( "Your Districts", [ 
