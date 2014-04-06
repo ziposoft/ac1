@@ -25,7 +25,7 @@ function ncvaw_init_your_district_menus() {
 function name_filter_chage() {
 
 	var a=$("#namefilter").val();
-	a.toLowerCase();
+	a=a.toLowerCase();
 	
 	var select="[data-name*='"+a+ "']";
 	if(a == "")

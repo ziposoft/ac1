@@ -540,9 +540,10 @@ class canidate extends json_obj{
 			$leg->print_list_row();
 			return;
 		}
-
+		$data_key=$this->key;
 		$lastname=strtolower($this->get('last'));
-		echo ("<div class='leg_bio' data-name='$lastname'><hr>");
+		
+		echo ("<div class='leg_bio' data-name='$data_key'><hr>");
 		//thumbnail
 		$photo = $this->get('photo');
 		if($photo)
@@ -848,23 +849,23 @@ class legislator extends json_obj{
 		
 		$canidate=getobj("canidates")->get_candiate($this->key);
 		
-
+		$data_key=$this->key;
 		
-		$lastname=strtolower($this->last);
-		echo "<div class='leg_bio' data-name='$lastname'><hr/><div class='leg_thumb' >";
-		echo "<a href='/guide/legpage.php?id=$this->key'>";
+		
+		echo "<div class='leg_bio' data-name='$data_key'><hr/><div class='leg_thumb' >";
+		echo "<a title='Click for voting record'  href='/guide/legpage.php?id=$this->key'>";
 				
 
 		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";
 		$title=$this->get('title') ;
-		echo "</div><div class='leg_info' ><a href='/guide/legpage.php?id=$this->key'><h2>$title $this->name</h2></a><table>";
+		echo "</div><div class='leg_info' ><a title='Click for voting record' href='/guide/legpage.php?id=$this->key'><h2>$title $this->name</h2></a><table>";
 
 		/*
 		$district=
 		*/
 		$district=$this->get('district');
 		$district_url="'/district.php?dist=". $district . "&ch=" . $this->chamberId . "'"; 
-		$this->print_table_row ( 'District', "<a href=$district_url>$district</a>" );
+		$this->print_table_row ( 'District', "<a title='Show district race'  href=$district_url>$district</a>" );
 		$running="Not running for re-election.";
 		if($canidate)
 		{
@@ -874,11 +875,19 @@ class legislator extends json_obj{
 		}
 		$this->print_table_row ( '2014 Election', $running );
 		$this->print_table_val ( 'Party', 'party' );			
-		$this->print_table_val ( 'Counties', 'county' );		
-		$this->print_table_val ( 'Email', 'email' );		
+		$this->print_table_val ( 'Counties', 'county' );	
+
+		$email_link="<a  href='mailto:'" . $this->get('email') . ">" .  $this->get('email') . "</a>";
+		$this->print_table_row ( 'Email', $email_link );
+				
 		$this->print_table_val ( 'Phone', 'phone' );	
 		if(option('grades'))
-			$this->print_table_row ( 'Grade', $this->grade,$this->grade_color );
+		{
+			$grade_link="<a title='Click for voting record'  style='color:" .$this->grade_color 
+				."' href='/guide/legpage.php?id=$this->key'>$this->grade</a>";
+			$this->print_table_row ( 'Grade',$grade_link );
+			
+		}
 
 		$comment=$this->get("comment");
 		if(!$comment)
