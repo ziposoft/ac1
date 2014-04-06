@@ -32,7 +32,6 @@ class z_ntf_action : public z_ntf_feature
 	z_ntf_member_func* _func;
 public:
 	z_ntf_action(z_ntf_obj* parent,z_ntf_member_func* func);
-	ctext get_map_key() { return _name; }
 };
 class z_ntf_prop : public z_ntf_feature
 {

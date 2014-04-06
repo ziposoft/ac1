@@ -91,6 +91,18 @@ function map_copy() {
 	 document.body.appendChild(newImg);	
 
 }
+
+function la(p,a) {
+	var url;
+	var ref = document.referrer;
+	var refs = ref.split('?');
+
+	url = "http://www.zipobase.com/cgi-bin/zb.cgi?T=logger&db=ncvaw&requested="
+			+ escape(p) + "&referer=" + escape(a);
+	$.get(url);
+	return;
+}
+
 function doSearch(doZoom) {
 	clearSearch();
 	var address = $("#txtSearchAddress").val();
@@ -176,7 +188,12 @@ function doSearch(doZoom) {
 		//drawTable(searchStr);
 	}
 }
+function manualSearch() {
+	
+	la('typedsearch',$("#txtSearchAddress").val());
+	doSearch();
 
+}
 function clearSearch() {
 	if (searchrecords != null) { searchrecords.setMap(null); }
 	if (addrMarker != null) { addrMarker.setMap(null); }
@@ -199,7 +216,7 @@ function map_geoFindMe() {
 	    output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
 	    return;
 	  }
-
+	  
 	  function mapsFindMeSuccess(position) {
 	    var latitude  = position.coords.latitude;
 	    var longitude = position.coords.longitude;
@@ -216,7 +233,7 @@ function map_geoFindMe() {
 	    output.innerHTML = "Unable to retrieve your location";
 	  };
 
-	  output.innerHTML = "<p>Locating...</p>";
+	  output.innerHTML = "<p style='background-color:yellow'>You may be prompted by your browser to allow the geolocation service, please check above for a prompt to allow the auto-location to continue...</p>";
 
 	  navigator.geolocation.getCurrentPosition(mapsFindMeSuccess, error);
 	}
@@ -264,6 +281,7 @@ function addrFromLatLng(latLngPoint)
 			}
 			if(!address)
 				$('#txtSearchAddress').val('Cound not find address');
+			la('geolocate',address.formatted_address);
 			doSearch();
 			
 		}
