@@ -903,7 +903,7 @@ class legislator extends json_obj{
 
 		
 		echo '</table>';
-		echo ("<a target='_blank' href='$this->url'>Link to page on NCGA website</a>");
+		echo ("<a target='_blank' href='$this->url'>Link to page on NCGA website</a>&nbsp;&nbsp;&nbsp;&nbsp;<a  href='/guide/legpage.php?id=$this->key'>Link to voting record</a>");
 		echo "</div></div><div style='clear:both'></div>";
 	}	
 }
