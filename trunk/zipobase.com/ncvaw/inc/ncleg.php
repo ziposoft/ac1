@@ -882,9 +882,14 @@ class legislator extends json_obj{
 
 		$comment=$this->get("comment");
 		if(!$comment)
-			$comment="Voting/Sponsorship Record";
-			
-		$this->print_table_row ( 'Reason For Grade', $comment );
+		{
+			$comment="Voting record, responsiveness to inquiries, feedback from other legislators and lobbyists, and public comment";
+			$this->print_table_row ( 'Ranking Created By', $comment );
+		}
+		else 
+			$this->print_table_row ( 'Reason For Grade', $comment );
+		
+	
 				
 
 		
