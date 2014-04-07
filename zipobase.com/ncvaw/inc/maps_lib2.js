@@ -130,53 +130,58 @@ function doSearch(doZoom) {
 	//-------end of filter by type code--------
 	
 	// because the geocode function does a callback, we have to handle it in both cases - when they search for and address and when they dont
-	if (address != "") {
+	if (address != "") 
+	{
 		//if (address.toLowerCase().indexOf("raleigh") == -1) { address = address + " raleigh"; }
         searchStr += " AND " + searchType.slice(0, searchType.length - 1) + ")";
 		
-		geocoder.geocode( { 'address': address}, function(results, status) {
-		    if (status == google.maps.GeocoderStatus.OK)
-		    {
-		        console.log("found address: " + results[0].geometry.location.toString());
-		       
+		geocoder.geocode( { 'address': address}, 
+			function(results, status) 
+			{
+			    if (status == google.maps.GeocoderStatus.OK)
+			    {
+			        console.log("found address: " + results[0].geometry.location.toString());
+			       
 		            gMap.setCenter(results[0].geometry.location);
 		            gMap.setZoom(14);
 		            //gMap.setZoom(9);
-		          
-				addrMarker = new google.maps.Marker({
-					position: results[0].geometry.location,
-					map: gMap,
-					icon: addrMarkerImage,
-					animation: google.maps.Animation.DROP
-				});
-
-				drawSearchRadiusCircle(results[0].geometry.location);
-				
-				//searchStr += " AND ST_INTERSECTS(geometry, LATLNG" + results[0].geometry.location.toString() +")";
-				searchStr += " AND ST_INTERSECTS(geometry, CIRCLE(LATLNG" + results[0].geometry.location.toString() + "," + searchRadius + "))";
-				
-				//get using all filters
-				console.log(searchStr);
-				searchrecords = new google.maps.FusionTablesLayer(fusionTableId, { query: searchStr } );
-				
-				searchrecords.setMap(gMap);
-				//displayCount(searchStr);
-				map_setbounds(searchStr);
-				drawTable(searchStr);
-
-				var contentString = '<b>ADDRESS:</b>' + address;
-
-				var infowindow = new google.maps.InfoWindow({
-    					content: contentString
-				});
-
-				google.maps.event.addListener(addrMarker, 'mouseover', function() {
-  					infowindow.open(gMap,addrMarker);
-				});
-
-			} else {
-				$('#legislators').html('<p class="error"><strong>Oops!</strong> We could not find your address. Make sure it is the </p>');
-			}
+			          
+					addrMarker = new google.maps.Marker({
+						position: results[0].geometry.location,
+						map: gMap,
+						icon: addrMarkerImage,
+						animation: google.maps.Animation.DROP
+					});
+	
+					drawSearchRadiusCircle(results[0].geometry.location);
+					
+					//searchStr += " AND ST_INTERSECTS(geometry, LATLNG" + results[0].geometry.location.toString() +")";
+					searchStr += " AND ST_INTERSECTS(geometry, CIRCLE(LATLNG" + results[0].geometry.location.toString() + "," + searchRadius + "))";
+					
+					//get using all filters
+					console.log(searchStr);
+					searchrecords = new google.maps.FusionTablesLayer(fusionTableId, { query: searchStr } );
+					
+					searchrecords.setMap(gMap);
+					//displayCount(searchStr);
+					map_setbounds(searchStr);
+					drawTable(searchStr);
+	
+					var contentString = '<b>ADDRESS:</b>' + address;
+	
+					var infowindow = new google.maps.InfoWindow({
+	    					content: contentString
+					});
+	
+					google.maps.event.addListener(addrMarker, 'mouseover', function() {
+	  					infowindow.open(gMap,addrMarker);
+					});
+	
+				} 
+			    else 
+			    {
+					$('#legislators').html('<p class="error"><strong>Oops!</strong> We could not find your address. Make sure you include the full address, or try the auto-locate feature.</p>');
+				}
 		});
 	} else {
 		//get using all filters
