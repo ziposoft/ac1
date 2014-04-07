@@ -3,15 +3,14 @@
 
 #include "zbase_lib/include/zipobase_lib.h"
 
-
-
-int test_table(zb_source* p_ds)
+int test_ds_table(zb_source* p_ds)
 {
 	z_status status;
+	zb_ds_table* tbl=
+
+
 	zb_record* pRec=0;
 	zb_st_test table_test(p_ds);
-
-
 	do
 	{
 		status=p_ds->open(true);
@@ -35,13 +34,39 @@ int test_table(zb_source* p_ds)
 	p_ds->close();
 	if(pRec)
 		delete pRec;
-
-
-
-
 	return 0;
+}
 
 
+int test_table(zb_source* p_ds)
+{
+	z_status status;
+	zb_record* pRec=0;
+	zb_st_test table_test(p_ds);
+	do
+	{
+		status=p_ds->open(true);
+		if(status)
+			break;
+		table_test.load_from_ds();
+		zb_record* pRec= table_test.new_default_rec();
+		if(!pRec)
+			break;
+		status=table_test._f_name->set(pRec,"hello?");
+		if(status)
+			break;
+
+		status=table_test.record_add(pRec);
+		if(status)
+			break;
+		status=p_ds->commit();
+		
+	}while(0);
+	
+	p_ds->close();
+	if(pRec)
+		delete pRec;
+	return 0;
 }
 
 

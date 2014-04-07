@@ -95,7 +95,15 @@ public:
 	//virtual z_status
 };
 
-
+class zb_ds_desc : public z_map_obj<zb_ds_field>,public z_refcount
+{
+public:
+	zb_ds_desc(){}
+	virtual ~zb_ds_desc(){}
+	zb_field* get_field(ctext name);
+	z_status get_default_rec(zb_record *rec);
+	
+};
 class zb_desc : public z_map_obj<zb_field>,public z_refcount
 {
 public:

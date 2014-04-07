@@ -10,6 +10,8 @@ public:
 	ctext get_map_key();
 	zb_ds_table(ctext unique_id);
 	virtual z_status record_add(zb_record* rec);
+
+	zb_ds_desc
 };
 
 class zb_table_base : public z_refcount
