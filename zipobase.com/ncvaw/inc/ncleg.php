@@ -1001,7 +1001,7 @@ class leg_list extends data_source{
 				if (! in_array ( $status, $status_filter ))
 					continue;
 				*/
-			$key= $row->{	'gsx$last' }->{'$t' };
+			$key= $row->{	'gsx$key' }->{'$t' };
 			if($sort=='dist')
 			{
 				$key=$id = $row->{	'gsx$district' }->{'$t' };
