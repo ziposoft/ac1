@@ -49,10 +49,10 @@
   
 <div id="wrapper">
 <div style="text-align:center;">
-		<a style="margin:5px" href="http://www.ncvaw.org/"><img
-		style="float: left; max-width: 25%;"
-			src="/img/NCVAW_paw.png"
-			alt="North Carolina Voters for Animal Welfare"></a>
+	   <!--  	<a style="margin:5px" href="http://www.ncvaw.org/">-->
+		<img 		style="float: left; max-width: 25%;"
+			src="/img/NCVAW_paw.png" 			alt="North Carolina Voters for Animal Welfare">
+			 <!--</a>-->
 			
 			<img 
 			style="text-align:center;   margin:auto;max-width: 40%" src="/img/title.png">
