@@ -48,24 +48,30 @@
 	?>
   
 <div id="wrapper">
+<div style="text-align:center;">
 		<a href="http://www.ncvaw.org/"><img
-			style="float: left; max-width: 30%" src="/img/NCVAW_paw.png"
-			alt="North Carolina Voters for Animal Welfare"></a> <a
+			style="float: left; max-width: 25%" src="/img/NCVAW_paw.png"
+			alt="North Carolina Voters for Animal Welfare"></a>
+			
+			<img 
+			style="text-align:center;   margin:auto;max-width: 40%" src="/img/title.png">
+			
+			 <a
 			href="http://www.facebook.com/NCVAW" target="_new"><img
-			style="float: right; max-width: 30%" src="/img/facebook.png"
+			style="float: right; max-width: 25%" src="/img/facebook.png"
 			alt="Follow us on Facebook"></a>
 		<!--  
 <div style="float: right;max-width:30%"><small style="color:#46a;font:">Follow us on Facebook</small>
 	<div style="display:block;padding:0;margin:0;" class="fb-like-box" data-href="http://www.facebook.com/ncvaw" data-width="220" data-height="70" data-colorscheme="light" data-show-faces="false" data-header="false" data-stream="false" data-show-border="false"></div>
-</div>-->
+</div>
 		<span
 			style="color: #46a; font-size: 20px; font-weight: bold; font: sans-serif; text-align: center;">
 			<div>North Carolina</div>
 			<div style="color: red;">Voters For Animal Welfare</div>
 			<div>2014 Election Central</div>
-		</span>
-
-
+		</span>-->
+</div>
+<div style='clear:both'></div>
   	
 <?php
 $menu_admin = 0;
