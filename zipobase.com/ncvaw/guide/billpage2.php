@@ -6,7 +6,7 @@ include $header;
 
 
 
-include $root.'/inc/ncleg.php';
+include $root.'/inc/db.php';
  
 $list=getobj("bill_list");
 
