@@ -196,7 +196,8 @@ div.leg_thumb
 {
 	
 	display:inline-block;
-	vertical-align: top;	
+	vertical-align: top;
+	width:180px;	
 	max-width:20%;
 	
 	
@@ -205,6 +206,7 @@ div.leg_thumb
 div.leg_thumb img
 {
 	vertical-align: top;
+	
 	width:100%;
 	/*
 	width:100px;
