@@ -8,7 +8,7 @@
 
 include $root.'/inc/ncleg.php';
  
-$leglist=new leg_list();
+$leglist=getobj("leg_list");
 
 $chamber=0;
 $district=0;
