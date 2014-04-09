@@ -343,8 +343,9 @@ class vote_data extends data_source
 		}
 		echo("</div>");
 	}	
-	public function get_votes($legid,&$list) {
+	public function get_votes($legid,&$list,&$count) {
 		$score=0;
+		$count=0;
 		foreach ( $this->rows as $row )
 		{
 			if($legid == getj($row,'key'))
@@ -352,6 +353,7 @@ class vote_data extends data_source
 				$v=new vote($row);
 				$list[]=$v;
 				$score+=$v->get_score();
+				$count++;
 				
 			}
 		}
@@ -771,7 +773,7 @@ class legislator extends json_obj{
 	public $key;	
 	public $grade;
 	public $score;
-	
+	public $comment;	
 	public $grade_color;		
 	public $uid;
 	public $party;	
@@ -786,7 +788,8 @@ class legislator extends json_obj{
 		$this->data = $data_in;
 		$this->first = $this->get('first');
 		$this->last = $this->get('last');
-		$this->key = $this->get('key');		
+		$this->key = $this->get('key');
+		$this->comment=$this->get("comment");
 		
 		
 		$this->name = $this->first.' '.$this->last;
@@ -819,12 +822,23 @@ class legislator extends json_obj{
 	public function create_grade()
 	{
 		$votelist=array();
-		$score=getobj("vote_data")->get_votes($this->key,$votelist);
+		$count=0;
+		$color="#000";
 		$grade=$this->get("grade");
 		
-			
-		$color="#000";
-		get_grade($score,$grade,$color);	
+		
+		
+		$score=getobj("vote_data")->get_votes($this->key,$votelist,$count);
+		
+		if( ($count==0) && (!$grade))
+		{
+			$grade='Not Graded';
+			$this->comment='Has not been in office long enough to assign grade';			
+		}
+		else
+			get_grade($score,$grade,$color);	
+		
+
 		$this->grade=$grade;	
 		$this->grade_color=$color;
 		$this->score=$score;
@@ -889,14 +903,15 @@ class legislator extends json_obj{
 			
 		}
 
-		$comment=$this->get("comment");
-		if(!$comment)
+		
+		if(!$this->comment)
 		{
-			$comment="Voting record, responsiveness to inquiries, and feedback from constituents";
-			$this->print_table_row ( 'Ranking Created By', $comment );
+			
+			$this->comment="Voting record, responsiveness to inquiries, and feedback from constituents";
+			$this->print_table_row ( 'Ranking Created By', $this->comment );
 		}
 		else 
-			$this->print_table_row ( 'Reason For Grade', $comment );
+			$this->print_table_row ( 'Reason For Grade', $this->comment );
 		
 	
 				
