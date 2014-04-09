@@ -892,7 +892,7 @@ class legislator extends json_obj{
 		$comment=$this->get("comment");
 		if(!$comment)
 		{
-			$comment="Voting record, responsiveness to inquiries, feedback from other legislators and lobbyists, and public comment";
+			$comment="Voting record, responsiveness to inquiries, and feedback from constituents";
 			$this->print_table_row ( 'Ranking Created By', $comment );
 		}
 		else 
