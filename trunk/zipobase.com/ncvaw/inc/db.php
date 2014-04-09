@@ -14,7 +14,9 @@ function getobj($type) {
 		else {
 			throw new Exception("Invalid product type given.");
 		}
-
+		$filename=$root."/data/$type.pdata";
+		$data=serialize($obj_array[$type]);
+		file_put_contents($filename, $data);
 
 	}
 	
@@ -40,6 +42,10 @@ class data_source
 {
 	public $rows;
 
+	function build_from_json()
+	{
+		
+	}
 	function get_data($tab,$id=null) 
 	{
 		global $root;
@@ -70,7 +76,7 @@ class data_source
 		$json = json_decode (  file_get_contents ( $filename ) );
 		if($json)
 			$this->rows = $json->{'feed' }->{'entry' };	
-				
+		build_from_json();
 	}
 }
 
@@ -937,7 +943,18 @@ function grade_sort_func($a, $b) {
 
 
 class leg_list extends data_source{
+	
+	
 	public $list;
+	public function __construct() {
+		$this->get_data(2);
+		
+
+	
+	}
+
+	
+	
 	public function print_list() {
 		echo "<div class='tbl_leglist' >";
 		foreach ( $this->list as $d ) {
@@ -945,10 +962,7 @@ class leg_list extends data_source{
 		}
 		echo '</div>';
 	}
-	public function __construct() {
-		$this->get_data(2);
-		
-	}
+
 	public function get_leg_by_key($key) {
 		foreach ( $this->rows as $row ) {
 	
