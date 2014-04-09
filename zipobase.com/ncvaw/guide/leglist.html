@@ -5,22 +5,35 @@ include $root.'/inc/ncleg.php';
 $leglist=new leg_list();
 
 $chamber=getParam("ch");
+$page_title="List of both NC Senate and House Members";
+$url="/guide/leglist.html?";
 $chamberName="Senate";
 if($chamber=='H')
 {
 	$chamberName="House";
 }
-else
-	$chamber='S';
+if($chamber)
+{
+	$page_title="List of $chamberName members";
+	$url="/guide/leglist.html?ch=".$chamber;
+}
 
-$page_title="List of $chamberName members";
 include $header;	
-$url="/guide/leglist.html?ch=".$chamber;
+
 ?>
 <h2><?php echo("$page_title"); ?></h2>
- 		<a href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>&sort=dist'>Sort by District</a>
- 		<a style="margin:20px" href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>'>Sort by Name</a>
- 		<a style="margin:20px" href='/guide/leglist.html?ch=<?php echo("$chamber"); ?>&sort=grade'>Sort by Grade</a>
+<p>
+Legislators are given points for voting for animal welfare bills, sponsoring animal welfare bills, completing the NCVAW survey, and responsiveness to animal advocates constituents. There have only been few animal welfare bills up to this point. As bills are introduced and voted on NCVAW will adjust the formula for final rating.
+</p>
+<?php 
+if($chamber)
+{
+	echo("<a  href='$url&sort=dist'><button>Sort by District</button></a>");
+}
+
+?>
+ 		<a  style="margin:20px" href='<?php echo("$url"); ?>'><button>Sort by Name</button></a>
+ 		<a style="margin:20px" href='<?php echo("$url"); ?>&sort=grade'><button>Sort by Grade</button></a>
 
 
  		<form  style="display:inline"   action="javascript:void(0);" autocomplete="on" >
