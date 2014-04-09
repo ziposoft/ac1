@@ -346,9 +346,10 @@ class vote_data extends data_source
 		}
 		echo("</div>");
 	}
-	public function get_votes($legid,&$list,&$count) {
+	public function get_votes($legid,&$count) {
 		$score=0;
 		$count=0;
+        
 		foreach ( $this->list as $v )
 		{
 			if($legid == $v->mkey)
@@ -373,14 +374,52 @@ class vote_data extends data_source
 	}
 }
 
+function get_grade(&$score,&$grade,&$color)
+{
+	$grades = [
+	 [ -3,"F","#F00"],
+	 [ -2,"D-","#C04"],	 
+	 [ -1,"D","#808"],
+	 [ 0,"C","#00F"],
+	 [ 1,"C+","#02E"],	 
+	 [ 2,"B","#088"],	 	
+	 [ 3,"B+","#0c8"],	  
+	 [ 4,"A-","#0c0"],
+	 [ 5,"A","#0c0"],	 
+ 	 [ 6,"A+","#0c0"],	 
+	];	
+	if(!$grade)
+	{
+		$grade="A+";
+		$color="#0c0";
+		foreach ( $grades as $g )
+		{
+			if($score <= $g[0])
+			{
+				$grade=$g[1];
+				$color=$g[2];
+				return;
+			}
+		}
+		return;
+	}
+	foreach ( $grades as $g )
+	{
+		if($grade == $g[1])
+		{
+			$score=$g[0];
+			$color=$g[2];
+			return;
+		}
+	}	
+}
 
 
-class legislator extends json_obj{
+class legislator{
 
 	public $name;
 	public $first;
 	public $last;
-	public $displayname;
 	public $id;
 	public $key;
 	public $grade;
@@ -391,10 +430,9 @@ class legislator extends json_obj{
 	public $party;
 	public $chamberId;
 	public $chamber;
-	public $url_cover_jpg;
-
-	public $jpg_path;
-	public $url;
+	public $county;
+    public $url;
+	public $district;
 
 	public function __construct($d) {
 
@@ -407,6 +445,7 @@ class legislator extends json_obj{
 		$this->name = $this->first.' '.$this->last;
 		$this->uid =getj($d,'uid');
 		$this->id = getj($d,'id');
+		$this->county = getj($d,'county');
 		$this->chamberId = getj($d,'chamber');
         $this->district=getj($d,'district');
         $this->title=getj($d,'title') ;
@@ -436,35 +475,25 @@ class legislator extends json_obj{
 	}
 	public function create_grade()
 	{
-		
 		$count=0;
 		$color="#000";
 
-
-
-
 		$score=getobj("vote_data")->get_votes($this->key,$count);
 
-		if( ($count==0) && (!$grade))
+		if( ($count==0) && (!$this->grade))
 		{
-			$grade='Not Graded';
+			$this->grade='Not Graded';
 			$this->comment='Has not been in office long enough to assign grade';
 		}
 		else
-			get_grade($score,$grade,$color);
+			get_grade($score,$this->grade,$color);
 
 
-		$this->grade=$grade;
 		$this->grade_color=$color;
 		$this->score=$score;
 			
 	}
-	public function print_table_val($label, $field) {
-		$val = getj($d, $field);
-		if(!$val)
-			return;
-		$this->print_table_row ( $label, $val );
-	}
+
 	public function print_table_row($label, $val,$color=null) {
 		$style="";
 		if($color)
@@ -500,13 +529,13 @@ class legislator extends json_obj{
 				
 		}
 		$this->print_table_row ( '2014 Election', $running );
-		$this->print_table_val ( 'Party', 'party' );
-		$this->print_table_val ( 'Counties', 'county' );
+		$this->print_table_row ( 'Party', $this->party );
+		$this->print_table_row ( 'Counties', $this->county );
 
 		$email_link="<a  href='mailto:'" . getj($d,'email') . ">" .  getj($d,'email') . "</a>";
 		$this->print_table_row ( 'Email', $email_link );
+		$this->print_table_val ( 'Phone', $this->phone );
 
-		$this->print_table_val ( 'Phone', 'phone' );
 		if(option('grades'))
 		{
 			$grade_link="<a title='Click for voting record'  style='color:" .$this->grade_color
@@ -559,41 +588,17 @@ class leg_list extends data_source{
 		echo '</div>';
 	}
    
-    function create_from_spreadsheet()
-	{
-		$this->get_json_data(2,'legislator','key');
-	}	 
 	public function get_leg_by_key($key) {
-        return $this->list[$key];
+        if(array_key_exists ($key,$this->list))
+            return $this->list[$key];
+        return null;
 	}
-	public function get_leg_by_name($first,$last) {
+	
+	public function get_leg_by_district($district,$chamber) {
 		foreach ( $this->list as $leg ) {
-
-			if(
-					(getj($row,'first')==$first)&&
-					(getj($row,'last')==$last))
-			{
-				return new legislator ( $row );
-			}
-		}
-		return 0;
-	}
-	public function get_leg_by_id($id) {
-		foreach ( $this->rows as $row ) {
-				
-			$i = $row->{	'gsx$id' }->{'$t' };
-			if ($i == $id) {
-				return new legislator ( $row );
-			}
-		}
-		return 0;
-	}
-	public function get_leg_by_district($district) {
-		foreach ( $this->rows as $row ) {
-			$id = $row->{	'gsx$district' }->{'$t' };
-			if ($district == $id) {
-				return new legislator ( $row );
-			}
+			if (($district == $leg->district)
+                &&($chamber==$leg->chamberId))
+				return $leg;
 		}
 		return 0;
 	}
