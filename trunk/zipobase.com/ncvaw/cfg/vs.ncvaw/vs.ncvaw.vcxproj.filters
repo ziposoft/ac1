@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="inc">
+      <UniqueIdentifier>{a100b547-324a-41fe-a87a-7dce4bd6895f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guide">
+      <UniqueIdentifier>{73c2219d-1cdc-4af9-8d41-ee07363ce263}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="about">
+      <UniqueIdentifier>{df89d080-2ab9-40e4-8f46-4073b538ca58}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\ncvaw\inc\maps_lib2.js">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\Mobile_Detect.php">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\ncvaw.css">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\ncvaw.js">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\unused.js">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\zs_menu.css">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\zs_menu.js">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\zs_menu.php">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\db.php">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\fb_script.p">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\fblike.p">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\foot.php">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\head.php">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\headscripts.p">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\jquery.js">
+      <Filter>inc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\canidate.php">
+      <Filter>guide</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\find.html">
+      <Filter>guide</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\getleg.php">
+      <Filter>guide</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\leglist.html">
+      <Filter>guide</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\legpage.php">
+      <Filter>guide</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\survey.html">
+      <Filter>guide</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\billpage.php">
+      <Filter>guide</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\about\getinvolved.html">
+      <Filter>about</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\about\lobbying101.html">
+      <Filter>about</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\about\who.html">
+      <Filter>about</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\about\aboutus.html">
+      <Filter>about</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\about\contact.html">
+      <Filter>about</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\about\donate.html">
+      <Filter>about</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\facebook.html" />
+    <None Include="..\..\..\..\..\ncvaw\global.php" />
+    <None Include="..\..\..\..\..\ncvaw\home.html" />
+    <None Include="..\..\..\..\..\ncvaw\linux.htaccess" />
+    <None Include="..\..\..\..\..\ncvaw\news.html" />
+    <None Include="..\..\..\..\..\ncvaw\phpinfo.php" />
+    <None Include="..\..\..\..\..\ncvaw\site_head.php" />
+    <None Include="..\..\..\..\..\ncvaw\bills.php" />
+    <None Include="..\..\..\..\..\ncvaw\district.php" />
+    <None Include="..\..\..\..\..\ncvaw\districts.php" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\ncvaw\favicon.ico" />
+  </ItemGroup>
+</Project>
