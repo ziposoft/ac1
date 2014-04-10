@@ -539,15 +539,19 @@ class legislator{
 		$email_link="<a  href='mailto:'" .$this->email . ">" . $this->email . "</a>";
 		$this->print_table_row ( 'Email', $email_link );
 		$this->print_table_row ( 'Phone', $this->phone );
+        $responded="No";
+        if(getobj("survey_data")->check($this->key))
+            $responded="<a style='color:green;font-weight:bold;' href='/guide/legpage.php?id=$this->key'>Yes</a>";
+        
+     
+        $this->print_table_row ( 'Responded to survey', $responded );
 
-		if(option('grades'))
-		{
+
 			$grade_link="<a title='Click for voting record'  style='font-weight:bold;color:" .$this->grade_color
 			."' href='/guide/legpage.php?id=$this->key'>$this->grade</a>";
 			$this->print_table_row ( 'Grade',$grade_link );
 				
-		}
-
+	
 
 		if(!$this->comment)
 		{
@@ -558,7 +562,7 @@ class legislator{
 		else
 			$this->print_table_row ( 'Reason For Grade', $this->comment );
 
-
+       
 
 
 
@@ -895,7 +899,11 @@ class survey_data extends data_source
 	{
 		$this->get_json_data(1,'survey_resp','key',"0AonA9tFgf4zjdE45M0MyZTR0UUYxXzNzRjBuNWFnMGc");
 	}   
-	
+	public function check($key)
+	{
+        return (array_key_exists ($key,$this->list));
+ 
+	}	
 	
 	public function printresp($key)
 	{
