@@ -1,9 +1,9 @@
 <?php
 
-include $root.'/inc/ncleg.php';
+include $root.'/inc/db.php';
  
 $leglist=getobj("leg_list");
-
+$leglist->sort();
 $chamber=getParam("ch");
 $page_title="List of both NC Senate and House Members";
 $url="/guide/leglist.html?";
@@ -23,15 +23,10 @@ include $header;
 ?>
 <h2><?php echo("$page_title"); ?></h2>
 <p>
-Legislators are given points for voting for animal welfare bills, sponsoring animal welfare bills, completing the NCVAW survey, and responsiveness to animal advocates constituents. There have only been few animal welfare bills up to this point. As bills are introduced and voted on NCVAW will adjust the formula for final rating.
+Legislators are given points for voting for animal welfare bills, sponsoring animal welfare bills, completing the NCVAW survey, and responsiveness to animal advocates constituents. There have only been a few animal welfare bills up to this point. As bills are introduced and voted on NCVAW will adjust the formula for final rating.
 </p>
-<?php 
-if($chamber)
-{
-	echo("<a  href='$url&sort=dist'><button>Sort by District</button></a>");
-}
 
-?>
+ 		<a  style="margin:20px" href='<?php echo("$url"); ?>&sort=dist'><button>Sort by District</button></a>
  		<a  style="margin:20px" href='<?php echo("$url"); ?>'><button>Sort by Name</button></a>
  		<a style="margin:20px" href='<?php echo("$url"); ?>&sort=grade'><button>Sort by Grade</button></a>
 
@@ -51,8 +46,8 @@ if($chamber)
  	
  		<div id='namelist'>
 <?php
-$leglist->get_list ($chamber,""  );
-$leglist->print_list ();?>
+
+$leglist->print_list ($chamber);?>
 </div>
 
 <?php

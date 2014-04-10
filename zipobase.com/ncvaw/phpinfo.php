@@ -1,7 +1,7 @@
+
+
 <?php
-
-// Show all information, defaults to INFO_ALL
+include $header;
 phpinfo();
-
-
+include $footer;
 ?>

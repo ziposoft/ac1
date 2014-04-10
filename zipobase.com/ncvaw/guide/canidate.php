@@ -1,7 +1,7 @@
 <?php
 include $header;
 
-include $root.'/inc/ncleg.php';
+include $root.'/inc/db.php';
 $key=getParam( "key");
 $canidate=null;
 if ($key)

@@ -25,11 +25,13 @@ function getobj($type) {
 				file_put_contents($filename, $data);				
 			}
 			$obj_array[$type]=$objlist;
+            
 		}
 		else {
 			throw new Exception("Invalid product type given.");
 		}
 	}
+    
 	return $obj_array[$type];
 }
 
@@ -82,15 +84,10 @@ class data_source
 			throw new Exception("Could not get JSON data for $obj");
 			return;
 		}
-		$first=1;
 		foreach ($jdata as $row )
 		{
 			
-			if($first)
-			{
-				$first=null;
-				continue;
-			}
+
 			if($keyname)
 			{
 				$key =getj($row,$keyname);
@@ -149,6 +146,8 @@ class bill {
 	}
 	public function print_tr()
 	{
+        if($this->year == 'Year')
+            return;
 		echo ("<div><h3><a href='/guide/billpage.php?doc=$this->doc'>$this->year - $this->doc - $this->nickname <img style='display:inline;width:40px' src='/img/$this->picture' /></a></h3>	
 			
 			<div>$this->official </div>
@@ -239,7 +238,7 @@ class vote {
 		$bill=getobj("bill_list")->get_bill($doc);
 		if($this->vid)
 		{
-			if(!(($vid==$bill->svid)||($vid==$bill->hvid)))
+			if(!(($this->vid==$bill->svid)||($this->vid==$bill->hvid)))
 				return;
 		}
 		//echo "<img style='width:50px' src='/img/x.jpg'/>";
@@ -365,7 +364,7 @@ class vote_data extends data_source
 	public function print_list_votes($legid,$sponsors) {
 		foreach ( $this->list as $v )
 		{
-			if($v->mkey xor $sponsors)
+			if($v->vid xor $sponsors)
 				if($legid == $v->mkey)
 				{
 					$v->print_vote_tr();
@@ -424,6 +423,8 @@ class legislator{
 	public $key;
 	public $grade;
 	public $score;
+	public $phone;
+	public $email;
 	public $comment;
 	public $grade_color;
 	public $uid;
@@ -436,10 +437,13 @@ class legislator{
 
 	public function __construct($d) {
 
+		$this->party = getj($d,'party');
 		$this->first = getj($d,'first');
+		$this->phone = getj($d,'phone');
 		$this->last = getj($d,'last');
 		$this->key = getj($d,'key');
 		$this->comment=getj($d,"comment");
+		$this->email=getj($d,"email");
 		$this->grade=getj($d,"grade");
 
 		$this->name = $this->first.' '.$this->last;
@@ -464,13 +468,13 @@ class legislator{
 	}
 	public function print_list_votes()
 	{
-		getobj("vote_data")->print_list_votes($this->id,0);
+		getobj("vote_data")->print_list_votes($this->key,0);
 
 	}
 	public function print_list_sponsorship()
 	{
 
-		getobj("vote_data")->print_list_votes($this->id,1);
+		getobj("vote_data")->print_list_votes($this->key,1);
 
 	}
 	public function create_grade()
@@ -532,13 +536,13 @@ class legislator{
 		$this->print_table_row ( 'Party', $this->party );
 		$this->print_table_row ( 'Counties', $this->county );
 
-		$email_link="<a  href='mailto:'" . getj($d,'email') . ">" .  getj($d,'email') . "</a>";
+		$email_link="<a  href='mailto:'" .$this->email . ">" . $this->email . "</a>";
 		$this->print_table_row ( 'Email', $email_link );
-		$this->print_table_val ( 'Phone', $this->phone );
+		$this->print_table_row ( 'Phone', $this->phone );
 
 		if(option('grades'))
 		{
-			$grade_link="<a title='Click for voting record'  style='color:" .$this->grade_color
+			$grade_link="<a title='Click for voting record'  style='font-weight:bold;color:" .$this->grade_color
 			."' href='/guide/legpage.php?id=$this->key'>$this->grade</a>";
 			$this->print_table_row ( 'Grade',$grade_link );
 				
@@ -574,10 +578,10 @@ function sort_func_grade($a, $b) {
 	return ($a->score < $b->score) ? 1 : -1;
 }
 function sort_func_dist($a, $b) {
-	if ($a->distrcit == $b->distrcit) {
+	if ($a->district == $b->district) {
 		return 0;
 	}
-	return ($a->distrcit < $b->distrcit) ? -1 : 1;
+	return ($a->district < $b->district) ? -1 : 1;
 }
 
 class leg_list extends data_source{
@@ -585,9 +589,13 @@ class leg_list extends data_source{
 	{
 		$this->get_json_data(2,'legislator','key');
 	}
-	public function print_list() {
+	public function print_list($chamber) {
 		echo "<div class='tbl_leglist' >";
-		foreach ( $this->list as $d ) {
+		foreach ( $this->list as $d )
+        {
+            if($chamber)
+                if($chamber != $d->chamberId)
+                    continue;
 			$d->print_list_row ();
 		}
 		echo '</div>';
@@ -599,7 +607,7 @@ class leg_list extends data_source{
         return null;
 	}
 	
-	public function get_leg_by_district($district,$chamber) {
+	public function get_leg_by_district($chamber,$district) {
 		foreach ( $this->list as $leg ) {
 			if (($district == $leg->district)
                 &&($chamber==$leg->chamberId))
@@ -615,7 +623,7 @@ class leg_list extends data_source{
 			uasort($this->list, 'sort_func_grade');
 		}
 		else
-		if($sort=='grade')
+		if($sort=='dist')
 		{
 			uasort($this->list, 'sort_func_dist');
 		}	
@@ -638,24 +646,32 @@ class canidate {
 	public $uid;
 	public $chamberId;
 	public $chamber;
+	public $district;
 	public $url_cover_jpg;
 
 	public $jpg_path;
 	public $url;
 	public $photo;
 	public $website;
+	public $phone;
 	public $email;
 	public $election;
 
 
 
-	public function __construct($data_in) {
-		$this->data = $data_in;
-		$this->displayname=$this->get('nameonballot');
-		$this->party_id = $this->get('party');
-		$this->chamberId = $this->get('chamber');
-		$this->key = $this->get('key');
+	public function __construct($d) {
+		$this->photo =getj($d,'photo');
+		$this->election=getj($d,'election');
+		$this->displayname=getj($d,'nameonballot');
+		$this->party_id = getj($d,'party');
+		$this->phone = getj($d,'phone');
+		$this->district = getj($d,'district');
+		$this->chamberId = getj($d,'chamber');
+		$this->key = getj($d,'key');
+		$this->website = getj($d,'website');
 		$this->party=$this->party_id;
+        
+        
 		if($this->party_id=='DEM')
 		{
 			$this->party='Democratic';
@@ -670,19 +686,14 @@ class canidate {
 			$this->chamber='Senate';
 			
 	}
-	public function print_table_val($label, $field) {
-		$val = $this->data->{	'gsx$' . $field }->{'$t' };
-		if(!$val)
-			return;
-		$this->print_table_row ( $label, $val );
-	}
+
 	public function print_table_row($label, $val) {
 		echo ("<tr><td class='leg_label'>$label: </td><td class='leg_val'>$val</td></tr>");
 	}
 	public function get_running() {
 		$running="Running for re-election in the ";
 
-		if($this->get('election')=='gen')
+		if($this->election=='gen')
 		{
 			$running.='general election 11/4/2014';
 				
@@ -702,12 +713,11 @@ class canidate {
 			return;
 		}
 		$data_key=$this->key;
-		$lastname=strtolower($this->get('last'));
 		
 		echo ("<div class='leg_bio' data-name='$data_key'><hr>");
 		//thumbnail
-		$photo = $this->get('photo');
-		if($photo)
+		
+		if($this->photo)
 		{
 
 			echo ("<div class='leg_thumb' ><a href='/guide/canidate.php?key=$this->key'>");
@@ -715,14 +725,13 @@ class canidate {
 		}
 
 		echo ("<div class='leg_info' ><a href='/guide/canidate.php?key=$this->key'><h2>$this->displayname</h2></a><table><tr><td/><td/></tr>");
-		$district=$this->get('district');
-		$district_url="'/district.php?dist=". $district . "&ch=" . $this->chamberId . "'";
-		$this->print_table_row ( 'District', "<a href=$district_url>$district</a>" );
+		$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
+		$this->print_table_row ( 'District', "<a href=$district_url>$this->district</a>" );
 
 		$this->print_table_row ( 'Party', $this->party );
 		$running="Challenger in the ";
 
-		if($this->get('election')=='gen')
+		if($this->election=='gen')
 		{
 			$running.='general election 11/4/2014';
 				
@@ -733,17 +742,17 @@ class canidate {
 		}
 		
 		$this->print_table_row ( '2014 Election', $running );
-		$website= $this->get('website');
-		if($website)
+		
+		if($this->website)
 		{
-			$link="<a href='".$website."' target='_blank'>".$website."</a>";
+			$link="<a href='".$website."' target='_blank'>".$this->website."</a>";
 			$this->print_table_row ( 'Webiste', $link );
 				
 		}
 		
 		
-		$this->print_table_val ( 'Email', 'email' );
-		$this->print_table_val ( 'Phone', 'phone' );
+		$this->print_table_row ( 'Email', $this->email );
+		$this->print_table_row ( 'Phone', $this->phone );
 
 		echo ('</table>');
 			
@@ -755,30 +764,29 @@ class canidate {
 
 class canidates extends data_source
 {
-	public function __construct() {
-		$this->get_data(5);
-		$this->list=array();
-		
-	}	
-	public function get_candiate($key)
+	function create_from_spreadsheet()
 	{
-		foreach ( $this->rows as $row )
-		{
-			if($key==getj($row,'key'))
-				return new canidate ( $row );
-		}
-		return null;
+		$this->get_json_data(5,'canidate','key');
 	}	
+
+	public function get_candiate($key) {
+        if(array_key_exists ($key,$this->list))
+            return $this->list[$key];
+        //person may not be running
+        return null;
+	}	
+	
 	public function getlist($ch,$num,$elect)
 	{
 		$set=array();
-		foreach ( $this->rows as $row )
+		foreach ( $this->list as $c )
 		{
-			if( (getj($row,'district')==$num)
-					 &&(getj($row,'chamber')==$ch)
-					&&(getj($row,'election')==$elect))
+			if( 
+            ($c->district==$num)&&
+            ($c->chamberId==$ch)&&
+            ($c->election==$elect))
 			{
-				$set [] = new canidate ( $row );
+				$set [] =$c;
 			}	
 		}
 		return $set;
@@ -787,64 +795,143 @@ class canidates extends data_source
 	public function printlist($ch,$num,$elect)
 	{
 		
-	
-		foreach ( $this->rows as $row )
-		{
-			
-			if( (getj($row,'district')==$num)
-					 &&(getj($row,'chamber')==$ch)
-					&&(getj($row,'election')==$elect))
-			{
-					
-					$x = new canidate ( $row );
-					
-					$x->print_list_row();
-					
-					
-				}	
-			
-		}
-		
+	    $set=$this->getlist($ch,$num,$elect);
+		foreach ( $set as $x )
+				$x->print_list_row();
 	}	
 }
 
-
-
 class district {
-	public function __construct($data_in) {
-		$this->data = $data_in;
+    public $counties;
+    public $ch;
+    public $dist;
+	public function __construct($d) {
+    		$this->photo =getj($d,'counties');
+    		$this->ch =getj($d,'chamber');
+    		$this->dist =getj($d,'district');
 	}	
-
 }
 
 class districts extends data_source
 {
-	public function __construct() {
-		$this->get_data(4);
-		$this->list=array();
-		
-	}	
-	
-	public function printlist($ch)
+	function create_from_spreadsheet()
 	{
-	
-		
-		return 0;
+		$this->get_json_data(4,'district');
 	}	
-	public function get($ch,$num)
+	public function get($ch,$dist)
 	{
-
-		foreach ( $this->rows as $row )
+		foreach ( $this->list as $d)
 		{
-			if( (getj($row,'district')==$num) &&(getj($row,'chamber')==$ch))
-			{
-				
-				return new district($row);
-			}	
-			
-		}
-		return 0;
+            if(($d->dist==$dist)&&($d->ch==$ch))
+                return $d;
+        }
+        return null;
+	}
+	
+
+}
+class survey_question 
+{
+	public $q;
+    public function __construct($d) {
+        $this->q = getj($d,'question');
 	}
 }
+class survey_questions extends data_source
+{
+ 	function create_from_spreadsheet()
+	{
+		$this->get_json_data(7,'survey_question');
+	}     
+	public function getquestion($num)
+	{
+		return  $this->list[$num]->q;
+	}
+}
+class survey_resp 
+{
+	public $fistname;
+	public $lastname;
+	public $comments;
+	public $answers;
+	public $key;
+    public function __construct($d) {
+            $this->answers=array();
+		    $this->key = getj($d,'key');
+		    $this->firstname = getj($d,'firstname');
+		    $this->lastname = getj($d,'lastname');
+		    $this->comments = getj($d,'comments');
+            $this->answers[0]=getj($d,'a1');
+            $this->answers[1]=getj($d,'a2');
+            $this->answers[2]=getj($d,'a3');
+            $this->answers[3]=getj($d,'a4');
+            $this->answers[4]=getj($d,'a5');
+        
+            }
+	public function printresp()
+	{
+		echo("<div  style='max-width:800px'><h3>Resposes to animal welfare survey:</h3>");    
+		for ($x=0; $x<5; $x++)
+		{
+			$qnum=$x+1;
+			$q=getobj("survey_questions")->getquestion($x);
+			if(!$q)
+				$q="could not get question";
+			$a=$this->answers[$x];
+			if(!$a)
+				$a="could not get answer";			
+			echo("<div style='margin-top:30px' class='section_head'>Question #$qnum</div>");
+			echo("<div>$q</div>");
+			echo("<div style='margin-top:10px' class='section_head'>Answer:</div>");
+			echo("<div>$a</div>");
+		}
+        echo("</div>");  
+
+	}	
+}
+
+class survey_data extends data_source
+{
+ 	function create_from_spreadsheet()
+	{
+		$this->get_json_data(1,'survey_resp','key',"0AonA9tFgf4zjdE45M0MyZTR0UUYxXzNzRjBuNWFnMGc");
+	}   
+	
+	
+	public function printresp($key)
+	{
+        $row=null;
+        if(array_key_exists ($key,$this->list))
+            $row= $this->list[$key];
+		if(!$row)
+        {
+            echo("<div>Did not respond to our survey.</div>");    
+			return;
+        }
+        $row->printresp();
+	}
+
+	public function printlist()
+	{
+		foreach ( $this->list as $row )
+		{
+			$key=$row->key;
+				
+			$leg=getobj("leg_list")->get_leg_by_key($key);
+			if($leg)
+			{
+				
+				$leg->print_list_row();
+			}
+			else {
+				echo("<div>$key </div>");
+				
+			}
+		}
+	}
+}
+
+
+
 ?>
 

@@ -6,7 +6,7 @@ $chamber=getParam("ch");
 
 
 include $header;
-include $root.'/inc/ncleg.php';
+include $root.'/inc/db.php';
 
 $distobj=getobj('districts')->get($chamber,$district);
 $next="";
