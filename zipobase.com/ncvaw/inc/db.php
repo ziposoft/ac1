@@ -567,13 +567,18 @@ class legislator{
 
 
 
-function grade_sort_func($a, $b) {
+function sort_func_grade($a, $b) {
 	if ($a->score == $b->score) {
 		return 0;
 	}
 	return ($a->score < $b->score) ? 1 : -1;
 }
-
+function sort_func_dist($a, $b) {
+	if ($a->distrcit == $b->distrcit) {
+		return 0;
+	}
+	return ($a->distrcit < $b->distrcit) ? -1 : 1;
+}
 
 class leg_list extends data_source{
     function create_from_spreadsheet()
@@ -602,54 +607,244 @@ class leg_list extends data_source{
 		}
 		return 0;
 	}
-	public function get_list($chamber,$district) {
-		$this->list = array ();
+	public function sort() {
+		
 		$sort=getParam("sort");
-
-		foreach ( $this->rows as $row ) {
-			$ch = $row->{	'gsx$chamber' }->{'$t' };
-			if (($ch == 'chamber') || ($ch == ''))
-				continue;
-			if($chamber)
-			{
-				if($chamber != $ch)
-					continue;
-					
-			}
-			if($district)
-			{
-				if($district != $row->{	'gsx$district' }->{'$t' })
-					continue;
-					
-			}
-			$legr=new legislator ( $row );
-				
-			/*
-			 $status = $row->{'gsx$status' }->{	'$t' };
-			if ($status_filter)
-				if (! in_array ( $status, $status_filter ))
-				continue;
-			*/
-			$key= $row->{	'gsx$key' }->{'$t' };
-			if($sort=='dist')
-			{
-				$key=$id = $row->{	'gsx$district' }->{'$t' };
-
-
-			}
-
-			$this->list [$key] = $legr;
-		}
 		if($sort=='grade')
 		{
-			uasort($this->list, 'grade_sort_func');
+			uasort($this->list, 'sort_func_grade');
 		}
 		else
+		if($sort=='grade')
+		{
+			uasort($this->list, 'sort_func_dist');
+		}	
+		else
 			ksort ( $this->list );
-		return $this->list;
+	
+	}	
+	
+}
+
+class canidate {
+	public $displayname;
+	public $key;
+	public $party;
+	public $party_id;
+	public $first;
+	public $last;
+
+	public $id;
+	public $uid;
+	public $chamberId;
+	public $chamber;
+	public $url_cover_jpg;
+
+	public $jpg_path;
+	public $url;
+	public $photo;
+	public $website;
+	public $email;
+	public $election;
+
+
+
+	public function __construct($data_in) {
+		$this->data = $data_in;
+		$this->displayname=$this->get('nameonballot');
+		$this->party_id = $this->get('party');
+		$this->chamberId = $this->get('chamber');
+		$this->key = $this->get('key');
+		$this->party=$this->party_id;
+		if($this->party_id=='DEM')
+		{
+			$this->party='Democratic';
+		}
+		if($this->party_id=='REP')
+		{
+			$this->party='Republican';
+		}
+		if($this->chamberId=='H')
+			$this->chamber='House';
+		else
+			$this->chamber='Senate';
+			
 	}
+	public function print_table_val($label, $field) {
+		$val = $this->data->{	'gsx$' . $field }->{'$t' };
+		if(!$val)
+			return;
+		$this->print_table_row ( $label, $val );
+	}
+	public function print_table_row($label, $val) {
+		echo ("<tr><td class='leg_label'>$label: </td><td class='leg_val'>$val</td></tr>");
+	}
+	public function get_running() {
+		$running="Running for re-election in the ";
+
+		if($this->get('election')=='gen')
+		{
+			$running.='general election 11/4/2014';
+				
+		}
+		else
+		{
+			$running.=$this->party . ' primary election 5/6/2014';
+		}
+		return $running;
+	}
+	public function print_list_row() {
+
+		$leg=getobj("leg_list")->get_leg_by_key($this->key);
+		if($leg)
+		{
+			$leg->print_list_row();
+			return;
+		}
+		$data_key=$this->key;
+		$lastname=strtolower($this->get('last'));
+		
+		echo ("<div class='leg_bio' data-name='$data_key'><hr>");
+		//thumbnail
+		$photo = $this->get('photo');
+		if($photo)
+		{
+
+			echo ("<div class='leg_thumb' ><a href='/guide/canidate.php?key=$this->key'>");
+			echo ("<img src='$photo'/></a></div>");
+		}
+
+		echo ("<div class='leg_info' ><a href='/guide/canidate.php?key=$this->key'><h2>$this->displayname</h2></a><table><tr><td/><td/></tr>");
+		$district=$this->get('district');
+		$district_url="'/district.php?dist=". $district . "&ch=" . $this->chamberId . "'";
+		$this->print_table_row ( 'District', "<a href=$district_url>$district</a>" );
+
+		$this->print_table_row ( 'Party', $this->party );
+		$running="Challenger in the ";
+
+		if($this->get('election')=='gen')
+		{
+			$running.='general election 11/4/2014';
+				
+		}
+		else
+		{
+			$running.=$this->party . ' primary election 5/6/2014';
+		}
+		
+		$this->print_table_row ( '2014 Election', $running );
+		$website= $this->get('website');
+		if($website)
+		{
+			$link="<a href='".$website."' target='_blank'>".$website."</a>";
+			$this->print_table_row ( 'Webiste', $link );
+				
+		}
+		
+		
+		$this->print_table_val ( 'Email', 'email' );
+		$this->print_table_val ( 'Phone', 'phone' );
+
+		echo ('</table>');
+			
+		echo ("</div></div><div style='clear:both'></div>");
+	}
+
 }
 
 
+class canidates extends data_source
+{
+	public function __construct() {
+		$this->get_data(5);
+		$this->list=array();
+		
+	}	
+	public function get_candiate($key)
+	{
+		foreach ( $this->rows as $row )
+		{
+			if($key==getj($row,'key'))
+				return new canidate ( $row );
+		}
+		return null;
+	}	
+	public function getlist($ch,$num,$elect)
+	{
+		$set=array();
+		foreach ( $this->rows as $row )
+		{
+			if( (getj($row,'district')==$num)
+					 &&(getj($row,'chamber')==$ch)
+					&&(getj($row,'election')==$elect))
+			{
+				$set [] = new canidate ( $row );
+			}	
+		}
+		return $set;
+	}
+	
+	public function printlist($ch,$num,$elect)
+	{
+		
+	
+		foreach ( $this->rows as $row )
+		{
+			
+			if( (getj($row,'district')==$num)
+					 &&(getj($row,'chamber')==$ch)
+					&&(getj($row,'election')==$elect))
+			{
+					
+					$x = new canidate ( $row );
+					
+					$x->print_list_row();
+					
+					
+				}	
+			
+		}
+		
+	}	
+}
+
+
+
+class district {
+	public function __construct($data_in) {
+		$this->data = $data_in;
+	}	
+
+}
+
+class districts extends data_source
+{
+	public function __construct() {
+		$this->get_data(4);
+		$this->list=array();
+		
+	}	
+	
+	public function printlist($ch)
+	{
+	
+		
+		return 0;
+	}	
+	public function get($ch,$num)
+	{
+
+		foreach ( $this->rows as $row )
+		{
+			if( (getj($row,'district')==$num) &&(getj($row,'chamber')==$ch))
+			{
+				
+				return new district($row);
+			}	
+			
+		}
+		return 0;
+	}
+}
 ?>
 
