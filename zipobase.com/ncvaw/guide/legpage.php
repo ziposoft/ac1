@@ -19,7 +19,6 @@ include $header;
 <div class="text_wrap">
 <?php 
 $leg->print_list_row();?>
-<H3>Survey Responses</H3>
 
 <?php 
 

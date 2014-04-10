@@ -870,7 +870,6 @@ class survey_resp
             }
 	public function printresp()
 	{
-		echo("<div  style='max-width:800px'><h3>Resposes to animal welfare survey:</h3>");    
 		for ($x=0; $x<5; $x++)
 		{
 			$qnum=$x+1;
@@ -885,7 +884,7 @@ class survey_resp
 			echo("<div style='margin-top:10px' class='section_head'>Answer:</div>");
 			echo("<div>$a</div>");
 		}
-        echo("</div>");  
+        
 
 	}	
 }
@@ -900,7 +899,8 @@ class survey_data extends data_source
 	
 	public function printresp($key)
 	{
-        $row=null;
+ 		echo("<div  style='max-width:800px'><h3>Resposes to animal welfare survey:</h3>");    
+       $row=null;
         if(array_key_exists ($key,$this->list))
             $row= $this->list[$key];
 		if(!$row)
@@ -909,6 +909,7 @@ class survey_data extends data_source
 			return;
         }
         $row->printresp();
+        echo("</div>");  
 	}
 
 	public function printlist()
