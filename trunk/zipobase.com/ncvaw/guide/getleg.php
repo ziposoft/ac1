@@ -1,12 +1,6 @@
 <?php
 
-
-
-
-
-
-
-include $root.'/inc/ncleg.php';
+include $root.'/inc/db.php';
  
 $leglist=getobj("leg_list");
 
@@ -19,8 +13,8 @@ if (array_key_exists ( "ch", $_GET ))
 
 	
 
-$leglist->get_list ($chamber,$district  );
-$leglist->print_list ();
+$leg=$leglist->get_leg_by_district ($chamber,$district  );
+$leg->print_list_row ();
 
 
 

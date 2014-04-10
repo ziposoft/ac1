@@ -26,7 +26,7 @@
 	?>	
 	
 <link href='/inc/ncvaw.css' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:600,400,300' rel='stylesheet' type='text/css'>
+<!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:600,400,300' rel='stylesheet' type='text/css'> -->
 <link href='/inc/zs_menu.css' rel='stylesheet' type='text/css'>
 <title>
 <?php 
@@ -112,6 +112,7 @@ make_menu ( [
 				// z_menu_sub("Search Legislature",[
 				z_mi ( "Senate List", "/guide/leglist.html?ch=S", "HOME" ),
 		z_mi("House List","/guide/leglist.html?ch=H",""),
+		z_mi("Complete List","/guide/leglist.html",""),
 		// ]),
 		// z_mi("LEGISLATIVE REPORT CARD","/guide/leglist.html","HOME"),
 		
@@ -119,8 +120,11 @@ make_menu ( [
 		]),
 		($admin? 
 			z_menu("Admin",[
+				z_mi ( "Debug", "/guide/debug.html" ),
 				z_mi ( "Admin Off", "/home.html?admin=off" ),
-				z_mi ( "PHP Info", "/phpinfo.html" ),
+				z_mi ( "Delete Pdata", "/home.html?delpdata=true" ),
+				z_mi ( "Delete all", "/home.html?deldata=true" ),
+				z_mi ( "PHP Info", "/phpinfo.php" ),
 				z_mi("Refresh","$current_url?refresh=true")		,
 				]):
 			0)

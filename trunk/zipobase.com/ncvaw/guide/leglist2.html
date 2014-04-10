@@ -3,10 +3,10 @@
 include $root.'/inc/db.php';
  
 $leglist=getobj("leg_list");
-
+$leglist->sort();
 $chamber=getParam("ch");
 $page_title="List of both NC Senate and House Members";
-$url="/guide/leglist.html?";
+$url="/guide/leglist2.html?";
 $chamberName="Senate";
 if($chamber=='H')
 {
@@ -15,7 +15,7 @@ if($chamber=='H')
 if($chamber)
 {
 	$page_title="List of $chamberName members";
-	$url="/guide/leglist.html?ch=".$chamber;
+	$url="/guide/leglist2.html?ch=".$chamber;
 }
 
 include $header;	

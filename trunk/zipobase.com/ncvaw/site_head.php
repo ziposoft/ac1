@@ -55,7 +55,15 @@ $refresh_data=getParam("refresh");
 if($refresh_data)
 {
 	array_map('unlink', glob("$root/data/*.json"));
-
+}
+if(getParam("deldata"))
+{
+	array_map('unlink', glob("$root/data/*.json"));
+	array_map('unlink', glob("$root/data/*.pdata"));
+}
+if(getParam("delpdata"))
+{
+	array_map('unlink', glob("$root/data/*.pdata"));
 }
 /*
 $isPhone=getParam("m");

@@ -1,9 +1,9 @@
 <?php
 
 $chamber=getParam("ch");
-$district=getParam("dist");
+$distnum=getParam("dist");
 
-$page_title=($chamber=='H' ? 'House' : 'Senate') . ' District #' . $district;
+$page_title=($chamber=='H' ? 'House' : 'Senate') . ' District #' . $distnum;
 
 array_push($zs_foot_jsfile,
 	"http://www.google.com/jsapi",
@@ -12,20 +12,20 @@ array_push($zs_foot_jsfile,
 	"/inc/maps_lib2.js");
 
 array_push($funcs_init,
-	"map_init();map_show_district('$chamber','$district'	);");
+	"map_init();map_show_district('$chamber','$distnum'	);");
 
 
 include $header;
-include $root.'/inc/ncleg.php';
+include $root.'/inc/db.php';
 
-$distobj=getobj('districts')->get($chamber,$district);
+$distobj=getobj('districts')->get($chamber,$distnum);
 $next="";
 $counties="";
 if($distobj)
 {
-	$counties=$distobj->get('counties');
+	$counties=$distobj->counties;
 	
-	$nextdist=intval ($district)+1;
+	$nextdist=intval ($distnum)+1;
 	$next="/district.php?ch=$chamber&dist=$nextdist";
 }
 ?>
@@ -40,17 +40,16 @@ if($distobj)
 
 		?>
 	</h1>
-	<p>
-	<?php echo($counties);?>
-	</p>
+	<H3>Counties: <?php echo($counties);?>
+	</h3>
 	
 	<h2>Primary Election 5/6/2014</h2>
 <?php 
-getobj('canidates')->printlist($chamber,$district,"primary");
+getobj('canidates')->printlist($chamber,$distnum,"primary");
 ?>		
 <h2>General Election 11/4/2014</h2>
 <?php	
-	getobj('canidates')->printlist($chamber,$district,"gen");
+	getobj('canidates')->printlist($chamber,$distnum,"gen");
 	?>
 	</div>
 

@@ -1,6 +1,6 @@
 <?php
 
-include $root.'/inc/ncleg.php';
+include $root.'/inc/db.php';
 $legid=getParam( "id");
 
 if (!$legid)
@@ -18,13 +18,16 @@ include $header;
 
 <div class="text_wrap">
 <?php 
-$leg->print_list_row();
+$leg->print_list_row();?>
+<H3>Survey Responses</H3>
 
-$leg->print_survey();
+<?php 
+
+$leg->print_survey();?>
 
 
 
-?>
+
 <H3>Bills Sponsored</H3>
 <table  class='votes'>
   <thead>
