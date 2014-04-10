@@ -810,7 +810,7 @@ class district {
     public $ch;
     public $dist;
 	public function __construct($d) {
-    		$this->photo =getj($d,'counties');
+    		$this->counties =getj($d,'counties');
     		$this->ch =getj($d,'chamber');
     		$this->dist =getj($d,'district');
 	}	
