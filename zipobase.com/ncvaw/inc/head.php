@@ -11,8 +11,6 @@
 <!-- FACEBOOK  -->
 	<meta property="fb:app_id" content="556512511086342" />
 	<meta name="og:site_name" content="NCVAW.org" />
-    
-	<meta property="og:title" content="<?php echo $fb_title ?>" />
 	<meta property="og:type" content="Website" /> 
     <!--
 	<meta property="og:image:width" content="600">
