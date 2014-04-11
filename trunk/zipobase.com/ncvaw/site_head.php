@@ -32,12 +32,12 @@ function getParam( $name)
 $meta_extra='';
 $page_title='';
 
-$fb_domain="http://ncvaw.org";
+$fb_domain="http://elect.ncvaw.org";
 $fb_link = $fb_domain.$_SERVER['REQUEST_URI'];
 $fb_title = "NCVAW";
 $fb_image= $fb_domain."/img/coverfb2.jpg";
 $fb_meta_images="";
-$fb_description="NC Voters For Animal Welfare";
+$fb_description="Find your districts and representatives, browse the report cards, and make sure your NC legislators are fighting for animal welfare.";
 
 date_default_timezone_set('US/Eastern');
 
