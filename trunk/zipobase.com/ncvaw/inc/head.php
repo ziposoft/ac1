@@ -13,8 +13,9 @@
 	<meta name="og:site_name" content="NCVAW.org" />
 	<meta property="og:title" content="<?php echo $fb_title ?>" />
 	<meta property="og:type" content="Website" /> 
+    <!--
 	<meta property="og:image:width" content="600">
-	<meta property="og:image:height" content="600">	
+	<meta property="og:image:height" content="600">	-->
 	<?php 
 	if($fb_description)
 		echo("<meta property='og:description' content='$fb_description'/>");
@@ -53,9 +54,9 @@
 		<img 		style="float: left; max-width: 25%;"
 			src="/img/NCVAW_paw.png" 			alt="North Carolina Voters for Animal Welfare">
 			 <!--</a>-->
-			
+				<a style="margin:5px" href="/home.html">
 			<img 
-			style="text-align:center;   margin:auto;max-width: 40%" src="/img/title.png">
+			style="text-align:center;   margin:auto;max-width: 40%" src="/img/title.png"></a>
 			
 			 <a
 			href="http://www.facebook.com/NCVAW" target="_new"><img
