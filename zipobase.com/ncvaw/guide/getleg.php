@@ -1,5 +1,5 @@
 <?php
-
+// called via AJAX!! Not standalone
 include $root.'/inc/db.php';
  
 $leglist=getobj("leg_list");

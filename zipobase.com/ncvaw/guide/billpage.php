@@ -1,4 +1,7 @@
 <?php
+$doc=getParam('doc');
+$page_title=$doc;
+
 include $header;
 
 
