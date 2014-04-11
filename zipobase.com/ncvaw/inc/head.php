@@ -10,7 +10,7 @@
 
 <!-- FACEBOOK  -->
 	<meta property="fb:app_id" content="556512511086342" />
-	<meta name="og:site_name" content="NC Voters For Animal Welfare" />
+	<meta property="og:site_name" content="NC Voters For Animal Welfare" />
 	<meta property="og:type" content="Website" /> 
     <!--
 	<meta property="og:image:width" content="600">
