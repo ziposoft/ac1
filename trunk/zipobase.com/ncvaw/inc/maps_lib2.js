@@ -69,7 +69,7 @@ $.ajax({
 	  },
 	  success:function(data){
 	    // successful request; do something with the data
-		  var text="<h3 style='margin:0;padding:0;'>Your " + (chamber=='H'? 'House' : 'Senate')+" district: "+ dist+"</h3>";
+		  var text="<h3 style='margin:0;padding:0;'><a href='/district.php?ch="+chamber+"&dist="+district +"'>Your " + (chamber=='H'? 'House' : 'Senate')+" district: "+ dist+"</a></h3>";
 		  $('#legislators').append(text);
 		  $('#legislators').append(data);
 	    
