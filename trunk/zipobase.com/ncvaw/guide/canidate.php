@@ -1,5 +1,6 @@
 <?php
-include $header;
+$page_title="Canidate";
+
 
 include $root.'/inc/db.php';
 $key=getParam( "key");
@@ -7,7 +8,11 @@ $canidate=null;
 if ($key)
 {
 	$canidate=getobj("canidates")->get_candiate($key);
+    $page_title=$canidate->displayname;
 }
+
+
+include $header;
 echo("<div class='text_wrap'>");
 
 

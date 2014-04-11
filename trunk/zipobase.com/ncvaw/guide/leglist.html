@@ -5,7 +5,8 @@ include $root.'/inc/db.php';
 $leglist=getobj("leg_list");
 $leglist->sort();
 $chamber=getParam("ch");
-$page_title="List of both NC Senate and House Members";
+$page_title="Report Card";
+$title="Legislator Report Card";
 $url="/guide/leglist.html?";
 $chamberName="Senate";
 if($chamber=='H')
@@ -14,14 +15,16 @@ if($chamber=='H')
 }
 if($chamber)
 {
-	$page_title="List of $chamberName members";
+    
+	$page_title="$chamberName Report Card";
+    $title=$page_title;
 	$url="/guide/leglist.html?ch=".$chamber;
 }
 
 include $header;	
 
 ?>
-<h2><?php echo("$page_title"); ?></h2>
+<h2><?php echo("$title"); ?></h2>
 <p>
 Legislators are given points for voting for animal welfare bills, sponsoring animal welfare bills, completing the NCVAW survey, and responsiveness to animal advocates constituents. There have only been a few animal welfare bills up to this point. As bills are introduced and voted on NCVAW will adjust the formula for final rating.
 </p>

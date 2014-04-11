@@ -11,6 +11,7 @@
 <!-- FACEBOOK  -->
 	<meta property="fb:app_id" content="556512511086342" />
 	<meta name="og:site_name" content="NCVAW.org" />
+    
 	<meta property="og:title" content="<?php echo $fb_title ?>" />
 	<meta property="og:type" content="Website" /> 
     <!--
@@ -37,6 +38,7 @@
 		echo("NC Voters For Animal Welfare");
 			
 ?></title>
+<meta property="og:title" content="<?php echo $page_title ?>" />
     
     <?php	include $root . '/inc/headscripts.p';
 				include $root . '/inc/zs_menu.php';	 ?>
