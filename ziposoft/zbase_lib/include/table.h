@@ -50,7 +50,6 @@ public:
 
 };
 
-
 class zb_table_dynamic : public zb_table_base
 {
 protected:
