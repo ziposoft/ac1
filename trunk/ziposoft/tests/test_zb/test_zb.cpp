@@ -6,17 +6,17 @@
 int test_ds_table(zb_source* p_ds)
 {
 	z_status status;
-	zb_ds_table* tbl=
+	zb_ds_table* tbl=  p_ds->
 
 
-	zb_record* pRec=0;
+	//zb_record* pRec=0;
 	zb_st_test table_test(p_ds);
 	do
 	{
 		status=p_ds->open(true);
 		if(status)
 			break;
-		table_test.load_from_ds();
+		
 		zb_record* pRec= table_test.new_default_rec();
 		if(!pRec)
 			break;
@@ -48,7 +48,6 @@ int test_table(zb_source* p_ds)
 		status=p_ds->open(true);
 		if(status)
 			break;
-		table_test.load_from_ds();
 		zb_record* pRec= table_test.new_default_rec();
 		if(!pRec)
 			break;

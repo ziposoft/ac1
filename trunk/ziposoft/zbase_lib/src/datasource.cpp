@@ -7,8 +7,9 @@ ctext zb_ds_table::get_map_key()
 {
 	return _id;
 }
-zb_ds_table::zb_ds_table(ctext unique_id)
+zb_ds_table::zb_ds_table(zb_source* ds,ctext unique_id)
 {
+	_ds=ds;
 	_id=unique_id;
 
 }

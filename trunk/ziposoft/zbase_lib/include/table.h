@@ -6,12 +6,14 @@
 class zb_ds_table  
 {
 public:
+	zb_source* _ds;
 	z_string _id;
 	ctext get_map_key();
-	zb_ds_table(ctext unique_id);
+	zb_ds_table(zb_source* ds,ctext unique_id);
 	virtual z_status record_add(zb_record* rec);
 
-	zb_ds_desc
+	zb_ds_desc _ds_desc;
+
 };
 
 class zb_table_base : public z_refcount
@@ -46,7 +48,6 @@ public:
 	zb_record* new_default_rec();
 	z_status get_default_rec(zb_record *rec);
 	z_status record_add(zb_record *rec);
-	virtual z_status load_from_ds();
 
 };
 

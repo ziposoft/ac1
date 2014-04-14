@@ -275,7 +275,7 @@ ____________________________________________________________________________*/
 	 Metakit Tables
 ____________________________________________________________________________*/
 
-zb_ds_table_mk::zb_ds_table_mk(zb_ds_metakit* ds,ctext unique_id):zb_ds_table(unique_id)
+zb_ds_table_mk::zb_ds_table_mk(zb_ds_metakit* ds,ctext unique_id):zb_ds_table(ds,unique_id)
 {
 	_ds=ds;
 }

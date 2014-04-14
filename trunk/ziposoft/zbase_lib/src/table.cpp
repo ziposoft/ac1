@@ -27,6 +27,7 @@ zb_table_base::zb_table_base()
 	_ds_table=0;
 	
 }
+/*
 z_status zb_table_base::load_from_ds()
 {
 	_ds_table=_ds->get_tbl(_id,get_desc());
@@ -36,6 +37,7 @@ z_status zb_table_base::load_from_ds()
 	return ZB_ERROR(zb_status_ds_data_error);
 
 }
+*/
 
 z_status zb_table_base::dump()
 {
