@@ -5,7 +5,12 @@
 
 class zb_ds_field  
 {
+protected:
+	z_string _id;
+
 public:
+	virtual ctext get_map_key() { return _id;};
+
 	virtual z_status set_string(zb_record *rec,ctext s);
 	virtual z_status get_string(zb_record *rec,z_string& s);
 	virtual z_status set_int32(zb_record *rec,I32 i);
@@ -15,11 +20,12 @@ public:
 class zb_field : public z_refcount
 {
 	z_string _name;
-	z_string _id;
 	zb_key   _key;
+	z_string _id;
+
 	int _index; //TODO-ugly, make private or something
 protected:
-	zb_ds_field* _ds_field;
+	zb_ds_field* _ds_field;	 // actually we could have more than one! 
 public:
 	
 	zb_field(zb_key key,ctext name);

@@ -46,7 +46,7 @@ public:
 	virtual bool is_open();
 	//virtual int get_record()=0;
 	virtual zb_st_master* get_tbl_master(){ return 0;};
-	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_desc& desc){ return 0;};
+	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_ds_field& desc){ return 0;};
 
 	virtual zb_ds_field* get_ds_field_string(ctext id){ return 0;};
 	virtual zb_ds_field* get_ds_field_int32(ctext id){ return 0;};

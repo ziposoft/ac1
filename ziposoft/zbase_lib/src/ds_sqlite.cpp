@@ -130,7 +130,7 @@ z_status zb_src_sl3::get_tables()
 		{
 			// SQLITE_ROW means fetched a row
 			const char *name = recset.ptr_get_column_text(1);
-			zb_ds_table* tbl= z_new zb_ds_table(name);
+			zb_ds_table* tbl= z_new zb_ds_table(this,name);
 			zb_desc desc; //TODO!!
 
 			get_table_desc(name,desc);
