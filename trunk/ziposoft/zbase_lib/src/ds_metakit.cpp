@@ -40,23 +40,25 @@ zb_record* zb_ds_metakit::get_solo_record(zb_table_base* tbl)
 {
 	zb_record_mk* pRec=	z_new zb_record_mk();
 	return pRec;
-
-
-
 }
-zb_ds_table* zb_ds_metakit::get_tbl(ctext ds_table_name,zb_desc& desc)
+zb_ds_table* zb_ds_metakit::ds_table_new(ctext ds_table_name)
 {
 
 	zb_ds_table_mk* tbl=z_new zb_ds_table_mk(this,ds_table_name);
-	_get_view(tbl->get_mk_view(),ds_table_name,desc);
 	return  tbl;
 }
+z_status zb_ds_metakit::ds_table_open(zb_ds_table* tbl)
+{
+	zb_ds_table_mk* mtbl= dynamic_cast<zb_ds_table_mk*>(tbl);
+	_get_view(mtbl->get_mk_view(),mtbl->get_ds_id(),mtbl->get_desc());
+	return zb_status_ok;
+}
 
-zb_ds_field* zb_ds_metakit::get_ds_field_string(ctext id)
+zb_ds_field* zb_ds_metakit::ds_field_string_new(ctext id)
 {
 	return z_new zb_ds_field_mk_string(id);
 }
-
+	//virtual z_status     ds_table_open(zb_ds_table* tbl);
 
 
 z_status zb_ds_metakit::open(bool writable) 
@@ -107,7 +109,7 @@ z_status zb_ds_metakit::close()
 	Metakit private functions 
 ____________________________________________________________________________*/
 
-z_status zb_ds_metakit::_get_view(c4_View& view,ctext viewid,zb_desc & desc)
+z_status zb_ds_metakit::_get_view(c4_View& view,ctext viewid,zb_ds_desc & desc)
 {
 
 	bool metakit_blocked_view=false; //TODO: metakit blocked views
@@ -117,12 +119,12 @@ z_status zb_ds_metakit::_get_view(c4_View& view,ctext viewid,zb_desc & desc)
 	str+="[";
 
 	z_map_iter i;
-	zb_field* f=0;
+	zb_ds_field* f=0;
 	bool comma=false;
 	while(f=desc.get_next(i))
 	{
         if(comma) str+=",";
-		zb_ds_field_mk * mkf=(zb_ds_field_mk*)f->get_ds_field();
+		zb_ds_field_mk * mkf=(zb_ds_field_mk*)f;
 
         mkf->MakeDesc(str);
 		comma=true;

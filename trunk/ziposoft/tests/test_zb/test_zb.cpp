@@ -6,16 +6,21 @@
 int test_ds_table(zb_source* p_ds)
 {
 	z_status status;
-	zb_ds_table* tbl=  p_ds->
+	zb_ds_table* tbl=  p_ds->ds_table_new("test");
 
+	tbl->get_desc() 
+		, 	p_ds->ds_field_string_new("name");
 
+	p_ds->ds_table_open(tbl);
 	//zb_record* pRec=0;
-	zb_st_test table_test(p_ds);
+	
 	do
 	{
 		status=p_ds->open(true);
 		if(status)
 			break;
+
+		tbl->record_add(
 		
 		zb_record* pRec= table_test.new_default_rec();
 		if(!pRec)

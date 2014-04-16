@@ -48,8 +48,11 @@ public:
 	virtual zb_st_master* get_tbl_master(){ return 0;};
 	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_ds_field& desc){ return 0;};
 
-	virtual zb_ds_field* get_ds_field_string(ctext id){ return 0;};
-	virtual zb_ds_field* get_ds_field_int32(ctext id){ return 0;};
+	virtual zb_ds_table* ds_table_new(ctext ds_table_name){ return 0;};
+ 	virtual z_status     ds_table_open(zb_ds_table* tbl){ return 0;};
+
+	virtual zb_ds_field* ds_field_string_new(ctext id){ return 0;};
+	virtual zb_ds_field* ds_field_int32_new(ctext id){ return 0;};
 	virtual zb_record* get_solo_record(zb_table_base* tbl){ return 0;};
 
 	z_map<zb_ds_table> _ds_tables;
