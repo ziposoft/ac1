@@ -15,6 +15,10 @@ public:
 	ctext get_map_key();
 	zb_ds_table(zb_source* ds,ctext unique_id);
 	virtual z_status record_add(zb_record* rec);
+	virtual z_status open();
+	virtual size_t get_record_count();
+	virtual z_status get_record_by_index(size_t index,zb_rec_ptr** cursor);
+	virtual z_status delete_record_by_index(size_t index);
 
 
 };

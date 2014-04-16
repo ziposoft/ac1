@@ -13,7 +13,6 @@ class zb_ds_metakit: public zb_source
 	z_string		_filename;
 
  	z_status _get_view_for_table(c4_View& view,zb_table_base* tbl);
-	z_status _get_view(c4_View& view,ctext viewid,zb_ds_desc & desc);
 
 public:
 	zb_ds_metakit(ctext name);
@@ -22,35 +21,50 @@ public:
 	virtual z_status close();
 	virtual z_status commit();
 	virtual zb_ds_field* ds_field_string_new(ctext id);
-	virtual zb_record* get_solo_record(zb_table_base* tbl);
-
-	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_desc& desc);
+	//virtual zb_record* get_solo_record(zb_table_base* tbl);
+	virtual zb_record* record_solo_new();
+	//virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_desc& desc);
  	virtual zb_ds_table* ds_table_new(ctext ds_table_name);
 	virtual z_status     ds_table_open(zb_ds_table* tbl);
+
+	//METAKIT SPECIFIC
+	z_status _get_view(c4_View& view,ctext viewid,zb_ds_desc & desc);
 
 
 };
 
+
+class zb_rec_ptr_mk  : public zb_rec_ptr
+{
+ 	c4_RowRef _rowref;
+public:
+	zb_rec_ptr_mk(){}
+ 	virtual ~zb_rec_ptr_mk(){};
+	virtual c4_RowRef& get_row_ref(){ return _rowref; }
+};
 class zb_record_mk  : public zb_record
 {
+ 	c4_Row _row;
 public:
 	zb_record_mk();
  	virtual ~zb_record_mk(){};
-
- 	c4_Row _row;
-
-
+	virtual c4_RowRef& get_row_ref() { return _row; }
 };
 class zb_ds_table_mk  : public zb_ds_table
 {
  	c4_View _mk_view;
 
 public:
+	zb_ds_table_mk(zb_ds_metakit* ds,ctext unique_id);
 	zb_ds_metakit* _ds;
 	c4_View& get_mk_view() { return _mk_view;}
 
 	virtual z_status record_add(zb_record* rec);
-	zb_ds_table_mk(zb_ds_metakit* ds,ctext unique_id);
+	virtual z_status open();
+	virtual size_t get_record_count();
+	virtual z_status get_record_by_index(size_t index,zb_rec_ptr** cursor);
+
+	
 };
 
 class zb_ds_recordset_mk  : public zb_ds_recordset
@@ -105,7 +119,7 @@ public:
 
 // Overrides 
 
- 	virtual z_status set_string(zb_record *rec,ctext s);
-	virtual z_status get_string(zb_record *rec,z_string& s);
+ 	virtual z_status set_string(zb_rec_ptr *rec,ctext s);
+	virtual z_status get_string(zb_rec_ptr *rec,z_string& s);
 };
 #endif

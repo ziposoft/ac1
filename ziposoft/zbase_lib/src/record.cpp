@@ -3,6 +3,10 @@
 #include "zbase_lib/include/record.h"
 #include "zbase_lib/include/datasource.h"
 
+
+zb_rec_ptr::zb_rec_ptr()
+{
+}
 /*____________________________________________________________________________
 	zb_record
 ____________________________________________________________________________*/

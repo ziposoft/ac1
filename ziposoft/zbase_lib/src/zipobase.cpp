@@ -13,6 +13,7 @@ ctext zb_status_text[]=
 	"zb_bad_param",//zb_status_bad_param,
 	"zb_cant_open_file",//zb_status_cant_open_file,
 	"zb_unknown_data_error",//zb_status_unknown_data_error,
+	"zb_status_index_out_of_range",//zb_status_index_out_of_range
 	"zb_data_source_not_open",//zb_status_ds_not_open,
 	"zb_status_ds_data_error",//zb_status_ds_data_error,
 
