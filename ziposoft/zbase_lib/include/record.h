@@ -53,10 +53,9 @@ class zb_ds_recordset
 public:
 	zb_ds_recordset()
 	{
-		_recset=0;
 
 	}
-	zb_recset* _recset;
+	
 
 	virtual zb_key_size get_num_records()=0; 
 	virtual int get_num_cols()=0; 

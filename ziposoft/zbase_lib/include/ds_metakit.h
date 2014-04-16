@@ -36,11 +36,10 @@ public:
 
 class zb_rec_ptr_mk  : public zb_rec_ptr
 {
- 	c4_RowRef _rowref;
 public:
 	zb_rec_ptr_mk(){}
  	virtual ~zb_rec_ptr_mk(){};
-	virtual c4_RowRef& get_row_ref(){ return _rowref; }
+	virtual c4_RowRef& get_row_ref();
 };
 class zb_record_mk  : public zb_record
 {
