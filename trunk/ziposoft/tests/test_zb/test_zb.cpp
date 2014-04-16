@@ -6,30 +6,54 @@
 int test_ds_table(zb_source* p_ds)
 {
 	z_status status;
-	zb_ds_table* tbl=  p_ds->ds_table_new("test");
-
-	tbl->get_desc() 
-		, 	p_ds->ds_field_string_new("name");
-
-	p_ds->ds_table_open(tbl);
-	//zb_record* pRec=0;
-	
+	zb_record* pRec=0;
+	zb_ds_table* tbl=0;
+	zb_ds_field* fld=0;
+	zb_rec_ptr* ptr=0;
+	z_string data;
 	do
 	{
+
+		tbl=  p_ds->ds_table_new("table1");
+		if(!tbl)
+			break;		
+		fld=p_ds->ds_field_string_new("field1str");
+		if(!fld)
+			break;
+
+		tbl->get_desc() ,fld;
 		status=p_ds->open(true);
 		if(status)
 			break;
-
-		tbl->record_add(
+		status=tbl->open();
+		if(status)
+			break;
 		
-		zb_record* pRec= table_test.new_default_rec();
+		size_t count=tbl->get_record_count();
+
+		printf("count=%d\n",count);
+
+
+		if(count>1)
+		{
+			tbl->get_record_by_index(0,&ptr);
+			if(!pRec)
+				break;
+
+			fld->get_string(pRec,data);
+			gz_out <<  "record0:"<< data <<"\n";
+		}
+		pRec=p_ds->record_solo_new();
+		
 		if(!pRec)
 			break;
-		status=table_test._f_name->set(pRec,"hello?");
+		data="record number";
+		data <<count;
+		status=fld->set_string(pRec,data);
 		if(status)
 			break;
 
-		status=table_test.record_add(pRec);
+		status=tbl->record_add(pRec);
 		if(status)
 			break;
 		status=p_ds->commit();
@@ -39,6 +63,10 @@ int test_ds_table(zb_source* p_ds)
 	p_ds->close();
 	if(pRec)
 		delete pRec;
+	if(fld)
+		delete fld;
+	if(tbl)
+		delete tbl;
 	return 0;
 }
 
@@ -87,7 +115,7 @@ int main(int argc, char* argv[])
 	____________________________________________________________________________*/
 
 	zb_ds_metakit test_ds_mk("test");
-	test_table(&test_ds_mk);
+	test_ds_table(&test_ds_mk);
 
  	/*____________________________________________________________________________
 
@@ -95,7 +123,7 @@ int main(int argc, char* argv[])
 	____________________________________________________________________________*/
 
 	zb_ds_text test_ds_text("test");
-	test_table(&test_ds_text);
+	test_ds_table(&test_ds_text);
 	z_logger_dump();
 
 

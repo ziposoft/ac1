@@ -11,10 +11,10 @@ protected:
 public:
 	virtual ctext get_map_key() { return _id;};
 
-	virtual z_status set_string(zb_record *rec,ctext s);
-	virtual z_status get_string(zb_record *rec,z_string& s);
-	virtual z_status set_int32(zb_record *rec,I32 i);
-	virtual z_status get_int32(zb_record *rec,I32& i);
+	virtual z_status set_string(zb_rec_ptr *rec,ctext s);
+	virtual z_status get_string(zb_rec_ptr *rec,z_string& s);
+	virtual z_status set_int32(zb_rec_ptr *rec,I32 i);
+	virtual z_status get_int32(zb_rec_ptr *rec,I32& i);
 
 };
 class zb_field : public z_refcount
@@ -37,7 +37,7 @@ public:
 	virtual int get_index() { return _index; }
 	virtual void set_index(int i) {  _index=i; }
 	virtual ctext  get_type_name() =0;
-	virtual z_status set_default(zb_record *rec)=0;
+	virtual z_status set_default(zb_rec_ptr *rec)=0;
 
 	virtual ctext get_id_prefix()=0;
 
@@ -62,7 +62,7 @@ public:
 	zb_field_int32(zb_key key,ctext name);
 	virtual z_status get_data_text(zb_recset* rec,z_string& text);
 	virtual ctext  get_type_name() { return "int32"; }
-	virtual z_status set_default(zb_record *rec);
+	virtual z_status set_default(zb_rec_ptr *rec);
 	virtual ctext get_id_prefix() { return "I"; }
 
 };
@@ -72,7 +72,7 @@ class zb_field_key : public zb_field_int32
 public:
 	zb_field_key();
 	virtual ctext  get_type_name() { return "key"; }
-	virtual z_status set_default(zb_record *rec);
+	virtual z_status set_default(zb_rec_ptr *rec);
 	virtual ctext get_id_prefix() { return "K"; }
 };
 
@@ -82,7 +82,7 @@ public:
 	zb_field_int64(zb_key key,ctext name);
 	virtual z_status get_data_text(zb_recset* rec,z_string& text);
 	virtual ctext  get_type_name() { return "int64"; }
-	virtual z_status set_default(zb_record *rec);
+	virtual z_status set_default(zb_rec_ptr *rec);
 	virtual ctext get_id_prefix() { return "I64_"; }
 };
 
@@ -95,8 +95,8 @@ public:
 	zb_field_string(zb_source* ds,zb_key key,ctext name);
 	virtual z_status get_data_text(zb_recset* rec,z_string& text);
 	virtual ctext  get_type_name() { return "string"; }
-	virtual z_status set_default(zb_record *rec);
-	virtual z_status set(zb_record *rec,ctext s);
+	virtual z_status set_default(zb_rec_ptr *rec);
+	virtual z_status set(zb_rec_ptr *rec,ctext s);
 	virtual ctext get_id_prefix() { return "S"; }
 	//virtual z_status
 };

@@ -15,6 +15,7 @@ class zb_ds_recordset;
 class zb_datum;
 class zb_record;
 class zb_recset;
+class zb_rec_ptr;
 
 class zb_table_dynamic;
 class zb_table_static;
@@ -38,6 +39,7 @@ enum
 	zb_status_bad_param,
 	zb_status_cant_open_file,
 	zb_status_unknown_data_error,
+	zb_status_index_out_of_range,
 	zb_status_ds_not_open,
 	zb_status_ds_data_error,
 

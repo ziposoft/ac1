@@ -8,6 +8,8 @@ class zb_rec_ptr
 {
 protected:
 	zb_recset* _p_recset;
+	zb_rec_ptr();
+	virtual ~zb_rec_ptr(){};
 public:
 };
 class zb_record : public zb_rec_ptr

@@ -36,7 +36,8 @@ zb_ds_metakit:: ~zb_ds_metakit(void)
 	{   delete _pStore;  }
 
 }
-zb_record* zb_ds_metakit::get_solo_record(zb_table_base* tbl)
+
+zb_record* zb_ds_metakit::record_solo_new()
 {
 	zb_record_mk* pRec=	z_new zb_record_mk();
 	return pRec;
@@ -236,22 +237,22 @@ zb_ds_field_mk_string::zb_ds_field_mk_string(ctext id) :zb_ds_field_mk(id)
 zb_ds_field_mk_string::~zb_ds_field_mk_string()
 {
 }
-z_status zb_ds_field_mk_string::set_string(zb_record *rec,ctext s)
+z_status zb_ds_field_mk_string::set_string(zb_rec_ptr *rec,ctext s)
 { 
 	
-	zb_record_mk* mk_rec=dynamic_cast<zb_record_mk*>(rec);
+	zb_rec_ptr_mk* mk_rec=dynamic_cast<zb_rec_ptr_mk*>(rec);
 	if(!mk_rec)
 		return ZB_ERROR(zb_status_bad_param);
- 	(*_pStrProp).Set(mk_rec->_row,s);
+ 	(*_pStrProp).Set(mk_rec->get_row_ref(),s);
 
 	return zb_status_ok;
 }
-z_status zb_ds_field_mk_string::get_string(zb_record *rec,z_string& s)
+z_status zb_ds_field_mk_string::get_string(zb_rec_ptr *rec,z_string& s)
 { 
-	zb_record_mk* mk_rec=dynamic_cast<zb_record_mk*>(rec);
+	zb_rec_ptr_mk* mk_rec=dynamic_cast<zb_rec_ptr_mk*>(rec);
 	if(!mk_rec)
 		return ZB_ERROR(zb_status_bad_param);
-	s=(*_pStrProp).Get(mk_rec->_row);
+	s=(*_pStrProp).Get(mk_rec->get_row_ref());
 
 	return zb_status_ok;
 }
@@ -284,8 +285,33 @@ zb_ds_table_mk::zb_ds_table_mk(zb_ds_metakit* ds,ctext unique_id):zb_ds_table(ds
 z_status zb_ds_table_mk::record_add(zb_record* rec)
 {
 	zb_record_mk* mk_rec=dynamic_cast<zb_record_mk*>(rec);
-	int index=_mk_view.Add(mk_rec->_row);
+	int index=_mk_view.Add(mk_rec->get_row_ref());
 
 	_ds->_status=zb_ds_metakit::status_opened_need_commit;
+	return zb_status_ok;
+}
+
+z_status zb_ds_table_mk::open()
+{
+	
+	return _ds->_get_view(get_mk_view(),get_ds_id(),get_desc());
+}
+size_t zb_ds_table_mk::get_record_count()
+{
+	return _mk_view.GetSize();
+	
+}
+z_status zb_ds_table_mk::get_record_by_index(size_t index,zb_rec_ptr** cursor)
+{
+	if( index>=_mk_view.GetSize())
+		return ZB_ERROR(zb_status_index_out_of_range);
+	if(cursor==0)
+		return ZB_ERROR(zb_status_bad_param);
+
+	zb_rec_ptr_mk* r=*(zb_rec_ptr_mk**)cursor;
+	if(r==0)
+		r=new zb_rec_ptr_mk();
+
+	r->get_row_ref()=_mk_view[index];
 	return zb_status_ok;
 }
