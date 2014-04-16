@@ -13,7 +13,7 @@ class zb_ds_metakit: public zb_source
 	z_string		_filename;
 
  	z_status _get_view_for_table(c4_View& view,zb_table_base* tbl);
-	z_status _get_view(c4_View& view,ctext viewid,zb_desc & desc);
+	z_status _get_view(c4_View& view,ctext viewid,zb_ds_desc & desc);
 
 public:
 	zb_ds_metakit(ctext name);
@@ -21,10 +21,12 @@ public:
 	virtual z_status open(bool writable);
 	virtual z_status close();
 	virtual z_status commit();
-	virtual zb_ds_field* get_ds_field_string(ctext id);
+	virtual zb_ds_field* ds_field_string_new(ctext id);
 	virtual zb_record* get_solo_record(zb_table_base* tbl);
-	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_desc& desc);
 
+	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_desc& desc);
+ 	virtual zb_ds_table* ds_table_new(ctext ds_table_name);
+	virtual z_status     ds_table_open(zb_ds_table* tbl);
 
 
 };

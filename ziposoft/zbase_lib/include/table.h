@@ -5,14 +5,17 @@
 
 class zb_ds_table  
 {
-public:
+protected:
 	zb_source* _ds;
 	z_string _id;
+	zb_ds_desc _ds_desc;
+public:
+	ctext get_ds_id() { return   _id; }
+	zb_ds_desc& get_desc() { return   _ds_desc; }
 	ctext get_map_key();
 	zb_ds_table(zb_source* ds,ctext unique_id);
 	virtual z_status record_add(zb_record* rec);
 
-	zb_ds_desc _ds_desc;
 
 };
 
