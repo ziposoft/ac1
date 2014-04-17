@@ -3,20 +3,7 @@
 #include "zbase_lib/include/zb.h"
 //#include "zbase_lib/include/datum.h"
 
-class zb_ds_field  
-{
-protected:
-	z_string _id;
 
-public:
-	virtual ctext get_map_key() { return _id;};
-
-	virtual z_status set_string(zb_rec_ptr *rec,ctext s);
-	virtual z_status get_string(zb_rec_ptr *rec,z_string& s);
-	virtual z_status set_int32(zb_rec_ptr *rec,I32 i);
-	virtual z_status get_int32(zb_rec_ptr *rec,I32& i);
-
-};
 class zb_field : public z_refcount
 {
 	z_string _name;
