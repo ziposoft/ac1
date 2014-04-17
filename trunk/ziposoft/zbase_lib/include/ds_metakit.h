@@ -34,7 +34,7 @@ public:
 };
 
 
-class zb_rec_ptr_mk  : public zb_rec_ptr
+class zb_rec_ptr_mk  : public zb_ds_recptr
 {
 public:
 	zb_rec_ptr_mk(){}

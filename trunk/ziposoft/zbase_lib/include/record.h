@@ -48,22 +48,7 @@ public:
 };
 
 
-class zb_ds_recordset
-{
-public:
-	zb_ds_recordset()
-	{
 
-	}
-	
-
-	virtual zb_key_size get_num_records()=0; 
-	virtual int get_num_cols()=0; 
-	virtual void  dump(z_file* fp)=0; 
-	virtual z_status ptr_increment()=0; 
-	virtual z_status ds_create_desc_from_source(zb_desc* desc)=0;
-	virtual z_status ds_get_val_string(z_string& val,zb_field* field)=0;
-};
 class zb_ds_recordset_vector : public zb_ds_recordset
 {
 public:

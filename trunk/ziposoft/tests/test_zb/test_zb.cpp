@@ -9,7 +9,7 @@ int test_ds_table(zb_source* p_ds)
 	zb_record* pRec=0;
 	zb_ds_table* tbl=0;
 	zb_ds_field* fld=0;
-	zb_rec_ptr* ptr=0;
+	zb_ds_recptr* ptr=0;
 	z_string data;
 	do
 	{
