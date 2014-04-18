@@ -66,15 +66,6 @@ public:
 	
 };
 
-class zb_ds_recordset_mk  : public zb_ds_recordset
-{
-public:
- 	c4_View _mk_view;
-
-
-
-};
-
 
 
 class zb_ds_field_mk  : public zb_ds_field
