@@ -3,7 +3,7 @@
 #include "zbase_lib/include/zb.h"
 #include "zbase_lib/include/table_static.h"
 
-
+class zb_ds_recptr;
 
 class zb_ds_field  
 {
@@ -19,6 +19,15 @@ public:
 	virtual z_status get_int32(zb_ds_recptr *rec,I32& i);
 
 };
+class zb_ds_desc : public z_map_obj<zb_ds_field>,public z_refcount
+{
+public:
+	zb_ds_desc(){}
+	virtual ~zb_ds_desc(){}
+	zb_field* get_field(ctext name);
+	z_status get_default_rec(zb_record *rec);
+	
+};
 class zb_ds_table 
 {
 protected:
@@ -26,21 +35,31 @@ protected:
 	z_string _id;
 	zb_ds_desc _ds_desc;
 public:
+	zb_ds_table(zb_source* ds,ctext unique_id);
+	virtual  ~zb_ds_table(){};
+
 	ctext get_ds_id() { return   _id; }
 	zb_ds_desc& get_desc() { return   _ds_desc; }
 	ctext get_map_key();
-	zb_ds_table(zb_source* ds,ctext unique_id);
 	virtual z_status record_add(zb_record* rec);
 	virtual z_status open();
 	virtual size_t get_record_count();
-	virtual z_status get_record_by_index(size_t index,zb_rec_ptr** cursor);
+	virtual z_status get_record_by_index(size_t index,zb_ds_recptr** cursor);
 	virtual z_status delete_record_by_index(size_t index);
+	/*
+	virtual int get_num_cols()=0; 
+	virtual void  dump(z_file* fp)=0; 
+	virtual z_status ptr_increment()=0; 
+	*/
+
 };
 
 class zb_ds_recptr 
 {
 public:
-	zb_ds_recordset* _set;
+	zb_ds_recptr();
+	virtual  ~zb_ds_recptr(){};
+	zb_ds_table* _set;
 	size_t _index;
 
 };
@@ -50,22 +69,7 @@ class zb_ds_record_native
 public:
 
 };
-class zb_ds_recordset
-{
-public:
-	zb_ds_recordset()
-	{
 
-	}
-	
-
-	virtual zb_key_size get_num_records()=0; 
-	virtual int get_num_cols()=0; 
-	virtual void  dump(z_file* fp)=0; 
-	virtual z_status ptr_increment()=0; 
-	virtual z_status ds_create_desc_from_source(zb_desc* desc)=0;
-	virtual z_status ds_get_val_string(z_string& val,zb_field* field)=0;
-};
 class zb_source 
 {
 

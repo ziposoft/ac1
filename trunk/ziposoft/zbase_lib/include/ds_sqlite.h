@@ -15,21 +15,13 @@ public:
 	}
 };
 
-class zb_ds_recordset_sl3 : public zb_ds_recordset
+class zb_ds_recordset_sl3 : public zb_ds_table
 {
 	sqlite3_stmt *_stmt;
 	zb_src_sl3 *_file_sqlite;
 public:
-	zb_ds_recordset_sl3() :zb_ds_recordset()
-	{
-		_stmt=0;
-		_file_sqlite=0;
-	}
-	zb_ds_recordset_sl3(zb_src_sl3* ds) :zb_ds_recordset()
-	{
-		_stmt=0;
-		_file_sqlite=ds;
-	}
+
+	zb_ds_recordset_sl3(zb_src_sl3* ds,ctext unique_id) ;
 
 	//-------------------------------
 	//sqlite specific

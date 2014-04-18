@@ -4,10 +4,7 @@
 
 
 
-z_status zb_ds_field::set_string(zb_rec_ptr *rec,ctext s){ return ZB_ERROR(zb_status_not_implemented);}
-z_status zb_ds_field::get_string(zb_rec_ptr *rec,z_string& s){ return ZB_ERROR(zb_status_not_implemented);}
-z_status zb_ds_field::set_int32(zb_rec_ptr *rec,I32 i){ return ZB_ERROR(zb_status_not_implemented);}
-z_status zb_ds_field::get_int32(zb_rec_ptr *rec,I32& i){ return ZB_ERROR(zb_status_not_implemented);}
+
 
 /*____________________________________________________________________________
 
@@ -105,7 +102,8 @@ z_status zb_field_string::set_default(zb_rec_ptr* rec)
 }
 z_status zb_field_string::set(zb_rec_ptr *rec,ctext s)
 {
-	return get_ds_field()->set_string(rec,s);
+	//return get_ds_field()->set_string(rec,s);
+	return ZB_ERROR(zb_status_not_implemented);
 
 
 }

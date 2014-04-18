@@ -4,27 +4,7 @@
 #include "zbase_lib/include/datasource.h"
 #include "zbase_lib/include/table_static.h"
 
-z_status zb_ds_table::record_add(zb_record* rec)
-{
-	 return ZB_ERROR(zb_status_not_implemented);
-}
-z_status zb_ds_table::open()
-{
-	 return ZB_ERROR(zb_status_not_implemented);
-}
-size_t zb_ds_table::get_record_count()
-{
-	ZB_ERROR(zb_status_not_implemented);
-	 return 0;
-}
-z_status zb_ds_table::get_record_by_index(size_t index,zb_rec_ptr** cursor)
-{
-	 return ZB_ERROR(zb_status_not_implemented);
-}
-z_status zb_ds_table::delete_record_by_index(size_t index)
-{
-	 return ZB_ERROR(zb_status_not_implemented);
-}
+
 
 zb_table_base::zb_table_base(zb_source* ds,zb_key key,ctext name)
 {

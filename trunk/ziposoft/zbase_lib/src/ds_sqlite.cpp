@@ -27,7 +27,7 @@ z_status zb_src_sl3::_read_stucture()
 
 	return zb_status_ok;
 }
-
+/*
 z_status zb_src_sl3::_get_sql_recset_sql(zb_ds_recordset_sl3*&  recset,ctext sqltext)
 {
 	ZTF;
@@ -36,6 +36,8 @@ z_status zb_src_sl3::_get_sql_recset_sql(zb_ds_recordset_sl3*&  recset,ctext sql
 
 	return zb_status_ok;
 }
+
+*/
 z_status zb_src_sl3::_get_sql_recset(zb_ds_recordset_sl3*&  recset,ctext tbl_name,ctext where_clause)
 {
 
@@ -53,7 +55,7 @@ zb_st_master* zb_src_sl3::get_tbl_master()
 zb_ds_table* zb_src_sl3::get_tbl(ctext ds_table_name)
 {
 	ZTF;
-	zb_ds_recordset_sl3* recset=z_new zb_ds_recordset_sl3(this);
+	zb_ds_recordset_sl3* recset=z_new zb_ds_recordset_sl3(this,ds_table_name);
 
 	z_string sqltext="SELECT * FROM ";
 	sqltext<<ds_table_name;
@@ -115,7 +117,7 @@ z_status zb_src_sl3::get_tables()
 	z_status status;
     // select those rows from the table
 
-	zb_ds_recordset_sl3 recset(this);
+	zb_ds_recordset_sl3 recset(this,"sqlite_master");
 
 	status=recset.exec_sql("SELECT * FROM sqlite_master WHERE type='table' ORDER BY name;");
 	ZT(("status=%s",zb_status_text[status]));
@@ -162,7 +164,7 @@ z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
 	z_status status;
     // select those rows from the table
 
-	zb_ds_recordset_sl3 recset(this);
+	zb_ds_recordset_sl3 recset(this,"ds_table_name");
 	z_string s="PRAGMA table_info('";
 	s<<ds_table_name<<"');";
 
@@ -209,6 +211,7 @@ z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
 	return zb_status_ok;
 
 }
+/*
 z_status zb_src_sl3::get_table_info()
 {
 	ZTF;
@@ -261,8 +264,12 @@ z_status zb_src_sl3::get_table_info()
 	}
 
 	return zb_status_ok;
+}*/
+zb_ds_recordset_sl3::zb_ds_recordset_sl3(zb_src_sl3* ds,ctext unique_id) :zb_ds_table(ds,unique_id)
+{
+	_stmt=0;
+	_file_sqlite=ds;
 }
-
 z_status zb_ds_recordset_sl3::ds_create_desc_from_source(zb_desc* desc)
 {
 	ZTF;

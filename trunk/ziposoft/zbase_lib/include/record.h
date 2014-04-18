@@ -48,7 +48,7 @@ public:
 };
 
 
-
+/*
 class zb_ds_recordset_vector : public zb_ds_recordset
 {
 public:
@@ -63,7 +63,7 @@ public:
 	virtual int get_num_cols()=0; 
 	virtual z_status ptr_increment()=0; 
 };
-
+*/
 
 
 
