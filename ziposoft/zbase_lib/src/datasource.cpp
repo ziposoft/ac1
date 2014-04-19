@@ -12,12 +12,19 @@ z_status zb_ds_field::get_string(zb_ds_recptr *rec,z_string& s){ return ZB_ERROR
 z_status zb_ds_field::set_int32(zb_ds_recptr *rec,I32 i){ return ZB_ERROR(zb_status_not_implemented);}
 z_status zb_ds_field::get_int32(zb_ds_recptr *rec,I32& i){ return ZB_ERROR(zb_status_not_implemented);}
 
+/*____________________________________________________________________________
+	zb_ds_record
+____________________________________________________________________________*/
+ zb_ds_record::zb_ds_record()
+{
+	//_p_desc=0;
+}
 
 /*__________________________________________________________________________
 
 	zb_ds_table
 ____________________________________________________________________________*/
-z_status zb_ds_table::record_add(zb_record* rec)
+z_status zb_ds_table::record_add(zb_ds_record* rec)
 {
 	 return ZB_ERROR(zb_status_not_implemented);
 }

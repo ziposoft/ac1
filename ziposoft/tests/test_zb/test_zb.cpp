@@ -6,7 +6,7 @@
 int test_ds_table(zb_source* p_ds)
 {
 	z_status status;
-	zb_record* pRec=0;
+	zb_ds_record* pRec=0;
 	zb_ds_table* tbl=0;
 	zb_ds_field* fld=0;
 	zb_ds_recptr* ptr=0;

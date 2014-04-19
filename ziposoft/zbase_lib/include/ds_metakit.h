@@ -22,7 +22,7 @@ public:
 	virtual z_status commit();
 	virtual zb_ds_field* ds_field_string_new(ctext id);
 	//virtual zb_record* get_solo_record(zb_table_base* tbl);
-	virtual zb_record* record_solo_new();
+	virtual zb_ds_record* record_solo_new();
 	//virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_desc& desc);
  	virtual zb_ds_table* ds_table_new(ctext ds_table_name);
 	virtual z_status     ds_table_open(zb_ds_table* tbl);
@@ -41,7 +41,7 @@ public:
  	virtual ~zb_rec_ptr_mk(){};
 	virtual c4_RowRef& get_row_ref();
 };
-class zb_record_mk  : public zb_record
+class zb_record_mk  : public zb_ds_record
 {
  	c4_Row _row;
 public:
@@ -58,7 +58,7 @@ public:
 	zb_ds_metakit* _ds;
 	c4_View& get_mk_view() { return _mk_view;}
 
-	virtual z_status record_add(zb_record* rec);
+	virtual z_status record_add(zb_ds_record* rec);
 	virtual z_status open();
 	virtual size_t get_record_count();
 	virtual z_status get_record_by_index(size_t index,zb_rec_ptr** cursor);

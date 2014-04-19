@@ -37,7 +37,7 @@ zb_ds_metakit:: ~zb_ds_metakit(void)
 
 }
 
-zb_record* zb_ds_metakit::record_solo_new()
+zb_ds_record* zb_ds_metakit::record_solo_new()
 {
 	zb_record_mk* pRec=	z_new zb_record_mk();
 	return pRec;
@@ -261,7 +261,7 @@ z_status zb_ds_field_mk_string::get_string(zb_rec_ptr *rec,z_string& s)
 
 	 Metakit zb_record_mk
 ____________________________________________________________________________*/
-zb_record_mk::zb_record_mk()   :	 zb_record()
+zb_record_mk::zb_record_mk()   :	 zb_ds_record()
 {
 
 
@@ -282,7 +282,7 @@ zb_ds_table_mk::zb_ds_table_mk(zb_ds_metakit* ds,ctext unique_id):zb_ds_table(ds
 {
 	_ds=ds;
 }
-z_status zb_ds_table_mk::record_add(zb_record* rec)
+z_status zb_ds_table_mk::record_add(zb_ds_record* rec)
 {
 	zb_record_mk* mk_rec=dynamic_cast<zb_record_mk*>(rec);
 	int index=_mk_view.Add(mk_rec->get_row_ref());
@@ -303,7 +303,7 @@ size_t zb_ds_table_mk::get_record_count()
 }
 z_status zb_ds_table_mk::get_record_by_index(size_t index,zb_rec_ptr** cursor)
 {
-	if( index>=_mk_view.GetSize())
+	if( index>=(size_t)_mk_view.GetSize())
 		return ZB_ERROR(zb_status_index_out_of_range);
 	if(cursor==0)
 		return ZB_ERROR(zb_status_bad_param);
