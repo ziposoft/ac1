@@ -45,7 +45,7 @@ zb_record* zb_table_base::new_default_rec()
 {
 	//ZB_ERROR(zb_status_not_implemented);
 	zb_record* rec=0;
-	rec=_ds->record_solo_new();
+//	rec=_ds->record_solo_new();
 
 	return rec;
 
@@ -53,6 +53,6 @@ zb_record* zb_table_base::new_default_rec()
 z_status zb_table_base::record_add(zb_record *rec)
 {
 
-	return _ds_table->record_add(rec);
+	return ZB_ERROR(zb_status_not_implemented);
 
 }

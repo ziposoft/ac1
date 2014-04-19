@@ -41,7 +41,7 @@ public:
 	ctext get_ds_id() { return   _id; }
 	zb_ds_desc& get_desc() { return   _ds_desc; }
 	ctext get_map_key();
-	virtual z_status record_add(zb_record* rec);
+	virtual z_status record_add(zb_ds_record* rec);
 	virtual z_status open();
 	virtual size_t get_record_count();
 	virtual z_status get_record_by_index(size_t index,zb_ds_recptr** cursor);
@@ -61,8 +61,19 @@ public:
 	virtual  ~zb_ds_recptr(){};
 	zb_ds_table* _set;
 	size_t _index;
+};
+class zb_ds_record : public zb_ds_recptr
+{
+protected:
+
+public:
+	//zb_record();
+	zb_ds_record();
+	virtual ~zb_ds_record(){};
 
 };
+
+
 class zb_ds_record_native  
 {
 	z_map<zb_datum> _data;
@@ -105,7 +116,7 @@ public:
 	virtual zb_ds_field* ds_field_string_new(ctext id){ return 0;};
 	virtual zb_ds_field* ds_field_int32_new(ctext id){ return 0;};
 	//virtual zb_record* get_solo_record(zb_table_base* tbl){ return 0;};
-	virtual zb_record* record_solo_new(){ return 0;};
+	virtual zb_ds_record* record_solo_new(){ return 0;};
 
 	z_map<zb_ds_table> _ds_tables;
 
