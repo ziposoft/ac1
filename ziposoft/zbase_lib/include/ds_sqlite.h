@@ -15,13 +15,13 @@ public:
 	}
 };
 
-class zb_ds_recordset_sl3 : public zb_ds_table
+class zb_ds_table_sl3 : public zb_ds_table
 {
 	sqlite3_stmt *_stmt;
 	zb_src_sl3 *_file_sqlite;
 public:
 
-	zb_ds_recordset_sl3(zb_src_sl3* ds,ctext unique_id) ;
+	zb_ds_table_sl3(zb_src_sl3* ds,ctext unique_id) ;
 
 	//-------------------------------
 	//sqlite specific
@@ -32,7 +32,7 @@ public:
 
 
 	//-------------------------------
-	//zb_ds_recordset - implements
+	//zb_ds_recptrset - implements
 	virtual zb_key_size get_num_records(); 
 	virtual int get_num_cols(); 
 	virtual z_status ptr_increment();
@@ -73,8 +73,8 @@ public:
 	//sqlite specific
 	sqlite3* get_handle();
 
-	z_status _get_sql_recset_sql(zb_ds_recordset_sl3*& recset,ctext sqltext);
-	z_status _get_sql_recset(zb_ds_recordset_sl3*& recset,ctext tbl_name,ctext where_clause);
+	z_status _get_sql_recset_sql(zb_ds_table_sl3*& recset,ctext sqltext);
+	z_status _get_sql_recset(zb_ds_table_sl3*& recset,ctext tbl_name,ctext where_clause);
 
 	ctext get_last_error_msg();
 

@@ -411,7 +411,7 @@ z_status zp_obj_parser::test_white_space(zp_mode mode)
 			zp_text* item=new zp_text("ws");
 			item->set_text(match,len);
 			_ctx_current->_obj->add_child(item);
-			ZT(("adding whitespace"));
+			ZT("adding whitespace");
 		}
 	}
 	return status;
@@ -487,7 +487,7 @@ z_status zp_obj_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 		{
 			U32 result=0;
 			U32 quanity_matched=0;
-			ZT(("TEST#%d START>>",testnum));
+			ZT("TEST#%d START>>",testnum);
 			_results->set_result(testnum,zp_result_unknown);
 			SANITY_CHECK(
 				_results->_test_result_tmpl[testnum]=tpl_start;
@@ -526,7 +526,7 @@ z_status zp_obj_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 							result_index_multi_success_mark=_test_result_current_index;
 							continue;
 						}
-						ZT(("eob, but satisfied"));
+						ZT("eob, but satisfied");
 					}		
 				}
 				if(status==zs_skipped)
@@ -571,7 +571,7 @@ z_status zp_obj_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 				debug_test_results<<' ';
 			}
 
-			ZT(("%s",debug_test_results.c_str()));
+			ZT("%s",debug_test_results.c_str());
 #endif
 			return status;
 		}
@@ -588,7 +588,7 @@ z_status zp_obj_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 			Z_ASSERT((tmpl_check==tpl_start ));
 			)
 
-			ZT(("CREATE#%d[%d] START>>",testnum,test_result));
+			ZT("CREATE#%d[%d] START>>",testnum,test_result);
 
 			if((test_result==zp_result_no_match)
 			   ||(test_result==zp_result_eof))
@@ -614,7 +614,7 @@ z_status zp_obj_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 				status=zs_no_match;
 			if(test_result==zp_result_eof)
 				status=zs_eof;
-			ZT(("<<EXIT#%d -%s",testnum,z_status_get_text(status)));
+			ZT("<<EXIT#%d -%s",testnum,z_status_get_text(status));
 			return status;
 		}
 	}
@@ -631,9 +631,9 @@ z_status zp_obj_parser::_process_sub_item(zp_obj* sub_obj,
 	context_sub_item_push(sub_obj,ie);
 	z_string raw;
 	debug(raw);
-	ZT(("%c %s[%s]-> %s",(mode.create?'C':'T'),
+	ZT("%c %s[%s]-> %s",(mode.create?'C':'T'),
 		z_obj_fact_get_name(ie)
-		,ie->parse_string,raw.c_str()));
+		,ie->parse_string,raw.c_str());
 	U32 ng=mode.nested_group;
 	mode.nested_group=0;
 
@@ -642,7 +642,7 @@ z_status zp_obj_parser::_process_sub_item(zp_obj* sub_obj,
 	z_status status=_process_group(flags,mode);
 	mode.nested_group=ng;
 
-	ZT(("<- %s=%s",z_obj_fact_get_name(ie),z_status_get_text(status)));
+	ZT("<- %s=%s",z_obj_fact_get_name(ie),z_status_get_text(status));
 
 	if(status>zs_internal_error)
 		return status;

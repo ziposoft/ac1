@@ -11,7 +11,7 @@ class z_directory
 public:
 	z_directory(); //current directory.
 	virtual ~z_directory(); //current directory.
-	z_status open(ctext path);
+	z_status open(ctext path,bool create =false);
 	void close();
 	 
 	z_status  get_files_by_extension(ctext ext,z_strlist &str);

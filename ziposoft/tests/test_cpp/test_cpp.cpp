@@ -3,6 +3,7 @@
 
 #include "zipolib_cpp/include/zipolib_cpp.h"
 #include "zipolib_cpp/include/z_filesystem.h"
+#include "zipolib_cpp/include/z_trace.h"
 
 
 
@@ -13,7 +14,7 @@ int main()
 	ZTF;
 	z_string larry="fred";
 
-	ZT(("Testing trace...\n"));
+	ZT("Testing trace %s %d...\n","ddd",4);
 
 
 	gz_out << "list of exe files:\n";

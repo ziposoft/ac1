@@ -37,9 +37,9 @@ zb_ds_metakit:: ~zb_ds_metakit(void)
 
 }
 
-zb_ds_record* zb_ds_metakit::record_solo_new()
+zb_ds_rec_ptr* zb_ds_metakit::record_solo_new()
 {
-	zb_record_mk* pRec=	z_new zb_record_mk();
+	zb_rec_ptr_mk* pRec=	z_new zb_rec_ptr_mk(true);
 	return pRec;
 }
 zb_ds_table* zb_ds_metakit::ds_table_new(ctext ds_table_name)
@@ -62,8 +62,10 @@ zb_ds_field* zb_ds_metakit::ds_field_string_new(ctext id)
 	//virtual z_status     ds_table_open(zb_ds_table* tbl);
 
 
-z_status zb_ds_metakit::open(bool writable) 
+z_status zb_ds_metakit::open(bool create,bool writable) 
 {
+	//TODO - only create when asked to
+
 	_pStore= z_new c4_Storage(_filename,(writable?1:0));
 	if(_pStore->Strategy().IsValid())
 	{
@@ -85,7 +87,7 @@ z_status zb_ds_metakit::commit()
 	{
 		if (_pStore) 
 		{
-			ZT(("commiting %s",	_filename.c_str() ));
+			ZT("commiting %s",	_filename.c_str() );
 
 			_pStore->Commit(true);
 			_status=status_opened_write;
@@ -93,7 +95,7 @@ z_status zb_ds_metakit::commit()
 	}
 	else
 	{
-		ZT(("file=%x, %s commit not needed ",this,	_filename.c_str() ));
+		ZT("file=%x, %s commit not needed ",this,	_filename.c_str() );
 	}
 
 	return zb_status_ok;
@@ -135,7 +137,7 @@ z_status zb_ds_metakit::_get_view(c4_View& view,ctext viewid,zb_ds_desc & desc)
 
 
 	
-	ZT(("metakit view: %s, viewstr=%s",viewid ,str.c_str()));	
+	ZT("metakit view: %s, viewstr=%s",viewid ,str.c_str());	
 
 	c4_View temp_view;
 	try
@@ -188,7 +190,7 @@ z_status zb_ds_metakit::_get_view_for_table(c4_View& view,zb_table_base* tbl)
 
 
 	
-	ZT(("Table# %x, %s, viewstr=%s", tbl->get_key(),tbl->get_name(),str.c_str()));	
+	ZT("Table# %x, %s, viewstr=%s", tbl->get_key(),tbl->get_name(),str.c_str());	
 
 	c4_View temp_view;
 	try
@@ -237,7 +239,7 @@ zb_ds_field_mk_string::zb_ds_field_mk_string(ctext id) :zb_ds_field_mk(id)
 zb_ds_field_mk_string::~zb_ds_field_mk_string()
 {
 }
-z_status zb_ds_field_mk_string::set_string(zb_rec_ptr *rec,ctext s)
+z_status zb_ds_field_mk_string::set_string(zb_ds_rec_ptr *rec,ctext s)
 { 
 	
 	zb_rec_ptr_mk* mk_rec=dynamic_cast<zb_rec_ptr_mk*>(rec);
@@ -247,25 +249,51 @@ z_status zb_ds_field_mk_string::set_string(zb_rec_ptr *rec,ctext s)
 
 	return zb_status_ok;
 }
-z_status zb_ds_field_mk_string::get_string(zb_rec_ptr *rec,z_string& s)
+z_status zb_ds_field_mk_string::get_string(zb_ds_rec_ptr *rec,z_string& s)
 { 
 	zb_rec_ptr_mk* mk_rec=dynamic_cast<zb_rec_ptr_mk*>(rec);
 	if(!mk_rec)
 		return ZB_ERROR(zb_status_bad_param);
-	s=(*_pStrProp).Get(mk_rec->get_row_ref());
+	c4_RowRef rr=mk_rec->get_row_ref();
+	s=(*_pStrProp).Get(rr);
 
 	return zb_status_ok;
 }
+/*____________________________________________________________________________
 
+	 Metakit zb_rec_ptr_mk
+____________________________________________________________________________*/
+c4_RowRef zb_rec_ptr_mk::get_row_ref()   
+{
+	if(_row)
+		return *_row;
+	return _set->get_mk_view()[_index]	;
+
+}
+zb_rec_ptr_mk::zb_rec_ptr_mk(bool solo)   :	 zb_ds_rec_ptr()
+{
+	_set=0;
+	_index=0;
+	if(solo)
+		_row=z_new c4_Row();
+	else
+		_row=0;
+}
+zb_rec_ptr_mk::~zb_rec_ptr_mk() 
+{
+	if(_row)
+		z_delete _row;
+}
+void zb_rec_ptr_mk::set(zb_ds_table* rs,size_t index)
+{
+	_set=dynamic_cast<zb_ds_table_mk*>(rs);
+	_index=index;
+
+}
 /*____________________________________________________________________________
 
 	 Metakit zb_record_mk
 ____________________________________________________________________________*/
-zb_record_mk::zb_record_mk()   :	 zb_ds_record()
-{
-
-
-}
 
 /*____________________________________________________________________________
 
@@ -282,36 +310,62 @@ zb_ds_table_mk::zb_ds_table_mk(zb_ds_metakit* ds,ctext unique_id):zb_ds_table(ds
 {
 	_ds=ds;
 }
-z_status zb_ds_table_mk::record_add(zb_ds_record* rec)
+z_status zb_ds_table_mk::record_add(zb_ds_rec_ptr* rec)
 {
-	zb_record_mk* mk_rec=dynamic_cast<zb_record_mk*>(rec);
+	zb_rec_ptr_mk* mk_rec=dynamic_cast<zb_rec_ptr_mk*>(rec);
 	int index=_mk_view.Add(mk_rec->get_row_ref());
 
 	_ds->_status=zb_ds_metakit::status_opened_need_commit;
 	return zb_status_ok;
 }
 
-z_status zb_ds_table_mk::open()
+z_status zb_ds_table_mk::open(bool writable)
 {
 	
-	return _ds->_get_view(get_mk_view(),get_ds_id(),get_desc());
+	return _ds->_get_view(_mk_view,get_ds_id(),get_desc());
 }
 size_t zb_ds_table_mk::get_record_count()
 {
 	return _mk_view.GetSize();
 	
 }
-z_status zb_ds_table_mk::get_record_by_index(size_t index,zb_rec_ptr** cursor)
+z_status zb_ds_table_mk::get_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
 {
 	if( index>=(size_t)_mk_view.GetSize())
 		return ZB_ERROR(zb_status_index_out_of_range);
 	if(cursor==0)
 		return ZB_ERROR(zb_status_bad_param);
 
-	zb_rec_ptr_mk* r=*(zb_rec_ptr_mk**)cursor;
+	zb_rec_ptr_mk* r=dynamic_cast<zb_rec_ptr_mk*>(*cursor);
 	if(r==0)
-		r=new zb_rec_ptr_mk();
-
-	r->get_row_ref()=_mk_view[index];
+		r=new zb_rec_ptr_mk(false);
+	r->set(this,index);
+	*cursor=r;
+	//r->get_row_ref()=_mk_view[index];
 	return zb_status_ok;
+}
+z_status zb_ds_table_mk::test_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
+{
+	if( index>=(size_t)_mk_view.GetSize())
+		return ZB_ERROR(zb_status_index_out_of_range);
+	if(cursor==0)
+		return ZB_ERROR(zb_status_bad_param);
+
+	c4_StringProp p("field1str");
+
+	get_record_by_index(index,cursor);
+	gz_out << p.Get(_mk_view[index])<<"\n";
+	c4_RowRef& rr=_mk_view[index];
+	gz_out << p.Get(rr)<<"\n";
+
+
+	zb_rec_ptr_mk* r=dynamic_cast<zb_rec_ptr_mk*>(*cursor);
+	if(r==0)
+		r=new zb_rec_ptr_mk(false);
+	r->set(this,index);
+	rr=r->get_row_ref();
+	
+	gz_out << p.Get(rr)<<"\n";
+	return 0;
+
 }

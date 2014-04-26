@@ -246,7 +246,7 @@ z_status zp_obj_parser::parse_obj(zp_obj* p_obj,ctext data)
 	status=_process_template(zp_mode_parse_input);
 	if(status==zs_matched)
 	{
-		ZT(("==========ITEM[%s] MATCHED, CREATING=====\n",p_obj->get_map_key()));
+		ZT("==========ITEM[%s] MATCHED, CREATING=====\n",p_obj->get_map_key());
 		index_reset();
 		context_get_current_template_parser().index_reset();
 		reset_results();
@@ -279,7 +279,7 @@ z_status zp_obj_parser::parse_item(zp_obj*& p_item,
 
 	if(status==zs_matched)
 	{
-		ZT(("==========ITEM[%s] MATCHED, CREATING=====\n",item_entry_name));
+		ZT("==========ITEM[%s] MATCHED, CREATING=====\n",item_entry_name);
 		index_reset();
 		context_get_current_template_parser().index_reset();
 		reset_results();
@@ -305,7 +305,7 @@ z_status zp_obj_parser::create_obj(ctext item_entry_name,zp_obj* &p_obj)
 }
 z_status zp_obj_parser::output_obj(z_file* fp,zp_obj* obj)
 {
-	ZT(("==========TEMPLATE[%s] OUTPUT OBJ=====\n",obj->get_map_key()));
+	ZT("==========TEMPLATE[%s] OUTPUT OBJ=====\n",obj->get_map_key());
 
 	_file_out=fp;
 	//ZTF;
@@ -348,7 +348,7 @@ z_status zp_obj_parser::output_default_template(z_file* fp,ctext tmpl)
 {
 	z_status status;
 	//_append_mode=false;
-	ZT(("==========TEMPLATE[%s] OUTPUT DEFAULT=====\n",tmpl));
+	ZT("==========TEMPLATE[%s] OUTPUT DEFAULT=====\n",tmpl);
 
 	_file_out=fp;
 
@@ -384,7 +384,7 @@ z_status zp_obj_parser::parse_template(zp_obj*& p_item,
 		zp_obj* obj=new zp_obj_generic(tmpl);
 		context_set_root(obj,0,0);
 
-		ZT(("==========TEMPLATE[%s] MATCHED, CREATING=====\n",tmpl));
+		ZT("==========TEMPLATE[%s] MATCHED, CREATING=====\n",tmpl);
 		index_reset();
 		context_get_current_template_parser().index_reset();
 		reset_results();

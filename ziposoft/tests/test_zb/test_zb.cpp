@@ -6,11 +6,12 @@
 int test_ds_table(zb_source* p_ds)
 {
 	z_status status;
-	zb_ds_record* pRec=0;
+	zb_ds_rec_ptr* pRec=0;
 	zb_ds_table* tbl=0;
 	zb_ds_field* fld=0;
-	zb_ds_recptr* ptr=0;
+	zb_ds_rec_ptr* ptr=0;
 	z_string data;
+	int i;
 	do
 	{
 
@@ -22,10 +23,10 @@ int test_ds_table(zb_source* p_ds)
 			break;
 
 		tbl->get_desc() ,fld;
-		status=p_ds->open(true);
+		status=p_ds->open(true,true);
 		if(status)
 			break;
-		status=tbl->open();
+		status=tbl->open(true);
 		if(status)
 			break;
 		
@@ -33,15 +34,22 @@ int test_ds_table(zb_source* p_ds)
 
 		printf("count=%d\n",count);
 
-
-		if(count>1)
+		for (i=0;i<3;i++)
 		{
-			tbl->get_record_by_index(0,&ptr);
-			if(!pRec)
-				break;
+			if(count>i)
+			{
+				status=tbl->get_record_by_index(i,&ptr);
+				if(status)
+					break;
+				if(!ptr)
+				{
+					gz_out << "could not get record"<<i<<"\n";
+					break;
+				}
 
-			fld->get_string(pRec,data);
-			gz_out <<  "record0:"<< data <<"\n";
+				fld->get_string(ptr,data);
+				gz_out <<  "record"<<i<<":"<< data <<"\n";
+			}
 		}
 		pRec=p_ds->record_solo_new();
 		
@@ -70,7 +78,7 @@ int test_ds_table(zb_source* p_ds)
 	return 0;
 }
 
-
+/*
 int test_table(zb_source* p_ds)
 {
 	z_status status;
@@ -102,7 +110,7 @@ int test_table(zb_source* p_ds)
 }
 
 
-
+*/
 
 
 int main(int argc, char* argv[])

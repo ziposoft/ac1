@@ -109,20 +109,20 @@ const st_test_tmpl_entry test_tmpl_list[]=
 
 
 	//Mixed groups
-	{"('a':'b')|'a'","a",zs_matched,"a","a"},
+	{"('a':'b')|'a'","a",zs_matched,"ab","ab"},
 	{"*'a':'b'","aaab",zs_matched,"b","b"},
 	{"*('a'|'b')&'d'","bd",zs_matched,"d","d"},
 	{"('a'|'b')&('c'|'d')","bd",zs_matched,"ac","ac"},
 	{"'b'&*('c'|'d')","bd",zs_matched,"b","b"},
 	{"('a'|'b')&*('c'|'d')","cbd",zs_matched,"a","a"},
 	{"('a'&'b')|('c'&'d')","cbd",zs_no_match,"ab","ab"},
-	{"('a'&'b')|('c'&'d')","cdab",zs_matched,"ab","ab"},
-	{"*('a'&'b'):*('c'&'d')","cdab",zs_matched,"",""},
+	{"('a'&'b')|('c'&'d')","cdab",zs_unparsed_data,"ab","ab"},
+	{"*('a'&'b'):*('c'&'d')","cdab",zs_unparsed_data,"",""},
 	{"*('a'&'b'):*('c'&'d')","abbaabcddc",zs_matched,"",""},
 	//identlist
-	{"test7","z,x,y:",zs_matched,"x,y,z:","def_on:def_off"},
-	{"test7","z:x,a",zs_matched,"z:a,x","def_on:def_off"},
-	{"test7",":x,a",zs_matched,":a,x","def_on:def_off"},
+	{"test7","z,x,y:",zs_matched,"A,x,y,z:B","A:B"},
+	{"test7","z:x,a",zs_matched,"A,z:B,a,x","A:B"},
+	{"test7",":x,a",zs_matched,"A:B,a,x","A:B"},
 	{"test6","dudley",zs_matched," dudley"," overwrite!"},
 
 

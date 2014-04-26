@@ -28,24 +28,24 @@ z_status zb_src_sl3::_read_stucture()
 	return zb_status_ok;
 }
 /*
-z_status zb_src_sl3::_get_sql_recset_sql(zb_ds_recordset_sl3*&  recset,ctext sqltext)
+z_status zb_src_sl3::_get_sql_recset_sql(zb_ds_table_sl3*&  recset,ctext sqltext)
 {
 	ZTF;
-	recset=z_new zb_ds_recordset_sl3(this);
+	recset=z_new zb_ds_table_sl3(this);
 	recset->exec_sql(sqltext);
 
 	return zb_status_ok;
 }
 
 */
-z_status zb_src_sl3::_get_sql_recset(zb_ds_recordset_sl3*&  recset,ctext tbl_name,ctext where_clause)
+z_status zb_src_sl3::_get_sql_recset(zb_ds_table_sl3*&  recset,ctext tbl_name,ctext where_clause)
 {
 
 	return zb_status_ok;
 }
 zb_st_master* zb_src_sl3::get_tbl_master()
 {
-	// zb_ds_recordset_sl3* recset=z_new zb_ds_recordset_sl3(this);
+	// zb_ds_table_sl3* recset=z_new zb_ds_table_sl3(this);
 	zb_st_master* tbl= z_new zb_st_master(this);
 
 
@@ -55,7 +55,7 @@ zb_st_master* zb_src_sl3::get_tbl_master()
 zb_ds_table* zb_src_sl3::get_tbl(ctext ds_table_name)
 {
 	ZTF;
-	zb_ds_recordset_sl3* recset=z_new zb_ds_recordset_sl3(this,ds_table_name);
+	zb_ds_table_sl3* recset=z_new zb_ds_table_sl3(this,ds_table_name);
 
 	z_string sqltext="SELECT * FROM ";
 	sqltext<<ds_table_name;
@@ -83,7 +83,7 @@ z_status zb_src_sl3::open()
 	ZTF;
 	int retval;
 	retval = sqlite3_open(_name,&_handle);
-	ZT(("opening=%s",_name.c_str()));
+	ZT("opening=%s",_name.c_str());
 
 	return get_zb_status_sqlite(retval);
 }
@@ -117,10 +117,10 @@ z_status zb_src_sl3::get_tables()
 	z_status status;
     // select those rows from the table
 
-	zb_ds_recordset_sl3 recset(this,"sqlite_master");
+	zb_ds_table_sl3 recset(this,"sqlite_master");
 
 	status=recset.exec_sql("SELECT * FROM sqlite_master WHERE type='table' ORDER BY name;");
-	ZT(("status=%s",zb_status_text[status]));
+	ZT("status=%s",zb_status_text[status]);
 	// Read the number of rows fetched
 	int cols = recset.get_num_cols();
 	while(1)
@@ -164,13 +164,13 @@ z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
 	z_status status;
     // select those rows from the table
 
-	zb_ds_recordset_sl3 recset(this,"ds_table_name");
+	zb_ds_table_sl3 recset(this,"ds_table_name");
 	z_string s="PRAGMA table_info('";
 	s<<ds_table_name<<"');";
 
 	//status=recset.exec_sql("SELECT * FROM sqlite_master WHERE type='table' ORDER BY name;");
 	status=recset.exec_sql(s);
-	ZT(("status=%s",zb_status_text[status]));
+	ZT("status=%s",zb_status_text[status]);
 
 	desc.clear_all();
 
@@ -218,13 +218,13 @@ z_status zb_src_sl3::get_table_info()
 	z_status status;
     // select those rows from the table
 
-	zb_ds_recordset_sl3 recset(this);
+	zb_ds_table_sl3 recset(this);
 	z_string s="PRAGMA table_info('";
 	s<<_param_table_name<<"');";
 
 	//status=recset.exec_sql("SELECT * FROM sqlite_master WHERE type='table' ORDER BY name;");
 	status=recset.exec_sql(s);
-	ZT(("status=%s",zb_status_text[status]));
+	ZT("status=%s",zb_status_text[status]);
 
 
 	// Read the number of rows fetched
@@ -265,12 +265,12 @@ z_status zb_src_sl3::get_table_info()
 
 	return zb_status_ok;
 }*/
-zb_ds_recordset_sl3::zb_ds_recordset_sl3(zb_src_sl3* ds,ctext unique_id) :zb_ds_table(ds,unique_id)
+zb_ds_table_sl3::zb_ds_table_sl3(zb_src_sl3* ds,ctext unique_id) :zb_ds_table(ds,unique_id)
 {
 	_stmt=0;
 	_file_sqlite=ds;
 }
-z_status zb_ds_recordset_sl3::ds_create_desc_from_source(zb_desc* desc)
+z_status zb_ds_table_sl3::ds_create_desc_from_source(zb_desc* desc)
 {
 	ZTF;
 	int i;
@@ -296,14 +296,14 @@ z_status zb_ds_recordset_sl3::ds_create_desc_from_source(zb_desc* desc)
 
 		*desc<<fld;
 
-		//ZT(("%s,%s,%d\n",get_column_name(i),,int_type));
+		//ZT("%s,%s,%d\n",get_column_name(i),,int_type);
 
 	}
    return zb_status_ok;
 }
 
 
-zb_key_size zb_ds_recordset_sl3::get_num_records()
+zb_key_size zb_ds_table_sl3::get_num_records()
 {
 	zb_key_size count=0;
 	sqlite3_reset(_stmt);
@@ -318,7 +318,7 @@ zb_key_size zb_ds_recordset_sl3::get_num_records()
 	return count;
 
 }
-z_status zb_ds_recordset_sl3::ptr_increment()
+z_status zb_ds_table_sl3::ptr_increment()
 {
 	int retval=sqlite3_step(_stmt);
 	if(retval==SQLITE_ROW) 
@@ -327,14 +327,14 @@ z_status zb_ds_recordset_sl3::ptr_increment()
 		return zb_status_end_of_data;
 	return zb_status_unknown_data_error;
 }
-int zb_ds_recordset_sl3::get_num_cols()
+int zb_ds_table_sl3::get_num_cols()
 {
 	if(_stmt==0)
 		return -1;
 	int cols = sqlite3_column_count(_stmt);
 	return cols;
 }
-z_status zb_ds_recordset_sl3::exec_sql(ctext sqltext)
+z_status zb_ds_table_sl3::exec_sql(ctext sqltext)
 {
 	ZTF;
 	int retval;
@@ -348,26 +348,26 @@ z_status zb_ds_recordset_sl3::exec_sql(ctext sqltext)
 	_file_sqlite->_last_error=retval;
 	return zb_status_unknown_data_error;
 }
-ctext zb_ds_recordset_sl3::get_column_name(int i)
+ctext zb_ds_table_sl3::get_column_name(int i)
 {
 	return sqlite3_column_name(_stmt,i);
 }
-ctext zb_ds_recordset_sl3::ptr_get_column_text(int i)
+ctext zb_ds_table_sl3::ptr_get_column_text(int i)
 {
 	return (ctext)sqlite3_column_text(_stmt,i);
 }
-ctext zb_ds_recordset_sl3::ptr_get_column_type(int i)
+ctext zb_ds_table_sl3::ptr_get_column_type(int i)
 {
 	return (ctext)sqlite3_column_decltype(_stmt,i);
 	//int int_type=sqlite3_column_type(_stmt,i);
 }
 
-z_status zb_ds_recordset_sl3::ds_get_val_string(z_string& val,zb_field* field)
+z_status zb_ds_table_sl3::ds_get_val_string(z_string& val,zb_field* field)
 {
 	val=(ctext)sqlite3_column_text(_stmt,field->get_index());
 	return zb_status_ok;
 }
-void zb_ds_recordset_sl3::dump(z_file* fp)
+void zb_ds_table_sl3::dump(z_file* fp)
 {
     // Read the number of rows fetched
     int cols = sqlite3_column_count(_stmt);

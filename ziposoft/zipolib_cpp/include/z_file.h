@@ -127,6 +127,46 @@ public:
 };
 
 
+class z_parse_csv
+{
+public:
+	z_parse_csv();
+	virtual ~z_parse_csv();
+    int _column_idx;    
+    int _row_idx; 	
+    int _num_columns; 	
+	size_t _buffSize;
+	ctext _buff;
+	size_t _i;
+	z_string _value;
+
+	virtual bool ParseBuffer(ctext buff,size_t size);
+	virtual bool ParseLine();
+	virtual bool ParseValue();
+
+	bool _bInsideString;
+	bool _bLineEnd;
+	bool _bBufferEnd;
+	bool Inc();
+	virtual bool NewRowCallback()
+	{
+		//z_printf("\n");
+		return true;
+	}
+	virtual bool EndRowCallback()
+	{
+		//z_printf("\n");
+		return true;
+	}
+	virtual bool NewValueCallback(const z_string & value)
+	{
+		//z_printf("%s ",value.c_str());
+		return true;
+	}
+};
+
+
+
 extern z_debug gz_debug;
 
 extern z_file gz_in;

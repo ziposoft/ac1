@@ -7,28 +7,39 @@
 
 	zb_ds_field
 ____________________________________________________________________________*/
-z_status zb_ds_field::set_string(zb_ds_recptr *rec,ctext s){ return ZB_ERROR(zb_status_not_implemented);}
-z_status zb_ds_field::get_string(zb_ds_recptr *rec,z_string& s){ return ZB_ERROR(zb_status_not_implemented);}
-z_status zb_ds_field::set_int32(zb_ds_recptr *rec,I32 i){ return ZB_ERROR(zb_status_not_implemented);}
-z_status zb_ds_field::get_int32(zb_ds_recptr *rec,I32& i){ return ZB_ERROR(zb_status_not_implemented);}
+z_status zb_ds_field::set_string(zb_ds_rec_ptr *rec,ctext s){ return ZB_ERROR(zb_status_not_implemented);}
+z_status zb_ds_field::get_string(zb_ds_rec_ptr *rec,z_string& s){ return ZB_ERROR(zb_status_not_implemented);}
+z_status zb_ds_field::set_int32(zb_ds_rec_ptr *rec,I32 i){ return ZB_ERROR(zb_status_not_implemented);}
+z_status zb_ds_field::get_int32(zb_ds_rec_ptr *rec,I32& i){ return ZB_ERROR(zb_status_not_implemented);}
 
 /*____________________________________________________________________________
-	zb_ds_record
+	zb_ds_rec_ptr
 ____________________________________________________________________________*/
- zb_ds_record::zb_ds_record()
+
+
+/*____________________________________________________________________________
+	zb_ds_rec_ptr
+____________________________________________________________________________*/
+ zb_ds_rec_ptr::zb_ds_rec_ptr()
 {
-	//_p_desc=0;
+
+
+}
+void zb_ds_rec_ptr::set(zb_ds_table* rs,size_t index)
+{
+	  ZB_ERROR(zb_status_not_implemented);
+
 }
 
 /*__________________________________________________________________________
 
 	zb_ds_table
 ____________________________________________________________________________*/
-z_status zb_ds_table::record_add(zb_ds_record* rec)
+z_status zb_ds_table::record_add(zb_ds_rec_ptr* rec)
 {
 	 return ZB_ERROR(zb_status_not_implemented);
 }
-z_status zb_ds_table::open()
+z_status zb_ds_table::open(bool writable)
 {
 	 return ZB_ERROR(zb_status_not_implemented);
 }
@@ -37,7 +48,11 @@ size_t zb_ds_table::get_record_count()
 	ZB_ERROR(zb_status_not_implemented);
 	 return 0;
 }
-z_status zb_ds_table::get_record_by_index(size_t index,zb_ds_recptr** cursor)
+z_status zb_ds_table::get_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
+{
+	 return ZB_ERROR(zb_status_not_implemented);
+}
+z_status zb_ds_table::test_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
 {
 	 return ZB_ERROR(zb_status_not_implemented);
 }

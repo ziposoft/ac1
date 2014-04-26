@@ -18,7 +18,7 @@ int    z_fopen(z_fileh* filep,utf8 _Filename,ascii _Mode);
 int    z_file_delete(utf8 name);
 
 int    z_change_dir(utf8 dir,int create);
-int    z_make_dir(utf8 dir_name);
+int    z_dir_create(utf8 dir_name);
 
 utf8 z_get_filename_from_path(utf8 fullpath);
 

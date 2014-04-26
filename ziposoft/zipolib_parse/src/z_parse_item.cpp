@@ -212,7 +212,7 @@ z_status zp_obj_parser::_f_string_literal_output(zp_flags flags,zp_mode mode)
 #if DEBUG
 	z_string dbgout;
 	dbgout.assign(match_start,match_len);
-	//ZT(("OUT: %s",dbgout.c_str()));
+	//ZT("OUT: %s",dbgout.c_str()));
 #endif
 	return status;
 }
@@ -275,7 +275,7 @@ z_status zp_obj_parser::_process_single_item(zp_mode mode,zp_flags flags)
 	if(mode.nested_group) debug_mode<<"nested_group ";
 
 
-	ZT(("(%s) <%s> [%s]",debug_mode.c_str(),debug_temp.c_str(),debug_data.c_str()));
+	ZT("(%s) <%s> [%s]",debug_mode.c_str(),debug_temp.c_str(),debug_data.c_str());
 
 #endif
 	item_type match_type=item_invalid_type;
