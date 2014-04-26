@@ -9,6 +9,7 @@
 enum {
 	z_status_cpp_lib_start=0x1000,
 	z_status_could_not_open_dir,
+	z_status_already_open,
 
 
 

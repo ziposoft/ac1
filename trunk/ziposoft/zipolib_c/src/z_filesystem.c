@@ -149,7 +149,7 @@ int z_file_delete(utf8 name)
 	return -1;
 }
 
-int    z_make_dir(utf8 dir_name)
+int    z_dir_create(utf8 dir_name)
 {
 #ifdef BUILD_VSTUDIO
 	return (mkdir(dir_name)) ;
@@ -165,7 +165,7 @@ int    z_change_dir(utf8 dir_name,int create)
 {
 	if(chdir(dir_name)==0) return 0;
 	if(!create) return -1;
-	if(z_make_dir(dir_name)) return -2;
+	if(z_dir_create(dir_name)) return -2;
 	if(chdir(dir_name)) return -3;
 	return 0;
 }

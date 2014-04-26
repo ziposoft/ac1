@@ -255,7 +255,7 @@ void zt_func::init(ctext prof)
 	_setting=_profiles.get_setting(prof);
 	if(_setting==ztp_inherit)
 		_setting=get_setting_from_text(_default);
-	ZT(("[func] %s = %s\n",_func_name.c_str(),get_text_from_setting(_setting)));
+	ZT("[func] %s = %s\n",_func_name.c_str(),get_text_from_setting(_setting));
 	
 }
 
@@ -341,7 +341,7 @@ void zt_src_file::init(ctext prof)
 	_setting=_profiles.get_setting(prof);
 	if(_setting==ztp_inherit)
 		_setting=get_setting_from_text(_default);
-	ZT(("[src file] %s = %s\n",_name.c_str(),get_text_from_setting(_setting)));
+	ZT("[src file] %s = %s\n",_name.c_str(),get_text_from_setting(_setting));
 	z_map_iter iter;
 	zt_func* p_f=0;
 	while((p_f=_funcs.get_next(iter)))
@@ -371,7 +371,7 @@ void zt_module::init(ctext prof)
 	if(_setting==ztp_inherit)
 		_setting=get_setting_from_text(_default);
 	z_map_iter iter;
-	ZT(("[module] %s = %s\n",_name.c_str(),get_text_from_setting(_setting)));
+	ZT("[module] %s = %s\n",_name.c_str(),get_text_from_setting(_setting));
 	zt_src_file* p_sf=0;
 	while((p_sf=_src_files.get_next(iter)))
 	{
@@ -489,6 +489,15 @@ bool  z_trace::load_config(ctext file_name)
 
 void  z_trace::save_config(ctext file_name)
 {
+	z_file file_cfg(file_name,"wb");
+	z_map_iter i;
+	zt_module* mod;
+	while(mod=_modules.get_next(i))
+	{
+		//mod->_name
+
+	}
+
 	/*
 	if(!_save_cfg_file)
 		return;
@@ -498,7 +507,6 @@ void  z_trace::save_config(ctext file_name)
 		_str_profile=_p_current_profile->get_map_key();
 	//Z_ASSERT(0); //TODO
 	//_parser.set_obj_table(PARSE_TABLE(trace_obj_list));
-	z_file file_cfg(file_name,"wb");
 
 	status=_parser.output_obj(&file_cfg,this);
 	if(status!=zs_matched)

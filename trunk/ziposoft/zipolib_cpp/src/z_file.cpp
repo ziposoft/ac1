@@ -1,5 +1,6 @@
 #include "zipolib_cpp_pch.h"
 #include "z_file.h"
+#include "z_logger.h"
 #include "zipolib_c/include/z_filesystem.h"
 #include "zipolib_c/include/z_os_specific.h"
 
@@ -319,3 +320,151 @@ int z_file_string_buffer::write(const char* buf, size_t count )
 	_buffer.append(buf,count);
 	return (int) count;
 }
+
+
+
+#define LIMIT_COL 10
+#define LIMIT_ROW 1000
+
+z_parse_csv::z_parse_csv()
+{
+	_column_idx=0;
+	_row_idx=0;
+	_buff=0;
+	_i=0;
+	_buffSize=0;
+	_num_columns=0;
+}
+z_parse_csv::~z_parse_csv()
+{
+}
+bool z_parse_csv::Inc()
+{
+	if (_bBufferEnd) return true;
+	_i++;
+	if (_i==_buffSize) _bBufferEnd=true;
+	return _bBufferEnd;
+}
+
+bool z_parse_csv::ParseLine()
+{
+	_column_idx=0;
+	_bLineEnd=false;
+
+	
+	while(_bLineEnd==false) 
+	{
+		if(!ParseValue()) 
+			return false;
+		if(_bLineEnd&&(_column_idx==0)&&(_value==""))
+		{
+			//If it is a blank svg:line, skip it.
+			_bLineEnd=false;
+			continue;
+		}
+		if(!NewValueCallback(_value)) return false;
+		_column_idx++;
+		if (_bBufferEnd) break;
+	}
+	return true;
+
+}
+//TODO this is terrible rewrite
+bool z_parse_csv::ParseValue()
+{
+//	bool bValueEnd=false;
+	_value="";
+	_bInsideString=false;
+
+	while(1)
+	{
+		if(_bBufferEnd) return true;
+		U8 c=_buff[_i];
+		U8 c2=_buff[_i+1];
+		Inc();
+		if (_bInsideString)
+		{
+			if (c=='\"')
+			{				
+				if (c2=='\"') 
+					Inc();    
+				else
+				{				
+					_bInsideString=false;
+					continue;
+				}
+			}
+		}
+		else
+		{
+			if (c=='\"')
+			{
+				_bInsideString=true;
+				continue;
+			}
+			if (c==',') return true;
+
+			if  (  
+				((c==0xD)&&(c2!=0xA)) //Crapintosh
+				|| (c==0xA) //Unix
+				)
+			{
+				_bLineEnd=true;
+				return true;
+			}
+			if (c==0xD) //DOS
+			{
+				continue; //next byte is the newline
+			}
+			if((c!='\t')&&(c<' ')) 
+			{
+				
+				//ZT("invalid char 0x%2x \"%c\"\n",c,c));
+				//return false;
+				c='~';
+			}
+			else
+			{
+				//continue; //skip white space?
+			}
+
+		}
+		_value+=c;
+	}
+}
+
+
+
+
+bool z_parse_csv::ParseBuffer(ctext buff,size_t size)
+{
+	_column_idx=0;
+	_row_idx=0;
+	_i=0;
+	_bBufferEnd=false;
+	_buff=buff;
+	_buffSize=size;
+	while(_bBufferEnd==false) 
+	{
+		ZT("%20.20s",_buff+_i);
+		if(!NewRowCallback()) 
+		{
+			ZT("!NewRowCallback()");
+			return false;
+		}
+		if(!ParseLine())
+		{
+			ZT("ParseLine failed\n");
+			return false;
+		}
+		if(!EndRowCallback()) 
+		{
+			ZT("!EndRowCallback()");
+			return false;
+		}
+		_row_idx++;
+	}
+	ZT("ParseBuffer() done");
+	return true;
+}
+

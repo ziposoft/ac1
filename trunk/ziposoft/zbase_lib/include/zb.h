@@ -9,8 +9,8 @@ typedef U32 zb_key_size;
 typedef zb_key_size zb_key;
 
 
-class zb_ds_record;
-class zb_ds_recordset;
+class zb_ds_rec_ptr;
+class zb_ds_recptrset;
 
 class zb_datum;
 class zb_record;
@@ -27,7 +27,7 @@ class zb_ds_field;
 class zb_zipobase;
 class zb_source;
 class zb_src_sl3;
-class zb_ds_recordset_sl3;
+class zb_ds_table_sl3;
 
 
 enum 

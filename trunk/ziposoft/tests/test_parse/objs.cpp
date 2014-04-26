@@ -81,8 +81,8 @@ class zp_test7 : public zp_obj
 public:
 	zp_test7() 
 	{ 
-		_on_list<<"def_on";
-		_off_list<<"def_off";
+		_on_list<<"A";
+		_off_list<<"B";
 		
 	}
 	void dump_list(zo_str_map& list,z_file& outf)

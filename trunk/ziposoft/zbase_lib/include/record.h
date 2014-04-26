@@ -31,11 +31,11 @@ public:
 
 class zb_recset
 {
-	zb_ds_recordset* _ds_recset;
+	zb_ds_recptrset* _ds_recset;
 protected:
 public:
 	zb_desc _desc;
-	zb_recset(zb_ds_recordset* ds_recset)
+	zb_recset(zb_ds_recptrset* ds_recset)
 	{
 		_ds_recset=ds_recset;
 	}
@@ -49,10 +49,10 @@ public:
 
 
 /*
-class zb_ds_recordset_vector : public zb_ds_recordset
+class zb_ds_recptrset_vector : public zb_ds_recptrset
 {
 public:
-	zb_ds_recordset_vector()
+	zb_ds_recptrset_vector()
 	{
 		_recset=0;
 

@@ -3,17 +3,27 @@
 #include "z_error.h"
 
 
-z_status z_directory::open(ctext path)
+z_status z_directory::open(ctext path,bool create)
 {
 	z_status status;
-	if(_hDir==NULL)
-	{
-		status=z_dir_open(path,&_hDir); //current dir
-		if(status!=z_status_success) 
-			return Z_ERROR_RETURN(z_status_could_not_open_dir,"Could not open directory \"%s\"",path);
+	if(_hDir!=NULL)
+			return Z_ERROR_RETURN(z_status_already_open,"z_directory already open");
 
+	status=z_dir_open(path,&_hDir); //current dir
+	if(status==z_status_success)
+		return status;
+
+	if(create)
+	{
+		status=z_dir_create(path); //current dir
+		if(status!=z_status_success)
+			return Z_ERROR_RETURN(z_status_could_not_open_dir,"Could not create directory \"%s\"",path);
+		status=z_dir_open(path,&_hDir); //current dir
+		if(status==z_status_success)
+			return status;
 	}
-	return status;
+	return Z_ERROR_RETURN(z_status_could_not_open_dir,"Could not open directory \"%s\"",path);
+
 
 }
 void z_directory::close()
