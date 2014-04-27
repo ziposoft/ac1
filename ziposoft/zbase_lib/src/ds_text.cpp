@@ -104,3 +104,16 @@ zb_rec_ptr_txt::zb_rec_ptr_txt(bool solo)
 
 
 }
+
+zb_rec_ptr_txt::~zb_rec_ptr_txt()
+{
+
+
+
+}
+void zb_rec_ptr_txt::set(zb_ds_table* rs,size_t index)
+{
+	//_set=dynamic_cast<zb_rec_ptr_txt*>(rs);
+	//_index=index;
+
+}
