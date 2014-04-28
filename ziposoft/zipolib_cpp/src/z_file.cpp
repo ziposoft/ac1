@@ -66,8 +66,8 @@ void z_file::close()
 bool z_file::get_file_size(size_t &size)//TODO more efficient
 {
 	if (_file_handle==0) return false;
-	fseek((FILE*)_file_handle,0,SEEK_END);
-	size=ftell((FILE*)_file_handle);
+	::fseek((FILE*)_file_handle,0L,SEEK_END);
+	size=::ftell((FILE*)_file_handle);
 	::rewind((FILE*)_file_handle);
 	return true;
 }
