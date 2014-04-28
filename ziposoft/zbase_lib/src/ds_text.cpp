@@ -73,19 +73,37 @@ zb_ds_table_txt::zb_ds_table_txt(zb_ds_text* ds,ctext unique_id):zb_ds_table(ds,
 	_ds=ds;
 	_current_row=0;
 	_current_column=0;
+	_dirty=false;
 }
 z_status zb_ds_table_txt::record_add(zb_ds_rec_ptr* rec)
 {
-	zb_rec_ptr_txt* rectxt=dynamic_cast<zb_rec_ptr_txt*>(rec);
+	_current_row=dynamic_cast<zb_rec_ptr_txt*>(rec);
 	
-
+	if(!_current_row)
+	{
+		return ZB_ERROR(zb_status_bad_param);
+	}
+	_data.push_back(_current_row);
 	
 	return zb_status_ok;
 }
+z_status zb_ds_table_txt::commit()
+{
+	z_status s=_file.open(_id,"w");
+	if(s)
+		return ZB_ERROR(zb_status_cant_open_file);
 
+	size_t i;
+	zb_rec_ptr_txt* p;
+	for(i=0;i<get_record_count();i++)
+		p
+		return 0;
+}
 z_status zb_ds_table_txt::open(bool writable)
 {
 	ctext flags="r";
+	/*
+	current we just read it all in then write it all out on commit
 	if(writable)
 	{
 		if(z_file_exists(_id)==0)
@@ -94,6 +112,7 @@ z_status zb_ds_table_txt::open(bool writable)
   			flags="wb+";
 
 	}
+	*/
 	z_status s=_file.open(_id,flags);
 	if(s)
 		return ZB_ERROR(zb_status_cant_open_file);
@@ -101,6 +120,7 @@ z_status zb_ds_table_txt::open(bool writable)
 	z_string data;
 	_file.read_all(data);
 	ParseBuffer(data.c_str(),data.size());
+	_file.close();
 
 	return 0;
 }
@@ -111,15 +131,13 @@ size_t zb_ds_table_txt::get_record_count()
 z_status zb_ds_table_txt::get_record_by_index(size_t index,
 											  zb_ds_rec_ptr** cursor)
 {
+	if(index>=get_record_count())
 		return ZB_ERROR(zb_status_index_out_of_range);
+	if(cursor==0)
 		return ZB_ERROR(zb_status_bad_param);
 
-	zb_rec_ptr_txt* r=dynamic_cast<zb_rec_ptr_txt*>(*cursor);
-	if(r==0)
-		r=new zb_rec_ptr_txt(false);
-	r->set(this,index);
-	*cursor=r;
-	//r->get_row_ref()=_mk_view[index];
+	//zb_rec_ptr_txt* r=dynamic_cast<zb_rec_ptr_txt*>(*cursor);
+	*cursor=_data[index];
 	return zb_status_ok;
 }
 bool zb_ds_table_txt::NewRowCallback()

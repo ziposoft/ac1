@@ -20,12 +20,12 @@
 #if UNIX
 
 #endif
-int z_fopen(z_fileh* filep,utf8 _Filename,ascii _Mode)
+int z_fopen(z_file_h* filep,utf8 _Filename,ascii _Mode)
 {
 #ifdef BUILD_VSTUDIO
 	return fopen_s((FILE**)filep,_Filename,_Mode);
 #else
-	*filep=(z_fileh)fopen(_Filename,_Mode);
+	*filep=(z_file_h)fopen(_Filename,_Mode);
 	if(*filep == 0) return -1;
 	return 0;
 #endif
@@ -34,16 +34,18 @@ int z_fopen(z_fileh* filep,utf8 _Filename,ascii _Mode)
 int    z_file_exists(utf8 fname)
 {
 	FILE *file;
-	if ((file = fopen(fname, "r")) == NULL) {
-	  if (errno == ENOENT) {
+	if ((file = fopen(fname, "r")) == NULL) 
+	{
+	  if (errno == ENOENT) 
+	  {
 		return -1;
 	  } else {
 		// Check for other errors too, like EACCES and EISDIR
 		return -1;
 	  }
-	} else {
-	  fclose(file);
-	}
+	} 
+	fclose(file);
+	
 	return 0;
 	
 }

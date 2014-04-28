@@ -40,7 +40,10 @@ int test_ds_table(zb_source* p_ds)
 			{
 				status=tbl->get_record_by_index(i,&ptr);
 				if(status)
+				{
+					gz_out << "get_record_by_index failed:"<<i<<"\n";
 					break;
+				}
 				if(!ptr)
 				{
 					gz_out << "could not get record"<<i<<"\n";

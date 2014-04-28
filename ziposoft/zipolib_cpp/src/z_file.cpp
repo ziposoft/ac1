@@ -321,6 +321,22 @@ int z_file_string_buffer::write(const char* buf, size_t count )
 	return (int) count;
 }
 
+z_status z_csv_encode_string(ctext input,z_string& output)
+{
+	ctext p=input;
+	if(!p)
+		return Z_ERROR()
+	char c=*p;
+
+	while(
+
+
+
+
+
+
+
+}
 
 
 #define LIMIT_COL 10

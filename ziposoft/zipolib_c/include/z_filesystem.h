@@ -10,11 +10,11 @@ ________________________________________________________________________*/
 extern "C" {
 #endif
 #include "zipolib_c/include/zipo.h"
-typedef size_t z_fileh;
+typedef size_t z_file_h;
 typedef size_t z_directory_h;
 U8*  z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  );
 int    z_file_open_and_write(utf8 in_filepath,U8* data,unsigned long length  );
-int    z_fopen(z_fileh* filep,utf8 _Filename,ascii _Mode);
+int    z_fopen(z_file_h* filep,utf8 _Filename,ascii _Mode);
 int    z_file_delete(utf8 name);
 int    z_file_exists(utf8 name);
 

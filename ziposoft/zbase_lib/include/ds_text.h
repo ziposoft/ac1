@@ -13,12 +13,14 @@ class zb_ds_table_txt  : public zb_ds_table	  ,public z_parse_csv
 	std::vector<zb_rec_ptr_txt*>   _data;
 	zb_rec_ptr_txt* _current_row;
 	int _current_column;
+	bool _dirty;
 public:
 	zb_ds_table_txt(zb_ds_text* ds,ctext unique_id);
 	zb_ds_text* _ds;
 
 	virtual z_status record_add(zb_ds_rec_ptr* rec);
 	virtual z_status open(bool writable);
+	virtual z_status commit();
 	virtual size_t get_record_count();
 	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 

@@ -6,6 +6,14 @@
 #include "zipolib_cpp/include/z_trace.h"
 
 
+/*
+errors can be reported many ways.
+
+To stdout, to the zipo log, to the OS debug/trace facilities (DbgPrint), to custom callbacks, etc.
+
+
+*/
+
 enum {
 	z_status_cpp_lib_start=0x1000,
 	z_status_could_not_open_dir,
@@ -32,6 +40,8 @@ public:
 };
 
 extern z_error gz_error;
+#define	Z_ERROR(status)   gz_logger.add_msg (__FILE__,__FUNCTION__,__LINE__,status);
+#define	Z_ERROR_MSG(status,...)   gz_logger.add_msg (__FILE__,__FUNCTION__,__LINE__,status,__VA_ARGS__);
 
 #define	Z_ERROR(status, ...)   gz_logger.add_msg (__FILE__,__FUNCTION__,__LINE__,status,__VA_ARGS__);
 #define	Z_ERROR_RETURN(status, ...)  gz_logger.add_msg( __FILE__,__FUNCTION__,__LINE__,status,__VA_ARGS__);
