@@ -6,6 +6,7 @@
 #include "zipolib_c/include/z_debug.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 #ifdef BUILD_VSTUDIO
 #include  <direct.h>
 #else
@@ -30,6 +31,22 @@ int z_fopen(z_fileh* filep,utf8 _Filename,ascii _Mode)
 #endif
 }
 
+int    z_file_exists(utf8 fname)
+{
+	FILE *file;
+	if ((file = fopen(fname, "r")) == NULL) {
+	  if (errno == ENOENT) {
+		return -1;
+	  } else {
+		// Check for other errors too, like EACCES and EISDIR
+		return -1;
+	  }
+	} else {
+	  fclose(file);
+	}
+	return 0;
+	
+}
 
 
 U8* z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  )

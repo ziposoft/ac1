@@ -9,8 +9,12 @@ class zb_ds_field
 {
 protected:
 	z_string _id;
+	int _index;
 
 public:
+	virtual void index_set(int i) {  _index=i; };
+	virtual int index_get(){  return _index; };
+
 	virtual ctext get_map_key() { return _id;};
 
 	virtual z_status set_string(zb_ds_rec_ptr *rec,ctext s);
@@ -26,6 +30,12 @@ public:
 	virtual ~zb_ds_desc(){}
 	zb_field* get_field(ctext name);
 	z_status get_default_rec(zb_record *rec);
+	virtual void init_child(zb_ds_field *fld)
+	{
+		int i=size()-1;
+		fld->index_set(i);
+
+	}
 	
 };
 class zb_ds_table 
@@ -109,15 +119,15 @@ public:
 	virtual z_status close(){ return ZB_ERROR(zb_status_not_implemented);};
 	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return ZB_ERROR(zb_status_not_implemented);};
 	virtual bool is_open();
-	virtual zb_st_master* get_tbl_master(){ return 0;};
-	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_ds_field& desc){ return 0;};
+	virtual zb_st_master* get_tbl_master(){ ZB_ERROR(zb_status_not_implemented);return 0;};
+	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_ds_field& desc){ZB_ERROR(zb_status_not_implemented); return 0;};
 
-	virtual zb_ds_table* ds_table_new(ctext ds_table_name){ return 0;};
- 	virtual z_status     ds_table_open(zb_ds_table* tbl){ return 0;};
+	virtual zb_ds_table* ds_table_new(ctext ds_table_name){ZB_ERROR(zb_status_not_implemented); return 0;};
+ 	virtual z_status     ds_table_open(zb_ds_table* tbl){ return ZB_ERROR(zb_status_not_implemented);};
 
-	virtual zb_ds_field* ds_field_string_new(ctext id){ return 0;};
-	virtual zb_ds_field* ds_field_int32_new(ctext id){ return 0;};
-	virtual zb_ds_rec_ptr* record_solo_new(){ return 0;};
+	virtual zb_ds_field* ds_field_string_new(ctext id){ ZB_ERROR(zb_status_not_implemented);return 0;};
+	virtual zb_ds_field* ds_field_int32_new(ctext id){ ZB_ERROR(zb_status_not_implemented);return 0;};
+	virtual zb_ds_rec_ptr* record_solo_new(){ ZB_ERROR(zb_status_not_implemented);return 0;};
 
 	z_map<zb_ds_table> _ds_tables;
 

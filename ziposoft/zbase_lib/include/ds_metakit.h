@@ -70,7 +70,6 @@ public:
 class zb_ds_field_mk  : public zb_ds_field
 {
 protected:
-	z_string		_id;
 public:
 	zb_ds_field_mk(ctext id);
 	virtual ~zb_ds_field_mk();
