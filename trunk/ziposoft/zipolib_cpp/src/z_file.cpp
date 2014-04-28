@@ -376,11 +376,13 @@ bool z_parse_csv::ParseValue()
 	_value="";
 	_bInsideString=false;
 
-	while(1)
+	while(_i<_buffSize)
 	{
 		if(_bBufferEnd) return true;
 		U8 c=_buff[_i];
-		U8 c2=_buff[_i+1];
+		U8 c2=0;
+		if((_i+1)<_buffSize)
+			c2=_buff[_i+1];
 		Inc();
 		if (_bInsideString)
 		{
@@ -431,6 +433,8 @@ bool z_parse_csv::ParseValue()
 		}
 		_value+=c;
 	}
+	_bBufferEnd=true;
+	return true;
 }
 
 
@@ -444,6 +448,8 @@ bool z_parse_csv::ParseBuffer(ctext buff,size_t size)
 	_bBufferEnd=false;
 	_buff=buff;
 	_buffSize=size;
+	if(size==0)
+		return false;
 	while(_bBufferEnd==false) 
 	{
 		ZT("%20.20s",_buff+_i);
