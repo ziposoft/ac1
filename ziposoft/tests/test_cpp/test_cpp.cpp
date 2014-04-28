@@ -4,6 +4,13 @@
 #include "zipolib_cpp/include/zipolib_cpp.h"
 #include "zipolib_cpp/include/z_filesystem.h"
 #include "zipolib_cpp/include/z_trace.h"
+#include "zipolib_cpp/include/z_ntf.h"
+
+ class test	 : public 	z_ntf_obj
+ {
+
+
+ };
 
 
 
