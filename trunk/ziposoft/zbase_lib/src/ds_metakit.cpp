@@ -14,7 +14,7 @@ void  d4_assert(bool a)
 	if(!a)
 	{
 		Z_ASSERT(0);
-		Z_ERROR(zb_status_ds_data_error,"metakit error");
+		Z_ERROR_MSG(zb_status_ds_data_error,"metakit error");
 	}
 }
 /*____________________________________________________________________________
@@ -158,7 +158,7 @@ z_status zb_ds_metakit::_get_view(c4_View& view,ctext viewid,zb_ds_desc & desc)
 	{
 		_status=status_corrupt;
 		//Z_ASSERT(0);
-		return Z_ERROR_RETURN(	zb_status_ds_data_error,"Error accessing %s",viewid);
+		return Z_ERROR_MSG(	zb_status_ds_data_error,"Error accessing %s",viewid);
 
 	}
 	return zb_status_ok;
@@ -211,7 +211,7 @@ z_status zb_ds_metakit::_get_view_for_table(c4_View& view,zb_table_base* tbl)
 	{
 		_status=status_corrupt;
 		//Z_ASSERT(0);
-		return Z_ERROR_RETURN(	zb_status_ds_data_error,"Error accessing %s",tbl->get_name());
+		return Z_ERROR_MSG(	zb_status_ds_data_error,"Error accessing %s",tbl->get_name());
 
 	}
 	return zb_status_ok;

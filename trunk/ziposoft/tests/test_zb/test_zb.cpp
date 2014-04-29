@@ -9,6 +9,7 @@ int test_ds_table(zb_source* p_ds)
 	zb_ds_rec_ptr* pRec=0;
 	zb_ds_table* tbl=0;
 	zb_ds_field* fld=0;
+	zb_ds_field* fld2=0;
 	zb_ds_rec_ptr* ptr=0;
 	z_string data;
 	int i;
@@ -21,8 +22,11 @@ int test_ds_table(zb_source* p_ds)
 		fld=p_ds->ds_field_string_new("field1str");
 		if(!fld)
 			break;
+		fld2=p_ds->ds_field_string_new("field2str");
+		if(!fld2)
+			break;
 
-		tbl->get_desc() ,fld;
+		tbl->get_desc() ,fld,fld2;
 		status=p_ds->open(true,true);
 		if(status)
 			break;
@@ -63,7 +67,9 @@ int test_ds_table(zb_source* p_ds)
 		status=fld->set_string(pRec,data);
 		if(status)
 			break;
-
+		status=fld2->set_string(pRec,"teabag");
+		if(status)
+			break;
 		status=tbl->record_add(pRec);
 		if(status)
 			break;
@@ -124,10 +130,10 @@ int main(int argc, char* argv[])
 	/*____________________________________________________________________________
 		Test Metakit 
 	____________________________________________________________________________*/
-
+	/*
 	zb_ds_metakit test_ds_mk("test");
 	test_ds_table(&test_ds_mk);
-
+	*/
  	/*____________________________________________________________________________
 
 	Test Text 

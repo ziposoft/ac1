@@ -22,7 +22,7 @@ z_status zb_ds_text::open(bool create,bool writable)
 	size_t i;
 	status=_dir.open(_name,create);
 	if(status)
-		return Z_ERROR(zb_status_cant_open_file,"can't open directory");
+		return Z_ERROR_MSG(zb_status_cant_open_file,"can't open directory");
 
 	z_strlist list;
 	_dir.get_files_by_extension("txt",list);
@@ -36,7 +36,7 @@ z_status zb_ds_text::open(bool create,bool writable)
 
 	status=z_change_dir(_name,false);
 	if(status)
-  		return Z_ERROR(zb_status_cant_open_file,"can't change to directory");
+  		return Z_ERROR_MSG(zb_status_cant_open_file,"can't change to directory");
 
 
 	 return 0;
@@ -50,6 +50,7 @@ zb_ds_table* zb_ds_text::ds_table_new(ctext ds_table_name)
 {
 
 	zb_ds_table_txt* tbl=z_new zb_ds_table_txt(this,ds_table_name);
+	_tables<<tbl;
 	return  tbl;
 }
 zb_ds_field* zb_ds_text::ds_field_string_new(ctext id)
@@ -61,6 +62,19 @@ zb_ds_rec_ptr* zb_ds_text::record_solo_new()
 	zb_rec_ptr_txt* pRec=	z_new zb_rec_ptr_txt(true);
 	return pRec;
 }
+z_status zb_ds_text::commit()
+{
+	z_map_iter i;
+	zb_ds_table_txt* t;
+	while(t=_tables.get_next(i))
+	{
+		t->commit();
+
+	}
+	return zb_status_ok;
+
+}
+
 /*___________________________________________________________________________
 
 	zb_ds_table_txt 
@@ -89,15 +103,35 @@ z_status zb_ds_table_txt::record_add(zb_ds_rec_ptr* rec)
 }
 z_status zb_ds_table_txt::commit()
 {
-	z_status s=_file.open(_id,"w");
+	z_status s=_file.open(_id,"wb");
 	if(s)
 		return ZB_ERROR(zb_status_cant_open_file);
 
-	size_t i;
-	zb_rec_ptr_txt* p;
-	for(i=0;i<get_record_count();i++)
-		p
-		return 0;
+	size_t i_rec;
+	zb_ds_field *fld;
+	z_string data;
+	zb_ds_rec_ptr* rec;
+	for(i_rec=0;i_rec<get_record_count();i_rec++)
+	{
+		z_map_iter i_fld;
+		bool comma=false;
+		while(fld=_ds_desc.get_next(i_fld))
+		{
+			if(comma)
+				_file <<',';
+
+			rec=_data[i_rec];
+			fld->get_string(rec,data);
+			z_csv_encode_string(data);
+			_file <<data;
+			comma=true;
+
+		}
+		_file <<'\n';
+	}
+	_file.close();
+	return zb_status_ok;
+
 }
 z_status zb_ds_table_txt::open(bool writable)
 {
@@ -115,7 +149,12 @@ z_status zb_ds_table_txt::open(bool writable)
 	*/
 	z_status s=_file.open(_id,flags);
 	if(s)
+	{
+		if(writable)
+			return zb_status_ok; //this is a new file, it will be created on commit
+
 		return ZB_ERROR(zb_status_cant_open_file);
+	}
 
 	z_string data;
 	_file.read_all(data);
@@ -142,6 +181,7 @@ z_status zb_ds_table_txt::get_record_by_index(size_t index,
 }
 bool zb_ds_table_txt::NewRowCallback()
 {
+	
 	_current_row=new zb_rec_ptr_txt();
 	_data.push_back(_current_row);
 	_current_column=0;
@@ -219,6 +259,21 @@ ctext zb_rec_ptr_txt::get_string(int index)
 		return 0;
 	return (*this)[index];
 }
+void zb_rec_ptr_txt::output_csv(z_file& out)
+{
+	size_t i;
+	z_string s;
+	for(i=0;i<size();i++)
+	{
+		s=at(i);
+		z_csv_encode_string(s);
+		out<<s;
+
+	}
+
+}
+
+
 /*___________________________________________________________________________
 
 	Fields 

@@ -164,7 +164,7 @@ public:
 		return true;
 	}
 };
-z_status z_csv_encode_string(ctext input,z_string& output);
+z_status z_csv_encode_string(z_string& output);
 
 
 extern z_debug gz_debug;

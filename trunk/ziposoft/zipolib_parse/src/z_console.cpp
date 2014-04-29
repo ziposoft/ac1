@@ -246,7 +246,7 @@ z_status z_console::execute_line(ctext text)
 			z_obj* child=get_child_obj(name,_obj_current_tmp);
 			if(!child)
 			{
-				Z_ERROR("Could not find child object \"%s\"",name);
+				Z_ERROR_MSG("Could not find child object \"%s\"",name);
 				return zs_child_not_found;
 			}
 			_obj_current_tmp=child;
@@ -260,7 +260,7 @@ z_status z_console::execute_line(ctext text)
 	if(status==zs_no_entry_for_item)
 		status=execute_feature(this);
 	if(status==zs_no_entry_for_item)
-		Z_ERROR("Unknown feature:\"%s\"",_cmd_line_obj._feature._name.c_str());
+		Z_ERROR_MSG("Unknown feature:\"%s\"",_cmd_line_obj._feature._name.c_str());
 #endif
 	return status;
 }
