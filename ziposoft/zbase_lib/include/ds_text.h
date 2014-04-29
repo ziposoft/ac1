@@ -41,6 +41,7 @@ public:
 	virtual ~zb_ds_text();
 	virtual z_status open(bool create,bool writable);
 	virtual z_status close();
+	virtual z_status commit();
  	virtual zb_ds_table* ds_table_new(ctext ds_table_name);
 	virtual zb_ds_rec_ptr* record_solo_new();
 	virtual zb_ds_field* ds_field_string_new(ctext id);
@@ -69,6 +70,7 @@ public:
 
 	ctext get_string(int index);
 	void set_string(int index,ctext str);
+	void output_csv(z_file& out);
 
 };
 class zb_ds_field_text  : public zb_ds_field

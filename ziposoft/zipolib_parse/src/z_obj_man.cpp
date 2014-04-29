@@ -438,11 +438,11 @@ z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt
 				const z_obj_fact* fact=zo_get_factory(op->_name);
 				if(!fact)
 				{
-					return Z_ERROR_RETURN(zs_no_entry_for_item,"Unknown class \"%s\"",op->_name.c_str());
+					return Z_ERROR(zs_no_entry_for_item,"Unknown class \"%s\"",op->_name.c_str());
 				}
 				if(!fact->create_func)
 				{
-					return Z_ERROR_RETURN(zs_cannot_create_virtual_obj,"Cannot create virtual obj \"%s\"",op->_name.c_str());
+					return Z_ERROR(zs_cannot_create_virtual_obj,"Cannot create virtual obj \"%s\"",op->_name.c_str());
 
 				}
 				z_obj* new_obj=(fact->create_func)();
