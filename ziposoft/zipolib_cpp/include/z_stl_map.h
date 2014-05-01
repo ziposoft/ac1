@@ -137,8 +137,9 @@ public:
 };
 
 template <class ITEM_CLASS > class z_map 
-: public std::map<ctext,void*,ctext_less_than> 
 {
+protected:
+	std::map<ctext,void*,ctext_less_than>  _map;
 public:
 	typedef typename std::map<ctext,void*,ctext_less_than> m;
 	/*
@@ -149,7 +150,6 @@ public:
         return *this;
     };
 	*/
-
 	bool add(ctext key_in,ITEM_CLASS* item)
 	{
 		size_t len=strlen(key_in);
@@ -157,20 +157,24 @@ public:
 		
 		strncpy(s,key_in,len);
 		s[len]=0;
-		(*this)[s]=item;
+		_map[s]=item;
 		
 		return true;
 	}
 	void clear_all()
 	{ 
-		m::clear(); 
+		_map.clear(); 
+	}
+ 	size_t size()
+	{ 
+		return _map.size(); 
 	}
 	ITEM_CLASS* get_current(z_map_iter& iter)
 	{
 
 		if(iter.key==0)
-			iter.i=m::begin();
-		if(iter.i==m::end()) return 0;
+			iter.i=_map.begin();
+		if(iter.i==_map.end()) return 0;
 		void* data_out=iter.i->second;
 		iter.key=iter.i->first;
 		return (ITEM_CLASS*)data_out;
@@ -182,19 +186,26 @@ public:
 			iter.i++;
 		return (ITEM_CLASS*)data_out;
 	}
+	ITEM_CLASS* operator [](ctext key)
+	{
+		z_map_iterator i=_map.find(key);
+		if(i==_map.end()) return 0;
+		void* data_out=i->second;
+		return (ITEM_CLASS*)data_out;
+	}
 	ITEM_CLASS* get(ctext key)
 	{
-		z_map_iterator i=m::find(key);
-		if(i==m::end()) return 0;
+		z_map_iterator i=_map.find(key);
+		if(i==_map.end()) return 0;
 		void* data_out=i->second;
 		return (ITEM_CLASS*)data_out;
 	}
 
 	bool del(ctext key)
 	{
-		z_map_iterator i=m::find(key);
-		if(i==m::end()) return false;
-		m::erase(i);
+		z_map_iterator i=_map.find(key);
+		if(i==_map.end()) return false;
+		_map.erase(i);
 		return true;
 	}
 };

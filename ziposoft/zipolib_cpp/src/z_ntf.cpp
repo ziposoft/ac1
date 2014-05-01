@@ -8,3 +8,14 @@ z_ntf_feature::z_ntf_feature(z_ntf_obj* parent,ctext name)
 
 
 }
+
+z_ntf_prop::z_ntf_prop(z_ntf_obj* parent,ctext name)  :z_ntf_feature(parent,name)
+{
+
+
+}
+z_ntf_prop::~z_ntf_prop() 
+{
+
+
+}

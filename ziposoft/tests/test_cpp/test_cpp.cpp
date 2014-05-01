@@ -8,6 +8,21 @@
 
  class test	 : public 	z_ntf_obj
  {
+ public:
+	 test()
+	 {
+
+		PROP(_i);
+		PROP(_str);
+		PROP_T(hex32,_hex);
+
+	 }
+	 virtual ~test(){}
+	 U32 _i;
+	 U32 _hex;
+	 z_string _str;
+
+
  };
 
 
@@ -18,9 +33,22 @@ int main()
 {
 	ZT_ENABLE();
 	ZTF;
-	z_string larry="fred";
+	z_string larry="Fred";
 
-	ZT("Testing trace %s %d...\n","ddd",4);
+	ZT("Testing trace %s %d...\n","duds",4);
+
+
+	test x;
+	x.props["_i"]->set_value("123");
+	x.props["_i"]->get_value(larry);
+	gz_out <<larry<<','<<x._i <<'\n';
+
+	x._i=982;
+ 	x.props["_i"]->get_value(larry);
+	gz_out <<larry<<','<<x._i <<'\n';
+ 	x._hex=982;
+ 	x.props["_hex"]->get_value(larry);
+	gz_out <<larry<<','<<x._hex <<'\n';
 
 
 	gz_out << "list of exe files:\n";
