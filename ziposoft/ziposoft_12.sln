@@ -52,10 +52,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "third", "third", "{C1E23D21-20AD-446C-8831-1C806ED8AA82}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zlibs", "zlibs", "{616AE2B8-05F0-4DAF-98B5-1D9B8CE5441C}"
+	ProjectSection(SolutionItems) = preProject
+		common.mk = common.mk
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zbase", "zbase", "{57DE92DE-CAEC-48D5-8E8E-40B00879C10C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dump", "..\third\metakit\dump\dump.vcxproj", "{C1FBFA01-75CF-4B32-9C48-4AC837766A26}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_make", "tests\test_make\test_make.vcxproj", "{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -215,6 +220,18 @@ Global
 		{C1FBFA01-75CF-4B32-9C48-4AC837766A26}.release_trace|Win32.Build.0 = Release|Win32
 		{C1FBFA01-75CF-4B32-9C48-4AC837766A26}.Release|Win32.ActiveCfg = Release|Win32
 		{C1FBFA01-75CF-4B32-9C48-4AC837766A26}.Release|Win32.Build.0 = Release|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.Debug_NoTrace|Win32.ActiveCfg = Debug|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.Debug_NoTrace|Win32.Build.0 = Debug|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.Debug_Trace|Win32.ActiveCfg = Debug|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.Debug_Trace|Win32.Build.0 = Debug|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.Debug|Win32.Build.0 = Debug|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.dll_release|Win32.ActiveCfg = Debug|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.dll_release|Win32.Build.0 = Debug|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.release_trace|Win32.ActiveCfg = Release|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.release_trace|Win32.Build.0 = Release|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.Release|Win32.ActiveCfg = Release|Win32
+		{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

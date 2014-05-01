@@ -135,6 +135,10 @@
     <ClCompile Include="..\src\z_utility.c" />
     <ClCompile Include="..\src\z_os_specific.c" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Makefile" />
+    <None Include="..\Makefile.dbg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
