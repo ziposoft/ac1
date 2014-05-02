@@ -233,7 +233,7 @@ z_status zp_obj_parser::_f_output_string(zp_flags flags,zp_mode mode)
 			//Z_ASSERT((0));
 			return zs_no_match;
 		}
-		zp_obj_base* obj=
+		zp_obj* obj=
 			_ctx_current->_obj->get_child_by_offset(
 			_ctx_current->_output_obj_index,
 			context_get_current_template_parser().get_index_offset(),
@@ -400,7 +400,7 @@ z_status zp_obj_parser::_process_single_item(zp_mode mode,zp_flags flags)
 					if(flags.multi)
 					{
 						item_result=feature_objlist_get_next(_ctx_current->_obj,
-							_ctx_current->_member_var_name,(z_obj**)&sub_obj);
+							_ctx_current->_member_var_name,(zp_obj_base**)&sub_obj);
 						if(item_result)
 							return zs_no_match;
 					}
@@ -413,7 +413,7 @@ z_status zp_obj_parser::_process_single_item(zp_mode mode,zp_flags flags)
 				}
 				if((!sub_obj)&&(_ctx_current->_obj))
 				{
-					zp_obj_base* obj=
+					zp_obj* obj=
 						_ctx_current->_obj->get_child_by_offset(
 						_ctx_current->_output_obj_index,
 						context_get_current_template_parser().get_index_offset(),

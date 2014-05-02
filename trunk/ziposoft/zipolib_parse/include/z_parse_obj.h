@@ -1,6 +1,6 @@
 #ifndef z_parse_obj_h
 #define z_parse_obj_h
-#include "zipolib_parse/include/z_obj.h"
+#include "zipolib_parse/include/zp_obj.h"
 
 Z_MODULE_DECLARE(parse);
 
@@ -32,19 +32,6 @@ struct z_obj_fact
 */
 class zp_obj_parser;
 
-class zp_obj_base : public z_obj
-{
-public:
-	zp_obj_base()
-	{
-		_templ_offset=0;
-	}
-	size_t _templ_offset;
-	virtual void dump(int level,z_file& outf,int flags)=0;
-	virtual ctext get_map_key()=0;
-	virtual void output(z_file* fp)=0;
-	virtual void dump_custom(z_file& outf) {};
-};
 
 
 const U8 zp_result_no_match=0;
@@ -75,7 +62,7 @@ public:
 #endif
 };
 
-class zp_obj_vect_base : public z_obj_vect<zp_obj_base>
+class zp_obj_vect_base : public z_obj_vect<zp_obj>
 {
 };
 class zp_obj : public zp_obj_base
@@ -83,14 +70,15 @@ class zp_obj : public zp_obj_base
 	zp_obj_vect_base* _children;
 //	const z_obj_fact* _entry;
 public:
+	size_t _templ_offset;
 //	zp_obj(const z_obj_fact* entry);
 	zp_obj();
 	~zp_obj();
 	virtual void output(z_file* fp);
 	virtual ctext get_parse_string();
-	virtual void add_child(zp_obj_base* item);
-	zp_obj_base* get_child(int index);
-	zp_obj_base* get_child_by_offset(int &index,size_t off,int si);
+	virtual void add_child(zp_obj* item);
+	zp_obj* get_child(int index);
+	zp_obj* get_child_by_offset(int &index,size_t off,int si);
 
 	void dump(int level,z_file& outf,int flags);
 	virtual ctext get_map_key();
@@ -99,6 +87,7 @@ public:
 	{
 		return z_str_same(id,get_map_key());
 	}
+	virtual void dump_custom(z_file& outf) {};
 };
 class zp_obj_generic : public zp_obj
 {

@@ -2,7 +2,7 @@
 #include "z_obj_cmd.h"
 
 
-zo_man_cmd::zo_man_cmd(z_obj* root)
+zo_man_cmd::zo_man_cmd(zp_obj_base* root)
 {
 	_root_obj=root;
 	_obj_current=_root_obj;
@@ -21,7 +21,7 @@ z_status zo_man_cmd::parse_line(ctext text)
 	}
 	return status;
 }
-z_status zo_man_cmd::execute_feature(z_obj* obj)
+z_status zo_man_cmd::execute_feature(zp_obj_base* obj)
 {
 	z_status status=zs_ok;
 	ctext feature=_cmd_line_obj._feature._name;
@@ -37,7 +37,7 @@ z_status zo_man_cmd::execute_feature(z_obj* obj)
 		z_string fullname;
 		z_obj_container* list=0;
 		feature_objlist_get(obj,feature,&list);
-		z_obj* subobj=list->get_obj(_cmd_line_obj._feature._subscript_id);
+		zp_obj_base* subobj=list->get_obj(_cmd_line_obj._feature._subscript_id);
 		
 		subobj->set_name(_cmd_line_obj._feature.get_full_name(fullname));
 		subobj->set_parent_obj(_obj_current);
@@ -94,7 +94,7 @@ z_status zo_man_cmd::execute_feature(z_obj* obj)
 }
 z_status zo_man_cmd::navigate_feature(ctext name)
 {
-	z_obj* child=get_child_obj(name,_obj_current_tmp);
+	zp_obj_base* child=get_child_obj(name,_obj_current_tmp);
 	if(!child)
 	{
 		return Z_ERROR_MSG(zs_child_not_found,"Could not find child object \"%s\"",name);
@@ -138,7 +138,7 @@ z_status zo_man_cmd::execute_line(ctext text)
 		if(_cmd_line_obj._object)
 		{
 			ctext name=_cmd_line_obj._object;
-			z_obj* child=get_child_obj(name,_obj_current_tmp);
+			zp_obj_base* child=get_child_obj(name,_obj_current_tmp);
 			if(!child)
 			{
 				return Z_ERROR_MSG(zs_child_not_found,"Could not find child object \"%s\"",name);
@@ -159,7 +159,7 @@ z_status zo_man_cmd::execute_line(ctext text)
 	}
 	return status;
 }
-z_status zo_man_cmd::callback_feature_execute_obj(z_obj* pObj,zo_ftr_entry* fe)
+z_status zo_man_cmd::callback_feature_execute_obj(zp_obj_base* pObj,zo_ftr_entry* fe)
 {
 	//This is absolutely horrible code.
 	
@@ -170,7 +170,7 @@ z_status zo_man_cmd::callback_feature_execute_obj(z_obj* pObj,zo_ftr_entry* fe)
 	return zs_ok;
 }
 
-z_status zo_man_cmd::dump_features_by_type(z_file* fp,z_obj* obj,U32 feature_type)
+z_status zo_man_cmd::dump_features_by_type(z_file* fp,zp_obj_base* obj,U32 feature_type)
 {
 	_dump_fp=fp;
 	zo_feature_list list;
@@ -218,7 +218,7 @@ z_status zo_man_cmd::dump_features_by_type(z_file* fp,z_obj* obj,U32 feature_typ
 }
 
 
-z_status zo_man_cmd::dump_features(z_file* fp,z_obj* obj)
+z_status zo_man_cmd::dump_features(z_file* fp,zp_obj_base* obj)
 {
 	if(!obj)
 	{
@@ -234,7 +234,7 @@ z_status zo_man_cmd::dump_features(z_file* fp,z_obj* obj)
 	dump_features_by_type(fp,obj,ZO_MT_LIST);
 	return zs_ok;
 }
-void zo_man_cmd::dump_features(z_obj* obj)
+void zo_man_cmd::dump_features(zp_obj_base* obj)
 {
 	const z_obj_fact* fact=obj->get_fact();
 	if(!fact)
@@ -276,7 +276,7 @@ void zo_man_cmd::dump()
 
 
 #define ZO_OBJ_LIST \
-	OBJ(zo_man_cmd,z_obj,"generic","generic",0,NO_FTR)
+	OBJ(zo_man_cmd,zp_obj_base,"generic","generic",0,NO_FTR)
 
 #define Z_MODULE _Z_MODULE(man)
 #include "zipolib_parse/include/z_obj_macro.h"

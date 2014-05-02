@@ -77,7 +77,7 @@ public:
 	virtual void refresh();
 	
 	void OnDoubleBack();
-	void runz(z_obj* obj);
+	void runz(zp_obj_base* obj);
 	void show_history();
 	void inc_history(int i);
     virtual void OnUp();
@@ -92,8 +92,8 @@ public:
 
 
 	void dump_all();
-	void dump_feature_outline(z_obj* obj);
-	void dump_obj2(z_obj* obj);
+	void dump_feature_outline(zp_obj_base* obj);
+	void dump_obj2(zp_obj_base* obj);
 
 	//command line functions
 
@@ -112,7 +112,7 @@ public:
 	z_status exit();
 
 };
-class zo_root : public z_obj_vect<z_obj>
+class zo_root : public z_obj_vect<zp_obj_base>
 {
 public:
 	ZO_OBJ_H;
@@ -132,7 +132,7 @@ class zo_console : public z_console,public zo_man_cmd
 {
 public:
 	ZO_OBJ_H;
-	zo_console(z_obj* obj=0) : zo_man_cmd(obj)
+	zo_console(zp_obj_base* obj=0) : zo_man_cmd(obj)
 	{
 		_dummy=0;
 		debug=true;
@@ -157,7 +157,7 @@ public:
 	virtual void refresh();
 	
 	void OnDoubleBack();
-	void runz(z_obj* obj);
+	void runz(zp_obj_base* obj);
 	void show_history();
 	void inc_history(int i);
     virtual void OnUp();
@@ -172,8 +172,8 @@ public:
 
 
 	void dump_all();
-	void dump_feature_outline(z_obj* obj);
-	void dump_obj2(z_obj* obj);
+	void dump_feature_outline(zp_obj_base* obj);
+	void dump_obj2(zp_obj_base* obj);
 
 	//command line functions
 
@@ -192,7 +192,7 @@ public:
 	z_status exit();
 
 };
-class zo_root : public z_obj_vect<z_obj>
+class zo_root : public z_obj_vect<zp_obj_base>
 {
 public:
 	ZO_OBJ_H;

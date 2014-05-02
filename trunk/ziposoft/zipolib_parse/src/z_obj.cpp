@@ -1,6 +1,6 @@
 #include "z_parse_pch.h"
 
-#include "zipolib_parse/include/z_obj.h"
+#include "zipolib_parse/include/zp_obj.h"
 #include "zipolib_parse/include/z_obj_man.h"
 
 
@@ -30,7 +30,7 @@ z_obj_man_data::z_obj_man_data()
 	ctext parse_string;
 	*/
 
-void z_obj_man_data::init_from_fact(const z_obj_fact* f,z_obj* parent)
+void z_obj_man_data::init_from_fact(const z_obj_fact* f,zp_obj_base* parent)
 {
 	_parent_obj=parent;
 	_fet_ent._desc=f->desc;
@@ -60,11 +60,11 @@ ctext zo_ftr_get_name(zo_ftr_entry* fe)
 }
 
 
-z_obj::z_obj()
+zp_obj_base::zp_obj_base()
 {
 	_man_data=0;
 }
-ctext z_obj::get_id()
+ctext zp_obj_base::get_id()
 {
 	if(_man_data)
 		return _man_data->_fet_ent._short_id;
@@ -75,16 +75,16 @@ ctext z_obj::get_id()
 	
 }
 /*
-bool z_obj::compare_id(ctext id_to_compare)
+bool zp_obj_base::compare_id(ctext id_to_compare)
 {
 	if(!get_id())
 		return false;
 	return z_str_same(id_to_compare,get_id());
 }
 */
-void z_obj::get_path(z_string& path)
+void zp_obj_base::get_path(z_string& path)
 {
-	z_obj* o=get_parent_obj();
+	zp_obj_base* o=get_parent_obj();
 	if(o)
 	{
 		o->get_path(path);
@@ -96,20 +96,20 @@ void z_obj::get_path(z_string& path)
 
 
 //ZP_OBJ(zo_module,zp_obj,"module", "#'\t':{_name}ident:'<':#{_default}ident:'>':#'\n'",ZPV(_name),ZPV(_default));
-zo_ftr_entry* z_obj::get_feature(ctext f)
+zo_ftr_entry* zp_obj_base::get_feature(ctext f)
 {
 	const z_obj_fact* fact=get_fact();
 	if(!fact) return 0;
 	return get_feature(fact,f);
 }
-z_status z_obj::get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias)
+z_status zp_obj_base::get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 feature_type,bool include_alias)
 {
 	man->get_feature_map_by_fact(list,get_fact(),feature_type,include_alias);
 	return zs_ok;
 }
 
 
-zo_ftr_entry* z_obj::get_feature(const z_obj_fact* fact,ctext f)
+zo_ftr_entry* zp_obj_base::get_feature(const z_obj_fact* fact,ctext f)
 {
 	zo_ftr_entry* fe=0;
 	if(!fact) return 0;
@@ -136,9 +136,9 @@ zo_ftr_entry* z_obj::get_feature(const z_obj_fact* fact,ctext f)
 }
 
 
-const z_obj_fact z_obj::FACT=
+const z_obj_fact zp_obj_base::FACT=
 {
-	"z_obj",
+	"zp_obj_base",
 	"",
 	0,//zo_create_item_func func;
 	0,// zo_ftr_entry* var_list;
@@ -146,10 +146,10 @@ const z_obj_fact z_obj::FACT=
 	0,// z_obj_fact* base_fact;
 	0
 };
-const z_obj_fact* z_obj::get_fact() { return &z_obj::FACT; }
+const z_obj_fact* zp_obj_base::get_fact() { return &zp_obj_base::FACT; }
 
 
-void z_obj::init_man_data(z_obj* parent_obj)
+void zp_obj_base::init_man_data(zp_obj_base* parent_obj)
 {
 	if(!_man_data)
 	{
@@ -158,36 +158,36 @@ void z_obj::init_man_data(z_obj* parent_obj)
 		
 	}
 }
-ctext z_obj::get_map_key() 
+ctext zp_obj_base::get_map_key() 
 { 
 	if(_man_data)
 		if(_man_data->_name)
 			return _man_data->_name;
 	return z_obj_fact_get_name(get_fact());
 };
-ctext z_obj::get_type()
+ctext zp_obj_base::get_type()
 {
 	return z_obj_fact_get_name(get_fact());
 
 }
 
-void z_obj::set_name(ctext t)
+void zp_obj_base::set_name(ctext t)
 {
 	get_man_data()->_name=t;
 
 }
-void z_obj::set_parent_obj(z_obj* obj)
+void zp_obj_base::set_parent_obj(zp_obj_base* obj)
 {
 	get_man_data()->_parent_obj=obj;
 
 }
-zo_ftr_entry* z_obj::get_feature_for_obj()
+zo_ftr_entry* zp_obj_base::get_feature_for_obj()
 {
 	if(_man_data)
 		return &(get_man_data()->_fet_ent);
 	return 0;
 }
-z_obj* z_obj::get_parent_obj()
+zp_obj_base* zp_obj_base::get_parent_obj()
 {
 	if(_man_data)
 		return _man_data->_parent_obj;
@@ -200,13 +200,13 @@ z_status z_obj_container::feature_manipulate(zo_fet_man_context* context)
 	zo_manipulator* m=context->_man;
 
 
-	z_obj* obj=get_obj(var_name);
+	zp_obj_base* obj=get_obj(var_name);
 	if(obj)
 		return m->feature_callback_pchild(context,0,obj);
 	return zs_feature_not_found;
 }
 
-z_obj_man_data* z_obj::get_man_data()
+z_obj_man_data* zp_obj_base::get_man_data()
 {
 	if(!_man_data)
 	{
@@ -282,10 +282,10 @@ void zo_str_container::copy(zo_str_container& other)
 zo_ftr_entry* z_obj_container::get_feature(ctext f)
 {	
 
-	z_obj* obj=get_obj(f);
+	zp_obj_base* obj=get_obj(f);
 	if(obj)
 		return obj->get_feature_for_obj();
-	return z_obj::get_feature(f);
+	return zp_obj_base::get_feature(f);
 
 
 
@@ -295,7 +295,7 @@ z_status z_obj_container::get_feature_map(zo_manipulator* man,zo_feature_list& l
 	if (feature_type&ZO_MT_CHILD)
 	{
 		reset_iter();
-		z_obj* obj=0;
+		zp_obj_base* obj=0;
 
 		while((obj=get_next_obj()))
 		{
@@ -310,5 +310,5 @@ z_status z_obj_container::get_feature_map(zo_manipulator* man,zo_feature_list& l
 		}
 	}
 
-	return z_obj::get_feature_map(man, list, feature_type, include_alias);
+	return zp_obj_base::get_feature_map(man, list, feature_type, include_alias);
 }

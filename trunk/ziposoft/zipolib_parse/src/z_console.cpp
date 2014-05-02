@@ -245,7 +245,7 @@ z_status z_console::execute_line(ctext text)
 		if(_cmd_line_obj._object)
 		{
 			ctext name=_cmd_line_obj._object;
-			z_obj* child=get_child_obj(name,_obj_current_tmp);
+			zp_obj_base* child=get_child_obj(name,_obj_current_tmp);
 			if(!child)
 			{
 				Z_ERROR_MSG("Could not find child object \"%s\"",name);
@@ -352,7 +352,7 @@ void z_console::OnDoubleBack()
 #if 0
 #define Z_MODULE _Z_MODULE(console)
 #define ZO_OBJ_LIST \
-	OBJ(zo_console,z_obj,"console","console desc",0,\
+	OBJ(zo_console,zp_obj_base,"console","console desc",0,\
 		PROP(_config_file,"cfgfile","cfg","Name of configuration file",0)\
 		PROP(_startup_path,"path","path","Startup Path",0)\
 		LIST(_history,"history",0,0,0)\
@@ -365,7 +365,7 @@ void z_console::OnDoubleBack()
 		ACT(shell,0,0,0,0,NO_PARAMS)\
 		ACT(exit,0,"quit",0,0,NO_PARAMS)\
 		)\
-	OBJ(zo_root,z_obj_vect<z_obj>,"root","root desc",0,\
+	OBJ(zo_root,z_obj_vect<zp_obj_base>,"root","root desc",0,\
 		CHILD(_console,"console","console","console desc",0)\
 		PCHILD(_p_trace,"trace","trace","trace desc",0)\
 		/*LIST(_child_list,"children",0,0,0)\ */ \
@@ -401,7 +401,7 @@ void zo_console::OnDoubleBack()
 	//if(!use_double_back) return;
 	if(!_obj_current)
 		return;
-	z_obj* p=_obj_current->get_parent_obj();
+	zp_obj_base* p=_obj_current->get_parent_obj();
 	if(!p)
 		return;
 	_obj_current=p;
@@ -409,7 +409,7 @@ void zo_console::OnDoubleBack()
 	put_prompt();
 
 }
-void zo_console::runz(z_obj* obj)
+void zo_console::runz(zp_obj_base* obj)
 {
 	_history_index=-1;
 	_feature_index=0;
@@ -577,7 +577,7 @@ void zo_console::OnTab()
 	
 }
 
-void zo_console::dump_feature_outline(z_obj* obj)
+void zo_console::dump_feature_outline(zp_obj_base* obj)
 {
 	const z_obj_fact* fact=obj->get_fact();
 	if(!fact)
@@ -612,7 +612,7 @@ void zo_console::dump_all()
 		}
 	}
 }
-void zo_console::dump_obj2(z_obj* obj)
+void zo_console::dump_obj2(zp_obj_base* obj)
 {
 	const z_obj_fact* fact=obj->get_fact();
 	gz_out<< z_obj_fact_get_name(fact)<<"\n";

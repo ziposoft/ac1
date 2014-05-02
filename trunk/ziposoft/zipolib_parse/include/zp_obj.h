@@ -5,7 +5,7 @@
 #include "zipolib_parse/include/z_parse_def.h"
 
 
-class z_obj;
+class zp_obj_base;
 class zo_manipulator;
 
 enum type_zo_memvar_oper
@@ -51,7 +51,7 @@ enum type_zo_opt_ui
 	zo_opt_ui_everything,
 	zo_opt_ui_debug
 };
-typedef z_obj* (*zo_create_item_func)();
+typedef zp_obj_base* (*zo_create_item_func)();
 
 #define ZO_OPT_SEC_NONE    (zo_opt_sec_none<<28)
 #define ZO_OPT_SEC_USER    (zo_opt_sec_user<<28) 
@@ -160,30 +160,30 @@ class z_obj_man_data
 {
 public:
 	z_obj_man_data();
-	z_obj* _parent_obj;
+	zp_obj_base* _parent_obj;
 	z_string _name;
 	zo_ftr_entry _fet_ent;
-	void init_from_fact(const z_obj_fact* f,z_obj* parent);
+	void init_from_fact(const z_obj_fact* f,zp_obj_base* parent);
 };
-class z_obj
+class zp_obj_base
 {
 	z_obj_man_data* _man_data;
 	z_obj_man_data* get_man_data();
 public:
-	z_obj();
+	zp_obj_base();
 
 	virtual z_status feature_manipulate(zo_fet_man_context* context) {
 		return zs_feature_not_found;
 	};
 	virtual const z_obj_fact* get_fact();
-	z_obj* get_parent_obj();
-	void set_parent_obj(z_obj* obj);
+	zp_obj_base* get_parent_obj();
+	void set_parent_obj(zp_obj_base* obj);
 	virtual void get_path(z_string& path);
 	virtual ctext get_map_key();
 	//virtual bool compare_id(ctext id_to_compare);
 	virtual ctext get_type();
 	virtual ctext get_id();
-	virtual void init_man_data(z_obj* parent_obj);
+	virtual void init_man_data(zp_obj_base* parent_obj);
 
 
 	virtual void set_name(ctext t);
@@ -284,13 +284,13 @@ public:
 	}
 };
 
-class z_obj_container : public z_obj
+class z_obj_container : public zp_obj_base
 {
 public:
-	virtual z_obj* get_next_obj()=0;
-	virtual z_obj* get_obj(ctext key)=0;
-	virtual z_obj* add_new(ctext type)=0;
-	virtual void add_obj(z_obj* obj)=0;
+	virtual zp_obj_base* get_next_obj()=0;
+	virtual zp_obj_base* get_obj(ctext key)=0;
+	virtual zp_obj_base* add_new(ctext type)=0;
+	virtual void add_obj(zp_obj_base* obj)=0;
 	virtual size_t get_count()=0;
 	virtual void clear_objs()=0;
 	virtual void reset_iter()=0;
@@ -310,14 +310,14 @@ public:
 		iter=0;
 	}
 	typedef typename std::vector<ITEM_CLASS*> v; //gnu
-	virtual z_obj* get_obj(ctext key)
+	virtual zp_obj_base* get_obj(ctext key)
 	{
 		if(!key)
 			return 0;
 		U32 i;
 		for(i=0;i<v::size();i++)
 		{
-			z_obj* o=(*this)[i];
+			zp_obj_base* o=(*this)[i];
 			if(o)
 			{
 				if(o->get_id())
@@ -329,22 +329,22 @@ public:
 		return 0;
 	}
 
-	virtual z_obj* get_next_obj()
+	virtual zp_obj_base* get_next_obj()
 	{
 		if(iter>=v::size() )
 			return 0;
 		return (*this)[iter++];
 	}
-	virtual z_obj* add_new(ctext type)
+	virtual zp_obj_base* add_new(ctext type)
 	{
 		const z_obj_fact* fact=zo_get_factory(type);
 		if(!fact) return 0;
-		z_obj* new_obj=(fact->create_func)();
+		zp_obj_base* new_obj=(fact->create_func)();
 		if(!new_obj) return 0;
 		add_obj(new_obj);
 		return new_obj;
 	}
-	virtual void add_obj(z_obj* obj)
+	virtual void add_obj(zp_obj_base* obj)
 	{
 		push_back((ITEM_CLASS*)obj);
 		obj->init_man_data(this);
@@ -381,16 +381,16 @@ public:
 	{
 
 	}
-	virtual z_obj* add_new(ctext type)
+	virtual zp_obj_base* add_new(ctext type)
 	{
 		const z_obj_fact* fact=zo_get_factory(type);
 		if(!fact) return 0;
-		z_obj* new_obj=(fact->create_func)();
+		zp_obj_base* new_obj=(fact->create_func)();
 		if(!new_obj) return 0;
 		add_obj(new_obj);
 		return new_obj;
 	}
-	virtual z_obj* get_next_obj()
+	virtual zp_obj_base* get_next_obj()
 	{
 		return z_map<ITEM_CLASS>::get_next(iter);
 	}
@@ -398,7 +398,7 @@ public:
 	{
 		return z_map<ITEM_CLASS>::get_next(iter);
 	}
-	virtual void add_obj(z_obj* obj)
+	virtual void add_obj(zp_obj_base* obj)
 	{
 		add(obj->get_map_key(),(ITEM_CLASS*)obj);
 	}
@@ -410,7 +410,7 @@ public:
 		z_map<ITEM_CLASS>::get_current(iter);
 		s = iter.key;
 	}
-	virtual z_obj* get_obj(ctext key)
+	virtual zp_obj_base* get_obj(ctext key)
 	{
 
 		return z_map<ITEM_CLASS>::get(key);
