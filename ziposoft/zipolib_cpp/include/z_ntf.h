@@ -121,8 +121,14 @@ public:
 
 };
 
+template <class OBJ> class z_ntf
+{
+public:
+	z_ntf();
+	virtual ~z_ntf();
+	OBJ* create_obj() { OBJ* o=new OBJ(); init_obj(o); } ;
 
 
-
+};
 #endif
 
