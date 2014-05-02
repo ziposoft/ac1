@@ -1,85 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
+#include  <string>
+using namespace std;
+
+class test 
+{
+public:
+	int i;
+	string str;
+	int j;
+	int k;
+};
+
+class test_ntf
+{
+public:
+
+};
+void print_str(void* obj,size_t offset)
+{
+	char* p=(char*)obj+offset;
+
+	string* sp=reinterpret_cast<string*>(p);
+	printf("str= %s",sp->c_str());
 
 
+}
+void print_int(void* obj,size_t offset)
+{
+	char* p=(char*)obj+offset;
 
-#include "zipolib_cpp/include/zipolib_cpp.h"
-#include "zipolib_cpp/include/z_filesystem.h"
-#include "zipolib_cpp/include/z_trace.h"
-#include "zipolib_cpp/include/z_ntf.h"
-
- class test	 : public 	z_ntf_obj
- {
- public:
-	 test():z_ntf_obj("test")
-	 {
-
-		PROP(_i);
-		PROP(_str);
-		PROP_T(hex32,_hex);
-
-	 }
-	 virtual ~test(){}
-	 U32 _hex;
-	 U32 _i;
-	 z_string _str;
+	int* sp=reinterpret_cast<int*>(p);
+	printf("int= %d",*sp);
 
 
- };
-
-
-
-#define TEST_FILE "testfile.txt"
+}
 
 int main()
 {
-	ZT_ENABLE();
-	ZTF;
-	z_string larry="Fred";
+	printf("offsetof(test,_i)=%d\n",offsetof(test,k));
+	size_t offset_k=offsetof(test,k);
+	size_t offset_str=offsetof(test,str);
 
-	ZT("Testing trace %s %d...\n","duds",4);
+	test x,y,z;
 
-	
-	printf("offsetof(test,_i)=%d\n",offsetof(test,_i));
-
-
-	test x;
-	x.props["_i"]->set_value("123");
-	x.props["_i"]->get_value(larry);
-	gz_out <<larry<<','<<x._i <<'\n';
-
-	x._i=982;
- 	x.props["_i"]->get_value(larry);
-	gz_out <<larry<<','<<x._i <<'\n';
- 	x._hex=982;
- 	x.props["_hex"]->get_value(larry);
-	gz_out <<larry<<','<<x._hex <<'\n';
+	x.str="larry x";
+	x.k=99;
+	y.str="geny y";
+	y.k=321;
 
 
-	gz_out << "list of exe files:\n";
+
+	void* px=(void*)&x;
+	void* py=(void*)&y;
+
+	print_int(px,offset_k);
+	print_str(px,offset_str);
+	print_int(py,offset_k);
+	print_str(py,offset_str);
 
 
-	z_directory localdir;
-	z_strlist list;
-
-	localdir.get_files_by_extension("exe",list);
-	list.dump(gz_out);
-	localdir.get_files_by_extension("lib",list);
-	list.dump(gz_out);
-
-	z_file test_file;
-	test_file.open(TEST_FILE,"w");
-	test_file.putf("testing %d,%d,%d\n",1,2,3);
-	test_file.close();
-
-	printf("z_file_exists(TEST_FILE)=%d\n",z_file_exists(TEST_FILE));
-
-	test_file.open(TEST_FILE,"r");
-
-	size_t size;
-	test_file.get_file_size(size);
-	printf("get_file_size=%d\n",size);
-
-	test_file.close();
-
-
-	return 0;//ZS_RET(base,feature_not_found);
+	return 0;
 }

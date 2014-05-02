@@ -38,10 +38,11 @@ public:
 class z_ntf_prop : public z_ntf_feature
 {
 public:
+	size_t _offset;
 	z_ntf_prop(z_ntf_obj* parent,ctext name);
 	virtual~ z_ntf_prop();
-	virtual void set_value(ctext from)=0;
-	virtual void get_value( z_string& str)=0;
+	virtual void set_value(void* obj,ctext from)=0;
+	virtual void get_value(void* obj, z_string& str)=0;
 	virtual void convert(ctext from, z_string& to){to=from;}
 	virtual void convert(ctext from,U32 & to){to=    atol(from); ;}
 	virtual void convert(const U32 & from,z_string& to){to=from;}
@@ -55,7 +56,12 @@ public:
 template <class ITEM> class z_ntf_prop_t : public z_ntf_prop
 {
 public:
-	ITEM* _p_memvar;
+	ITEM* get_var(void* obj)
+	{
+		char* p=(char*)obj+_offset;
+		ITEM* sp=reinterpret_cast<ITEM*>(p);
+		return sp;
+	}
 
 	z_ntf_prop_t(z_ntf_obj* parent,ctext name,ITEM* var) :z_ntf_prop( parent,name)
 	{
@@ -65,13 +71,13 @@ public:
 	{
 		
 	}	
-	void set_value(ctext from)
+	void set_value(void* obj,ctext from)
 	{
-		convert(from,*_p_memvar);	
+		convert(from,*get_var(obj));	
 	}
-	void get_value(z_string& str)
+	void get_value(void* obj,z_string& str)
 	{
-		convert(*_p_memvar,str);	
+		convert(*get_var(obj),str);	
 	}
 };
 
@@ -89,20 +95,22 @@ public:
 #define PROP_T(_TYPE_,_VAR_) addPropT<z_ntf_prop_##_TYPE_>(#_VAR_,&_VAR_)
 
 
-class z_ntf_obj
+
+
+class z_ntf_obj // Interface that contains it's own data. 
 {
 	z_string _name;
 	z_ntf_obj* _parent;
 	z_map_obj<z_ntf_obj> _children;
 	z_map_obj<z_ntf_action> _actions;
 	z_map_obj<z_ntf_feature> _features;
+	z_map_obj<z_ntf_prop> props;
 public:
 	z_ntf_obj(ctext name, z_ntf_obj* parent=0)
 	{
 		_name=name;
 		_parent=parent;
 	}
-	z_map_obj<z_ntf_prop> props;
 
 	
 	template <class PROP_TYPE,class ITEM> void addPropT(ctext id,ITEM* var)
@@ -117,15 +125,16 @@ public:
 		props << p;
 		_features<<p;
 	}
+
 	ctext get_map_key() { return _name; }
 
 };
 
-template <class OBJ> class z_ntf
+template <class OBJ> class z_ntf_fact
 {
 public:
-	z_ntf();
-	virtual ~z_ntf();
+	z_ntf_fact();
+	virtual ~z_ntf_fact();
 	OBJ* create_obj() { OBJ* o=new OBJ(); init_obj(o); } ;
 
 
