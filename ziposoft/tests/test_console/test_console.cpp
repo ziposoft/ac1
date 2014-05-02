@@ -3,7 +3,10 @@
 
 #include "zipolib_cpp/include/zipolib_cpp.h"
 #include "zipolib_parse/include/z_console.h"
+#include "test_console.h"
 Z_MODULE_INCLUDE(Z_MOD(parse));
+
+
 z_console g_con;
 int main(int argc, char* argv[])
 {

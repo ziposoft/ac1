@@ -50,7 +50,7 @@ public:
 	//virtual void convert(const U64 & from,z_string& to){to=from;}
 
 };
-
+ 
 
 template <class ITEM> class z_ntf_prop_t : public z_ntf_prop
 {
@@ -92,20 +92,30 @@ public:
 class z_ntf_obj
 {
 	z_string _name;
+	z_ntf_obj* _parent;
 	z_map<z_ntf_obj> _children;
 	z_map<z_ntf_action> _actions;
 	z_map<z_ntf_feature> _features;
 public:
+	z_ntf_obj(ctext name, z_ntf_obj* parent=0)
+	{
+		_name=name;
+		_parent=parent;
+	}
 	z_map<z_ntf_prop> props;
+
+	
 	template <class PROP_TYPE,class ITEM> void addPropT(ctext id,ITEM* var)
 	{
 		z_ntf_prop* p= new PROP_TYPE (this,id,var);
 		props << p;
+		_features<<p;
 	}	
 	template <class ITEM> void addProp(ctext id,ITEM* var)
 	{
 		z_ntf_prop* p= new z_ntf_prop_t<ITEM> (this,id,var);
 		props << p;
+		_features<<p;
 	}
 	ctext get_map_key() { return _name; }
 

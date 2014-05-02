@@ -121,10 +121,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClCompile Include="test_console.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="test_console.cpp" />
+    <ClInclude Include="test_console.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
