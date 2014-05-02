@@ -41,6 +41,7 @@ public:
 	void clear_line();
 	void trim_line_to(int trim_point);
 	void run();
+    void inc_history(int i);
     virtual void OnEnter();
     virtual void OnTab();
     virtual void OnUp();

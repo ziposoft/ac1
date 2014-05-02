@@ -212,6 +212,8 @@ z_status z_console::execute_line(ctext text)
 	if(status)
 		return status;
 
+
+
 	zo_manipulator man;
 
 	man.dump_obj(&gz_out,&_cmd_line_obj);
@@ -304,23 +306,41 @@ void z_console::OnEnter()
 
 }
 
+void z_console::inc_history(int i)
+{
+	int history_count=(int)_history.size();
+	if(history_count==0) return;
+	clear_line();
+	_history_index+=i;
+	if(_history_index>=history_count)
+	{
+		_history_index=0;
+	}		
+	if(_history_index<0)
+	{
+		_history_index=history_count-1;
+	}
+	output( _history[_history_index]);
+
+
+
+}
+void z_console::OnUp()
+{
+	inc_history(-1);
+};
+void z_console::OnDown()
+{
+	inc_history(1);
+
+};
 void z_console::OnTab()
 {
 
 
 }
 
-void z_console::OnUp()
-{
 
-
-}
-
-void z_console::OnDown()
-{
-
-
-}
 
 void z_console::OnDoubleBack()
 {

@@ -161,10 +161,11 @@ public:
 		
 		return true;
 	}
-	void clear_all()
+	void clear()
 	{ 
 		_map.clear(); 
 	}
+
  	size_t size()
 	{ 
 		return _map.size(); 

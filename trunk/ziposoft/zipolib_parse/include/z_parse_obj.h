@@ -93,7 +93,6 @@ public:
 	zp_obj_base* get_child_by_offset(int &index,size_t off,int si);
 
 	void dump(int level,z_file& outf,int flags);
-	//virtual z_status feature_manipulate(type_memvar_oper set,size_t *index,ctext name,zp_obj_parser* p);
 	virtual ctext get_map_key();
 	virtual ctext get_template();
 	int compare_id(ctext id)
