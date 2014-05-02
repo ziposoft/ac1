@@ -200,8 +200,8 @@ public:
 
 
 
-	z_map<zt_profile> _profiles;
-	z_map<zt_module> _modules;
+	z_map_obj<zt_profile> _profiles;
+	z_map_obj<zt_module> _modules;
 
 
 	void set_output_to_stdout();

@@ -210,12 +210,6 @@ public:
 		return true;
 	}
 };
-template <class ITEM_CLASS> z_map<ITEM_CLASS>& operator<< (z_map< ITEM_CLASS>& out,  ITEM_CLASS* obj) // output
-{
- 	Z_ASSERT(obj);
-    out.add(obj->get_map_key(),obj); 
-    return out;
-}
 template <class ITEM_CLASS > class z_map_obj 
 : public z_map<ITEM_CLASS> 
 {
@@ -231,7 +225,13 @@ public:
 		init_child(obj);
 		return *this;
 	}
-
+	virtual z_map_obj<ITEM_CLASS> & operator << (ITEM_CLASS *obj)
+	{
+ 		Z_ASSERT(obj);
+		add(obj->get_map_key(),obj); 
+		init_child(obj);
+		return *this;
+	}
 };
 
 

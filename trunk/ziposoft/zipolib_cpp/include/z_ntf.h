@@ -93,16 +93,16 @@ class z_ntf_obj
 {
 	z_string _name;
 	z_ntf_obj* _parent;
-	z_map<z_ntf_obj> _children;
-	z_map<z_ntf_action> _actions;
-	z_map<z_ntf_feature> _features;
+	z_map_obj<z_ntf_obj> _children;
+	z_map_obj<z_ntf_action> _actions;
+	z_map_obj<z_ntf_feature> _features;
 public:
 	z_ntf_obj(ctext name, z_ntf_obj* parent=0)
 	{
 		_name=name;
 		_parent=parent;
 	}
-	z_map<z_ntf_prop> props;
+	z_map_obj<z_ntf_prop> props;
 
 	
 	template <class PROP_TYPE,class ITEM> void addPropT(ctext id,ITEM* var)
