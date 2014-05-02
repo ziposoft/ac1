@@ -53,6 +53,8 @@ void zp_text::dump(int level,z_file& outf,int flags)
 zp_obj::zp_obj() 
 {
 	_children=0;
+	_templ_offset=0;
+
 //	_entry=0;
 //	_parent=0;
 //	_offset=0;
@@ -110,7 +112,7 @@ void zp_obj::output(z_file* fp)
 	size_t i;
 	for(i=0;i<size;i++)
 	{
-		zp_obj_base* item=_children->at(i);
+		zp_obj* item=_children->at(i);
 		Z_ASSERT(item);
 		item->output(fp);
 	}
@@ -145,7 +147,7 @@ void zp_obj::dump(int level, z_file& outf,int flags)
 	size_t i;
 	for(i=0;i<size;i++)
 	{
-		zp_obj_base* item=_children->at(i);
+		zp_obj* item=_children->at(i);
 		Z_ASSERT(item);
 		item->dump(level+1,outf,flags);
 	}
@@ -191,7 +193,7 @@ zp_obj* zp_obj::get_item_next_obj(ctext type,size_t& start)
 
 
 #endif
-void zp_obj::add_child(zp_obj_base* item)
+void zp_obj::add_child(zp_obj* item)
 {
 	if(!_children)
 		_children=new zp_obj_vect_base();
@@ -200,9 +202,9 @@ void zp_obj::add_child(zp_obj_base* item)
 //	item->_parent=this;
 
 }
-zp_obj_base* zp_obj::get_child_by_offset(int &index,size_t off,int si)
+zp_obj* zp_obj::get_child_by_offset(int &index,size_t off,int si)
 {
-	zp_obj_base* child=get_child(index);
+	zp_obj* child=get_child(index);
 	if(child)
 		if((child->_templ_offset==off)
 			/*&&(si==child->_stage_index)*/)
@@ -220,7 +222,7 @@ ctext zp_obj::get_parse_string()
 	return get_fact()->parse_string;
 
 }
-zp_obj_base* zp_obj::get_child(int index)
+zp_obj* zp_obj::get_child(int index)
 {
 	if(!_children)
 		return 0;
@@ -290,7 +292,7 @@ ctext zp_feature::get_full_name(z_string& fullname)
 	OBJ(zp_obj_parse,zp_obj,"obj",0,"%whsp:{_name}ident:'<':*{_fet_list}feature:'>':*whsp",VAR(_name) VAR(_fet_list)  )\
 	OBJ(zp_obj_generic,zp_obj,"generic","generic",0,NO_FTR)
 
-//	OBJ(zp_pair,z_obj,"pair","pair desc",ZPS("{_name}ident:'=':{_val}ident:#','"),VAR(_name),VAR(_val))
+//	OBJ(zp_pair,zp_obj_base,"pair","pair desc",ZPS("{_name}ident:'=':{_val}ident:#','"),VAR(_name),VAR(_val))
 //ZP_OBJ(zp_pair,zp_obj,"pair",,ZPV(_name),ZPV(_val));
 #define Z_MODULE _Z_MODULE(parse)
 #include "zipolib_parse/include/z_obj_macro.h"

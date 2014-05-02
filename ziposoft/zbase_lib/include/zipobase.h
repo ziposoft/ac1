@@ -2,7 +2,7 @@
 #include "zbase_lib/include/datasource.h"
 
 
-class zb_zipobase //: public z_obj
+class zb_zipobase //: public zp_obj_base
 {
 public:
 	zb_zipobase()

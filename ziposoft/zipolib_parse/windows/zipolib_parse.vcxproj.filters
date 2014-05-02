@@ -27,9 +27,6 @@
     <ClInclude Include="..\include\z_parse_text.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\z_obj.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\z_obj_cmd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -46,6 +43,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\z_console.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\zp_obj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

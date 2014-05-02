@@ -72,7 +72,7 @@ ZO_OBJ_LIST;
 #define VAR(_VAR) { #_VAR,0,0,0,0,ZO_MT_PROP/*type*/ ,0},
 #define PVAR(_VAR) { #_VAR,0,0,0,0,ZO_MT_PROP/*type*/ ,0},
 #define OBJ(_CLASS_,_BASE_,_NAME_,_DESC_,_PARSE,EXTRA) \
-	z_obj* new_##_CLASS_() {_CLASS_* obj=new  _CLASS_(); 	return obj; }\
+	zp_obj_base* new_##_CLASS_() {_CLASS_* obj=new  _CLASS_(); 	return obj; }\
 const z_obj_fact* _CLASS_::get_fact() { return &_CLASS_::FACT;}; \
 using namespace _CLASS_##ns ; zo_ftr_entry _CLASS_##_feature_list[]={ EXTRA }; \
 	const z_obj_fact  _CLASS_::FACT=  {#_CLASS_, _NAME_,_DESC_,new_##_CLASS_,\

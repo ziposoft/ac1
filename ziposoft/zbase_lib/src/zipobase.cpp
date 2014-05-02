@@ -45,18 +45,18 @@ void z_obj_ptr_delete(z_refcount* p)
 #if 0
 #define Z_MODULE _Z_MODULE(zipobase)
 #define ZO_OBJ_LIST \
-	OBJV(zb_source,z_obj,0,"Data source", 0 , \
+	OBJV(zb_source,zp_obj_base,0,"Data source", 0 , \
 		PROP(_name,"name",0,0,0) \
 		ACT(open,0,0,"open",0,PRM("name"))\
 		ACT(close,0,0,"close",0,NO_PRM)\
 		LIST(_tables,"tables",NO_ID,NO_DESC,DEF_OPT) \
 		)\
-	OBJV(zb_table_base,z_obj,0,"ZB Table", 0 , \
+	OBJV(zb_table_base,zp_obj_base,0,"ZB Table", 0 , \
 		PROP(_name,"name",0,0,0) \
 		LIST(_desc,"desc",NO_ID,NO_DESC,DEF_OPT) \
 		ACT(dump,0,NO_ID,NO_DESC,DEF_OPT,NO_PRM)\
 		)\
-	OBJV(zb_field,z_obj,0,"ZB field", 0 , NO_FTR\
+	OBJV(zb_field,zp_obj_base,0,"ZB field", 0 , NO_FTR\
 		)\
 	OBJ(zb_table,zb_table_base,0,"ZB Table", 0 , NO_FTR\
 		)\
