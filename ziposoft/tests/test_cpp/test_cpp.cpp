@@ -9,7 +9,7 @@
  class test	 : public 	z_ntf_obj
  {
  public:
-	 test()
+	 test():z_ntf_obj("test")
 	 {
 
 		PROP(_i);
@@ -18,8 +18,8 @@
 
 	 }
 	 virtual ~test(){}
-	 U32 _i;
 	 U32 _hex;
+	 U32 _i;
 	 z_string _str;
 
 
@@ -36,6 +36,9 @@ int main()
 	z_string larry="Fred";
 
 	ZT("Testing trace %s %d...\n","duds",4);
+
+	
+	printf("offsetof(test,_i)=%d\n",offsetof(test,_i));
 
 
 	test x;
