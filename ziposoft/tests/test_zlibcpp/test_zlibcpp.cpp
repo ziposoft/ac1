@@ -42,15 +42,15 @@ int main()
 
 
 	test x;
-	x.props["_i"]->set_value("123");
-	x.props["_i"]->get_value(larry);
+	x.set_prop("_i","123");
+	x.get_prop("_i",larry);
 	gz_out <<larry<<','<<x._i <<'\n';
 
 	x._i=982;
- 	x.props["_i"]->get_value(larry);
+	x.get_prop("_i",larry);
 	gz_out <<larry<<','<<x._i <<'\n';
  	x._hex=982;
- 	x.props["_hex"]->get_value(larry);
+	x.get_prop("_hex",larry);
 	gz_out <<larry<<','<<x._hex <<'\n';
 
 

@@ -38,6 +38,12 @@ z_status zo_manipulator::feature_callback(zo_fet_man_context* context,zo_fet_opt
 	case zo_mvo_get:
 		_member_var_int_data=val;
 		break;
+	case zo_mvo_dump:
+		{
+		
+		*_dump_fp<< (val? "true":"false");
+		}
+		break;
 	case zo_mvo_get_to_string:
 		
 		break;

@@ -11,6 +11,7 @@ ________________________________________________________________________*/
 #include "zipolib_cpp/include/zipolib_cpp_pch.h"
 #include "zipolib_cpp/include/z_stl_map.h"
 #include "zipolib_cpp/include/z_string.h"
+#include "zipolib_cpp/include/z_error.h"
 #include "zipolib_cpp/include/z_type_converter.h"
 class z_ntf_obj;
 
@@ -56,12 +57,16 @@ public:
 template <class ITEM> class z_ntf_prop_t : public z_ntf_prop
 {
 public:
+
+	ITEM*		_p_memvar;	
+	/*
 	ITEM* get_var(void* obj)
 	{
 		char* p=(char*)obj+_offset;
 		ITEM* sp=reinterpret_cast<ITEM*>(p);
 		return sp;
 	}
+	*/
 
 	z_ntf_prop_t(z_ntf_obj* parent,ctext name,ITEM* var) :z_ntf_prop( parent,name)
 	{
@@ -71,6 +76,15 @@ public:
 	{
 		
 	}	
+ 	void set_value(void* obj,ctext from)
+	{
+		convert(from,*_p_memvar);	
+	}
+	void get_value(void* obj,z_string& str)
+	{
+		convert(*_p_memvar,str);	
+	}
+	/*
 	void set_value(void* obj,ctext from)
 	{
 		convert(from,*get_var(obj));	
@@ -78,7 +92,7 @@ public:
 	void get_value(void* obj,z_string& str)
 	{
 		convert(*get_var(obj),str);	
-	}
+	} */
 };
 
 class z_ntf_prop_hex32 : public z_ntf_prop_t<U32>
@@ -104,7 +118,7 @@ class z_ntf_obj // Interface that contains it's own data.
 	z_map_obj<z_ntf_obj> _children;
 	z_map_obj<z_ntf_action> _actions;
 	z_map_obj<z_ntf_feature> _features;
-	z_map_obj<z_ntf_prop> props;
+	z_map_obj<z_ntf_prop> _props;
 public:
 	z_ntf_obj(ctext name, z_ntf_obj* parent=0)
 	{
@@ -116,21 +130,37 @@ public:
 	template <class PROP_TYPE,class ITEM> void addPropT(ctext id,ITEM* var)
 	{
 		z_ntf_prop* p= new PROP_TYPE (this,id,var);
-		props << p;
+		_props << p;
 		_features<<p;
 	}	
 	template <class ITEM> void addProp(ctext id,ITEM* var)
 	{
 		z_ntf_prop* p= new z_ntf_prop_t<ITEM> (this,id,var);
-		props << p;
+		_props << p;
 		_features<<p;
 	}
+	z_status set_prop(ctext n,ctext from)
+	{
+		 z_ntf_prop* p=_props[n];
+		 if(!p)
+			 return z_status_item_not_found;
+		 p->set_value(this,from);
+		 return z_status_ok; 
 
+	}
+	z_status get_prop(ctext n,z_string& str)
+	{
+		 z_ntf_prop* p=_props[n];
+		 if(!p)
+			 return z_status_item_not_found;
+		 p->get_value(this,str);
+		 return z_status_ok; 
+	}
 	ctext get_map_key() { return _name; }
 
 };
 
-template <class OBJ> class z_ntf_fact
+template <class OBJ> class z_ntf_fact  // Interface instruments another class TODO 
 {
 public:
 	z_ntf_fact();
