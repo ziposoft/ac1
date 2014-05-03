@@ -282,11 +282,11 @@ public:
 	ZP_OBJ_H
 	zp_cmdline() : zp_obj()
 	{
-		_root=false;
+		_root_slash=false;
 		_assignment=false;
 		_subscript=false;
 	}
-	bool _root;
+	bool _root_slash;
 	bool _assignment;
 	bool _subscript;
 

@@ -20,6 +20,7 @@ enum {
 	z_status_could_not_open_dir,
 	z_status_already_open,
 	z_status_bad_parameter,
+	z_status_item_not_found,
 
 
 

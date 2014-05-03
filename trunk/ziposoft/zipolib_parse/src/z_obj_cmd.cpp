@@ -113,7 +113,7 @@ z_status zo_man_cmd::execute_line(ctext text)
 		return status;
 
 //find path
-	if(_cmd_line_obj._root)
+	if(_cmd_line_obj._root_slash)
 	{
 		_obj_current_tmp=_root_obj;
 	}
