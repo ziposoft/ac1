@@ -13,6 +13,9 @@
   <ItemGroup>
     <ClCompile Include="test_zlibc.c" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{28574832-A7F0-4D98-9926-A0AD03331D16}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

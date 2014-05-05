@@ -29,6 +29,7 @@ else
 MACHINE= $(shell gcc -dumpmachine)
 ifneq (,$(findstring mingw32,$(MACHINE)))
 	PLATFORM_BUILD=BUILD_MINGW
+	LINK_OPTS+= -static  -lrt
 	OS=WINDOWS
 else
 ifneq (,$(findstring linux,$(MACHINE)))

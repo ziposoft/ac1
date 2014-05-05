@@ -190,11 +190,11 @@ int    z_change_dir(utf8 dir_name,int create)
 }
 typedef struct _z_directory_t
 {
+	char* path;
 #ifdef BUILD_VSTUDIO
 	WIN32_FIND_DATA FindFileData;
 	HANDLE handleDirectory ;
 	WCHAR* wc_path;
-	char* path;
 #else
     DIR* handleDirectory ;
 	struct dirent* entry;
@@ -303,12 +303,14 @@ void   z_dir_close(z_directory_h h)
 {
 	_z_directory* zdir=(_z_directory*)h;
 	if(!zdir) return;
+#ifdef BUILD_VSTUDIO	
 	if(zdir->path) 
 	{
 		free(zdir->path);
 		WCHAR_str_deallocate(zdir->wc_path);
 		zdir->path=0;
 	}
+#endif
 
 	if(zdir->handleDirectory) 
 	{

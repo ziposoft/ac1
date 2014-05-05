@@ -68,7 +68,7 @@ ________________________________________________________________________*/
 #define BUILD_VSTUDIO
 #elif __GNUC__
 //#warning "__GNUC__ is defined, setting BUILD_GCC"
-#define BUILD_GCC
+//#define BUILD_GCC
 #endif
 
 #if !(defined BUILD_VXWORKS || defined BUILD_GCC || defined BUILD_VSTUDIO || defined BUILD_INTEGRITY)
