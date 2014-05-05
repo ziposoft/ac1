@@ -119,8 +119,8 @@ public:
 
 
  #define ZO_OBJ_LIST \
-	OBJ(testclass,void,"cmdline","parse",VAR(i) VAR(k)  VAR(j) VAR(str)), \
-	OBJ(testclass2,void,"cmdline","parse",VAR(i) VAR(k)  VAR(j) VAR(str))
+	OBJ(testclass,void,"cmdline","parse",VAR(i) VAR(k)  VAR(j) VAR(str)) \
+	OBJ(testclass2,void,"cmdline","parse",VAR(i) VAR(k)   VAR(str))
 
 #include "macro.h"
 
