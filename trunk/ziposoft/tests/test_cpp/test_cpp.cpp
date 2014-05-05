@@ -4,6 +4,18 @@
 #include  <string>
 using namespace std;
 
+
+namespace X 
+{
+	int i;
+
+};
+namespace X 
+{
+
+	int j;
+
+};
 class test 
 {
 public:
@@ -60,6 +72,6 @@ int main()
 	print_int(py,offset_k);
 	print_str(py,offset_str);
 
-
+	X::j=3;
 	return 0;
 }
