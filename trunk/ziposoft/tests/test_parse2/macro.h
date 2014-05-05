@@ -31,3 +31,15 @@ ZO_OBJ_LIST;
 #undef OBJ
 #undef VAR
 #undef OBJV
+
+#define OBJ(_CLASS_,_BASE_,_NAME_,_DESC_,...) { #_CLASS_,&_CLASS_::FACT }, 
+#define _Z_MODULE(_NAME_) z_module_obj_entry z_module_##_NAME_##_obj_list[]={
+
+Z_MODULE
+ZO_OBJ_LIST
+};
+#undef _Z_MODULE
+#define _Z_MODULE(_NAME_) const z_module_entry z_module_##_NAME_= \
+{ #_NAME_,z_module_##_NAME_##_obj_list,sizeof(z_module_##_NAME_##_obj_list)/sizeof(z_module_obj_entry)};
+	
+Z_MODULE //Expands to the z_module_entry definition
