@@ -2,7 +2,7 @@
 #define z_parse_obj_h
 #include "zipolib_parse2/include/zp_obj.h"
 
-Z_MODULE_DECLARE(parse);
+ZP_MODULE_DECLARE(parse);
 
 /*
 enum type_memvar_oper
@@ -23,9 +23,9 @@ void* zp_create_item(z_parser& p);
 
 typedef bool (*zp_test_func)(z_parser& p);
 /*
-struct z_obj_fact
+struct zp_factory
 {
-	z_obj_fact* fact;
+	zp_factory* fact;
 	ctext parse_string;
 };
 */
@@ -68,7 +68,7 @@ public:
 #define void(_X_,...) 
 
 
-#define PARSE_TABLE(_x_) &_x_[0],sizeof(_x_)/sizeof(z_obj_fact*)
+#define PARSE_TABLE(_x_) &_x_[0],sizeof(_x_)/sizeof(zp_factory*)
 
 #define ZP_MNULL  ""
 
@@ -83,13 +83,13 @@ ctext _CLASS_##PARSE=_PARSE_;\
 ctext _CLASS_##NAME=_NAME_;\
 z_status _CLASS_::feature_manipulate(type_memvar_oper oper,size_t* p_size,ctext var_name,void_parser* p) {\
    __VA_ARGS__ ;	return _BASE_::feature_manipulate(oper,p_size,var_name,p);} \
-const z_obj_fact  _CLASS_::ENTRY=  {_CLASS_##NAME,_CLASS_##PARSE,new_##_CLASS_};\
-	const z_obj_fact* _CLASS_::get_fact() { return &_CLASS_::ENTRY;} 
+const zp_factory  _CLASS_::ENTRY=  {_CLASS_##NAME,_CLASS_##PARSE,new_##_CLASS_};\
+	const zp_factory* _CLASS_::get_fact() { return &_CLASS_::ENTRY;} 
 
 #define void_H \
 	public:virtual z_status feature_manipulate(type_memvar_oper set,size_t* i,ctext var_name,void_parser* p); \
-	static const z_obj_fact ENTRY;\
-	virtual const z_obj_fact* get_fact();
+	static const zp_factory ENTRY;\
+	virtual const zp_factory* get_fact();
 
 #define ZP_LISTOBJ(_CLASS_) &_CLASS_::ENTRY
 

@@ -79,7 +79,7 @@ zpi_context::zpi_context()
 }
 
 void zpi_context::init(zpi_context* parent,
-					  const z_obj_fact* ie, ctext parse_string	 )
+					  const zp_factory* ie, ctext parse_string	 )
 {
 	_parent=parent;
 	_obj_factory=ie;
@@ -103,13 +103,13 @@ void* zpi_context::get_next_child_obj()
 
 
 void void_parser::context_set_root(void* p_obj,
-									 const z_obj_fact* ie,
+									 const zp_factory* ie,
 									 ctext parse_string
 									 )
 {
 	if(!parse_string)
 	{
-		parse_string=ie->parse_string;
+		parse_string=ie->get_parse_string();
 	}
 	Z_ASSERT(ie);
 	_ctx_root.init(0,ie,parse_string);
@@ -119,7 +119,7 @@ void void_parser::context_set_root(void* p_obj,
 	//_ctx_root._output_result_index=0;
 
 }
-void void_parser::context_sub_item_push(void* obj,const z_obj_fact* ie)
+void void_parser::context_sub_item_push(void* obj,const zp_factory* ie)
 {
 	if(_ctx_current->_child==0)
 	{
@@ -128,7 +128,7 @@ void void_parser::context_sub_item_push(void* obj,const z_obj_fact* ie)
 	zpi_context* ctx=_ctx_current->_child;
 	ctx->_parent=_ctx_current;
 	_ctx_current=ctx;
-	ctx->_current_template_parser.set_source(ie->parse_string);
+	ctx->_current_template_parser.set_source(ie->get_parse_string());
 	ctx->_obj=obj;
 	ctx->_obj_factory=ie;
 	ctx->_output_obj_index=0;
@@ -152,14 +152,14 @@ void void_parser::context_sub_item_pop()
 //________________________________________________________________
 
 /*
-void_parser::void_parser(const z_obj_fact** it,size_t size)
+void_parser::void_parser(const zp_factory** it,size_t size)
 {
 	set_obj_table(it,size);
 	_results=0;
 	_ctx_current=0;
 }
 
-void void_parser::set_obj_table(const z_obj_fact** it,size_t size)
+void void_parser::set_obj_table(const zp_factory** it,size_t size)
 {
 	_item_table=it;
 	_item_table_size=size;
@@ -187,7 +187,7 @@ z_status void_parser::report_error(z_status status)
 	if(status==zs_ok)
 		return zs_ok;
 	Z_ASSERT(_ctx_current->_obj_factory);
-	printf("Error while parsing object type \"%s\"\n",z_obj_fact_get_name(_ctx_current->_obj_factory));
+	printf("Error while parsing object type \"%s\"\n",_ctx_current->_obj_factory->get_name());
 	zp_text_parser& tmpl=context_get_current_template_parser();
 	//printf("template=\n%s\n",t.get_buffer());
 	
@@ -248,7 +248,7 @@ z_status void_parser::parse_item(void*& p_item,
 {
 	//ZTF;
 	z_status status;
-	const z_obj_fact* ie=find_item(item_entry_name);
+	const zp_factory* ie=find_item(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
 	void* obj=create_new_obj(ie);
@@ -275,7 +275,7 @@ z_status void_parser::create_obj(ctext item_entry_name,void* &p_obj)
 {
 
 	//ZTF;
-	const z_obj_fact* ie=find_item(item_entry_name);
+	const zp_factory* ie=find_item(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
 	p_obj=create_new_obj(ie);
@@ -312,7 +312,7 @@ z_status void_parser::create_empty_item(void*& p_item,
 {
 	//ZTF;
 	z_status status;
-	const z_obj_fact* ie=find_item(item_entry_name);
+	const zp_factory* ie=find_item(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
 	void* obj=create_new_obj(ie);
@@ -376,7 +376,7 @@ z_status void_parser::parse_template(void*& p_item,
 }
 
 //item table
-const z_obj_fact* void_parser::find_item(ctext item_name,size_t len)
+const zp_factory* void_parser::find_item(ctext item_name,size_t len)
 {
 	if(len==-1)
 	{
@@ -422,13 +422,10 @@ z_status void_parser::access_obj_member_map(type_memvar_oper oper,int* pindex,z_
 #endif
 
 
-void* void_parser::create_new_obj(const z_obj_fact* ie)
+void* void_parser::create_new_obj(const zp_factory* ie)
 {
 	void* sub_obj=0;
-	if(ie->create_func)
-	{
-		sub_obj=(void*)ie->create_func();
-	}
+		sub_obj=(void*)ie->create_obj();
 	Z_ASSERT(0); //else		sub_obj=new void();
 	return sub_obj;
 }

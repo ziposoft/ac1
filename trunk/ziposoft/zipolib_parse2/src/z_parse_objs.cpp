@@ -60,7 +60,7 @@ void::void()
 //	_offset=0;
 }
 /*
-void::void(const z_obj_fact* ie) 
+void::void(const zp_factory* ie) 
 {
 	_children=0;
 //	_entry=ie;
@@ -122,7 +122,7 @@ void void::output(z_file* fp)
 zo_manipulator g_man;
 void void::dump(int level, z_file& outf,int flags)
 {
-	zo_ftr_entry* f;
+	zp_var_entry* f;
 	int indent=level;
 	while(indent--)	outf<<"  ";	
 	//outf<<get_map_key()<<'['<<(int)_offset<<']'<< " ";
@@ -244,13 +244,13 @@ void* zp_item::new_child(ctext name,ctext data)
 
 ctext void::get_map_key()
 {
-	const z_obj_fact* ei=get_fact();
+	const zp_factory* ei=get_fact();
 	Z_ASSERT((ei));
 	return z_obj_fact_get_name(get_fact());
 }
 ctext void::get_template()
 {
-	const z_obj_fact* ei=get_fact();
+	const zp_factory* ei=get_fact();
 	Z_ASSERT(0);
 	return ei->parse_string;
 }

@@ -368,7 +368,7 @@ z_status void_parser::_process_single_item(zp_mode mode,zp_flags flags)
 			if(mode.skip_test)
 				return zs_skipped;
 			tmpl.get_match(match_start,match_len);
-			const z_obj_fact* ie=find_item(match_start,match_len);
+			const zp_factory* ie=find_item(match_start,match_len);
 			if(ie==0)
 				return check_status(zs_no_entry_for_item);
 			if(mode.create)
