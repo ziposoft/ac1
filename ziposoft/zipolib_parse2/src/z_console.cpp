@@ -475,7 +475,7 @@ void zo_console::put_prompt()
 
 void zo_console::get_auto_complete_list(zp_feature& parse_feature)
 {
-	zo_ftr_entry* f;
+	zp_var_entry* f;
 
 
 	int i=0;
@@ -564,7 +564,7 @@ void zo_console::OnTab()
 	}
 	if(!_tab_count)
 		return;
-	zo_ftr_entry* fe=_auto_tab.get_next();
+	zp_var_entry* fe=_auto_tab.get_next();
 	if(!fe)
 	{
 		_auto_tab.reset_iter();
@@ -579,13 +579,13 @@ void zo_console::OnTab()
 
 void zo_console::dump_feature_outline(void* obj)
 {
-	const z_obj_fact* fact=obj->get_fact();
+	const zp_factory* fact=obj->get_fact();
 	if(!fact)
 		return;
 	int i_var;
 	for(i_var=0;i_var<fact->var_list_size;i_var++)
 	{
-		zo_ftr_entry& p_var_entry=fact->var_list[i_var];
+		zp_var_entry& p_var_entry=fact->var_list[i_var];
 		gz_out<< "\t\t"<< p_var_entry._internal_name;
 		if(obj)
 			gz_out<<"="<<feature_get_as_string(obj,&p_var_entry);
@@ -604,7 +604,7 @@ void zo_console::dump_all()
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const z_module_obj_entry& p_obj_entry=p_module->facts[i_obj];
-			const z_obj_fact* fact=p_obj_entry.fact;
+			const zp_factory* fact=p_obj_entry.fact;
 			gz_out<< "\t"<< p_obj_entry.name;
 			if(fact->base_fact)
 				gz_out<< "::"<< z_obj_fact_get_name(fact->base_fact);
@@ -614,7 +614,7 @@ void zo_console::dump_all()
 }
 void zo_console::dump_obj2(void* obj)
 {
-	const z_obj_fact* fact=obj->get_fact();
+	const zp_factory* fact=obj->get_fact();
 	gz_out<< z_obj_fact_get_name(fact)<<"\n";
 	gz_out<< fact->desc<<"\n";
 }

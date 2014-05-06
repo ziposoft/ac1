@@ -2,6 +2,8 @@
 
 #include "zipolib_cpp/include/zipolib_cpp.h"
 
+
+
 class testclass 
 {
 public:
@@ -28,6 +30,10 @@ public:
 	z_string str;
 	int k;
 };
+
+
+#define ZP_MODULE(_NAME_) zp_module_##_NAME_ 
+#define ZP_MODULE_DECLARE(_NAME_) extern const zp_module_entry ZP_MODULE(_NAME_);
  class zp_var_funcs_base
  {
  public:
@@ -63,7 +69,7 @@ typedef  const zp_var_funcs_base* (*funcp_var_funcs_get)();
  };
 
 
-struct zp_var_list
+struct zp_var_entry
 {
 	const char* name;
 	size_t offset;
@@ -81,11 +87,11 @@ class zp_factory
 {
 public:
 	virtual size_t get_var_list_size()=0;
-	virtual zp_var_list* get_var_list()=0;
-	zp_var_list* get_var_entry(ctext name)
+	virtual zp_var_entry* get_var_list()=0;
+	zp_var_entry* get_var_entry(ctext name)
 	{
 		int i;
-		zp_var_list* list=get_var_list();
+		zp_var_entry* list=get_var_list();
 		for(i=0;i<get_var_list_size();i++)
 			if(strcmp(name,	list[i].name)==0)
 				return &list[i];
@@ -93,7 +99,7 @@ public:
 	}
 	z_status set_var(void* obj,ctext var_name,ctext value)
 	{
-		zp_var_list* ent= get_var_entry(var_name);
+		zp_var_entry* ent= get_var_entry(var_name);
 		if(!ent)
 			return -1; 
 		const zp_var_funcs_base* funcs=ent->fp_var_func_get();
@@ -107,13 +113,25 @@ public:
 
 
 };
+struct zp_module_fact_entry 
+{
+	ctext name;
+	const zp_factory* fact;
+};
 
+struct zp_module_entry 
+{
+	ctext name;
+	zp_module_fact_entry *facts;
+	const int num_facts;
+
+};
  template <class C >  class zp_factory_T :public  zp_factory
  {
  public:
 	 static C* create_new();
 	size_t get_var_list_size();
-	zp_var_list* get_var_list();	
+	zp_var_entry* get_var_list();	
 
  };
 
@@ -122,7 +140,9 @@ public:
 	OBJ(testclass,void,"cmdline","parse",VAR(i) VAR(k)  VAR(j) VAR(str)) \
 	OBJ(testclass2,void,"cmdline","parse",VAR(i) VAR(k)   VAR(str))
 
+
 #include "macro.h"
+Z_MODULE_DEFINE(testmod);
 
 
 
@@ -133,7 +153,7 @@ int main()
 {
 
 //	const zp_var_funcs_base* ff=_zp_parse_testclass::__zp_var_funcs_get_i();
-
+	const zp_module_entry* me=&ZP_MODULE(testmod);
 	zp_factory_T<testclass>	f;
 	testclass t;
 	void* pt=(void*)&t;

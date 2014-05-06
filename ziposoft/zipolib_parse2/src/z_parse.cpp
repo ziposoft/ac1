@@ -606,7 +606,7 @@ z_status void_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 
 
 z_status void_parser::_process_sub_item(void* sub_obj,
-										  const z_obj_fact* ie,
+										  const zp_factory* ie,
 										  zp_mode mode,zp_flags flags)
 {
 	//ZTF;
@@ -614,8 +614,8 @@ z_status void_parser::_process_sub_item(void* sub_obj,
 	z_string raw;
 	debug(raw);
 	ZT("%c %s[%s]-> %s",(mode.create?'C':'T'),
-		z_obj_fact_get_name(ie)
-		,ie->parse_string,raw.c_str());
+		ie->get_name()
+		,ie->get_parse_string(),raw.c_str());
 	U32 ng=mode.nested_group;
 	mode.nested_group=0;
 
@@ -624,7 +624,7 @@ z_status void_parser::_process_sub_item(void* sub_obj,
 	z_status status=_process_group(flags,mode);
 	mode.nested_group=ng;
 
-	ZT("<- %s=%s",z_obj_fact_get_name(ie),z_status_get_text(status));
+	ZT("<- %s=%s",ie->get_name(),z_status_get_text(status));
 
 	if(status>zs_internal_error)
 		return status;

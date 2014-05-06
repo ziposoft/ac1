@@ -8,7 +8,7 @@
 
 
 
-ctext zo_ftr_get_name(zo_ftr_entry* fe)
+ctext zo_ftr_get_name(zp_var_entry* fe)
 {
 	ctext name=fe->_display_name;
 	if(name)
@@ -33,7 +33,7 @@ ctext void::get_id()
 {
 	if(_man_data)
 		return _man_data->_fet_ent._short_id;
-	const z_obj_fact* fact=get_fact();
+	const zp_factory* fact=get_fact();
 	return fact->name_internal;
 
 	return 0;
@@ -61,9 +61,9 @@ void void::get_path(z_string& path)
 
 
 //void(zo_module,void,"module", "#'\t':{_name}ident:'<':#{_default}ident:'>':#'\n'",ZPV(_name),ZPV(_default));
-zo_ftr_entry* void::get_feature(ctext f)
+zp_var_entry* void::get_feature(ctext f)
 {
-	const z_obj_fact* fact=get_fact();
+	const zp_factory* fact=get_fact();
 	if(!fact) return 0;
 	return get_feature(fact,f);
 }
@@ -74,11 +74,11 @@ z_status void::get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 fea
 }
 
 
-zo_ftr_entry* void::get_feature(const z_obj_fact* fact,ctext f)
+zp_var_entry* void::get_feature(const zp_factory* fact,ctext f)
 {
-	zo_ftr_entry* fe=0;
+	zp_var_entry* fe=0;
 	if(!fact) return 0;
-	const z_obj_fact* fact_base=fact->base_fact;
+	const zp_factory* fact_base=fact->base_fact;
 	if((fact_base)&&(fact_base->var_list_size))
 	{
 		fe=get_feature(fact_base,f);
@@ -101,17 +101,17 @@ zo_ftr_entry* void::get_feature(const z_obj_fact* fact,ctext f)
 }
 
 
-const z_obj_fact void::FACT=
+const zp_factory void::FACT=
 {
 	"void",
 	"",
 	0,//zo_create_item_func func;
-	0,// zo_ftr_entry* var_list;
+	0,// zp_var_entry* var_list;
 	0,//int var_list_size;
-	0,// z_obj_fact* base_fact;
+	0,// zp_factory* base_fact;
 	0
 };
-const z_obj_fact* void::get_fact() { return &void::FACT; }
+const zp_factory* void::get_fact() { return &void::FACT; }
 
 
 void void::init_man_data(void* parent_obj)
@@ -146,7 +146,7 @@ void void::set_parent_obj(void* obj)
 	get_man_data()->_parent_obj=obj;
 
 }
-zo_ftr_entry* void::get_feature_for_obj()
+zp_var_entry* void::get_feature_for_obj()
 {
 	if(_man_data)
 		return &(get_man_data()->_fet_ent);
@@ -181,7 +181,7 @@ z_obj_man_data* void::get_man_data()
 	return _man_data;
 }
 
-ctext z_obj_fact_get_name(const z_obj_fact* fact)
+ctext z_obj_fact_get_name(const zp_factory* fact)
 {
 	ctext class_name=fact->name_display;
 	if(!class_name)
@@ -192,7 +192,7 @@ ctext z_obj_fact_get_name(const z_obj_fact* fact)
 
 #if 1
 
-const z_obj_fact*  zo_get_factory_by_name_and_length(ctext name,size_t len)
+const zp_factory*  zo_get_factory_by_name_and_length(ctext name,size_t len)
 {
 	int i_module;
 	for(i_module=0;i_module<z_module_master_list_size;i_module++)
@@ -202,14 +202,14 @@ const z_obj_fact*  zo_get_factory_by_name_and_length(ctext name,size_t len)
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const z_module_obj_entry& p_obj_entry=p_module->facts[i_obj];
-			const z_obj_fact* fact=p_obj_entry.fact;
+			const zp_factory* fact=p_obj_entry.fact;
 			if(strncmp(z_obj_fact_get_name(fact),name,len)==0)
 				return fact;
 		}
 	}
 	return 0;
 }
-const z_obj_fact*  zo_get_factory(ctext name)
+const zp_factory*  zo_get_factory(ctext name)
 {
 	int i_module;
 	for(i_module=0;i_module<z_module_master_list_size;i_module++)
@@ -219,7 +219,7 @@ const z_obj_fact*  zo_get_factory(ctext name)
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const z_module_obj_entry& p_obj_entry=p_module->facts[i_obj];
-			const z_obj_fact* fact=p_obj_entry.fact;
+			const zp_factory* fact=p_obj_entry.fact;
 
 			if(z_str_same(name,z_obj_fact_get_name(fact)))
 				return fact;
@@ -244,7 +244,7 @@ void zo_str_container::copy(zo_str_container& other)
 }
 
 
-zo_ftr_entry* void::get_feature(ctext f)
+zp_var_entry* void::get_feature(ctext f)
 {	
 
 	void* obj=get_obj(f);
@@ -264,7 +264,7 @@ z_status void::get_feature_map(zo_manipulator* man,zo_feature_list& list,U32 fea
 
 		while((obj=get_next_obj()))
 		{
-			zo_ftr_entry* fe=new zo_ftr_entry();
+			zp_var_entry* fe=new zp_var_entry();
 			fe->_internal_name=obj->get_map_key();
 			fe->_display_name=obj->get_map_key();
 			fe->_short_id=0;

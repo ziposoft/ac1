@@ -101,7 +101,7 @@ class zpi_context
 public:
 	zpi_context();
 	void init(zpi_context* parent,
-					   const z_obj_fact* ie,
+					   const zp_factory* ie,
 					   ctext parse_string
 					   	);
 	//void* get_next_child_obj();
@@ -110,7 +110,7 @@ public:
 	zpi_context* _parent;
 	zpi_context* _child;
 	void* _obj;
-	const z_obj_fact* _obj_factory;
+	const zp_factory* _obj_factory;
 	zp_text_parser _current_template_parser;
 	//U32 _output_result_index;
 	int _output_obj_index;
@@ -146,8 +146,8 @@ public:
 
 	//initialization
 	/*
-	void set_obj_table(const z_obj_fact** it,size_t size);
-	void_parser(const z_obj_fact** it,size_t size);
+	void set_obj_table(const zp_factory** it,size_t size);
+	void_parser(const zp_factory** it,size_t size);
 	*/
 	void_parser();
 
@@ -173,7 +173,7 @@ public:
 	z_status feature_callback(type_memvar_oper oper,size_t* size,void& ppObj);
 	z_status feature_callback(type_memvar_oper oper,size_t* size,z_string& member_var);
 */
-	void* create_new_obj(const z_obj_fact* ie);
+	void* create_new_obj(const zp_factory* ie);
 	z_status create_obj(ctext item_entry_name,void* &p_item);
 
 
@@ -181,19 +181,19 @@ public:
 	z_status output_default_template(z_file* fp,ctext tmpl);
 	//context
 private:
-	const z_obj_fact* find_item(ctext item_name,size_t len=(size_t)-1);
+	const zp_factory* find_item(ctext item_name,size_t len=(size_t)-1);
 	z_status _process_stage(zp_mode mode ,zp_flags* pflags=0);
 	void reset_results();
 	z_status _process_template(zp_mode mode);
 	z_status _process_group(zp_flags flags,zp_mode mode);
 	z_status test_white_space(zp_mode mode);
-	z_status _process_sub_item(void* obj,const z_obj_fact* ie,zp_mode mode,zp_flags flags);
+	z_status _process_sub_item(void* obj,const zp_factory* ie,zp_mode mode,zp_flags flags);
 	z_status _process_sub_obj(ctext start, size_t len,zp_mode mode,zp_flags flags);
 	z_status _process_single_item(zp_mode mode,zp_flags flags);
 	z_status get_flags(zp_flags& flags);
 	zp_text_parser& context_get_current_template_parser();
-	void context_set_root(void* p_item,const z_obj_fact* ie, ctext parse_string);
-	void context_sub_item_push(void* obj,const z_obj_fact* ie);
+	void context_set_root(void* p_item,const zp_factory* ie, ctext parse_string);
+	void context_sub_item_push(void* obj,const zp_factory* ie);
 	void context_sub_group_push(void* obj);
 	void context_sub_item_pop();
 public:
