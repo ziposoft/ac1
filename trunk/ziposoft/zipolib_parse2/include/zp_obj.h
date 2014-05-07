@@ -7,29 +7,32 @@
 
 #define ZP_MODULE(_NAME_) zp_module_##_NAME_ 
 #define ZP_MODULE_DECLARE(_NAME_) extern const zp_module_entry ZP_MODULE(_NAME_);
+#define ZP_MOD(_NAME_) &ZP_MODULE(_NAME_)
+
+ #define ZP_MODULE_INCLUDE(...) const zp_module_entry *zp_module_master_list[] = { __VA_ARGS__ };const int zp_module_master_list_size=sizeof(zp_module_master_list)/sizeof(void*);
+
  class zp_var_funcs_base
  {
  public:
- 	virtual void get(z_string& s, void* v) const=0;
-	virtual void set(ctext s, void* v) const=0;
+	virtual void get(z_string& s, void* v) const {};
+	virtual void set(ctext s, void* v) const {};
+	virtual void clear(void* v) const {} 
  } ;
  template <class VAR >  class zp_var_funcs  : public zp_var_funcs_base
  {
  public:
  	virtual void get(z_string& s, void* v) const;
 	virtual void set(ctext  s, void* v) const;
- };
+ 	virtual void clear(void* v) const;
+};
+
+
   template <class VAR >  class zp_var_funcs_hex  : public zp_var_funcs_base
  {
  public:
  	virtual void get(z_string& s, void* v) const;
 	virtual void set(ctext  s, void* v) const;
  };
- void zp_var_funcs<int>::get(z_string& s, void* v) const{    }
- void zp_var_funcs<int>::set(ctext s, void* v) const{int* i= reinterpret_cast<int*>(v); *i=atoi(s);    }
- void zp_var_funcs<z_string>::get(z_string& s, void* v) const{    }
- void zp_var_funcs<z_string>::set(ctext s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); *vs=s;   }
- 
 
 typedef  const zp_var_funcs_base* (*funcp_var_funcs_get)();
 
@@ -60,27 +63,11 @@ class zp_factory
 {
 public:
 	virtual void* create_obj() const=0;
-	virtual size_t get_var_list_size()=0;
-	virtual zp_var_entry* get_var_list()=0;
-	zp_var_entry* get_var_entry(ctext name)
-	{
-		size_t i;
-		zp_var_entry* list=get_var_list();
-		for(i=0;i<get_var_list_size();i++)
-			if(strcmp(name,	list[i].name)==0)
-				return &list[i];
-		return 0;
-	}
-	z_status set_var(void* obj,ctext var_name,ctext value)
-	{
-		zp_var_entry* ent= get_var_entry(var_name);
-		if(!ent)
-			return -1; 
-		const zp_var_funcs_base* funcs=ent->fp_var_func_get();
-		char* pvar=(char*)obj+ent->offset;
-		funcs->set(value,pvar);
-		return z_status_success;
-	}
+	virtual const size_t get_var_list_size() const=0;
+	virtual const zp_var_entry* get_var_list() const=0;
+	const zp_var_entry* get_var_entry(ctext name) const;
+	z_status set_var(void* obj,ctext var_name,ctext value) const;
+	void clear_all_vars(void* obj) const;
 	virtual ctext get_parse_string() const{ return ""; }
 	virtual ctext get_name()const =0;
 
@@ -97,14 +84,18 @@ struct zp_module_entry
 	ctext name;
 	zp_module_fact_entry *facts;
 	const int num_facts;
-
 };
+const zp_factory*  zo_get_factory_by_name_and_length(ctext name,size_t len);
+const zp_factory*  zo_get_factory(ctext name);
+extern const zp_module_entry *zp_module_master_list[];
+extern const int zp_module_master_list_size;
  template <class C >  class zp_factory_T :public  zp_factory
  {
  public:
+	static const zp_factory_T<C> static_instance;
 	virtual void* create_obj() const;
-	size_t get_var_list_size();
-	zp_var_entry* get_var_list();	
+	const size_t get_var_list_size() const;
+	const zp_var_entry* get_var_list() const;	
 	virtual ctext get_parse_string() const;
 	virtual ctext get_name() const;
  };

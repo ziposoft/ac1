@@ -2,7 +2,7 @@
 #define z_console_h
 #include "zipolib_cpp/include/zipolib_cpp.h"
 #include "zipolib_cpp/include/z_terminal.h"
-#include "zipolib_parse/include/z_parse.h"
+#include "zipolib_parse2/include/z_parse.h"
 
 class z_console : public z_terminal
 {
@@ -22,7 +22,7 @@ protected:
 	z_string _path;
 	U32  _tab_count;
 	U32  _tab_mode_line_index;
-	void_parser _parser;
+	zp_parser _parser;
 	zp_cmdline _cmd_line_obj;
 	z_status parse_line(ctext text);
 	z_status execute_line(ctext text);

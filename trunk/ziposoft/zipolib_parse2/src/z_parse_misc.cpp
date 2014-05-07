@@ -55,7 +55,7 @@ void zp_test_result::clear()
 {
 	return _test_results.resize(0);
 }
-void void_parser::reset_results()
+void zp_parser::reset_results()
 {
 	if(!_results)
 		_results=new zp_test_result();
@@ -98,11 +98,11 @@ void* zpi_context::get_next_child_obj()
 
 //________________________________________________________________
 //
-//void_parser
+//zp_parser
 //________________________________________________________________
 
 
-void void_parser::context_set_root(void* p_obj,
+void zp_parser::context_set_root(void* p_obj,
 									 const zp_factory* ie,
 									 ctext parse_string
 									 )
@@ -119,7 +119,7 @@ void void_parser::context_set_root(void* p_obj,
 	//_ctx_root._output_result_index=0;
 
 }
-void void_parser::context_sub_item_push(void* obj,const zp_factory* ie)
+void zp_parser::context_sub_item_push(void* obj,const zp_factory* ie)
 {
 	if(_ctx_current->_child==0)
 	{
@@ -135,7 +135,7 @@ void void_parser::context_sub_item_push(void* obj,const zp_factory* ie)
 	//ctx->_output_result_index=0;
 }
 
-void void_parser::context_sub_item_pop()
+void zp_parser::context_sub_item_pop()
 {
 	if(_ctx_current->_parent)
 	{
@@ -148,37 +148,37 @@ void void_parser::context_sub_item_pop()
 
 //________________________________________________________________
 //
-//void_parser
+//zp_parser
 //________________________________________________________________
 
 /*
-void_parser::void_parser(const zp_factory** it,size_t size)
+zp_parser::zp_parser(const zp_factory** it,size_t size)
 {
 	set_obj_table(it,size);
 	_results=0;
 	_ctx_current=0;
 }
 
-void void_parser::set_obj_table(const zp_factory** it,size_t size)
+void zp_parser::set_obj_table(const zp_factory** it,size_t size)
 {
 	_item_table=it;
 	_item_table_size=size;
 }
 */
-void_parser::void_parser()
+zp_parser::zp_parser()
 {
 //	_item_table=0;
 //	_item_table_size=0;
 	_results=0;
 	_ctx_current=0;
 }
-zp_text_parser& void_parser::context_get_current_template_parser()
+zp_text_parser& zp_parser::context_get_current_template_parser()
 {
 	return _ctx_current->_current_template_parser;
 }
 
 
-z_status void_parser::report_error(z_status status)
+z_status zp_parser::report_error(z_status status)
 {
 	z_string data;
 	printf("status=%s\n",z_status_get_text(status));
@@ -216,18 +216,18 @@ z_status void_parser::report_error(z_status status)
 
 
 
-z_status void_parser::parse_obj(void* p_obj,ctext data)
+z_status zp_parser::parse_obj(void* p_obj,const zp_factory* factory,ctext data)
 {
 	z_status status;
 	Z_ASSERT(p_obj);
 	set_source(data,strlen(data));
 	reset_results();
-	feature_clear(p_obj);
-	Z_ASSERT(0); //context_set_root(p_obj,p_obj->get_fact(),0);
+	factory->clear_all_vars(p_obj);
+	context_set_root(p_obj,factory,0);
 	status=_process_template(zp_mode_parse_input);
 	if(status==zs_matched)
 	{
-		Z_ASSERT(0); //ZT("==========ITEM[%s] MATCHED, CREATING=====\n",p_obj->get_map_key());
+		ZT("==========ITEM[%s] MATCHED, CREATING=====\n",factory->get_name());
 		index_reset();
 		context_get_current_template_parser().index_reset();
 		reset_results();
@@ -235,14 +235,8 @@ z_status void_parser::parse_obj(void* p_obj,ctext data)
 	}
 	return status;
 }
-z_status void_parser::parse_obj(void* p_obj,z_string& data_in)
-{
 
-	return parse_obj(p_obj,data_in.c_str());
-
-}
-
-z_status void_parser::parse_item(void*& p_item,
+z_status zp_parser::parse_item(void*& p_item,
 									ctext item_entry_name
 									)
 {
@@ -271,7 +265,7 @@ z_status void_parser::parse_item(void*& p_item,
 	}
 	return status;
 }
-z_status void_parser::create_obj(ctext item_entry_name,void* &p_obj)
+z_status zp_parser::create_obj(ctext item_entry_name,void* &p_obj)
 {
 
 	//ZTF;
@@ -284,7 +278,7 @@ z_status void_parser::create_obj(ctext item_entry_name,void* &p_obj)
 	return zs_ok;
 
 }
-z_status void_parser::output_obj(z_file* fp,void* obj)
+z_status zp_parser::output_obj(z_file* fp,void* obj)
 {
 	Z_ASSERT(0); //ZT("==========TEMPLATE[%s] OUTPUT OBJ=====\n",obj->get_map_key());
 
@@ -306,7 +300,7 @@ z_status void_parser::output_obj(z_file* fp,void* obj)
 
 
 
-z_status void_parser::create_empty_item(void*& p_item,
+z_status zp_parser::create_empty_item(void*& p_item,
 										   ctext item_entry_name
 										   )
 {
@@ -325,7 +319,7 @@ z_status void_parser::create_empty_item(void*& p_item,
 	return status;
 }
 
-z_status void_parser::output_default_template(z_file* fp,ctext tmpl)
+z_status zp_parser::output_default_template(z_file* fp,ctext tmpl)
 {
 	z_status status;
 	//_append_mode=false;
@@ -346,7 +340,7 @@ z_status void_parser::output_default_template(z_file* fp,ctext tmpl)
 }
 
 
-z_status void_parser::parse_template(void*& p_item,
+z_status zp_parser::parse_template(void*& p_item,
 										ctext tmpl)
 {
 	z_status status;
@@ -376,7 +370,7 @@ z_status void_parser::parse_template(void*& p_item,
 }
 
 //item table
-const zp_factory* void_parser::find_item(ctext item_name,size_t len)
+const zp_factory* zp_parser::find_item(ctext item_name,size_t len)
 {
 	if(len==-1)
 	{
@@ -386,7 +380,7 @@ const zp_factory* void_parser::find_item(ctext item_name,size_t len)
 }
 
 #if 0
-z_status void_parser::access_obj_member_map(type_memvar_oper oper,int* pindex,z_obj_map* member_var)
+z_status zp_parser::access_obj_member_map(type_memvar_oper oper,int* pindex,z_obj_map* member_var)
 {
 	if(oper==mvo_clear)//clear
 	{
@@ -422,7 +416,7 @@ z_status void_parser::access_obj_member_map(type_memvar_oper oper,int* pindex,z_
 #endif
 
 
-void* void_parser::create_new_obj(const zp_factory* ie)
+void* zp_parser::create_new_obj(const zp_factory* ie)
 {
 	void* sub_obj=0;
 		sub_obj=(void*)ie->create_obj();

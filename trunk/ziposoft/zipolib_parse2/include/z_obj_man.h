@@ -3,7 +3,7 @@
 #include "zipolib_parse2/include/zp_obj.h"
 
 class void_parse;
-class void_parser;
+class zp_parser;
 class zo_manipulator
 {
 	int     _dump_depth;
@@ -56,7 +56,7 @@ public:
 	z_status dump_obj(z_file* fp,void* obj);
 	z_status dump_obj(void* obj);
 	z_status load_obj(void* obj,void_parse* p);
-	void* get_child_obj(ctext name,void* parent);
+	void* get_child_obj(ctext name,	const zp_factory* obj_factory,void* parent);
 
 	void dump_indent();
 	void dump_newline();

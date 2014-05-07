@@ -3,12 +3,20 @@
 #include "z_parse_obj.h"
 
 
+zo_manipulator::zo_manipulator()
+{
+	_dump_depth=0;
+	_dump_new_line=false;
+}
 
 
-   /*
-void* zo_manipulator::get_child_obj(ctext name,void* parent)
+   
+void* zo_manipulator::get_child_obj(ctext name,	const zp_factory* obj_factory,void* parent)
 {
 	ZTF;
+		Z_ASSERT(0);
+	return 0;
+	/*
 	zp_var_entry* fe=parent->get_feature(name);
 	if(!fe) return 0;
 	_p_member_var_obj=0;
@@ -20,8 +28,8 @@ void* zo_manipulator::get_child_obj(ctext name,void* parent)
 	void* child=_p_member_var_obj;
 	if(child)
 		child->set_parent_obj(parent);
-	return child;
-}	  */
+	return child;	*/
+}	  
 int zo_manipulator::feature_get_num_children(void* p_obj,ctext var_id /* 0 for all */)
 {
 	return _member_var_int_data;
@@ -208,7 +216,7 @@ void zo_manipulator::dump_newline()
 	
 
 }
-
+ /*
 z_status zo_manipulator::dump_obj(z_file* fp,void* obj)
 {
 	_dump_fp=fp;
@@ -261,7 +269,7 @@ z_status zo_manipulator::dump_obj(void* obj)
 
 
 	return zs_ok;
-}
+}	  
 
 z_status zo_manipulator::load_obj(void* obj,void_parse* p)
 {
@@ -292,6 +300,6 @@ z_status zo_manipulator::load_obj(void* obj,void_parse* p)
 
 	return zs_ok;
 }
-
+			   */
 
 

@@ -28,9 +28,11 @@
     <ClInclude Include="..\include\z_parse_text.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\z_console.cpp" />
-    <ClCompile Include="..\src\z_obj.cpp">
+    <ClCompile Include="..\src\z_console.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\src\z_obj.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\src\z_obj_cmd.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
