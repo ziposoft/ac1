@@ -69,6 +69,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zipolib_parse2", "zipolib_parse2\windows\zipolib_parse2.vcxproj", "{1387C270-EF53-438B-939A-3D980D27EF0C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_parse2", "tests\test_parse2\test_parse2.vcxproj", "{D7A24E14-1C3C-4E67-B925-529FBC0712B7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9296B73D-D94E-4724-907F-E1766D6A575C} = {9296B73D-D94E-4724-907F-E1766D6A575C}
+		{1387C270-EF53-438B-939A-3D980D27EF0C} = {1387C270-EF53-438B-939A-3D980D27EF0C}
+		{61770672-CA7E-41A4-894F-76A1511CEDB0} = {61770672-CA7E-41A4-894F-76A1511CEDB0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution

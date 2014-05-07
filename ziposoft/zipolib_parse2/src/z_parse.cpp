@@ -31,7 +31,7 @@ ctext z_status_get_text(z_status status)
 }
 
 
-z_status void_parser::get_flags(zp_flags& flags)
+z_status zp_parser::get_flags(zp_flags& flags)
 {
 	//zp_flags& flags=_ctx_current->_flags;
 	zp_text_parser& tmpl=context_get_current_template_parser();
@@ -102,7 +102,7 @@ z_status void_parser::get_flags(zp_flags& flags)
 
 }
 
-z_status void_parser::_process_template(zp_mode mode)
+z_status zp_parser::_process_template(zp_mode mode)
 {
 	zp_flags flags;
 	flags.as_u32=0;
@@ -120,7 +120,7 @@ z_status void_parser::_process_template(zp_mode mode)
 
 }
 
-z_status void_parser::_process_group(zp_flags flags,zp_mode mode)
+z_status zp_parser::_process_group(zp_flags flags,zp_mode mode)
 {
 	//ZTF;
 	zp_group_type group_type=zp_group_single;
@@ -377,7 +377,7 @@ struct item_process
 
 };
 
-z_status void_parser::test_white_space(zp_mode mode)
+z_status zp_parser::test_white_space(zp_mode mode)
 {
 	z_status status=test_cset(*cset_white_space);
 	if (status==zs_matched)
@@ -398,7 +398,7 @@ z_status void_parser::test_white_space(zp_mode mode)
 	}
 	return status;
 }
-z_status void_parser::_process_stage(zp_mode mode,zp_flags* pflags)
+z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 {
 	//ZTF;
 	z_status status;
@@ -605,7 +605,7 @@ z_status void_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 }
 
 
-z_status void_parser::_process_sub_item(void* sub_obj,
+z_status zp_parser::_process_sub_item(void* sub_obj,
 										  const zp_factory* ie,
 										  zp_mode mode,zp_flags flags)
 {

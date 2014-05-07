@@ -29,7 +29,7 @@ struct zp_factory
 	ctext parse_string;
 };
 */
-class void_parser;
+class zp_parser;
 
 
 
@@ -81,13 +81,13 @@ void* new_##_CLASS_() {\
 	return obj; }\
 ctext _CLASS_##PARSE=_PARSE_;\
 ctext _CLASS_##NAME=_NAME_;\
-z_status _CLASS_::feature_manipulate(type_memvar_oper oper,size_t* p_size,ctext var_name,void_parser* p) {\
+z_status _CLASS_::feature_manipulate(type_memvar_oper oper,size_t* p_size,ctext var_name,zp_parser* p) {\
    __VA_ARGS__ ;	return _BASE_::feature_manipulate(oper,p_size,var_name,p);} \
 const zp_factory  _CLASS_::ENTRY=  {_CLASS_##NAME,_CLASS_##PARSE,new_##_CLASS_};\
 	const zp_factory* _CLASS_::get_fact() { return &_CLASS_::ENTRY;} 
 
 #define void_H \
-	public:virtual z_status feature_manipulate(type_memvar_oper set,size_t* i,ctext var_name,void_parser* p); \
+	public:virtual z_status feature_manipulate(type_memvar_oper set,size_t* i,ctext var_name,zp_parser* p); \
 	static const zp_factory ENTRY;\
 	virtual const zp_factory* get_fact();
 

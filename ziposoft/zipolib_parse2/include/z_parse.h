@@ -127,10 +127,10 @@ public:
 };
 //________________________________________________________________
 //
-//void_parser
+//zp_parser
 //________________________________________________________________
 
-class void_parser : public zp_text_parser, public zo_manipulator
+class zp_parser : public zp_text_parser, public zo_manipulator
 {
 	zp_test_result* _results;
 	zpi_context _ctx_root;
@@ -147,9 +147,9 @@ public:
 	//initialization
 	/*
 	void set_obj_table(const zp_factory** it,size_t size);
-	void_parser(const zp_factory** it,size_t size);
+	zp_parser(const zp_factory** it,size_t size);
 	*/
-	void_parser();
+	zp_parser();
 
 
 	//parsing
@@ -158,7 +158,14 @@ public:
 	z_status parse_template(void*& p_item_out,ctext tmpl);
 	z_status parse_item(void*& p_item_out,ctext item_entry_name);
 	z_status parse_obj(void* p_obj,z_string& data_in);
-	z_status parse_obj(void* p_obj,ctext data);
+
+	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data)
+	{
+		const zp_factory* factory=&zp_factory_T<CLASS>::static_instance;
+		return 	parse_obj(p_obj, factory,data);
+
+	}
+	z_status parse_obj(void* p_obj,const zp_factory* factory,ctext data);
 	z_status create_empty_item(void*& p_item_out,ctext item_entry_name);
 
 
@@ -225,10 +232,10 @@ public:
 
 };
 
-typedef z_status (void_parser::*type_obj_parser_fp)(const void* p1);
-typedef z_status (void_parser::*type_obj_parser_fp_flags)(zp_flags p1);
-typedef z_status (void_parser::*type_obj_parser_fp_create)(zp_flags p1,int type);
-typedef z_status (void_parser::*type_obj_parser_fp_output)(zp_flags p1,zp_mode mode);
+typedef z_status (zp_parser::*type_obj_parser_fp)(const void* p1);
+typedef z_status (zp_parser::*type_obj_parser_fp_flags)(zp_flags p1);
+typedef z_status (zp_parser::*type_obj_parser_fp_create)(zp_flags p1,int type);
+typedef z_status (zp_parser::*type_obj_parser_fp_output)(zp_flags p1,zp_mode mode);
 
 struct keyword_item
 {

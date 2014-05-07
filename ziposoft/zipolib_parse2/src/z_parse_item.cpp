@@ -6,7 +6,7 @@
 
 
 #define FPT(_X_) &zp_text_parser::_X_
-#define FPO(_X_) &void_parser::_X_
+#define FPO(_X_) &zp_parser::_X_
 
 keyword_item keyword_list[]={
 	{item_literal,		"literal",	"string literal",		
@@ -42,7 +42,7 @@ keyword_item keyword_list[]={
 
 };
 #define keyword_list_count (sizeof(keyword_list)/sizeof(keyword_item))
-z_status void_parser::_f_ident_list_test(const void* dummy)
+z_status zp_parser::_f_ident_list_test(const void* dummy)
 {
 	z_status result; 
 	z_status result_total=zs_no_match; 
@@ -78,12 +78,12 @@ z_status void_parser::_f_ident_list_test(const void* dummy)
 	}
 }
 
-z_status void_parser::_f_ident_list_create(zp_flags flags,int type)
+z_status zp_parser::_f_ident_list_create(zp_flags flags,int type)
 {
 	return zs_matched;
 
 }
-z_status void_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
+z_status zp_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
 {
 	z_status result=zs_ok;
 	bool need_comma=false;
@@ -109,33 +109,33 @@ z_status void_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
 		return result;
 	return zs_matched;
 }
-z_status void_parser::_f_squoted_string_test(const void* dummy)
+z_status zp_parser::_f_squoted_string_test(const void* dummy)
 {
 	return test_single_quoted_string();
 }
-z_status void_parser::_f_quoted_string_test(const void* dummy)
+z_status zp_parser::_f_quoted_string_test(const void* dummy)
 {
 	return test_code_string();
 }
-z_status void_parser::_f_test_ident(const void* dummy)
+z_status zp_parser::_f_test_ident(const void* dummy)
 {
 	return test_any_identifier();
 }
-z_status void_parser::_f_test_whsp(const void* dummy)
+z_status zp_parser::_f_test_whsp(const void* dummy)
 {
 	return test_cset(*cset_white_space);
 }
-z_status void_parser::_f_test_path(const void* dummy)
+z_status zp_parser::_f_test_path(const void* dummy)
 {
 	return test_cset(*cset_path_string);
 
 }
-z_status void_parser::_f_test_to_eob(const void* dummy)
+z_status zp_parser::_f_test_to_eob(const void* dummy)
 {
 	return test_to_eob();
 }
 
-z_status void_parser::_f_create_string(zp_flags flags,int type)
+z_status zp_parser::_f_create_string(zp_flags flags,int type)
 {
 	z_status status=zs_matched;
 	ctext match_start=0;
@@ -148,7 +148,10 @@ z_status void_parser::_f_create_string(zp_flags flags,int type)
 		{
 			if(_ctx_current->_obj)
 			{
-				status=feature_set_string(_ctx_current->_obj,_ctx_current->_member_var_name,match_start,match_len);
+				z_string temp;
+				temp.assign( match_start,match_len);
+				status=_ctx_current->_obj_factory->set_var( _ctx_current->_obj,_ctx_current->_member_var_name,temp.c_str());
+				//status=feature_set_string(_ctx_current->_obj,_ctx_current->_member_var_name,match_start,match_len);
 			}
 		}
 		else
@@ -167,7 +170,7 @@ z_status void_parser::_f_create_string(zp_flags flags,int type)
 	return status;
 }
 
-z_status void_parser::_f_test_string_literal(const void* dummy)
+z_status zp_parser::_f_test_string_literal(const void* dummy)
 {
 	z_status status=zs_no_match;
 	ctext match_start=0;
@@ -177,7 +180,7 @@ z_status void_parser::_f_test_string_literal(const void* dummy)
 	status= test_string(match_start,match_len);
 	return status;
 }
-z_status void_parser::_f_not_test_string_literal(const void* dummy)
+z_status zp_parser::_f_not_test_string_literal(const void* dummy)
 {
 	//TODO!!!
 	z_status status=zs_no_match;
@@ -189,7 +192,7 @@ z_status void_parser::_f_not_test_string_literal(const void* dummy)
 	return status;
 }
 
-z_status void_parser::_f_string_literal_create(zp_flags flags,int type)
+z_status zp_parser::_f_string_literal_create(zp_flags flags,int type)
 {
 	z_status status=zs_ok;
 	if(flags.parent_data)
@@ -201,7 +204,7 @@ z_status void_parser::_f_string_literal_create(zp_flags flags,int type)
 	}
 	return status;
 }
-z_status void_parser::_f_string_literal_output(zp_flags flags,zp_mode mode)
+z_status zp_parser::_f_string_literal_output(zp_flags flags,zp_mode mode)
 {
 	z_status status=zs_ok;
 	ctext match_start=0;
@@ -218,7 +221,7 @@ z_status void_parser::_f_string_literal_output(zp_flags flags,zp_mode mode)
 #endif
 	return status;
 }
-z_status void_parser::_f_output_string(zp_flags flags,zp_mode mode)
+z_status zp_parser::_f_output_string(zp_flags flags,zp_mode mode)
 {
 	z_status status=zs_ok;
 	if(_ctx_current->_obj)
@@ -254,7 +257,7 @@ z_status void_parser::_f_output_string(zp_flags flags,zp_mode mode)
 	return zs_no_match;
 }
 
-z_status void_parser::_process_single_item(zp_mode mode,zp_flags flags)
+z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 {
 	//ZTF;
 	z_status item_result=zs_template_syntax_error;
@@ -381,7 +384,7 @@ z_status void_parser::_process_single_item(zp_mode mode,zp_flags flags)
 				{
 					if(flags.parent_data)
 					{
-						sub_obj=(void*)get_child_obj(_ctx_current->_member_var_name,_ctx_current->_obj);
+						sub_obj=(void*)get_child_obj(_ctx_current->_member_var_name,_ctx_current->_obj_factory,_ctx_current->_obj);
 					}
 					if(!sub_obj)
 					{
@@ -408,7 +411,7 @@ z_status void_parser::_process_single_item(zp_mode mode,zp_flags flags)
 					}
 					else
 					{
-						sub_obj=(void*)get_child_obj(_ctx_current->_member_var_name,_ctx_current->_obj);
+						sub_obj=(void*)get_child_obj(_ctx_current->_member_var_name,_ctx_current->_obj_factory,_ctx_current->_obj);
 						if(!sub_obj)
 							return zs_no_match;
 					}
