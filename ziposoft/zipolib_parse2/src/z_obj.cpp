@@ -4,28 +4,40 @@
 #include "zipolib_parse2/include/z_obj_man.h"
 
 
+void zp_member_funcs_base::dump(z_file& file, void* v,int& depth) const
+{
+	z_string s;
+	get(s,v);
+	file<<s;
+}
 
 
-
-
- void zp_var_funcs<int>::clear(void* v) const{int* i= reinterpret_cast<int*>(v); *i=0;    }
- void zp_var_funcs<int>::get(z_string& s, void* v) const{    }
- void zp_var_funcs<int>::set(ctext s, void* v) const{int* i= reinterpret_cast<int*>(v); *i=atoi(s);    }
- void zp_var_funcs<z_string>::get(z_string& s, void* v) const{    }
- void zp_var_funcs<z_string>::set(ctext s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); *vs=s;   }
- void zp_var_funcs<z_string>::clear(void* v) const
- {
-	 z_string* vs= reinterpret_cast<z_string*>(v); 
-	 *vs="";   
- }
+void zp_var_funcs<int>::clear(void* v) const{int* i= reinterpret_cast<int*>(v); *i=0;    }
+void zp_var_funcs<int>::get(z_string& s, void* v) const{ int* i= reinterpret_cast<int*>(v); s=*i;   }
+void zp_var_funcs<int>::set(ctext s, void* v) const{int* i= reinterpret_cast<int*>(v); *i=atoi(s);    }
+void zp_var_funcs<z_string>::get(z_string& s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); s=*vs;    }
+void zp_var_funcs<z_string>::set(ctext s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); *vs=s;   }
+void zp_var_funcs<z_string>::clear(void* v) const
+{
+	z_string* vs= reinterpret_cast<z_string*>(v); 
+	*vs="";   
+}
  
+
+
+
+
 
  template class zp_var_funcs<z_string>;
  template class zp_var_funcs<int>;
 
 
-const zp_factory*  zo_get_factory_by_name_and_length(ctext name,size_t len)
+const zp_factory*  zo_get_factory_by_name(ctext name,size_t len)
 {
+	if(len==-1)
+	{
+		len=strlen(name);
+	}
 	int i_module;
 	for(i_module=0;i_module<zp_module_master_list_size;i_module++)
 	{
@@ -70,12 +82,38 @@ const zp_var_entry* zp_factory::get_var_entry (ctext name) const
 			return &list[i];
 	return 0;
 }
+
+z_status zp_factory::get_new_child_obj_ptr(void* obj,ctext var_name,void** ppChild) const
+{
+	const zp_var_entry* ent= get_var_entry(var_name);
+	if(!ent)
+		return z_status_item_not_found;
+	char* pvar=(char*)obj+ent->offset;
+	const zp_member_funcs_base* funcs=ent->fp_var_func_get();
+
+	*ppChild=funcs->reset_create_obj(pvar);
+	return z_status_success;
+
+}
+z_status zp_factory::get_child_obj_ptr(void* obj,ctext var_name,void** ppChild) const
+{
+	const zp_var_entry* ent= get_var_entry(var_name);
+	if(!ent)
+		return z_status_item_not_found;
+	char* pvar=(char*)obj+ent->offset;
+	const zp_member_funcs_base* funcs=ent->fp_var_func_get();
+
+	*ppChild=funcs->get_opj_ptr(pvar);
+	return z_status_success;
+
+}
+
 z_status zp_factory::set_var(void* obj,ctext var_name,ctext value)	const
 {
 	const zp_var_entry* ent= get_var_entry(var_name);
 	if(!ent)
-		return -1; 
-	const zp_var_funcs_base* funcs=ent->fp_var_func_get();
+		return z_status_item_not_found; 
+	const zp_member_funcs_base* funcs=ent->fp_var_func_get();
 	char* pvar=(char*)obj+ent->offset;
 	funcs->set(value,pvar);
 	return z_status_success;
@@ -90,4 +128,48 @@ void zp_factory::clear_all_vars (void* obj) const
 		char* pvar=(char*)obj+list[i].offset;
 		list[i].fp_var_func_get()->clear(pvar);
 	}
+}
+
+z_status zp_factory::get_var_as_string(void* obj,ctext var_name,z_string& value) const
+{
+	const zp_var_entry* ent= get_var_entry(var_name);
+	if(!ent)
+		return z_status_item_not_found; 
+	const zp_member_funcs_base* funcs=ent->fp_var_func_get();
+	char* pvar=(char*)obj+ent->offset;
+	funcs->get(value,pvar);
+	return z_status_success;
+}
+void dump_indent(z_file& f,int depth)
+{
+	while(depth--)
+		f<<"  ";
+}
+void zp_factory::dump_obj_r(z_file& f,void* obj,int& depth) const
+{
+	size_t i;
+	z_string value;
+	const zp_var_entry* list=get_var_list();
+	dump_indent(f,depth);
+	f << get_name()<<"{\n";
+	depth++;
+	for(i=0;i<get_var_list_size();i++)
+	{
+		char* pvar=(char*)obj+list[i].offset;
+		dump_indent(f,depth);
+		f << list[i].name<< "=";
+		list[i].fp_var_func_get()->dump(f,pvar,depth);
+		f <<'\n';
+	}
+	depth--;
+	dump_indent(f,depth);
+	f<< "}\n";
+
+}
+
+void zp_factory::dump_obj (z_file& f,void* obj) const
+{
+	int depth=0;
+	dump_obj_r(f,obj,depth);
+
 }

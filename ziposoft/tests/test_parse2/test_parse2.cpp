@@ -50,8 +50,8 @@ int main()
 
 
  #define ZO_OBJ_LIST \
- OBJ(testclass,void,"cmdline","{_val}ident:'=':{i}int",VAR(i) VAR(k)  VAR(j) VAR(_val)) \
-	OBJ(testclass2,void,"cmdline","parse",VAR(i) VAR(k)   VAR(str))
+ CLS(testclass,void,"cmdline","{_val}ident:'=':{i}int",VAR(i) VAR(k)  VAR(j) VAR(_val)) \
+	CLS(testclass2,void,"cmdline","parse",VAR(i) VAR(k)   VAR(str))
 
 
 #include "zipolib_parse2/include/z_obj_macro.h"

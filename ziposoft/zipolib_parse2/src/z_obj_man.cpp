@@ -10,26 +10,7 @@ zo_manipulator::zo_manipulator()
 }
 
 
-   
-void* zo_manipulator::get_child_obj(ctext name,	const zp_factory* obj_factory,void* parent)
-{
-	ZTF;
-		Z_ASSERT(0);
-	return 0;
-	/*
-	zp_var_entry* fe=parent->get_feature(name);
-	if(!fe) return 0;
-	_p_member_var_obj=0;
-	zo_fet_man_context con( this,zo_mvo_get_child_obj,name,fe);
-	z_status status=parent->feature_manipulate(&con);
-
-	if(status)
-		return 0;
-	void* child=_p_member_var_obj;
-	if(child)
-		child->set_parent_obj(parent);
-	return child;	*/
-}	  
+  
 int zo_manipulator::feature_get_num_children(void* p_obj,ctext var_id /* 0 for all */)
 {
 	return _member_var_int_data;
@@ -58,19 +39,7 @@ z_status zo_manipulator::feature_objlist_get_next(void* p_obj,ctext fet_name,voi
 	Z_ASSERT(0);
 	return -1;
 }
-z_status zo_manipulator::feature_set_string(void* p_obj,ctext fet_name,ctext val,size_t len)
-{
-	ZTF;
-	Z_ASSERT(0);
-	return -1;
-}
 
-z_status zo_manipulator::feature_get_string(void* p_obj,ctext fet_name ,ctext& val)
-{
-	ZTF;
-	Z_ASSERT(0);
-	return -1;
-}
 z_status zo_manipulator::feature_objlist_add(void* p_obj,ctext fet_name,void* p_obj_child)
 {
 	ZTF;
@@ -95,12 +64,6 @@ ctext zo_manipulator::feature_get_as_string(void* p_obj,zp_var_entry* fe)
 	ZTF;
 	Z_ASSERT(0);
 	return "[error]";
-}
-z_status zo_manipulator::feature_reset_iter(void* p_obj,ctext name)
-{
-	ZTF;
-	Z_ASSERT(0);
-	return -1;
 }
 z_status zo_manipulator::feature_clear(void* p_obj,ctext name)
 {

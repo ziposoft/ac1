@@ -52,11 +52,10 @@ public:
 /*
 	z_status var_set_from_text(void* p_obj,ctext var_id,ctext txt);
 	z_status var_set_from_string(void* p_obj,ctext var_id);
-*/	
+	
 	z_status dump_obj(z_file* fp,void* obj);
-	z_status dump_obj(void* obj);
+	z_status dump_obj(void* obj);*/
 	z_status load_obj(void* obj,void_parse* p);
-	void* get_child_obj(ctext name,	const zp_factory* obj_factory,void* parent);
 
 	void dump_indent();
 	void dump_newline();
@@ -68,10 +67,7 @@ public:
 	z_status feature_objlist_get_next(void* p_obj,ctext fet_name,void** pp_obj);
 	z_status feature_objlist_get(void* p_obj,ctext fet_name,void** pp_list);
 	z_status feature_set_integer(void* p_obj,ctext fet_name,int val);
-	z_status feature_set_string(void* p_obj,ctext fet_name,ctext val,size_t len);
-	z_status feature_get_string(void* p_obj,ctext fet_name ,ctext& val);
 	//z_status feature_set_from_value(void* p_obj,zp_value* p_value_obj,zp_var_entry* fe);
-	z_status feature_reset_iter(void* p_obj,ctext name=0 /* all*/);
 	z_status feature_clear(void* p_obj,ctext name=0 /* all*/);
 	z_status feature_dump(void* p_obj,ctext var_id);
 	void     feature_capture_action_return_value(size_t act_rtn_val);
