@@ -155,7 +155,7 @@ public:
 	//parsing
 
 
-	z_status parse_template(void*& p_item_out,ctext tmpl);
+	z_status parse_template(ctext tmpl);
 	z_status parse_item(void*& p_item_out,ctext item_entry_name);
 	z_status parse_obj(void* p_obj,z_string& data_in);
 
@@ -172,19 +172,11 @@ public:
 
 	z_status report_error(z_status status);
 
-	//item table
-/*
-	z_status feature_callback(type_memvar_oper oper,size_t* size,void*& ppObj);
-	z_status feature_callback(type_memvar_oper oper,size_t* size,void_container& member_var);
-	z_status feature_callback(type_memvar_oper oper,size_t* size,zo_str_map& member_var);
-	z_status feature_callback(type_memvar_oper oper,size_t* size,void& ppObj);
-	z_status feature_callback(type_memvar_oper oper,size_t* size,z_string& member_var);
-*/
-	void* create_new_obj(const zp_factory* ie);
+
 	z_status create_obj(ctext item_entry_name,void* &p_item);
 
 
-	z_status output_obj(z_file* fp,void* obj);
+	z_status output_obj(z_file* fp,const zp_factory* factory,void* obj);
 	z_status output_default_template(z_file* fp,ctext tmpl);
 	//context
 private:
