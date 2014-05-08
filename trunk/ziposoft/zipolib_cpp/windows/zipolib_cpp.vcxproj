@@ -141,6 +141,9 @@
     <ClCompile Include="..\src\z_type_converter.cpp" />
     <ClCompile Include="..\src\z_utility.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Makefile" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

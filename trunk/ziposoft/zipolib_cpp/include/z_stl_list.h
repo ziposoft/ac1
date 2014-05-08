@@ -31,7 +31,7 @@ public:
 	};	
 	virtual z_stl_list<ITEM_CLASS> & operator << (ITEM_CLASS *x)
     {
-        push_back(x);
+        l::push_back(x);
         return *this;
     };
 };
@@ -44,7 +44,7 @@ public:
 
     virtual z_stl_obj_vector<ITEM_CLASS> & operator << (ITEM_CLASS *x)
     {
-        push_back(x);
+        l::push_back(x);
         return *this;
     };
     template <class ID> ITEM_CLASS* get_next_obj(const ID & id,size_t &  start) 
