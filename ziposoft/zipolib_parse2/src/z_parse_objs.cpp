@@ -1,3 +1,4 @@
+#if 0
 #include "z_parse_pch.h"
 #include "z_parse.h"
 
@@ -298,3 +299,5 @@ ctext zp_feature::get_full_name(z_string& fullname)
 #include "zipolib_parse/include/z_obj_macro.h"
 
 
+
+#endif

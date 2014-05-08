@@ -12,12 +12,12 @@ void zp_member_funcs_base::dump(z_file& file, void* v,int& depth) const
 }
 
 
-void zp_var_funcs<int>::clear(void* v) const{int* i= reinterpret_cast<int*>(v); *i=0;    }
-void zp_var_funcs<int>::get(z_string& s, void* v) const{ int* i= reinterpret_cast<int*>(v); s=*i;   }
-void zp_var_funcs<int>::set(ctext s, void* v) const{int* i= reinterpret_cast<int*>(v); *i=atoi(s);    }
-void zp_var_funcs<z_string>::get(z_string& s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); s=*vs;    }
-void zp_var_funcs<z_string>::set(ctext s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); *vs=s;   }
-void zp_var_funcs<z_string>::clear(void* v) const
+template <> void zp_var_funcs<int>::clear(void* v) const{int* i= reinterpret_cast<int*>(v); *i=0;    }
+template <> void zp_var_funcs<int>::get(z_string& s, void* v) const{ int* i= reinterpret_cast<int*>(v); s=*i;   }
+template <> void zp_var_funcs<int>::set(ctext s, void* v) const{int* i= reinterpret_cast<int*>(v); *i=atoi(s);    }
+template <> void zp_var_funcs<z_string>::get(z_string& s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); s=*vs;    }
+template <> void zp_var_funcs<z_string>::set(ctext s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); *vs=s;   }
+template <> void zp_var_funcs<z_string>::clear(void* v) const
 {
 	z_string* vs= reinterpret_cast<z_string*>(v); 
 	*vs="";   
