@@ -220,8 +220,7 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zp_member_funcs_bas
 	virtual void* reset_create_obj(void* var /* pointer to obj pointer*/) const
 	{
 		void** ppObj=reinterpret_cast<void**>(var); 
-		if(*ppObj)
-			delete *ppObj;
+		//if(*ppObj) 	delete *ppObj;
 		*ppObj=zp_factory_T<CLASS>::static_instance.create_obj();
 		return *ppObj;
 	}
