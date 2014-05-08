@@ -42,24 +42,24 @@ public:
 	}
 	bool get(const KEY& key,DATA& data_out)
 	{
-		iter i=find(key);
+		iter i=this->find(key);
 		if(i==m::end()) return false;
 		data_out=i->second;
 		return true;
 	}
 	bool pop(const KEY& key,DATA& data_out)
 	{
-		iter i=find(key);
+		iter i=this->find(key);
 		if(i==m::end()) return false;
 		data_out=i->second;
-		erase(i);
+		m:erase(i);
 		return true;
 	}
 	bool del(const KEY& key)
 	{
-		iter i=find(key);
+		iter i=this->find(key);
 		if(i==m::end()) return false;
-		erase(i);
+		m:erase(i);
 		return true;
 	}
 	bool pop_first( KEY& key,DATA& data_out)
@@ -68,7 +68,7 @@ public:
 		if(i==m::end()) return false;
 		key=i->first;
 		data_out=i->second;
-		erase(i);
+		m:erase(i);
 		
 		return true;
 	}
@@ -141,7 +141,6 @@ template <class ITEM_CLASS > class z_map
 protected:
 	std::map<ctext,void*,ctext_less_than>  _map;
 public:
-	typedef typename std::map<ctext,void*,ctext_less_than> m;
 	/*
     virtual z_map<ITEM_CLASS> & operator << (ITEM_CLASS *x)
     {
@@ -210,10 +209,10 @@ public:
 		return true;
 	}
 };
-template <class ITEM_CLASS > class z_map_obj 
-: public z_map<ITEM_CLASS> 
+template <class ITEM_CLASS > class z_map_obj  : public z_map<ITEM_CLASS> 
 {
 public:
+
 	virtual void init_child(ITEM_CLASS *obj)
 	{
 
@@ -221,14 +220,14 @@ public:
 	virtual z_map_obj<ITEM_CLASS> & operator , (ITEM_CLASS *obj)
 	{
  		Z_ASSERT(obj);
-		add(obj->get_map_key(),obj); 
+		this->add(obj->get_map_key(),obj); 
 		init_child(obj);
 		return *this;
 	}
 	virtual z_map_obj<ITEM_CLASS> & operator << (ITEM_CLASS *obj)
 	{
  		Z_ASSERT(obj);
-		add(obj->get_map_key(),obj); 
+		this->add(obj->get_map_key(),obj); 
 		init_child(obj);
 		return *this;
 	}

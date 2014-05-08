@@ -6,7 +6,7 @@
 z_status z_directory::open(ctext path,bool create)
 {
 	z_status status;
-	if(_hDir!=NULL)
+	if(_hDir!=0)
 			return Z_ERROR_MSG(z_status_already_open,"z_directory already open");
 
 	status=z_dir_open(path,&_hDir); //current dir
@@ -29,12 +29,12 @@ z_status z_directory::open(ctext path,bool create)
 void z_directory::close()
 {
 	z_dir_close(_hDir);
-	_hDir=NULL;
+	_hDir=0;
 
 }
 z_directory::z_directory()
 {
-	_hDir=NULL;
+	_hDir=0;
 
 }
 z_directory::~z_directory()
@@ -46,7 +46,7 @@ z_directory::~z_directory()
 z_status z_directory::get_files_by_extension(ctext ext,z_strlist &list)
 {
 	
-	if(_hDir==NULL)
+	if(_hDir==0)
 	{
 
 		if(open(".")) 
