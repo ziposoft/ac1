@@ -29,7 +29,8 @@ ZO_OBJ_LIST;
 	namespace Z_PARSE_NS(_CLASS_) {const zp_var_entry varlist[]={ _EXTRA_ }; const size_t varlist_length=sizeof( varlist)/sizeof(	zp_var_entry);  }	 \
 	template <> const size_t zp_factory_T<_CLASS_>::get_var_list_size() const{ return Z_PARSE_NS(_CLASS_)::varlist_length; };\
 	template <> const zp_var_entry* zp_factory_T<_CLASS_>::get_var_list() const{ return Z_PARSE_NS(_CLASS_)::varlist; }\
-	template <> const zp_factory_T<_CLASS_>  zp_factory_T<_CLASS_>::static_instance;  \
+	const zp_factory_T<_CLASS_> static_instance_factory##_CLASS_;  \
+	template <> const zp_factory_T<_CLASS_>&  zp_factory_T<_CLASS_>::obj=static_instance_factory##_CLASS_;  \
 	template <> ctext zp_factory_T<_CLASS_>::get_parse_string() const{ return _PARSE_; }	  \
 	template <> ctext zp_factory_T<_CLASS_>::get_name()const { return #_CLASS_; }		\
 	template <> void* zp_factory_T<_CLASS_>::create_obj()const { return z_new _CLASS_(); }	
@@ -41,7 +42,7 @@ ZO_OBJ_LIST;
 #undef VAR
 #undef POBJ
 
-#define ZCLS(_CLASS_,_BASE_,_NAME_,_DESC_,...) { #_CLASS_,&zp_factory_T<_CLASS_>::static_instance }, 
+#define ZCLS(_CLASS_,_BASE_,_NAME_,_DESC_,...) { #_CLASS_,&static_instance_factory##_CLASS_ }, 
 #define ZP_MODULE_DEFINE(_NAME_) zp_module_fact_entry zp_module_##_NAME_##_fact_list[]={\
 ZO_OBJ_LIST };\
 const zp_module_entry ZP_MODULE(_NAME_)= \

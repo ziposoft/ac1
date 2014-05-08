@@ -1,29 +1,7 @@
 #include "test_parse.h"
-class testA 
-{
-public:
-	testA()
-	{
-	   i123=123;
-	   _val="defaultstr";
 
-	}
-	int i123;
-	z_string _val;
-};
-class testB 
-{
-public:
-	int i222;
-	testB()
-	{
-		_child=0;
-		i222=222;
-	}
-	testA* _child;
-};
 
- template <> const zp_factory_T<testA>  zp_factory_T<testA>::static_instance; 
+
 
  #define ZO_OBJ_LIST \
 	ZCLS(testA,void,"cmdline","{_val}ident:'=':{i123}int",VAR(i123) VAR(_val)) \

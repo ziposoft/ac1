@@ -22,14 +22,14 @@ endif
 ZROOT= $(CODEROOT)/ziposoft
 
 ifneq ($(WIND_BASE),)
-	PLATFORM_BUILD=vxworks
+	PLATFORM_BUILD=BUILD_VX
 	PLATFORM_TARGET=vxworks
-	MACHINE=vxWorks_x86
+	
 else
 MACHINE= $(shell gcc -dumpmachine)
 ifneq (,$(findstring mingw32,$(MACHINE)))
-	PLATFORM_BUILD=BUILD_MINGW
-	LINK_OPTS+= -static  -lrt
+	PLATFORM_BUILD=BUILD_GCC
+	LINK_OPTS+= -static  
 	OS=WINDOWS
 else
 ifneq (,$(findstring linux,$(MACHINE)))
@@ -54,22 +54,41 @@ endif
 endif
 
 
-ifeq ($(MACHINE),)
-$(error MACHINE not set.)
+ifeq ($(PLATFORM_BUILD),)
+$(error PLATFORM_BUILD not set.)
 endif
 CC=gcc
 CPP=g++
 
-ifeq ($(PLATFORM_BUILD),vxworks)
+ifeq ($(PLATFORM_BUILD),BUILD_VX)
+WIND_BASE := $(subst \,/,$(WIND_BASE))
 TGT_DIR= $(WIND_BASE)/target
 TOOL=gnu
 CPU=Pentium4
+ifeq "$(PROC)" "ppc"
+	CPU=PPC32
+	CPU_VARIANT= _ppc85XX_e500mc
+	VX_CPU_FAMILY= 
+	MACHINE=vx_ppc32
+endif
+ifeq "$(PROC)" "x64"
+	CPU = NEHALEM
+	CPU_VARIANT = none
+	VXBUILD=LP64
+	_WRS_CONFIG_LP64=1
+	export _WRS_CONFIG_LP64 
+	MACHINE=vx_x64
+endif
+
 #include $(TGT_DIR)/h/make/defs.option
-include $(TGT_DIR)/h/make/defs.default
-include $(TGT_DIR)/h/tool/$(TOOL_FAMILY)/make.$(CPU)$(TOOL)
+#include $(TGT_DIR)/h/make/defs.default
+#include $(TGT_DIR)/h/tool/$(TOOL_FAMILY)/make.$(CPU)$(TOOL)
+include $(TGT_DIR)/h/make/defs.library
 OPTION_ANSI=
-CFLAGS+= -std=gnu99 -pedantic
-#	$(TGT_DIR)/h/make/defs.$(WIND_HOST_TYPE)
+CFLAGS+= -std=gnu99 -pedantic  -D_WRS_KERNEL
+include $(TGT_DIR)/h/make/rules.library
+OPTION_ANSI=
+
 endif
 
 CFLAGS+= -I$(CODEROOT)  -I$(ZROOT) $(INC_DIRS)  -D$(PLATFORM_BUILD)

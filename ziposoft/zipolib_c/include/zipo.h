@@ -71,8 +71,8 @@ ________________________________________________________________________*/
 //#define BUILD_GCC
 #endif
 
-#if !(defined BUILD_VXWORKS || defined BUILD_GCC || defined BUILD_VSTUDIO || defined BUILD_INTEGRITY)
-#error "You must define BUILD_VXWORKS,BUILD_GCC,BUILD_VSTUDIO, or BUILD_INTEGRITY"
+#if !(defined BUILD_VX ||defined BUILD_MINGW || defined BUILD_GCC || defined BUILD_VSTUDIO || defined BUILD_INTEGRITY)
+#error "You must define BUILD_MINGW,BUILD_VXWORKS,BUILD_GCC,BUILD_VSTUDIO, or BUILD_INTEGRITY"
 #endif
 
 /*________________________________________________________________________
@@ -86,7 +86,15 @@ ________________________________________________________________________*/
 //#pragma ghs nowarning 680 //unnamed member 
 #pragma ghs nowarning 620 //unnamed member 
 #endif
+/*________________________________________________________________________*/
 
+#ifdef BUILD_VX
+#define UNUSED  __attribute__ ((unused))
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stddef.h>
+#endif
 /*________________________________________________________________________*/
 
 #ifdef BUILD_GCC

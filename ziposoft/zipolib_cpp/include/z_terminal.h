@@ -116,7 +116,7 @@ protected:
 	HANDLE hConsoleOutput;
 	CONSOLE_SCREEN_BUFFER_INFO csbiInfo; 
 #else
-#ifdef UNIX
+
 	struct termios term_original;
 	struct termios term_no_wait;
 	struct termios term_wait;
@@ -125,7 +125,7 @@ protected:
 	int set_wait();
 	int set_no_echo();
 	int get_resp(char*,char);
-#endif
+
 #endif
 public:	
 	char char_back;

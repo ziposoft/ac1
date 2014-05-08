@@ -78,7 +78,7 @@ extern const int zp_module_master_list_size;
  template <class C >  class zp_factory_T :public  zp_factory
  {
  public:
-	const  static zp_factory_T<C> static_instance;
+	const  static zp_factory_T<C> &obj;
 	virtual void* create_obj() const;
 	const size_t get_var_list_size() const;
 	const zp_var_entry* get_var_list() const;	
@@ -193,7 +193,7 @@ template <class CLASS >  class zp_child_obj_funcs  : public zp_member_funcs_base
  public:
 	virtual void* reset_create_obj(void* var /* pointer to obj */) const
 	{
-		zp_factory_T<CLASS>::static_instance.clear_all_vars(var); 
+		zp_factory_T<CLASS>::obj.clear_all_vars(var); 
 		return var;
 	}
 	virtual void* get_opj_ptr(void* var ) const
@@ -221,7 +221,7 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zp_member_funcs_bas
 	{
 		void** ppObj=reinterpret_cast<void**>(var); 
 		//if(*ppObj) 	delete *ppObj;
-		*ppObj=zp_factory_T<CLASS>::static_instance.create_obj();
+		*ppObj=zp_factory_T<CLASS>::obj.create_obj();
 		return *ppObj;
 	}
 	virtual void dump(z_file& file, void* v,int& depth) const
@@ -231,7 +231,7 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zp_member_funcs_bas
 			file<< "NULL";
 		else
 
-			zp_factory_T<CLASS>::static_instance.dump_obj_r(file,*ppObj,depth);
+			zp_factory_T<CLASS>::obj.dump_obj_r(file,*ppObj,depth);
 	}
 
  	virtual void get(z_string& s, void* v) const

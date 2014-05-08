@@ -33,6 +33,8 @@ int func2()
 int main(int argc, char** argv)
 {
 		ZT_ENABLE();
+
+	gz_out<<	zp_factory_T<testA>::obj.get_name();
 	//z_trace_enable();
 	//___________________________________________________________
 	//

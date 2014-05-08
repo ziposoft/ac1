@@ -78,11 +78,11 @@ U8* z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  )
 	FILE* pFile=fopen(in_filepath,"r");
 	char * code;
 	size_t len;
-	printf("pFile=%lx\n",(size_t)pFile);
+	printf("pFile=%d\n",(size_t)pFile);
 
 	fseek(pFile,0,SEEK_END);
 	len=ftell(pFile);
-	printf("len=%lu\n",len);
+	printf("len=%d\n",len);
 	code=(char*)malloc(len+1);
 	rewind(pFile);
 	*bytesread=fread(code,1,len,pFile);
@@ -90,7 +90,7 @@ U8* z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  )
 	printf("bytesread=%lu\n",*bytesread);
 	fclose(pFile);
 
-	return code;
+	return (U8*)code;
 #endif
 
 }
@@ -172,7 +172,7 @@ int    z_dir_create(utf8 dir_name)
 {
 #ifdef BUILD_VSTUDIO
 	return (mkdir(dir_name)) ;
-#elif defined BUILD_MINGW
+#elif defined( BUILD_MINGW) || defined(BUILD_VX)
 	return mkdir(dir_name /*S_IRUSR| S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH*/) ;
 
 #else
@@ -278,7 +278,7 @@ int     z_dir_get_next(z_directory_h h,utf8* currentfile,int type)
 			return -1;
 		*currentfile=zdir->entry->d_name;
 		DBG_OUT(("currentfile=%x %s\n",currentfile,*currentfile));
-#ifdef BUILD_MINGW	
+#if defined( BUILD_MINGW) || defined(BUILD_VX)
 		isDir=opendir(zdir->entry->d_name);
 		if(isDir) close(isDir);
 		
