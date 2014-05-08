@@ -29,20 +29,21 @@ public:
  template <class C >  class fact_T
  {
  public:
-	const static fact_T<C> static_instance;
-	C out(C x,C y)  const {return x+y;  };
- };
- 
- template <class C >  class other_T
- {
- public:
-	void func()
-	{
-		fact_T<C>::static_instance.out(1,2);
+	 static const fact_T<C> &p;
 
-	}
+	const static fact_T<C> static_instance;
+	void* create() const ;
  };
  
+
+ template class fact_T<test> ;
+
+
+ const  fact_T<test> theone;
+template<> const fact_T<test>&  fact_T<test>::p=theone;
+template<> const fact_T<test>  fact_T<test>::static_instance;
+template<> void* fact_T<test>::create() const { return 0;};
+
 class test_ntf
 {
 public:
@@ -67,6 +68,7 @@ void print_int(void* obj,size_t offset)
 
 }
 
+
 int main()
 {
 	printf("offsetof(test,_i)=%d\n",offsetof(test,k));
@@ -80,8 +82,7 @@ int main()
 	y.str="geny y";
 	y.k=321;
 
-	other_T<int> t;
-	t.func();
+	fact_T<test>::p.create();
 
 	void* px=(void*)&x;
 	void* py=(void*)&y;
@@ -97,4 +98,3 @@ int main()
 
 
 
-template <> const fact_T<int>  fact_T<int>::static_instance;

@@ -88,6 +88,31 @@ int run_help();
 
 //GLOBALS
 extern opt_func g_test_type_function_to_run;
+
+
+class testA 
+{
+public:
+	testA()
+	{
+	   i123=123;
+	   _val="defaultstr";
+
+	}
+	int i123;
+	z_string _val;
+};
+class testB 
+{
+public:
+	int i222;
+	testB()
+	{
+		_child=0;
+		i222=222;
+	}
+	testA* _child;
+};
 /*
 class zp_xml_atr : public zp_obj
 {
