@@ -23,7 +23,7 @@ public:
 	testA* _child;
 };
 
-
+ template <> const zp_factory_T<testA>  zp_factory_T<testA>::static_instance; 
 
  #define ZO_OBJ_LIST \
 	ZCLS(testA,void,"cmdline","{_val}ident:'=':{i123}int",VAR(i123) VAR(_val)) \
