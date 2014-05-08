@@ -1,3 +1,5 @@
+#if 0
+
 #include "z_parse_pch.h"
 #include "z_console.h"
 
@@ -709,4 +711,5 @@ z_status zo_console::process_args(int argc, char** argv)
 	return zs_ok;
 
 }
+#endif
 #endif

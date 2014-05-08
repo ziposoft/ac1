@@ -5,16 +5,15 @@
 using namespace std;
 
 
+
+
 namespace X 
 {
 	int i;
-
 };
 namespace X 
 {
-
 	int j;
-
 };
 class test 
 {
@@ -25,6 +24,25 @@ public:
 	int k;
 };
 
+
+
+ template <class C >  class fact_T
+ {
+ public:
+	const static fact_T<C> static_instance;
+	C out(C x,C y)  const {return x+y;  };
+ };
+ 
+ template <class C >  class other_T
+ {
+ public:
+	void func()
+	{
+		fact_T<C>::static_instance.out(1,2);
+
+	}
+ };
+ 
 class test_ntf
 {
 public:
@@ -62,7 +80,8 @@ int main()
 	y.str="geny y";
 	y.k=321;
 
-
+	other_T<int> t;
+	t.func();
 
 	void* px=(void*)&x;
 	void* py=(void*)&y;
@@ -75,3 +94,7 @@ int main()
 	X::j=3;
 	return 0;
 }
+
+
+
+template <> const fact_T<int>  fact_T<int>::static_instance;

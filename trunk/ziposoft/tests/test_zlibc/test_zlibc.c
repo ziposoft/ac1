@@ -5,7 +5,7 @@
 #include "zipolib_c/include/z_filesystem.h"
 
 
-
+void z_itobase2(char* buf, I64 value, int base, int buff_length, char padchar, int _signed);
 
 int main()
 {
@@ -14,11 +14,16 @@ int main()
 	int x=2;
 	z_directory_h hDir;
 	utf8 pname;
+	I64 i64=-12345;
+
+	char buff[100];
 
 
-//	Z_ERROR("Error test params %d %d",5,x);
-//	Z_ERROR("Error test",5);
+	z_itobase2(buff,i64,10,99,' ',1);
+	printf("%lld=%s\n",i64,buff);
+	z_itobase2(buff,i64,16,99,' ',1);
 
+	printf("%llx=%s\n",i64,buff);
 
 
 	printf("strcmp(%s,%s)=%d\n",str1,str2,strcmp(str1,str2));

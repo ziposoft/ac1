@@ -44,6 +44,7 @@ public:
 	virtual~ z_ntf_prop();
 	virtual void set_value(void* obj,ctext from)=0;
 	virtual void get_value(void* obj, z_string& str)=0;
+	virtual void convert(const z_string from, z_string& to){to=from;}
 	virtual void convert(ctext from, z_string& to){to=from;}
 	virtual void convert(ctext from,U32 & to){to=    atol(from); ;}
 	virtual void convert(const U32 & from,z_string& to){to=from;}
@@ -78,11 +79,11 @@ public:
 	}	
  	void set_value(void* obj,ctext from)
 	{
-		convert(from,*_p_memvar);	
+		this->convert(from,*_p_memvar);	
 	}
 	void get_value(void* obj,z_string& str)
 	{
-		convert(*_p_memvar,str);	
+		this->convert(*_p_memvar,str);	
 	}
 	/*
 	void set_value(void* obj,ctext from)

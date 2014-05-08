@@ -1,3 +1,4 @@
+#if 0
 #include "z_parse_pch.h"
 #include "z_obj_cmd.h"
 
@@ -280,3 +281,6 @@ void zo_man_cmd::dump()
 
 #define Z_MODULE _Z_MODULE(man)
 #include "zipolib_parse/include/z_obj_macro.h"
+
+
+#endif

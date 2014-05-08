@@ -1,5 +1,5 @@
 
-
+ #if 0
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -44,7 +44,7 @@ int main(int c,char* argv[])
 	printf("exiting...\n");
 	return 0;
 }
-#if 0
+
 	switch(ipmbAor) 
 	{
 	case IPMB0_SET_OVERRIDE:
