@@ -110,12 +110,12 @@
   <ItemGroup>
     <ClInclude Include="..\include\Windows_zipo.h" />
     <ClInclude Include="..\include\zipo.h" />
-    <ClInclude Include="..\include\z_debug.h" />
-    <ClInclude Include="..\include\z_filesystem.h" />
+    <ClInclude Include="..\include\z_dbg.h" />
+    <ClInclude Include="..\include\z_files.h" />
     <ClInclude Include="..\include\z_str.h" />
     <ClInclude Include="..\include\z_temp_buff.h" />
     <ClInclude Include="..\include\z_time.h" />
-    <ClInclude Include="..\include\z_utility.h" />
+    <ClInclude Include="..\include\z_util.h" />
     <ClInclude Include="..\include\z_os_specific.h" />
   </ItemGroup>
   <ItemGroup>
@@ -128,11 +128,11 @@
     <ClCompile Include="..\src\pstrtoi.c" />
     <ClCompile Include="..\src\strptime.c" />
     <ClCompile Include="..\src\z_debug.c" />
-    <ClCompile Include="..\src\z_filesystem.c" />
+    <ClCompile Include="..\src\z_files.c" />
     <ClCompile Include="..\src\z_str.c" />
     <ClCompile Include="..\src\z_temp_buff.c" />
     <ClCompile Include="..\src\z_time.c" />
-    <ClCompile Include="..\src\z_utility.c" />
+    <ClCompile Include="..\src\z_util.c" />
     <ClCompile Include="..\src\z_os_specific.c" />
   </ItemGroup>
   <ItemGroup>

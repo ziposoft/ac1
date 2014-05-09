@@ -2,7 +2,7 @@
 #include "z_file.h"
 #include "z_error.h"
 #include "z_logger.h"
-#include "zipolib_c/include/z_filesystem.h"
+#include "zipolib_c/include/z_files.h"
 #include "zipolib_c/include/z_os_specific.h"
 
 using namespace std;
@@ -324,7 +324,7 @@ int z_file_string_buffer::write(const char* buf, size_t count )
 
 z_status z_csv_encode_string(z_string& output)
 {
-	bool quoted=false;
+
 	size_t dq=0;
 	if(output.find_first_of(",\"\n")==z_string::npos)
 		return z_status_ok;

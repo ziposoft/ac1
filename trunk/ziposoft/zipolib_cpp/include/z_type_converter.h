@@ -17,9 +17,10 @@
 
 
 bool  z_convert(const double &from, char* to,int size,ctext format=0); 
-bool  z_convert(const int &from, char* to,int size,ctext format=0); 
-bool  z_convert(const unsigned int &from, char* to,int size,ctext format=0); 
-bool  z_convert(const  unsigned long &from, char* to,int size,ctext format=0);
+bool  z_convert(const U32 &from, char* to,int size,ctext format=0); 
+bool  z_convert(const I32 &from, char* to,int size,ctext format=0); 
+bool  z_convert(const  I64 &from, char* to,int size,ctext format=0);
+bool  z_convert(const  U64 &from, char* to,int size,ctext format=0);
 bool  z_convert(const z_string &from,unsigned int& to,ctext format=0);
 
 #endif

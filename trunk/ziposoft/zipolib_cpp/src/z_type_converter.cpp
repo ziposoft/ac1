@@ -283,6 +283,11 @@ bool z_convert(const U64 &val, char* to,int size,ctext format)
 	z_itobase2(to,val,10,size,' ',0);
 	return true;  
 }
+bool z_convert(const I64 &val, char* to,int size,ctext format)
+{
+	z_itobase2(to,val,10,size,' ',1);
+	return true;  
+}
 bool z_convert(const U64 &val,z_string &s,ctext format)
 {
     static char buff[24];

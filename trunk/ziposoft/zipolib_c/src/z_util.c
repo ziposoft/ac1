@@ -5,7 +5,7 @@ z_utility.c
 ________________________________________________________________________*/
 
 #include "zipo.h"
-#include "z_utility.h"
+#include "z_util.h"
 
 //TODO make Unicode
 

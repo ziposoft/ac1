@@ -65,11 +65,11 @@ public:
 	bool read_all(char*& data,size_t& size);
 	template <class TYPE>  z_file  &put(TYPE data)
 	{ 
-		char* tb=(char*)z_temp_buffer_get(0x100);
-		
+		//char* tb=(char*)z_temp_buffer_get(0x100);
+		static char tb[0x100]; //TODO - NOT THREAD SAFE!!!
 		z_convert(data,tb,0x100);
 		write(tb,strlen(tb));
-		z_temp_buffer_release(tb);
+		//z_temp_buffer_release(tb);
 		return *this;
 	}	
 
@@ -92,8 +92,10 @@ public:
 		write(x.c_str(),x.length());
 		return *this;
 	}
-    virtual z_file  &operator <<  (int x){ return put(x); }
-    virtual z_file  &operator <<  (size_t x){ return put(x); }
+    virtual z_file  &operator <<  (I64 x){ return put(x); }
+    virtual z_file  &operator <<  (I32 x){ return put(x); }
+    virtual z_file  &operator <<  (U64 x){ return put(x); }
+    virtual z_file  &operator <<  (U32 x){ return put(x); }
 
     virtual int putf(const char*  lpszFormat,  ...  );
 

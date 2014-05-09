@@ -137,6 +137,7 @@
     <ClCompile Include="..\src\z_ntf.cpp" />
     <ClCompile Include="..\src\z_string.cpp" />
     <ClCompile Include="..\src\z_terminal.cpp" />
+    <ClCompile Include="..\src\z_terminal_keys.cpp" />
     <ClCompile Include="..\src\z_trace.cpp" />
     <ClCompile Include="..\src\z_type_converter.cpp" />
     <ClCompile Include="..\src\z_utility.cpp" />

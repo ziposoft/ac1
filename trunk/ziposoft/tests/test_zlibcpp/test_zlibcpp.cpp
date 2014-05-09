@@ -5,6 +5,7 @@
 #include "zipolib_cpp/include/z_filesystem.h"
 #include "zipolib_cpp/include/z_trace.h"
 #include "zipolib_cpp/include/z_ntf.h"
+#include "zipolib_cpp/include/z_terminal.h"
 
  class test	 : public 	z_ntf_obj
  {
@@ -26,25 +27,20 @@
  };
 
 
-
-#define TEST_FILE "testfile.txt"
-
-int main()
-{
-	ZT_ENABLE();
-	ZTF;
-	z_string larry="Fred";
-
-	ZT("Testing trace %s %d...\n","duds",4);
-
-	
+ int test_ntf()
+ {
 	printf("offsetof(test,_i)=%d\n",offsetof(test,_i));
 
+	z_string larry="Fred";
 
 	test x;
 	x.set_prop("_i","123");
 	x.get_prop("_i",larry);
-	gz_out <<larry<<','<<x._i <<'\n';
+	gz_out
+		<<larry
+		<<','
+		<<x._i 
+		<<'\n';
 
 	x._i=982;
 	x.get_prop("_i",larry);
@@ -54,11 +50,16 @@ int main()
 	gz_out <<larry<<','<<x._hex <<'\n';
 
 
-	gz_out << "list of exe files:\n";
 
+	return 0;
+ }
+#define TEST_FILE "testfile.txt"
 
+ int test_filesystem()
+ {
 	z_directory localdir;
 	z_strlist list;
+	gz_out << "list of exe files:\n";
 
 	localdir.get_files_by_extension("exe",list);
 	list.dump(gz_out);
@@ -79,6 +80,32 @@ int main()
 	printf("get_file_size=%d\n",size);
 
 	test_file.close();
+
+
+
+
+	return 0;
+ }
+
+
+int main()
+{
+	ZT_ENABLE();
+	ZTF;
+
+	ZT("Testing trace %s %d...\n","duds",4);
+
+	
+	z_terminal term;
+	enum_key key;
+	char c;
+	term.terminal_open();
+	term.debug=true;
+	while(term.GetKey(key,c))
+	{
+		if(c=='x')
+			break;
+	}
 
 
 	return 0;//ZS_RET(base,feature_not_found);

@@ -21,19 +21,10 @@
     <ClInclude Include="..\include\Windows_zipo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\z_utility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\z_filesystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\z_temp_buff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\z_str.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\z_debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\z_os_specific.h">
@@ -42,15 +33,18 @@
     <ClInclude Include="..\include\z_time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\z_dbg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\z_files.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\z_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\pch.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\z_utility.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\z_filesystem.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\z_temp_buff.c">
@@ -75,6 +69,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\z_time.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\z_files.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\z_util.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
