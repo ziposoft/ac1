@@ -22,8 +22,10 @@ public:
 	string str;
 	int j;
 	int k;
-};
+	int func() { return 0;};
 
+};
+typedef int (test::*obj_funcptr)();
 
 
  template <class C >  class fact_T
@@ -77,6 +79,10 @@ int main()
 
 	test x,y,z;
 
+	test* null_obj=0;
+
+	obj_funcptr p=&test::func;
+	printf("obj_funcptr=%p\n",p);
 	x.str="larry x";
 	x.k=99;
 	y.str="geny y";

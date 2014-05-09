@@ -1,12 +1,37 @@
 #include "zipolib_cpp_pch.h"
 #include "z_terminal.h"
+#include "z_file.h"
 #include "zipolib_c/include/z_os_specific.h"
 
 
 #ifdef UNIX
 #include <stdio.h>
 #endif
+#ifdef BUILD_VX
+#include <vxWorks.h>
+#include <ctype.h>
+#include <fioLib.h>
+#include <ioLib.h>
+#endif
 
+z_terminal::z_terminal()
+{
+	_pBuffer=0;
+#ifdef WIN32
+	set_key_map(tt_windows);
+#else
+	set_key_map(tt_vt100);
+#endif
+};
+
+size_t  z_terminal::BuffGetCount() 
+{ 
+	if (_buffNext>_buffEnd)
+	{
+		return (_buffSize-_buffNext+_buffEnd);
+	}
+	return (_buffEnd-_buffNext);
+}
 bool z_terminal::terminal_open()
 {
 	debug=false;
@@ -66,14 +91,15 @@ bool z_terminal::GetKey(enum_key& key,char &c)
 	if(!count) 	WaitForKey();
 	if(debug) 
 	{
+		printf("\nkey:");
 		for(j=0;j<BuffGetCount();j++)
 			printf("%02x ",BuffPeekChar(j));
 		printf("\n");
 	}
 
-	for(i=0;i<num_keys;i++)
+	for(i=0;i<_key_map_count;i++)
 	{
-		if(keys[i].type==key_alpha) 
+		if(_key_map[i].type==key_alpha) 
 		{
 			c=BuffPeekChar(0);
 			BuffAdvance(1);
@@ -91,12 +117,12 @@ bool z_terminal::GetKey(enum_key& key,char &c)
 			match=true;
 			break;
 		}
-		if(keys[i].length<=BuffGetCount())
+		if(_key_map[i].length<=BuffGetCount())
 		{
 			match=true;
-			for(j=0;j<keys[i].length;j++)
+			for(j=0;j<_key_map[i].length;j++)
 			{
-				if(keys[i].code[j]!=BuffPeekChar(j)) 
+				if(_key_map[i].code[j]!=BuffPeekChar(j)) 
 				{
 					match=false;
 					break;
@@ -109,10 +135,10 @@ bool z_terminal::GetKey(enum_key& key,char &c)
 	{
 		if(debug)
         {
-			printf("%s\r\n",keys[i].name);
+			printf("%s\r\n",_key_map[i].name);
         }
-		key=keys[i].type;
-		BuffAdvance(keys[i].length);
+		key=_key_map[i].type;
+		BuffAdvance(_key_map[i].length);
 		return true;
 	}
 	return false;
@@ -194,7 +220,7 @@ void z_terminal::WaitForKey()
 }
 int z_terminal::get_resp(char* buff,char token)
 {
-	int i,n=0;
+	int n=0;
 	char c=0;
 	while(c!=token)
 	{
@@ -258,8 +284,12 @@ int z_terminal::mode_normal()
 	int result=0;
 #ifdef LYNXOS
 	result=tcsetattr(fileno(stdin), TCSAFLUSH, &term_original);
-#else
+#endif
+#ifdef UNIX
 	result=tcsetattr(fileno(stdin), TCSANOW, &term_original);
+#endif
+#ifdef BUILD_VX
+			(void) ioctl (STD_IN, FIOSETOPTIONS, OPT_TERMINAL);
 #endif
 	if(result < 0) 	return(-1);
 	return(0);
@@ -269,19 +299,27 @@ int z_terminal::set_no_wait()
 	int result=0;
 #ifdef LYNXOS
 	result=tcsetattr(fileno(stdin), TCSANOW, &term_no_wait);
-#else
+#endif
+#ifdef UNIX
 	result=tcsetattr(0, TCSANOW, &term_no_wait);
+#endif
+#ifdef BUILD_VX
+	    (void) ioctl (STD_IN, FIOSETOPTIONS,  /*OPT_ECHO |*/ OPT_CRMOD | OPT_TANDEM | OPT_7_BIT);
 #endif
 	if(result < 0) 	return(-1);
 	return(0);
 }
 int z_terminal::set_wait()
 {
-	int result;
+	int result=0;
 #ifdef LYNXOS
 	result=tcsetattr(0, TCSANOW , &term_wait);
-#else
+#endif
+#ifdef UNIX
 	result=tcsetattr(0, TCSANOW, &term_wait);
+#endif
+#ifdef BUILD_VX
+	    (void) ioctl (STD_IN, FIOSETOPTIONS, /*OPT_ECHO |*/   OPT_CRMOD | OPT_TANDEM | OPT_7_BIT);
 #endif
 	if(result < 0) 	return(-1);
 	return(0);

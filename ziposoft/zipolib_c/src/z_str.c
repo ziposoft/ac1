@@ -5,7 +5,7 @@ z_utility.c
 ________________________________________________________________________*/
 
 #include "zipo.h"
-#include "z_utility.h"
+#include "z_util.h"
 
 //TODO make Unicode
 char z_to_upper(char c) {if ((c>='a')&&(c<='z')) c=c-'a'+'A'; return c; }

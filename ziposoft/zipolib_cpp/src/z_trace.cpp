@@ -492,7 +492,7 @@ void  z_trace::save_config(ctext file_name)
 	z_file file_cfg(file_name,"wb");
 	z_map_iter i;
 	zt_module* mod;
-	while(mod=_modules.get_next(i))
+	while((mod=_modules.get_next(i)))
 	{
 		//mod->_name
 
