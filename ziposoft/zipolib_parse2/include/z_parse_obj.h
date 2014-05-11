@@ -108,7 +108,7 @@ const zp_factory  _CLASS_::ENTRY=  {_CLASS_##NAME,_CLASS_##PARSE,new_##_CLASS_};
 //________________________________________________________________
 
 
-	/*
+	
 
 
 class zp_pair

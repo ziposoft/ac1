@@ -172,7 +172,7 @@ z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
 	status=recset.exec_sql(s);
 	ZT("status=%s",zb_status_text[status]);
 
-	desc.clear_all();
+	desc.clear();
 
 	// Read the number of rows fetched
 	int cols = recset.get_num_cols();
