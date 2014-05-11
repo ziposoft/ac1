@@ -129,7 +129,7 @@ public:
 	virtual zb_ds_field* ds_field_int32_new(ctext id){ ZB_ERROR(zb_status_not_implemented);return 0;};
 	virtual zb_ds_rec_ptr* record_solo_new(){ ZB_ERROR(zb_status_not_implemented);return 0;};
 
-	z_map<zb_ds_table> _ds_tables;
+	z_map_obj<zb_ds_table> _ds_tables;
 
 
 	//crap

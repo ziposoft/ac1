@@ -17,7 +17,6 @@
   <ItemGroup>
     <ClInclude Include="..\include\z_console.h" />
     <ClInclude Include="..\include\zp_obj.h" />
-    <ClInclude Include="..\include\z_objlist.h" />
     <ClInclude Include="..\include\z_obj_cmd.h" />
     <ClInclude Include="..\include\z_obj_macro.h" />
     <ClInclude Include="..\include\z_obj_man.h" />

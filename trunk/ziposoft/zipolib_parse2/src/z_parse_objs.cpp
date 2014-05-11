@@ -4,50 +4,10 @@
 
 
 
-/*
-void void::set_label(ctext t)
-{
-	if(_label) 			return _label->set_label( t);
-	return ;
-}
-
-ctext void::get_label()
-{
-	if(_label) 	
-		return _label->get_text();
-	return "";
-}
-*/
-/*
 void void::output(z_file* fp)
 {
-	if(!_children) return;
-	size_t size=_children->size();
-	size_t i;
-	for(i=0;i<size;i++)
-	{
-		void* item=_children->at(i);
-		Z_ASSERT(item);
-		item->output(fp);
-	}
-}
-*/
-void void::output(z_file* fp)
-{
-	/*
-	if(!_children) return;
-	size_t size=_children->size();
-	size_t i;
-	for(i=0;i<size;i++)
-	{
-		void* item=_children->at(i);
-		Z_ASSERT(item);
-		item->output(fp);
-	}
-	*/
 }
 
-zo_manipulator g_man;
 void void::dump(int level, z_file& outf,int flags)
 {
 	zp_var_entry* f;
@@ -56,18 +16,6 @@ void void::dump(int level, z_file& outf,int flags)
 	//outf<<get_map_key()<<'['<<(int)_offset<<']'<< " ";
 	outf<<get_map_key()<< "[";
 	dump_custom(outf);
-	/*
-	zo_feature_list full_list;
-	get_feature_map(&g_man,full_list,ZO_MT_PROP,false);
-	full_list.reset_iter();
-	while(f=full_list.get_next())
-	{
-		ctext name=full_list._internal_iter.key;
-		outf<<name<<',';
-		this->get_feature
-
-
-	}*/
 
 	outf<<"]\n";
 	if(!_children) return;
