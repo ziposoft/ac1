@@ -4,7 +4,7 @@ z_str.h
 
 ________________________________________________________________________*/
 
-#include "zipolib_c/include/zipo.h"
+#include "zipolib/include/zipo.h"
 #ifndef z_str_h
 #define z_str_h
 #ifdef	__cplusplus

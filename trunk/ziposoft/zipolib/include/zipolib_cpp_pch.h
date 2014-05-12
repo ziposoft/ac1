@@ -2,13 +2,13 @@
 #define zipolib_cpp_pch_h
 /*_______________________________________________________________________*\
 
-   zipolib_cpp.h
+   zipolib.h
 
 \*_______________________________________________________________________*/
-#include "zipolib_c/include/zipo.h"
-#include "zipolib_c/include/z_util.h"
-#include "zipolib_c/include/z_dbg.h"
-#include "zipolib_c/include/z_time.h"
+#include "zipolib/include/zipo.h"
+#include "zipolib/include/z_util.h"
+#include "zipolib/include/z_dbg.h"
+#include "zipolib/include/z_time.h"
 #include <string>
 #include <map>
 #include <vector>

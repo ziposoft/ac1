@@ -5,7 +5,7 @@ z_utility.h
 ________________________________________________________________________*/
 
 
-#include "zipolib_c/include/zipo.h"
+#include "zipolib/include/zipo.h"
 #ifndef z_utility_h
 #define z_utility_h
 #ifdef	__cplusplus

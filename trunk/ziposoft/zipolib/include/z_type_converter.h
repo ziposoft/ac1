@@ -6,7 +6,7 @@
 #ifndef z_type_converter_h
 #define z_type_converter_h
 
-#include "zipolib_cpp/include/z_string.h"
+#include "zipolib/include/z_string.h"
 
 //TODO - this is terrible, get rid of this!
 

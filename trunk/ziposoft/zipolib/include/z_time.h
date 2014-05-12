@@ -5,7 +5,7 @@
 //________________________________________________________________________/////////////////////////
 #ifndef z_time_h
 #define z_time_h
-#include "zipolib_c/include/zipo.h"
+#include "zipolib/include/zipo.h"
 #include <time.h>
 
 

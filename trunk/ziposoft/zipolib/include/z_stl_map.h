@@ -7,8 +7,8 @@ ________________________________________________________________________*/
 #ifndef z_stl_map_h
 #define z_stl_map_h
 
-#include "zipolib_c/include/zipo.h"
-#include "zipolib_c/include/z_dbg.h"
+#include "zipolib/include/zipo.h"
+#include "zipolib/include/z_dbg.h"
 
 #include <map>
 

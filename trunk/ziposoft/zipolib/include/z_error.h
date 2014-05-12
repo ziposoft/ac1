@@ -1,9 +1,9 @@
 #ifndef z_error_h
 #define z_error_h
-#include "zipolib_cpp/include/zipolib_cpp.h"
-#include "zipolib_cpp/include/z_file.h"
-#include "zipolib_cpp/include/z_logger.h"
-#include "zipolib_cpp/include/z_trace.h"
+#include "zipolib/include/zipolib.h"
+#include "zipolib/include/z_file.h"
+#include "zipolib/include/z_logger.h"
+#include "zipolib/include/z_trace.h"
 
 
 /*

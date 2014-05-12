@@ -5,10 +5,10 @@
 //________________________________________________________________________/////////////////////////
 #ifndef z_file_header
 #define z_file_header
-#include "zipolib_cpp/include/zipolib_cpp.h"
-#include "zipolib_cpp/include/z_string.h"
-#include "zipolib_c/include/z_temp_buff.h"
-#include "zipolib_cpp/include/z_type_converter.h"
+#include "zipolib/include/zipolib.h"
+#include "zipolib/include/z_string.h"
+#include "zipolib/include/z_temp_buff.h"
+#include "zipolib/include/z_type_converter.h"
 #ifndef WIN32
 #define	HANDLE size_t
 #endif

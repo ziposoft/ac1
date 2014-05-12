@@ -6,7 +6,7 @@ ________________________________________________________________________*/
 
 #ifndef z_stl_list_h
 #define z_stl_list_h
-#include "zipolib_c/include/zipo.h"
+#include "zipolib/include/zipo.h"
 
 
 #include <list>
