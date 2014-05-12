@@ -4,7 +4,7 @@ z_time.c
 
 */
 #include "zipo.h"
-#include "zipolib_c/include/z_time.h"
+#include "zipolib/include/z_time.h"
 
 
 

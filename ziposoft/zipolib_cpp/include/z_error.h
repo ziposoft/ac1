@@ -1,6 +1,6 @@
 #ifndef z_error_h
 #define z_error_h
-#include "zipolib/include/zipolib.h"
+#include "zipolib/include/zipo.h"
 #include "zipolib/include/z_file.h"
 #include "zipolib/include/z_logger.h"
 #include "zipolib/include/z_trace.h"

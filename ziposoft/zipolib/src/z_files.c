@@ -1,9 +1,9 @@
 #include "zipo.h"
-#include "zipolib_c/include/z_files.h"
-#include "zipolib_c/include/z_temp_buff.h"
-#include "zipolib_c/include/z_util.h"
-#include "zipolib_c/include/z_os_specific.h"
-#include "zipolib_c/include/z_dbg.h"
+#include "zipolib/include/z_files.h"
+#include "zipolib/include/z_temp_buff.h"
+#include "zipolib/include/z_util.h"
+#include "zipolib/include/z_os_specific.h"
+#include "zipolib/include/z_dbg.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>

@@ -1,6 +1,6 @@
 #ifndef z_logger_h
 #define z_logger_h
-#include "zipolib/include/zipolib.h"
+#include "zipolib/include/zipo.h"
 #include "zipolib/include/z_string.h"
 
 

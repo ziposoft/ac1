@@ -1,6 +1,6 @@
 #ifndef z_console_h
 #define z_console_h
-#include "zipolib/include/zipolib.h"
+#include "zipolib/include/zipo.h"
 #include "zipolib/include/z_terminal.h"
 #include "zipolib_parse2/include/z_parse.h"
 

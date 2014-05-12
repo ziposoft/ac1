@@ -13,7 +13,7 @@ ________________________________________________________________________*/
 
 
 \*_______________________________________________________________________*/
-#include "zipolib/include/zipolib.h"
+#include "zipolib/include/zipo.h"
 #include "zipolib/include/z_string.h"
 #include "zipolib/include/z_stl_map.h"
 

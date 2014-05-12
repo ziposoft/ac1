@@ -1,5 +1,5 @@
 #include "test_parse.h"
-#include "zipolib_c/include/z_dbg.h"
+#include "zipolib/include/z_dbg.h"
 
 
 z_string g_file_buffer;

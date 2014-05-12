@@ -1,7 +1,6 @@
 #ifndef z_logger_h
 #define z_logger_h
-#include "zipolib/include/zipolib.h"
-#include "zipolib/include/z_string.h"
+#include "zipolib/include/zipolib_cpp.h"
 
 
 enum z_logger_level

@@ -1,5 +1,5 @@
 #include "zipolib_cpp_pch.h"
-#include "zipolib_cpp/include/z_type_converter.h"
+#include "zipolib/include/z_type_converter.h"
 #include <stdlib.h>
 #ifdef UNIX
 #include <stdio.h>
