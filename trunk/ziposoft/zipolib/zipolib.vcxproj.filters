@@ -30,9 +30,6 @@
     <ClInclude Include="include\zipo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\z_type_converter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\zipolib_cpp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -54,9 +51,6 @@
     <ClInclude Include="include\ptypes_cset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\z_file.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\z_files.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -67,9 +61,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\z_error.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\z_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\z_dbg.h">
@@ -97,6 +88,15 @@
       <Filter>cpp</Filter>
     </ClInclude>
     <ClInclude Include="include\z_trace.h">
+      <Filter>cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_list.h">
+      <Filter>cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_type_converter.h">
+      <Filter>cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_file.h">
       <Filter>cpp</Filter>
     </ClInclude>
   </ItemGroup>
@@ -167,13 +167,13 @@
     <ClCompile Include="src\z_utility.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="src\pch.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
     <ClCompile Include="src\pcset.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="src\z_error.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch_cpp.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
   </ItemGroup>
