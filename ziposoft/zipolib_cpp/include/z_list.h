@@ -13,9 +13,9 @@ ________________________________________________________________________*/
 
 
 \*_______________________________________________________________________*/
-#include "zipolib_cpp/include/zipolib_cpp.h"
-#include "zipolib_cpp/include/z_string.h"
-#include "zipolib_cpp/include/z_stl_map.h"
+#include "zipolib/include/zipolib.h"
+#include "zipolib/include/z_string.h"
+#include "zipolib/include/z_stl_map.h"
 
 class z_file;
 class z_strmap : public z_stl_map<z_string,z_string>

@@ -13,7 +13,7 @@
  */
 #ifndef ptypes_cset_h
 #define ptypes_cset_h
-#include "zipolib_c/include/zipo.h"
+#include "zipolib/include/zipo.h"
 
 #include <stdlib.h>
 #include <string.h>

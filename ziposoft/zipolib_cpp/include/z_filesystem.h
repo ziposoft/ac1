@@ -1,8 +1,8 @@
 #ifndef z_filesystem_cpp_h
 #define z_filesystem_cpp_h
-#include "zipolib_cpp/include/zipolib_cpp.h"
-#include "zipolib_cpp/include/z_string.h"
-#include "zipolib_c/include/z_files.h"
+#include "zipolib/include/zipolib.h"
+#include "zipolib/include/z_string.h"
+#include "zipolib/include/z_files.h"
 
 
 class z_directory

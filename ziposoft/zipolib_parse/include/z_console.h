@@ -1,7 +1,7 @@
 #ifndef z_console_h
 #define z_console_h
-#include "zipolib_cpp/include/zipolib_cpp.h"
-#include "zipolib_cpp/include/z_terminal.h"
+#include "zipolib/include/zipolib.h"
+#include "zipolib/include/z_terminal.h"
 #include "zipolib_parse/include/z_parse.h"
 
 class z_console : public z_terminal

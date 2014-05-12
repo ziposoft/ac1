@@ -8,11 +8,11 @@ ________________________________________________________________________*/
 #ifndef z_ntf_h
 #define z_ntf_h
 
-#include "zipolib_cpp/include/zipolib_cpp_pch.h"
-#include "zipolib_cpp/include/z_stl_map.h"
-#include "zipolib_cpp/include/z_string.h"
-#include "zipolib_cpp/include/z_error.h"
-#include "zipolib_cpp/include/z_type_converter.h"
+#include "zipolib/include/zipolib_cpp_pch.h"
+#include "zipolib/include/z_stl_map.h"
+#include "zipolib/include/z_string.h"
+#include "zipolib/include/z_error.h"
+#include "zipolib/include/z_type_converter.h"
 class z_ntf_obj;
 
 

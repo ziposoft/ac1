@@ -8,7 +8,7 @@ ________________________________________________________________________*/
 #ifndef z_debug_h
 #define z_debug_h
 
-#include "zipolib_cpp/include/zipolib_cpp_pch.h"
+#include "zipolib/include/zipolib_cpp_pch.h"
 
 #define z_new new
 #define z_delete delete 
