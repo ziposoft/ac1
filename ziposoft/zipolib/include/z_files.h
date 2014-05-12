@@ -9,7 +9,7 @@ ________________________________________________________________________*/
 #ifdef	__cplusplus
 extern "C" {
 #endif
-#include "zipolib_c/include/zipo.h"
+#include "zipolib/include/zipo.h"
 typedef size_t z_file_h;
 typedef size_t z_directory_h;
 U8*  z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  );

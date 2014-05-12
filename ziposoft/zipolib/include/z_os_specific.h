@@ -4,7 +4,7 @@ z_os_specific.h
 
 ________________________________________________________________________*/
 
-#include "zipolib_c/include/zipo.h"
+#include "zipolib/include/zipo.h"
 #ifndef z_windows_h
 #define z_windows_h
 #ifdef	__cplusplus

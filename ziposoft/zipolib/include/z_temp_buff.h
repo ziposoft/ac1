@@ -1,4 +1,4 @@
-#include "zipolib_c/include/zipo.h"
+#include "zipolib/include/zipo.h"
 #ifndef z_temp_buff_h
 #define z_temp_buff_h
 #ifdef	__cplusplus

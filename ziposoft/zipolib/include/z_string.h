@@ -8,7 +8,7 @@ ________________________________________________________________________*/
 #ifndef z_string_h
 #define z_string_h
 
-#include "zipolib_cpp/include/zipolib_cpp_pch.h"
+#include "zipolib/include/zipolib_cpp_pch.h"
 class z_file;
 static const char* empty_cstr="";
 class z_string : public std::string
