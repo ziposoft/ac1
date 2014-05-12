@@ -4,9 +4,9 @@ z_debug.c
 
 */
 #include "zipo.h"
-#include "zipolib_c/include/z_dbg.h"
-#include "zipolib_c/include/z_util.h"
-#include "zipolib_c/include/z_os_specific.h"
+#include "zipolib/include/z_dbg.h"
+#include "zipolib/include/z_util.h"
+#include "zipolib/include/z_os_specific.h"
 int g_z_dbg_trace_mask=0;
 #define MAX_DEBUG_STR 0x1000
 #if DEBUG

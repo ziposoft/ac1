@@ -1,8 +1,8 @@
 
 
 
-#include "zipolib_c/include/zipo.h"
-#include "zipolib_c/include/z_files.h"
+#include "zipolib/include/zipo.h"
+#include "zipolib/include/z_files.h"
 
 
 void z_itobase2(char* buf, I64 value, int base, int buff_length, char padchar, int _signed);

@@ -1,7 +1,7 @@
 // test_console.cpp : Defines the entry point for the console application.
 //
 
-#include "zipolib_cpp/include/zipolib_cpp.h"
+#include "zipolib/include/zipolib_cpp.h"
 #include "zipolib_parse/include/z_console.h"
 #include "test_console.h"
 Z_MODULE_INCLUDE(Z_MOD(parse));

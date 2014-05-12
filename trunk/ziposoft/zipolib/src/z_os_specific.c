@@ -4,7 +4,7 @@ z_utility.c
 
 ________________________________________________________________________*/
 #include "zipo.h"
-#include "zipolib_c/include/z_os_specific.h"
+#include "zipolib/include/z_os_specific.h"
 #include "z_temp_buff.h"
 
 #ifdef OS_WINDOWS

@@ -2,8 +2,8 @@
 #include "z_file.h"
 #include "z_error.h"
 #include "z_logger.h"
-#include "zipolib_c/include/z_files.h"
-#include "zipolib_c/include/z_os_specific.h"
+#include "zipolib/include/z_files.h"
+#include "zipolib/include/z_os_specific.h"
 
 using namespace std;
 #ifdef WIN32

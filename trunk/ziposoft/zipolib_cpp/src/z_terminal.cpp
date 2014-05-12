@@ -1,7 +1,7 @@
 #include "zipolib_cpp_pch.h"
 #include "z_terminal.h"
 #include "z_file.h"
-#include "zipolib_c/include/z_os_specific.h"
+#include "zipolib/include/z_os_specific.h"
 
 
 #ifdef UNIX
