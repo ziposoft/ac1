@@ -2,17 +2,17 @@
 #define zipolib_cpp_h
 /*_______________________________________________________________________*\
 
-   zipolib_cpp.h
+   zipolib.h
 
 \*_______________________________________________________________________*/
-#include "zipolib_cpp/include/zipolib_cpp_pch.h"
-#include "zipolib_cpp/include/z_debug.h"
-#include "zipolib_cpp/include/z_string.h"
-#include "zipolib_cpp/include/z_type_converter.h"
-#include "zipolib_cpp/include/z_file.h"
-#include "zipolib_cpp/include/z_stl_list.h"
-#include "zipolib_cpp/include/z_stl_map.h"
-#include "zipolib_cpp/include/z_list.h"
-#include "zipolib_cpp/include/z_logger.h"
+#include "zipolib/include/zipolib_cpp_pch.h"
+#include "zipolib/include/z_debug.h"
+#include "zipolib/include/z_string.h"
+#include "zipolib/include/z_type_converter.h"
+#include "zipolib/include/z_file.h"
+#include "zipolib/include/z_stl_list.h"
+#include "zipolib/include/z_stl_map.h"
+#include "zipolib/include/z_list.h"
+#include "zipolib/include/z_logger.h"
 
 #endif
