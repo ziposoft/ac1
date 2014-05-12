@@ -18,6 +18,7 @@
     <ProjectGuid>{9296B73D-D94E-4724-907F-E1766D6A575C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>zipolib_c</RootNamespace>
+    <ProjectName>zipolib</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -108,13 +109,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\ptypes_cset.h" />
     <ClInclude Include="..\include\Windows_zipo.h" />
     <ClInclude Include="..\include\zipo.h" />
+    <ClInclude Include="..\include\zipolib_cpp.h" />
+    <ClInclude Include="..\include\zipolib_cpp_pch.h" />
     <ClInclude Include="..\include\z_dbg.h" />
+    <ClInclude Include="..\include\z_debug.h" />
+    <ClInclude Include="..\include\z_error.h" />
+    <ClInclude Include="..\include\z_file.h" />
     <ClInclude Include="..\include\z_files.h" />
+    <ClInclude Include="..\include\z_filesystem.h" />
+    <ClInclude Include="..\include\z_list.h" />
+    <ClInclude Include="..\include\z_logger.h" />
+    <ClInclude Include="..\include\z_ntf.h" />
+    <ClInclude Include="..\include\z_stl_list.h" />
+    <ClInclude Include="..\include\z_stl_map.h" />
     <ClInclude Include="..\include\z_str.h" />
+    <ClInclude Include="..\include\z_string.h" />
     <ClInclude Include="..\include\z_temp_buff.h" />
+    <ClInclude Include="..\include\z_terminal.h" />
     <ClInclude Include="..\include\z_time.h" />
+    <ClInclude Include="..\include\z_trace.h" />
+    <ClInclude Include="..\include\z_type_converter.h" />
     <ClInclude Include="..\include\z_util.h" />
     <ClInclude Include="..\include\z_os_specific.h" />
   </ItemGroup>
@@ -124,16 +141,73 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Trace|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\src\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="..\src\pcset.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
     <ClCompile Include="..\src\pstrconv.c" />
     <ClCompile Include="..\src\pstrtoi.c" />
     <ClCompile Include="..\src\strptime.c" />
     <ClCompile Include="..\src\z_debug.c" />
+    <ClCompile Include="..\src\z_error.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="..\src\z_file.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
     <ClCompile Include="..\src\z_files.c" />
+    <ClCompile Include="..\src\z_filesystem.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="..\src\z_list.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="..\src\z_logger.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="..\src\z_ntf.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
     <ClCompile Include="..\src\z_str.c" />
+    <ClCompile Include="..\src\z_string.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
     <ClCompile Include="..\src\z_temp_buff.c" />
+    <ClCompile Include="..\src\z_terminal.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="..\src\z_terminal_keys.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
     <ClCompile Include="..\src\z_time.c" />
+    <ClCompile Include="..\src\z_trace.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="..\src\z_type_converter.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
     <ClCompile Include="..\src\z_util.c" />
     <ClCompile Include="..\src\z_os_specific.c" />
+    <ClCompile Include="..\src\z_utility.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)zipo_cpp.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Makefile" />

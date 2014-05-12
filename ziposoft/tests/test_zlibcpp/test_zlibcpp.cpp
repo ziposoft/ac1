@@ -1,11 +1,11 @@
 
 
 
-#include "zipolib_cpp/include/zipolib_cpp.h"
-#include "zipolib_cpp/include/z_filesystem.h"
-#include "zipolib_cpp/include/z_trace.h"
-#include "zipolib_cpp/include/z_ntf.h"
-#include "zipolib_cpp/include/z_terminal.h"
+#include "zipolib/include/zipolib_cpp.h"
+#include "zipolib/include/z_filesystem.h"
+#include "zipolib/include/z_trace.h"
+#include "zipolib/include/z_ntf.h"
+#include "zipolib/include/z_terminal.h"
 
  class test	 : public 	z_ntf_obj
  {
