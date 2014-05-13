@@ -106,8 +106,10 @@ class testB
 {
 public:
 	int i222;
+	bool _exclam;
 	testB()
 	{
+		_exclam=false;
 		_child=0;
 		i222=222;
 	}
@@ -121,6 +123,14 @@ public:
 		_list << "larry" << "fred";
 	}
 	z_strlist  _list;
+};
+class testObjList 
+{
+public:
+	testObjList()
+	{
+	}
+	zp_obj_vector _list;
 };
 class testDrv : public testA
 {

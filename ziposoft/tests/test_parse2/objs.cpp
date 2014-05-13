@@ -3,18 +3,20 @@
 
 
 
+
  #define ZO_OBJ_LIST \
 	ZCLS(testA,void,"cmdline","{_val}ident:'=':{i123}int",VAR(i123) VAR(_val)) \
-	ZCLS(testB,void,"cmdline","{_child}testA",VAR(i222)  POBJ(_child) )	\
+	ZCLS(testB,void,"cmdline","{_child}testA:{_exclam}?'!'",VAR(i222) VAR(_exclam)  POBJ(_child) )	\
 	ZCLS(testStrList,void,"cmdline","+({_list}ident:?',')",VAR(_list)  )\
-	ZCLS(testDrv,void,"cmdline","{_val}ident:'=':{i123}int",VAR(i123) VAR(_val) VAR(_val2))
+	ZCLS(testDrv,void,"cmdline","{_val}ident:'=':{i123}int",VAR(i123) VAR(_val) VAR(_val2))\
+	ZCLS(testObjList,void,"cmdline","*({_list}testA:?',')",VAR(_list) )
 
 		  
 #include "zipolib_parse2/include/z_obj_macro.h"
 ZP_MODULE_DEFINE(testmod);
 
 
-ZP_MODULE_INCLUDE(ZP_MOD(testmod));
+ZP_MODULE_INCLUDE(ZP_MOD(testmod), ZP_MOD(parse));
 
 
 #if 0

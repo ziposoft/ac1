@@ -38,7 +38,7 @@
     <ClCompile Include="..\src\z_parse_item.cpp" />
     <ClCompile Include="..\src\z_parse_misc.cpp" />
     <ClCompile Include="..\src\z_parse_objs.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\src\z_parse_pch.cpp">

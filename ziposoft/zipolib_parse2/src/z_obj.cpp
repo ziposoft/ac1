@@ -3,6 +3,8 @@
 #include "zipolib_parse2/include/zp_obj.h"
 #include "zipolib_parse2/include/z_obj_man.h"
 
+#define RECAST(_TYPE_,_NAME_) _TYPE_& _NAME_= *reinterpret_cast<_TYPE_*>(v);
+#define VF template <> void zp_var_funcs
 
 void zp_member_funcs_base::dump(z_file& file, void* v,int& depth) const
 {
@@ -11,27 +13,63 @@ void zp_member_funcs_base::dump(z_file& file, void* v,int& depth) const
 	file<<s;
 }
 
+VF<bool>::clear(void* v)            const {RECAST(bool,b); b=false;    }
+VF<bool>::get(z_string& s, void* v) const {RECAST(bool,b); s=(b?"true":"false");  }
+VF<bool>::set(ctext s, void* v)     const {RECAST(bool,b); b=(strcmp(s,"true")==0);    }
 
-template <> void zp_var_funcs<int>::clear(void* v) const{int* i= reinterpret_cast<int*>(v); *i=0;    }
-template <> void zp_var_funcs<int>::get(z_string& s, void* v) const{ int* i= reinterpret_cast<int*>(v); s=*i;   }
-template <> void zp_var_funcs<int>::set(ctext s, void* v) const{int* i= reinterpret_cast<int*>(v); *i=atoi(s);    }
-template <> void zp_var_funcs<z_string>::get(z_string& s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); s=*vs;    }
-template <> void zp_var_funcs<z_string>::set(ctext s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); *vs=s;   }
-template <> void zp_var_funcs<z_string>::clear(void* v) const
+VF<int>::clear(void* v) const			{RECAST(int,i); i=0;    }
+VF<int>::get(z_string& s, void* v) const	{RECAST(int,i); s=i;   }
+VF<int>::set(ctext s, void* v) const		{RECAST(int,i); i=atoi(s);    }
+
+
+VF<z_string>::get(z_string& s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); s=*vs;    }
+VF<z_string>::set(ctext s, void* v) const{z_string* vs= reinterpret_cast<z_string*>(v); *vs=s;   }
+VF<z_string>::clear(void* v) const
 {
 	z_string* vs= reinterpret_cast<z_string*>(v); 
 	*vs="";   
 }
  
-template <> void zp_var_funcs<z_strlist>::get(z_string& s, void* v) const
+VF<z_strlist>::get(z_string& s, void* v) const
 {z_strlist* vs= reinterpret_cast<z_strlist*>(v);vs->get_as_string(s);    }
-template <> void zp_var_funcs<z_strlist>::set(ctext s, void* v) const{z_strlist* vs= reinterpret_cast<z_strlist*>(v); *vs <<  s;   }
-template <> void zp_var_funcs<z_strlist>::clear(void* v) const
+VF<z_strlist>::clear(void* v) const
 {
 	z_strlist* vs= reinterpret_cast<z_strlist*>(v); 
 	vs->clear();
 }
+VF<z_strlist>::set(ctext s, void* v) const
+{
+	RECAST(z_strlist,list);
+	list <<  s;   
+}
+VF<zp_obj_vector>::set(ctext s, void* v) const
+{
+	RECAST(zp_obj_vector,list);
+	list.size();
+}
 
+
+template <> void* zp_var_funcs<zp_obj_vector>::reset_create_obj(void* v) const
+{
+	RECAST(zp_obj_vector,list);
+	return v;
+}
+template <> size_t zp_var_funcs<zp_obj_vector>::get_size(void* v) const
+{
+	RECAST(zp_obj_vector,list);
+	return list.size();
+}
+
+VF<zp_obj_vector>::dump(z_file& file, void* v,int& depth) const
+{
+	RECAST(zp_obj_vector,list);
+	size_t count=list.size();
+	int i;
+	for(i=0;i<count;i++)
+	{
+		list[i]._fact->dump_obj_r(file,list[i]._obj,depth);
+	}
+}
 
 
 
@@ -103,7 +141,7 @@ z_status zp_factory::get_new_child_obj_ptr(void* obj,ctext var_name,void** ppChi
 	return z_status_success;
 
 }
-z_status zp_factory::get_child_obj_ptr(void* obj,ctext var_name,void** ppChild) const
+z_status zp_factory::get_memvar_ptr(void* obj,ctext var_name,void** ppChild) const
 {
 	const zp_var_entry* ent= get_var_entry(var_name);
 	if(!ent)
@@ -111,7 +149,7 @@ z_status zp_factory::get_child_obj_ptr(void* obj,ctext var_name,void** ppChild) 
 	char* pvar=(char*)obj+ent->offset;
 	const zp_member_funcs_base* funcs=ent->fp_var_func_get();
 
-	*ppChild=funcs->get_opj_ptr(pvar);
+	*ppChild=funcs->get_ptr(pvar);
 	return z_status_success;
 
 }

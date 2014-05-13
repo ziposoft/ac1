@@ -18,8 +18,11 @@ class zp_factory;
 	virtual void get(z_string& s, void* v) const {};
 	virtual void set(ctext s, void* v) const {};
 	virtual void clear(void* v) const {} 
+	virtual void add(void* list,void* obj) const {} 
+	virtual void* get_item(void* list,size_t index) const { return 0;} 
+	virtual size_t get_size(void* list) const { return 0;} 
 	virtual void* reset_create_obj(void* var) const { return 0;}  /*could be pointer to obj, or porinter to obj pointer */
-	virtual void* get_opj_ptr(void* var) const { return 0;}  /*could be pointer to obj, or porinter to obj pointer */
+	virtual void* get_ptr(void* var) const { return var;}  /*could be pointer to obj, or porinter to obj pointer */
 			
  } ;
  typedef  const zp_member_funcs_base* (*funcp_var_funcs_get)();
@@ -48,7 +51,7 @@ public:
 	virtual const zp_var_entry* get_var_list() const=0;
 	const zp_var_entry* get_var_entry(ctext name) const;
 	z_status get_new_child_obj_ptr(void* obj,ctext var_name,void** ppChild) const;
-	z_status get_child_obj_ptr(void* obj,ctext var_name,void** ppChild) const;
+	z_status get_memvar_ptr(void* obj,ctext var_name,void** ppChild) const;
 	z_status set_var(void* obj,ctext var_name,ctext value) const;
 	z_status get_var_as_string(void* obj,ctext var_name,z_string& value) const;
 	void clear_all_vars(void* obj) const;
@@ -59,6 +62,18 @@ public:
 
 
 };
+struct zp_obj
+{
+	zp_factory* _fact;
+	void* _obj;
+};
+class zp_obj_vector  : public std::vector<zp_obj>
+{
+public:
+
+
+};
+
 struct zp_module_fact_entry 
 {
 	ctext name;
@@ -86,88 +101,7 @@ extern const int zp_module_master_list_size;
 	virtual ctext get_name() const;
  };
 
-class zo_str_container
-{
-public:
-	virtual ctext get_next()=0;
-	virtual void add(ctext x)=0;
-	virtual void clear()=0;
-	virtual size_t count()=0;
-	virtual void reset_iter()=0;
-	virtual void copy(zo_str_container& other);
 
-};
-class zo_str_vect : public z_strlist,public zo_str_container
-{
-public:
-	U32 _iter;
-	zo_str_vect()
-	{
-		_iter=0;
-	}
-    virtual void add(ctext x)
-    {
-		push_back(x);
-    };
-	virtual void clear() 
-	{ 
-		z_strlist::clear();
-	}
-	virtual size_t count() 
-	{ 
-		return size();
-	}
-	virtual void reset_iter() 
-	{ 
-		_iter=0;
-	}
-	virtual ctext get_next()
-	{
-		if(_iter>=size())
-			return 0;
-		ctext t= (*this)[_iter];
-		_iter++;
-		return t;
-	}   
-};
-class zo_str_map : public z_stl_map<z_string,int>,public zo_str_container
-{
-public:
-	zo_str_map()
-	{
-		iter=begin();
-
-	}
-	virtual zo_str_map & operator << (ctext s) { add(s); return *this; }
-
-    virtual void add(ctext x)
-    {
-		Z_ASSERT(x);
-        (*this)[x]=0;
-    };
-
-	z_stl_map<z_string,int>::iterator iter;
-	virtual void reset_iter() 
-	{ 
-		iter=begin();
-	}
-	virtual void clear() 
-	{ 
-		z_stl_map<z_string,int>::clear();
-	}
-	virtual ctext get_next()
-	{
-		if(iter==end())
-			return 0;
-		const z_string& str=iter->first;
-		iter++;
-		return str.c_str();
-	}   
-	virtual size_t count() 
-	{ 
-		return size();
-	}
-};
 
  
  /*
@@ -179,7 +113,14 @@ public:
  	virtual void get(z_string& s, void* v) const;
 	virtual void set(ctext  s, void* v) const;
  	virtual void clear(void* v) const;
+	virtual void add(void* list,void* obj) const ;
+	virtual void* get_item(void* list,size_t index) const;
+	virtual size_t get_size(void* list) const;
+	virtual void dump(z_file& s, void* v,int& depth) const;
+	virtual void* reset_create_obj(void* var) const;
 };
+
+
  template <class VAR >  const zp_member_funcs_base* zp_var_funcs_get(VAR& item)
  {
 	static const zp_var_funcs<VAR> f;
@@ -196,7 +137,7 @@ template <class CLASS >  class zp_child_obj_funcs  : public zp_member_funcs_base
 		zp_factory_T<CLASS>::obj.clear_all_vars(var); 
 		return var;
 	}
-	virtual void* get_opj_ptr(void* var ) const
+	virtual void* get_ptr(void* var ) const
 	{
 		return var;
 	}
@@ -212,7 +153,7 @@ template <class CLASS >  class zp_child_obj_funcs  : public zp_member_funcs_base
 template <class CLASS >  class zp_child_pobj_funcs  : public zp_member_funcs_base
 {
  public:
-	virtual void* get_opj_ptr(void* var ) const
+	virtual void* get_ptr(void* var ) const
 	{
 		void** ppObj=reinterpret_cast<void**>(var); 
 		return *ppObj;
@@ -258,6 +199,7 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zp_member_funcs_bas
  	virtual void get(z_string& s, void* v) const;
 	virtual void set(ctext  s, void* v) const;
  };
+
 
 
 #endif
