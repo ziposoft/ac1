@@ -22,11 +22,7 @@ z_status zo_manipulator::feature_dump(void* p_obj,ctext var_id)
 	return -1;
 }
 
-z_status zo_manipulator::feature_set_integer(void* p_obj,ctext fet_name,int val)
-{
-	Z_ASSERT(0);
-	return -1;
-}
+
 z_status zo_manipulator::feature_objlist_get(void* p_obj,ctext fet_name,void** pp_list)
 {
 	ZTF;

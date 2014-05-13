@@ -1,12 +1,20 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include  <string>
+#include  "test_cpp.h"
+
+int main()
+{
+	A* a=new B<char>();
+	a->func2(3);
+	a=new B<bool>();
+	a->func2(3);
+
+	return 0;
+}
+// template <> void B<bool>::func2(int x) const { printf("bool func2 overload"); };
+// template <> void B<bool>::func3(int x) const {};
+#if 0
+
+
 using namespace std;
-
-
-
-
 namespace X 
 {
 	int i;
@@ -103,4 +111,4 @@ int main()
 }
 
 
-
+#endif

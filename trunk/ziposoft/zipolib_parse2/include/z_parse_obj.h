@@ -1,6 +1,7 @@
 #ifndef z_parse_obj_h
 #define z_parse_obj_h
 #include "zipolib_parse2/include/zp_obj.h"
+#include "zipolib/include/z_stl_list.h"
 
 ZP_MODULE_DECLARE(parse);
 
@@ -64,52 +65,8 @@ public:
 
 
 
-/*
-#define void(_X_,...) 
-
-
-#define PARSE_TABLE(_x_) &_x_[0],sizeof(_x_)/sizeof(zp_factory*)
-
-#define ZP_MNULL  ""
-
-#define ZPV(_X_)   0;if(var_name==0) p->feature_callback(oper,0,_X_);if(var_name&&z_str_same(#_X_,var_name))  return	p->feature_callback(oper, p_size,_X_);;0
-
-
-#define void(_CLASS_,_BASE_,_NAME_,_PARSE_,...) \
-void* new_##_CLASS_() {\
-	_CLASS_* obj=new  _CLASS_(); \
-	return obj; }\
-ctext _CLASS_##PARSE=_PARSE_;\
-ctext _CLASS_##NAME=_NAME_;\
-z_status _CLASS_::feature_manipulate(type_memvar_oper oper,size_t* p_size,ctext var_name,zp_parser* p) {\
-   __VA_ARGS__ ;	return _BASE_::feature_manipulate(oper,p_size,var_name,p);} \
-const zp_factory  _CLASS_::ENTRY=  {_CLASS_##NAME,_CLASS_##PARSE,new_##_CLASS_};\
-	const zp_factory* _CLASS_::get_fact() { return &_CLASS_::ENTRY;} 
-
-#define void_H \
-	public:virtual z_status feature_manipulate(type_memvar_oper set,size_t* i,ctext var_name,zp_parser* p); \
-	static const zp_factory ENTRY;\
-	virtual const zp_factory* get_fact();
-
-#define ZP_LISTOBJ(_CLASS_) &_CLASS_::ENTRY
-
-
-
-
-
-*/
-
-#define void_H ZO_OBJ_H;
-
-
-//________________________________________________________________
-//
-//zp_pair
-//________________________________________________________________
-
-
 	
-#if 0
+
 
 class zp_pair
 {
@@ -129,48 +86,32 @@ public:
 		outf<<_name<<'='<<_val<<"\n";
 	};
 };
-class void_feature;
-class void_parse : public void
-{
-public:
-	void_parse() 
-	{
-	}
 
-	z_obj_map<void_feature> _fet_list;
-	z_obj_vect<void_parse> _child_list;
-
-	z_string _name;
-};
 class zp_str_list 
 {
 public:
 	zp_str_list()
 	{
 	}
-	zo_str_vect  _list;
+	z_strlist  _list;
 };
 
-class zp_value : public void
+class zp_value 
 {
 public:
-	void_H
-	zp_value() : void()
+	zp_value() 
 	{
 	}
 
-	void_parse _obj;
-	z_obj_vect<void_parse> _child_list;
 	zp_str_list _string_list;
 	int  _integer;
 	z_string _string;
 };
-
-class void_feature : public void
+/*
+class void_feature 
 {
 public:
-	void_H
-	void_feature() : void()
+	void_feature() 
 	{
 	}
 	virtual ctext get_map_key()
@@ -180,21 +121,17 @@ public:
 	z_string _name;
 	zp_value _val;
 };
-class zp_params : public void
+*/
+class zp_params 
 {
 public:
-	void_H
-	zp_params() : void()
-	{
-	}
-	z_obj_vect<zp_value> _param_list;
+	zp_obj_vector _param_list;
 };
-class zp_feature : public void
+class zp_feature 
 {
 public:
-	void_H
 
-	zp_feature() : void()
+	zp_feature() 
 	{
 		_subscript=false;
 
@@ -209,31 +146,31 @@ public:
 	int get_num_chars();
 	ctext get_full_name(z_string& fullname);
 };
-class zp_cmdline : public void
+class zp_cmdline 
 {
 public:
-	void_H
-	zp_cmdline() : void()
+	zp_cmdline() 
 	{
 		_root_slash=false;
 		_assignment=false;
 		_subscript=false;
+		_feature=0;
+		_assign_val=0;
+		_params=0;
 	}
 	bool _root_slash;
 	bool _assignment;
 	bool _subscript;
 
-	zo_str_vect _path_list;
-	zp_params _params;
+	z_strlist _path_list;
+	zp_params* _params;
 
 	z_string _object;
-	zp_feature _feature;
+	zp_feature* _feature;
 	z_string _subscript_id;
-	zp_value _assign_val;
+	zp_value* _assign_val;
 
 };
 
-*/
-#endif
 #endif
 

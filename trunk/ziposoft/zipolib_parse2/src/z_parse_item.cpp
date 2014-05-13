@@ -93,7 +93,7 @@ z_status zp_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
 		//feature_reset_iter(_ctx_current->_obj,_ctx_current->_member_var_name);
 		while(result==zs_ok)
 		{
-			ctext s;
+			ctext s="";
 			Z_ASSERT(0); //get STRING by index?
 			result=0;//feature_get_string(_ctx_current->_obj,_ctx_current->_member_var_name,s);
 			if(result==zs_ok)
@@ -200,7 +200,11 @@ z_status zp_parser::_f_string_literal_create(zp_flags flags,int type)
 	{
 		if(_ctx_current->_obj)
 		{
-			feature_set_integer(_ctx_current->_obj,_ctx_current->_member_var_name,1);
+			bool* pVar=0;
+			_ctx_current->_obj_factory->get_memvar_ptr(
+				_ctx_current->_obj,_ctx_current->_member_var_name,(void**)&pVar);
+			if(pVar)
+				*pVar=true;
 		}
 	}
 	return status;
@@ -407,7 +411,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 					}
 					else
 					{
-						_ctx_current->_obj_factory->get_child_obj_ptr(_ctx_current->_obj,
+						_ctx_current->_obj_factory->get_memvar_ptr(_ctx_current->_obj,
 							_ctx_current->_member_var_name,
 							&sub_obj);
 						if(!sub_obj)
