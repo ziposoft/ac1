@@ -54,6 +54,7 @@ public:
     }
 	int break_string(ctext s,char c);
 	void dump(z_file &out);
+	void get_as_string(z_string &out);
 	virtual z_strlist & operator << (z_string& s) { push_back(s); return *this; }
 	virtual z_strlist & operator << (ctext s) { push_back(s); return *this; }
 

@@ -72,17 +72,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\ptypes_cset.h" />
     <ClInclude Include="include\Windows_zipo.h" />
     <ClInclude Include="include\zipo.h" />
     <ClInclude Include="include\zipolib_cpp.h" />
     <ClInclude Include="include\zipolib_cpp_pch.h" />
+    <ClInclude Include="include\z_console.h" />
     <ClInclude Include="include\z_dbg.h" />
     <ClInclude Include="include\z_debug.h" />
     <ClInclude Include="include\z_error.h" />
+    <ClInclude Include="include\z_factory.h" />
     <ClInclude Include="include\z_file.h" />
     <ClInclude Include="include\z_files.h" />
     <ClInclude Include="include\z_filesystem.h" />
@@ -132,6 +131,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipo.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipo_c.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
+    <ClCompile Include="src\z_console.cpp" />
     <ClCompile Include="src\z_debug.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipo.h</PrecompiledHeaderFile>

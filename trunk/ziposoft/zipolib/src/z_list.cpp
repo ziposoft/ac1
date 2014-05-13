@@ -11,6 +11,21 @@ void z_strlist::dump(z_file &out)
 
 
 }
+void z_strlist::get_as_string(z_string &out)
+{
+	size_t  i;
+	bool comma=false;
+	for (i=0;i<size();i++)
+	{
+		if(comma)
+			out <<',';
+		out << (*this)[i] ;
+		comma=true;
+	}
+
+
+}
+	void get_as_string(z_string &out);
 
 int z_strlist::break_string(ctext s,char break_char)
 {

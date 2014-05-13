@@ -161,14 +161,6 @@ public:
 
 };
 
-template <class OBJ> class z_ntf_fact  // Interface instruments another class TODO 
-{
-public:
-	z_ntf_fact();
-	virtual ~z_ntf_fact();
-	OBJ* create_obj() { OBJ* o=new OBJ(); init_obj(o); } ;
 
-
-};
 #endif
 
