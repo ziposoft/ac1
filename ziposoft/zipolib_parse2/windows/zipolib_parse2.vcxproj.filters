@@ -39,9 +39,6 @@
     <ClInclude Include="..\include\z_parse_def.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\z_console.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\zp_obj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,9 +69,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\z_parse_pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\z_console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

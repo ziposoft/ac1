@@ -113,7 +113,7 @@ public:
 	}
 	testA* _child;
 };
-class testStrList
+class testStrList : public testA
 {
 public:
 	testStrList()
@@ -122,7 +122,15 @@ public:
 	}
 	z_strlist  _list;
 };
-
+class testDrv : public testA
+{
+public:
+	testDrv()
+	{
+	   _val="drvstr";
+	}
+	z_string _val2;
+};
 /*
 class zp_xml_atr : public zp_obj
 {

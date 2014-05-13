@@ -6,7 +6,8 @@
  #define ZO_OBJ_LIST \
 	ZCLS(testA,void,"cmdline","{_val}ident:'=':{i123}int",VAR(i123) VAR(_val)) \
 	ZCLS(testB,void,"cmdline","{_child}testA",VAR(i222)  POBJ(_child) )	\
-	ZCLS(testStrList,void,"cmdline","{_list}ident",VAR(_list)  )
+	ZCLS(testStrList,void,"cmdline","+({_list}ident:?',')",VAR(_list)  )\
+	ZCLS(testDrv,void,"cmdline","{_val}ident:'=':{i123}int",VAR(i123) VAR(_val) VAR(_val2))
 
 		  
 #include "zipolib_parse2/include/z_obj_macro.h"

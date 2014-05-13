@@ -1,17 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="c">
       <UniqueIdentifier>{0cd89b51-9da2-472a-9f4f-9b073ca482a4}</UniqueIdentifier>
@@ -19,14 +11,14 @@
     <Filter Include="cpp">
       <UniqueIdentifier>{d067f87e-c1ea-4aaa-b07b-da792660607c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="factory">
+      <UniqueIdentifier>{ae06270f-6dd8-436a-ae7d-7a5b81e188e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="console">
+      <UniqueIdentifier>{0f9c1104-ab82-4644-884c-c8c985fa049f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\Windows_zipo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\zipo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -43,9 +35,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\z_time.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\z_util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ptypes_cset.h">
@@ -72,9 +61,6 @@
     <ClInclude Include="include\z_logger.h">
       <Filter>cpp</Filter>
     </ClInclude>
-    <ClInclude Include="include\z_ntf.h">
-      <Filter>cpp</Filter>
-    </ClInclude>
     <ClInclude Include="include\z_stl_list.h">
       <Filter>cpp</Filter>
     </ClInclude>
@@ -82,9 +68,6 @@
       <Filter>cpp</Filter>
     </ClInclude>
     <ClInclude Include="include\z_string.h">
-      <Filter>cpp</Filter>
-    </ClInclude>
-    <ClInclude Include="include\z_terminal.h">
       <Filter>cpp</Filter>
     </ClInclude>
     <ClInclude Include="include\z_trace.h">
@@ -98,6 +81,24 @@
     </ClInclude>
     <ClInclude Include="include\z_file.h">
       <Filter>cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Windows_zipo.h">
+      <Filter>c</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_util.h">
+      <Filter>c</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_factory.h">
+      <Filter>factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_ntf.h">
+      <Filter>factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_terminal.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_console.h">
+      <Filter>console</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -146,13 +147,7 @@
     <ClCompile Include="src\z_logger.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="src\z_ntf.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
     <ClCompile Include="src\z_string.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="src\z_terminal.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="src\z_terminal_keys.cpp">
@@ -175,6 +170,15 @@
     </ClCompile>
     <ClCompile Include="src\pch_cpp.cpp">
       <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_ntf.cpp">
+      <Filter>factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_terminal.cpp">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_console.cpp">
+      <Filter>console</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

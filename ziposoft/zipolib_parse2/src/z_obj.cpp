@@ -23,6 +23,14 @@ template <> void zp_var_funcs<z_string>::clear(void* v) const
 	*vs="";   
 }
  
+template <> void zp_var_funcs<z_strlist>::get(z_string& s, void* v) const
+{z_strlist* vs= reinterpret_cast<z_strlist*>(v);vs->get_as_string(s);    }
+template <> void zp_var_funcs<z_strlist>::set(ctext s, void* v) const{z_strlist* vs= reinterpret_cast<z_strlist*>(v); *vs <<  s;   }
+template <> void zp_var_funcs<z_strlist>::clear(void* v) const
+{
+	z_strlist* vs= reinterpret_cast<z_strlist*>(v); 
+	vs->clear();
+}
 
 
 
