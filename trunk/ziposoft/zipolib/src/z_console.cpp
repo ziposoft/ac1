@@ -1,7 +1,8 @@
-#if 0
+#include "zipolib_cpp_pch.h"
 
-#include "z_parse_pch.h"
+#include "z_file.h"
 #include "z_console.h"
+#include "z_error.h"
 
 
 
@@ -199,14 +200,7 @@ void z_console::put_prompt()
 
 z_status z_console::parse_line(ctext text)
 {
-	z_status status=_parser.parse_obj(&_cmd_line_obj,text);
-	if(status)
-	{
-		_parser.report_error(status);
-
-		return status;
-	}
-	return status;
+	return z_status_error;
 }
 z_status z_console::execute_line(ctext text)
 {
@@ -216,56 +210,6 @@ z_status z_console::execute_line(ctext text)
 
 
 
-	zo_manipulator man;
-
-	man.dump_obj(&gz_out,&_cmd_line_obj);
-	
-#if 0
-//find path
-	if(_cmd_line_obj._root)
-	{
-		_obj_current_tmp=_root_obj;
-	}
-	else
-	{
-		_obj_current_tmp=_obj_current;
-	}
-	if(_obj_current_tmp)
-	{
-		if(_cmd_line_obj._path_list.size())
-		{
-			size_t i;
-			for (i=0;i<_cmd_line_obj._path_list.size();i++)
-			{
-				ctext name=_cmd_line_obj._path_list[i];
-				status=navigate_feature(name);
-				if(status)
-					return status;
-
-			}
-		}
-		if(_cmd_line_obj._object)
-		{
-			ctext name=_cmd_line_obj._object;
-			void* child=get_child_obj(name,_obj_current_tmp);
-			if(!child)
-			{
-				Z_ERROR_MSG("Could not find child object \"%s\"",name);
-				return zs_child_not_found;
-			}
-			_obj_current_tmp=child;
-		}
-		status=execute_feature(_obj_current_tmp);
-	}
-	else
-		status=zs_no_entry_for_item;
-
-
-	if(status==zs_no_entry_for_item)
-		status=execute_feature(this);
-	if(status==zs_no_entry_for_item)
-		Z_ERROR_MSG("Unknown feature:\"%s\"",_cmd_line_obj._feature._name.c_str());
-#endif
 	return status;
 }
 void z_console::OnEnter()
@@ -291,10 +235,8 @@ void z_console::OnEnter()
 		{
 			switch(result)
 			{
-			case zs_no_match:
-			case zs_unparsed_data:
-				gz_out << "\nsyntax error at \"" << _parser.get_char_under_test()<<"\"\n";
-				_parser.print_context();
+			case z_status_ok:
+			case z_status_error:
 				break;
 			default:
 				break;
@@ -338,6 +280,7 @@ void z_console::OnDown()
 };
 void z_console::OnTab()
 {
+	gz_out << "\nTab.\n";
 
 
 }
@@ -347,6 +290,7 @@ void z_console::OnTab()
 void z_console::OnDoubleBack()
 {
 
+	gz_out << "\ndouble back!.\n";
 
 }
 
@@ -711,5 +655,4 @@ z_status zo_console::process_args(int argc, char** argv)
 	return zs_ok;
 
 }
-#endif
 #endif

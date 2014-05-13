@@ -16,6 +16,7 @@ To stdout, to the zipo log, to the OS debug/trace facilities (DbgPrint), to cust
 
 enum {
 	z_status_ok=0,
+	z_status_error,
 	z_status_cpp_lib_start=0x1000,
 	z_status_could_not_open_dir,
 	z_status_already_open,

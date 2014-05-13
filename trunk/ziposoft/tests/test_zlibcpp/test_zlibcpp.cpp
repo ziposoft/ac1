@@ -5,7 +5,7 @@
 #include "zipolib/include/z_filesystem.h"
 #include "zipolib/include/z_trace.h"
 #include "zipolib/include/z_ntf.h"
-#include "zipolib/include/z_terminal.h"
+#include "zipolib/include/z_console.h"
 
  class test	 : public 	z_ntf_obj
  {
@@ -96,16 +96,10 @@ int main()
 	ZT("Testing trace %s %d...\n","duds",4);
 
 	
-	z_terminal term;
-	enum_key key;
-	char c;
-	term.terminal_open();
-	term.debug=true;
-	while(term.GetKey(key,c))
-	{
-		if(c=='x')
-			break;
-	}
+	z_console con;
+	con.debug=true;
+	con.run();
+
 
 
 	return 0;//ZS_RET(base,feature_not_found);
