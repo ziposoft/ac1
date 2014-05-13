@@ -1,8 +1,8 @@
 #ifndef z_console_h
 #define z_console_h
 #include "zipolib/include/zipo.h"
+#include "zipolib/include/z_list.h"
 #include "zipolib/include/z_terminal.h"
-#include "zipolib_parse2/include/z_parse.h"
 
 class z_console : public z_terminal
 {
@@ -12,7 +12,6 @@ class z_console : public z_terminal
 	bool insertmode;
 	enum_key _key;
 	enum_key _prev_key;
-protected:
 	bool TabMode;
 	z_string buff;
 	bool _running;
@@ -22,13 +21,9 @@ protected:
 	z_string _path;
 	U32  _tab_count;
 	U32  _tab_mode_line_index;
-	zp_parser _parser;
-	zp_cmdline _cmd_line_obj;
 	z_status parse_line(ctext text);
 	z_status execute_line(ctext text);
     virtual void put_prompt();
-public:
-	z_console();
 	U32 get_index();
 	U32 get_line_length();
 	void AppendChar(char ch);
@@ -40,13 +35,19 @@ public:
 	void output(ctext text);
 	void clear_line();
 	void trim_line_to(int trim_point);
-	void run();
     void inc_history(int i);
+	void get_auto_complete_list(z_string& partial);
+
+protected:
     virtual void OnEnter();
     virtual void OnTab();
     virtual void OnUp();
     virtual void OnDown();
     virtual void OnDoubleBack();
+public:
+	z_console();
+	void run();
+
 };
 #if 0
 class z_console_ntf : public z_console
