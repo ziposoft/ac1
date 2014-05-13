@@ -109,7 +109,7 @@ const zp_factory  _CLASS_::ENTRY=  {_CLASS_##NAME,_CLASS_##PARSE,new_##_CLASS_};
 
 
 	
-
+#if 0
 
 class zp_pair
 {
@@ -117,7 +117,7 @@ public:
 	zp_pair() 
 	{
 	}
-	zp_pair(ctext name,ctext val) : void()
+	zp_pair(ctext name,ctext val) 
 	{
 		_name=name;
 		_val=val;
@@ -133,8 +133,7 @@ class void_feature;
 class void_parse : public void
 {
 public:
-	void_H
-	void_parse() : void()
+	void_parse() 
 	{
 	}
 
@@ -143,11 +142,10 @@ public:
 
 	z_string _name;
 };
-class zp_str_list : public void
+class zp_str_list 
 {
 public:
-	void_H
-	zp_str_list() : void()
+	zp_str_list()
 	{
 	}
 	zo_str_vect  _list;
@@ -236,5 +234,6 @@ public:
 };
 
 */
+#endif
 #endif
 

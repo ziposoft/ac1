@@ -113,6 +113,16 @@ public:
 	}
 	testA* _child;
 };
+class testStrList
+{
+public:
+	testStrList()
+	{
+		_list << "larry" << "fred";
+	}
+	z_strlist  _list;
+};
+
 /*
 class zp_xml_atr : public zp_obj
 {
