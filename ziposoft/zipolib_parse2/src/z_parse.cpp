@@ -227,7 +227,10 @@ z_status zp_parser::_process_group(zp_flags flags,zp_mode mode)
 
 					}
 					if(next_char!=group_type)
+					{
+						Z_ERROR_MSG(zs_template_syntax_error,"Mixed group types!");
 						return check_status(zs_template_syntax_error);
+					}
 					tmpl.inc(); //Advance
 					break;
 				}

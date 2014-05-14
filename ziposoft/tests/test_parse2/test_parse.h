@@ -20,6 +20,8 @@ int run_create_def_obj();
 int run_test_output_def();
 int run_test_all();
 int run_test_output();
+int run_dump_all();
+int run_provided_template_test();
 
 
 struct st_test_obj_entry
@@ -80,6 +82,7 @@ extern z_string g_arg_test_num;
 extern z_string g_arg_test_type;
 extern z_string g_arg_data_in;
 extern z_string g_arg_obj_type;
+extern z_string g_arg_templ_in;
 extern z_string g_arg_dump;
 extern z_string g_arg_file_input_data;
 extern z_string g_arg_file_output_data;

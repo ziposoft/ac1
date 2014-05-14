@@ -4,6 +4,7 @@
 z_string g_arg_operation="help";
 z_string g_arg_test_num="all";
 z_string g_arg_test_type="all";
+z_string g_arg_templ_in="";
 z_string g_arg_data_in="";
 z_string g_arg_obj_type="";
 z_string g_arg_dump="off";
@@ -16,11 +17,10 @@ option opt_list_operation[]=
 { 
 	{ "help","show help" ,run_help},
 	{ "static","run tests from built in list",run_static_tests },
-	{ "tmpl","use provided template",0 },
+	{ "tmpl","use provided template",run_provided_template_test },
 	{ "xml","parse xml file",run_parse_xml },
 	{ "cust","custom",run_custom },
-
-	
+	{ "dumpfacts","dump all factories",run_dump_all },
 	{ "obj","test a specific parse object",run_parse_obj },
 };
 const size_t  opt_list_operation_count= (sizeof(opt_list_operation)/sizeof(option));
@@ -32,6 +32,7 @@ int run_create_def_obj();
 int run_test_output_def();
 int run_test_all();
 int run_test_output();
+int run_dump_all();
 
 option opt_list_test_type[]=
 { 
@@ -54,6 +55,7 @@ argument arg_list[]=
 	{ "dump","dump object tree",g_arg_dump,0,0},
 	{ "obj","object to test",g_arg_obj_type,0,0},
 	{ "data","data to use",g_arg_data_in,0,0},
+	{ "tmpl","template to use",g_arg_templ_in,0,0},
 	{ "datafile","data file to use",g_arg_file_input_data,0,0},
 	{ "outfile","output file to use",g_arg_file_output_data,0,0},
 };

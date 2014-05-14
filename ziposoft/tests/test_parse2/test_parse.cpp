@@ -85,6 +85,12 @@ int  run_test_only()
 
 	return 0;
 }
+
+int run_dump_all()
+{
+	zo_factory_list_dump();
+	return 0;
+}
 int run_test_create()
 {
 	return run_test_only();
@@ -318,6 +324,21 @@ int run_static_tests()
 			break;
 	}
 	//if(test_num==num_tests) printf("ALL TESTS PASSED.\n");
+
+	return 0;
+}
+int run_provided_template_test()
+{
+	//___________________________________________________________
+	//
+	//  
+	//___________________________________________________________
+
+	g_expected_output="";
+	g_expected_result=zs_matched;
+	g_template=g_arg_templ_in.c_str();
+
+	(*g_test_type_function_to_run)();
 
 	return 0;
 }
