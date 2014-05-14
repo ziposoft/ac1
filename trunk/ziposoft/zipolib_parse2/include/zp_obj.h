@@ -171,7 +171,7 @@ template <class CLASS> void z_fact_dump(CLASS* p_obj)
 			*iter=0;
 		else 
 		{
-			*iter++;
+			(*iter)++;
 			if(*iter>=(int)list.size())
 			{
 				*iter=-1;

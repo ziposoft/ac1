@@ -2,6 +2,7 @@
 #define z_parse_obj_h
 #include "zipolib_parse2/include/zp_obj.h"
 #include "zipolib/include/z_stl_list.h"
+#include "zipolib/include/z_stl_vector.h"
 
 ZP_MODULE_DECLARE(parse);
 
@@ -125,7 +126,7 @@ public:
 class zp_params 
 {
 public:
-	zp_obj_vector _param_list;
+	z_obj_vector<zp_value> _param_list;
 };
 class zp_feature 
 {

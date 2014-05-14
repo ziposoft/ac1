@@ -9,7 +9,7 @@ SRC_PATH= src/
 INC_DIRS=-I include/
 
 
-TGT_NAME= libzipo_c.a
+TGT_NAME= libzipo.a
 TGT= $(LIB_PATH)/$(TGT_NAME)
 
 include ../common.mk 

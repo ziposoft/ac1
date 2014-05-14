@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 {
 	ZT_ENABLE();
 
-	zo_factory_list_dump();
+
 
 
 
