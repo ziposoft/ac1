@@ -367,19 +367,20 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 			if(mode.skip_test)
 				return zs_skipped;
 			tmpl.get_match(match_start,match_len);
-			const zp_factory* ie=find_item(match_start,match_len);
-			if(ie==0)
+			const zp_factory* fact_new_obj=find_item(match_start,match_len);
+			if(fact_new_obj==0)
 				return check_status(zs_no_entry_for_item);
 			if(mode.create)
 			{
 				if(flags.this_obj)
 				{
-					sub_obj=_ctx_current->_obj;
+					sub_obj=_ctx_current->_obj;	// what does this even mean? its for the @ operator 
 				}
 				else
 				{
 					if(flags.parent_data)
 					{
+						fact_new_obj->create_obj();
 						_ctx_current->_obj_factory->get_new_child_obj_ptr(_ctx_current->_obj,
 							_ctx_current->_member_var_name,
 							&sub_obj);
