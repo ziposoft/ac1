@@ -2,12 +2,15 @@
 
 #undef POBJ
 #undef OBJ
+#undef LIST
 #undef ZCLS
 #undef VAR
 #undef OBJV
+#undef NOFTR
 
-
+#define NOFTR
 #define POBJ(_VAR)  const zp_member_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_child_pobj_funcs_get(nullobj->_VAR); }
+#define LIST(_VAR)  const zp_member_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_var_list_funcs(nullobj->_VAR); }
 #define OBJ(_VAR)  const zp_member_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_child_obj_funcs_get(nullobj->_VAR); }
 #define VAR(_VAR)  const zp_member_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_var_funcs_get(nullobj->_VAR); }
 #define ZCLS(_CLASS_,_BASE_,_NAME_,_PARSE_,_EXTRA_) namespace Z_PARSE_NS(_CLASS_) { _CLASS_* nullobj=0;	_EXTRA_ }
@@ -16,11 +19,13 @@ ZO_OBJ_LIST;
 
 
 #undef ZCLS
+#undef LIST
 #undef VAR
 #undef OBJ
 #undef POBJ
+#undef NOFTR
 
-
+#define NOFTR {"",0,0},
 #define VAR(_VAR)  { #_VAR, zp_offsetof(_VAR),__zp_var_funcs_get_##_VAR },
 
 #define POBJ(_VAR) VAR(_VAR)
@@ -39,9 +44,9 @@ ZO_OBJ_LIST;
 
 #undef OBJ
 #undef ZCLS
+#undef LIST
 #undef VAR
 #undef POBJ
-
 #define ZCLS(_CLASS_,_BASE_,_NAME_,_DESC_,...) { #_CLASS_,&static_instance_factory##_CLASS_ }, 
 #define ZP_MODULE_DEFINE(_NAME_) zp_module_fact_entry zp_module_##_NAME_##_fact_list[]={\
 ZO_OBJ_LIST };\

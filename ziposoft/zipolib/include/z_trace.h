@@ -207,7 +207,7 @@ public:
 
 	void set_output_to_stdout();
 	zt_func_call* _current_func_call;
-	#ifdef WIN32
+	#ifdef BUILD_VSTUDIO
 	static LARGE_INTEGER _win32_freq;
 	#endif
 };

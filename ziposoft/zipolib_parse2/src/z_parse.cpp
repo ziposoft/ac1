@@ -22,6 +22,8 @@ ctext status_text[]=
 	"zs_tmpl_expected_closing_parenthesis",
 	"zs_internal_error",
 	"zs_bad_argument_2",
+	"Bad Parameter",//zs_bad_parameter
+	"Wrong Object Type",//zs_wrong_object_type
 
 };
 

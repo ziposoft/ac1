@@ -91,6 +91,7 @@
     <ClInclude Include="include\z_os_specific.h" />
     <ClInclude Include="include\z_stl_list.h" />
     <ClInclude Include="include\z_stl_map.h" />
+    <ClInclude Include="include\z_stl_vector.h" />
     <ClInclude Include="include\z_str.h" />
     <ClInclude Include="include\z_string.h" />
     <ClInclude Include="include\z_temp_buff.h" />

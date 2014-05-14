@@ -17,6 +17,31 @@ opt_func g_test_type_function_to_run=0;
 
 --------------------------------------------------------------*/
 
+int  run_custom()
+{
+
+	z_status status=zs_no_match;
+	p.set_source(g_arg_data_in);
+	testObjList obj;
+
+
+	status=p.parse_obj(&obj,g_arg_data_in);
+
+
+
+	if(status!=g_expected_result)
+	{
+		printf("TEST FAILED!\n");
+		printf("result=%s\n",z_status_get_text(status));
+		printf("expected result=%s\n",z_status_get_text(g_expected_result));
+		p.report_error(status);
+		return -1;
+	}
+	printf("TEST PASSED\n");
+	z_fact_dump(&obj);
+
+	return 0;
+}
 int  run_test_only()
 {
 	if(g_parse_obj)

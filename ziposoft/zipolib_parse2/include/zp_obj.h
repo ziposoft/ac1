@@ -3,6 +3,7 @@
 
 #include "zipolib_parse2/include/z_parse_pch.h"
 #include "zipolib_parse2/include/z_parse_def.h"
+#include "zipolib/include/z_stl_vector.h"
 
 
 #define ZP_MODULE(_NAME_) zp_module_##_NAME_ 
@@ -14,15 +15,15 @@ class zp_factory;
  class zp_member_funcs_base
  {
  public:
-	virtual void dump(z_file& s, void* v,int& depth) const;
+	virtual void dump(z_file& s, void* v) const;
 	virtual void get(z_string& s, void* v) const {};
 	virtual void set(ctext s, void* v) const {};
 	virtual void clear(void* v) const {} 
 	virtual void add(void* list,void* obj) const {} 
 	virtual void* get_item(void* list,size_t index) const { return 0;} 
 	virtual size_t get_size(void* list) const { return 0;} 
-	virtual void* reset_create_obj(void* var) const { return 0;}  /*could be pointer to obj, or porinter to obj pointer */
-	virtual void* get_ptr(void* var) const { return var;}  /*could be pointer to obj, or porinter to obj pointer */
+	virtual void* create_obj(void* var,const zp_factory* new_child_type) const { return 0;}  /*could be pointer to obj, or porinter to obj pointer */
+	virtual void* get_ptr(void* var,int* iter) const { return var;}  /*could be pointer to obj, or porinter to obj pointer */
 			
  } ;
  typedef  const zp_member_funcs_base* (*funcp_var_funcs_get)();
@@ -50,13 +51,14 @@ public:
 	virtual const size_t get_var_list_size() const=0;
 	virtual const zp_var_entry* get_var_list() const=0;
 	const zp_var_entry* get_var_entry(ctext name) const;
-	z_status get_new_child_obj_ptr(void* obj,ctext var_name,void** ppChild) const;
-	z_status get_memvar_ptr(void* obj,ctext var_name,void** ppChild) const;
+	z_status create_child(void* obj,ctext var_name,const zp_factory* new_child_type,void** ppChild) const;
+	z_status get_memvar_ptr(void* obj,ctext var_name,void** ppChild,int* iter=0) const;
 	z_status set_var(void* obj,ctext var_name,ctext value) const;
 	z_status get_var_as_string(void* obj,ctext var_name,z_string& value) const;
 	void clear_all_vars(void* obj) const;
 	void dump_obj(z_file& f,void* obj) const;
-	void dump_obj_r(z_file& f,void* obj,int& depth) const;
+	void dump_obj_r(z_file& f,void* obj) const;
+	void dump_static_r(z_file& f) const;
 	virtual ctext get_parse_string() const{ return ""; }
 	virtual ctext get_name()const =0;
 
@@ -64,7 +66,7 @@ public:
 };
 struct zp_obj
 {
-	zp_factory* _fact;
+	const zp_factory* _fact;
 	void* _obj;
 };
 class zp_obj_vector  : public std::vector<zp_obj>
@@ -86,10 +88,7 @@ struct zp_module_entry
 	zp_module_fact_entry *facts;
 	const int num_facts;
 };
-const zp_factory*  zo_get_factory_by_name(ctext name,size_t len=-1);
-const zp_factory*  zo_get_factory(ctext name);
-extern const zp_module_entry *zp_module_master_list[];
-extern const int zp_module_master_list_size;
+
  template <class C >  class zp_factory_T :public  zp_factory
  {
  public:
@@ -101,7 +100,12 @@ extern const int zp_module_master_list_size;
 	virtual ctext get_name() const;
  };
 
+template <class CLASS> void z_fact_dump(CLASS* p_obj)
+{
+	const zp_factory* factory=&zp_factory_T<CLASS>::obj;
+	factory->dump_obj(gz_out,p_obj);
 
+}
 
  
  /*
@@ -116,14 +120,79 @@ extern const int zp_module_master_list_size;
 	virtual void add(void* list,void* obj) const ;
 	virtual void* get_item(void* list,size_t index) const;
 	virtual size_t get_size(void* list) const;
-	virtual void dump(z_file& s, void* v,int& depth) const;
-	virtual void* reset_create_obj(void* var) const;
+	virtual void dump(z_file& s, void* v) const;
+	virtual void* create_obj(void* var,const zp_factory* new_child_type) const;
 };
-
+ template <class TYPE >  class zp_var_list_funcs  : public zp_member_funcs_base
+ {
+ public:
+	virtual void* create_obj(void* v,const zp_factory* fact) const
+	{
+		z_obj_vector<TYPE>& list= *reinterpret_cast<z_obj_vector<TYPE>*>(v);
+		TYPE* obj=reinterpret_cast<TYPE*>(fact->create_obj());
+		list.add(obj);
+		return obj;
+	}
+	virtual size_t get_size(void* v) const
+	{
+		z_obj_vector<TYPE>& list= *reinterpret_cast<z_obj_vector<TYPE>*>(v);
+		return list.size();
+	}
+	void dump(z_file& f, void* v) const
+	{
+		z_obj_vector<TYPE>& list= *reinterpret_cast<z_obj_vector<TYPE>*>(v);
+		size_t count=list.size();
+		if(!count)
+		{
+			f << "{}";
+			return;
+		}
+		size_t i;
+		f << "{\n";
+		f.indent_inc();
+		for(i=0;i<count;i++)
+		{
+			TYPE* obj=list[i];
+			zp_factory_T<TYPE>::obj.dump_obj_r(f,obj);
+		}
+		f.indent_dec();
+		f.indent();
+		f << "}";
+	}
+	virtual void* get_ptr(void* v,int* iter ) const
+	{
+		z_obj_vector<TYPE>& list= *reinterpret_cast<z_obj_vector<TYPE>*>(v);
+		if(!iter)
+		{
+			Z_ERROR_MSG(zs_bad_parameter,"Objects type does not match member variable");
+			return 0;
+		}
+		if(*iter==-1)
+			*iter=0;
+		else 
+		{
+			*iter++;
+			if(*iter>=(int)list.size())
+			{
+				*iter=-1;
+				return 0;
+			}
+		}
+	
+			
+		TYPE* obj=list[*iter];
+		return obj;
+	}
+};
 
  template <class VAR >  const zp_member_funcs_base* zp_var_funcs_get(VAR& item)
  {
 	static const zp_var_funcs<VAR> f;
+	return &f;
+ };
+ template <class VAR >  const zp_member_funcs_base* zp_var_funcs_get(z_obj_vector<VAR>& list)
+ {
+	static const zp_var_list_funcs<VAR> f;
 	return &f;
  };
  /*
@@ -132,12 +201,20 @@ extern const int zp_module_master_list_size;
 template <class CLASS >  class zp_child_obj_funcs  : public zp_member_funcs_base
 {
  public:
-	virtual void* reset_create_obj(void* var /* pointer to obj */) const
+	virtual void* create_obj(void* var /* pointer to obj */,const zp_factory* new_child_type) const
 	{
-		zp_factory_T<CLASS>::obj.clear_all_vars(var); 
+		//OBJ instance is part of parent, so it is already created.
+		//Just reset it and return a pointer to it.
+		const zp_factory* f=&zp_factory_T<CLASS>::obj;
+		if(new_child_type!=f)
+		{
+			Z_ERROR_MSG(zs_wrong_object_type,"Objects type does not match member variable");
+			return 0;
+		}
+		f->clear_all_vars(var); 
 		return var;
 	}
-	virtual void* get_ptr(void* var ) const
+	virtual void* get_ptr(void* var,int* iter ) const
 	{
 		return var;
 	}
@@ -153,26 +230,33 @@ template <class CLASS >  class zp_child_obj_funcs  : public zp_member_funcs_base
 template <class CLASS >  class zp_child_pobj_funcs  : public zp_member_funcs_base
 {
  public:
-	virtual void* get_ptr(void* var ) const
+	virtual void* get_ptr(void* var,int* iter ) const
 	{
 		void** ppObj=reinterpret_cast<void**>(var); 
 		return *ppObj;
 	}
-	virtual void* reset_create_obj(void* var /* pointer to obj pointer*/) const
+	virtual void* create_obj(void* var /* pointer to obj pointer*/,const zp_factory* new_child_type) const
 	{
 		void** ppObj=reinterpret_cast<void**>(var); 
-		//if(*ppObj) 	delete *ppObj;
-		*ppObj=zp_factory_T<CLASS>::obj.create_obj();
+
+		const zp_factory* f=&zp_factory_T<CLASS>::obj;
+		if(new_child_type!=f)
+		{
+			Z_ERROR_MSG(zs_wrong_object_type,"Objects type does not match member variable");
+			return 0;
+		}
+
+		*ppObj=f->create_obj();
 		return *ppObj;
 	}
-	virtual void dump(z_file& file, void* v,int& depth) const
+	virtual void dump(z_file& file, void* v) const
 	{
 		void** ppObj=reinterpret_cast<void**>(v); 
 		if(*ppObj == 0)
 			file<< "NULL";
 		else
 
-			zp_factory_T<CLASS>::obj.dump_obj_r(file,*ppObj,depth);
+			zp_factory_T<CLASS>::obj.dump_obj_r(file,*ppObj);
 	}
 
  	virtual void get(z_string& s, void* v) const
@@ -201,5 +285,14 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zp_member_funcs_bas
  };
 
 
+/*________________________________________________________________________
+
+GLOBAL zp_factory functions
+________________________________________________________________________*/
+const zp_factory*  zo_get_factory_by_name(ctext name,size_t len=-1);
+const zp_factory*  zo_get_factory(ctext name);
+void  zo_factory_list_dump();
+extern const zp_module_entry *zp_module_master_list[];
+extern const int zp_module_master_list_size;
 
 #endif

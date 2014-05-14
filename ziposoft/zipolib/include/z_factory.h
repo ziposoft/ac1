@@ -25,7 +25,7 @@ public:
 	virtual z_status get_var_as_string(void* obj,ctext var_name,z_string& value) const =0;
 	virtual void clear_all_vars(void* obj) const;
 	virtual void dump_obj(z_file& f,void* obj) const;
-	virtual void dump_obj_r(z_file& f,void* obj,int& depth) const;
+	virtual void dump_obj_r(z_file& f,void* obj) const;
 	virtual ctext get_name()const =0;
 
 

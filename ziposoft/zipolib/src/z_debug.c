@@ -24,7 +24,7 @@ void z_debug_printf(const char*  lpszFormat,  ...  )
 
 }
 
-#ifdef WIN32
+#ifdef BUILD_VSTUDIO
 
 void z_debug_out(const char*  str  )
 {

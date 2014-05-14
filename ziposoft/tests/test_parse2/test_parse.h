@@ -2,12 +2,14 @@
 #define test_parse_h
 #include "zipolib/include/z_trace.h"
 #include "zipolib/include/z_file.h"
+#include "zipolib/include/z_stl_vector.h"
 #include "zipolib_parse2/include/z_parse.h"
 
 //opt_list_operation
 int run_help();
 int run_parse_obj();
 int run_static_tests();
+int run_custom();
 int run_parse_xml();
 
 //opt_list_test_type
@@ -124,13 +126,16 @@ public:
 	}
 	z_strlist  _list;
 };
+
+
+
 class testObjList 
 {
 public:
 	testObjList()
 	{
 	}
-	zp_obj_vector _list;
+	z_obj_vector<testA> _list;
 };
 class testDrv : public testA
 {
@@ -141,30 +146,31 @@ public:
 	}
 	z_string _val2;
 };
-/*
-class zp_xml_atr : public zp_obj
+
+class zp_xml_atr 
 {
-	ZO_OBJ_H;
+public:
 	z_string _name;
 	z_string _val;
 
 };
-class zp_xml_elm : public zp_obj
+class zp_xml_elm
 {
-	ZO_OBJ_H;
+public:
 	z_string _name;
+	z_obj_vector<zp_xml_elm> _children;
+	z_obj_vector<zp_xml_atr> _attribs;
+
 };	
-class zp_xml_trackpoint : public zp_obj
+class zp_xml_trackpoint
 {
-	ZO_OBJ_H;
 	zp_xml_trackpoint()
 	{
 
 	}
 };
-class zp_xml_activity : public zp_obj
+class zp_xml_activity 
 {
-	ZO_OBJ_H;
 	zp_xml_activity()
 	{
 
@@ -172,17 +178,15 @@ class zp_xml_activity : public zp_obj
 };
 class zp_xml_tcd : public zp_xml_elm
 {
-	ZO_OBJ_H;
 	
 };
-class zp_xml_file : public zp_obj
+class zp_xml_file 
 {
-	ZO_OBJ_H;
 	zp_xml_file()
 	{
 		
 	}
 	zp_xml_tcd _tcd;
 };
-*/
+
 #endif

@@ -157,11 +157,10 @@ public:
 
 	z_status parse_template(ctext tmpl);
 	z_status parse_item(void*& p_item_out,ctext item_entry_name);
-	z_status parse_obj(void* p_obj,z_string& data_in);
 
 	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data)
 	{
-		const zp_factory* factory=&zp_factory_T<CLASS>::static_instance;
+		const zp_factory* factory=&zp_factory_T<CLASS>::obj;
 		return 	parse_obj(p_obj, factory,data);
 
 	}

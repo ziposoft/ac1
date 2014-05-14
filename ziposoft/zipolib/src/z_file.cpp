@@ -19,6 +19,7 @@ z_file::z_file()
 	_file_handle=0;
 	_log_file_handle=0;
 	_max_line_length=0x1000;
+	_indent_depth=0;
 }
 z_file::z_file(ctext filename)
 {
@@ -26,6 +27,7 @@ z_file::z_file(ctext filename)
 	_max_line_length=0x1000;
 	_log_file_handle=0;
 	_file_name=filename;
+	_indent_depth=0;
 }
 z_file::~z_file()
 {
@@ -179,7 +181,7 @@ int z_file::write(const char* buf, size_t count )
 }
 void z_file::eol()
 {
-#ifdef WIN32
+#ifdef BUILD_VSTUDIO
 	write("\r\n",2);
 #else
 	write("\n",1);
@@ -200,11 +202,30 @@ int z_file::putf(const char*  lpszFormat,  ...  )
 void z_file::flush()
 {
     
-#ifdef WIN32
+#ifdef BUILD_VSTUDIO
     FlushFileBuffers(HANDLE(_file_handle));
 #endif
 }
+void z_file::indent()
+{
+	int i=_indent_depth;
+	while(i--)
+		*this<<"  ";
+}
+void z_file::indent_inc()
+{
+	_indent_depth++;
 
+}
+void z_file::indent_reset()
+{
+	_indent_depth=0;
+}
+void z_file::indent_dec()
+{
+	_indent_depth--;
+
+}
 int z_file::delete_file()
 {
 	close();
@@ -222,7 +243,7 @@ z_file gz_out((size_t)stdout);
 
 int z_debug::write(const char* buf, size_t count )
 {
-#ifdef WIN32
+#ifdef BUILD_VSTUDIO
 	WCHAR* wc=WCHAR_str_allocate(buf,count);
 	 OutputDebugString(wc);
 	 WCHAR_str_deallocate(wc);

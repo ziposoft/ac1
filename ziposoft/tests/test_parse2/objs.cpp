@@ -2,14 +2,27 @@
 
 
 
-
+class testBadObj 
+{
+public:
+;
+};
+class testBadObjChild 
+{
+public:
+	testBadObj _child;
+};
 
  #define ZO_OBJ_LIST \
 	ZCLS(testA,void,"cmdline","{_val}ident:'=':{i123}int",VAR(i123) VAR(_val)) \
 	ZCLS(testB,void,"cmdline","{_child}testA:{_exclam}?'!'",VAR(i222) VAR(_exclam)  POBJ(_child) )	\
+	ZCLS(testBadObj,void,"cmdline","bogusident",NOFTR)	\
+	ZCLS(testBadObjChild,void,"cmdline","{_child}testBadObj",OBJ(_child) )	\
 	ZCLS(testStrList,void,"cmdline","+({_list}ident:?',')",VAR(_list)  )\
 	ZCLS(testDrv,void,"cmdline","{_val}ident:'=':{i123}int",VAR(i123) VAR(_val) VAR(_val2))\
-	ZCLS(testObjList,void,"cmdline","*({_list}testA:?',')",VAR(_list) )
+	ZCLS(testObjList,void,"cmdline","*({_list}testA:?',')",VAR(_list) )\
+	ZCLS(zp_xml_elm,base,"zp_xml_elm","%whsp:'<':{_name}ident:{_attribs}*zp_xml_atr:(('>': *(^'<'|{_children}zp_xml_elm):'</':ident:'>')|'/>')",VAR(_name) VAR(_attribs) VAR(_children) )\
+	ZCLS(zp_xml_atr,base,"zp_xml_atr","%whsp:{_name}scoped:'=':{_val}string_sq",VAR(_name) VAR(_val))
 
 		  
 #include "zipolib_parse2/include/z_obj_macro.h"
@@ -23,15 +36,13 @@ ZP_MODULE_INCLUDE(ZP_MOD(testmod), ZP_MOD(parse));
 ZP_MODULE_DECLARE(test);
 ZP_MODULE_DECLARE(xml);
 ZP_MODULE_INCLUDE(ZP_MOD(test),ZP_MOD(xml)/*,ZP_MOD(parse)*/);
+	//ZCLS(zp_xml_file,base,"zp_xml_file","%whsp:('<?':^'?>':'?>'):{_tcd}zp_xml_elm:%whsp",VAR(_tcd))\
 
 
 #define ZO_OBJ_LIST \
-	CLS(zp_xml_file,zp_obj,"zp_xml_file",0,"%whsp:('<?':^'?>':'?>'):{_tcd}zp_xml_elm:%whsp",VAR(_tcd))\
 CLS(zp_xml_tcd,zp_obj,"zp_xml_tcd",0,"%whsp:'<TrainingCenterDatabase>':+zp_xml_elm:'</TrainingCenterDatabase>'",NO_FTR)\
 CLS(zp_xml_activity,zp_obj,"zp_xml_activity",0,"%whsp:'<Activity>':+zp_xml_elm:'</Activity>'",NO_FTR)\
 CLS(zp_xml_trackpoint,zp_obj,"zp_xml_trackpoint",0,"%whsp:'<Trackpoint>':+zp_xml_elm:'</Trackpoint>'",NO_FTR)\
-CLS(zp_xml_elm,zp_obj,"zp_xml_elm",0,"%whsp:'<':{_name}ident:*zp_xml_atr:(('>': *(^'<'|zp_xml_trackpoint|zp_xml_elm):'</':ident:'>')|'/>')",VAR(_name))\
-CLS(zp_xml_atr,zp_obj,"zp_xml_atr",0,"%whsp:scoped:'=':string",NO_FTR)
 
 #include "zipolib_parse2/include/z_obj_macro.h"
 ZP_MODULE_DEFINE(xml);
