@@ -202,7 +202,7 @@ z_status zp_parser::_f_string_literal_create(zp_flags flags,int type)
 		{
 			bool* pVar=0;
 			_ctx_current->_obj_factory->get_memvar_ptr(
-				_ctx_current->_obj,_ctx_current->_member_var_name,(void**)&pVar);
+				_ctx_current->_obj,_ctx_current->_member_var_name,(void**)&pVar,0);
 			if(pVar)
 				*pVar=true;
 		}
@@ -380,9 +380,8 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 				{
 					if(flags.parent_data)
 					{
-						fact_new_obj->create_obj();
-						_ctx_current->_obj_factory->get_new_child_obj_ptr(_ctx_current->_obj,
-							_ctx_current->_member_var_name,
+						_ctx_current->_obj_factory->create_child(_ctx_current->_obj,
+							_ctx_current->_member_var_name,fact_new_obj,
 							&sub_obj);
 					}
 					/*
@@ -403,6 +402,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 
 				if(flags.parent_data)
 				{
+					/*
 					if(flags.multi)
 					{
 						item_result=feature_objlist_get_next(_ctx_current->_obj,
@@ -411,13 +411,15 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 							return zs_no_match;
 					}
 					else
-					{
-						_ctx_current->_obj_factory->get_memvar_ptr(_ctx_current->_obj,
-							_ctx_current->_member_var_name,
-							&sub_obj);
-						if(!sub_obj)
-							return zs_no_match;
-					}
+					{*/
+					_ctx_current->_obj_factory->get_memvar_ptr(
+						_ctx_current->_obj,
+						_ctx_current->_member_var_name,
+						&sub_obj, 
+						&_ctx_current->_output_obj_index);
+					if(!sub_obj)
+						return zs_no_match;
+					
 				}
 				if((!sub_obj)&&(_ctx_current->_obj))
 				{
@@ -436,13 +438,13 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 				{
 					if(!(flags.required || flags.create_default))
 						return zs_skipped;
-					sub_obj=ie->create_obj();
+					sub_obj=fact_new_obj->create_obj();
 				}
 				//Reset all of the member var iterators.
 
 
 			}
-			item_result= _process_sub_item(sub_obj,ie,mode,flags);
+			item_result= _process_sub_item(sub_obj,fact_new_obj,mode,flags);
 			if(mode.create)
 			{
 				if(item_result==zs_matched)

@@ -9,7 +9,7 @@
 #include "zipolib/include/z_string.h"
 #include "zipolib/include/z_temp_buff.h"
 #include "zipolib/include/z_type_converter.h"
-#ifndef WIN32
+#ifndef BUILD_VSTUDIO
 #define	HANDLE size_t
 #endif
 
@@ -21,6 +21,7 @@ class z_file
 	size_t  _file_handle;	
 	z_string _file_name;
 	void* _log_file_handle;
+	int _indent_depth;
 protected:
 	int _max_line_length;
 public:
@@ -102,6 +103,11 @@ public:
 	//duplicate log file
 	virtual void start_log_to_file(ctext filename);
 	virtual void stop_log_to_file();
+	void indent();
+	void indent_inc();
+	void indent_reset();
+	void indent_dec();
+
 };
 class z_file_string_buffer: public z_file
 {

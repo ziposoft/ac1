@@ -22,6 +22,8 @@ enum
 	zs_tmpl_expected_closing_parenthesis,
 	zs_internal_error,
 	zs_bad_argument_2,
+	zs_bad_parameter,
+	zs_wrong_object_type,
 
 };
 ctext z_status_get_text(z_status status);

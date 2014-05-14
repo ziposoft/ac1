@@ -75,7 +75,7 @@ zpi_context::zpi_context()
 	_obj_factory=0;
 	_obj=0;
 	_flags.as_u32=0;
-	_output_obj_index=0;
+	_output_obj_index=-1;
 }
 
 void zpi_context::init(zpi_context* parent,
@@ -115,7 +115,7 @@ void zp_parser::context_set_root(void* p_obj,
 	_ctx_root.init(0,ie,parse_string);
 	_ctx_current=&_ctx_root;
 	_ctx_root._obj=p_obj;
-	_ctx_root._output_obj_index=0;
+	_ctx_root._output_obj_index=-1;
 	//_ctx_root._output_result_index=0;
 
 }
@@ -131,7 +131,7 @@ void zp_parser::context_sub_item_push(void* obj,const zp_factory* ie)
 	ctx->_current_template_parser.set_source(ie->get_parse_string());
 	ctx->_obj=obj;
 	ctx->_obj_factory=ie;
-	ctx->_output_obj_index=0;
+	ctx->_output_obj_index=-1;
 	//ctx->_output_result_index=0;
 }
 

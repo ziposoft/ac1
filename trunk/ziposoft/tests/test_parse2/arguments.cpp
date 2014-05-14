@@ -18,6 +18,9 @@ option opt_list_operation[]=
 	{ "static","run tests from built in list",run_static_tests },
 	{ "tmpl","use provided template",0 },
 	{ "xml","parse xml file",run_parse_xml },
+	{ "cust","custom",run_custom },
+
+	
 	{ "obj","test a specific parse object",run_parse_obj },
 };
 const size_t  opt_list_operation_count= (sizeof(opt_list_operation)/sizeof(option));

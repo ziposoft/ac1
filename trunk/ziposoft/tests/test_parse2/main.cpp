@@ -32,7 +32,11 @@ int func2()
 
 int main(int argc, char** argv)
 {
-		ZT_ENABLE();
+	ZT_ENABLE();
+
+	zo_factory_list_dump();
+
+
 
 	//z_trace_enable();
 	//___________________________________________________________
