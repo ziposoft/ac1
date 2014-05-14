@@ -13,6 +13,32 @@ void zp_member_funcs_base::dump(z_file& file, void* v,int& depth) const
 	file<<s;
 }
 
+template <class V> void zp_var_funcs<V>::dump(z_file& file, void* v,int& depth) const
+{
+	zp_member_funcs_base::dump( file,  v, depth) ;
+
+}
+template <class V> void zp_var_funcs<V>::add(void* list,void* obj) const
+{
+}
+template <class V> void* zp_var_funcs<V>::get_item(void* list,size_t index) const
+{
+	return 0;
+}
+template <class V> size_t zp_var_funcs<V>::get_size(void* list) const
+{
+	return 0;
+}
+template <class V> void* zp_var_funcs<V>::reset_create_obj(void* list) const
+{
+	return 0;
+}
+template <class V> void zp_var_funcs<V>::get(z_string& s, void* v)	const
+{
+}
+template <class V> void zp_var_funcs<V>::clear( void* v)	const
+{
+}
 VF<bool>::clear(void* v)            const {RECAST(bool,b); b=false;    }
 VF<bool>::get(z_string& s, void* v) const {RECAST(bool,b); s=(b?"true":"false");  }
 VF<bool>::set(ctext s, void* v)     const {RECAST(bool,b); b=(strcmp(s,"true")==0);    }
@@ -74,9 +100,11 @@ VF<zp_obj_vector>::dump(z_file& file, void* v,int& depth) const
 
 
 
- template class zp_var_funcs<z_string>;
- template class zp_var_funcs<int>;
-
+template class zp_var_funcs<z_string>;
+template class zp_var_funcs<int>;
+template class zp_var_funcs<bool>;
+template class zp_var_funcs<z_strlist>;
+template class zp_var_funcs<zp_obj_vector>;
 
 const zp_factory*  zo_get_factory_by_name(ctext name,size_t len)
 {
