@@ -4,26 +4,7 @@
 #include "zipolib_parse2/include/z_parse_def.h"
 
 
-/*
-const cset cset_stringcontrol("\"\\");
-const cset cset_stringdata = !cset_stringcontrol;
-const cset cset_whitespace(" \t\r");
-const cset cset_letters("_A-Za-z");
-const cset cset_digits("0-9");
-const cset cset_hex_digits("0-9A-Fa-f");
-const cset cset_float("0-9.");
-const cset cset_misc(":;,&%<*>?().=+!~~[]|#/");
-const cset cset_modifiers("*&");
-const cset cset_identchars = cset_letters + cset_digits;
-const cset cset_path_string = cset_letters + cset_digits+"\\/.:"+'-';
 
-const cset cset_filename = cset_letters + cset_digits+'.';
-const cset cset_otherchars = !cset_letters;
-
-const cset z_parser::cset_letters("_A-Za-z");
-const cset z_parser::cset_identchars(cset_letters);
-
-*/
 
 enum item_type {
 	item_invalid_type,
@@ -71,7 +52,7 @@ class zp_text_parser
 	const char* _match_end;
 	int n_newlines;
 	zpt_options _options;
-	//internal funcitons
+	//internal functions
 	z_status start_test();
 
 
