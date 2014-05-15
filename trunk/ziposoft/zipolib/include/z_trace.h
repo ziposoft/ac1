@@ -8,7 +8,11 @@ ________________________________________________________________________*/
 #ifndef z_trace_h
 #define z_trace_h
 
-#include "zipolib/include/zipolib_cpp.h"
+#include "zipolib/include/z_string.h"
+#include "zipolib/include/z_time.h"
+#include "zipolib/include/z_stl_map.h"
+#include "zipolib/include/z_stl_vector.h"
+#include "zipolib/include/z_stl_list.h"
 
 
 class zt_src_file;

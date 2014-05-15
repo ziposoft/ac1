@@ -23,15 +23,15 @@
     <Filter Include="parse">
       <UniqueIdentifier>{759aaa0d-1c3d-44ed-b261-e79758425726}</UniqueIdentifier>
     </Filter>
+    <Filter Include="pch">
+      <UniqueIdentifier>{31452160-6a68-49f8-9eaa-23eea8438f95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\zipo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\zipolib_cpp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\zipolib_cpp_pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\z_str.h">
@@ -53,9 +53,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\z_debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\z_error.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\z_dbg.h">
@@ -109,15 +106,33 @@
     <ClInclude Include="include\z_list.h">
       <Filter>container</Filter>
     </ClInclude>
+    <ClInclude Include="include\z_parse_obj.h">
+      <Filter>parse</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_parse_text.h">
+      <Filter>parse</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zp_obj.h">
+      <Filter>parse</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_obj_macro.h">
+      <Filter>parse</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_parse.h">
+      <Filter>parse</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zipolib_cpp_pch.h">
+      <Filter>pch</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_error.h">
+      <Filter>cpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\z_time.c">
       <Filter>c</Filter>
     </ClCompile>
     <ClCompile Include="src\z_util.c">
-      <Filter>c</Filter>
-    </ClCompile>
-    <ClCompile Include="src\pch.c">
       <Filter>c</Filter>
     </ClCompile>
     <ClCompile Include="src\pstrconv.c">
@@ -174,9 +189,6 @@
     <ClCompile Include="src\z_error.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="src\pch_cpp.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
     <ClCompile Include="src\z_ntf.cpp">
       <Filter>factory</Filter>
     </ClCompile>
@@ -188,6 +200,30 @@
     </ClCompile>
     <ClCompile Include="src\z_list.cpp">
       <Filter>container</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_parse_text.cpp">
+      <Filter>parse</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_obj.cpp">
+      <Filter>parse</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_obj_cmd.cpp">
+      <Filter>parse</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_parse.cpp">
+      <Filter>parse</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_parse_misc.cpp">
+      <Filter>parse</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_parse_objs.cpp">
+      <Filter>parse</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch.c">
+      <Filter>pch</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch_cpp.cpp">
+      <Filter>pch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-#include "z_parse_pch.h"
+#include "zipolib_cpp_pch.h"
 
 #include "z_parse.h"
 
@@ -151,20 +151,7 @@ void zp_parser::context_sub_item_pop()
 //zp_parser
 //________________________________________________________________
 
-/*
-zp_parser::zp_parser(const zp_factory** it,size_t size)
-{
-	set_obj_table(it,size);
-	_results=0;
-	_ctx_current=0;
-}
 
-void zp_parser::set_obj_table(const zp_factory** it,size_t size)
-{
-	_item_table=it;
-	_item_table_size=size;
-}
-*/
 zp_parser::zp_parser()
 {
 //	_item_table=0;
@@ -387,38 +374,3 @@ const zp_factory* zp_parser::find_item(ctext item_name,size_t len)
 	return zo_get_factory_by_name(item_name,len);
 }
 
-#if 0
-z_status zp_parser::access_obj_member_map(type_memvar_oper oper,int* pindex,z_obj_map* member_var)
-{
-	if(oper==mvo_clear)//clear
-	{
-		member_var->clear();
-		return zs_ok;
-	}
-	if(oper==mvo_get_size_reset)//get list size
-	{
-		*pindex=(int)member_var->size();
-		return zs_ok;
-	}
-	if(oper==zo_mvo_set) //add an object
-	{
-		member_var->add(_p_member_var_obj->get_map_key(),_p_member_var_obj);
-		return zs_ok;
-	}
-	if(oper==zo_mvo_get)//get an object
-	{
-		int index=0;
-		if(pindex)
-			index=*pindex;
-
-		if(index>=(int)member_var->size())	
-			return zs_end_of_list;
-		//TODO!!
-		/*
-		_p_member_var_obj=(void*)(*member_var)[index];
-		*/
-		return zs_ok;
-	}
-	return zs_internal_error;
-}
-#endif

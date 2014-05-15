@@ -10,6 +10,10 @@ ________________________________________________________________________*/
 extern "C" {
 #endif
 #include "zipolib/include/zipo.h"
+
+
+#define Z_MAX_PATH_LENGTH 2048
+
 typedef size_t z_file_h;
 typedef size_t z_directory_h;
 U8*  z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  );

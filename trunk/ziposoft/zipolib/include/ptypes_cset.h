@@ -15,8 +15,6 @@
 #define ptypes_cset_h
 #include "zipolib/include/zipo.h"
 
-#include <stdlib.h>
-#include <string.h>
 
 // -------------------------------------------------------------------- //
 // --- character set -------------------------------------------------- //

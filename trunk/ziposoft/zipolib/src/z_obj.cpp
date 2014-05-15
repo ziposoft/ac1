@@ -1,7 +1,6 @@
-#include "z_parse_pch.h"
+#include "zipolib_cpp_pch.h"
 
-#include "zipolib_parse2/include/zp_obj.h"
-#include "zipolib_parse2/include/z_obj_man.h"
+#include "zipolib/include/zp_obj.h"
 
 #define RECAST(_TYPE_,_NAME_) _TYPE_& _NAME_= *reinterpret_cast<_TYPE_*>(v);
 #define VF template <> void zp_var_funcs
@@ -80,7 +79,7 @@ VF<zp_obj_vector>::dump(z_file& file, void* v) const
 {
 	RECAST(zp_obj_vector,list);
 	size_t count=list.size();
-	int i;
+	size_t i;
 	for(i=0;i<count;i++)
 	{
 		list[i]._fact->dump_obj_r(file,list[i]._obj);

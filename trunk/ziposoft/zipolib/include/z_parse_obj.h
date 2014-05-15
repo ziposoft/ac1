@@ -1,8 +1,10 @@
 #ifndef z_parse_obj_h
 #define z_parse_obj_h
-#include "zipolib_parse2/include/zp_obj.h"
+#include "zipolib/include/zp_obj.h"
 #include "zipolib/include/z_stl_list.h"
+#include "zipolib/include/z_list.h"
 #include "zipolib/include/z_stl_vector.h"
+#include <map>
 
 ZP_MODULE_DECLARE(parse);
 

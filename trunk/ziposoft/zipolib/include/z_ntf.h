@@ -8,7 +8,6 @@ ________________________________________________________________________*/
 #ifndef z_ntf_h
 #define z_ntf_h
 
-#include "zipolib/include/zipolib_cpp_pch.h"
 #include "zipolib/include/z_stl_map.h"
 #include "zipolib/include/z_string.h"
 #include "zipolib/include/z_error.h"
@@ -146,7 +145,7 @@ public:
 		 if(!p)
 			 return z_status_item_not_found;
 		 p->set_value(this,from);
-		 return z_status_ok; 
+		 return z_status_success; 
 
 	}
 	z_status get_prop(ctext n,z_string& str)
@@ -155,7 +154,7 @@ public:
 		 if(!p)
 			 return z_status_item_not_found;
 		 p->get_value(this,str);
-		 return z_status_ok; 
+		 return z_status_success; 
 	}
 	ctext get_map_key() { return _name; }
 

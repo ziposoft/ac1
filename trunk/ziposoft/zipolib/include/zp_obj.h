@@ -1,8 +1,7 @@
 #ifndef z_obj_h
 #define z_obj_h
 
-#include "zipolib_parse2/include/z_parse_pch.h"
-#include "zipolib_parse2/include/z_parse_def.h"
+#include "zipolib/include/z_error.h"
 #include "zipolib/include/z_stl_vector.h"
 
 
