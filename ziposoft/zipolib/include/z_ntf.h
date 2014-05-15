@@ -101,7 +101,7 @@ class z_ntf_prop_hex32 : public z_ntf_prop_t<U32>
 public:
 	z_ntf_prop_hex32(z_ntf_obj* parent,ctext name,U32* var) :z_ntf_prop_t<U32>( parent,name,var)  {}
 
-	virtual void convert(ctext from,U32 & to){to=    z_stringtoue(from,16); ;}
+	virtual void convert(ctext from,U32 & to){to=   (U32) z_stringtoue(from,16); ;}
 	virtual void convert(const U32 & from,z_string& to){to.hex(from);}
 
 };

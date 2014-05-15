@@ -20,6 +20,9 @@
     <Filter Include="container">
       <UniqueIdentifier>{e3e9a783-ba7a-4649-9d93-0684daf679a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="parse">
+      <UniqueIdentifier>{759aaa0d-1c3d-44ed-b261-e79758425726}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\zipo.h">
