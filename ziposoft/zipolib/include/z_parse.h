@@ -1,8 +1,7 @@
 #ifndef z_parse_h
 #define z_parse_h
-#include "zipolib_parse2/include/z_parse_text.h"
-#include "zipolib_parse2/include/z_parse_obj.h"
-#include "zipolib_parse2/include/z_obj_man.h"
+#include "zipolib/include/z_parse_text.h"
+#include "zipolib/include/z_parse_obj.h"
 
 
 #if DEBUG
@@ -130,16 +129,12 @@ public:
 //zp_parser
 //________________________________________________________________
 
-class zp_parser : public zp_text_parser, public zo_manipulator
+class zp_parser : public zp_text_parser //, public zo_manipulator
 {
 	zp_test_result* _results;
 	zpi_context _ctx_root;
 	zpi_context *_ctx_current;
 	U32 _test_result_current_index;
-
-
-public:
-
 
 	z_file* _file_out;
 
@@ -149,36 +144,23 @@ public:
 	void set_obj_table(const zp_factory** it,size_t size);
 	zp_parser(const zp_factory** it,size_t size);
 	*/
-	zp_parser();
 
 
 	//parsing
 
 
-	z_status parse_template(ctext tmpl);
-	z_status parse_item(void*& p_item_out,ctext item_entry_name);
 
-	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data)
-	{
-		const zp_factory* factory=&zp_factory_T<CLASS>::obj;
-		return 	parse_obj(p_obj, factory,data);
 
-	}
 	z_status parse_obj(void* p_obj,const zp_factory* factory,ctext data);
 	z_status create_empty_item(void*& p_item_out,ctext item_entry_name);
 
 
 
-	z_status report_error(z_status status);
 
 
-	z_status create_obj(ctext item_entry_name,void* &p_item);
 
 
-	z_status output_obj(z_file* fp,const zp_factory* factory,void* obj);
-	z_status output_default_template(z_file* fp,ctext tmpl);
 	//context
-private:
 	const zp_factory* find_item(ctext item_name,size_t len=(size_t)-1);
 	z_status _process_stage(zp_mode mode ,zp_flags* pflags=0);
 	void reset_results();
@@ -194,7 +176,7 @@ private:
 	void context_sub_item_push(void* obj,const zp_factory* ie);
 	void context_sub_group_push(void* obj);
 	void context_sub_item_pop();
-public:
+   public:
 	//String literal
 	z_status _f_string_literal_output(zp_flags p1,zp_mode mode);
 	z_status _f_test_string_literal(const void* dummy);
@@ -220,27 +202,27 @@ public:
 	z_status _f_quoted_string_test(const void* dummy);
 	z_status _f_squoted_string_test(const void* dummy);
 
+public:
+
+	zp_parser();
+ 	z_status report_error(z_status status);
+ 	z_status parse_template(ctext tmpl);
+	z_status parse_item(void*& p_item_out,ctext item_entry_name);
+	z_status output_obj(z_file* fp,const zp_factory* factory,void* obj);
+	z_status output_default_template(z_file* fp,ctext tmpl);
+	z_status create_obj(ctext item_entry_name,void* &p_item);
+
+	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data)
+	{
+		const zp_factory* factory=&zp_factory_T<CLASS>::obj;
+		return 	parse_obj(p_obj, factory,data);
+
+	}
 
 };
 
-typedef z_status (zp_parser::*type_obj_parser_fp)(const void* p1);
-typedef z_status (zp_parser::*type_obj_parser_fp_flags)(zp_flags p1);
-typedef z_status (zp_parser::*type_obj_parser_fp_create)(zp_flags p1,int type);
-typedef z_status (zp_parser::*type_obj_parser_fp_output)(zp_flags p1,zp_mode mode);
 
-struct keyword_item
-{
-	item_type type;
-	ctext name;
-	ctext desc;
-	type_txt_parser_fp _f_identify;
-	const void* param;
-	type_obj_parser_fp _f_test;
-	type_obj_parser_fp_create _f_create;
-	type_obj_parser_fp_output _f_output;
 
-};
-extern keyword_item keyword_list[];
 
 #endif
 

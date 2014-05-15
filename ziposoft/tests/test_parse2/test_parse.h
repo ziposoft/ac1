@@ -1,9 +1,7 @@
 #ifndef test_parse_h
 #define test_parse_h
-#include "zipolib/include/z_trace.h"
-#include "zipolib/include/z_file.h"
-#include "zipolib/include/z_stl_vector.h"
-#include "zipolib_parse2/include/z_parse.h"
+#include "zipolib/include/zipolib_cpp.h"
+#include "zipolib/include/z_parse.h"
 
 //opt_list_operation
 int run_help();

@@ -348,7 +348,7 @@ z_status z_csv_encode_string(z_string& output)
 
 	size_t dq=0;
 	if(output.find_first_of(",\"\n")==z_string::npos)
-		return z_status_ok;
+		return z_status_success;
 
 	output.insert(0,1,'\"');
 	while( (dq=output.find_first_of("\""))!=z_string::npos)
@@ -357,7 +357,7 @@ z_status z_csv_encode_string(z_string& output)
 	}
 	output.append(1,'\"');
 
-	return z_status_ok;
+	return z_status_success;
 	
 
 }

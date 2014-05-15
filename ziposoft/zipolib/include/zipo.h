@@ -38,10 +38,7 @@ typedef   unsigned short  U16;
 typedef   unsigned char  U8;
 typedef   int   z_status;
 
-enum 
-{
-	z_status_success=0,
-};
+
 
 typedef const char* utf8;
 typedef char* ascii;
@@ -54,7 +51,6 @@ typedef char const *STRPTR;
 #define U64_MAX (LLCONST(18446744073709551615u))
 
 
-#define Z_MAX_PATH_LENGTH 2048
 
 
 

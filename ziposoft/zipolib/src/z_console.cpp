@@ -235,7 +235,7 @@ void z_console::OnEnter()
 		{
 			switch(result)
 			{
-			case z_status_ok:
+			case z_status_success:
 			case z_status_error:
 				break;
 			default:

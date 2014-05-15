@@ -1,8 +1,8 @@
 // test_console.cpp : Defines the entry point for the console application.
 //
 
-#include "zipolib/include/zipo.h"
-#include "zipolib_parse/include/z_console.h"
+#include "zipolib/include/zipolib_cpp.h"
+#include "zipolib/include/z_console.h"
 
 
 class z_console_ntf : public z_console

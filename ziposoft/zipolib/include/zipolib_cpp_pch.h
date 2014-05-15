@@ -18,5 +18,10 @@
 #define stricmp strcasecmp
 #endif
 #endif
-#include <stdarg.h>
-#include <stdio.h>
+#include "zipolib/include/z_string.h"
+#include "zipolib/include/z_stl_map.h"
+#include "zipolib/include/z_stl_list.h"
+#include "zipolib/include/z_stl_vector.h"
+#include "zipolib/include/ptypes_cset.h"
+#include "zipolib/include/z_trace.h"
+#include "zipolib/include/z_error.h"

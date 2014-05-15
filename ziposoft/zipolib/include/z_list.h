@@ -16,6 +16,7 @@ ________________________________________________________________________*/
 #include "zipolib/include/zipo.h"
 #include "zipolib/include/z_string.h"
 #include "zipolib/include/z_stl_map.h"
+#include "zipolib/include/z_list.h"
 
 class z_file;
 class z_strmap : public z_stl_map<z_string,z_string>

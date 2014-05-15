@@ -6,7 +6,6 @@
 #ifndef z_file_header
 #define z_file_header
 #include "zipolib/include/zipo.h"
-#include "zipolib/include/z_string.h"
 #include "zipolib/include/z_temp_buff.h"
 #include "zipolib/include/z_type_converter.h"
 #ifndef BUILD_VSTUDIO
