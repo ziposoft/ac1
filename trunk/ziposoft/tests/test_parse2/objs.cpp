@@ -25,7 +25,7 @@ public:
 	ZCLS(zp_xml_atr,base,"zp_xml_atr","%whsp:{_name}scoped:'=':{_val}string_sq",VAR(_name) VAR(_val))
 
 		  
-#include "zipolib/include/z_obj_macro.h"
+#include "zipolib/include/z_obj.macro"
 ZP_MODULE_DEFINE(testmod);
 
 
@@ -44,7 +44,7 @@ CLS(zp_xml_tcd,zp_obj,"zp_xml_tcd",0,"%whsp:'<TrainingCenterDatabase>':+zp_xml_e
 CLS(zp_xml_activity,zp_obj,"zp_xml_activity",0,"%whsp:'<Activity>':+zp_xml_elm:'</Activity>'",NO_FTR)\
 CLS(zp_xml_trackpoint,zp_obj,"zp_xml_trackpoint",0,"%whsp:'<Trackpoint>':+zp_xml_elm:'</Trackpoint>'",NO_FTR)\
 
-#include "zipolib/include/z_obj_macro.h"
+#include "zipolib/include/z_obj.macro"
 ZP_MODULE_DEFINE(xml);
 
 class zp_test1
@@ -145,7 +145,7 @@ CLS(zp_test6,zp_obj,"test6",0,"{_static_var}test4",VAR(_static_var))\
 CLS(zp_test7,zp_obj,"test7",0,"?{_on_list}identlist:':':?{_off_list}identlist",VAR(_on_list) VAR(_off_list))
 
 
-#include "zipolib_parse/include/z_obj_macro.h"
+#include "zipolib_parse/include/z_obj.macro"
 /*
 
 class zp_xml : public zp_obj

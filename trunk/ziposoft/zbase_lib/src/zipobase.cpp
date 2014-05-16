@@ -72,5 +72,5 @@ void z_obj_ptr_delete(z_refcount* p)
 
 
 
-#include "zipolib/include/z_obj_macro.h"
+#include "zipolib/include/z_obj.macro"
 #endif

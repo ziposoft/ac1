@@ -749,6 +749,6 @@ OBJ(zt_src_file,zp_obj,"zt_file","",\
 	   "#'\t\t':'{':#'\n':*{_funcs}zt_func:#'\t\t':'}':#'\n'",\
 	   VAR(_full_name) VAR(_default) VAR(_profiles) VAR(_funcs)) 
 
-#include "zipolib/include/z_obj_macro.h"
+#include "zipolib/include/z_obj.macro"
 
 #endif

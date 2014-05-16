@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	int i;
 	ZT_ENABLE();
 	zp_cmdline 	cmdline ;
-	zp_parser parser;
+	z_parser parser;
 	for(i=1;i<argc;i++)
 	{
 		status=parser.parse_obj(&cmdline,argv[i]);

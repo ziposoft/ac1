@@ -1,5 +1,6 @@
 #include "test_parse.h"
 #include "zipolib/include/z_dbg.h"
+#include "zipolib/include/z_parse_text.h"
 
 
 z_string g_file_buffer;
@@ -119,7 +120,7 @@ int main(int argc, char** argv)
 
 	if(g_arg_obj_type)
 	{
-		g_parse_fact=zo_get_factory(g_arg_obj_type);
+		g_parse_fact=zfs_get_factory(g_arg_obj_type);
 		if(!g_parse_fact)
 		{
 			printf("ERROR! Class \"%s\" not found.\n",g_arg_obj_type.c_str());

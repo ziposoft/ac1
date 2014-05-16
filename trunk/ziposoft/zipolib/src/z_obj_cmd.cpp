@@ -280,7 +280,7 @@ void zo_man_cmd::dump()
 	OBJ(zo_man_cmd,void,"generic","generic",0,NO_FTR)
 
 #define Z_MODULE _Z_MODULE(man)
-#include "zipolib_parse/include/z_obj_macro.h"
+#include "zipolib_parse/include/z_obj.macro"
 
 
 #endif

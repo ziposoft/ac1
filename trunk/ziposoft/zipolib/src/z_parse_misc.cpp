@@ -1,6 +1,9 @@
 #include "zipolib_cpp_pch.h"
 
-#include "z_parse.h"
+#include "z_parse_internal.h"
+
+
+
 
 /*________________________________________________________________
 
@@ -371,6 +374,6 @@ const z_factory_static* zp_parser::find_item(ctext item_name,size_t len)
 	{
 		len=strlen(item_name);
 	}
-	return zo_get_factory_by_name(item_name,len);
+	return zfs_get_factory_by_name(item_name,len);
 }
 

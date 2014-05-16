@@ -106,13 +106,7 @@
     <ClInclude Include="include\z_list.h">
       <Filter>container</Filter>
     </ClInclude>
-    <ClInclude Include="include\z_parse_obj.h">
-      <Filter>parse</Filter>
-    </ClInclude>
     <ClInclude Include="include\z_parse_text.h">
-      <Filter>parse</Filter>
-    </ClInclude>
-    <ClInclude Include="include\z_obj_macro.h">
       <Filter>parse</Filter>
     </ClInclude>
     <ClInclude Include="include\z_parse.h">
@@ -128,6 +122,9 @@
       <Filter>factory</Filter>
     </ClInclude>
     <ClInclude Include="include\z_parse_internal.h">
+      <Filter>parse</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_obj.macro">
       <Filter>parse</Filter>
     </ClInclude>
   </ItemGroup>

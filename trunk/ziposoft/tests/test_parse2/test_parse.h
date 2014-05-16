@@ -66,7 +66,7 @@ struct argument
 extern const size_t  opt_list_operation_count;
 extern const size_t  opt_list_test_type_count;
 extern const size_t  arg_list_count;
-extern zp_parser p;
+extern z_parser p;
 extern const z_factory_static * g_parse_fact;
 
 
