@@ -55,6 +55,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_parse2", "tests\test_parse2\test_parse2.vcxproj", "{D7A24E14-1C3C-4E67-B925-529FBC0712B7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1387C270-EF53-438B-939A-3D980D27EF0C} = {1387C270-EF53-438B-939A-3D980D27EF0C}
+		{547309F3-E79A-49EE-841B-684DB97F356A} = {547309F3-E79A-49EE-841B-684DB97F356A}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zipolib", "zipolib\zipolib.vcxproj", "{547309F3-E79A-49EE-841B-684DB97F356A}"

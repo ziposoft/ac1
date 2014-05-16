@@ -79,7 +79,7 @@ zpi_context::zpi_context()
 }
 
 void zpi_context::init(zpi_context* parent,
-					  const zp_factory* ie, ctext parse_string	 )
+					  const z_factory_static* ie, ctext parse_string	 )
 {
 	_parent=parent;
 	_obj_factory=ie;
@@ -103,7 +103,7 @@ void* zpi_context::get_next_child_obj()
 
 
 void zp_parser::context_set_root(void* p_obj,
-									 const zp_factory* ie,
+									 const z_factory_static* ie,
 									 ctext parse_string
 									 )
 {
@@ -119,7 +119,7 @@ void zp_parser::context_set_root(void* p_obj,
 	//_ctx_root._output_result_index=0;
 
 }
-void zp_parser::context_sub_item_push(void* obj,const zp_factory* ie)
+void zp_parser::context_sub_item_push(void* obj,const z_factory_static* ie)
 {
 	if(_ctx_current->_child==0)
 	{
@@ -208,7 +208,7 @@ z_status zp_parser::report_error(z_status status)
 
 
 
-z_status zp_parser::parse_obj(void* p_obj,const zp_factory* factory,ctext data)
+z_status zp_parser::parse_obj(void* p_obj,const z_factory_static* factory,ctext data)
 {
 	z_status status;
 	Z_ASSERT(p_obj);
@@ -234,7 +234,7 @@ z_status zp_parser::parse_item(void*& p_item,
 {
 	//ZTF;
 	z_status status;
-	const zp_factory* ie=find_item(item_entry_name);
+	const z_factory_static* ie=find_item(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
 	void* obj=ie->create_obj();
@@ -261,7 +261,7 @@ z_status zp_parser::create_obj(ctext item_entry_name,void* &p_obj)
 {
 
 	//ZTF;
-	const zp_factory* ie=find_item(item_entry_name);
+	const z_factory_static* ie=find_item(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
 	p_obj=ie->create_obj();
@@ -270,7 +270,7 @@ z_status zp_parser::create_obj(ctext item_entry_name,void* &p_obj)
 	return zs_ok;
 
 }
-z_status zp_parser::output_obj(z_file* fp,const zp_factory* factory,void* obj)
+z_status zp_parser::output_obj(z_file* fp,const z_factory_static* factory,void* obj)
 {
 	if(!factory)
 		return -1;
@@ -299,7 +299,7 @@ z_status zp_parser::create_empty_item(void*& p_item,
 {
 	//ZTF;
 	z_status status;
-	const zp_factory* ie=find_item(item_entry_name);
+	const z_factory_static* ie=find_item(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
 	void* obj=ie->create_obj();
@@ -365,7 +365,7 @@ z_status zp_parser::parse_template(	ctext tmpl)
 }
 
 //item table
-const zp_factory* zp_parser::find_item(ctext item_name,size_t len)
+const z_factory_static* zp_parser::find_item(ctext item_name,size_t len)
 {
 	if(len==-1)
 	{

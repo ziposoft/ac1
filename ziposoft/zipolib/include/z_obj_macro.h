@@ -9,10 +9,10 @@
 #undef NOFTR
 
 #define NOFTR
-#define POBJ(_VAR)  const zp_member_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_child_pobj_funcs_get(nullobj->_VAR); }
-#define LIST(_VAR)  const zp_member_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_var_list_funcs(nullobj->_VAR); }
-#define OBJ(_VAR)  const zp_member_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_child_obj_funcs_get(nullobj->_VAR); }
-#define VAR(_VAR)  const zp_member_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_var_funcs_get(nullobj->_VAR); }
+#define POBJ(_VAR)  const zf_var_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_child_pobj_funcs_get(nullobj->_VAR); }
+#define LIST(_VAR)  const zf_var_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_var_list_funcs(nullobj->_VAR); }
+#define OBJ(_VAR)  const zf_var_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_child_obj_funcs_get(nullobj->_VAR); }
+#define VAR(_VAR)  const zf_var_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_var_funcs_get(nullobj->_VAR); }
 #define ZCLS(_CLASS_,_BASE_,_NAME_,_PARSE_,_EXTRA_) namespace Z_PARSE_NS(_CLASS_) { _CLASS_* nullobj=0;	_EXTRA_ }
 
 ZO_OBJ_LIST;
@@ -31,14 +31,14 @@ ZO_OBJ_LIST;
 #define POBJ(_VAR) VAR(_VAR)
 #define OBJ(_VAR) VAR(_VAR)
 #define ZCLS(_CLASS_,_BASE_,_NAME_,_PARSE_,_EXTRA_) \
-	namespace Z_PARSE_NS(_CLASS_) {const zp_var_entry varlist[]={ _EXTRA_ }; const size_t varlist_length=sizeof( varlist)/sizeof(	zp_var_entry);  }	 \
-	template <> const size_t zp_factory_T<_CLASS_>::get_var_list_size() const{ return Z_PARSE_NS(_CLASS_)::varlist_length; };\
-	template <> const zp_var_entry* zp_factory_T<_CLASS_>::get_var_list() const{ return Z_PARSE_NS(_CLASS_)::varlist; }\
-	const zp_factory_T<_CLASS_> static_instance_factory##_CLASS_;  \
-	template <> const zp_factory_T<_CLASS_>&  zp_factory_T<_CLASS_>::obj=static_instance_factory##_CLASS_;  \
-	template <> ctext zp_factory_T<_CLASS_>::get_parse_string() const{ return _PARSE_; }	  \
-	template <> ctext zp_factory_T<_CLASS_>::get_name()const { return #_CLASS_; }		\
-	template <> void* zp_factory_T<_CLASS_>::create_obj()const { return z_new _CLASS_(); }	
+	namespace Z_PARSE_NS(_CLASS_) {const zf_static_var_entry varlist[]={ _EXTRA_ }; const size_t varlist_length=sizeof( varlist)/sizeof(	zf_static_var_entry);  }	 \
+	template <> const size_t z_factory_static_T<_CLASS_>::get_var_list_size() const{ return Z_PARSE_NS(_CLASS_)::varlist_length; };\
+	template <> const zf_static_var_entry* z_factory_static_T<_CLASS_>::get_var_list() const{ return Z_PARSE_NS(_CLASS_)::varlist; }\
+	const z_factory_static_T<_CLASS_> static_instance_factory##_CLASS_;  \
+	template <> const z_factory_static_T<_CLASS_>&  z_factory_static_T<_CLASS_>::obj=static_instance_factory##_CLASS_;  \
+	template <> ctext z_factory_static_T<_CLASS_>::get_parse_string() const{ return _PARSE_; }	  \
+	template <> ctext z_factory_static_T<_CLASS_>::get_name()const { return #_CLASS_; }		\
+	template <> void* z_factory_static_T<_CLASS_>::create_obj()const { return z_new _CLASS_(); }	
 
 ZO_OBJ_LIST;
 

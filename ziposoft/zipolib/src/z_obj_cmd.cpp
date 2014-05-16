@@ -26,7 +26,7 @@ z_status zo_man_cmd::execute_feature(void* obj)
 {
 	z_status status=zs_ok;
 	ctext feature=_cmd_line_obj._feature._name;
-	zp_var_entry* f=obj->get_feature(feature);
+	zf_static_var_entry* f=obj->get_feature(feature);
 	if(!f)
 	{
 		
@@ -71,7 +71,7 @@ z_status zo_man_cmd::execute_feature(void* obj)
 			{
 				return Z_ERROR_MSG(zs_error,"Action  \"%s\" has no parameters",feature);
 			}
-			zp_var_entry* param_feature=obj->get_feature(param_name);
+			zf_static_var_entry* param_feature=obj->get_feature(param_name);
 			if(!param_feature)
 			{
 				return Z_ERROR_MSG(zs_error,"Bad parameter \"%s\"",param_name);
@@ -160,7 +160,7 @@ z_status zo_man_cmd::execute_line(ctext text)
 	}
 	return status;
 }
-z_status zo_man_cmd::callback_feature_execute_obj(void* pObj,zp_var_entry* fe)
+z_status zo_man_cmd::callback_feature_execute_obj(void* pObj,zf_static_var_entry* fe)
 {
 	//This is absolutely horrible code.
 	
@@ -175,7 +175,7 @@ z_status zo_man_cmd::dump_features_by_type(z_file* fp,void* obj,U32 feature_type
 {
 	_dump_fp=fp;
 	zo_feature_list list;
-	zp_var_entry* f;
+	zf_static_var_entry* f;
 	int i=0;
 	obj->get_feature_map(this,list,feature_type,false);
 	list.reset_iter();
@@ -237,13 +237,13 @@ z_status zo_man_cmd::dump_features(z_file* fp,void* obj)
 }
 void zo_man_cmd::dump_features(void* obj)
 {
-	const zp_factory* fact=obj->get_fact();
+	const z_factory_static* fact=obj->get_fact();
 	if(!fact)
 		return;
 	int i_var;
 	for(i_var=0;i_var<fact->var_list_size;i_var++)
 	{
-		zp_var_entry& fe=fact->var_list[i_var];
+		zf_static_var_entry& fe=fact->var_list[i_var];
 		gz_out<< "\t\t"<< fe._internal_name;
 		if(obj)
 			gz_out<<"="<<feature_get_as_string(obj,&fe);
@@ -266,7 +266,7 @@ void zo_man_cmd::dump()
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const z_module_obj_entry& p_obj_entry=p_module->facts[i_obj];
-			const zp_factory* fact=p_obj_entry.fact;
+			const z_factory_static* fact=p_obj_entry.fact;
 			gz_out<< "\t"<< p_obj_entry.name;
 			if(fact->base_fact)
 				gz_out<< "::"<< z_obj_fact_get_name(fact->base_fact);

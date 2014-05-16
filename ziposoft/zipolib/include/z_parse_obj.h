@@ -1,6 +1,6 @@
 #ifndef z_parse_obj_h
 #define z_parse_obj_h
-#include "zipolib/include/zp_obj.h"
+#include "zipolib/include/z_factory_static.h"
 #include "zipolib/include/z_stl_list.h"
 #include "zipolib/include/z_list.h"
 #include "zipolib/include/z_stl_vector.h"
@@ -27,9 +27,9 @@ void* zp_create_item(z_parser& p);
 
 typedef bool (*zp_test_func)(z_parser& p);
 /*
-struct zp_factory
+struct z_factory_static
 {
-	zp_factory* fact;
+	z_factory_static* fact;
 	ctext parse_string;
 };
 */

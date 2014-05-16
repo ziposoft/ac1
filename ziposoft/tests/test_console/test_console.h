@@ -4,7 +4,7 @@
 #include "zipolib/include/zipolib_cpp.h"
 #include "zipolib/include/z_console.h"
 
-
+#if 0
 class z_console_ntf : public z_console
 {
 public:
@@ -65,4 +65,6 @@ public:
 	z_status exit();
 
 };
+
+#endif
 

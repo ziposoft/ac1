@@ -1,11 +1,11 @@
 #include "zipolib_cpp_pch.h"
 
-#include "zipolib/include/zp_obj.h"
+#include "zipolib/include/z_factory_static.h"
 
 #define RECAST(_TYPE_,_NAME_) _TYPE_& _NAME_= *reinterpret_cast<_TYPE_*>(v);
-#define VF template <> void zp_var_funcs
+#define VF template <> void zf_var_funcs
 
-void zp_member_funcs_base::dump(z_file& file, void* v) const
+void zf_var_funcs_base::dump(z_file& file, void* v) const
 {
 	z_string s;
 	get(s,v);
@@ -14,62 +14,62 @@ void zp_member_funcs_base::dump(z_file& file, void* v) const
 
 /*________________________________________________________________________
 
- zp_var_funcs<TYPE> defaults
+ zf_var_funcs<TYPE> defaults
 ________________________________________________________________________*/
 
-template <class V> void zp_var_funcs<V>::dump(z_file& file, void* v) const {	zp_member_funcs_base::dump( file,  v) ; }
-template <class V> void zp_var_funcs<V>::add(void* list,void* obj) const {}
-template <class V> void* zp_var_funcs<V>::get_item(void* list,size_t index) const {	return 0;}
-template <class V> size_t zp_var_funcs<V>::get_size(void* list) const{	return 0;}
-template <class V> void* zp_var_funcs<V>::create_obj(void* list,const zp_factory* new_child_type) const{	return 0;}
-template <class V> void zp_var_funcs<V>::get(z_string& s, void* v)	const{}
-template <class V> void zp_var_funcs<V>::set(ctext s, void* v)	const{}
-template <class V> void zp_var_funcs<V>::clear( void* v)	const{}
+template <class V> void zf_var_funcs<V>::dump(z_file& file, void* v) const {	zf_var_funcs_base::dump( file,  v) ; }
+template <class V> void zf_var_funcs<V>::add(void* list,void* obj) const {}
+template <class V> void* zf_var_funcs<V>::get_item(void* list,size_t index) const {	return 0;}
+template <class V> size_t zf_var_funcs<V>::get_size(void* list) const{	return 0;}
+template <class V> void* zf_var_funcs<V>::create_obj(void* list,const z_factory* fact) const{	return 0;}
+template <class V> void zf_var_funcs<V>::get(z_string& s, void* v)	const{}
+template <class V> void zf_var_funcs<V>::set(ctext s, void* v)	const{}
+template <class V> void zf_var_funcs<V>::clear( void* v)	const{}
 
 
 /*________________________________________________________________________
 
- zp_var_funcs<bool> 
+ zf_var_funcs<bool> 
 ________________________________________________________________________*/
 VF<bool>::clear(void* v)            const {RECAST(bool,b); b=false;    }
 VF<bool>::get(z_string& s, void* v) const {RECAST(bool,b); s=(b?"true":"false");  }
 VF<bool>::set(ctext s, void* v)     const {RECAST(bool,b); b=(strcmp(s,"true")==0);    }
 /*________________________________________________________________________
 
- zp_var_funcs<int> 
+ zf_var_funcs<int> 
 ________________________________________________________________________*/
 VF<int>::clear(void* v) const			{RECAST(int,i); i=0;    }
 VF<int>::get(z_string& s, void* v) const	{RECAST(int,i); s=i;   }
 VF<int>::set(ctext s, void* v) const		{RECAST(int,i); i=atoi(s);    }
 /*________________________________________________________________________
 
-zp_var_funcs<z_string> 
+zf_var_funcs<z_string> 
 ________________________________________________________________________*/
 VF<z_string>::get(z_string& s, void* v) const{RECAST(z_string,str); s=str;    }
 VF<z_string>::set(ctext s, void* v) const{RECAST(z_string,str); str=s;   }
 VF<z_string>::clear(void* v) const{	RECAST(z_string,str); str="";}
 /*________________________________________________________________________
 
-zp_var_funcs<z_strlist> 
+zf_var_funcs<z_strlist> 
 ________________________________________________________________________*/
 VF<z_strlist>::get(z_string& s, void* v)	const{	RECAST(z_strlist,list);	list.get_as_string(s);    }
 VF<z_strlist>::clear(void* v)				const{	RECAST(z_strlist,list);	list.clear();}
 VF<z_strlist>::set(ctext s, void* v)		const{	RECAST(z_strlist,list);	list <<  s; }
 /*________________________________________________________________________
 
-zp_var_funcs<zp_obj_vector> 
+zf_var_funcs<zp_obj_vector> 
 ________________________________________________________________________*/
-template <> void* zp_var_funcs<zp_obj_vector>::create_obj(void* v,const zp_factory* new_child_type) const
+template <> void* zf_var_funcs<zp_obj_vector>::create_obj(void* v,const z_factory* fact) const
 {
 	RECAST(zp_obj_vector,list);
 	zp_obj obj;
-	obj._obj=new_child_type->create_obj();
-	obj._fact=new_child_type;
+	obj._obj=fact->create_obj();
+	obj._fact=fact;
 	list.push_back(obj);
 
 	return obj._obj;
 }
-template <> size_t zp_var_funcs<zp_obj_vector>::get_size(void* v) const
+template <> size_t zf_var_funcs<zp_obj_vector>::get_size(void* v) const
 {
 	RECAST(zp_obj_vector,list);
 	return list.size();
@@ -82,16 +82,42 @@ VF<zp_obj_vector>::dump(z_file& file, void* v) const
 	size_t i;
 	for(i=0;i<count;i++)
 	{
-		list[i]._fact->dump_obj_r(file,list[i]._obj);
+		list[i]._fact->dump_obj(file,list[i]._obj);
 	}
 }
 /*________________________________________________________________________
 
-zp_var_funcs<z_obj_vector> 
+zp_var_list_funcs<zp_obj_vector> 
+________________________________________________________________________*/
+
+void zp_var_list_funcs_base::dump(z_file& f, void* list) const 
+{
+	size_t count=get_size(list);
+	if(!count)
+	{
+		f << "{}";
+		return;
+	}
+	size_t i;
+	f << "{\n";
+	f.indent_inc();
+	for(i=0;i<count;i++)
+	{
+		void* p=get_item(list,i);
+		get_fact()->dump_obj(f,p);
+	}
+	f.indent_dec();
+	f.indent();
+	f << "}";
+}
+
+/*________________________________________________________________________
+
+zf_var_funcs<z_obj_vector> 
 ________________________________________________________________________*/
 
 #if 0
-template <> template <class TYPE> void* zp_var_funcs<z_obj_vector<TYPE>>::create_obj(void* v,const zp_factory* new_child_type) const
+template <> template <class TYPE> void* zf_var_funcs<z_obj_vector<TYPE>>::create_obj(void* v,const z_factory_static* new_child_type) const
 {
 	RECAST(zp_obj_vector,list);
 	zp_obj obj;
@@ -107,63 +133,66 @@ template <> template <class TYPE> void* zp_var_funcs<z_obj_vector<TYPE>>::create
 
 
 
-template class zp_var_funcs<z_string>;
-template class zp_var_funcs<int>;
-template class zp_var_funcs<bool>;
-template class zp_var_funcs<z_strlist>;
-template class zp_var_funcs<zp_obj_vector>;
+template class zf_var_funcs<z_string>;
+template class zf_var_funcs<int>;
+template class zf_var_funcs<bool>;
+template class zf_var_funcs<z_strlist>;
+template class zf_var_funcs<zp_obj_vector>;
 
+/*________________________________________________________________________
 
-const zp_var_entry* zp_factory::get_var_entry (ctext name) const
+z_factory_static
+________________________________________________________________________*/
+const zf_static_var_entry* z_factory_static::get_var_entry (ctext name) const
 {
 	size_t i;
-	const zp_var_entry* list=get_var_list();
+	const zf_static_var_entry* list=get_var_list();
 	for(i=0;i<get_var_list_size();i++)
 		if(strcmp(name,	list[i].name)==0)
 			return &list[i];
 	return 0;
 }
 
-z_status zp_factory::create_child(void* obj,ctext var_name,const zp_factory* new_child_type,void** ppChild) const
+z_status z_factory_static::create_child(void* obj,ctext var_name,const z_factory_static* new_child_type,void** ppChild) const
 {
-	const zp_var_entry* ent= get_var_entry(var_name);
+	const zf_static_var_entry* ent= get_var_entry(var_name);
 	if(!ent)
 		return z_status_item_not_found;
 	char* pvar=(char*)obj+ent->offset;
-	const zp_member_funcs_base* funcs=ent->fp_var_func_get();
+	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
 
 	*ppChild=funcs->create_obj(pvar,new_child_type);
 	return z_status_success;
 
 }
-z_status zp_factory::get_memvar_ptr(void* obj,ctext var_name,void** ppChild,int* iter) const
+z_status z_factory_static::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter) const
 {
-	const zp_var_entry* ent= get_var_entry(var_name);
+	const zf_static_var_entry* ent= get_var_entry(var_name);
 	if(!ent)
 		return z_status_item_not_found;
 	char* pvar=(char*)obj+ent->offset;
-	const zp_member_funcs_base* funcs=ent->fp_var_func_get();
+	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
 
 	*ppChild=funcs->get_ptr(pvar,iter);
 	return z_status_success;
 
 }
 
-z_status zp_factory::set_var(void* obj,ctext var_name,ctext value)	const
+z_status z_factory_static::set_var_as_string(void* obj,ctext var_name,ctext value)	const
 {
-	const zp_var_entry* ent= get_var_entry(var_name);
+	const zf_static_var_entry* ent= get_var_entry(var_name);
 	if(!ent)
 		return z_status_item_not_found; 
-	const zp_member_funcs_base* funcs=ent->fp_var_func_get();
+	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
 	char* pvar=(char*)obj+ent->offset;
 	funcs->set(value,pvar);
 	return z_status_success;
 }
 
-void zp_factory::clear_all_vars (void* obj) const
+void z_factory_static::clear_all_vars (void* obj) const
 {
 	size_t i;
-	const zp_var_entry* list=get_var_list();
+	const zf_static_var_entry* list=get_var_list();
 	for(i=0;i<get_var_list_size();i++)
 	{
 		char* pvar=(char*)obj+list[i].offset;
@@ -171,22 +200,22 @@ void zp_factory::clear_all_vars (void* obj) const
 	}
 }
 
-z_status zp_factory::get_var_as_string(void* obj,ctext var_name,z_string& value) const
+z_status z_factory_static::get_var_as_string(void* obj,ctext var_name,z_string& value) const
 {
-	const zp_var_entry* ent= get_var_entry(var_name);
+	const zf_static_var_entry* ent= get_var_entry(var_name);
 	if(!ent)
 		return z_status_item_not_found; 
-	const zp_member_funcs_base* funcs=ent->fp_var_func_get();
+	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
 	char* pvar=(char*)obj+ent->offset;
 	funcs->get(value,pvar);
 	return z_status_success;
 }
 
-void zp_factory::dump_obj_r(z_file& f,void* obj) const
+void z_factory_static::dump_obj(z_file& f,void* obj) const
 {
 	size_t i;
 	z_string value;
-	const zp_var_entry* list=get_var_list();
+	const zf_static_var_entry* list=get_var_list();
 	f.indent();
 	f << get_name()<<"{\n";
 	f.indent_inc();
@@ -203,11 +232,11 @@ void zp_factory::dump_obj_r(z_file& f,void* obj) const
 	f<< "}\n";
 
 }
-void zp_factory::dump_static_r(z_file& f) const
+void z_factory_static::dump_static(z_file& f) const
 {
 	size_t i;
 	z_string value;
-	const zp_var_entry* list=get_var_list();
+	const zf_static_var_entry* list=get_var_list();
 	f.indent();
 	f << get_name()<<"{\n";
 	f.indent_inc();
@@ -220,19 +249,13 @@ void zp_factory::dump_static_r(z_file& f) const
 	f.indent();
 	f<< "}\n";
 }
-void zp_factory::dump_obj (z_file& f,void* obj) const
-{
-	f.indent_reset();
-	dump_obj_r(f,obj);
-
-}
 
 
 /*________________________________________________________________________
 
-GLOBAL zp_factory functions
+GLOBAL z_factory_static functions
 ________________________________________________________________________*/
-const zp_factory*  zo_get_factory_by_name(ctext name,size_t len)
+const z_factory_static*  zo_get_factory_by_name(ctext name,size_t len)
 {
 	if(len==-1)
 	{
@@ -246,14 +269,14 @@ const zp_factory*  zo_get_factory_by_name(ctext name,size_t len)
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const zp_module_fact_entry& p_obj_entry=p_module->facts[i_obj];
-			const zp_factory* fact=p_obj_entry.fact;
+			const z_factory_static* fact=p_obj_entry.fact;
 			if(strncmp(fact->get_name(),name,len)==0)
 				return fact;
 		}
 	}
 	return 0;
 }
-const zp_factory*  zo_get_factory(ctext name)
+const z_factory_static*  zo_get_factory(ctext name)
 {
 	int i_module;
 	for(i_module=0;i_module<zp_module_master_list_size;i_module++)
@@ -263,7 +286,7 @@ const zp_factory*  zo_get_factory(ctext name)
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const zp_module_fact_entry& p_obj_entry=p_module->facts[i_obj];
-			const zp_factory* fact=p_obj_entry.fact;
+			const z_factory_static* fact=p_obj_entry.fact;
 
 			if(z_str_same(name,fact->get_name()))
 				return fact;
@@ -282,9 +305,9 @@ void  zo_factory_list_dump()
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const zp_module_fact_entry& p_obj_entry=p_module->facts[i_obj];
-			const zp_factory* fact=p_obj_entry.fact;
+			const z_factory_static* fact=p_obj_entry.fact;
 			gz_out.indent_reset();
-			fact->dump_static_r(gz_out);
+			fact->dump_static(gz_out);
 
 		}
 	}
