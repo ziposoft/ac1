@@ -112,9 +112,6 @@
     <ClInclude Include="include\z_parse_text.h">
       <Filter>parse</Filter>
     </ClInclude>
-    <ClInclude Include="include\zp_obj.h">
-      <Filter>parse</Filter>
-    </ClInclude>
     <ClInclude Include="include\z_obj_macro.h">
       <Filter>parse</Filter>
     </ClInclude>
@@ -126,6 +123,12 @@
     </ClInclude>
     <ClInclude Include="include\z_error.h">
       <Filter>cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_factory_static.h">
+      <Filter>factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_parse_internal.h">
+      <Filter>parse</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -204,9 +207,6 @@
     <ClCompile Include="src\z_parse_text.cpp">
       <Filter>parse</Filter>
     </ClCompile>
-    <ClCompile Include="src\z_obj.cpp">
-      <Filter>parse</Filter>
-    </ClCompile>
     <ClCompile Include="src\z_obj_cmd.cpp">
       <Filter>parse</Filter>
     </ClCompile>
@@ -224,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="src\pch_cpp.cpp">
       <Filter>pch</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_factory.cpp">
+      <Filter>factory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,9 @@
 //
 
 #include "test_console.h"
-Z_MODULE_INCLUDE(Z_MOD(parse));
+#include "zipolib/include/z_parse.h"
+
+ZP_MODULE_INCLUDE(ZP_MOD(parse));
 
 z_console g_con;
 int main(int argc, char* argv[])
@@ -11,13 +13,13 @@ int main(int argc, char* argv[])
 	int i;
 	ZT_ENABLE();
 	zp_cmdline 	cmdline ;
-	zp_obj_parser parser;
+	zp_parser parser;
 	for(i=1;i<argc;i++)
 	{
 		status=parser.parse_obj(&cmdline,argv[i]);
 		if(status==	zs_ok)
 		{
-
+			parser.	
 			
 
 

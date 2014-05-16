@@ -77,7 +77,7 @@
     <ClInclude Include="include\zipo.h" />
     <ClInclude Include="include\zipolib_cpp.h" />
     <ClInclude Include="include\zipolib_cpp_pch.h" />
-    <ClInclude Include="include\zp_obj.h" />
+    <ClInclude Include="include\z_factory_static.h" />
     <ClInclude Include="include\z_console.h" />
     <ClInclude Include="include\z_dbg.h" />
     <ClInclude Include="include\z_debug.h" />
@@ -92,6 +92,7 @@
     <ClInclude Include="include\z_obj_macro.h" />
     <ClInclude Include="include\z_os_specific.h" />
     <ClInclude Include="include\z_parse.h" />
+    <ClInclude Include="include\z_parse_internal.h" />
     <ClInclude Include="include\z_parse_obj.h" />
     <ClInclude Include="include\z_parse_text.h" />
     <ClInclude Include="include\z_stl_list.h" />
@@ -178,7 +179,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipo_cpp.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
-    <ClCompile Include="src\z_obj.cpp">
+    <ClCompile Include="src\z_factory.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipo_cpp.pch</PrecompiledHeaderOutputFile>

@@ -637,7 +637,7 @@ z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 
 
 z_status zp_parser::_process_sub_item(void* sub_obj,
-										  const zp_factory* ie,
+										  const z_factory_static* ie,
 										  zp_mode mode,zp_flags flags)
 {
 	//ZTF;
@@ -778,7 +778,7 @@ z_status zp_parser::_f_create_string(zp_flags flags,int type)
 			{
 				z_string temp;
 				temp.assign( match_start,match_len);
-				status=_ctx_current->_obj_factory->set_var( _ctx_current->_obj,_ctx_current->_member_var_name,temp.c_str());
+				status=_ctx_current->_obj_factory->set_var_as_string( _ctx_current->_obj,_ctx_current->_member_var_name,temp.c_str());
 				//status=feature_set_string(_ctx_current->_obj,_ctx_current->_member_var_name,match_start,match_len);
 			}
 		}
@@ -828,7 +828,7 @@ z_status zp_parser::_f_string_literal_create(zp_flags flags,int type)
 		if(_ctx_current->_obj)
 		{
 			bool* pVar=0;
-			_ctx_current->_obj_factory->get_memvar_ptr(
+			_ctx_current->_obj_factory->get_var_ptr(
 				_ctx_current->_obj,_ctx_current->_member_var_name,(void**)&pVar,0);
 			if(pVar)
 				*pVar=true;
@@ -994,7 +994,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 			if(mode.skip_test)
 				return zs_skipped;
 			tmpl.get_match(match_start,match_len);
-			const zp_factory* fact_new_obj=find_item(match_start,match_len);
+			const z_factory_static* fact_new_obj=find_item(match_start,match_len);
 			if(fact_new_obj==0)
 				return check_status(zs_no_entry_for_item);
 			if(mode.create)
@@ -1039,7 +1039,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 					}
 					else
 					{*/
-					_ctx_current->_obj_factory->get_memvar_ptr(
+					_ctx_current->_obj_factory->get_var_ptr(
 						_ctx_current->_obj,
 						_ctx_current->_member_var_name,
 						&sub_obj, 
