@@ -165,6 +165,9 @@ class zp_parser : public zp_text_parser //, public zo_manipulator
 	zpi_context _ctx_root;
 	zpi_context *_ctx_current;
 	U32 _test_result_current_index;
+	const char* _start_furthest;//TODO
+
+	z_status _last_status;
 
 	z_file* _file_out;
 
@@ -181,7 +184,6 @@ class zp_parser : public zp_text_parser //, public zo_manipulator
 
 
 
-	z_status parse_obj(void* p_obj,const z_factory_static* factory,ctext data);
 	z_status create_empty_item(void*& p_item_out,ctext item_entry_name);
 
 
@@ -235,19 +237,15 @@ class zp_parser : public zp_text_parser //, public zo_manipulator
 public:
 
 	zp_parser();
- 	z_status report_error(z_status status);
+ 	z_status report_error();
  	z_status parse_template(ctext tmpl);
 	z_status parse_item(void*& p_item_out,ctext item_entry_name);
 	z_status output_obj(z_file* fp,const z_factory_static* factory,void* obj);
 	z_status output_default_template(z_file* fp,ctext tmpl);
 	z_status create_obj(ctext item_entry_name,void* &p_item);
+	z_status parse_obj_f(void* p_obj,const z_factory_static* factory,ctext data);
 
-	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data)
-	{
-		const z_factory_static* factory=&z_factory_static_T<CLASS>::obj;
-		return 	parse_obj(p_obj, factory,data);
 
-	}
 
 };
 

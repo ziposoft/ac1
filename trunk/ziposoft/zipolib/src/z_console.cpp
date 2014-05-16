@@ -616,7 +616,7 @@ z_status zo_console::loadcfg()
 	z_status status=_parser.parse_obj(&o,data_in);
 	if(status!=zs_ok)
 	{
-		_parser.report_error(status);
+		_parser.report_error();
 		return status;
 	}
 	//dump_obj(&gz_out,&o);

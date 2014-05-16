@@ -124,9 +124,11 @@ void zp_parser::context_set_root(void* p_obj,
 }
 void zp_parser::context_sub_item_push(void* obj,const z_factory_static* ie)
 {
+	//TODO need to change this so that we can remember where we failed
+	//and give an accurate parse error message
 	if(_ctx_current->_child==0)
 	{
-		_ctx_current->_child=new zpi_context();
+		_ctx_current->_child=z_new zpi_context();
 	}
 	zpi_context* ctx=_ctx_current->_child;
 	ctx->_parent=_ctx_current;
@@ -161,6 +163,7 @@ zp_parser::zp_parser()
 //	_item_table_size=0;
 	_results=0;
 	_ctx_current=0;
+	_last_status=zs_ok;
 }
 zp_text_parser& zp_parser::context_get_current_template_parser()
 {
@@ -168,13 +171,13 @@ zp_text_parser& zp_parser::context_get_current_template_parser()
 }
 
 
-z_status zp_parser::report_error(z_status status)
+z_status zp_parser::report_error()
 {
 	z_string data;
-	printf("status=%s\n",z_status_get_text(status));
+	printf("status=%s\n",z_status_get_text(_last_status));
 	if(!_ctx_current) 
-		return status;
-	if(status==zs_ok)
+		return _last_status;
+	if(_last_status==zs_ok)
 		return zs_ok;
 	if(_ctx_current->_obj_factory==0)
 	{
@@ -184,51 +187,51 @@ z_status zp_parser::report_error(z_status status)
 	else
 	printf("Error while parsing object type \"%s\"\n",_ctx_current->_obj_factory->get_name());
 	zp_text_parser& tmpl=context_get_current_template_parser();
+	//TODO it should report from the FARTHEST that we got
 	//printf("template=\n%s\n",t.get_buffer());
 	
-	if(status)
+	if(_last_status)
 	{
 		print_context();
 		tmpl.print_context();
 	}
 
-	if(status==zs_no_entry_for_item)
+	if(_last_status==zs_no_entry_for_item)
 	{
 		z_string match;
 		tmpl.get_match(match);
 		printf("No entry found for item \"%s\"",match.c_str());
 
 	}
-	if(status==zs_syntax_error)
+	if(_last_status==zs_syntax_error)
 	{
 
 
 
 	}
-	return status;
+	return _last_status;
 }
 
 
 
 
-z_status zp_parser::parse_obj(void* p_obj,const z_factory_static* factory,ctext data)
+z_status zp_parser::parse_obj_f(void* p_obj,const z_factory_static* factory,ctext data)
 {
-	z_status status;
 	Z_ASSERT(p_obj);
 	set_source(data,strlen(data));
 	reset_results();
 	factory->clear_all_vars(p_obj);
 	context_set_root(p_obj,factory,0);
-	status=_process_template(zp_mode_parse_input);
-	if(status==zs_matched)
+	_last_status=_process_template(zp_mode_parse_input);
+	if(_last_status==zs_matched)
 	{
 		ZT("==========ITEM[%s] MATCHED, CREATING=====\n",factory->get_name());
 		index_reset();
 		context_get_current_template_parser().index_reset();
 		reset_results();
-		status=_process_template(zp_mode_parse_create);
+		_last_status=_process_template(zp_mode_parse_create);
 	}
-	return status;
+	return _last_status;
 }
 
 z_status zp_parser::parse_item(void*& p_item,
@@ -273,6 +276,7 @@ z_status zp_parser::create_obj(ctext item_entry_name,void* &p_obj)
 	return zs_ok;
 
 }
+
 z_status zp_parser::output_obj(z_file* fp,const z_factory_static* factory,void* obj)
 {
 	if(!factory)
@@ -281,18 +285,18 @@ z_status zp_parser::output_obj(z_file* fp,const z_factory_static* factory,void* 
 
 	_file_out=fp;
 	//ZTF;
-	z_status status;
 	context_set_root(obj,factory,0);
 	zp_mode mode=zp_mode_output_obj;
 
 
-	status=_process_template(mode);
+	_last_status=_process_template(mode);
 
 	//*fp<< "\n\n";
 
-	return status;
+	return _last_status;
 
 }
+
 
 
 

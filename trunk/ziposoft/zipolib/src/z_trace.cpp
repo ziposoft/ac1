@@ -473,7 +473,7 @@ bool  z_trace::load_config(ctext file_name)
 		status=_parser.parse_obj(this,g_file_data);
 		if(status!=zs_matched)
 		{
-			_parser.report_error(status);
+			_parser.report_error();
 		}
 		else
 		{
@@ -511,7 +511,7 @@ void  z_trace::save_config(ctext file_name)
 	status=_parser.output_obj(&file_cfg,this);
 	if(status!=zs_matched)
 	{
-		_parser.report_error(status);
+		_parser.report_error();
 	}
 	*/
 }

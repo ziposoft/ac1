@@ -276,6 +276,16 @@ const z_factory_static*  zfs_get_factory_by_name(ctext name,size_t len)
 	}
 	return 0;
 }
+
+void*  zfs_create_obj_by_type(ctext name)
+{
+	const z_factory_static*  f=zfs_get_factory_by_name( name);
+	if(f)
+		return f->create_obj();
+	return 0;
+
+
+}
 const z_factory_static*  zfs_get_factory(ctext name)
 {
 	int i_module;

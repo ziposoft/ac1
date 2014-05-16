@@ -126,7 +126,6 @@ public:
 	z_status skip_ws();
 	size_t debug(z_string &out,ctext pbuff=0,size_t before=0,size_t after=9 );
 
-	void print_status();
 	void print_context();
 
 	z_status check_status(z_status status);
