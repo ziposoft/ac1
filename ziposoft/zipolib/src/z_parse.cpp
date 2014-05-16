@@ -1,5 +1,5 @@
 #include "zipolib_cpp_pch.h"
-#include "z_parse.h"
+#include "z_parse_internal.h"
 
 
 typedef z_status (zp_parser::*type_obj_parser_fp)(const void* p1);

@@ -255,7 +255,7 @@ void z_factory_static::dump_static(z_file& f) const
 
 GLOBAL z_factory_static functions
 ________________________________________________________________________*/
-const z_factory_static*  zo_get_factory_by_name(ctext name,size_t len)
+const z_factory_static*  zfs_get_factory_by_name(ctext name,size_t len)
 {
 	if(len==-1)
 	{
@@ -276,7 +276,7 @@ const z_factory_static*  zo_get_factory_by_name(ctext name,size_t len)
 	}
 	return 0;
 }
-const z_factory_static*  zo_get_factory(ctext name)
+const z_factory_static*  zfs_get_factory(ctext name)
 {
 	int i_module;
 	for(i_module=0;i_module<zp_module_master_list_size;i_module++)

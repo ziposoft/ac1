@@ -259,8 +259,9 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
 
 GLOBAL z_factory_static functions
 ________________________________________________________________________*/
-const z_factory_static*  zo_get_factory_by_name(ctext name,size_t len=-1);
-const z_factory_static*  zo_get_factory(ctext name);
+const z_factory_static*  zfs_get_factory_by_name(ctext name,size_t len=-1);
+const z_factory_static*  zfs_get_factory(ctext name);
+void*  zfs_create_obj_by_type(ctext name);
 void  zo_factory_list_dump();
 extern const zp_module_entry *zp_module_master_list[];
 extern const int zp_module_master_list_size;

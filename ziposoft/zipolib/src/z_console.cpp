@@ -319,7 +319,7 @@ void z_console::OnDoubleBack()
 
 	
 
-#include "zipolib/include/z_obj_macro.h"
+#include "zipolib/include/z_obj.macro"
 
 
 

@@ -25,7 +25,7 @@
 	ZCLS(zp_feature,void,"feat","{_name}ident:?({_subscript}':':{_subscript_id}ident)",VAR(_name) VAR(_subscript) VAR(_subscript_id)   )
 
 
-#include "zipolib/include/z_obj_macro.h"
+#include "zipolib/include/z_obj.macro"
 ZP_MODULE_DEFINE(parse);
 
 

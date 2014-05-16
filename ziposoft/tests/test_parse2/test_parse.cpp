@@ -4,7 +4,7 @@
 //GLOBALS
 void * g_parse_obj=0;
 const z_factory_static * g_parse_fact=0;
-zp_parser p;
+z_parser p;
 ctext g_template=0;
 ctext g_expected_output=0;
 ctext g_expected_def_output=0;
@@ -21,7 +21,6 @@ int  run_custom()
 {
 
 	z_status status=zs_no_match;
-	p.set_source(g_arg_data_in);
 	testObjList obj;
 
 

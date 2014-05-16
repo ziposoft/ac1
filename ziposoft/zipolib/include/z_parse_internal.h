@@ -1,9 +1,14 @@
 #ifndef z_parse_internal_h
 #define z_parse_internal_h
 #include "zipolib/include/z_parse_text.h"
-#include "zipolib/include/z_parse_obj.h"
+#include "zipolib/include/z_factory_static.h"
+#include "zipolib/include/z_error.h"
 
+const U8 zp_result_no_match=0;
 
+const U8 zp_result_unknown=0xFD;
+const U8 zp_result_eof=0xFE;
+const U8 zp_result_extended_value=0xFF;
 #if DEBUG
 //#define SANITY_CHECKS 1
 //#define DEBUG_RESULT 1
@@ -123,6 +128,31 @@ public:
 	
 
 
+};
+
+
+
+
+class zp_test_result
+{
+	//TODO HANLDE results more than 254
+	std::vector<U8> _test_results;
+	std::map<U32,U32> _test_results_ex;
+
+public:
+	zp_test_result();
+	U32 add_result(U32 result);
+	U32 set_result(U32 index,U32 result);
+	U32 get_result(U32 index);
+	U32 get_result_count();
+	void clear();
+	/*
+	U32 get_index();
+	void inc_index();
+	U32 set_index(U32 index);
+	*/
+#ifdef SANITY_CHECKS
+#endif
 };
 //________________________________________________________________
 //
