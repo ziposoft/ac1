@@ -33,7 +33,7 @@ int  run_custom()
 		printf("TEST FAILED!\n");
 		printf("result=%s\n",z_status_get_text(status));
 		printf("expected result=%s\n",z_status_get_text(g_expected_result));
-		p.report_error(status);
+		p.report_error();
 		return -1;
 	}
 	printf("TEST PASSED\n");
@@ -49,15 +49,14 @@ int  run_test_only()
 		g_parse_obj=0;
 	}
 	z_status status=zs_no_match;
-	p.set_source(g_arg_data_in);
 
 
 	if(g_template)
-		status=p.parse_template(g_template);
+		status=p.parse_template(g_template,g_arg_data_in);
 	else
 	{
 		if(g_arg_obj_type)
-			status=p.parse_item(g_parse_obj,g_arg_obj_type);
+			status=p.parse_obj_f(g_parse_obj,g_parse_fact,g_arg_data_in);
 		else
 		{
 			printf("ERROR! no object or template specified.\n");
@@ -72,7 +71,7 @@ int  run_test_only()
 		printf("TEST FAILED!\n");
 		printf("result=%s\n",z_status_get_text(status));
 		printf("expected result=%s\n",z_status_get_text(g_expected_result));
-		p.report_error(status);
+		p.report_error();
 		return -1;
 	}
 	printf("TEST PASSED\n");
@@ -132,7 +131,7 @@ int run_test_output()
 		if(status)
 		{
 			printf("output_obj FAILED!\n");
-			p.report_error(status);
+			p.report_error();
 			return -1;
 		}
 		if(g_expected_output)
@@ -191,7 +190,7 @@ int run_test_output_def()
 	if(status)
 	{
 		printf("Default output FAILED!\n");
-		p.report_error(status);
+		p.report_error();
 		return -1;
 	}
 	if(g_expected_def_output)
@@ -215,21 +214,13 @@ int run_create_def_obj()
 {
 	printf("CREATE DEFAULT OBJECT\n");
 	z_status status=zs_no_match;
-	g_parse_obj=0;
-	status=p.create_obj(g_arg_obj_type,g_parse_obj);
-	if(status)
-	{
-		printf("Default create FAILED!\n");
-		p.report_error(status);
-		return -1;
-	}
-
+	g_parse_obj= zfs_create_obj_by_type(g_arg_obj_type);
 	if(g_parse_obj)
 	{
 		return run_test_output();
 
 	}
-	
+	printf("Default create FAILED!\n");	
 	return -1;
 
 }
@@ -260,7 +251,7 @@ int run_parse_xml()
 		printf("TEST FAILED!\n");
 		printf("result=%s\n",z_status_get_text(status));
 		printf("expected result=%s\n",z_status_get_text(g_expected_result));
-		p.report_error(status);
+		p.report_error();
 		return -1;
 	}
 	printf("TEST PASSED\n");

@@ -16,7 +16,7 @@ z_status zo_man_cmd::parse_line(ctext text)
 	z_status status=_parser.parse_obj(&_cmd_line_obj,text);
 	if(status)
 	{
-		_parser.report_error(status);
+		_parser.report_error();
 
 		return status;
 	}

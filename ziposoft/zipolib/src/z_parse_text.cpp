@@ -93,11 +93,6 @@ void zp_text_parser::index_reset()
 	_index_current=_start;
 }
 
-void zp_text_parser::print_status()
-{
-
-
-}
 void zp_text_parser::set_ignore_whitespace()
 {
 	_options.ignore_tabs=1;

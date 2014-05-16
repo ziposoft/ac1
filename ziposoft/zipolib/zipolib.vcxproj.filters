@@ -26,6 +26,9 @@
     <Filter Include="pch">
       <UniqueIdentifier>{31452160-6a68-49f8-9eaa-23eea8438f95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="h_internal">
+      <UniqueIdentifier>{b2e5ac38-7c4d-417b-abd7-2be117ec6213}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\zipo.h">
@@ -121,11 +124,11 @@
     <ClInclude Include="include\z_factory_static.h">
       <Filter>factory</Filter>
     </ClInclude>
-    <ClInclude Include="include\z_parse_internal.h">
-      <Filter>parse</Filter>
-    </ClInclude>
     <ClInclude Include="include\z_obj.macro">
       <Filter>parse</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_parse_internal.h">
+      <Filter>h_internal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="src\z_factory.cpp">
       <Filter>factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_parse_internal.cpp">
+      <Filter>parse</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

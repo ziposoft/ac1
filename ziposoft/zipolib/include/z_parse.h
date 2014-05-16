@@ -6,11 +6,21 @@ class z_parser
 {
 	zp_parser* _p;
 public:
-	z_parser()
+	z_parser();
+	virtual ~z_parser();
+
+	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data)
 	{
-	  _p=0;
+		const z_factory_static* factory=&z_factory_static_T<CLASS>::obj;
+		return 	parse_obj_f(p_obj, factory,data);
 
 	}
+ 	z_status report_error();
+	z_status output_default_template(z_file* fp,ctext tmpl);
+	z_status output_obj(z_file* fp,const z_factory_static* factory,void* obj);
+	z_status parse_template(ctext tmpl,ctext data);
+	z_status parse_obj_f(void* p_obj,const z_factory_static* factory,ctext data);
+
 
 };
 
