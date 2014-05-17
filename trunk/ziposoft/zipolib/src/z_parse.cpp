@@ -30,6 +30,6 @@ z_status z_parser::parse_template(ctext tmpl,ctext data)
 }
 z_status z_parser::parse_obj_f(void* p_obj,const z_factory_static* factory,ctext data)
 {
-
+	_p->parse_obj_f(p_obj,factory,data);
 	return zs_ok;
 }
