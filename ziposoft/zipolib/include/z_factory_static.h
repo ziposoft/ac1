@@ -136,7 +136,7 @@ class zp_var_list_funcs_base  : public zf_var_funcs_base
 		return &z_factory_static_T<TYPE>::obj;
 	}
 
-	virtual void* create_obj(void* v,const z_factory_static* fact) const
+	virtual void* create_obj(void* v,const z_factory* fact) const
 	{
 		z_obj_vector<TYPE>& list= *reinterpret_cast<z_obj_vector<TYPE>*>(v);
 		TYPE* obj=reinterpret_cast<TYPE*>(fact->create_obj());
@@ -171,7 +171,7 @@ class zp_var_list_funcs_base  : public zf_var_funcs_base
 template <class CLASS >  class zp_child_obj_funcs  : public zf_var_funcs_base
 {
  public:
-	virtual void* create_obj(void* var /* pointer to obj */,const z_factory_static* new_child_type) const
+	virtual void* create_obj(void* var /* pointer to obj */,const z_factory* new_child_type) const
 	{
 		//OBJ instance is part of parent, so it is already created.
 		//Just reset it and return a pointer to it.
@@ -205,7 +205,9 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
 		void** ppObj=reinterpret_cast<void**>(var); 
 		return *ppObj;
 	}
-	virtual void* create_obj(void* var /* pointer to obj pointer*/,const z_factory_static* new_child_type) const
+
+
+	virtual void* create_obj(void* var /* pointer to obj pointer*/,const z_factory* new_child_type) const
 	{
 		void** ppObj=reinterpret_cast<void**>(var); 
 
@@ -265,7 +267,7 @@ void*  zfs_create_obj_by_type(ctext name);
 void  zo_factory_list_dump();
 extern const zp_module_entry *zp_module_master_list[];
 extern const int zp_module_master_list_size;
-template <class CLASS> void z_fact_dump(CLASS* p_obj)
+template <class CLASS> void zf_dump_obj(CLASS* p_obj)
 {
 	const z_factory_static* factory=&z_factory_static_T<CLASS>::obj;
 	factory->dump_obj(gz_out,p_obj);

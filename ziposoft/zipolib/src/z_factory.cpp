@@ -117,7 +117,7 @@ zf_var_funcs<z_obj_vector>
 ________________________________________________________________________*/
 
 #if 0
-template <> template <class TYPE> void* zf_var_funcs<z_obj_vector<TYPE>>::create_obj(void* v,const z_factory_static* new_child_type) const
+template <> template <class TYPE> void* zf_var_funcs<z_obj_vector<TYPE>>::create_obj(void* v,const z_factory* new_child_type) const
 {
 	RECAST(zp_obj_vector,list);
 	zp_obj obj;
@@ -161,7 +161,8 @@ z_status z_factory_static::create_child(void* obj,ctext var_name,const z_factory
 	char* pvar=(char*)obj+ent->offset;
 	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
 
-	*ppChild=funcs->create_obj(pvar,new_child_type);
+	void* newobj=funcs->create_obj(pvar,new_child_type);
+	*ppChild=newobj;
 	return z_status_success;
 
 }
@@ -224,7 +225,8 @@ void z_factory_static::dump_obj(z_file& f,void* obj) const
 		char* pvar=(char*)obj+list[i].offset;
 		f.indent();
 		f << list[i].name<< "=";
-		list[i].fp_var_func_get()->dump(f,pvar);
+		const zf_var_funcs_base* func=list[i].fp_var_func_get();
+		func->dump(f,pvar);
 		f <<'\n';
 	}
 	f.indent_dec();

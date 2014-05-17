@@ -126,6 +126,7 @@ int main(int argc, char** argv)
 			printf("ERROR! Class \"%s\" not found.\n",g_arg_obj_type.c_str());
 			return -1;
 		}
+
 	}
 	//___________________________________________________________
 	//

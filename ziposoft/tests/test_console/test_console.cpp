@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 		status=parser.parse_obj(&cmdline,argv[i]);
 		if(status==	zs_ok)
 		{
-			parser.	
+			zf_dump_obj( &cmdline);
 			
 
 

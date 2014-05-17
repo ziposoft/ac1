@@ -37,7 +37,7 @@ int  run_custom()
 		return -1;
 	}
 	printf("TEST PASSED\n");
-	z_fact_dump(&obj);
+	zf_dump_obj(&obj);
 
 	return 0;
 }
@@ -56,7 +56,17 @@ int  run_test_only()
 	else
 	{
 		if(g_arg_obj_type)
+		{
+		
+			g_parse_obj= zfs_create_obj_by_type(g_arg_obj_type);
+ 			if(!g_parse_obj)
+			{
+				printf("ERROR! Cannot create object of class \"%s\" .\n",g_arg_obj_type.c_str());
+				return -1;
+			}
 			status=p.parse_obj_f(g_parse_obj,g_parse_fact,g_arg_data_in);
+
+		}
 		else
 		{
 			printf("ERROR! no object or template specified.\n");
