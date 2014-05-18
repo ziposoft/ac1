@@ -76,6 +76,11 @@ struct zp_module_entry
  public:
 	const  static z_factory_static_T<C> &obj;
 	virtual void* create_obj() const;
+	virtual void delete_obj(void* v) const
+	{
+		delete reinterpret_cast<C*>(v);
+	}
+
 	const size_t get_var_list_size() const;
 	const zf_static_var_entry* get_var_list() const;	
 	virtual ctext get_parse_string() const;
@@ -104,31 +109,16 @@ struct zp_module_entry
 class zp_var_list_funcs_base  : public zf_var_funcs_base
  {
  public:
-	virtual const z_factory* get_fact() const=0;
-	void dump(z_file& f, void* v) const;
-	virtual void* get_ptr(void* v,int* iter ) const
-	{
-		if(!iter)
-		{
-			Z_ERROR_MSG(zs_bad_parameter,"Objects type does not match member variable");
-			return 0;
-		}
-		if(*iter==-1)
-			*iter=0;
-		else 
-		{
-			(*iter)++;
-			if(*iter>=(int)get_size(v))
-			{
-				*iter=-1;
-				return 0;
-			}
-		}
-		return get_item(v,*iter);
-	}
-};
+ 	virtual void clear(void* v) const;
 
- template <class TYPE >  class zp_var_list_funcs  : public zf_var_funcs_base
+	virtual const z_factory* get_fact() const=0;
+	virtual z_obj_vector_base* get_list(void * v) const=0;
+	void dump(z_file& f, void* v) const;
+	virtual void* get_ptr(void* v,int* iter ) const;
+};
+ /*
+ WARNING- overloaded funcs must match exactly! otherwise they will quietly not be called */
+ template <class TYPE >  class zp_var_list_funcs  : public zp_var_list_funcs_base
  {
  public:
 	virtual const z_factory* get_fact()	const
@@ -143,15 +133,11 @@ class zp_var_list_funcs_base  : public zf_var_funcs_base
 		list.add(obj);
 		return obj;
 	}
-	virtual size_t get_size(void* v) const
+
+	virtual z_obj_vector_base* get_list(void* v ) const
 	{
-		z_obj_vector<TYPE>& list= *reinterpret_cast<z_obj_vector<TYPE>*>(v);
-		return list.size();
-	}
-	virtual void* get_item(void* v,int index ) const
-	{
-		z_obj_vector<TYPE>& list= *reinterpret_cast<z_obj_vector<TYPE>*>(v);
-		return list[index];;
+		z_obj_vector<TYPE>* list= reinterpret_cast<z_obj_vector<TYPE>*>(v);
+		return list;
 	}
 };
 
@@ -187,6 +173,10 @@ template <class CLASS >  class zp_child_obj_funcs  : public zf_var_funcs_base
 	virtual void* get_ptr(void* var,int* iter ) const
 	{
 		return var;
+	}
+ 	virtual void clear(void* v) const{
+		const z_factory_static* f=&z_factory_static_T<CLASS>::obj;
+		f->clear_all_vars(v);
 	}
 };
  template <class CLASS >  const zf_var_funcs_base* zp_child_obj_funcs_get(CLASS& obj)
@@ -233,10 +223,13 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
 
  	virtual void get(z_string& s, void* v) const
 	{
-		
 		s="???";
-
-
+	}
+ 	virtual void clear(void* v) const{
+		CLASS** ppObj=reinterpret_cast<CLASS**>(v); 
+		if(*ppObj )
+			delete *ppObj;
+		*ppObj=0;
 	}
 
 

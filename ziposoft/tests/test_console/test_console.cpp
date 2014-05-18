@@ -10,6 +10,8 @@ z_console g_con;
 int main(int argc, char* argv[])
 {
 	z_status status=zs_no_match;
+
+	z_debug_load_save_args(&argc,&argv);
 	int i;
 	ZT_ENABLE();
 	zp_cmdline 	cmdline ;
@@ -24,6 +26,8 @@ int main(int argc, char* argv[])
 
 
 		}
+		else
+			parser.report_error();
 
 
 	}

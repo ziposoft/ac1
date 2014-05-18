@@ -115,7 +115,7 @@ public:
 	inline ctext get_buffer() { return _start;}
 	void  set_index(ctext in) {  _index_current=in;}
 	char inc();
-	z_status advance(size_t count);
+	virtual z_status advance(size_t count);
 	bool eob(char* i);
 	bool eob();
 //	bool teob();

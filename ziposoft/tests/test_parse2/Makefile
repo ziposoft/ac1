@@ -14,7 +14,7 @@ TGT= $(BIN_PATH)$(TGT_NAME)
 include ../../common.mk 
 #order of lib linking is important??!!
 $(TGT):   $(OBJS)  
-	$(CPP) $(CPPFLAGS) -g $(OBJS) -o $(TGT) -L$(LIB_PATH) -lzipo_parse -lzipo $(LINK_OPTS)
+	$(CPP) $(CPPFLAGS) -g $(OBJS) -o $(TGT) -L$(LIB_PATH)  -lzipo $(LINK_OPTS)
 
 
 	

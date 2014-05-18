@@ -37,6 +37,7 @@ class z_factory
 {
 public:
 	virtual void* create_obj() const=0;
+	virtual void delete_obj(void*) const=0;
 
 	virtual z_status get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter=0) const=0;
 	virtual z_status set_var_as_string(void* obj,ctext var_name,ctext value) const =0;
