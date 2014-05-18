@@ -66,6 +66,13 @@ public:
 	z_string _string;
 };
 
+class zp_subscript 
+{
+public:
+	z_string _id;
+};
+
+
 class zp_params 
 {
 public:
@@ -77,7 +84,7 @@ public:
 
 	zp_feature() 
 	{
-		_subscript=false;
+		_sub=0;
 
 	}
 	virtual ctext get_map_key()
@@ -85,8 +92,8 @@ public:
 		return _name;
 	}
 	z_string _name;
-	z_string _subscript_id;
-	bool _subscript;
+	zp_subscript* _sub;
+
 	int get_num_chars();
 	ctext get_full_name(z_string& fullname);
 };
@@ -97,21 +104,18 @@ public:
 	{
 		_root_slash=false;
 		_assignment=false;
-		_subscript=false;
 		_feature=0;
 		_assign_val=0;
 		_params=0;
 	}
 	bool _root_slash;
 	bool _assignment;
-	bool _subscript;
 
 	z_strlist _path_list;
 	zp_params* _params;
 
 	z_string _object;
 	zp_feature* _feature;
-	z_string _subscript_id;
 	zp_value* _assign_val;
 
 };

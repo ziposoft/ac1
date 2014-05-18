@@ -90,9 +90,47 @@ VF<zp_obj_vector>::dump(z_file& file, void* v) const
 zp_var_list_funcs<zp_obj_vector> 
 ________________________________________________________________________*/
 
-void zp_var_list_funcs_base::dump(z_file& f, void* list) const 
+void zp_var_list_funcs_base::clear(void* v) const 
 {
-	size_t count=get_size(list);
+
+	z_obj_vector_base* plist=get_list(v);
+	Z_ASSERT(plist);
+	size_t count=plist->size();
+	size_t i;
+	for(i=0;i<count;i++)
+	{
+		void* p=plist->get_void(i);
+		get_fact()->delete_obj(p);
+	}
+	plist->clear();
+
+}
+void* zp_var_list_funcs_base::get_ptr(void* v,int* iter ) const
+{
+	z_obj_vector_base* plist=get_list(v);
+	if(!iter)
+	{
+		Z_ERROR_MSG(zs_bad_parameter,"Objects type does not match member variable");
+		return 0;
+	}
+	if(*iter==-1)
+		*iter=0;
+	else 
+	{
+		(*iter)++;
+		if(*iter>=(int)plist->size())
+		{
+			*iter=-1;
+			return 0;
+		}
+	}
+	return plist->get_void(*iter);
+}
+void zp_var_list_funcs_base::dump(z_file& f, void* v) const 
+{
+	z_obj_vector_base* plist=get_list(v);
+
+	size_t count=plist->size();
 	if(!count)
 	{
 		f << "{}";
@@ -103,14 +141,13 @@ void zp_var_list_funcs_base::dump(z_file& f, void* list) const
 	f.indent_inc();
 	for(i=0;i<count;i++)
 	{
-		void* p=get_item(list,i);
+		void* p= plist->get_void(i);
 		get_fact()->dump_obj(f,p);
 	}
 	f.indent_dec();
 	f.indent();
 	f << "}";
 }
-
 /*________________________________________________________________________
 
 zf_var_funcs<z_obj_vector> 

@@ -164,6 +164,7 @@ zp_parser::zp_parser()
 	_results=0;
 	_ctx_current=0;
 	_last_status=zs_ok;
+	_index_furthest=0;
 }
 zp_text_parser& zp_parser::context_get_current_template_parser()
 {

@@ -104,8 +104,6 @@ void zp_text_parser::set_ignore_whitespace()
 
 z_status zp_text_parser::advance(size_t count)
 {
-
-
 	while(count)
 	{
 		if(!_index_current) 
@@ -117,27 +115,10 @@ z_status zp_text_parser::advance(size_t count)
 		if(c=='\n')
 		{
 				n_newlines++;
-				if(n_newlines%100000 == 0)
-					printf("%d\r",n_newlines);
 		}
-		/*
-		if(
-			(_options.ignore_tabs && (c=='\t')) ||
-			(_options.ignore_space && (c==' ')) ||
-			(_options.ignore_newline && (c=='\n')) ||
-			(_options.ignore_newline && (c=='\r')))
-		{
-			   _index_current++;
-			   continue;
-		}*/
-
 		_index_current++;
 		count--;
 	}
-	/*
-	if(_index_current>_index_furthest)
-		_index_furthest=_index_current;
-	*/
 	return zs_ok;
 }
 

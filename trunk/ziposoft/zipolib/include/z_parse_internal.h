@@ -165,7 +165,7 @@ class zp_parser : public zp_text_parser //, public zo_manipulator
 	zpi_context _ctx_root;
 	zpi_context *_ctx_current;
 	U32 _test_result_current_index;
-	const char* _start_furthest;//TODO
+	const char* _index_furthest;//TODO
 
 	z_status _last_status;
 
@@ -233,6 +233,8 @@ class zp_parser : public zp_text_parser //, public zo_manipulator
 
 	z_status _f_quoted_string_test(const void* dummy);
 	z_status _f_squoted_string_test(const void* dummy);
+
+	virtual z_status advance(size_t count);
 
 public:
 
