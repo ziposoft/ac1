@@ -197,6 +197,9 @@ z_status z_factory_static::create_child(void* obj,ctext var_name,const z_factory
 		return z_status_item_not_found;
 	char* pvar=(char*)obj+ent->offset;
 	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
+	if(!funcs)
+		return zs_operation_not_supported; //could be ACT
+
 
 	void* newobj=funcs->create_obj(pvar,new_child_type);
 	*ppChild=newobj;
@@ -210,6 +213,8 @@ z_status z_factory_static::get_var_ptr(void* obj,ctext var_name,void** ppChild,i
 		return z_status_item_not_found;
 	char* pvar=(char*)obj+ent->offset;
 	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
+	if(!funcs)
+		return zs_operation_not_supported; //could be ACT
 
 	*ppChild=funcs->get_ptr(pvar,iter);
 	return z_status_success;
@@ -222,6 +227,9 @@ z_status z_factory_static::set_var_as_string(void* obj,ctext var_name,ctext valu
 	if(!ent)
 		return z_status_item_not_found; 
 	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
+	if(!funcs)
+		return zs_operation_not_supported; //could be ACT
+
 	char* pvar=(char*)obj+ent->offset;
 	funcs->set(value,pvar);
 	return z_status_success;
@@ -234,16 +242,29 @@ void z_factory_static::clear_all_vars (void* obj) const
 	for(i=0;i<get_var_list_size();i++)
 	{
 		char* pvar=(char*)obj+list[i].offset;
-		list[i].fp_var_func_get()->clear(pvar);
+		const zf_var_funcs_base* funcs=list[i].fp_var_func_get();
+		if(funcs)
+			funcs->clear(pvar);
 	}
 }
-
+z_status z_factory_static::execute_act(void* obj,ctext var_name,int* pret) const
+{
+	const zf_static_var_entry* ent= get_var_entry(var_name);
+	if(!ent)
+		return z_status_item_not_found; 
+	int ret=execute_act_ptr	(obj, (void*)ent->offset);
+	if(pret)
+		*pret=ret;
+	return z_status_success;
+}
 z_status z_factory_static::get_var_as_string(void* obj,ctext var_name,z_string& value) const
 {
 	const zf_static_var_entry* ent= get_var_entry(var_name);
 	if(!ent)
 		return z_status_item_not_found; 
 	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
+	if(!funcs)
+		return zs_operation_not_supported; //could be ACT
 	char* pvar=(char*)obj+ent->offset;
 	funcs->get(value,pvar);
 	return z_status_success;
@@ -263,7 +284,8 @@ void z_factory_static::dump_obj(z_file& f,void* obj) const
 		f.indent();
 		f << list[i].name<< "=";
 		const zf_var_funcs_base* func=list[i].fp_var_func_get();
-		func->dump(f,pvar);
+		if(func)
+			func->dump(f,pvar);
 		f <<'\n';
 	}
 	f.indent_dec();

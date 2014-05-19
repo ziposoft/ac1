@@ -14,7 +14,6 @@ public:
  {
  public:
 	virtual void func2(int x) const;
-	virtual void func3(int x) const;
 
  };
 // template <class VAR > void B<VAR>::func2(int x) const { printf("default  func2");};

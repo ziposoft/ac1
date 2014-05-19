@@ -4,13 +4,31 @@
 #include "test_console.h"
 #include "zipolib/include/z_parse.h"
 
-ZP_MODULE_INCLUDE(ZP_MOD(parse));
+
+
+class testA 
+{
+public:
+	testA() { i=0; }
+	int func() { printf("hooray!!\n");return 0;};
+	int func2() { printf("time for a %d min nap!!\n",i);return 0;};
+	int i;
+};
+
+
+
 
 z_console g_con;
 int main(int argc, char* argv[])
 {
 	z_status status=zs_no_match;
+	/*
+	testA A;
 
+	zfs_get_factory("testA")->execute_act(&A,"func");
+	zfs_get_factory("testA")->set_var_as_string(&A,"i","67");
+	zfs_get_factory("testA")->execute_act(&A,"func2");
+   */
 	z_debug_load_save_args(&argc,&argv);
 	int i;
 	ZT_ENABLE();
@@ -31,8 +49,22 @@ int main(int argc, char* argv[])
 
 
 	}
-
-	//g_con.run();
+ 
+	g_con.run();
 	return 0;
 }
+
+
+
+
+
+ #define ZO_OBJ_LIST \
+	ZCLS(testA,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) ACT(func2) VAR(i)) 
+
+		  
+#include "zipolib/include/z_obj.macro"
+ZP_MODULE_DEFINE(testmod);
+
+
+ZP_MODULE_INCLUDE(ZP_MOD(testmod), ZP_MOD(parse));
 
