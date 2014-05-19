@@ -432,7 +432,7 @@ void zo_console::put_prompt()
 
 void zo_console::get_auto_complete_list(zp_feature& parse_feature)
 {
-	zf_static_var_entry* f;
+	zf_var_entry* f;
 
 
 	int i=0;
@@ -521,7 +521,7 @@ void zo_console::OnTab()
 	}
 	if(!_tab_count)
 		return;
-	zf_static_var_entry* fe=_auto_tab.get_next();
+	zf_var_entry* fe=_auto_tab.get_next();
 	if(!fe)
 	{
 		_auto_tab.reset_iter();
@@ -542,7 +542,7 @@ void zo_console::dump_feature_outline(void* obj)
 	int i_var;
 	for(i_var=0;i_var<fact->var_list_size;i_var++)
 	{
-		zf_static_var_entry& p_var_entry=fact->var_list[i_var];
+		zf_var_entry& p_var_entry=fact->var_list[i_var];
 		gz_out<< "\t\t"<< p_var_entry._internal_name;
 		if(obj)
 			gz_out<<"="<<feature_get_as_string(obj,&p_var_entry);

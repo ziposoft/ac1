@@ -1,6 +1,6 @@
 #ifndef terminal_h
 #define terminal_h
-#include "zipolib/include/zipolib_cpp_pch.h"
+#include "zipolib/include/zipo.h"
 
 
 #ifdef BUILD_VSTUDIO

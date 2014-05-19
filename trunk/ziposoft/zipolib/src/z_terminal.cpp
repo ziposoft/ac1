@@ -229,6 +229,8 @@ int z_terminal::get_resp(char* buff,char token)
 
 		buff[n]=c;
 		n++;
+		if(n>5)
+			break;
 	}
 	buff[n]=0;
 	mode_normal();

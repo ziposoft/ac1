@@ -54,9 +54,9 @@ ZO_OBJ_LIST;
 #define ACT(_VAR)  { #_VAR, (size_t)(void*)&act_##_VAR,zf_ft_act,0 },
 
 #define ZCLS(_CLASS_,_BASE_,_NAME_,_PARSE_,_EXTRA_) \
-	namespace Z_PARSE_NS(_CLASS_) {typedef  _CLASS_ THECLASS; const zf_static_var_entry varlist[]={ _EXTRA_ }; const size_t varlist_length=sizeof( varlist)/sizeof(	zf_static_var_entry);  }	 \
+	namespace Z_PARSE_NS(_CLASS_) {typedef  _CLASS_ THECLASS; const zf_var_entry varlist[]={ _EXTRA_ }; const size_t varlist_length=sizeof( varlist)/sizeof(	zf_var_entry);  }	 \
 	template <> const size_t z_factory_static_T<_CLASS_>::get_var_list_size() const{ return Z_PARSE_NS(_CLASS_)::varlist_length; };\
-	template <> const zf_static_var_entry* z_factory_static_T<_CLASS_>::get_var_list() const{ return Z_PARSE_NS(_CLASS_)::varlist; }\
+	template <> const zf_var_entry* z_factory_static_T<_CLASS_>::get_var_list() const{ return Z_PARSE_NS(_CLASS_)::varlist; }\
 	const z_factory_static_T<_CLASS_> static_instance_factory##_CLASS_;  \
 	template <> const z_factory_static_T<_CLASS_>&  z_factory_static_T<_CLASS_>::obj=static_instance_factory##_CLASS_;  \
 	template <> ctext z_factory_static_T<_CLASS_>::get_parse_string() const{ return _PARSE_; }	  \

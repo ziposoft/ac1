@@ -70,5 +70,11 @@ void z_debug_out(const char*  str  )
 }
 
 #endif
+#else //NOT DEBUG
+void z_debug_out(const char*  str  )
+{
+
+}
+
 #endif
 
