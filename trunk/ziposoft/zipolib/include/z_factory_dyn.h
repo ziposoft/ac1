@@ -10,33 +10,7 @@ ________________________________________________________________________*/
 
 #include "zipolib/include/z_factory.h"
 
-
-
-
- class z_factory;
- class zf_var_funcs_base
- {
- public:
-	virtual void dump(z_file& s, void* v) const;
-	virtual void get(z_string& s, void* v) const {};
-	virtual void set(ctext s, void* v) const {};
-	virtual void clear(void* v) const {} 
-	virtual void add(void* list,void* obj) const {} 
-	virtual void* get_item(void* list,size_t index) const { return 0;} 
-	virtual size_t get_size(void* list) const { return 0;} 
-	virtual void* get_ptr(void* var,int* iter) const { return var;}  /*could be pointer to obj, or pointer to obj pointer */
-	//This is if the member var is an obj, pointer to obj, or obj list		
-	virtual void* create_obj(void* var,const z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
- } ;
- typedef  const zf_var_funcs_base* (*funcp_var_funcs_get)();
-
-class zf_feature_list : public z_map_obj<zf_feature>
-{
-
-
-};
-
-class z_factory
+class z_factory_dyn : public z_factory
 {
 public:
 	virtual void* create_obj() const=0;
@@ -50,45 +24,9 @@ public:
 	virtual void dump_static(z_file& f) const=0;
 
 	virtual ctext get_name()const =0;
- 	virtual z_status get_list_features(zf_feature_list& list)const =0;
-
-};
-enum zf_feature_type
-{
-	zf_ft_var,
-	zf_ft_obj,
-	zf_ft_pobj,
-	zf_ft_act,
-
+	virtual z_status get_list_features(zf_feature_list& list)const { return Z_ERROR(zs_operation_not_supported);};
 
 };
 
-class zf_feature
-{
-	z_string _name;
-	z_string _description;
-public:
-	zf_feature(ctext name);
-	ctext get_map_key() { return _name; }
-};
-
-class zf_prop  : public  zf_feature
-{
-public:
-	zf_var_funcs_base* df;
-
-};
-class zf_alias  : public  zf_feature
-{
-public:
-	zf_feature* df;
-
-};
-
-class zf_action  : public  zf_feature
-{
-public:
-
-};
 #endif
 
