@@ -1,11 +1,15 @@
 #ifndef z_console_h
 #define z_console_h
 #include "zipolib/include/zipo.h"
-#include "zipolib/include/z_list.h"
+#include "zipolib/include/z_parse.h"
 #include "zipolib/include/z_terminal.h"
 
 class z_console : public z_terminal
 {
+
+	zp_cmdline 	_cmdline ;
+	z_parser _parser;
+
 	U32 index;
 	U32 cur_start;
 	U32 len;

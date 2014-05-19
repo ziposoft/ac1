@@ -8,10 +8,7 @@ ________________________________________________________________________*/
 #ifndef z_ntf_h
 #define z_ntf_h
 
-#include "zipolib/include/z_stl_map.h"
-#include "zipolib/include/z_string.h"
-#include "zipolib/include/z_error.h"
-#include "zipolib/include/z_type_converter.h"
+#include "zipolib/include/z_factory.h"
 class z_ntf_obj;
 
 
@@ -41,15 +38,7 @@ public:
 	size_t _offset;
 	z_ntf_prop(z_ntf_obj* parent,ctext name);
 	virtual~ z_ntf_prop();
-	virtual void set_value(void* obj,ctext from)=0;
-	virtual void get_value(void* obj, z_string& str)=0;
-	virtual void convert(const z_string from, z_string& to){to=from;}
-	virtual void convert(ctext from, z_string& to){to=from;}
-	virtual void convert(ctext from,U32 & to){to=    atol(from); ;}
-	virtual void convert(const U32 & from,z_string& to){to=from;}
-	virtual void convert(ctext from,int & to){to=    atol(from); ;}
-	virtual void convert(const int & from,z_string& to){to=from;}
-	//virtual void convert(const U64 & from,z_string& to){to=from;}
+
 
 };
  
@@ -144,7 +133,7 @@ public:
 		 z_ntf_prop* p=_props[n];
 		 if(!p)
 			 return z_status_item_not_found;
-		 p->set_value(this,from);
+		// p->set_value(this,from);
 		 return z_status_success; 
 
 	}
@@ -153,7 +142,7 @@ public:
 		 z_ntf_prop* p=_props[n];
 		 if(!p)
 			 return z_status_item_not_found;
-		 p->get_value(this,str);
+		// p->get_value(this,str);
 		 return z_status_success; 
 	}
 	ctext get_map_key() { return _name; }

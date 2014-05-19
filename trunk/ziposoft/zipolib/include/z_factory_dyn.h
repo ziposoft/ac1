@@ -1,17 +1,15 @@
 /*________________________________________________________________________
 
- z_factory_h
+ z_factory_dyn_h
 
 ________________________________________________________________________*/
 
 
-#ifndef z_factory_h
-#define z_factory_h
+#ifndef z_factory_dyn_h
+#define z_factory_dyn_h
 
-#include "zipolib/include/z_string.h"
-#include "zipolib/include/z_error.h"
-#include "zipolib/include/z_type_converter.h"
-#include "zipolib/include/z_stl_vector.h"
+#include "zipolib/include/z_factory.h"
+
 
 
 
@@ -31,7 +29,7 @@ ________________________________________________________________________*/
 	virtual void* create_obj(void* var,const z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
  } ;
  typedef  const zf_var_funcs_base* (*funcp_var_funcs_get)();
-class zf_feature;
+
 class zf_feature_list : public z_map_obj<zf_feature>
 {
 
@@ -52,7 +50,7 @@ public:
 	virtual void dump_static(z_file& f) const=0;
 
 	virtual ctext get_name()const =0;
-	virtual z_status get_list_features(zf_feature_list& list)const { return Z_ERROR(zs_operation_not_supported);};
+ 	virtual z_status get_list_features(zf_feature_list& list)const =0;
 
 };
 enum zf_feature_type

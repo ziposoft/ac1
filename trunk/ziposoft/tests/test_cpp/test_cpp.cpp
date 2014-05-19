@@ -1,6 +1,6 @@
 #include  "test_cpp.h"
 
-int main()
+int templ_test()
 {
 	A* a=new B<char>();
 	a->func2(3);
@@ -11,7 +11,7 @@ int main()
 }
 // template <> void B<bool>::func2(int x) const { printf("bool func2 overload"); };
 // template <> void B<bool>::func3(int x) const {};
-#if 0
+#if 1
 
 
 using namespace std;
@@ -30,10 +30,10 @@ public:
 	string str;
 	int j;
 	int k;
-	int func() { return 0;};
+	int func() { printf("hooray!!\n");return 0;};
 
 };
-typedef int (test::*obj_funcptr)();
+typedef int (test::*test_obj_funcptr)();
 
 
  template <class C >  class fact_T
@@ -89,8 +89,24 @@ int main()
 
 	test* null_obj=0;
 
-	obj_funcptr p=&test::func;
-	printf("obj_funcptr=%p\n",p);
+	test_obj_funcptr pFunc=(&test::func);
+
+
+	void* pvp=&test::func;
+	size_t fp_val=(size_t)pvp;
+
+
+	
+
+	test_obj_funcptr pFunc2=*( test_obj_funcptr*) ((void*)fp_val);
+
+	printf("pFunc=%p\n",pFunc);
+	printf("pFunc2=%p\n",pFunc2);
+	printf("fp_val=%d\n",fp_val);
+
+
+
+												  
 	x.str="larry x";
 	x.k=99;
 	y.str="geny y";
@@ -107,6 +123,7 @@ int main()
 	print_str(py,offset_str);
 
 	X::j=3;
+	(x.*pFunc)();
 	return 0;
 }
 

@@ -130,6 +130,9 @@
     <ClInclude Include="include\z_parse_internal.h">
       <Filter>h_internal</Filter>
     </ClInclude>
+    <ClInclude Include="include\z_factory_dyn.h">
+      <Filter>factory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\z_time.c">
@@ -234,5 +237,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
+    <None Include="Makefile.dbg" />
   </ItemGroup>
 </Project>

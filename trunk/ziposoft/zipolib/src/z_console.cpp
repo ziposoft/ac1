@@ -200,6 +200,16 @@ void z_console::put_prompt()
 
 z_status z_console::parse_line(ctext text)
 {
+ 	z_status status=_parser.parse_obj(&_cmdline,text);
+	if(status==	zs_ok)
+	{
+		zf_dump_obj( &_cmdline);
+			
+
+
+	}
+	else
+		_parser.report_error();
 	return z_status_error;
 }
 z_status z_console::execute_line(ctext text)
@@ -207,6 +217,7 @@ z_status z_console::execute_line(ctext text)
 	z_status status=parse_line(text);
 	if(status)
 		return status;
+
 
 
 

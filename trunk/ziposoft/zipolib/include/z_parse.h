@@ -110,7 +110,6 @@ public:
 	}
 	bool _root_slash;
 	bool _assignment;
-
 	z_strlist _path_list;
 	zp_params* _params;
 

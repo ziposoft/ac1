@@ -1,8 +1,7 @@
 #ifndef z_obj_h
 #define z_obj_h
 
-#include "zipolib/include/z_error.h"
-#include "zipolib/include/z_stl_vector.h"
+
 #include "zipolib/include/z_factory.h"
 
 #define ZP_MODULE(_NAME_) zp_module_##_NAME_ 
@@ -17,6 +16,7 @@ struct zf_static_var_entry
 {
 	const char* name;
 	size_t offset;
+	zf_feature_type type;  //currently not used for anything
 	funcp_var_funcs_get fp_var_func_get;
 };
 
@@ -40,6 +40,8 @@ public:
 	virtual z_status get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter=0) const;
 	virtual z_status set_var_as_string(void* obj,ctext var_name,ctext value) const;
 	virtual z_status get_var_as_string(void* obj,ctext var_name,z_string& value) const;
+	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
+	virtual int execute_act_ptr(void* obj,void*  act_addr) const=0;
 	void clear_all_vars(void* obj) const;
 	void dump_obj(z_file& f,void* obj) const;
 	void dump_static(z_file& f) const;
@@ -80,7 +82,13 @@ struct zp_module_entry
 	{
 		delete reinterpret_cast<C*>(v);
 	}
-
+ 	virtual int execute_act_ptr(void* vobj,void* act_addr) const
+	{
+		typedef int (C::*funcptr)();
+		C*  cobj=reinterpret_cast<C*>(vobj);
+		funcptr fp=*( funcptr*) (act_addr);
+		return (cobj->*fp)();
+	}
 	const size_t get_var_list_size() const;
 	const zf_static_var_entry* get_var_list() const;	
 	virtual ctext get_parse_string() const;
@@ -105,7 +113,6 @@ struct zp_module_entry
 	virtual void dump(z_file& s, void* v) const;
 	virtual void* create_obj(void* var,const z_factory* fact) const;
 };	
-
 class zp_var_list_funcs_base  : public zf_var_funcs_base
  {
  public:
@@ -116,6 +123,7 @@ class zp_var_list_funcs_base  : public zf_var_funcs_base
 	void dump(z_file& f, void* v) const;
 	virtual void* get_ptr(void* v,int* iter ) const;
 };
+
  /*
  WARNING- overloaded funcs must match exactly! otherwise they will quietly not be called */
  template <class TYPE >  class zp_var_list_funcs  : public zp_var_list_funcs_base
@@ -266,6 +274,11 @@ template <class CLASS> void zf_dump_obj(CLASS* p_obj)
 	factory->dump_obj(gz_out,p_obj);
 
 }
+ template <class CLASS> void zf_dump_static(CLASS* p_obj)
+{
+	const z_factory_static* factory=&z_factory_static_T<CLASS>::obj;
+	factory->dump_static(gz_out);
 
+}
 
 #endif
