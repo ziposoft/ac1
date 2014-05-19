@@ -38,6 +38,7 @@ enum zf_feature_type
 	virtual void* get_ptr(void* var,int* iter) const { return var;}  /*could be pointer to obj, or pointer to obj pointer */
 	//This is if the member var is an obj, pointer to obj, or obj list		
 	virtual void* create_obj(void* var,const z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
+	virtual const z_factory*  get_child_obj_fact() const { return 0;}
  } ;
  typedef  const zf_var_funcs_base* (*funcp_var_funcs_get)();
 class zf_feature;

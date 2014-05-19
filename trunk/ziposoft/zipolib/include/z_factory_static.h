@@ -177,6 +177,10 @@ template <class CLASS >  class zp_child_obj_funcs  : public zf_var_funcs_base
 		const z_factory_static* f=&z_factory_static_T<CLASS>::obj;
 		f->clear_all_vars(v);
 	}
+	virtual const  z_factory*  get_child_obj_fact() const 
+	{ 
+		return &z_factory_static_T<CLASS>::obj;
+	}
 };
  template <class CLASS >  const zf_var_funcs_base* zp_child_obj_funcs_get(CLASS& obj)
  {
@@ -189,6 +193,11 @@ template <class CLASS >  class zp_child_obj_funcs  : public zf_var_funcs_base
 template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
 {
  public:
+	virtual const  z_factory*  get_child_obj_fact() const 
+	{ 
+		return &z_factory_static_T<CLASS>::obj;
+	}
+
 	virtual void* get_ptr(void* var,int* iter ) const
 	{
 		void** ppObj=reinterpret_cast<void**>(var); 

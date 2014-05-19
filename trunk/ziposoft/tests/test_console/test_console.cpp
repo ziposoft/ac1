@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 	ZCLS(testA,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) ACT(func2) VAR(i)) 
 
 		  
-#include "zipolib/include/z_obj.macro"
+#include "zipolib/include/z_obj.inc"
 ZP_MODULE_DEFINE(testmod);
 
 
