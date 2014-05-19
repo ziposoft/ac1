@@ -29,13 +29,18 @@ int main(int argc, char* argv[])
 	zfs_get_factory("testA")->set_var_as_string(&A,"i","67");
 	zfs_get_factory("testA")->execute_act(&A,"func2");
    */
+	gz_out << "load save args...\n";
 	z_debug_load_save_args(&argc,&argv);
+	gz_out << "load save args done\n";
+
 	int i;
-	ZT_ENABLE();
+	//ZT_ENABLE();
 	zp_cmdline 	cmdline ;
 	z_parser parser;
 	for(i=1;i<argc;i++)
 	{
+		gz_out << "parsing [%s]:\n";
+		/*
 		status=parser.parse_obj(&cmdline,argv[i]);
 		if(status==	zs_ok)
 		{
@@ -46,6 +51,7 @@ int main(int argc, char* argv[])
 		}
 		else
 			parser.report_error();
+			*/
 
 
 	}

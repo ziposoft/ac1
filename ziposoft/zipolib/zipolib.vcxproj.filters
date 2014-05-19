@@ -124,13 +124,13 @@
     <ClInclude Include="include\z_factory_static.h">
       <Filter>factory</Filter>
     </ClInclude>
-    <ClInclude Include="include\z_obj.macro">
-      <Filter>parse</Filter>
-    </ClInclude>
     <ClInclude Include="include\z_parse_internal.h">
       <Filter>h_internal</Filter>
     </ClInclude>
     <ClInclude Include="include\z_factory_dyn.h">
+      <Filter>factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\z_obj.inc">
       <Filter>factory</Filter>
     </ClInclude>
   </ItemGroup>

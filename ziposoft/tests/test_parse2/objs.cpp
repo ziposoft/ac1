@@ -25,7 +25,7 @@ public:
 	ZCLS(zp_xml_atr,base,"zp_xml_atr","%whsp:{_name}scoped:'=':{_val}string_sq",VAR(_name) VAR(_val))
 
 		  
-#include "zipolib/include/z_obj.macro"
+#include "zipolib/include/z_obj.inc"
 ZP_MODULE_DEFINE(testmod);
 
 

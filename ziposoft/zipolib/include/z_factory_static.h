@@ -12,13 +12,6 @@
 class z_factory_static;
 
 
-struct zf_static_var_entry
-{
-	const char* name;
-	size_t offset;
-	zf_feature_type type;  //currently not used for anything
-	funcp_var_funcs_get fp_var_func_get;
-};
 
 #ifdef  _WIN64
 #define zp_offsetof(m)   (size_t)( (ptrdiff_t)&reinterpret_cast<const volatile char&>(((nullobj)->m)) )
@@ -32,14 +25,12 @@ class z_factory_static	: public z_factory
 
 protected:
 	virtual const size_t get_var_list_size() const=0;
-	virtual const zf_static_var_entry* get_var_list() const=0;
-	const zf_static_var_entry* get_var_entry(ctext name) const;
+	virtual const zf_var_entry* get_var_list() const=0;
+	virtual const zf_var_entry*  get_var_entry(ctext name) const;
 
 public:
-	virtual z_status create_child(void* obj,ctext var_name,const z_factory_static* new_child_type,void** ppChild) const;
-	virtual z_status get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter=0) const;
-	virtual z_status set_var_as_string(void* obj,ctext var_name,ctext value) const;
-	virtual z_status get_var_as_string(void* obj,ctext var_name,z_string& value) const;
+	virtual z_status get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const;
+
 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
 	virtual int execute_act_ptr(void* obj,void*  act_addr) const=0;
 	void clear_all_vars(void* obj) const;
@@ -90,7 +81,7 @@ struct zp_module_entry
 		return (cobj->*fp)();
 	}
 	const size_t get_var_list_size() const;
-	const zf_static_var_entry* get_var_list() const;	
+	const zf_var_entry* get_var_list() const;	
 	virtual ctext get_parse_string() const;
 	virtual ctext get_name() const;
  };

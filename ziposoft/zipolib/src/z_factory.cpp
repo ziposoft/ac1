@@ -178,41 +178,16 @@ template class zf_var_funcs<zp_obj_vector>;
 
 /*________________________________________________________________________
 
-z_factory_static
+z_factory
 ________________________________________________________________________*/
-const zf_static_var_entry* z_factory_static::get_var_entry (ctext name) const
+z_status z_factory::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter) const
 {
-	size_t i;
-	const zf_static_var_entry* list=get_var_list();
-	for(i=0;i<get_var_list_size();i++)
-		if(strcmp(name,	list[i].name)==0)
-			return &list[i];
-	return 0;
-}
-
-z_status z_factory_static::create_child(void* obj,ctext var_name,const z_factory_static* new_child_type,void** ppChild) const
-{
-	const zf_static_var_entry* ent= get_var_entry(var_name);
-	if(!ent)
-		return z_status_item_not_found;
-	char* pvar=(char*)obj+ent->offset;
-	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
-	if(!funcs)
-		return zs_operation_not_supported; //could be ACT
-
-
-	void* newobj=funcs->create_obj(pvar,new_child_type);
-	*ppChild=newobj;
-	return z_status_success;
-
-}
-z_status z_factory_static::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter) const
-{
-	const zf_static_var_entry* ent= get_var_entry(var_name);
-	if(!ent)
-		return z_status_item_not_found;
-	char* pvar=(char*)obj+ent->offset;
-	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
+	size_t offset;
+	const zf_var_funcs_base* funcs;
+	z_status status=get_var_info(var_name,offset,funcs);
+	if(status)
+		return status;
+	char* pvar=(char*)obj+offset;
 	if(!funcs)
 		return zs_operation_not_supported; //could be ACT
 
@@ -221,24 +196,85 @@ z_status z_factory_static::get_var_ptr(void* obj,ctext var_name,void** ppChild,i
 
 }
 
-z_status z_factory_static::set_var_as_string(void* obj,ctext var_name,ctext value)	const
+z_status z_factory::set_var_as_string(void* obj,ctext var_name,ctext value)	const
 {
-	const zf_static_var_entry* ent= get_var_entry(var_name);
-	if(!ent)
-		return z_status_item_not_found; 
-	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
+	size_t offset;
+	const zf_var_funcs_base* funcs;
+	z_status status=get_var_info(var_name,offset,funcs);
+	if(status)
+		return status;
 	if(!funcs)
 		return zs_operation_not_supported; //could be ACT
 
-	char* pvar=(char*)obj+ent->offset;
+	char* pvar=(char*)obj+offset;
 	funcs->set(value,pvar);
 	return z_status_success;
 }
+z_status z_factory::get_var_as_string(void* obj,ctext var_name,z_string& value) const
+{
+	size_t offset;
+	const zf_var_funcs_base* funcs;
+	z_status status=get_var_info(var_name,offset,funcs);
+	if(status)
+		return status;
+	if(!funcs)
+		return zs_operation_not_supported; //could be ACT
+	char* pvar=(char*)obj+offset;
+	funcs->get(value,pvar);
+	return z_status_success;
+}
+z_status z_factory::create_child(void* obj,ctext var_name,const z_factory* new_child_type,void** ppChild) const
+{
+	size_t offset;
+	const zf_var_funcs_base* funcs;
+	z_status status=get_var_info(var_name,offset,funcs);
+	if(status)
+		return status;
+	if(!funcs)
+		return zs_operation_not_supported; //could be ACT
+	char* pvar=(char*)obj+offset;
+
+
+	void* newobj=funcs->create_obj(pvar,new_child_type);
+	*ppChild=newobj;
+	return z_status_success;
+
+}
+
+/*________________________________________________________________________
+
+z_factory_static
+________________________________________________________________________*/
+const zf_var_entry* z_factory_static::get_var_entry (ctext name) const
+{
+	size_t i;
+	const zf_var_entry* list=get_var_list();
+	for(i=0;i<get_var_list_size();i++)
+		if(strcmp(name,	list[i].name)==0)
+		{
+			return &list[i];
+		}
+	return 0;		
+
+}
+z_status z_factory_static::get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const
+{
+	size_t i;
+	const zf_var_entry* ent=get_var_entry(name);
+	const zf_var_entry* list=get_var_list();
+	if(!ent)
+		return z_status_item_not_found;
+	offset=ent->offset;
+	funcs=ent->fp_var_func_get();
+	return zs_ok;		
+		
+}
+
 
 void z_factory_static::clear_all_vars (void* obj) const
 {
 	size_t i;
-	const zf_static_var_entry* list=get_var_list();
+	const zf_var_entry* list=get_var_list();
 	for(i=0;i<get_var_list_size();i++)
 	{
 		char* pvar=(char*)obj+list[i].offset;
@@ -249,7 +285,7 @@ void z_factory_static::clear_all_vars (void* obj) const
 }
 z_status z_factory_static::execute_act(void* obj,ctext var_name,int* pret) const
 {
-	const zf_static_var_entry* ent= get_var_entry(var_name);
+	const zf_var_entry* ent= get_var_entry(var_name);
 	if(!ent)
 		return z_status_item_not_found; 
 	int ret=execute_act_ptr	(obj, (void*)ent->offset);
@@ -257,24 +293,13 @@ z_status z_factory_static::execute_act(void* obj,ctext var_name,int* pret) const
 		*pret=ret;
 	return z_status_success;
 }
-z_status z_factory_static::get_var_as_string(void* obj,ctext var_name,z_string& value) const
-{
-	const zf_static_var_entry* ent= get_var_entry(var_name);
-	if(!ent)
-		return z_status_item_not_found; 
-	const zf_var_funcs_base* funcs=ent->fp_var_func_get();
-	if(!funcs)
-		return zs_operation_not_supported; //could be ACT
-	char* pvar=(char*)obj+ent->offset;
-	funcs->get(value,pvar);
-	return z_status_success;
-}
+
 
 void z_factory_static::dump_obj(z_file& f,void* obj) const
 {
 	size_t i;
 	z_string value;
-	const zf_static_var_entry* list=get_var_list();
+	const zf_var_entry* list=get_var_list();
 	f.indent();
 	f << get_name()<<"{\n";
 	f.indent_inc();
@@ -297,7 +322,7 @@ void z_factory_static::dump_static(z_file& f) const
 {
 	size_t i;
 	z_string value;
-	const zf_static_var_entry* list=get_var_list();
+	const zf_var_entry* list=get_var_list();
 	f.indent();
 	f << get_name()<<"{\n";
 	f.indent_inc();

@@ -27,7 +27,7 @@
 		VAR(_name) POBJ(_sub)   )
 
 
-#include "zipolib/include/z_obj.macro"
+#include "zipolib/include/z_obj.inc"
 ZP_MODULE_DEFINE(parse);
 
 
