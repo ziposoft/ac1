@@ -63,44 +63,12 @@ void z_debug_shutdown()
 
 }
 #else
-#include <stdarg.h>
-#include <stdarg.h>
-#include <stdio.h>
-size_t g_z_dbg_out_file=0;
-
-void z_debug_printf(const char*  lpszFormat,  ...  )
-{
-	static char tempbuf[0x1000];
-	if(g_z_dbg_out_file)
-	{
-		int c;
-		va_list ap;
-		va_start (ap, lpszFormat);
-		c=vsnprintf (tempbuf,z_temp_buffer_size(), lpszFormat, ap);
-		va_end (ap);
-		fwrite(tempbuf,1,c,(FILE*)g_z_dbg_out_file);	
-		fflush(g_z_dbg_out_file);
-	}
-
-}
-void z_debug_logfile(ctext filename)
-{
-	g_z_dbg_out_file=(size_t)(void*)fopen(filename,"wa");
-
-}
-void z_debug_shutdown()
-{
-	
-}
-#endif
-
-#else
-
 void z_debug_out(const char*  str  )
 {
-
+	printf("%s",str);
 
 }
 
+#endif
 #endif
 
