@@ -57,6 +57,7 @@ public:
 };
 enum zf_feature_type
 {
+	zf_ft_none,
 	zf_ft_var,
 	zf_ft_obj,
 	zf_ft_pobj,

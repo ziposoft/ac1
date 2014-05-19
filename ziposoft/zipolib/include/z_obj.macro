@@ -47,7 +47,7 @@ ZO_OBJ_LIST;
 #undef NOFTR
 #undef ACT
 
-#define NOFTR {"",0,0},
+#define NOFTR {"",0,zf_ft_none,0},
 #define VAR(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_var,__zp_var_funcs_get_##_VAR },
 #define POBJ(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_obj,__zp_var_funcs_get_##_VAR },
 #define OBJ(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_pobj,__zp_var_funcs_get_##_VAR },
