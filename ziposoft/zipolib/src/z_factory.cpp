@@ -372,6 +372,12 @@ z_status z_factory_static::get_var_info(ctext name,size_t &offset,const zf_var_f
 
 GLOBAL z_factory_static functions
 ________________________________________________________________________*/
+
+
+#pragma comment(linker, "/alternatename:zp_module_master_list=zp_module_master_list_default")
+#pragma comment(linker, "/alternatename:zp_module_master_list_size=zp_module_master_list_size_default")
+
+
 const z_factory_static*  zfs_get_factory_by_name(ctext name,size_t len)
 {
 	if(len==-1)
