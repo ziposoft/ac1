@@ -24,20 +24,19 @@ class z_factory_static	: public z_factory
 {
 
 protected:
-	virtual const size_t get_var_list_size() const=0;
 	virtual const zf_var_entry* get_var_list() const=0;
 	virtual const zf_var_entry*  get_var_entry(ctext name) const;
+	virtual const zf_var_entry*  get_var_entry(size_t index) const;
+
 
 public:
+	virtual const size_t get_var_list_size() const=0;
+
+
+	virtual z_status get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs) const;
 	virtual z_status get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const;
 
-	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
-	virtual int execute_act_ptr(void* obj,void*  act_addr) const=0;
-	void clear_all_vars(void* obj) const;
-	void dump_obj(z_file& f,void* obj) const;
-	void dump_static(z_file& f) const;
 	virtual ctext get_parse_string() const{ return ""; }
-	virtual ctext get_name()const =0;
 
 
 };
@@ -67,12 +66,9 @@ struct zp_module_entry
  template <class C >  class z_factory_static_T :public  z_factory_static
  {
  public:
-	const  static z_factory_static_T<C> &obj;
-	virtual void* create_obj() const;
-	virtual void delete_obj(void* v) const
-	{
-		delete reinterpret_cast<C*>(v);
-	}
+	const  static z_factory_static_T<C> &self;
+	virtual void* create_obj() const {return z_new C(); }
+	virtual void delete_obj(void* v) const {delete reinterpret_cast<C*>(v);	}
  	virtual int execute_act_ptr(void* vobj,void* act_addr) const
 	{
 		typedef int (C::*funcptr)();
@@ -122,7 +118,7 @@ class zp_var_list_funcs_base  : public zf_var_funcs_base
  public:
 	virtual const z_factory* get_fact()	const
 	{
-		return &z_factory_static_T<TYPE>::obj;
+		return &z_factory_static_T<TYPE>::self;
 	}
 
 	virtual void* create_obj(void* v,const z_factory* fact) const
@@ -151,7 +147,7 @@ class zp_var_list_funcs_base  : public zf_var_funcs_base
 	return &f;
  };
  /*
- This inteface manipulates child objects 
+ This interface manipulates child objects 
  */
 template <class CLASS >  class zp_child_obj_funcs  : public zf_var_funcs_base
 {
@@ -160,7 +156,7 @@ template <class CLASS >  class zp_child_obj_funcs  : public zf_var_funcs_base
 	{
 		//OBJ instance is part of parent, so it is already created.
 		//Just reset it and return a pointer to it.
-		const z_factory_static* f=&z_factory_static_T<CLASS>::obj;
+		const z_factory_static* f=&z_factory_static_T<CLASS>::self;
 		if(new_child_type!=f)
 		{
 			Z_ERROR_MSG(zs_wrong_object_type,"Objects type does not match member variable");
@@ -174,12 +170,12 @@ template <class CLASS >  class zp_child_obj_funcs  : public zf_var_funcs_base
 		return var;
 	}
  	virtual void clear(void* v) const{
-		const z_factory_static* f=&z_factory_static_T<CLASS>::obj;
+		const z_factory_static* f=&z_factory_static_T<CLASS>::self;
 		f->clear_all_vars(v);
 	}
 	virtual const  z_factory*  get_child_obj_fact() const 
 	{ 
-		return &z_factory_static_T<CLASS>::obj;
+		return &z_factory_static_T<CLASS>::self;
 	}
 };
  template <class CLASS >  const zf_var_funcs_base* zp_child_obj_funcs_get(CLASS& obj)
@@ -195,7 +191,7 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
  public:
 	virtual const  z_factory*  get_child_obj_fact() const 
 	{ 
-		return &z_factory_static_T<CLASS>::obj;
+		return &z_factory_static_T<CLASS>::self;
 	}
 
 	virtual void* get_ptr(void* var,int* iter ) const
@@ -209,7 +205,7 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
 	{
 		void** ppObj=reinterpret_cast<void**>(var); 
 
-		const z_factory_static* f=&z_factory_static_T<CLASS>::obj;
+		const z_factory_static* f=&z_factory_static_T<CLASS>::self;
 		if(new_child_type!=f)
 		{
 			Z_ERROR_MSG(zs_wrong_object_type,"Objects type does not match member variable");
@@ -226,7 +222,7 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
 			file<< "NULL";
 		else
 
-			z_factory_static_T<CLASS>::obj.dump_obj(file,*ppObj);
+			z_factory_static_T<CLASS>::self.dump_obj(file,*ppObj);
 	}
 
  	virtual void get(z_string& s, void* v) const
@@ -270,13 +266,13 @@ extern const zp_module_entry *zp_module_master_list[];
 extern const int zp_module_master_list_size;
 template <class CLASS> void zf_dump_obj(CLASS* p_obj)
 {
-	const z_factory_static* factory=&z_factory_static_T<CLASS>::obj;
+	const z_factory_static* factory=&z_factory_static_T<CLASS>::self;
 	factory->dump_obj(gz_out,p_obj);
 
 }
  template <class CLASS> void zf_dump_static(CLASS* p_obj)
 {
-	const z_factory_static* factory=&z_factory_static_T<CLASS>::obj;
+	const z_factory_static* factory=&z_factory_static_T<CLASS>::self;
 	factory->dump_static(gz_out);
 
 }

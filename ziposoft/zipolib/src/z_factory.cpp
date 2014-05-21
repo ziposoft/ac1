@@ -240,6 +240,82 @@ z_status z_factory::create_child(void* obj,ctext var_name,const z_factory* new_c
 	return z_status_success;
 
 }
+void z_factory::clear_all_vars (void* obj) const
+{
+	size_t index=0;
+	const zf_var_funcs_base* funcs=0;
+	ctext name=0;
+	size_t offset=0;
+	while(get_var_info_i(index,name,offset,funcs)==zs_ok)	 
+	{
+		char* pvar=(char*)obj+offset;
+		if(funcs)
+			funcs->clear(pvar);
+	}
+}
+z_status z_factory::execute_act(void* obj,ctext name,int* pret) const
+{
+	const zf_var_funcs_base* funcs=0;
+	size_t offset=0;
+	z_status status=get_var_info(name,offset,funcs);
+	if(status)
+		return status; 
+	int ret=execute_act_ptr	(obj, (void*)offset);
+	if(pret)
+		*pret=ret;
+	return z_status_success;
+}
+
+void z_factory::dump_obj(z_file& f,void* obj) const
+{
+	size_t index=0;
+	ctext name=0;
+	size_t offset=0;
+	const zf_var_funcs_base* funcs=0;
+	z_string value;
+	
+	f.indent();
+	f << get_name()<<"{\n";
+	f.indent_inc();
+	while(get_var_info_i(index,name,offset,funcs)==zs_ok)	 
+	{
+		char* pvar=(char*)obj+offset;
+		f.indent();
+		f << name<< "=";
+		if(funcs)
+			funcs->dump(f,pvar);
+		f <<'\n';
+	}
+
+
+
+	f.indent_dec();
+	f.indent();
+	f<< "}\n";
+
+}
+void z_factory::dump_static(z_file& f) const
+{
+	size_t index=0;
+	ctext name=0;
+	size_t offset=0;
+	const zf_var_funcs_base* funcs=0;
+	
+	z_string value;
+	f.indent();
+	f << get_name()<<"{\n";
+	f.indent_inc();
+
+	while(get_var_info_i(index,name,offset,funcs)==zs_ok)	 
+	{
+		f.indent();
+		f << name<<'\n';
+		index++;
+	}
+	f.indent_dec();
+	f.indent();
+	f<< "}\n";
+}
 
 /*________________________________________________________________________
 
@@ -257,11 +333,30 @@ const zf_var_entry* z_factory_static::get_var_entry (ctext name) const
 	return 0;		
 
 }
+const zf_var_entry* z_factory_static::get_var_entry (size_t i) const
+{
+	if(i>=get_var_list_size())
+		return 0;		
+	return &get_var_list()[i];
+
+}
+
+z_status z_factory_static::get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs)  const
+{
+	const zf_var_entry* ent=0;
+	ent=get_var_entry(index);
+	if(!ent)
+		return z_status_item_not_found;
+	name=ent->name;
+	offset=ent->offset;
+	funcs=ent->fp_var_func_get();
+	return zs_ok;		
+		
+}
 z_status z_factory_static::get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const
 {
-	size_t i;
-	const zf_var_entry* ent=get_var_entry(name);
-	const zf_var_entry* list=get_var_list();
+	const zf_var_entry* ent=0;
+	ent=get_var_entry(name);
 	if(!ent)
 		return z_status_item_not_found;
 	offset=ent->offset;
@@ -271,70 +366,6 @@ z_status z_factory_static::get_var_info(ctext name,size_t &offset,const zf_var_f
 }
 
 
-void z_factory_static::clear_all_vars (void* obj) const
-{
-	size_t i;
-	const zf_var_entry* list=get_var_list();
-	for(i=0;i<get_var_list_size();i++)
-	{
-		char* pvar=(char*)obj+list[i].offset;
-		const zf_var_funcs_base* funcs=list[i].fp_var_func_get();
-		if(funcs)
-			funcs->clear(pvar);
-	}
-}
-z_status z_factory_static::execute_act(void* obj,ctext var_name,int* pret) const
-{
-	const zf_var_entry* ent= get_var_entry(var_name);
-	if(!ent)
-		return z_status_item_not_found; 
-	int ret=execute_act_ptr	(obj, (void*)ent->offset);
-	if(pret)
-		*pret=ret;
-	return z_status_success;
-}
-
-
-void z_factory_static::dump_obj(z_file& f,void* obj) const
-{
-	size_t i;
-	z_string value;
-	const zf_var_entry* list=get_var_list();
-	f.indent();
-	f << get_name()<<"{\n";
-	f.indent_inc();
-	for(i=0;i<get_var_list_size();i++)
-	{
-		char* pvar=(char*)obj+list[i].offset;
-		f.indent();
-		f << list[i].name<< "=";
-		const zf_var_funcs_base* func=list[i].fp_var_func_get();
-		if(func)
-			func->dump(f,pvar);
-		f <<'\n';
-	}
-	f.indent_dec();
-	f.indent();
-	f<< "}\n";
-
-}
-void z_factory_static::dump_static(z_file& f) const
-{
-	size_t i;
-	z_string value;
-	const zf_var_entry* list=get_var_list();
-	f.indent();
-	f << get_name()<<"{\n";
-	f.indent_inc();
-	for(i=0;i<get_var_list_size();i++)
-	{
-		f.indent();
-		f << list[i].name<<'\n';
-	}
-	f.indent_dec();
-	f.indent();
-	f<< "}\n";
-}
 
 
 /*________________________________________________________________________

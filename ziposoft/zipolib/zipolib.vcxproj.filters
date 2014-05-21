@@ -234,6 +234,9 @@
     <ClCompile Include="src\z_parse_internal.cpp">
       <Filter>parse</Filter>
     </ClCompile>
+    <ClCompile Include="src\z_factory_dyn.cpp">
+      <Filter>factory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
