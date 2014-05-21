@@ -63,35 +63,53 @@ class z_factory
 public:
 	virtual void* create_obj() const=0;
 	virtual void delete_obj(void*) const=0;
+	virtual ctext get_name()const =0;
+	/*
+	virtual const zf_var_entry*  get_var_entry(ctext name) const=0;
+	virtual const zf_var_entry*  get_var_entry(size_t index) const=0;
+	virtual const size_t get_var_list_size() const=0;
+	*/
+	virtual z_status get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs) const=0;
 	virtual z_status get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const=0;
+ 	virtual int execute_act_ptr(void* obj,void*  act_addr) const=0;
+
+
+
 	virtual z_status create_child(void* obj,ctext var_name,const z_factory* new_child_type,void** ppChild) const;
 
 	virtual z_status get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter=0) const;
 	virtual z_status set_var_as_string(void* obj,ctext var_name,ctext value) const;
 	virtual z_status get_var_as_string(void* obj,ctext var_name,z_string& value) const;
-	virtual void clear_all_vars(void* obj) const=0;
-	virtual void dump_obj(z_file& f,void* obj) const=0;
-	virtual void dump_static(z_file& f) const=0;
+	virtual void clear_all_vars(void* obj) const;
+	virtual void dump_obj(z_file& f,void* obj) const;
+	virtual void dump_static(z_file& f) const;
 
-	virtual ctext get_name()const =0;
 	virtual z_status get_list_features(zf_feature_list& list)const { return Z_ERROR(zs_operation_not_supported);};
+ 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
 
 };
 
 
 class zf_feature
 {
-	z_string _name;
-	z_string _description;
+
 public:
+
+
 	zf_feature(ctext name);
-	ctext get_map_key() { return _name; }
+	ctext get_map_key() { return name; }
+
+	z_string name;
+	z_string description;
+	zf_var_funcs_base* df;
+	size_t offset;
+
 };
 
 class zf_prop  : public  zf_feature
 {
 public:
-	zf_var_funcs_base* df;
+
 
 };
 class zf_alias  : public  zf_feature

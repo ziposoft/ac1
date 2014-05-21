@@ -11,7 +11,7 @@ public:
 
 	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data)
 	{
-		const z_factory_static* factory=&z_factory_static_T<CLASS>::obj;
+		const z_factory_static* factory=&z_factory_static_T<CLASS>::self;
 		return 	parse_obj_f(p_obj, factory,data);
 
 	}

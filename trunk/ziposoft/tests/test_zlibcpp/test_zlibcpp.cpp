@@ -6,6 +6,7 @@
 #include "zipolib/include/z_trace.h"
 #include "zipolib/include/z_ntf.h"
 #include "zipolib/include/z_console.h"
+#include "zipolib/include/z_factory_dyn.h"
 
  class test	 : public 	z_ntf_obj
  {
@@ -88,6 +89,28 @@
  }
 
 
+
+ class testA
+ {
+ public:
+	 testA()
+	 {
+
+
+	 }
+	 virtual ~testA(){}
+	 U32 _i;
+	 z_string _str;
+	 int func()
+	 {
+		printf("hooorraaayy!!!\n");
+	 }
+
+ };
+
+z_factory_T	<testA>	  factA;
+
+
 int main()
 {
 	ZT_ENABLE();
@@ -95,10 +118,6 @@ int main()
 
 	ZT("Testing trace %s %d...\n","duds",4);
 
-	
-	z_console con;
-	con.debug=true;
-	con.run();
 
 
 
