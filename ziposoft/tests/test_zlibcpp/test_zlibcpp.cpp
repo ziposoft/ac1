@@ -95,7 +95,8 @@
  public:
 	 testA()
 	 {
-
+		_i=123;
+		_str="fred";
 
 	 }
 	 virtual ~testA(){}
@@ -104,12 +105,21 @@
 	 int func()
 	 {
 		printf("hooorraaayy!!!\n");
+		return 0;
 	 }
 
  };
+#define ZFACT(_CLASS_)  z_factory_T<_CLASS_> ZFACT##_CLASS_(#_CLASS_);\
+	z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=ZFACT##_CLASS_;\
+	void z_factory_T<testA>	::add_features()
 
-z_factory_T	<testA>	  factA;
+ZFACT(testA)
+{
+	add_act("func",&testA::func);
 
+
+
+}
 
 int main()
 {
@@ -117,6 +127,12 @@ int main()
 	ZTF;
 
 	ZT("Testing trace %s %d...\n","duds",4);
+	//dummy.add_features();
+
+	testA A;
+
+	z_factory_T<testA>::self.execute_act(&A,"func");
+	z_factory_T<testA>::self.dump_obj(gz_out,&A);
 
 
 
