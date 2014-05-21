@@ -8,7 +8,7 @@
 #define ZP_MODULE_DECLARE(_NAME_) extern const zp_module_entry ZP_MODULE(_NAME_);
 #define ZP_MOD(_NAME_) &ZP_MODULE(_NAME_)
 
- #define ZP_MODULE_INCLUDE(...) const zp_module_entry *zp_module_master_list[] = { __VA_ARGS__ };const int zp_module_master_list_size=sizeof(zp_module_master_list)/sizeof(void*);
+
 class z_factory_static;
 
 
@@ -69,7 +69,7 @@ struct zp_module_entry
 	const  static z_factory_static_T<C> &self;
 	virtual void* create_obj() const {return z_new C(); }
 	virtual void delete_obj(void* v) const {delete reinterpret_cast<C*>(v);	}
- 	virtual int execute_act_ptr(void* vobj,void* act_addr) const
+ 	virtual int execute_act_ptr(void* vobj,size_t act_addr) const
 	{
 		typedef int (C::*funcptr)();
 		C*  cobj=reinterpret_cast<C*>(vobj);
@@ -258,9 +258,17 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
 
 GLOBAL z_factory_static functions
 ________________________________________________________________________*/
+extern "C" {
+extern const zp_module_entry *zp_module_master_list[];
+extern const  int zp_module_master_list_size;
+extern const zp_module_entry *zp_module_master_list_default[];
+extern const  int zp_module_master_list_size_default;
+}
 
-  extern const __declspec(selectany) zp_module_entry *zp_module_master_list[]={NULL};
-extern const __declspec(selectany) int zp_module_master_list_size=0;
+ #define ZP_MODULE_INCLUDE(...) extern "C" { const zp_module_entry *zp_module_master_list[] = { __VA_ARGS__ }; \
+ const int zp_module_master_list_size=sizeof(zp_module_master_list)/sizeof(void*);}
+#pragma comment(linker, "/alternatename:_zp_module_master_list=_zp_module_master_list_default")
+#pragma comment(linker, "/alternatename:_zp_module_master_list_size=_zp_module_master_list_size_default")
 
 const z_factory_static*  zfs_get_factory_by_name(ctext name,size_t len=-1);
 const z_factory_static*  zfs_get_factory(ctext name);

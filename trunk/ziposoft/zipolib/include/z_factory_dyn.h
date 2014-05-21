@@ -12,7 +12,7 @@ ________________________________________________________________________*/
 
 class z_factory_dyn : public z_factory
 {
-
+protected:
 	z_string _name;
 	z_factory_dyn* _parent;
 	z_obj_vector_map<zf_feature> _features;
@@ -28,22 +28,42 @@ public:
 		_features<<p;
 	}
 };
+
+extern z_obj_vector_map<z_factory_dyn> g_factories_dynamic;
+
  template <class C >  class z_factory_T :public  z_factory_dyn
  {
  public:
-	const  static z_factory_T<C> &obj;
+	typedef int (C::*fn_act)();
+
+	z_factory_T(ctext name)
+	{
+		_name=name;
+		add_features();
+
+	}
+
+	static z_factory_T<C> &self;
 	virtual void* create_obj() const {return z_new C(); }
 	virtual void delete_obj(void* v) const
 	{
 		delete reinterpret_cast<C*>(v);
 	}
- 	virtual int execute_act_ptr(void* vobj,void* act_addr) const
+ 	virtual int execute_act_ptr(void* vobj,size_t act_addr) const
 	{
 		typedef int (C::*funcptr)();
 		C*  cobj=reinterpret_cast<C*>(vobj);
-		funcptr fp=*( funcptr*) (act_addr);
+		void* pp=&act_addr;
+		funcptr fp=*( funcptr*) (pp);
 		return (cobj->*fp)();
 	}
+ 	virtual int add_act(ctext name,fn_act act_addr) 
+	{
+		_features.add(z_new	zf_feature(name,0,*(size_t*)(void*)&act_addr));
+		return 0;
+	}
+
+	void add_features();
 
  };
 

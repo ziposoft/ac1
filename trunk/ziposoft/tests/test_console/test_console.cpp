@@ -74,3 +74,4 @@ ZP_MODULE_DEFINE(testmod);
 
 ZP_MODULE_INCLUDE(ZP_MOD(testmod), ZP_MOD(parse));
 
+#pragma comment(linker, "/alternatename:zp_module_master_list_size=zp_module_master_list_size_exe")

@@ -71,7 +71,7 @@ public:
 	*/
 	virtual z_status get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs) const=0;
 	virtual z_status get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const=0;
- 	virtual int execute_act_ptr(void* obj,void*  act_addr) const=0;
+ 	virtual int execute_act_ptr(void* obj,size_t  act_addr) const=0;
 
 
 
@@ -96,13 +96,13 @@ class zf_feature
 public:
 
 
-	zf_feature(ctext name);
-	ctext get_map_key() { return name; }
+	zf_feature(ctext name,zf_var_funcs_base* funcs,size_t offset);
+	ctext get_map_key() { return _name; }
 
-	z_string name;
-	z_string description;
+	z_string _name;
+	z_string _description;
 	zf_var_funcs_base* df;
-	size_t offset;
+	size_t _offset;
 
 };
 

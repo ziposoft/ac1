@@ -260,7 +260,7 @@ z_status z_factory::execute_act(void* obj,ctext name,int* pret) const
 	z_status status=get_var_info(name,offset,funcs);
 	if(status)
 		return status; 
-	int ret=execute_act_ptr	(obj, (void*)offset);
+	int ret=execute_act_ptr	(obj,offset);
 	if(pret)
 		*pret=ret;
 	return z_status_success;
@@ -281,10 +281,14 @@ void z_factory::dump_obj(z_file& f,void* obj) const
 	{
 		char* pvar=(char*)obj+offset;
 		f.indent();
-		f << name<< "=";
+		f << name;
 		if(funcs)
+		{
+			f << "=";
 			funcs->dump(f,pvar);
+		}
 		f <<'\n';
+		index++;
 	}
 
 
@@ -366,16 +370,17 @@ z_status z_factory_static::get_var_info(ctext name,size_t &offset,const zf_var_f
 }
 
 
-
+//C:\Users\218015568\Documents\Visual Studio 2012\Templates\ProjectTemplates
 
 /*________________________________________________________________________
 
 GLOBAL z_factory_static functions
 ________________________________________________________________________*/
+extern "C" {
+extern const zp_module_entry *zp_module_master_list_default[]={0};
+extern const  int zp_module_master_list_size_default=0;
+}
 
-
-#pragma comment(linker, "/alternatename:zp_module_master_list=zp_module_master_list_default")
-#pragma comment(linker, "/alternatename:zp_module_master_list_size=zp_module_master_list_size_default")
 
 
 const z_factory_static*  zfs_get_factory_by_name(ctext name,size_t len)
