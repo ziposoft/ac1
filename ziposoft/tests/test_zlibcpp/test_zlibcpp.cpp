@@ -7,7 +7,7 @@
 #include "zipolib/include/z_ntf.h"
 #include "zipolib/include/z_console.h"
 #include "zipolib/include/z_factory_dyn.h"
-
+/*
  class test	 : public 	z_ntf_obj
  {
  public:
@@ -54,6 +54,8 @@
 
 	return 0;
  }
+
+ */
 #define TEST_FILE "testfile.txt"
 
  int test_filesystem()
@@ -109,21 +111,29 @@
 	 }
 
  };
-#define ZFACT(_CLASS_)  z_factory_T<_CLASS_> ZFACT##_CLASS_(#_CLASS_);\
-	z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=ZFACT##_CLASS_;\
-	void z_factory_T<testA>	::add_features()
+  class testB
+ {
+ public:
+	 testB()
+	 {
+		_xi=456;
+		_name="larry";
 
-//#define ZPROP(_VAR_) _features.add(z_new	zf_feature(#_VAR_,zp_var_funcs_get(_VAR_),zp_offsetof_class(THECLASS,_VAR_)));
-#define ZPROP(_VAR_) _features.add(z_new	zf_feature(#_VAR_,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_)));
+	 }
+	 virtual ~testB(){}
+	 z_string _name;
+	 int  _xi;
+	 int func()
+	 {
+		 printf("hooorraaayy!!! %d  %s\n",_xi,_name.c_str());
+		return 0;
+	 }
 
-ZFACT(testA)
-{
-	add_act("func",&testA::func);
+ };
 
-	ZPROP (_i);
-	ZPROP (_str);
 
-}
+
+
 int main(int argc, char** argv)
 {
 	ZT_ENABLE();
@@ -135,6 +145,9 @@ int main(int argc, char** argv)
 	testA A;
 	z_factory_T<testA>::self.dump_static(gz_out);
 	const z_factory* f=zf_get_factory("testA");
+	f->dump_obj(gz_out,&A);
+
+	f=	zf_get_factory_T<testA>();
 	z_parser p;
 
 	if(argc>1)
@@ -161,3 +174,22 @@ int main(int argc, char** argv)
 
 	return 0;//ZS_RET(base,feature_not_found);
 }
+  
+ZFACT(testA)
+{
+	add_act_T("func",&testA::func);
+
+	ZPROP (_i);
+	ZPROP (_str);
+
+}
+
+ #define ZO_OBJ_LIST \
+	ZCLS(testB,void,"cmdline","{_xi}ident:'=':{i123}int",ACT(func)  VAR(_name) VAR(_xi)) 
+
+		  
+#include "zipolib/include/z_obj.inc"
+ZP_MODULE_DEFINE(testmod);
+
+
+ZP_MODULE_INCLUDE(ZP_MOD(testmod), ZP_MOD(parse));

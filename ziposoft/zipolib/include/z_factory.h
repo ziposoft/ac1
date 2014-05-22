@@ -13,6 +13,7 @@ ________________________________________________________________________*/
 #include "zipolib/include/z_type_converter.h"
 #include "zipolib/include/z_stl_vector.h"
 
+
 enum zf_feature_type
 {
 	zf_ft_none,
@@ -23,11 +24,10 @@ enum zf_feature_type
 
 
 };
-
- class z_factory;
- class zf_var_funcs_base
- {
- public:
+class z_factory;
+class zf_var_funcs_base
+{
+public:
 	virtual void dump(z_file& s, void* v) const;
 	virtual void get(z_string& s, void* v) const {};
 	virtual void set(ctext s, void* v) const {};
@@ -40,32 +40,17 @@ enum zf_feature_type
 	virtual void* create_obj(void* var,const z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
 	virtual const z_factory*  get_child_obj_fact() const { return 0;}
 
- } ;
- typedef  const zf_var_funcs_base* (*funcp_var_funcs_get)();
+} ;
+
+
 class zf_feature;
 class zf_feature_list : public z_map_obj<zf_feature>
 {
 
 
 };
-struct zf_var_entry
-{
-	const char* name;
-	size_t offset;
-	zf_feature_type type;  //currently not used for anything
-	funcp_var_funcs_get fp_var_func_get;
-};
 
-  template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(VAR& item)
- {
-	static const zf_var_funcs<VAR> f;
-	return &f;
- };
- template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(z_obj_vector<VAR>& list)
- {
-	static const zp_var_list_funcs<VAR> f;
-	return &f;
- };
+
 
 class z_factory
 {
@@ -104,6 +89,12 @@ public:
 };
 
 const z_factory*  zf_get_factory(ctext name);
+template <class CLASS> const z_factory*  zf_get_factory_T()
+{
+	const type_info & ti=typeid( CLASS );
+	return zf_get_factory(ti.name()+6);
+
+}
 
 
  #define zp_offsetof_class(_class_,_member_)   (size_t)&reinterpret_cast<const volatile char&>((((_class_*)0)->_member_))

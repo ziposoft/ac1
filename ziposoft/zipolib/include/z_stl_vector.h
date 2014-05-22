@@ -75,7 +75,7 @@ public:
 		size_t i=0;
 		while(i<this->size())
 		{
-			ITEM_CLASS* obj= get(i);
+			ITEM_CLASS* obj= this->get(i);
 			if(strcmp(obj->get_map_key(),t)==0)
 				return obj;
 			i++;
