@@ -1,6 +1,7 @@
 #ifndef z_parse_h
 #define z_parse_h
 #include "zipolib/include/z_factory_static.h"
+#include "zipolib/include/z_factory_dyn.h"
 class zp_parser;
 class z_parser
 {

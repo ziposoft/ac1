@@ -6,14 +6,33 @@
 
 
 
-class testA 
+class testAs 
 {
 public:
-	testA() { i=0; }
+	testAs() { i=0; }
 	int func() { printf("hooray!!\n");return 0;};
 	int func2() { printf("time for a %d min nap!!\n",i);return 0;};
 	int i;
 };
+ class testAd
+ {
+ public:
+	 testAd()
+	 {
+		_i=123;
+		_str="fred";
+
+	 }
+	 virtual ~testAd(){}
+	 int  _i;
+	 z_string _str;
+	 int func()
+	 {
+		 printf("hooorraaayy!!! %d  %s\n",_i,_str.c_str());
+		return 0;
+	 }
+
+ };
 
 
 
@@ -65,7 +84,7 @@ int main(int argc, char* argv[])
 
 
  #define ZO_OBJ_LIST \
-	ZCLS(testA,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) ACT(func2) VAR(i)) 
+	ZCLS(testAs,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) ACT(func2) VAR(i)) 
 
 		  
 #include "zipolib/include/z_obj.inc"

@@ -23,7 +23,11 @@ public:
 
 	virtual ctext get_name()const;
 	virtual z_status get_list_features(zf_feature_list& list)const { return Z_ERROR(zs_operation_not_supported);};
-
+ 	virtual int add_act(ctext name,size_t act_addr) 
+	{
+		_features.add(z_new	zf_feature(name,0,*(size_t*)(void*)&act_addr));
+		return 0;
+	}
 };
 
 z_obj_vector_map<z_factory_dyn>& get_factories_dynamic();
@@ -54,23 +58,20 @@ z_obj_vector_map<z_factory_dyn>& get_factories_dynamic();
 		funcptr fp=*( funcptr*) (pp);
 		return (cobj->*fp)();
 	}
- 	virtual int add_act(ctext name,fn_act act_addr) 
+ 	virtual int add_act_T(ctext name,fn_act act_addr) 
 	{
-		_features.add(z_new	zf_feature(name,0,*(size_t*)(void*)&act_addr));
+		add_act(name,*(size_t*)(void*)&act_addr);
 		return 0;
 	}
- 	template <class ITEM> void addProp(ctext name,ITEM& var)
-	{
-		C* nullobj=0;
-		zf_var_funcs_base* f=zp_var_funcs_get(var); 
-		size_t off=zp_offsetof(var);
-		_features.add(z_new	zf_feature(name,f,off));
-	}
+
 	void add_features();
 
  };
+ #define ZFACT(_CLASS_)  z_factory_T<_CLASS_> ZFACT##_CLASS_(#_CLASS_);\
+	z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=ZFACT##_CLASS_;\
+	void z_factory_T<testA>	::add_features()
 
-
+ #define ZPROP(_VAR_) _features.add(z_new	zf_feature(#_VAR_,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_)));
 
 #endif
 

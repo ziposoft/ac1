@@ -86,6 +86,7 @@
     <ClInclude Include="include\z_debug.h" />
     <ClInclude Include="include\z_error.h" />
     <ClInclude Include="include\z_factory.h" />
+    <ClInclude Include="include\z_factory_var_funcs.h" />
     <ClInclude Include="include\z_file.h" />
     <ClInclude Include="include\z_files.h" />
     <ClInclude Include="include\z_filesystem.h" />
