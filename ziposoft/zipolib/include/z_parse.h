@@ -9,17 +9,17 @@ public:
 	z_parser();
 	virtual ~z_parser();
 
-	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data)
+	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data,ctext tmpl=0)
 	{
-		const z_factory_static* factory=&z_factory_static_T<CLASS>::self;
+		const z_factory* factory=&z_factory_static_T<CLASS>::self;
 		return 	parse_obj_f(p_obj, factory,data);
 
 	}
  	z_status report_error();
 	z_status output_default_template(z_file* fp,ctext tmpl);
-	z_status output_obj(z_file* fp,const z_factory_static* factory,void* obj);
+	z_status output_obj(z_file* fp,const z_factory* factory,void* obj);
 	z_status parse_template(ctext tmpl,ctext data);
-	z_status parse_obj_f(void* p_obj,const z_factory_static* factory,ctext data);
+	z_status parse_obj_f(void* p_obj,const z_factory* factory,ctext data,ctext tmpl=0);
 
 
 };

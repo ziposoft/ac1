@@ -25,9 +25,9 @@ int main(int argc, char* argv[])
 	/*
 	testA A;
 
-	zfs_get_factory("testA")->execute_act(&A,"func");
-	zfs_get_factory("testA")->set_var_as_string(&A,"i","67");
-	zfs_get_factory("testA")->execute_act(&A,"func2");
+	zfs_get_static_factory("testA")->execute_act(&A,"func");
+	zfs_get_static_factory("testA")->set_var_as_string(&A,"i","67");
+	zfs_get_static_factory("testA")->execute_act(&A,"func2");
    */
 	gz_out << "load save args...\n";
 	z_debug_load_save_args(&argc,&argv);

@@ -36,7 +36,6 @@ public:
 	virtual z_status get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs) const;
 	virtual z_status get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const;
 
-	virtual ctext get_parse_string() const{ return ""; }
 
 
 };
@@ -136,16 +135,7 @@ class zp_var_list_funcs_base  : public zf_var_funcs_base
 	}
 };
 
- template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(VAR& item)
- {
-	static const zf_var_funcs<VAR> f;
-	return &f;
- };
- template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(z_obj_vector<VAR>& list)
- {
-	static const zp_var_list_funcs<VAR> f;
-	return &f;
- };
+
  /*
  This interface manipulates child objects 
  */
@@ -270,8 +260,7 @@ extern const  int zp_module_master_list_size_default;
 #pragma comment(linker, "/alternatename:_zp_module_master_list=_zp_module_master_list_default")
 #pragma comment(linker, "/alternatename:_zp_module_master_list_size=_zp_module_master_list_size_default")
 
-const z_factory_static*  zfs_get_factory_by_name(ctext name,size_t len=-1);
-const z_factory_static*  zfs_get_factory(ctext name);
+const z_factory_static*  zf_get_static_factory_by_name(ctext name);
 void*  zfs_create_obj_by_type(ctext name);
 void  zo_factory_list_dump();
 

@@ -1,5 +1,6 @@
 #include "zipolib_cpp_pch.h"
 
+#include "zipolib/include/z_factory_dyn.h"
 #include "zipolib/include/z_factory_static.h"
 
 #define RECAST(_TYPE_,_NAME_) _TYPE_& _NAME_= *reinterpret_cast<_TYPE_*>(v);
@@ -180,6 +181,14 @@ template class zf_var_funcs<zp_obj_vector>;
 
 z_factory
 ________________________________________________________________________*/
+
+ctext z_factory::get_map_key() const
+{
+	return get_name();
+
+}
+
+
 z_status z_factory::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter) const
 {
 	size_t offset;
@@ -251,6 +260,7 @@ void z_factory::clear_all_vars (void* obj) const
 		char* pvar=(char*)obj+offset;
 		if(funcs)
 			funcs->clear(pvar);
+		index++;
 	}
 }
 z_status z_factory::execute_act(void* obj,ctext name,int* pret) const
@@ -382,13 +392,8 @@ extern const  int zp_module_master_list_size_default=0;
 }
 
 
-
-const z_factory_static*  zfs_get_factory_by_name(ctext name,size_t len)
+const z_factory_static*  zf_get_static_factory_by_name(ctext name)
 {
-	if(len==-1)
-	{
-		len=strlen(name);
-	}
 	int i_module;
 	for(i_module=0;i_module<zp_module_master_list_size;i_module++)
 	{
@@ -398,40 +403,32 @@ const z_factory_static*  zfs_get_factory_by_name(ctext name,size_t len)
 		{
 			const zp_module_fact_entry& p_obj_entry=p_module->facts[i_obj];
 			const z_factory_static* fact=p_obj_entry.fact;
-			if(strncmp(fact->get_name(),name,len)==0)
+			if(strcmp(fact->get_name(),name)==0)
 				return fact;
 		}
 	}
 	return 0;
 }
+const z_factory*  zf_get_factory(ctext name)
+{
+	
+	const z_factory* f=	 get_factories_dynamic().get_by_name(name);
+	if(f)
+		return f;
 
+	f=zf_get_static_factory_by_name(name);
+	return f;
+}
 void*  zfs_create_obj_by_type(ctext name)
 {
-	const z_factory_static*  f=zfs_get_factory_by_name( name);
+	const z_factory_static*  f=zf_get_static_factory_by_name( name);
 	if(f)
 		return f->create_obj();
 	return 0;
 
 
 }
-const z_factory_static*  zfs_get_factory(ctext name)
-{
-	int i_module;
-	for(i_module=0;i_module<zp_module_master_list_size;i_module++)
-	{
-		const zp_module_entry* p_module=zp_module_master_list[i_module];
-		int i_obj;
-		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
-		{
-			const zp_module_fact_entry& p_obj_entry=p_module->facts[i_obj];
-			const z_factory_static* fact=p_obj_entry.fact;
 
-			if(z_str_same(name,fact->get_name()))
-				return fact;
-		}
-	}
-	return 0;
-}
 void  zo_factory_list_dump()
 {
 	int i_module;

@@ -67,7 +67,7 @@ extern const size_t  opt_list_operation_count;
 extern const size_t  opt_list_test_type_count;
 extern const size_t  arg_list_count;
 extern z_parser p;
-extern const z_factory_static * g_parse_fact;
+extern const z_factory * g_parse_fact;
 extern void * g_parse_obj;
 
 extern option opt_list_test_type[];

@@ -100,11 +100,11 @@
 
 	 }
 	 virtual ~testA(){}
-	 U32 _i;
+	 int  _i;
 	 z_string _str;
 	 int func()
 	 {
-		printf("hooorraaayy!!!\n");
+		 printf("hooorraaayy!!! %d  %s\n",_i,_str.c_str());
 		return 0;
 	 }
 
@@ -113,15 +113,18 @@
 	z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=ZFACT##_CLASS_;\
 	void z_factory_T<testA>	::add_features()
 
+//#define ZPROP(_VAR_) _features.add(z_new	zf_feature(#_VAR_,zp_var_funcs_get(_VAR_),zp_offsetof_class(THECLASS,_VAR_)));
+#define ZPROP(_VAR_) _features.add(z_new	zf_feature(#_VAR_,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_)));
+
 ZFACT(testA)
 {
 	add_act("func",&testA::func);
 
-
+	ZPROP (_i);
+	ZPROP (_str);
 
 }
-
-int main()
+int main(int argc, ctext argv[])
 {
 	ZT_ENABLE();
 	ZTF;
@@ -130,10 +133,24 @@ int main()
 	//dummy.add_features();
 
 	testA A;
+	const z_factory* f=zf_get_factory("testA");
+	z_parser p;
 
-	z_factory_T<testA>::self.execute_act(&A,"func");
-	z_factory_T<testA>::self.dump_obj(gz_out,&A);
+	if(argc>1)
+		p.parse_obj(&A,argv[1],"{_str}ident:'=':{_i}ident");
 
+
+	f->dump_obj(gz_out,&A);
+
+	A._i=27;
+	A._str="go run!";
+ 	f->dump_obj(gz_out,&A);
+
+	f->set_var_as_string(&A,"_str","ok ok");
+	f->set_var_as_string(&A,"_i","1");
+	f->execute_act(&A,"func");
+
+  	f->dump_obj(gz_out,&A);
 
 
 
