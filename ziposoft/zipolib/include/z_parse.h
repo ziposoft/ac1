@@ -8,16 +8,16 @@ class z_parser
 public:
 	z_parser();
 	virtual ~z_parser();
-
+	//TODO UG!!!
 	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data,ctext tmpl=0)
 	{
-		const z_factory* factory=&z_factory_static_T<CLASS>::self;
+		const z_factory* factory=&z_factory_static_T<CLASS>::self;//TODO UG!!!
 		return 	parse_obj_f(p_obj, factory,data);
 
 	}
 	template <class CLASS> z_status parse_obj_d(CLASS* p_obj,ctext data,ctext tmpl=0)
 	{
-		const z_factory* factory=&z_factory_T<CLASS>::self;
+		const z_factory* factory=&z_factory_T<CLASS>::self;	  //TODO UG!!!
 		return 	parse_obj_f(p_obj, factory,data,tmpl);
 
 	}
