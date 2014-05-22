@@ -39,6 +39,7 @@ enum zf_feature_type
 	//This is if the member var is an obj, pointer to obj, or obj list		
 	virtual void* create_obj(void* var,const z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
 	virtual const z_factory*  get_child_obj_fact() const { return 0;}
+
  } ;
  typedef  const zf_var_funcs_base* (*funcp_var_funcs_get)();
 class zf_feature;
@@ -55,7 +56,16 @@ struct zf_var_entry
 	funcp_var_funcs_get fp_var_func_get;
 };
 
-
+  template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(VAR& item)
+ {
+	static const zf_var_funcs<VAR> f;
+	return &f;
+ };
+ template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(z_obj_vector<VAR>& list)
+ {
+	static const zp_var_list_funcs<VAR> f;
+	return &f;
+ };
 
 class z_factory
 {
@@ -64,6 +74,10 @@ public:
 	virtual void* create_obj() const=0;
 	virtual void delete_obj(void*) const=0;
 	virtual ctext get_name()const =0;
+	virtual ctext get_map_key()const;
+	
+	virtual ctext get_parse_string() const{ return ""; }
+
 	/*
 	virtual const zf_var_entry*  get_var_entry(ctext name) const=0;
 	virtual const zf_var_entry*  get_var_entry(size_t index) const=0;
@@ -89,6 +103,10 @@ public:
 
 };
 
+const z_factory*  zf_get_factory(ctext name);
+
+
+ #define zp_offsetof_class(_class_,_member_)   (size_t)&reinterpret_cast<const volatile char&>((((_class_*)0)->_member_))
 
 class zf_feature
 {
@@ -96,12 +114,12 @@ class zf_feature
 public:
 
 
-	zf_feature(ctext name,zf_var_funcs_base* funcs,size_t offset);
+	zf_feature(ctext name,const zf_var_funcs_base* funcs,size_t offset);
 	ctext get_map_key() { return _name; }
 
 	z_string _name;
 	z_string _description;
-	zf_var_funcs_base* df;
+	const zf_var_funcs_base* df;
 	size_t _offset;
 
 };

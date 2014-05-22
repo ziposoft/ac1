@@ -1,7 +1,7 @@
 #ifndef z_parse_internal_h
 #define z_parse_internal_h
 #include "zipolib/include/z_parse_text.h"
-#include "zipolib/include/z_factory_static.h"
+#include "zipolib/include/z_factory.h"
 #include "zipolib/include/z_error.h"
 
 const U8 zp_result_no_match=0;
@@ -105,7 +105,7 @@ class zpi_context
 public:
 	zpi_context();
 	void init(zpi_context* parent,
-					   const z_factory_static* ie,
+					   const z_factory* ie,
 					   ctext parse_string
 					   	);
 	//void* get_next_child_obj();
@@ -114,7 +114,7 @@ public:
 	zpi_context* _parent;
 	zpi_context* _child;
 	void* _obj;
-	const z_factory_static* _obj_factory;
+	const z_factory* _obj_factory;
 	zp_text_parser _current_template_parser;
 	//U32 _output_result_index;
 	int _output_obj_index;
@@ -174,8 +174,8 @@ class zp_parser : public zp_text_parser //, public zo_manipulator
 
 	//initialization
 	/*
-	void set_obj_table(const z_factory_static** it,size_t size);
-	zp_parser(const z_factory_static** it,size_t size);
+	void set_obj_table(const z_factory** it,size_t size);
+	zp_parser(const z_factory** it,size_t size);
 	*/
 
 
@@ -193,19 +193,19 @@ class zp_parser : public zp_text_parser //, public zo_manipulator
 
 
 	//context
-	const z_factory_static* find_item(ctext item_name,size_t len=(size_t)-1);
+	const z_factory* find_item(ctext item_name,size_t len);
 	z_status _process_stage(zp_mode mode ,zp_flags* pflags=0);
 	void reset_results();
 	z_status _process_template(zp_mode mode);
 	z_status _process_group(zp_flags flags,zp_mode mode);
 	z_status test_white_space(zp_mode mode);
-	z_status _process_sub_item(void* obj,const z_factory_static* ie,zp_mode mode,zp_flags flags);
+	z_status _process_sub_item(void* obj,const z_factory* ie,zp_mode mode,zp_flags flags);
 	z_status _process_sub_obj(ctext start, size_t len,zp_mode mode,zp_flags flags);
 	z_status _process_single_item(zp_mode mode,zp_flags flags);
 	z_status get_flags(zp_flags& flags);
 	zp_text_parser& context_get_current_template_parser();
-	void context_set_root(void* p_item,const z_factory_static* ie, ctext parse_string);
-	void context_sub_item_push(void* obj,const z_factory_static* ie);
+	void context_set_root(void* p_item,const z_factory* ie, ctext parse_string);
+	void context_sub_item_push(void* obj,const z_factory* ie);
 	void context_sub_group_push(void* obj);
 	void context_sub_item_pop();
    public:
@@ -242,10 +242,10 @@ public:
  	z_status report_error();
  	z_status parse_template(ctext tmpl);
 	z_status parse_item(void*& p_item_out,ctext item_entry_name);
-	z_status output_obj(z_file* fp,const z_factory_static* factory,void* obj);
+	z_status output_obj(z_file* fp,const z_factory* factory,void* obj);
 	z_status output_default_template(z_file* fp,ctext tmpl);
 	z_status create_obj(ctext item_entry_name,void* &p_item);
-	z_status parse_obj_f(void* p_obj,const z_factory_static* factory,ctext data);
+	z_status parse_obj_f(void* p_obj,const z_factory* factory,ctext data,ctext tmpl=0);
 
 
 

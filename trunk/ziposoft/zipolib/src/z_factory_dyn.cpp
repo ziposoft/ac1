@@ -1,9 +1,17 @@
 #include "zipolib_cpp_pch.h"
 
 #include "zipolib/include/z_factory_dyn.h"
-z_obj_vector_map<z_factory_dyn> g_factories_dynamic;
 
-zf_feature::zf_feature(ctext name,zf_var_funcs_base* funcs,size_t offset) 
+
+z_obj_vector_map<z_factory_dyn>& get_factories_dynamic()
+{
+	static z_obj_vector_map<z_factory_dyn> g_factories_dynamic;
+	return 	g_factories_dynamic;
+
+}
+
+
+zf_feature::zf_feature(ctext name,const zf_var_funcs_base* funcs,size_t offset) 
 {
 	_name=name;
 	df=funcs;
@@ -16,7 +24,11 @@ ctext z_factory_dyn::get_name() const
 	return _name;
 
 }
-
+z_factory_dyn::z_factory_dyn(ctext name) 
+{
+	_name=name;
+	get_factories_dynamic().add(this);
+}
 
 z_status z_factory_dyn::get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs)  const
 {

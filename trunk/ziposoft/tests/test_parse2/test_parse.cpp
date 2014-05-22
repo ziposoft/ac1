@@ -3,7 +3,7 @@
 
 //GLOBALS
 void * g_parse_obj=0;
-const z_factory_static * g_parse_fact=0;
+const z_factory * g_parse_fact=0;
 z_parser p;
 ctext g_template=0;
 ctext g_expected_output=0;
