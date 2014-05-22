@@ -114,7 +114,7 @@ void zp_parser::context_set_root(void* p_obj,
 	{
 		parse_string=ie->get_parse_string();
 	}
-	
+	Z_ASSERT(parse_string);
 	_ctx_root.init(0,ie,parse_string);
 	_ctx_current=&_ctx_root;
 	_ctx_root._obj=p_obj;

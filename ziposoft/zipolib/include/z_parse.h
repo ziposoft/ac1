@@ -15,6 +15,12 @@ public:
 		return 	parse_obj_f(p_obj, factory,data);
 
 	}
+	template <class CLASS> z_status parse_obj_d(CLASS* p_obj,ctext data,ctext tmpl=0)
+	{
+		const z_factory* factory=&z_factory_T<CLASS>::self;
+		return 	parse_obj_f(p_obj, factory,data,tmpl);
+
+	}
  	z_status report_error();
 	z_status output_default_template(z_file* fp,ctext tmpl);
 	z_status output_obj(z_file* fp,const z_factory* factory,void* obj);

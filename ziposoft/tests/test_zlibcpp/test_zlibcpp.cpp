@@ -124,20 +124,25 @@ ZFACT(testA)
 	ZPROP (_str);
 
 }
-int main(int argc, ctext argv[])
+int main(int argc, char** argv)
 {
 	ZT_ENABLE();
 	ZTF;
 
 	ZT("Testing trace %s %d...\n","duds",4);
 	//dummy.add_features();
-
+	z_debug_load_save_args(&argc,&argv);
 	testA A;
+	z_factory_T<testA>::self.dump_static(gz_out);
 	const z_factory* f=zf_get_factory("testA");
 	z_parser p;
 
 	if(argc>1)
-		p.parse_obj(&A,argv[1],"{_str}ident:'=':{_i}ident");
+	{
+		if(p.parse_obj_d(&A,argv[1],"{_str}ident:'=':{_i}ident"))
+			p.report_error();
+
+	}
 
 
 	f->dump_obj(gz_out,&A);
