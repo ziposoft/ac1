@@ -13,7 +13,23 @@ ________________________________________________________________________*/
 #include "zipolib/include/z_stl_map.h"
 #include "zipolib/include/z_stl_vector.h"
 #include "zipolib/include/z_stl_list.h"
+ 
+class z_trace 
+{
+public:
+	void add_msg(ctext file,ctext func,int line,const char*  lpszFormat,   ... );
 
+
+
+};
+
+extern z_trace g_z_trace;
+
+#define	ZT(...)   g_z_trace.add_msg (__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__);
+#define ZT_ENABLE() 
+
+#define	ZTF 
+#if 0
 
 class zt_src_file;
 
@@ -230,6 +246,7 @@ public:
 };
 extern z_trace g_z_trace;
 
+#define	ZT(...)   gz_logger.add_msg (__FILE__,__FUNCTION__,__LINE__,0, __VA_ARGS__);
 
 
 #if Z_TRACE
@@ -272,5 +289,8 @@ const ctext module_name=STRINGIZE(Z_TRACE_MODULE);
 
 
 #endif
+#endif
+
+
 #endif
 

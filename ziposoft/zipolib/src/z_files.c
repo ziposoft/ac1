@@ -328,7 +328,11 @@ void   z_dir_close(z_directory_h h)
 
 utf8 z_get_filename_from_path(utf8 fullpath)
 {
+#ifdef UNIX
+	utf8 filename=strrchr(fullpath,'/');
+#else
 	utf8 filename=strrchr(fullpath,'\\');
+#endif
 	if(filename) filename++;
 	else filename=fullpath;
 	return filename;

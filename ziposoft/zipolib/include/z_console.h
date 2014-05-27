@@ -7,8 +7,6 @@
 class z_console : public z_terminal
 {
 
-	zp_cmdline 	_cmdline ;
-	z_parser _parser;
 
 	U32 index;
 	U32 cur_start;
@@ -19,14 +17,10 @@ class z_console : public z_terminal
 	bool TabMode;
 	z_string buff;
 	bool _running;
-	z_strlist _history;
 	int _history_index;
 	z_string _partial;
-	z_string _path;
 	U32  _tab_count;
 	U32  _tab_mode_line_index;
-	z_status parse_line(ctext text);
-	z_status execute_line(ctext text);
     virtual void put_prompt();
 	U32 get_index();
 	U32 get_line_length();
@@ -43,12 +37,20 @@ class z_console : public z_terminal
 	void get_auto_complete_list(z_string& partial);
 
 protected:
+	z_strlist _history;
+	z_strlist _path;
+	zp_cmdline 	_cmdline ;
+	z_parser _parser;
+	z_status parse_line(ctext text);
+	virtual z_status OnExecuteLine(ctext text);
     virtual void OnEnter();
     virtual void OnTab();
     virtual void OnUp();
     virtual void OnDown();
     virtual void OnDoubleBack();
 public:
+
+
 	z_console();
 	void run();
 

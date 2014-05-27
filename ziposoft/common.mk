@@ -35,7 +35,7 @@ ifneq (,$(findstring mingw32,$(MACHINE)))
 else
 ifneq (,$(findstring linux,$(MACHINE)))
 	PLATFORM_BUILD=BUILD_GCC
-	CFLAGS+= -DUNIX
+	CFLAGS+= -DUNIX -Wno-invalid-offsetof
 	LINK_OPTS+= -static  -lrt
 	OS=LINUX
 else
@@ -106,7 +106,8 @@ endif
 
 LIB_PATH= $(ZROOT)/lib/$(BUILD_TYPE)/$(MACHINE)/
 DIR_BUILD = $(ZROOT)/build/$(BUILD_TYPE)/$(MACHINE)/$(TGT_NAME)/
-BIN_PATH=  $(ZROOT)/$(BUILD_TYPE)/$(MACHINE)/
+# BIN_PATH=  $(ZROOT)/$(BUILD_TYPE)/$(MACHINE)/
+BIN_PATH=
 
 SRC_AUTO_C =	$(wildcard	$(SRC_PATH)*.c)
 SRC_AUTO_CPP =	$(wildcard	$(SRC_PATH)*.cpp) 

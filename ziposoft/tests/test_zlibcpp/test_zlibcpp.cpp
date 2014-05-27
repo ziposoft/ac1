@@ -6,7 +6,7 @@
 #include "zipolib/include/z_trace.h"
 #include "zipolib/include/z_ntf.h"
 #include "zipolib/include/z_console.h"
-#include "zipolib/include/z_factory_dyn.h"
+#include "zipolib/include/z_factory_static.h"
 /*
  class test	 : public 	z_ntf_obj
  {
@@ -131,6 +131,26 @@
 
  };
 
+  /*
+ class testc : public  z_ntf<testc>
+ {
+ public:
+	testc()
+	{
+		_i=9;
+			ZACT(func);
+			ZPROP(_i);
+	}
+	int _i;
+ 	 int func()
+	 {
+		
+		 printf("hooorraaayy lets nap!!\n");
+		return 0;
+	 }
+ };
+
+ */
 
 
 
@@ -169,15 +189,19 @@ int main(int argc, char** argv)
 	f->execute_act(&A,"func");
 
   	f->dump_obj(gz_out,&A);
+	/*
+	testc c;
+	c.execute_act(&c,"func");
+	c.dump_obj(gz_out,&c);
 
-
+	*/
 
 	return 0;//ZS_RET(base,feature_not_found);
 }
   
 ZFACT(testA)
 {
-	add_act_T("func",&testA::func);
+	ZACT(func);
 
 	ZPROP (_i);
 	ZPROP (_str);

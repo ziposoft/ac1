@@ -1,5 +1,4 @@
 #include "zipolib_cpp_pch.h"
-
 #include "z_file.h"
 #include "z_console.h"
 #include "z_error.h"
@@ -191,9 +190,15 @@ void z_console::run()
 
 void z_console::put_prompt()
 {
-	_path="";
+	int i;
+	gz_out  << "/";
+	for (i=0;i<_path.size();i++)
+	{
+		if(i) gz_out  << "/";
+		gz_out<< _path[i] ;
+	}
+	gz_out  << ">";
 	//_obj_current->get_path(_path);
-	gz_out  << _path << ">";
 	reset_line();
 }
 
@@ -203,7 +208,8 @@ z_status z_console::parse_line(ctext text)
  	z_status status=_parser.parse_obj(&_cmdline,text);
 	if(status==	zs_ok)
 	{
-		zf_dump_obj( &_cmdline);
+		_path= _cmdline._path_list;
+		return zs_ok;
 			
 
 
@@ -212,7 +218,7 @@ z_status z_console::parse_line(ctext text)
 		_parser.report_error();
 	return z_status_error;
 }
-z_status z_console::execute_line(ctext text)
+z_status z_console::OnExecuteLine(ctext text)
 {
 	z_status status=parse_line(text);
 	if(status)
@@ -241,7 +247,7 @@ void z_console::OnEnter()
 	if(buff.size())
 	{
 		//parse_line(buff,_zc);
-		result=execute_line(buff);
+		result=OnExecuteLine(buff);
 		if(result) 
 		{
 			switch(result)
@@ -300,8 +306,11 @@ void z_console::OnTab()
 
 void z_console::OnDoubleBack()
 {
+	if(	_path.size())
+		_path.pop_back();
+	gz_out << "\n";
+	put_prompt();
 
-	gz_out << "\ndouble back!.\n";
 
 }
 
@@ -477,7 +486,7 @@ void zo_console::OnEnter()
 	if(buff.size())
 	{
 		//parse_line(buff,_zc);
-		result=execute_line(buff);
+		result=OnExecuteLine(buff);
 		if(result) 
 		{
 			switch(result)
@@ -536,7 +545,7 @@ void zo_console::OnTab()
 
 void zo_console::dump_feature_outline(void* obj)
 {
-	const z_factory_static* fact=obj->get_fact();
+	const z_factory* fact=obj->get_fact();
 	if(!fact)
 		return;
 	int i_var;
@@ -561,7 +570,7 @@ void zo_console::dump_all()
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const z_module_obj_entry& p_obj_entry=p_module->facts[i_obj];
-			const z_factory_static* fact=p_obj_entry.fact;
+			const z_factory* fact=p_obj_entry.fact;
 			gz_out<< "\t"<< p_obj_entry.name;
 			if(fact->base_fact)
 				gz_out<< "::"<< z_obj_fact_get_name(fact->base_fact);
@@ -571,7 +580,7 @@ void zo_console::dump_all()
 }
 void zo_console::dump_obj2(void* obj)
 {
-	const z_factory_static* fact=obj->get_fact();
+	const z_factory* fact=obj->get_fact();
 	gz_out<< z_obj_fact_get_name(fact)<<"\n";
 	gz_out<< fact->desc<<"\n";
 }
@@ -658,7 +667,7 @@ z_status zo_console::process_args(int argc, char** argv)
 	{
 		int i;
 		for(i=1;i<argc;i++)
-			execute_line(argv[i]);
+			OnExecuteLine(argv[i]);
 	}
 	else
 		list_features();
