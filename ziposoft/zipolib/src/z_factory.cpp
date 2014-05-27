@@ -204,7 +204,7 @@ z_status z_factory::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* ite
 		return zs_operation_not_supported; //could be ACT
 
 	*ppChild=funcs->get_ptr(pvar,iter);
-	return z_status_success;
+	return zs_success;
 
 }
 
@@ -220,7 +220,7 @@ z_status z_factory::set_var_as_string(void* obj,ctext var_name,ctext value)	cons
 
 	char* pvar=(char*)obj+offset;
 	funcs->set(value,pvar);
-	return z_status_success;
+	return zs_success;
 }
 z_status z_factory::get_var_as_string(void* obj,ctext var_name,z_string& value) const
 {
@@ -233,7 +233,7 @@ z_status z_factory::get_var_as_string(void* obj,ctext var_name,z_string& value) 
 		return zs_operation_not_supported; //could be ACT
 	char* pvar=(char*)obj+offset;
 	funcs->get(value,pvar);
-	return z_status_success;
+	return zs_success;
 }
 z_status z_factory::create_child(void* obj,ctext var_name,const z_factory* new_child_type,void** ppChild) const
 {
@@ -249,7 +249,7 @@ z_status z_factory::create_child(void* obj,ctext var_name,const z_factory* new_c
 
 	void* newobj=funcs->create_obj(pvar,new_child_type);
 	*ppChild=newobj;
-	return z_status_success;
+	return zs_success;
 
 }
 void z_factory::clear_all_vars (void* obj) const
@@ -276,7 +276,7 @@ z_status z_factory::execute_act(void* obj,ctext name,int* pret) const
 	int ret=execute_act_ptr	(obj,offset);
 	if(pret)
 		*pret=ret;
-	return z_status_success;
+	return zs_success;
 }
 
 void z_factory::dump_obj(z_file& f,void* obj) const
@@ -371,7 +371,7 @@ z_status z_factory::get_var_info_i(size_t index,ctext& name,size_t &offset,const
 	}
 	ent=get_var_entry(index);
 	if(!ent)
-		return z_status_item_not_found;
+		return zs_item_not_found;
 	name=ent->name;
 	offset=ent->offset;
 	funcs=0;
@@ -380,6 +380,35 @@ z_status z_factory::get_var_info_i(size_t index,ctext& name,size_t &offset,const
 	return zs_ok;		
 		
 }
+
+z_status z_factory::get_feature(ctext name,zf_feature& feat_out) const
+{
+	if(_dynamic)
+	{
+ 		zf_feature* f=_dynamic->features.get_by_name(name);
+		if(f)
+		{
+			feat_out=*f;
+			return zs_ok;
+		}
+	}
+	const zf_var_entry* ent=0;
+	ent=get_var_entry(name);
+	if(!ent)
+		return zs_item_not_found;
+	feat_out._offset=ent->offset;
+	feat_out._name=ent->name;
+	feat_out._type=ent->type;
+
+	feat_out._description="?";
+	if(ent->fp_var_func_get)
+		feat_out.df=ent->fp_var_func_get();
+	else
+		feat_out.df=0;
+	return zs_ok;		
+		
+}
+
 z_status z_factory::get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const
 {
 	if(_dynamic)
@@ -395,7 +424,7 @@ z_status z_factory::get_var_info(ctext name,size_t &offset,const zf_var_funcs_ba
 	const zf_var_entry* ent=0;
 	ent=get_var_entry(name);
 	if(!ent)
-		return z_status_item_not_found;
+		return zs_item_not_found;
 	offset=ent->offset;
 	funcs=ent->fp_var_func_get();
 	return zs_ok;		

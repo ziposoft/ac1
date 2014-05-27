@@ -216,7 +216,7 @@ z_status z_console::parse_line(ctext text)
 	}
 	else
 		_parser.report_error();
-	return z_status_error;
+	return zs_error;
 }
 z_status z_console::OnExecuteLine(ctext text)
 {
@@ -252,8 +252,8 @@ void z_console::OnEnter()
 		{
 			switch(result)
 			{
-			case z_status_success:
-			case z_status_error:
+			case zs_success:
+			case zs_error:
 				break;
 			default:
 				break;

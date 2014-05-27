@@ -175,7 +175,7 @@ zp_text_parser& zp_parser::context_get_current_template_parser()
 z_status zp_parser::report_error()
 {
 	z_string data;
-	printf("status=%s\n",z_status_get_text(_last_status));
+	printf("status=%s\n",zs_get_text(_last_status));
 	if(!_ctx_current) 
 		return _last_status;
 	if(_last_status==zs_ok)

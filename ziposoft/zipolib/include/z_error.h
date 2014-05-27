@@ -6,7 +6,7 @@
 enum {
 	zs_ok=0,
 	zs_matched=0,
-	z_status_success=0,
+	zs_success=0,
 	zs_no_match,
 	zs_skipped,
 	zs_unparsed_data,
@@ -14,11 +14,11 @@ enum {
 	zs_end_of_list,
 	zs_child_not_found,
 	zs_fatal_error,//fatal errors below. Status above!
-	z_status_error,
-	z_status_could_not_open_dir,
-	z_status_already_open,
-	z_status_bad_parameter,
-	z_status_item_not_found,
+	zs_error,
+	zs_could_not_open_dir,
+	zs_already_open,
+	zs_bad_parameter,
+	zs_item_not_found,
  	zs_feature_not_found,
 	zs_operation_not_supported,
 	zs_cannot_create_virtual_obj,
@@ -28,11 +28,10 @@ enum {
 	zs_tmpl_expected_closing_parenthesis,
 	zs_internal_error,
 	zs_bad_argument_2,
-	zs_bad_parameter,
 	zs_wrong_object_type,
 
 };
-ctext z_status_get_text(z_status status);
+ctext zs_get_text(z_status status);
 
 #ifdef	__cplusplus
 #include "zipolib/include/z_file.h"

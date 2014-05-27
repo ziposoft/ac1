@@ -16,7 +16,6 @@ class z_console : public z_terminal
 	enum_key _prev_key;
 	bool TabMode;
 	z_string buff;
-	bool _running;
 	int _history_index;
 	z_string _partial;
 	U32  _tab_count;
@@ -37,6 +36,7 @@ class z_console : public z_terminal
 	void get_auto_complete_list(z_string& partial);
 
 protected:
+	bool _running;
 	z_strlist _history;
 	z_strlist _path;
 	zp_cmdline 	_cmdline ;

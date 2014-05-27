@@ -569,7 +569,7 @@ z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 #ifdef DEBUG_RESULT
 			U32 i;
 			z_string debug_test_results;
-			debug_test_results<<"TEST#"<<testnum<<'('<<z_status_get_text(status)<<"):";
+			debug_test_results<<"TEST#"<<testnum<<'('<<zs_get_text(status)<<"):";
 			//debug_test_results<<'='<<quanity_matched<< ':';
 			for(i=0;i<_results->get_result_count();i++)
 			{
@@ -627,7 +627,7 @@ z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 				status=zs_no_match;
 			if(test_result==zp_result_eof)
 				status=zs_eof;
-			ZT("<<EXIT#%d -%s",testnum,z_status_get_text(status));
+			ZT("<<EXIT#%d -%s",testnum,zs_get_text(status));
 			return status;
 		}
 	}
@@ -655,7 +655,7 @@ z_status zp_parser::_process_sub_item(void* sub_obj,
 	z_status status=_process_group(flags,mode);
 	mode.nested_group=ng;
 
-	ZT("<- %s=%s",ie->get_name(),z_status_get_text(status));
+	ZT("<- %s=%s",ie->get_name(),zs_get_text(status));
 
 	if(status>zs_internal_error)
 		return status;

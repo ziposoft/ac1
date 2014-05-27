@@ -26,7 +26,7 @@ public:
 	const z_factory* _fact_root;
 	const z_factory* _fact_current;
 	void run(const z_factory* f,void * obj);
-
+	z_status evaluate_feature(const z_factory* f,void* obj);
 	//command line props
 	z_string _script_file;
 	z_string _config_file;

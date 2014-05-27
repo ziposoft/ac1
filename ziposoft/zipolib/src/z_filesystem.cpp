@@ -7,22 +7,22 @@ z_status z_directory::open(ctext path,bool create)
 {
 	z_status status;
 	if(_hDir!=0)
-			return Z_ERROR_MSG(z_status_already_open,"z_directory already open");
+			return Z_ERROR_MSG(zs_already_open,"z_directory already open");
 
 	status=z_dir_open(path,&_hDir); //current dir
-	if(status==z_status_success)
+	if(status==zs_success)
 		return status;
 
 	if(create)
 	{
 		status=z_dir_create(path); //current dir
-		if(status!=z_status_success)
-			return Z_ERROR_MSG(z_status_could_not_open_dir,"Could not create directory \"%s\"",path);
+		if(status!=zs_success)
+			return Z_ERROR_MSG(zs_could_not_open_dir,"Could not create directory \"%s\"",path);
 		status=z_dir_open(path,&_hDir); //current dir
-		if(status==z_status_success)
+		if(status==zs_success)
 			return status;
 	}
-	return Z_ERROR_MSG(z_status_could_not_open_dir,"Could not open directory \"%s\"",path);
+	return Z_ERROR_MSG(zs_could_not_open_dir,"Could not open directory \"%s\"",path);
 
 
 }
@@ -50,7 +50,7 @@ z_status z_directory::get_files_by_extension(ctext ext,z_strlist &list)
 	{
 
 		if(open(".")) 
-			return Z_ERROR_MSG(z_status_could_not_open_dir,"Could not open local directory");
+			return Z_ERROR_MSG(zs_could_not_open_dir,"Could not open local directory");
 
 	}
 	z_string filename;
@@ -69,7 +69,7 @@ z_status z_directory::get_files_by_extension(ctext ext,z_strlist &list)
 		}
 	}
 	close();
-	return z_status_success;
+	return zs_success;
 
 }
 
