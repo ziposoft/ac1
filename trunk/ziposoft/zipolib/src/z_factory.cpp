@@ -53,7 +53,10 @@ VF<z_string>::clear(void* v) const{	RECAST(z_string,str); str="";}
 
 zf_var_funcs<z_strlist> 
 ________________________________________________________________________*/
-VF<z_strlist>::get(z_string& s, void* v)	const{	RECAST(z_strlist,list);	list.get_as_string(s);    }
+VF<z_strlist>::get(z_string& s, void* v)	const
+{	
+	RECAST(z_strlist,list);	
+	list.get_as_string(s);    }
 VF<z_strlist>::clear(void* v)				const{	RECAST(z_strlist,list);	list.clear();}
 VF<z_strlist>::set(ctext s, void* v)		const{	RECAST(z_strlist,list);	list <<  s; }
 /*________________________________________________________________________
@@ -300,12 +303,9 @@ void z_factory::dump_obj(z_file& f,void* obj) const
 		f <<'\n';
 		index++;
 	}
-
-
-
 	f.indent_dec();
 	f.indent();
-	f<< "}\n";
+	f<< "}";
 
 }
 void z_factory::dump_static(z_file& f) const
@@ -333,9 +333,9 @@ void z_factory::dump_static(z_file& f) const
 
 /*________________________________________________________________________
 
-z_factory_static
+z_factory
 ________________________________________________________________________*/
-const zf_var_entry* z_factory_static::get_var_entry (ctext name) const
+const zf_var_entry* z_factory::get_var_entry (ctext name) const
 {
 	size_t i;
 	const zf_var_entry* list=get_var_list();
@@ -347,7 +347,7 @@ const zf_var_entry* z_factory_static::get_var_entry (ctext name) const
 	return 0;		
 
 }
-const zf_var_entry* z_factory_static::get_var_entry (size_t i) const
+const zf_var_entry* z_factory::get_var_entry (size_t i) const
 {
 	if(i>=get_var_list_size())
 		return 0;		
@@ -355,20 +355,43 @@ const zf_var_entry* z_factory_static::get_var_entry (size_t i) const
 
 }
 
-z_status z_factory_static::get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs)  const
+z_status z_factory::get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs)  const
 {
 	const zf_var_entry* ent=0;
+	if(_dynamic)
+	{
+ 		zf_feature* f=_dynamic->features[index];
+		if(f)
+		{
+			name=f->_name;
+			offset=f->_offset;
+			funcs=f->df;
+			return zs_ok;
+		}
+	}
 	ent=get_var_entry(index);
 	if(!ent)
 		return z_status_item_not_found;
 	name=ent->name;
 	offset=ent->offset;
-	funcs=ent->fp_var_func_get();
+	funcs=0;
+	if(ent->fp_var_func_get)
+		funcs=ent->fp_var_func_get();
 	return zs_ok;		
 		
 }
-z_status z_factory_static::get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const
+z_status z_factory::get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const
 {
+	if(_dynamic)
+	{
+ 		zf_feature* f=_dynamic->features.get_by_name(name);
+		if(f)
+		{
+			offset=f->_offset;
+			funcs=f->df;
+			return zs_ok;
+		}
+	}
 	const zf_var_entry* ent=0;
 	ent=get_var_entry(name);
 	if(!ent)
@@ -384,7 +407,7 @@ z_status z_factory_static::get_var_info(ctext name,size_t &offset,const zf_var_f
 
 /*________________________________________________________________________
 
-GLOBAL z_factory_static functions
+GLOBAL z_factory functions
 ________________________________________________________________________*/
 extern "C" {
 extern const zp_module_entry *zp_module_master_list_default[]={0};
@@ -392,7 +415,7 @@ extern const  int zp_module_master_list_size_default=0;
 }
 
 
-const z_factory_static*  zf_get_static_factory_by_name(ctext name)
+const z_factory*  zf_get_static_factory_by_name(ctext name)
 {
 	int i_module;
 	for(i_module=0;i_module<zp_module_master_list_size;i_module++)
@@ -402,7 +425,7 @@ const z_factory_static*  zf_get_static_factory_by_name(ctext name)
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const zp_module_fact_entry& p_obj_entry=p_module->facts[i_obj];
-			const z_factory_static* fact=p_obj_entry.fact;
+			const z_factory* fact=p_obj_entry.fact;
 			if(strcmp(fact->get_name(),name)==0)
 				return fact;
 		}
@@ -421,7 +444,7 @@ const z_factory*  zf_get_factory(ctext name)
 }
 void*  zfs_create_obj_by_type(ctext name)
 {
-	const z_factory_static*  f=zf_get_static_factory_by_name( name);
+	const z_factory*  f=zf_get_static_factory_by_name( name);
 	if(f)
 		return f->create_obj();
 	return 0;
@@ -440,7 +463,7 @@ void  zo_factory_list_dump()
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const zp_module_fact_entry& p_obj_entry=p_module->facts[i_obj];
-			const z_factory_static* fact=p_obj_entry.fact;
+			const z_factory* fact=p_obj_entry.fact;
 			gz_out.indent_reset();
 			fact->dump_static(gz_out);
 

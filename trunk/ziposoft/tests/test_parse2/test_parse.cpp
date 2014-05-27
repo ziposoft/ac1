@@ -21,7 +21,7 @@ int  run_custom()
 {
 
 	z_status status=zs_no_match;
-	testObjList obj;
+	zp_value obj;
 
 
 	status=p.parse_obj(&obj,g_arg_data_in);

@@ -15,6 +15,8 @@
 #include <algorithm>
 #ifdef UNIX
 #include <stdarg.h>
+#include <typeinfo>
+
 #define stricmp strcasecmp
 #endif
 #endif

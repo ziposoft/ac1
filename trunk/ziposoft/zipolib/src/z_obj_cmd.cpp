@@ -237,7 +237,7 @@ z_status zo_man_cmd::dump_features(z_file* fp,void* obj)
 }
 void zo_man_cmd::dump_features(void* obj)
 {
-	const z_factory_static* fact=obj->get_fact();
+	const z_factory* fact=obj->get_fact();
 	if(!fact)
 		return;
 	int i_var;
@@ -266,7 +266,7 @@ void zo_man_cmd::dump()
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const z_module_obj_entry& p_obj_entry=p_module->facts[i_obj];
-			const z_factory_static* fact=p_obj_entry.fact;
+			const z_factory* fact=p_obj_entry.fact;
 			gz_out<< "\t"<< p_obj_entry.name;
 			if(fact->base_fact)
 				gz_out<< "::"<< z_obj_fact_get_name(fact->base_fact);

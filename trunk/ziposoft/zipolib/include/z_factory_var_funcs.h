@@ -36,7 +36,7 @@ template <class TYPE >  class zp_var_list_funcs  : public zp_var_list_funcs_base
 public:
 	virtual const z_factory* get_fact()	const
 	{
-		return &z_factory_static_T<TYPE>::self;
+		return &z_factory_T<TYPE>::self;
 	}
 
 	virtual void* create_obj(void* v,const z_factory* fact) const
@@ -65,7 +65,7 @@ public:
 	{
 		//OBJ instance is part of parent, so it is already created.
 		//Just reset it and return a pointer to it.
-		const z_factory_static* f=&z_factory_static_T<CLASS>::self;
+		const z_factory* f=&z_factory_T<CLASS>::self;
 		if(new_child_type!=f)
 		{
 			Z_ERROR_MSG(zs_wrong_object_type,"Objects type does not match member variable");
@@ -79,12 +79,19 @@ public:
 		return var;
 	}
 	virtual void clear(void* v) const{
-		const z_factory_static* f=&z_factory_static_T<CLASS>::self;
+		const z_factory* f=&z_factory_T<CLASS>::self;
 		f->clear_all_vars(v);
 	}
 	virtual const  z_factory*  get_child_obj_fact() const 
 	{ 
-		return &z_factory_static_T<CLASS>::self;
+		return &z_factory_T<CLASS>::self;
+	}
+	virtual void dump(z_file& file, void* v) const
+	{
+		file.indent_inc();
+		file << "\n";
+		z_factory_T<CLASS>::self.dump_obj(file,v);
+		file.indent_dec();
 	}
 };
 template <class CLASS >  const zf_var_funcs_base* zp_child_obj_funcs_get(CLASS& obj)
@@ -100,7 +107,7 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
 public:
 	virtual const  z_factory*  get_child_obj_fact() const 
 	{ 
-		return &z_factory_static_T<CLASS>::self;
+		return &z_factory_T<CLASS>::self;
 	}
 
 	virtual void* get_ptr(void* var,int* iter ) const
@@ -114,7 +121,7 @@ public:
 	{
 		void** ppObj=reinterpret_cast<void**>(var); 
 
-		const z_factory_static* f=&z_factory_static_T<CLASS>::self;
+		const z_factory* f=&z_factory_T<CLASS>::self;
 		if(new_child_type!=f)
 		{
 			Z_ERROR_MSG(zs_wrong_object_type,"Objects type does not match member variable");
@@ -130,8 +137,12 @@ public:
 		if(*ppObj == 0)
 			file<< "NULL";
 		else
-
-			z_factory_static_T<CLASS>::self.dump_obj(file,*ppObj);
+		{
+	 		file.indent_inc();
+			file << "\n";
+			z_factory_T<CLASS>::self.dump_obj(file,*ppObj);
+			file.indent_dec();
+		}
 	}
 
 	virtual void get(z_string& s, void* v) const

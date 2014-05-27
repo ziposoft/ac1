@@ -358,7 +358,7 @@ z_status zb_ds_table_mk::test_record_by_index(size_t index,zb_ds_rec_ptr** curso
 	c4_RowRef& rr=_mk_view[index];
 	gz_out << p.Get(rr)<<"\n";
 
-
+	//Apparently dynamic_cast is slow. change to static for release build
 	zb_rec_ptr_mk* r=dynamic_cast<zb_rec_ptr_mk*>(*cursor);
 	if(r==0)
 		r=new zb_rec_ptr_mk(false);

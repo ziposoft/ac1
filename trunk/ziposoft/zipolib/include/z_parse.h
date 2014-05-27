@@ -1,7 +1,7 @@
 #ifndef z_parse_h
 #define z_parse_h
 #include "zipolib/include/z_factory_static.h"
-#include "zipolib/include/z_factory_dyn.h"
+#include "zipolib/include/z_factory.h"
 class zp_parser;
 class z_parser
 {
@@ -12,7 +12,7 @@ public:
 	//TODO UG!!!
 	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data,ctext tmpl=0)
 	{
-		const z_factory* factory=&z_factory_static_T<CLASS>::self;//TODO UG!!!
+		const z_factory* factory=&z_factory_T<CLASS>::self;//TODO UG!!!
 		return 	parse_obj_f(p_obj, factory,data);
 
 	}
