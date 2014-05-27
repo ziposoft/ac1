@@ -21,7 +21,7 @@ U32 PrintWin32Error ()
 	// Display the string.
 	if (success)
 	{
-		printf("ERROR %lx: %s\n",error,(LPCTSTR)lpMsgBuf);
+		printf("ERROR %lx: %S\n",error,(LPCWSTR)lpMsgBuf);
 		LocalFree( lpMsgBuf );
 	}
 	else

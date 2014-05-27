@@ -36,16 +36,16 @@ struct st_error_msg
 
 st_error_msg status_text[]=
 {
-ERR(z_status_success,	"success")
+ERR(zs_success,	"success")
 ERR(zs_eof,				0)
 ERR(zs_end_of_list	,	0)
 ERR(zs_child_not_found,	0)
 ERR(zs_fatal_error,	0)
-ERR(z_status_error,	0)
-ERR(z_status_could_not_open_dir,	0)
-ERR(z_status_already_open,	0)
-ERR(z_status_bad_parameter,	0)
-ERR(z_status_item_not_found,	0)
+ERR(zs_error,	0)
+ERR(zs_could_not_open_dir,	0)
+ERR(zs_already_open,	0)
+ERR(zs_bad_parameter,	0)
+ERR(zs_item_not_found,	0)
 ERR(zs_feature_not_found,	0)
 ERR(zs_operation_not_supported,	0)
 ERR(zs_cannot_create_virtual_obj,	0)
@@ -62,7 +62,7 @@ ERR(zs_unparsed_data,	0)
 
 };
 
-ctext z_status_get_text(z_status status)
+ctext zs_get_text(z_status status)
 {
 	size_t  i;
 	for (i=0;i<(sizeof(status_text)/ sizeof(st_error_msg) );i++)

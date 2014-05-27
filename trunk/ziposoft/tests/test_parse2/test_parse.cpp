@@ -31,8 +31,8 @@ int  run_custom()
 	if(status!=g_expected_result)
 	{
 		printf("TEST FAILED!\n");
-		printf("result=%s\n",z_status_get_text(status));
-		printf("expected result=%s\n",z_status_get_text(g_expected_result));
+		printf("result=%s\n",zs_get_text(status));
+		printf("expected result=%s\n",zs_get_text(g_expected_result));
 		p.report_error();
 		return -1;
 	}
@@ -79,8 +79,8 @@ int  run_test_only()
 	if(status!=g_expected_result)
 	{
 		printf("TEST FAILED!\n");
-		printf("result=%s\n",z_status_get_text(status));
-		printf("expected result=%s\n",z_status_get_text(g_expected_result));
+		printf("result=%s\n",zs_get_text(status));
+		printf("expected result=%s\n",zs_get_text(g_expected_result));
 		p.report_error();
 		return -1;
 	}
@@ -151,7 +151,7 @@ int run_test_output()
 			if(fp_output_buffer.get_buffer() != g_expected_output)
 			{
 				printf("Output FAILED!\n");
-				printf("result=%s\n",z_status_get_text(status));
+				printf("result=%s\n",zs_get_text(status));
 				printf("Expected: %s (len=%d)\n",g_expected_output,strlen(g_expected_output));
 				printf("Got     : %s (len=%d)\n",fp_output_buffer.get_buffer().c_str(),fp_output_buffer.get_buffer().size());
 				return -1;
@@ -208,7 +208,7 @@ int run_test_output_def()
 		if(fp_output_buffer.get_buffer() != g_expected_def_output)
 		{
 			printf("Default output FAILED!\n");
-			printf("result=%s\n",z_status_get_text(status));
+			printf("result=%s\n",zs_get_text(status));
 			printf("Expected: %s (len=%d)\n",g_expected_def_output,strlen(g_expected_def_output));
 			printf("Got     : %s (len=%d)\n",fp_output_buffer.get_buffer().c_str(),fp_output_buffer.get_buffer().size());
 			return -1;
@@ -259,8 +259,8 @@ int run_parse_xml()
 	if(status!=g_expected_result)
 	{
 		printf("TEST FAILED!\n");
-		printf("result=%s\n",z_status_get_text(status));
-		printf("expected result=%s\n",z_status_get_text(g_expected_result));
+		printf("result=%s\n",zs_get_text(status));
+		printf("expected result=%s\n",zs_get_text(g_expected_result));
 		p.report_error();
 		return -1;
 	}
@@ -312,7 +312,7 @@ int run_static_tests()
 		printf("tmpl=%s, data=%s, expected result=%s\n",
 			entry.templ,
 			entry.input_data,
-			z_status_get_text(entry.expected_result)
+			zs_get_text(entry.expected_result)
 			);
 		g_arg_data_in=entry.input_data;
 		g_expected_output=entry.expected_output;

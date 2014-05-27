@@ -121,8 +121,9 @@ public:
 	virtual z_status get_list_features(zf_feature_list& list)const { return Z_ERROR(zs_operation_not_supported);};
  	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
 
- 	virtual int add_act(ctext name,size_t act_addr); 
+ 	virtual int add_act(ctext name,size_t act_addr,ctext desc); 
  	virtual int add_prop(ctext name,const zf_var_funcs_base* f,size_t act_addr); 
+	z_status get_feature(ctext name,zf_feature& f) const;
 
 };
 
@@ -157,15 +158,14 @@ public:
 		funcptr fp=*( funcptr*) (pp);
 		return (cobj->*fp)();
 	}
- 	virtual int add_act_T(ctext name,fn_act act_addr) 
+ 	virtual int add_act_T(ctext name,fn_act act_addr,ctext desc) 
 	{
-		add_act(name,*(size_t*)(void*)&act_addr);
+		add_act(name,*(size_t*)(void*)&act_addr,desc);
 		return 0;
 	}
 
 	virtual void add_features();
 	virtual const z_factory_info& get_info() const;
-
 
  };
 
@@ -185,13 +185,16 @@ class zf_feature
 public:
 
 
-	zf_feature(ctext name,const zf_var_funcs_base* funcs,size_t offset);
+	zf_feature();
+	zf_feature(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,size_t offset,ctext desc="");
 	ctext get_map_key() { return _name; }
 
 	z_string _name;
 	z_string _description;
 	const zf_var_funcs_base* df;
 	size_t _offset;
+	zf_feature_type _type;
+	void dump(z_file& f,void* obj);
 
 };
 
@@ -222,7 +225,8 @@ public:
 	template <> void z_factory_T<_CLASS_>	::add_features()
 
  #define ZPROP(_VAR_) add_prop(#_VAR_,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_));
-#define ZACT(_ACT_) add_act_T(#_ACT_,&THECLASS::_ACT_ );
+#define ZACT(_ACT_) add_act_T(#_ACT_,&THECLASS::_ACT_ ,"");
+#define ZACT_X(_ACT_,_NAME_,_DESC_) add_act_T(_NAME_,&THECLASS::_ACT_ ,_DESC_);
 
 #endif
 

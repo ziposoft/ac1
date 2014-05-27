@@ -3,6 +3,7 @@
 
 #include "test_console.h"
 #include "zipolib/include/z_parse.h"
+#include "zipolib/include/z_error.h"
 
 
 
@@ -14,36 +15,78 @@ public:
 	int func2() { printf("time for a %d min nap!!\n",i);return 0;};
 	int i;
 };
- class testAd
- {
- public:
-	 testAd()
-	 {
+class testAd
+{
+public:
+	testAd()
+	{
 		_i=123;
 		_str="fred";
 
-	 }
-	 virtual ~testAd(){}
-	 int  _i;
-	 z_string _str;
-	 int func()
-	 {
-		 printf("hooorraaayy!!! %d  %s\n",_i,_str.c_str());
+	}
+	virtual ~testAd(){}
+	int  _i;
+	z_string _str;
+	int func()
+	{
+		printf("hooorraaayy!!! %d  %s\n",_i,_str.c_str());
 		return 0;
-	 }
+	}
+};
 
- };
+z_status z_console_ntf::evaluate_feature(const z_factory* fact,void* obj)
+{
+	z_status status;
+	zf_feature f;
+	if(!_cmdline._feature)
+		return Z_ERROR(zs_error);
+	status=fact->get_feature(_cmdline._feature->_name,f);
+	if(status)
+		return status;
 
- z_status z_console_ntf:: OnExecuteLine(ctext text)
+	if(_cmdline._assignment)
+	{
+		if(!f.df)
+			return Z_ERROR_MSG(zs_error,"Cannot assign value to function\n");//???
+		if(!_cmdline._assign_val)
+		{
+			gz_out<<"Clearing member \""<<f._name<<"\"\n";
+			f.df->clear((char*)obj+f._offset);
+			return zs_ok;
+
+
+		}
+		f.df->set(_cmdline._assign_val->_string,(char*)obj+f._offset);
+
+		return zs_ok;
+	}
+	if(f._type==zf_ft_act)
+	{
+		int ret=fact->execute_act_ptr	(obj,f._offset);
+		return zs_ok;//???
+	}
+	if(!f.df)
+		return Z_ERROR(zs_error);//???
+	gz_out << f._name<<"=";
+	f.df->dump(gz_out,obj);
+	gz_out<<"\n";
+
+	return zs_ok;//???
+}
+z_status z_console_ntf:: OnExecuteLine(ctext text)
 {
 	z_status status=parse_line(text);
 	if(status)
 		return status;
+	zf_feature f;
+	void* obj=_obj_current;
 
 	if(_cmdline._feature)
 	{
-		_fact_self->execute_act(this,_cmdline._feature->_name);
-		
+		status=evaluate_feature(_fact_self,this);
+		if(status)
+			status=evaluate_feature(_fact_current,obj);
+
 	}
 
 
@@ -75,12 +118,13 @@ z_status z_console_ntf::savecfg()
 }
 z_status z_console_ntf::help()
 {
-		gz_out << "help..\n";
+	gz_out << "help..\n";
 	return zs_ok;
 }
 z_status z_console_ntf::exit()
 {
-
+	gz_out<< "exiting.\n";
+	_running=false;
 	return zs_ok;
 }
 void z_console_ntf::run(const z_factory* f,void * obj)
@@ -109,7 +153,7 @@ int main(int argc, char* argv[])
 	zfs_get_static_factory("testA")->execute_act(&A,"func");
 	zfs_get_static_factory("testA")->set_var_as_string(&A,"i","67");
 	zfs_get_static_factory("testA")->execute_act(&A,"func2");
-   */
+	*/
 	gz_out << "load save args...\n";
 	z_debug_load_save_args(&argc,&argv);
 	gz_out << "load save args done\n";
@@ -121,22 +165,22 @@ int main(int argc, char* argv[])
 	for(i=1;i<argc;i++)
 	{
 		gz_out << "parsing [%s]:\n";
-		
+
 		status=parser.parse_obj(&cmdline,argv[i]);
 		if(status==	zs_ok)
 		{
 			zf_dump_obj( &cmdline);
-			
+
 
 
 		}
 		else
 			parser.report_error();
-			
+
 
 
 	}
- 	testAs theobj;
+	testAs theobj;
 	g_con.run(zf_get_factory_T<testAs>(),&theobj);
 	return 0;
 }
@@ -145,10 +189,10 @@ int main(int argc, char* argv[])
 
 
 
- #define ZO_OBJ_LIST \
+#define ZO_OBJ_LIST \
 	ZCLS(testAs,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) ACT(func2) VAR(i)) 
 
-		  
+
 #include "zipolib/include/z_obj.inc"
 ZP_MODULE_DEFINE(testmod);
 
