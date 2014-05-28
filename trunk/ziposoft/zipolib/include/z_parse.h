@@ -104,20 +104,30 @@ public:
 	int get_num_chars();
 	ctext get_full_name(z_string& fullname);
 };
+class zp_path 
+{
+public:
+	zp_path() 
+	{
+		_root_slash=false;
+	}
+	bool _root_slash;
+	z_strlist _path_list;
+};
+
 class zp_cmdline 
 {
 public:
 	zp_cmdline() 
 	{
-		_root_slash=false;
 		_assignment=false;
 		_feature=0;
+		_path=0;
 		_assign_val=0;
 		_params=0;
 	}
-	bool _root_slash;
 	bool _assignment;
-	z_strlist _path_list;
+	zp_path* _path;
 	zp_params* _params;
 
 	z_string _object;

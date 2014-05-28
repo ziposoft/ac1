@@ -20,12 +20,18 @@
 
 
 
-struct zp_obj
+class zf_obj
 {
+public:
+    zf_obj()
+	{
+		_fact=0;	
+		_obj=0;	
+	}
 	const z_factory* _fact;
 	void* _obj;
 };
-class zp_obj_vector  : public std::vector<zp_obj>
+class zp_obj_vector  : public std::vector<zf_obj>
 {
 public:
 };

@@ -10,10 +10,11 @@
 class testAs 
 {
 public:
-	testAs() { i=0; }
+	testAs() { i=0;child=0; }
 	int func() { printf("hooray!!\n");return 0;};
 	int func2() { printf("time for a %d min nap!!\n",i);return 0;};
 	int i;
+	testAs* child;
 };
 class testAd
 {
@@ -27,22 +28,77 @@ public:
 	virtual ~testAd(){}
 	int  _i;
 	z_string _str;
+	testAs child;
 	int func()
 	{
 		printf("hooorraaayy!!! %d  %s\n",_i,_str.c_str());
 		return 0;
 	}
 };
+z_status z_console_ntf::select_obj(ctext name)
+{
+	z_status status;
+	zf_feature f;
+	status=_temp._fact->get_feature(name,f);
+	if(status)
+		return status;
+	if(f._type==zf_ft_obj)
+	{
+		void* v=f.get_var_ptr(_temp._obj);
+		if(!v)
+			return Z_ERROR(zs_feature_not_found);
 
-z_status z_console_ntf::evaluate_feature(const z_factory* fact,void* obj)
+		const z_factory* fact=f.df->get_child_obj_fact();
+		if(!fact)
+			return Z_ERROR(zs_error);			
+		_temp._obj=v;
+		_temp._fact=fact;
+		return zs_ok;
+	}
+
+	return Z_ERROR_MSG(zs_error,"\"%s\" is not an object",name);
+}
+
+z_status z_console_ntf::navigate_to_obj()
+{
+	z_status status;
+	_temp= _selected;
+	if(_cmdline._path)
+	{
+
+		if(_cmdline._path->_root_slash)
+			_temp=_root;
+		size_t i;
+		for(i=0;i<_cmdline._path->_path_list.size();i++)
+		{
+			status=select_obj(_cmdline._path->_path_list[i]);
+			if(status)
+				return Z_ERROR(status);
+		}
+	}
+	if(_cmdline._object)
+	{
+		status=select_obj(_cmdline._object);
+		if(status)
+			return Z_ERROR(status);
+	}
+	return zs_ok;
+
+}
+
+z_status z_console_ntf::evaluate_feature(zf_obj& o)
 {
 	z_status status;
 	zf_feature f;
 	if(!_cmdline._feature)
 		return Z_ERROR(zs_error);
-	status=fact->get_feature(_cmdline._feature->_name,f);
+	status=o._fact->get_feature(_cmdline._feature->_name,f);
+
+
 	if(status)
 		return status;
+
+	void* ftr_ptr=(char*)o._obj+f._offset;
 
 	if(_cmdline._assignment)
 	{
@@ -51,24 +107,24 @@ z_status z_console_ntf::evaluate_feature(const z_factory* fact,void* obj)
 		if(!_cmdline._assign_val)
 		{
 			gz_out<<"Clearing member \""<<f._name<<"\"\n";
-			f.df->clear((char*)obj+f._offset);
+			f.df->clear(ftr_ptr);
 			return zs_ok;
 
 
 		}
-		f.df->set(_cmdline._assign_val->_string,(char*)obj+f._offset);
+		f.df->set(_cmdline._assign_val->_string,ftr_ptr);
 
 		return zs_ok;
 	}
 	if(f._type==zf_ft_act)
 	{
-		int ret=fact->execute_act_ptr	(obj,f._offset);
+		int ret=o._fact->execute_act_ptr	(o._obj,f._offset);
 		return zs_ok;//???
 	}
 	if(!f.df)
 		return Z_ERROR(zs_error);//???
 	gz_out << f._name<<"=";
-	f.df->dump(gz_out,obj);
+	f.df->dump(gz_out,ftr_ptr);
 	gz_out<<"\n";
 
 	return zs_ok;//???
@@ -78,14 +134,29 @@ z_status z_console_ntf:: OnExecuteLine(ctext text)
 	z_status status=parse_line(text);
 	if(status)
 		return status;
+	_temp= _selected;
+	if(!_cmdline._path)
+	{
+		//if no path is specified, then try the built in commands
+		status=evaluate_feature(_self);
+		if(status==zs_ok)
+			return 	zs_ok;
+	}
 	zf_feature f;
-	void* obj=_obj_current;
+	status=navigate_to_obj();
+	if(status)
+	{
+		gz_out <<"Bad path\n";
+		return status;
+	}
 
 	if(_cmdline._feature)
 	{
-		status=evaluate_feature(_fact_self,this);
-		if(status)
-			status=evaluate_feature(_fact_current,obj);
+		status=evaluate_feature(_temp);
+	}
+	else
+	{
+
 
 	}
 
@@ -98,7 +169,9 @@ z_status z_console_ntf:: OnExecuteLine(ctext text)
 z_console_ntf g_con;
 z_status z_console_ntf::list_features()
 {
-	_fact_current->dump_obj(gz_out,_obj_current);
+	_temp._fact->dump_obj(gz_out,_temp._obj);
+	gz_out << "\n";
+
 	return zs_ok;
 }
 z_status z_console_ntf::dumpcfg()
@@ -127,16 +200,11 @@ z_status z_console_ntf::exit()
 	_running=false;
 	return zs_ok;
 }
-void z_console_ntf::run(const z_factory* f,void * obj)
-{
-	_fact_current=_fact_root=f;								  
-	_obj_current=_obj_root=obj;
-	_fact_self=zf_get_factory_T<z_console_ntf>();
-	z_console::run();
 
-}
 ZFACT(z_console_ntf)
 {
+	ZACT_X(exit,"q","Quit/Exit");
+	ZACT_X(list_features,"ls","List features");
 	ZACT(list_features);
 	ZACT(help);
 	ZACT(exit);
@@ -180,8 +248,8 @@ int main(int argc, char* argv[])
 
 
 	}
-	testAs theobj;
-	g_con.run(zf_get_factory_T<testAs>(),&theobj);
+	testAd theobj;
+	g_con.run_T(&theobj);
 	return 0;
 }
 
@@ -190,7 +258,8 @@ int main(int argc, char* argv[])
 
 
 #define ZO_OBJ_LIST \
-	ZCLS(testAs,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) ACT(func2) VAR(i)) 
+	ZCLS(testAs,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) ACT(func2) VAR(i) POBJ(child))  \
+	ZCLS(testAd,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func)  VAR(_str) OBJ(child)) 
 
 
 #include "zipolib/include/z_obj.inc"

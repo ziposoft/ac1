@@ -50,7 +50,7 @@ ZO_OBJ_LIST;
 #define NOFTR {"",0,zf_ft_none,0},
 #define VAR(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_var,__zp_var_funcs_get_##_VAR },
 #define POBJ(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_obj,__zp_var_funcs_get_##_VAR },
-#define OBJ(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_pobj,__zp_var_funcs_get_##_VAR },
+#define OBJ(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_obj,__zp_var_funcs_get_##_VAR },
 #define ACT(_VAR)  { #_VAR, *(size_t*)(void*)&act_##_VAR,zf_ft_act,0 },
 
 #define ZCLS(_CLASS_,_BASE_,_NAME_,_PARSE_,_EXTRA_) \

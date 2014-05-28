@@ -19,7 +19,7 @@ enum zf_feature_type
 	zf_ft_none,
 	zf_ft_var,
 	zf_ft_obj,
-	zf_ft_pobj,
+	//zf_ft_pobj,
 	zf_ft_act,
 
 
@@ -195,6 +195,8 @@ public:
 	size_t _offset;
 	zf_feature_type _type;
 	void dump(z_file& f,void* obj);
+
+	void* get_var_ptr(void* obj,int* iter=0) ;
 
 };
 
