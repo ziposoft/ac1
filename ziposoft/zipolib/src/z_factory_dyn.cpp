@@ -47,7 +47,13 @@ zf_feature::zf_feature(ctext name,zf_feature_type t,const zf_var_funcs_base* fun
 	_description=desc;
 
 }
+void* zf_feature::get_var_ptr(void* obj,int* iter)
+{
+	char* pvar=(char*)obj+_offset;
+	return df->get_ptr(pvar,iter);
 
+
+}
 void zf_feature::dump(z_file& f,void* obj)
 {
 	char* pvar=(char*)obj+_offset;

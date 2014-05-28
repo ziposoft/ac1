@@ -190,7 +190,7 @@ void z_console::run()
 
 void z_console::put_prompt()
 {
-	int i;
+	size_t i;
 	gz_out  << "/";
 	for (i=0;i<_path.size();i++)
 	{
@@ -208,11 +208,7 @@ z_status z_console::parse_line(ctext text)
  	z_status status=_parser.parse_obj(&_cmdline,text);
 	if(status==	zs_ok)
 	{
-		_path= _cmdline._path_list;
 		return zs_ok;
-			
-
-
 	}
 	else
 		_parser.report_error();

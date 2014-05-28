@@ -66,7 +66,7 @@ ________________________________________________________________________*/
 template <> void* zf_var_funcs<zp_obj_vector>::create_obj(void* v,const z_factory* fact) const
 {
 	RECAST(zp_obj_vector,list);
-	zp_obj obj;
+	zf_obj obj;
 	obj._obj=fact->create_obj();
 	obj._fact=fact;
 	list.push_back(obj);
@@ -161,7 +161,7 @@ ________________________________________________________________________*/
 template <> template <class TYPE> void* zf_var_funcs<z_obj_vector<TYPE>>::create_obj(void* v,const z_factory* new_child_type) const
 {
 	RECAST(zp_obj_vector,list);
-	zp_obj obj;
+	zf_obj obj;
 	obj._obj=new_child_type->create_obj();
 	obj._fact=new_child_type;
 	list.push_back(obj);

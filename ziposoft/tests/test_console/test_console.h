@@ -20,13 +20,25 @@ public:
 
 	}
 	virtual z_status OnExecuteLine(ctext text);
-	void* _obj_root;
-	void* _obj_current;
-	const z_factory* _fact_self;
-	const z_factory* _fact_root;
-	const z_factory* _fact_current;
-	void run(const z_factory* f,void * obj);
-	z_status evaluate_feature(const z_factory* f,void* obj);
+	zf_obj _root;
+	zf_obj _self;
+	zf_obj _selected;
+	zf_obj _temp;
+
+	template <class CLASS> void run_T(CLASS * obj)
+	{
+		_root._obj=obj;
+		_root._fact=&z_factory_T<CLASS>::self;
+		_selected= _root;
+		_self._fact=&z_factory_T<z_console_ntf>::self;
+		_self._obj=this;
+		run();
+	}
+
+	z_status evaluate_feature(zf_obj& o);
+ 	z_status navigate_to_obj();
+ 	z_status select_obj(ctext name);
+
 	//command line props
 	z_string _script_file;
 	z_string _config_file;
