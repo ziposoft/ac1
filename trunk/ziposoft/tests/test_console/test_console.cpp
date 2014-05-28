@@ -190,7 +190,7 @@ z_status z_console_ntf::loadcfg()
 		_parser.report_error();
 		return status;
 	}
-
+	//cfg._obj.get_by_name(
 	return zs_ok;
 
 	return zs_ok;

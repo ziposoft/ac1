@@ -183,5 +183,9 @@ template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(z_obj_vector<VA
 	static const zp_var_list_funcs<VAR> f;
 	return &f;
 };
-
+template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(z_obj_vector_map<VAR>& list)
+{
+	static const zp_var_list_funcs<VAR> f;
+	return &f;
+};
 #endif

@@ -158,7 +158,7 @@ public:
 	{
 	}
 	z_string _obj_type;
-	z_obj_vector<zp_cfg_feature> _features;
+	z_obj_vector_map<zp_cfg_feature> _features;
 };
 class zp_cfg_file
 {
@@ -166,7 +166,7 @@ public:
 	zp_cfg_file() 
 	{
 	}
-	z_obj_vector<zp_cfg_obj> _obj;
+	z_obj_vector_map<zp_cfg_obj> _obj;
 };
 #endif
 

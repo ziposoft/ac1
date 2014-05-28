@@ -293,14 +293,14 @@ void z_factory::dump_obj(z_file& f,void* obj) const
 	while(get_var_info_i(index,name,offset,funcs)==zs_ok)	 
 	{
 		char* pvar=(char*)obj+offset;
-		f.indent();
-		f << name;
-		if(funcs)
+		if(funcs)//only vars, not acts
 		{
+			f.indent();
+			f << name;
 			f << "=";
 			funcs->dump(f,pvar);
+			f <<'\n';
 		}
-		f <<'\n';
 		index++;
 	}
 	f.indent_dec();
