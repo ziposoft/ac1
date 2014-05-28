@@ -164,7 +164,7 @@ zp_parser::zp_parser()
 	_results=0;
 	_ctx_current=0;
 	_last_status=zs_ok;
-	_index_furthest=0;
+	_furthest_index=0;
 }
 zp_text_parser& zp_parser::context_get_current_template_parser()
 {
@@ -186,7 +186,7 @@ z_status zp_parser::report_error()
 
 	}
 	else
-	printf("Error while parsing object type \"%s\"\n",_ctx_current->_obj_factory->get_name());
+	printf("Error while parsing object type \"%s\"\n",_furthest_obj);
 	zp_text_parser& tmpl=context_get_current_template_parser();
 	//TODO it should report from the FARTHEST that we got
 	//printf("template=\n%s\n",t.get_buffer());
@@ -195,6 +195,9 @@ z_status zp_parser::report_error()
 	{
 		print_context();
 		tmpl.print_context();
+
+		_index_under_test=_furthest_index;
+		print_context();
 	}
 
 	if(_last_status==zs_no_entry_for_item)

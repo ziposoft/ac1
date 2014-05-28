@@ -12,22 +12,22 @@ using namespace std;
 #include <sys/types.h>
 #include <sys/stat.h>
 #endif
-
-
-z_file::z_file()
+void z_file::init()
 {
 	_file_handle=0;
 	_log_file_handle=0;
 	_max_line_length=0x1000;
 	_indent_depth=0;
 }
+
+z_file::z_file()
+{
+	init();
+}
 z_file::z_file(ctext filename)
 {
-	_file_handle=0;
-	_max_line_length=0x1000;
-	_log_file_handle=0;
+	init();
 	_file_name=filename;
-	_indent_depth=0;
 }
 z_file::~z_file()
 {
@@ -37,16 +37,14 @@ z_file::~z_file()
 
 z_file::z_file(size_t h)
 {
+	init();
 	_file_handle=h;
-	_max_line_length=0x1000;
-	_log_file_handle=0;
 }
 z_file::z_file(ctext filename,ctext mode)
 {
+	init();
 	_file_name=filename;
 	_file_handle=(size_t)(void*)fopen(filename,mode);
-	_max_line_length=0x1000;
-	_log_file_handle=0;
 }
 int z_file::open(ctext filename,ctext mode)
 {
