@@ -121,6 +121,7 @@ int main(int argc, char** argv)
 	if(g_arg_obj_type)
 	{
 		g_parse_fact=zf_get_factory(g_arg_obj_type);
+		g_arg_operation="obj";
 		if(!g_parse_fact)
 		{
 			printf("ERROR! Class \"%s\" not found.\n",g_arg_obj_type.c_str());

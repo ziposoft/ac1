@@ -47,8 +47,6 @@ class zp_text_parser
 	const char* _start;
 	const char* _end;
 	const char* _index_current;
-	const char* _index_under_test;
-	//const char* _index_furthest;
 	const char* _match_start;
 	const char* _match_end;
 	int n_newlines;
@@ -60,6 +58,8 @@ class zp_text_parser
 	//internal stream tests
 	z_status _test_char(char c);
 	z_status _test_end_char(char c); //  ~>(char) 
+protected:
+	const char* _index_under_test;
 public:
 	//initialization
 	zp_text_parser();

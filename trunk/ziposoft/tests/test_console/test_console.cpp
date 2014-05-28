@@ -166,7 +166,6 @@ z_status z_console_ntf:: OnExecuteLine(ctext text)
 }
 
 
-z_console_ntf g_con;
 z_status z_console_ntf::list_features()
 {
 	_temp._fact->dump_obj(gz_out,_temp._obj);
@@ -181,12 +180,25 @@ z_status z_console_ntf::dumpcfg()
 }
 z_status z_console_ntf::loadcfg()
 {
+	z_file f(_config_file,"rb");
+	zp_cfg_file cfg;
+	z_string data_in;
+	f.read_all(data_in);
+	z_status status=_parser.parse_obj(&cfg,data_in);
+	if(status!=zs_ok)
+	{
+		_parser.report_error();
+		return status;
+	}
+
+	return zs_ok;
 
 	return zs_ok;
 }
 z_status z_console_ntf::savecfg()
 {
-
+	z_file f(_config_file,"wb");
+	_root._fact->dump_obj(f,_root._obj);
 	return zs_ok;
 }
 z_status z_console_ntf::help()
@@ -206,10 +218,10 @@ ZFACT(z_console_ntf)
 	ZACT_X(exit,"q","Quit/Exit");
 	ZACT_X(list_features,"ls","List features");
 	ZACT(list_features);
+	ZACT(loadcfg);
+	ZACT(savecfg);
 	ZACT(help);
 	ZACT(exit);
-
-
 }
 
 int main(int argc, char* argv[])
@@ -228,6 +240,8 @@ int main(int argc, char* argv[])
 
 	int i;
 	//ZT_ENABLE();
+	z_console_ntf console(argv[0]);
+
 	zp_cmdline 	cmdline ;
 	z_parser parser;
 	for(i=1;i<argc;i++)
@@ -249,7 +263,7 @@ int main(int argc, char* argv[])
 
 	}
 	testAd theobj;
-	g_con.run_T(&theobj);
+	console.run_T(&theobj);
 	return 0;
 }
 

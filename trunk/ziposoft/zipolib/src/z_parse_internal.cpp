@@ -529,6 +529,7 @@ z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 				status=_process_single_item(mode,flags);
 				if(status==zs_matched)
 				{
+
 					quanity_matched++;
 					if(flags.multi)
 					{
@@ -889,7 +890,14 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 	ctext match_start=0;
 	size_t match_len=0;
 	size_t template_offset=tmpl.get_index_offset();
+	
+	if(get_index()>_furthest_index)
+	{
+		_furthest_index=get_index();
+		_furthest_obj=	_ctx_current->_obj_factory->get_name();
+	//	_furthest_tmpl=	tmpl.;
 
+	}
 #if DEBUG
 	z_string debug_data;	
 	z_string debug_temp;
@@ -1098,14 +1106,3 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 	//	return result;
 }
 
-z_status zp_parser::advance(size_t count)
-{
-	z_status s=zp_text_parser::advance(count);
-	if(s)
-		return s;
-
-	if(get_index()>_index_furthest)
-		_index_furthest=get_index();
-	
-	return zs_ok;
-}

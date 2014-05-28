@@ -41,6 +41,8 @@ public:
     z_file(ctext filename,ctext mode);
     virtual ~z_file();
 
+	void init();
+
 	int open(ctext filename,ctext mode);
 	void close();
 	void flush();

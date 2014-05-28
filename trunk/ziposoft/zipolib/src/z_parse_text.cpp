@@ -51,7 +51,6 @@ z_status zp_text_parser::check_status(z_status status)
 void zp_text_parser::set_source(const char* code,size_t len)
 {
 	n_newlines=0;
-//	_index_furthest=0;
 	_index_under_test=0;
 	_match_start=0;
 	if(len==(size_t)-1)
@@ -84,7 +83,7 @@ bool zp_text_parser::eob()
 }
 char zp_text_parser::current_ch() 
 { 
-//	_index_under_test= _index_current;
+	//	_index_under_test= _index_current;
 	return *_index_current; 
 }
 
@@ -114,7 +113,7 @@ z_status zp_text_parser::advance(size_t count)
 		char c=*_index_current;
 		if(c=='\n')
 		{
-				n_newlines++;
+			n_newlines++;
 		}
 		_index_current++;
 		count--;
@@ -196,24 +195,26 @@ size_t zp_text_parser::debug(z_string &out,ctext pbuff,size_t before,size_t afte
 		bool escaped=true;
 		switch(*c)
 		{
-			case '\n':
+		case '\n':
 			out << "\\n";
 			break;
-			case '\r':
+		case '\r':
 			out << "\\r";
 			break;
-			case '\\':
+		case '\\':
 			out << "\\";
 			break;
-			case '\t':
+		case '\t':
 			out << "\\t";
 			break;
-			case ' ':
-			out << "~";
+		case ' ':
+			escaped=false;
+			out << " ";
 			break;
-			default:
-				escaped=false;
-				out<<*c;
+		default:
+
+			escaped=false;
+			out<<*c;
 			break;
 		}
 		if(escaped)
@@ -226,7 +227,7 @@ size_t zp_text_parser::debug(z_string &out,ctext pbuff,size_t before,size_t afte
 		c++;
 	}
 	return before;
-	
+
 }
 //________________________________________________________________
 //
@@ -286,7 +287,7 @@ z_status zp_text_parser::test_char(char c)
 {
 	z_status status;
 	if((status=start_test())) return status;
-	
+
 	if(current_ch() == c)
 	{
 		inc();

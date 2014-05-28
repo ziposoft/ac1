@@ -135,5 +135,38 @@ public:
 	zp_value* _assign_val;
 
 };
+class zp_cfg_obj;
+
+class zp_cfg_feature
+{
+public:
+	zp_cfg_feature() 
+	{
+		_strlist=0;
+		_child=0;
+	}
+	z_string _name;
+	z_string _val;
+	zp_str_list* _strlist;
+	zp_cfg_obj* _child;
+};
+
+class zp_cfg_obj
+{
+public:
+	zp_cfg_obj() 
+	{
+	}
+	z_string _obj_type;
+	z_obj_vector<zp_cfg_feature> _features;
+};
+class zp_cfg_file
+{
+public:
+	zp_cfg_file() 
+	{
+	}
+	z_obj_vector<zp_cfg_obj> _obj;
+};
 #endif
 

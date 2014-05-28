@@ -305,7 +305,7 @@ void z_factory::dump_obj(z_file& f,void* obj) const
 	}
 	f.indent_dec();
 	f.indent();
-	f<< "}";
+	f<< "}\n";
 
 }
 void z_factory::dump_static(z_file& f) const
