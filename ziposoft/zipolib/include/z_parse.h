@@ -66,6 +66,7 @@ class zp_value
 public:
 	zp_value() 
 	{
+		_string_list=0;//setting obj pointers to 0 is critical!!!
 	}
 	//zp_cfg_obj* _child;
 	zp_str_list* _string_list;
