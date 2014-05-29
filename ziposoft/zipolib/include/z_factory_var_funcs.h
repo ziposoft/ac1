@@ -9,15 +9,15 @@ This interface manipulates simple member variables
 template <class VAR >  class zf_var_funcs  : public zf_var_funcs_base
 {
 public:
-	virtual void get(z_string& s, void* v,int index=0) const;
-	virtual void set(ctext  s, void* v,int index=0) const;
+	virtual void get(z_string& s, void* v,int index=-1) const;
+	virtual void set(ctext  s, void* v,int index=-1) const;
 	virtual void clear(void* v) const;
 	virtual void add(void* list,void* obj) const ;
 	virtual void* get_item(void* list,size_t index) const;
 	virtual size_t get_size(void* list) const;
 	virtual void dump(z_file& s, void* v) const;
 	virtual void* create_obj(void* var,const z_factory* fact) const;
-	virtual void set_from_value(zp_value* val, void* var) const ;
+	virtual void set_from_value(zp_value* val, void* var,int index=-1) const ;
 };	
 class zp_var_list_funcs_base  : public zf_var_funcs_base
 {
@@ -146,7 +146,7 @@ public:
 		}
 	}
 
-	virtual void get(z_string& s, void* v,int index=0) const
+	virtual void get(z_string& s, void* v,int index=-1) const
 	{
 		s="???";
 	}

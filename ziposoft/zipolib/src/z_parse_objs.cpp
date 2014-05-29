@@ -13,7 +13,7 @@
 #define ZO_OBJ_LIST \
 	ZCLS(zp_path,void,"","{_root_slash}?'/':+({_path_list}ident:'/')",	VAR(_root_slash)   VAR(_path_list) )\
 	ZCLS(zp_cmdline,void,"",\
-	"{_path}?zp_path:?({_object}ident:'.'):{_feature}zp_feature:"\
+	"{_path}?zp_path:?({_object}ident:'.'):{_feature}?zp_feature:"\
 	"?( ({_assignment}'=':{_assign_val}zp_value)|{_params}zp_params)",\
 	POBJ(_feature)  VAR(_object) POBJ(_assign_val)  VAR(_assignment) POBJ(_params) POBJ(_path) )\
 	ZCLS(zp_str_list,void,"strlist","'{':*(({_list}ident|{_list}string|{_list}string_sq):?','):'}'",VAR(_list) )\

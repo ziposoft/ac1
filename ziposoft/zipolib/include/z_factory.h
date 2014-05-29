@@ -31,8 +31,8 @@ class zf_var_funcs_base
 {
 public:
 	virtual void dump(z_file& s, void* v) const;
-	virtual void get(z_string& s, void* v,int index=0) const {};
-	virtual void set(ctext s, void* v,int index=0) const {};
+	virtual void get(z_string& s, void* v,int index=-1) const {};
+	virtual void set(ctext s, void* v,int index=-1) const {};
 	virtual void clear(void* v) const {} 
 	virtual void add(void* list,void* obj) const {} 
 	virtual void* get_item(void* list,size_t index) const { return 0;} 
@@ -41,7 +41,7 @@ public:
 	//This is if the member var is an obj, pointer to obj, or obj list		
 	virtual void* create_obj(void* var,const z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
 	virtual const z_factory*  get_child_obj_fact() const { return 0;}
-	virtual void set_from_value(zp_value* val, void* var) const {};
+	virtual void set_from_value(zp_value* val, void* var,int index=-1) const {};
 
 } ;
 

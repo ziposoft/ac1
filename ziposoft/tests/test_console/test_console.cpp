@@ -54,6 +54,7 @@ z_status z_console_ntf::select_obj(ctext name)
 			return Z_ERROR(zs_error);			
 		_temp._obj=v;
 		_temp._fact=fact;
+
 		return zs_ok;
 	}
 
@@ -64,17 +65,24 @@ z_status z_console_ntf::navigate_to_obj()
 {
 	z_status status;
 	_temp= _selected;
+	_temp_path=_path;
 	if(_cmdline._path)
 	{
 
 		if(_cmdline._path->_root_slash)
+		{
 			_temp=_root;
+			_temp_path.clear();
+		}
 		size_t i;
 		for(i=0;i<_cmdline._path->_path_list.size();i++)
 		{
-			status=select_obj(_cmdline._path->_path_list[i]);
+			ctext name=_cmdline._path->_path_list[i];
+			status=select_obj(name);
+			
 			if(status)
 				return Z_ERROR(status);
+			_temp_path<<name;
 		}
 	}
 	if(_cmdline._object)
@@ -82,6 +90,7 @@ z_status z_console_ntf::navigate_to_obj()
 		status=select_obj(_cmdline._object);
 		if(status)
 			return Z_ERROR(status);
+		_temp_path<<_cmdline._object;
 	}
 	return zs_ok;
 
@@ -91,6 +100,7 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 {
 	z_status status;
 	zf_feature f;
+	int index=-1;
 	if(!_cmdline._feature)
 		return Z_ERROR(zs_error);
 	status=o._fact->get_feature(_cmdline._feature->_name,f);
@@ -100,6 +110,8 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 		return status;
 
 	void* ftr_ptr=(char*)o._obj+f._offset;
+	if(_cmdline._feature->_sub)
+		index=_cmdline._feature->_sub->_id.GetDecVal();
 
 	if(_cmdline._assignment)
 	{
@@ -113,7 +125,7 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 
 
 		}
-		f.df->set_from_value(_cmdline._assign_val,ftr_ptr);
+		f.df->set_from_value(_cmdline._assign_val,ftr_ptr,index);
 
 		return zs_ok;
 	}
@@ -127,17 +139,20 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 
 	if(f._type==zf_ft_var)
 	{
-		int index=0;
 		z_string str;
-		if(_cmdline._feature->_sub)
-			index=_cmdline._feature->_sub->_id.GetDecVal();
 		f.df->get(str,ftr_ptr,index);
 		gz_out << f._name<<"="<<str<<"\n";
 		return zs_ok;//???
 
 	}
-	f.df->dump(gz_out,ftr_ptr);
-	gz_out<<"\n";
+	if(f._type==zf_ft_obj)
+	{
+		_selected=_temp;
+		_path=_temp_path;
+
+	}
+	//f.df->dump(gz_out,ftr_ptr);
+	//gz_out<<"\n";
 
 	return zs_ok;//???
 }
@@ -168,7 +183,8 @@ z_status z_console_ntf:: OnExecuteLine(ctext text)
 	}
 	else
 	{
-
+		if(_cmdline._path)//if they just provide a path then assign the path
+			_path=_temp_path;
 
 	}
 
