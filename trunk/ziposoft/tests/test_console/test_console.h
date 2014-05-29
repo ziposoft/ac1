@@ -24,6 +24,8 @@ public:
 	zf_obj _self;
 	zf_obj _selected;
 	zf_obj _temp;
+	z_strlist _temp_path;
+
 
 	template <class CLASS> void run_T(CLASS * obj)
 	{

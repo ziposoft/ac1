@@ -26,7 +26,7 @@ template <class V> void* zf_var_funcs<V>::create_obj(void* list,const z_factory*
 template <class V> void zf_var_funcs<V>::get(z_string& s, void* v,int index)	const{}
 template <class V> void zf_var_funcs<V>::set(ctext s, void* v,int index)	const{}
 template <class V> void zf_var_funcs<V>::clear( void* v)	const{}
-template <class V> void zf_var_funcs<V>::set_from_value(zp_value* val, void* var)	const{  set(val->_string,var);}
+template <class V> void zf_var_funcs<V>::set_from_value(zp_value* val, void* var,int index)	const{  set(val->_string,var);}
 
 /*________________________________________________________________________
 
@@ -61,12 +61,38 @@ VF<z_strlist>::dump(z_file& file, void* v)	const{RECAST(z_strlist,list);
 VF<z_strlist>::get(z_string& s, void* v,int index)	const
 {	
 	RECAST(z_strlist,list);	
-	if(index<list.size()) s=list[index];    }
+	if(index==-1)
+	{
+		list.get_as_string(s);
+		return;
+	}
+	if(index<(int)list.size()) 
+		s=list[index];    
+}
 VF<z_strlist>::clear(void* v)				const{	RECAST(z_strlist,list);	list.clear();}
-VF<z_strlist>::set(ctext s, void* v,int index)		const{	RECAST(z_strlist,list);if(index<list.size()) list[index]=s;  }
-VF<z_strlist>::set_from_value(zp_value* val, void* v)		const{	RECAST(z_strlist,list);
-	if((val)&&(val->_string_list))
-		list=val->_string_list->_list ; 
+VF<z_strlist>::set(ctext s, void* v,int index)		const
+{	
+	RECAST(z_strlist,list);
+	if(index==-1)
+	{
+		list<<s; //this is important for multi-stage items in  the parser. 
+		return;
+	}
+	if(index<(int)list.size()) list[index]=s;  
+}
+VF<z_strlist>::set_from_value(zp_value* val, void* v,int index)		const{	RECAST(z_strlist,list);
+	if(index==-1)
+	{
+		if(val->_string_list)
+			list=val->_string_list->_list ;
+		else
+			list<<val->_string;//if we are passed a single string, then just append it.
+		return;
+	}
+	if(index<(int)list.size())
+		list[index]=val->_string; 
+
+
 }
 
 
