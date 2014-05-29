@@ -23,8 +23,8 @@ template <class V> void zf_var_funcs<V>::add(void* list,void* obj) const {}
 template <class V> void* zf_var_funcs<V>::get_item(void* list,size_t index) const {	return 0;}
 template <class V> size_t zf_var_funcs<V>::get_size(void* list) const{	return 0;}
 template <class V> void* zf_var_funcs<V>::create_obj(void* list,const z_factory* fact) const{	return 0;}
-template <class V> void zf_var_funcs<V>::get(z_string& s, void* v)	const{}
-template <class V> void zf_var_funcs<V>::set(ctext s, void* v)	const{}
+template <class V> void zf_var_funcs<V>::get(z_string& s, void* v,int index)	const{}
+template <class V> void zf_var_funcs<V>::set(ctext s, void* v,int index)	const{}
 template <class V> void zf_var_funcs<V>::clear( void* v)	const{}
 template <class V> void zf_var_funcs<V>::set_from_value(zp_value* val, void* var)	const{  set(val->_string,var);}
 
@@ -33,32 +33,37 @@ template <class V> void zf_var_funcs<V>::set_from_value(zp_value* val, void* var
  zf_var_funcs<bool> 
 ________________________________________________________________________*/
 VF<bool>::clear(void* v)            const {RECAST(bool,b); b=false;    }
-VF<bool>::get(z_string& s, void* v) const {RECAST(bool,b); s=(b?"true":"false");  }
-VF<bool>::set(ctext s, void* v)     const {RECAST(bool,b); b=(strcmp(s,"true")==0);    }
+VF<bool>::get(z_string& s, void* v,int index) const {RECAST(bool,b); s=(b?"true":"false");  }
+VF<bool>::set(ctext s, void* v,int index)     const {RECAST(bool,b); b=(strcmp(s,"true")==0);    }
 /*________________________________________________________________________
 
  zf_var_funcs<int> 
 ________________________________________________________________________*/
 VF<int>::clear(void* v) const			{RECAST(int,i); i=0;    }
-VF<int>::get(z_string& s, void* v) const	{RECAST(int,i); s=i;   }
-VF<int>::set(ctext s, void* v) const		{RECAST(int,i); i=atoi(s);    }
+VF<int>::get(z_string& s, void* v,int index) const	{RECAST(int,i); s=i;   }
+VF<int>::set(ctext s, void* v,int index) const		{RECAST(int,i); i=atoi(s);    }
 /*________________________________________________________________________
 
 zf_var_funcs<z_string> 
 ________________________________________________________________________*/
-VF<z_string>::get(z_string& s, void* v) const{RECAST(z_string,str); s=str;    }
-VF<z_string>::set(ctext s, void* v) const{RECAST(z_string,str); str=s;   }
+VF<z_string>::get(z_string& s, void* v,int index) const{RECAST(z_string,str); s=str;    }
+VF<z_string>::set(ctext s, void* v,int index) const{RECAST(z_string,str); str=s;   }
 VF<z_string>::clear(void* v) const{	RECAST(z_string,str); str="";}
 /*________________________________________________________________________
 
 zf_var_funcs<z_strlist> 
 ________________________________________________________________________*/
-VF<z_strlist>::get(z_string& s, void* v)	const
+VF<z_strlist>::dump(z_file& file, void* v)	const{RECAST(z_strlist,list);
+	z_string s;
+	list.get_as_string(s);
+	file<<s;
+}
+VF<z_strlist>::get(z_string& s, void* v,int index)	const
 {	
 	RECAST(z_strlist,list);	
-	list.get_as_string(s);    }
+	if(index<list.size()) s=list[index];    }
 VF<z_strlist>::clear(void* v)				const{	RECAST(z_strlist,list);	list.clear();}
-VF<z_strlist>::set(ctext s, void* v)		const{	RECAST(z_strlist,list);	list <<  s; }
+VF<z_strlist>::set(ctext s, void* v,int index)		const{	RECAST(z_strlist,list);if(index<list.size()) list[index]=s;  }
 VF<z_strlist>::set_from_value(zp_value* val, void* v)		const{	RECAST(z_strlist,list);
 	if((val)&&(val->_string_list))
 		list=val->_string_list->_list ; 

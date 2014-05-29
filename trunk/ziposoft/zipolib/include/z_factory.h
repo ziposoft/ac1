@@ -31,8 +31,8 @@ class zf_var_funcs_base
 {
 public:
 	virtual void dump(z_file& s, void* v) const;
-	virtual void get(z_string& s, void* v) const {};
-	virtual void set(ctext s, void* v) const {};
+	virtual void get(z_string& s, void* v,int index=0) const {};
+	virtual void set(ctext s, void* v,int index=0) const {};
 	virtual void clear(void* v) const {} 
 	virtual void add(void* list,void* obj) const {} 
 	virtual void* get_item(void* list,size_t index) const { return 0;} 

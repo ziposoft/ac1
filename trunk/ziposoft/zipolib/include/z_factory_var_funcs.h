@@ -9,8 +9,8 @@ This interface manipulates simple member variables
 template <class VAR >  class zf_var_funcs  : public zf_var_funcs_base
 {
 public:
-	virtual void get(z_string& s, void* v) const;
-	virtual void set(ctext  s, void* v) const;
+	virtual void get(z_string& s, void* v,int index=0) const;
+	virtual void set(ctext  s, void* v,int index=0) const;
 	virtual void clear(void* v) const;
 	virtual void add(void* list,void* obj) const ;
 	virtual void* get_item(void* list,size_t index) const;
@@ -146,7 +146,7 @@ public:
 		}
 	}
 
-	virtual void get(z_string& s, void* v) const
+	virtual void get(z_string& s, void* v,int index=0) const
 	{
 		s="???";
 	}
@@ -170,8 +170,8 @@ This is custom HEX interface
 template <class VAR >  class zp_var_funcs_hex  : public zf_var_funcs_base
 {
 public:
-	virtual void get(z_string& s, void* v) const;
-	virtual void set(ctext  s, void* v) const;
+	virtual void get(z_string& s, void* v,int index=0) const;
+	virtual void set(ctext  s, void* v,int index=0) const;
 };
 
 template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(VAR& item)

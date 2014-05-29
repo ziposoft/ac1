@@ -124,7 +124,18 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 	}
 	if(!f.df)
 		return Z_ERROR(zs_error);//???
-	gz_out << f._name<<"=";
+
+	if(f._type==zf_ft_var)
+	{
+		int index=0;
+		z_string str;
+		if(_cmdline._feature->_sub)
+			index=_cmdline._feature->_sub->_id.GetDecVal();
+		f.df->get(str,ftr_ptr,index);
+		gz_out << f._name<<"="<<str<<"\n";
+		return zs_ok;//???
+
+	}
 	f.df->dump(gz_out,ftr_ptr);
 	gz_out<<"\n";
 
