@@ -19,13 +19,13 @@ void z_trace::add_msg(ctext file,ctext func,int line,const char*  lpszFormat,  .
 	char* p=&buff[0];
 	char* end=&buff[BUFF_SIZE-3];
 	ctext fn=z_get_filename_from_path(file);
-    p+=_snprintf (p,end-p, "%s %s %d: ",fn, func, line );
+    p+=snprintf (p,end-p, "%s %s %d: ",fn, func, line );
 
 	va_list ArgList;
 	va_start (ArgList, lpszFormat);
 
     p+=vsnprintf (p,end-p, lpszFormat, ArgList);
-    _snprintf (p,end-p, "\n");
+    snprintf (p,end-p, "\n");
   	
 
 	z_debug_out(buff);

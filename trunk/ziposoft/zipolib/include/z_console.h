@@ -37,7 +37,6 @@ class z_console : public z_terminal
 
 protected:
 	bool _running;
-	z_strlist _history;
 	z_strlist _path;
 	zp_cmdline 	_cmdline ;
 	z_parser _parser;
@@ -49,6 +48,7 @@ protected:
     virtual void OnDown();
     virtual void OnDoubleBack();
 public:
+	z_strlist _history;
 
 
 	z_console();

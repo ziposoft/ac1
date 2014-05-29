@@ -25,6 +25,8 @@ enum zf_feature_type
 
 };
 class z_factory;
+class zp_value;
+
 class zf_var_funcs_base
 {
 public:
@@ -39,6 +41,7 @@ public:
 	//This is if the member var is an obj, pointer to obj, or obj list		
 	virtual void* create_obj(void* var,const z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
 	virtual const z_factory*  get_child_obj_fact() const { return 0;}
+	virtual void set_from_value(zp_value* val, void* var) const {};
 
 } ;
 
@@ -122,7 +125,7 @@ public:
  	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
 
  	virtual int add_act(ctext name,size_t act_addr,ctext desc); 
- 	virtual int add_prop(ctext name,const zf_var_funcs_base* f,size_t act_addr); 
+ 	virtual int add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,size_t act_addr); 
 	z_status get_feature(ctext name,zf_feature& f) const;
 
 };
@@ -226,7 +229,8 @@ public:
 	template <> z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=ZFACT##_CLASS_;\
 	template <> void z_factory_T<_CLASS_>	::add_features()
 
- #define ZPROP(_VAR_) add_prop(#_VAR_,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_));
+ #define ZOBJ(_VAR_) add_prop(#_VAR_,zf_ft_obj,zp_child_obj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_));
+ #define ZPROP(_VAR_) add_prop(#_VAR_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_));
 #define ZACT(_ACT_) add_act_T(#_ACT_,&THECLASS::_ACT_ ,"");
 #define ZACT_X(_ACT_,_NAME_,_DESC_) add_act_T(_NAME_,&THECLASS::_ACT_ ,_DESC_);
 

@@ -29,6 +29,7 @@ public:
 	int  _i;
 	z_string _str;
 	testAs child;
+	z_strlist sl;
 	int func()
 	{
 		printf("hooorraaayy!!! %d  %s\n",_i,_str.c_str());
@@ -112,7 +113,7 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 
 
 		}
-		f.df->set(_cmdline._assign_val->_string,ftr_ptr);
+		f.df->set_from_value(_cmdline._assign_val,ftr_ptr);
 
 		return zs_ok;
 	}
@@ -222,8 +223,41 @@ ZFACT(z_console_ntf)
 	ZACT(savecfg);
 	ZACT(help);
 	ZACT(exit);
+	ZPROP(_history);
+
+
 }
 
+class root
+{
+public:
+	root()
+	{
+		x.push_back("x");
+		x<<"y";
+		s="anthony";
+		i=27;
+
+	}
+	z_console_ntf console;
+	testAd a;
+	z_strlist x;
+	int i;
+	z_string s;
+	int add() {  x<<s;return 0;}
+
+
+};
+ZFACT(root)
+{
+	ZOBJ(console);
+	ZOBJ(a);
+	ZPROP(x);
+	ZPROP(i);
+	ZPROP(s);
+	ZACT(add);
+
+};
 int main(int argc, char* argv[])
 {
 	z_status status=zs_no_match;
@@ -240,7 +274,6 @@ int main(int argc, char* argv[])
 
 	int i;
 	//ZT_ENABLE();
-	z_console_ntf console(argv[0]);
 
 	zp_cmdline 	cmdline ;
 	z_parser parser;
@@ -262,8 +295,8 @@ int main(int argc, char* argv[])
 
 
 	}
-	testAd theobj;
-	console.run_T(&theobj);
+	root o;
+	o.console.run_T(&o);
 	return 0;
 }
 
@@ -273,7 +306,7 @@ int main(int argc, char* argv[])
 
 #define ZO_OBJ_LIST \
 	ZCLS(testAs,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) ACT(func2) VAR(i) POBJ(child))  \
-	ZCLS(testAd,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func)  VAR(_str) OBJ(child)) 
+	ZCLS(testAd,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) VAR(sl)  VAR(_str) OBJ(child)) 
 
 
 #include "zipolib/include/z_obj.inc"

@@ -1,7 +1,7 @@
 #include "zipolib_cpp_pch.h"
 
 #include "zipolib/include/z_factory_dyn.h"
-#include "zipolib/include/z_factory_static.h"
+#include "zipolib/include/z_parse.h"
 
 #define RECAST(_TYPE_,_NAME_) _TYPE_& _NAME_= *reinterpret_cast<_TYPE_*>(v);
 #define VF template <> void zf_var_funcs
@@ -26,7 +26,7 @@ template <class V> void* zf_var_funcs<V>::create_obj(void* list,const z_factory*
 template <class V> void zf_var_funcs<V>::get(z_string& s, void* v)	const{}
 template <class V> void zf_var_funcs<V>::set(ctext s, void* v)	const{}
 template <class V> void zf_var_funcs<V>::clear( void* v)	const{}
-
+template <class V> void zf_var_funcs<V>::set_from_value(zp_value* val, void* var)	const{  set(val->_string,var);}
 
 /*________________________________________________________________________
 
@@ -59,6 +59,12 @@ VF<z_strlist>::get(z_string& s, void* v)	const
 	list.get_as_string(s);    }
 VF<z_strlist>::clear(void* v)				const{	RECAST(z_strlist,list);	list.clear();}
 VF<z_strlist>::set(ctext s, void* v)		const{	RECAST(z_strlist,list);	list <<  s; }
+VF<z_strlist>::set_from_value(zp_value* val, void* v)		const{	RECAST(z_strlist,list);
+	if((val)&&(val->_string_list))
+		list=val->_string_list->_list ; 
+}
+
+
 /*________________________________________________________________________
 
 zf_var_funcs<zp_obj_vector> 
