@@ -17,6 +17,7 @@ public:
 	virtual size_t get_size(void* list) const;
 	virtual void dump(z_file& s, void* v) const;
 	virtual void* create_obj(void* var,const z_factory* fact) const;
+	virtual void set_from_value(zp_value* val, void* var) const ;
 };	
 class zp_var_list_funcs_base  : public zf_var_funcs_base
 {

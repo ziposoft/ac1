@@ -67,8 +67,8 @@ public:
 	zp_value() 
 	{
 	}
-
-	zp_str_list _string_list;
+	//zp_cfg_obj* _child;
+	zp_str_list* _string_list;
 	int  _integer;
 	z_string _string;
 };

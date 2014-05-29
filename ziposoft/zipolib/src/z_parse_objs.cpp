@@ -20,7 +20,7 @@
 	ZCLS(zp_params,void,"params","('(':*({_param_list}zp_value:?','):')')",VAR(_param_list) )\
 	ZCLS(zp_pair,void,"pair","{_name}ident:'=':{_val}?ident:#','",VAR(_name) VAR(_val) )\
 	ZCLS(zp_value,void,"value","{_string}string|{_string}string_sq|{_string_list}zp_str_list|{_string}ident",\
-		 OBJ(_string_list) VAR(_string)   )\
+		 POBJ(_string_list) VAR(_string)   )\
 	ZCLS(zp_subscript,void,"","'[':({_id}ident):']'",VAR(_id) )	\
 	ZCLS(zp_feature,void,"","{_name}ident:?{_sub}zp_subscript",VAR(_name) POBJ(_sub)   )\
 	ZCLS(zp_cfg_file,void,"","%whsp:{_obj}*zp_cfg_obj:?whsp",VAR(_obj))\
