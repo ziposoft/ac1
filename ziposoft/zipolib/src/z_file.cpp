@@ -197,6 +197,7 @@ int z_file::putf(const char*  lpszFormat,  ...  )
 	z_temp_buffer_release(tempbuf);
     return c;
 }
+
 void z_file::flush()
 {
     
@@ -238,11 +239,11 @@ z_file gz_out((size_t)stdout);
 // z_debug -  this is the old zipobase01 debug stuff
 //
 //____________________________________________________________________
-
+#define MAX_DEBUG_STR 0x1000
 int z_debug::write(const char* buf, size_t count )
 {
 #ifdef BUILD_VSTUDIO
-	WCHAR* wc=WCHAR_str_allocate(buf,count);
+	WCHAR* wc=WCHAR_str_allocate(buf,MAX_DEBUG_STR);
 	 OutputDebugString(wc);
 	 WCHAR_str_deallocate(wc);
 #else
@@ -257,55 +258,11 @@ ctext GetSourceFileName(ctext fullpath)
 	else filename=fullpath;
 	return filename;
 }
-int z_debug::putfline(const char*  lpszFormat,  ...  )
-{
-    int c;
-    va_list ap;
-	char* tempbuf=z_temp_buffer_get(_max_line_length);
-    va_start (ap, lpszFormat);
-    c=vsnprintf (tempbuf,_max_line_length, lpszFormat, ap);
-    va_end (ap);
-	int d=_depth;
-	while(d--)
-	{
-		write("  ",2);
-	}
-    write(tempbuf,strlen(tempbuf));
-	z_temp_buffer_release(tempbuf);
 
-    return c;
-}
 //TODO ! clean this unused stuff up
-int z_debug::putf(const char*  lpszFormat,  ...  )
-{
-    int c;
-    va_list ap;
-	char* tempbuf=z_temp_buffer_get(_max_line_length);
-    va_start (ap, lpszFormat);
-    c=vsnprintf (tempbuf,_max_line_length, lpszFormat, ap);
-    va_end (ap);
-    write(tempbuf,strlen(tempbuf));
-	z_temp_buffer_release(tempbuf);
-    return c;
-}
-int z_debug:: trace(ctext text,ctext fullpath,ctext func,int line)
-{
-	ctext filename=GetSourceFileName(fullpath);
-	putfline("%s %s(%d): %s()\n",text,filename,line,func);
-	return 0;
-}
-int z_debug:: enter(ctext fullpath,ctext func,int line)
-{
-	trace("->",fullpath,func,line);
-	_depth++;
-	return 0;
-}
-int z_debug:: exit(ctext fullpath,ctext func,int line)
-{
-	_depth--;
-	trace("<-",fullpath,func,line);
-	return 0;
-}
+
+
+
 z_debug::z_debug()
 {
 #ifdef LINUX
@@ -313,7 +270,6 @@ z_debug::z_debug()
 	//open("debug.log","w");
 #endif
 
-	_depth=0;
 }
 z_debug:: ~z_debug()
 {

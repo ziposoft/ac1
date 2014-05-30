@@ -1,6 +1,8 @@
 #include "zipolib_cpp_pch.h"
 #include "z_parse_internal.h"
 
+#undef	ZT
+#define	ZT(...)
 
 typedef z_status (zp_parser::*type_obj_parser_fp)(const void* p1);
 typedef z_status (zp_parser::*type_obj_parser_fp_flags)(zp_flags p1);

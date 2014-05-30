@@ -10,17 +10,20 @@ class z_console_ntf : public z_console
 public:
 	z_console_ntf()
 	{
-
+		_self._fact=&z_factory_T<z_console_ntf>::self;
+		_self._obj=this;
+		_selected= _self;
+		_root._fact=0;
+		_root._obj=0;
 	}
- 	z_console_ntf(ctext exe_name)
+ 	z_status load_config_file(ctext exe_name)
 	{
 		_config_file= exe_name;
 		_config_file<<".cfg";
-
-
+		loadcfg();
 	}
     virtual void OnDoubleBack();
-	virtual z_status OnExecuteLine(ctext text);
+	virtual z_status ExecuteLine(ctext text);
     virtual void OnTab();
 
 
@@ -31,20 +34,19 @@ public:
 	z_strlist _temp_path;
 
 
-	template <class CLASS> void run_T(CLASS * obj)
+	template <class CLASS> void setroot(CLASS * obj)
 	{
 		_root._obj=obj;
 		_root._fact=&z_factory_T<CLASS>::self;
 		_selected= _root;
-		_self._fact=&z_factory_T<z_console_ntf>::self;
-		_self._obj=this;
-		run();
+
 	}
 
 	z_status evaluate_feature(zf_obj& o);
  	z_status navigate_to_obj();
  	z_status select_obj(ctext name);
  	z_status select_obj_from_path(zf_obj& start,z_strlist& list);
+	//void get_auto_complete_list(z_string& partial);
 
 	//command line props
 	z_string _script_file;

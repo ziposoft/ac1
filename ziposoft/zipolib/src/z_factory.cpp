@@ -391,8 +391,21 @@ const zf_var_entry* z_factory::get_var_entry (size_t i) const
 	return &get_var_list()[i];
 
 }
-
-z_status z_factory::get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs)  const
+z_status z_factory::get_list_features(z_strlist& list) const
+{
+	int index=0;
+	ctext name;
+	size_t offset;
+	const zf_var_funcs_base* funcs;
+	while(	get_var_info_i(index,name,offset,funcs)==zs_ok)
+	{
+		list<<name;
+		index++;
+	}
+	return zs_ok;
+}
+z_status z_factory::get_var_info_i(size_t index,ctext& name,size_t &offset,
+								   const zf_var_funcs_base*& funcs)  const
 {
 	const zf_var_entry* ent=0;
 	if(_dynamic)
@@ -405,6 +418,7 @@ z_status z_factory::get_var_info_i(size_t index,ctext& name,size_t &offset,const
 			funcs=f->df;
 			return zs_ok;
 		}
+		index-=_dynamic->features.size();
 	}
 	ent=get_var_entry(index);
 	if(!ent)

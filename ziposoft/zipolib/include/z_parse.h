@@ -102,7 +102,7 @@ public:
 	z_string _name;
 	zp_subscript* _sub;
 
-	int get_num_chars();
+	//int get_num_chars();
 	ctext get_full_name(z_string& fullname);
 };
 class zp_path 
