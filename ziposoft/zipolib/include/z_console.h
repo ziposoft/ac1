@@ -20,7 +20,6 @@ class z_console : public z_terminal
 	z_string _partial;
 	U32  _tab_count;
 	U32  _tab_mode_line_index;
-    virtual void put_prompt();
 	U32 get_index();
 	U32 get_line_length();
 	void AppendChar(char ch);
@@ -47,6 +46,7 @@ protected:
     virtual void OnUp();
     virtual void OnDown();
     virtual void OnDoubleBack();
+    virtual void put_prompt();
 public:
 	z_strlist _history;
 

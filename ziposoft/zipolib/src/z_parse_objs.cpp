@@ -3,7 +3,10 @@
 #include "z_parse.h"
 
 
-
+bool zp_cmdline::has_path()
+{
+	return (_path_list.size())|| _root_slash;
+}
 
 //________________________________________________________________
 //
@@ -11,11 +14,10 @@
 //________________________________________________________________
 
 #define ZO_OBJ_LIST \
-	ZCLS(zp_path,void,"","{_root_slash}?'/':+({_path_list}ident:'/')",	VAR(_root_slash)   VAR(_path_list) )\
 	ZCLS(zp_cmdline,void,"",\
-	"{_path}?zp_path:?({_object}ident:'.'):{_feature}?zp_feature:"\
+	"{_root_slash}?'/':*({_path_list}ident:'/'):?({_object}ident:'.'):{_feature}?zp_feature:"\
 	"?( ({_assignment}'=':{_assign_val}zp_value)|{_params}zp_params)",\
-	POBJ(_feature)  VAR(_object) POBJ(_assign_val)  VAR(_assignment) POBJ(_params) POBJ(_path) )\
+	POBJ(_feature)  VAR(_object) POBJ(_assign_val)  VAR(_assignment) POBJ(_params) VAR(_root_slash)   VAR(_path_list) )\
 	ZCLS(zp_str_list,void,"strlist","'{':*(({_list}ident|{_list}string|{_list}string_sq):?','):'}'",VAR(_list) )\
 	ZCLS(zp_params,void,"params","('(':*({_param_list}zp_value:?','):')')",VAR(_param_list) )\
 	ZCLS(zp_pair,void,"pair","{_name}ident:'=':{_val}?ident:#','",VAR(_name) VAR(_val) )\
@@ -29,6 +31,7 @@
 		POBJ(_strlist) POBJ(_child) VAR(_val) VAR(_name))
 
 
+//	ZCLS(zp_path,void,"","{_root_slash}?'/':*({_path_list}ident:'/')",	VAR(_root_slash)   VAR(_path_list) )
 
 
 

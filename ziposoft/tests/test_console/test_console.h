@@ -19,7 +19,11 @@ public:
 
 
 	}
+    virtual void OnDoubleBack();
 	virtual z_status OnExecuteLine(ctext text);
+    virtual void OnTab();
+
+
 	zf_obj _root;
 	zf_obj _self;
 	zf_obj _selected;
@@ -40,6 +44,7 @@ public:
 	z_status evaluate_feature(zf_obj& o);
  	z_status navigate_to_obj();
  	z_status select_obj(ctext name);
+ 	z_status select_obj_from_path(zf_obj& start,z_strlist& list);
 
 	//command line props
 	z_string _script_file;
