@@ -180,9 +180,6 @@
     <ClCompile Include="src\z_string.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="src\z_terminal_keys.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
     <ClCompile Include="src\z_trace.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
@@ -239,6 +236,9 @@
     </ClCompile>
     <ClCompile Include="src\z_factory_dyn.cpp">
       <Filter>factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_terminal_keys.cpp">
+      <Filter>console</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

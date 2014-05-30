@@ -100,8 +100,10 @@ void z_console::trim_line_to(int trim_point)
 }
 int z_console::run()
 {
+	terminal_open();
 	_running=true;
 	reset_line();
+	put_prompt();
 	
 	_key=key_alpha;
 	char ch;

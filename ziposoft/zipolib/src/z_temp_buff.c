@@ -18,7 +18,7 @@ static char buff[TEMP_BUFF_COUNT][TEMP_BUFF_SIZE];
 #endif
 int gz_temp_buff_outstanding=0;
 int gz_temp_buff_count=0;
-int index=0;
+
 char* z_temp_buffer_get(size_t size)
 {
 	gz_temp_buff_outstanding++;

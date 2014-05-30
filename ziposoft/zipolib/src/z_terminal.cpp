@@ -19,6 +19,8 @@ z_terminal::z_terminal()
 	_pBuffer=0;
 #ifdef WIN32
 	set_key_map(tt_windows);
+	hStdout=NULL;
+	hStdin=NULL;
 #else
 	set_key_map(tt_vt100);
 #endif
