@@ -7,13 +7,13 @@ ________________________________________________________________________*/
 
 #ifndef z_trace_h
 #define z_trace_h
-
+#if 0 
 #include "zipolib/include/z_string.h"
 #include "zipolib/include/z_time.h"
 #include "zipolib/include/z_stl_map.h"
 #include "zipolib/include/z_stl_vector.h"
 #include "zipolib/include/z_stl_list.h"
- 
+
 class z_trace 
 {
 public:
@@ -25,11 +25,8 @@ public:
 
 extern z_trace g_z_trace;
 
-#define	ZT(...)   g_z_trace.add_msg (__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__);
-#define ZT_ENABLE() 
+ 
 
-#define	ZTF 
-#if 0
 
 class zt_src_file;
 

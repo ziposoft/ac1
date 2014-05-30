@@ -110,10 +110,8 @@ class zp_path
 public:
 	zp_path() 
 	{
-		_root_slash=false;
 	}
-	bool _root_slash;
-	z_strlist _path_list;
+
 };
 
 class zp_cmdline 
@@ -123,18 +121,23 @@ public:
 	{
 		_assignment=false;
 		_feature=0;
-		_path=0;
+		//_path=0;
 		_assign_val=0;
 		_params=0;
+		_root_slash=false;
 	}
 	bool _assignment;
-	zp_path* _path;
+	//zp_path* _path;
 	zp_params* _params;
 
 	z_string _object;
 	zp_feature* _feature;
 	zp_value* _assign_val;
+	bool _root_slash;
+	z_strlist _path_list;
 
+
+	bool has_path();
 };
 class zp_cfg_obj;
 

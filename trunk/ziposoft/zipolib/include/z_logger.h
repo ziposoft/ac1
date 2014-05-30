@@ -9,17 +9,21 @@ enum z_logger_level
 	z_logger_lvl_warning,
 	z_logger_lvl_info,
 	z_logger_lvl_debug,
+	z_logger_lvl_trace,
 };
 
 class z_logger_msg
 {
 public:
 	z_string _msg;
-	z_string _source_file;
-	z_string _source_function;
+	ctext _source_file;
+	ctext _source_function;
 	int _source_line;
+	z_logger_level _lvl;
+	z_status _status;
 
-	z_logger_msg(ctext file,ctext func,int line,z_status status,const char*  msg=0);
+
+	z_logger_msg(z_logger_level lvl,ctext file,ctext func,int line,z_status status,const char*  msg=0);
 
 	void dump(z_file *fp);
 
@@ -30,17 +34,22 @@ class z_logger
 {
 	z_stl_obj_vector<z_logger_msg> _log;
 public:
-	z_status add_msg(ctext file,ctext func,int line,z_status status,const char*  lpszFormat,   ... );
+	z_status add_msg(z_logger_level lvl,ctext file,ctext func,int line,z_status status,const char*  lpszFormat,   ... );
+	void out(z_file* f,ctext file,ctext func,int line,ctext msg);
 	void dump();
 
 };
 
 #define	Z_LOG_ERROR(status,...)  gz_logger.add_msg (__FILE__,__FUNCTION__,__LINE__,status, __VA_ARGS__);
-//#define	ZT(...)   gz_logger.add_msg (__FILE__,__FUNCTION__,__LINE__,0, __VA_ARGS__);
+#define	ZT(...)   gz_logger.add_msg (z_logger_lvl_trace,__FILE__,__FUNCTION__,__LINE__,0, __VA_ARGS__);
 
 
 void z_logger_dump();
 
 extern z_logger gz_logger;
+#define ZT_ENABLE() 
+
+#define	ZTF
+
 #endif
 

@@ -60,30 +60,52 @@ z_status z_console_ntf::select_obj(ctext name)
 
 	return Z_ERROR_MSG(zs_error,"\"%s\" is not an object",name);
 }
+void z_console_ntf::OnDoubleBack()
+{
+	if(	_path.size())
+		_path.pop_back();
+	select_obj_from_path(_root,_path);
+	_selected=_temp;
+	gz_out << "\n";
+	put_prompt();
 
+
+}
+z_status z_console_ntf::select_obj_from_path(zf_obj& start,z_strlist& list)
+{
+	z_status status;
+	_temp= start;
+	size_t i;
+	for(i=0;i<list.size();i++)
+	{
+		ctext name=list[i];
+		status=select_obj(name);
+		if(status)
+			return Z_ERROR(status);
+	}
+	return zs_ok;
+
+}
 z_status z_console_ntf::navigate_to_obj()
 {
 	z_status status;
 	_temp= _selected;
 	_temp_path=_path;
-	if(_cmdline._path)
-	{
 
-		if(_cmdline._path->_root_slash)
-		{
-			_temp=_root;
-			_temp_path.clear();
-		}
-		size_t i;
-		for(i=0;i<_cmdline._path->_path_list.size();i++)
-		{
-			ctext name=_cmdline._path->_path_list[i];
-			status=select_obj(name);
+	if(_cmdline._root_slash)
+	{
+		_temp=_root;
+		_temp_path.clear();
+	}
+	size_t i;
+	for(i=0;i<_cmdline._path_list.size();i++)
+	{
+		ctext name=_cmdline._path_list[i];
+		status=select_obj(name);
 			
-			if(status)
-				return Z_ERROR(status);
-			_temp_path<<name;
-		}
+		if(status)
+			return Z_ERROR(status);
+		_temp_path<<name;
 	}
 	if(_cmdline._object)
 	{
@@ -107,7 +129,7 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 
 
 	if(status)
-		return status;
+		return Z_ERROR_MSG(status,"Feature \"%s\" not found\n",_cmdline._feature->_name);
 
 	void* ftr_ptr=(char*)o._obj+f._offset;
 	if(_cmdline._feature->_sub)
@@ -147,7 +169,10 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 	}
 	if(f._type==zf_ft_obj)
 	{
-		_selected=_temp;
+		_temp_path<< f._name;
+
+		_selected._fact=f.df->get_child_obj_fact();
+		_selected._obj=f.get_var_ptr(o._obj);
 		_path=_temp_path;
 
 	}
@@ -156,13 +181,26 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 
 	return zs_ok;//???
 }
+
+void z_console_ntf:: OnTab()
+{
+	z_status status=parse_line(text);
+	if(status)
+		return status;
+
+
+
+
+
+}
+
 z_status z_console_ntf:: OnExecuteLine(ctext text)
 {
 	z_status status=parse_line(text);
 	if(status)
 		return status;
 	_temp= _selected;
-	if(!_cmdline._path)
+	if(!_cmdline.has_path())
 	{
 		//if no path is specified, then try the built in commands
 		status=evaluate_feature(_self);
@@ -183,8 +221,11 @@ z_status z_console_ntf:: OnExecuteLine(ctext text)
 	}
 	else
 	{
-		if(_cmdline._path)//if they just provide a path then assign the path
+		if(_cmdline.has_path())//if they just provide a path then assign the path
+		{
 			_path=_temp_path;
+			_selected=_temp;
+		}
 
 	}
 

@@ -49,21 +49,8 @@ To stdout, to the zipo log, to the OS debug/trace facilities (DbgPrint), to cust
 
 
 
-class z_error_handler : public z_file
-{
-public:
-    z_error_handler()
-    {
-    }
-    virtual ~z_error_handler()
-    {
-    }
-	z_status report(ctext file,ctext func,int line,z_status status,const char*  lpszFormat,   ... );
-};
-
-extern z_error_handler gz_error;
-#define	Z_ERROR(status)   gz_error.report (__FILE__,__FUNCTION__,__LINE__,status,"");
-#define	Z_ERROR_MSG(status,...)   gz_error.report (__FILE__,__FUNCTION__,__LINE__,status,__VA_ARGS__);
+#define	Z_ERROR(status)   gz_logger.add_msg (z_logger_lvl_error,__FILE__,__FUNCTION__,__LINE__,status,0);
+#define	Z_ERROR_MSG(status,...)   gz_logger.add_msg (z_logger_lvl_error,__FILE__,__FUNCTION__,__LINE__,status,__VA_ARGS__);
 
 //#define Z_ERROR_THROW(_error_no_,_error_msg_) {zb_error* e=new  zb_error(_error_no_);e->_error_msg.Format _error_msg_; throw e;}
 

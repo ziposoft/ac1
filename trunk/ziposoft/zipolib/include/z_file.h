@@ -67,11 +67,10 @@ public:
 	bool read_all(char*& data,size_t& size);
 	template <class TYPE>  z_file  &put(TYPE data)
 	{ 
-		//char* tb=(char*)z_temp_buffer_get(0x100);
-		static char tb[0x100]; //TODO - NOT THREAD SAFE!!!
+		char* tb=(char*)z_temp_buffer_get(0x100);
 		z_convert(data,tb,0x100);
 		write(tb,strlen(tb));
-		//z_temp_buffer_release(tb);
+		z_temp_buffer_release(tb);
 		return *this;
 	}	
 

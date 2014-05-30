@@ -4,6 +4,8 @@
 
 ________________________________________________________________________*/
 #include "zipolib_cpp_pch.h"
+#if 0
+
 #include "z_trace.h"
 #include "z_string.h"
 #include "z_logger.h"
@@ -31,7 +33,7 @@ void z_trace::add_msg(ctext file,ctext func,int line,const char*  lpszFormat,  .
 	z_debug_out(buff);
 }
 
-#if 0
+
 
 /* GLOBALS */
 z_string g_file_data;

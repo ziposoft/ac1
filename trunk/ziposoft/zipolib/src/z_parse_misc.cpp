@@ -193,8 +193,8 @@ z_status zp_parser::report_error()
 	
 	if(_last_status)
 	{
-		print_context();
-		tmpl.print_context();
+		//print_context();
+		//tmpl.print_context();
 
 		_index_under_test=_furthest_index;
 		print_context();
