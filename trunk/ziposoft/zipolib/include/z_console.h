@@ -14,33 +14,34 @@ class z_console : public z_terminal
 	bool insertmode;
 	enum_key _key;
 	enum_key _prev_key;
-	bool TabMode;
-	z_string buff;
 	int _history_index;
 	z_string _partial;
-	U32  _tab_count;
-	U32  _tab_mode_line_index;
 	U32 get_index();
-	U32 get_line_length();
 	void AppendChar(char ch);
 	void RedrawLine(int blanks=0);
 	void InsertChar(char ch);
 	void OverwriteChar(char ch);
 	void hChar(char ch);
 	void reset_line();
-	void output(ctext text);
 	void clear_line();
-	void trim_line_to(int trim_point);
     void inc_history(int i);
-	void get_auto_complete_list(z_string& partial);
 
 protected:
+	z_strlist _auto_tab;
+	bool _tab_mode;
+	U32  _tab_count;
+	U32  _tab_index;
+	U32  _tab_mode_line_index;
+	void trim_line_to(int trim_point);
+	U32 get_line_length();
+	void output(ctext text);
+
+	z_string _buffer;
 	bool _running;
-	z_strlist _path;
 	zp_cmdline 	_cmdline ;
 	z_parser _parser;
 	z_status parse_line(ctext text);
-	virtual z_status OnExecuteLine(ctext text);
+	virtual z_status ExecuteLine(ctext text);
     virtual void OnEnter();
     virtual void OnTab();
     virtual void OnUp();
@@ -48,11 +49,12 @@ protected:
     virtual void OnDoubleBack();
     virtual void put_prompt();
 public:
+	z_strlist _path;
 	z_strlist _history;
 
 
 	z_console();
-	void run();
+	int run();
 
 };
 #if 0

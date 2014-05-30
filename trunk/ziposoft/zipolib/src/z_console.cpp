@@ -12,14 +12,14 @@ z_console::z_console()
 	cur_start=0;
 	len=0;
 	insertmode=true;
-	TabMode=false;
+	_tab_mode=false;
 }
 U32 z_console::get_index() { return index;}
 U32 z_console::get_line_length() { return len;}
 void z_console::AppendChar(char ch)
 {
 	
-	buff+=ch;
+	_buffer+=ch;
 	gz_out <<ch;
 	len++;
 	cur_x++;
@@ -28,7 +28,7 @@ void z_console::AppendChar(char ch)
 void z_console::RedrawLine(int blanks)
 {
 	const char* s;
-	s=buff;
+	s=_buffer;
 	s+=index;
 	gz_out << s;
 	while(blanks--) gz_out << ' ';
@@ -37,7 +37,7 @@ void z_console::RedrawLine(int blanks)
 void z_console::InsertChar(char ch)
 {
 	cur_x++;
-	buff.insert(index,1,ch);
+	_buffer.insert(index,1,ch);
 	RedrawLine();
 	len++;
 	index++;
@@ -45,7 +45,7 @@ void z_console::InsertChar(char ch)
 void z_console::OverwriteChar(char ch)
 {
 	cur_x++;
-	buff.replace(index,1,1,ch);
+	_buffer.replace(index,1,1,ch);
 	RedrawLine();
 	index++;
 }
@@ -63,7 +63,7 @@ void z_console::reset_line()
 {
 	index=0;
 	len=0;
-	buff="";
+	_buffer="";
 	GetXY();
 	cur_start=cur_x;
 	
@@ -73,7 +73,7 @@ void z_console::output(ctext text)
 	U32 l=(U32)strlen(text);
 	gz_out << text;
 	len+=l;
-	buff+=text;
+	_buffer+=text;
 	index+=l;
 	cur_x+=l;
 }
@@ -84,7 +84,7 @@ void z_console::clear_line()
 	curGotoXY(cur_x,cur_y);
 	index=0;
 	len=0;
-	buff="";
+	_buffer="";
 }
 void z_console::trim_line_to(int trim_point)
 {
@@ -94,11 +94,11 @@ void z_console::trim_line_to(int trim_point)
 	while(amount_to_trim--) gz_out << ' ';
 	curGotoXY(cur_x,cur_y);
 	index=trim_point;
-	buff.erase(trim_point);
-	//del(buff,trim_point);
+	_buffer.erase(trim_point);
+	//del(_buffer,trim_point);
 	len=trim_point;
 }
-void z_console::run()
+int z_console::run()
 {
 	_running=true;
 	reset_line();
@@ -121,7 +121,7 @@ void z_console::run()
 			OnEnter();
 			break;
 		case key_tab:
-			if(_prev_key!=key_tab) TabMode=false;
+			if(_prev_key!=key_tab) _tab_mode=false;
 			OnTab();
 			break;
 		case key_up:
@@ -155,8 +155,8 @@ void z_console::run()
 				//gz_out << char_back;
 				index--;
 				len--;
-				buff.erase(index,1);
-				//del(buff,index,1);
+				_buffer.erase(index,1);
+				//del(_buffer,index,1);
 				RedrawLine(1);
 			}
 			else
@@ -172,8 +172,8 @@ void z_console::run()
 			{
 				
 				len--;
-				buff.erase(index,1);
-				//del(buff,index,1);
+				_buffer.erase(index,1);
+				//del(_buffer,index,1);
 				RedrawLine(1);
 			}
 			break;
@@ -186,6 +186,7 @@ void z_console::run()
 			break;
 		}
 	}
+	return 0;
 }
 
 void z_console::put_prompt()
@@ -214,7 +215,7 @@ z_status z_console::parse_line(ctext text)
 		_parser.report_error();
 	return zs_error;
 }
-z_status z_console::OnExecuteLine(ctext text)
+z_status z_console::ExecuteLine(ctext text)
 {
 	z_status status=parse_line(text);
 	if(status)
@@ -230,20 +231,20 @@ void z_console::OnEnter()
 	int i;
 	z_status result;
 	gz_out << '\n';
-	if(buff.size())
+	if(_buffer.size())
 	{
-		i=_history.find(buff);
+		i=_history.find(_buffer);
 		if(i!=-1)
 		{
 			_history.del(i);
 		}
-		_history<<buff;
+		_history<<_buffer;
 		_history_index=(U32)_history.size();
 	}
-	if(buff.size())
+	if(_buffer.size())
 	{
-		//parse_line(buff,_zc);
-		result=OnExecuteLine(buff);
+		//parse_line(_buffer,_zc);
+		result=ExecuteLine(_buffer);
 		if(result) 
 		{
 			switch(result)
@@ -254,6 +255,7 @@ void z_console::OnEnter()
 			default:
 				break;
 			}
+			gz_logger.dump();
 			gz_out << "\ncommand failed.\n";
 
 		}
@@ -469,20 +471,20 @@ void zo_console::OnEnter()
 	int i;
 	z_status result;
 	gz_out << '\n';
-	if(buff.size())
+	if(_buffer.size())
 	{
-		i=_history.find(buff);
+		i=_history.find(_buffer);
 		if(i!=-1)
 		{
 			_history.del(i);
 		}
-		_history<<buff;
+		_history<<_buffer;
 		_history_index=(U32)_history.size();
 	}
-	if(buff.size())
+	if(_buffer.size())
 	{
-		//parse_line(buff,_zc);
-		result=OnExecuteLine(buff);
+		//parse_line(_buffer,_zc);
+		result=ExecuteLine(_buffer);
 		if(result) 
 		{
 			switch(result)
@@ -509,7 +511,7 @@ void zo_console::OnTab()
 	if(!TabMode)
 	{
 		int len=0;
-		z_status status=parse_line(buff);
+		z_status status=parse_line(_buffer);
 		if(status==zs_ok)
 		{
 			//TODO - user hits tab with bad line		
@@ -663,7 +665,7 @@ z_status zo_console::process_args(int argc, char** argv)
 	{
 		int i;
 		for(i=1;i<argc;i++)
-			OnExecuteLine(argv[i]);
+			ExecuteLine(argv[i]);
 	}
 	else
 		list_features();

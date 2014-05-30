@@ -1,6 +1,6 @@
 /*________________________________________________________________________
 
- z_factory_h
+z_factory_h
 
 ________________________________________________________________________*/
 
@@ -52,7 +52,7 @@ class zf_feature_list : public z_map_obj<zf_feature>
 
 };
 
- typedef  const zf_var_funcs_base* (*funcp_var_funcs_get)();
+typedef  const zf_var_funcs_base* (*funcp_var_funcs_get)();
 struct zf_var_entry
 {
 	const char* name;
@@ -60,13 +60,13 @@ struct zf_var_entry
 	zf_feature_type type;  //currently not used for anything
 	funcp_var_funcs_get fp_var_func_get;
 };
- struct z_factory_info
- {
+struct z_factory_info
+{
 	ctext name;
 	ctext parse;
 	const size_t num_features;
 	const zf_var_entry* list;
- };
+};
 
 class z_factory_dyn 
 {
@@ -103,12 +103,12 @@ public:
 	virtual const z_factory_info& get_info() const=0;
 	virtual ctext get_parse_string() const { return  get_info().parse;}
 	virtual ctext get_map_key()const;
-	
+
 
 
 	virtual z_status get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs) const;
 	virtual z_status get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const;
- 	virtual int execute_act_ptr(void* obj,size_t  act_addr) const=0;
+	virtual int execute_act_ptr(void* obj,size_t  act_addr) const=0;
 
 
 
@@ -121,25 +121,26 @@ public:
 	virtual void dump_obj(z_file& f,void* obj) const;
 	virtual void dump_static(z_file& f) const;
 
-	virtual z_status get_list_features(zf_feature_list& list)const { return Z_ERROR(zs_operation_not_supported);};
- 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
+	virtual z_status get_list_features(z_strlist& list)const;
 
- 	virtual int add_act(ctext name,size_t act_addr,ctext desc); 
- 	virtual int add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,size_t act_addr); 
+	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
+
+	virtual int add_act(ctext name,size_t act_addr,ctext desc); 
+	virtual int add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,size_t act_addr,ctext desc); 
 	z_status get_feature(ctext name,zf_feature& f) const;
 
 };
 
- z_obj_vector_map<z_factory>& get_factories_dynamic();
- template <class C >  class z_factory_T :public  z_factory
- {
- public:
+z_obj_vector_map<z_factory>& get_factories_dynamic();
+template <class C >  class z_factory_T :public  z_factory
+{
+public:
 	typedef int (C::*fn_act)();
 	typedef C THECLASS;
- 	z_factory_T()	 : z_factory()
+	z_factory_T()	 : z_factory()
 	{			//STATIC
 	}
-  	z_factory_T(ctext name)	 : z_factory()
+	z_factory_T(ctext name)	 : z_factory()
 	{
 		//DYNAMIC
 		get_dyn();
@@ -153,7 +154,7 @@ public:
 	{
 		delete reinterpret_cast<C*>(v);
 	}
- 	virtual int execute_act_ptr(void* vobj,size_t act_addr) const
+	virtual int execute_act_ptr(void* vobj,size_t act_addr) const
 	{
 		typedef int (C::*funcptr)();
 		C*  cobj=reinterpret_cast<C*>(vobj);
@@ -161,7 +162,7 @@ public:
 		funcptr fp=*( funcptr*) (pp);
 		return (cobj->*fp)();
 	}
- 	virtual int add_act_T(ctext name,fn_act act_addr,ctext desc) 
+	virtual int add_act_T(ctext name,fn_act act_addr,ctext desc) 
 	{
 		add_act(name,*(size_t*)(void*)&act_addr,desc);
 		return 0;
@@ -170,7 +171,7 @@ public:
 	virtual void add_features();
 	virtual const z_factory_info& get_info() const;
 
- };
+};
 
 const z_factory*  zf_get_factory(ctext name);
 template <class CLASS> const z_factory*  zf_get_factory_T()
@@ -180,7 +181,7 @@ template <class CLASS> const z_factory*  zf_get_factory_T()
 }
 
 
- #define zp_offsetof_class(_class_,_member_)   (size_t)&reinterpret_cast<const volatile char&>((((_class_*)0)->_member_))
+#define zp_offsetof_class(_class_,_member_)   (size_t)&reinterpret_cast<const volatile char&>((((_class_*)0)->_member_))
 
 class zf_feature
 {
@@ -223,14 +224,15 @@ public:
 };
 
 
- #define ZFACT(_CLASS_)  z_factory_T<_CLASS_> ZFACT##_CLASS_(#_CLASS_); \
+#define ZFACT(_CLASS_)  z_factory_T<_CLASS_> ZFACT##_CLASS_(#_CLASS_); \
 	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,0,0,0 };   \
 	template <>  const z_factory_info& z_factory_T<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; }	  \
 	template <> z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=ZFACT##_CLASS_;\
 	template <> void z_factory_T<_CLASS_>	::add_features()
 
- #define ZOBJ(_VAR_) add_prop(#_VAR_,zf_ft_obj,zp_child_obj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_));
- #define ZPROP(_VAR_) add_prop(#_VAR_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_));
+#define ZOBJ(_VAR_)						add_prop(#_VAR_,zf_ft_obj,zp_child_obj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"");
+#define ZPROP(_VAR_)					add_prop(#_VAR_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"");
+#define ZPROP_X(_VAR_,_NAME_,_DESC_)	add_prop(_NAME_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),_DESC_);
 #define ZACT(_ACT_) add_act_T(#_ACT_,&THECLASS::_ACT_ ,"");
 #define ZACT_X(_ACT_,_NAME_,_DESC_) add_act_T(_NAME_,&THECLASS::_ACT_ ,_DESC_);
 

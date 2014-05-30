@@ -23,9 +23,9 @@ z_obj_vector_map<z_factory>& get_factories_dynamic()
 		return 0;
 
  }
- int z_factory::add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,size_t offset)
+ int z_factory::add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,size_t offset,ctext desc)
  {
- 	get_dyn().features.add(z_new	zf_feature(name,type,f,offset));
+ 	get_dyn().features.add(z_new	zf_feature(name,type,f,offset,desc));
 		return 0;
 
 

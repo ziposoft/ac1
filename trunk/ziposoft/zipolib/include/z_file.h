@@ -125,13 +125,7 @@ class z_debug: public z_file
 public:
 	z_debug();
     virtual ~z_debug();
-	int _depth;
 	virtual int  write(const char* buf, size_t count);
-	virtual int  enter(ctext file,ctext func,int line);
-	virtual int  exit(ctext file,ctext func,int line);
-	virtual int  trace(ctext text,ctext file,ctext func,int line);
-    virtual int putf(const char*  lpszFormat,  ...  );
-    virtual int putfline(const char*  lpszFormat,  ...  );
 };
 
 

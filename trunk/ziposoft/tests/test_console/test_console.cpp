@@ -129,7 +129,10 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 
 
 	if(status)
-		return Z_ERROR_MSG(status,"Feature \"%s\" not found\n",_cmdline._feature->_name);
+		//May not be an error. If it is searching multiple objects.
+		return zs_feature_not_found; 
+
+		//return Z_ERROR_MSG(status,"Feature \"%s\" not found\n",_cmdline._feature->_name.c_str());
 
 	void* ftr_ptr=(char*)o._obj+f._offset;
 	if(_cmdline._feature->_sub)
@@ -169,6 +172,10 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 	}
 	if(f._type==zf_ft_obj)
 	{
+		void* obj=f.get_var_ptr(o._obj);
+		if(!obj)
+			return Z_ERROR_MSG(zs_error,"Cannot select NULL object \"%s\".",f._name.c_str());
+
 		_temp_path<< f._name;
 
 		_selected._fact=f.df->get_child_obj_fact();
@@ -182,19 +189,68 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 	return zs_ok;//???
 }
 
+
 void z_console_ntf:: OnTab()
 {
-	z_status status=parse_line(text);
-	if(status)
-		return status;
+	if(!_tab_mode)
+	{
+		z_status status=parse_line(_buffer);
+		if(status)
+		{
+			gz_logger.dump();
+				put_prompt();
+			return ;
+		}
 
+		status=navigate_to_obj();
+		if(status)
+		{
+			gz_out <<"\nBad path\n";
+			gz_logger.dump();
+				put_prompt();
+			return ;
+		}
+		_auto_tab.clear();		
+		_temp._fact->get_list_features(_auto_tab);
+		if(!_cmdline.has_path())
+		{
+			_self._fact->get_list_features(_auto_tab);
 
+		}
 
+		_tab_mode_line_index=get_line_length();
+		if(_cmdline._feature)
+		{
+			z_string& s=_cmdline._feature->_name;
+			_tab_mode_line_index-=s.size();
+			size_t i=0;
+			while(i<_auto_tab.size())
+			{
+				if(_auto_tab[i].compare(0,s.size(),s))
+					_auto_tab.del(i);
+				else
+					i++;
+			}
+		}
+
+		
+		_tab_count=_auto_tab.size();
+		_tab_mode=true;
+		_tab_index=0;
+
+	}
+	if(!_tab_count)
+		return;
+	trim_line_to(_tab_mode_line_index);
+	output(_auto_tab[_tab_index]);
+	_tab_index++;
+	if(_tab_index>=_tab_count)
+		_tab_index=0;
 
 
 }
 
-z_status z_console_ntf:: OnExecuteLine(ctext text)
+z_status z_console_ntf:: ExecuteLine(ctext text)
 {
 	z_status status=parse_line(text);
 	if(status)
@@ -218,6 +274,9 @@ z_status z_console_ntf:: OnExecuteLine(ctext text)
 	if(_cmdline._feature)
 	{
 		status=evaluate_feature(_temp);
+		if(status==zs_feature_not_found)
+			return Z_ERROR_MSG(status,"Feature \"%s\" not found\n",_cmdline._feature->_name.c_str());
+
 	}
 	else
 	{
@@ -291,7 +350,11 @@ ZFACT(z_console_ntf)
 	ZACT(savecfg);
 	ZACT(help);
 	ZACT(exit);
-	ZPROP(_history);
+	ZACT(run);
+	ZPROP_X(_path,"path","Current path");
+	ZPROP_X(_history,"history","Command line history");
+	ZPROP_X(_config_file,"cfgfile","Filename of configuration file");
+	ZPROP_X(_script_file,"script","Filename of script to run/save");
 
 
 }
@@ -339,32 +402,26 @@ int main(int argc, char* argv[])
 	gz_out << "load save args...\n";
 	z_debug_load_save_args(&argc,&argv);
 	gz_out << "load save args done\n";
+	root o;
+	o.console.setroot(&o);
 
 	int i;
-	//ZT_ENABLE();
-
-	zp_cmdline 	cmdline ;
-	z_parser parser;
 	for(i=1;i<argc;i++)
 	{
-		gz_out << "parsing [%s]:\n";
 
-		status=parser.parse_obj(&cmdline,argv[i]);
-		if(status==	zs_ok)
-		{
-			zf_dump_obj( &cmdline);
-
-
-
-		}
-		else
-			parser.report_error();
+		status=o.console.ExecuteLine(argv[i]);
+		if(status)
+			gz_logger.dump();
 
 
 
 	}
-	root o;
-	o.console.run_T(&o);
+	if(argc==1)
+		o.console.run();
+
+	printf("gz_temp_buff_outstanding=%d\n",gz_temp_buff_outstanding);
+	printf("gz_temp_buff_count=%d\n",gz_temp_buff_count);
+
 	return 0;
 }
 

@@ -3,7 +3,25 @@
 
 #define BUFF_SIZE 100
 
+/*
+enum z_logger_level
+{
+	z_logger_lvl_error,
+	z_logger_lvl_warning,
+	z_logger_lvl_info,
+	z_logger_lvl_debug,
+	z_logger_lvl_trace,
+};
+*/
 
+ctext log_level_type[]=
+{
+	"ERROR",
+	"WARNING",
+	"INFO",
+	"DBG",
+	"TRC",
+};
 
 z_logger_msg::z_logger_msg(z_logger_level lvl,ctext file,ctext func,int line,z_status status,const char*  msg)
 {
@@ -17,34 +35,42 @@ z_logger_msg::z_logger_msg(z_logger_level lvl,ctext file,ctext func,int line,z_s
 }
 void z_logger_msg::dump(z_file *fp)
 {
-	gz_logger.out(fp,_source_file, _source_function,_source_line,_msg.c_str());
+	gz_logger.out(_lvl,fp,_source_file, _source_function,_source_line,_status,_msg.c_str());
 
 }
-void z_logger::out(z_file* f,ctext file,ctext func,int line,ctext msg)
+void z_logger::out(z_logger_level lvl,z_file* f,ctext file,ctext func,int line,z_status status,ctext msg)
 {
 	ctext fn=z_get_filename_from_path(file);
-	f->putf("%s[%d] %s() : %s\n",
+	f->putf("%s-%s[%d] %s()",
+		log_level_type[lvl],
 		fn,
 		line,
-		func,
-		msg);
+		func);
+	if(status)
+		*f<<':'<<zs_get_text(status);
+	if(msg)
+		*f<<':'<<msg;
+	*f<<'\n';
 }
 
 z_status z_logger::add_msg(z_logger_level lvl,ctext file,ctext func,int line,z_status status,const char*  lpszFormat,  ... )
 {
     int c;
-	char* buff=z_temp_buffer_get(BUFF_SIZE);
+	char* buff=0;
+	if(lpszFormat)
+	{
+		buff=z_temp_buffer_get(BUFF_SIZE);
+		va_list ArgList;
+		va_start (ArgList, lpszFormat);
 
-	va_list ArgList;
-	va_start (ArgList, lpszFormat);
+		c=vsnprintf (buff,BUFF_SIZE-1, lpszFormat, ArgList);
+	}
 
-    c=vsnprintf (buff,BUFF_SIZE-1, lpszFormat, ArgList);
-
-
-	z_debug_out(buff);
-	out(&gz_debug,file,func,line,buff);
-
-	_log << new z_logger_msg(lvl, file, func, line, status, buff);
+	out(lvl,&gz_debug,file,func,line,status,buff);
+	if(lvl<=_log_level)
+		_log << new z_logger_msg(lvl, file, func, line, status, buff);
+	if(buff)
+		z_temp_buffer_release(buff);
 	return status;
 }
 
@@ -54,8 +80,10 @@ void z_logger::dump( )
 	for(i=0;i<_log.size();i++)
 	{
 		_log[i]->dump(&gz_out);
+		delete _log[i];
 
 	}
+	_log.clear();
 
 
 }
