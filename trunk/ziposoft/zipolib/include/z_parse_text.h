@@ -97,7 +97,7 @@ public:
 	z_status test_any_identifier();
 	z_status test_file_path();
 	z_status test_code_string();
-	z_status test_cset(const cset &set,size_t limit=0xFFFFFFFF);
+	z_status test_cset(const cset &set);
 	z_status test_char(char c);
 	z_status test_to_eob();
 	/*

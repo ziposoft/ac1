@@ -23,11 +23,26 @@ ctext HEXSTR(U32 i)
 	return num;
 }
 
-void z_str_escape(std::string& inout)
+void z_str_escape(ctext in,std::string& out)
 {
-	inout.replace('\r',"\\r");
-
-
+	out.clear();
+	size_t i;
+	for(i=0;i<strlen(in);i++)
+	{
+		char c=in[i];
+		switch (c)
+		{
+		case '\\':
+			out.append( "\\\\");
+			break;
+		case '\"':
+			out.append( "\\\"");
+			break;
+		default:
+			out.append(1, c);
+		break;
+		}
+	}
 
 }
 

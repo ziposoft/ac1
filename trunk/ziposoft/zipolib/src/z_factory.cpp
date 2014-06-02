@@ -49,7 +49,7 @@ ________________________________________________________________________*/
 VF<z_string>::get(z_string& s, void* v,int index) const{RECAST(z_string,str); s=str;    }
 VF<z_string>::set(ctext s, void* v,int index) const{RECAST(z_string,str); str=s;   }
 VF<z_string>::clear(void* v) const{	RECAST(z_string,str); str="";}
-VF<z_string>::dump(z_file& file, void* v) const{	RECAST(z_string,str);z_string out;str.stringize(out);file <<out;}
+VF<z_string>::dump(z_file& file, void* v) const{	RECAST(z_string,str);z_string out;z_str_escape(str,out);file <<out;}
 
 /*________________________________________________________________________
 
@@ -63,7 +63,7 @@ VF<z_strlist>::dump(z_file& file, void* v)	const{RECAST(z_strlist,list);
 	{
 		if(i)
 			file<<',';
-		list[i].stringize(s);
+		z_str_escape(list[i],s);
 		file<<s;
 	}
 
