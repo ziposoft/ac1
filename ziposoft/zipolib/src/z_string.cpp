@@ -27,6 +27,7 @@ void z_str_escape(ctext in,std::string& out)
 {
 	out.clear();
 	size_t i;
+	out.append( "\"");
 	for(i=0;i<strlen(in);i++)
 	{
 		char c=in[i];
@@ -34,6 +35,18 @@ void z_str_escape(ctext in,std::string& out)
 		{
 		case '\\':
 			out.append( "\\\\");
+			break;
+		case '\n':
+			out.append( "\\n");
+			break;
+		case '\r':
+			out.append( "\\r");
+			break;
+		case '\t':
+			out.append( "\\t");
+			break;
+		case '\'':
+			out.append( "\\'");
 			break;
 		case '\"':
 			out.append( "\\\"");
@@ -43,9 +56,33 @@ void z_str_escape(ctext in,std::string& out)
 		break;
 		}
 	}
+	out.append( "\"");
+}
+void z_str_unescape(std::string& in,std::string& out)
+{
+  std::string::const_iterator it = in.begin();
+  while (it != in.end())
+  {
+    char c = *it++;
+    if (c == '\\' && it != in.end())
+    {
+      switch (*it++) {
+      case '\\': c = '\\'; break;
+      case '\"': c = '\"'; break;
+      case '\'': c = '\''; break;
+      case 'n': c = '\n'; break;
+      case 'r': c = '\r'; break;
+      case 't': c = '\t'; break;
+      // all other escapes
+      default: 
+        // invalid escape sequence - skip it. alternatively you can copy it as is, throw an exception...
+        continue;
+      }
+    }
+    out += c;
+  }
 
 }
-
 
 //TODO FIX THIS
 bool z_string::FormatV(ctext pFormat,va_list ArgList) 

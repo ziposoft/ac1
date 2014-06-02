@@ -22,7 +22,7 @@ public:
 	testAd()
 	{
 		_i=123;
-		_str="fred";
+		_str="fr\"ed";
 
 	}
 	virtual ~testAd(){}
@@ -367,7 +367,7 @@ public:
 	{
 		x.push_back("x");
 		x<<"y";
-		s="anthony";
+		s="ant\"hony";
 		i=27;
 
 	}
@@ -377,17 +377,19 @@ public:
 	int i;
 	z_string s;
 	int add() {  x<<s;return 0;}
+	int show() { gz_out << '\n'<<s<<'\n';return 0;}
 
 
 };
 ZFACT(root)
 {
 	ZOBJ(console);
-	ZOBJ(a);
+	//ZOBJ(a);
 	ZPROP(x);
 	ZPROP(i);
 	ZPROP(s);
 	ZACT(add);
+	ZACT(show);
 
 };
 int main(int argc, char* argv[])

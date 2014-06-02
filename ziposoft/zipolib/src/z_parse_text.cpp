@@ -396,6 +396,7 @@ z_status zp_text_parser::test_not_single_quoted_string(const void *dummy)
 z_status zp_text_parser::test_code_string()
 {
 	z_status status;
+	bool escape=false;
 	if((status=start_test())) 
 		return status;
 
@@ -403,18 +404,25 @@ z_status zp_text_parser::test_code_string()
 		return status;
 	_match_start=get_index();
 
-	while(1)
+	while(!eob())
 	{
-		if((_test_end_char('\"'))) 
-			return check_status(zs_template_syntax_error);
-	
-		if(_test_char('\"')!=zs_matched)
-			break;
+		if(_test_char('\\')==zs_matched)
+			escape=true;
+
+		if(_test_char('\"')==zs_matched)
+		{
+			if(escape)
+			{
+				escape=false;
+				continue;
+			}
+			_match_end=get_index()-1;
+			return zs_matched;
+		}
+		escape=false;
+		inc();
 	}
-
-	_match_end=get_index()-1;
-	return zs_matched;
-
+	return check_status(zs_template_syntax_error);
 }
 z_status zp_text_parser::test_cset(const cset &set)
 {
