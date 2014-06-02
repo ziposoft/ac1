@@ -47,6 +47,10 @@ public:
 	z_string & operator += (const char i)  { append(1,i);return *this; }
 	z_string & operator += (const U8 i)  { append(1,(char)i);return *this; }
 
+
+	void stringize(z_string &append_to);
+
+
     friend z_string operator+ (const z_string&, const z_string&);
     friend z_string operator+ (const z_string&, const char*);
     friend z_string operator+ (const char*, const z_string&);
@@ -91,6 +95,8 @@ public:
         return *this;
     }
 };
+void z_str_escape(std::string& in,std::string& out);
+
 extern const z_string z_string_null;
 
 

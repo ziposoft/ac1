@@ -300,15 +300,16 @@ int z_file_string_buffer::write(const char* buf, size_t count )
 
 z_status z_csv_encode_string(z_string& output)
 {
-
+	Z_ASSERT(0);//THIS doesnt work
 	size_t dq=0;
 	if(output.find_first_of(",\"\n")==z_string::npos)
 		return zs_success;
 
 	output.insert(0,1,'\"');
-	while( (dq=output.find_first_of("\""))!=z_string::npos)
+	while( (dq=output.find_first_of("\"",dq))!=z_string::npos)
 	{
 		output.insert(dq,1,'\"');
+		
 	}
 	output.append(1,'\"');
 

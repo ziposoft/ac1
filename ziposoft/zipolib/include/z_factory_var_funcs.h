@@ -94,6 +94,19 @@ public:
 		z_factory_T<CLASS>::self.dump_obj(file,v);
 		file.indent_dec();
 	}
+	virtual void set_from_value(zp_value* val, void* var,int index=-1) const 
+	{
+		z_status status;
+		//TODO - change all these to return status
+		const z_factory* f=&z_factory_T<CLASS>::self;
+		if(!val->_obj)
+			return; //ERROR!!!!
+		status=val->_obj->load_obj(var,f);
+		Z_ASSERT(status==zs_ok);
+
+
+
+	}
 };
 template <class CLASS >  const zf_var_funcs_base* zp_child_obj_funcs_get(CLASS& obj)
 {
@@ -155,6 +168,11 @@ public:
 		if(*ppObj )
 			delete *ppObj;
 		*ppObj=0;
+	}
+	virtual void set_from_value(zp_value* val, void* var,int index=-1) const 
+	{
+		//TODO - change all these to return status
+			void** ppObj=reinterpret_cast<void**>(var); 
 	}
 
 

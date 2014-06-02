@@ -87,6 +87,7 @@ public:
 	z_status test_not_single_quoted_string(const void* dummy); //  ~>(char) 
 
 
+	z_status _peek_next_char(char c);
 
 
 	z_status test_not_char(char c); //  ~^(char)  ~^\n

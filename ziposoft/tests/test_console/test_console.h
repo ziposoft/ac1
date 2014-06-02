@@ -15,6 +15,7 @@ public:
 		_selected= _self;
 		_root._fact=0;
 		_root._obj=0;
+		_config_file="console.cfg";
 	}
  	z_status load_config_file(ctext exe_name)
 	{

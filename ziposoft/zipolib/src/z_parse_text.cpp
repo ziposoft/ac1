@@ -103,10 +103,15 @@ void zp_text_parser::set_ignore_whitespace()
 
 z_status zp_text_parser::advance(size_t count)
 {
+	if((!_index_current) ||	  ( _index_current+count>_end))
+		return check_status(zs_eof);
+	_index_current+=count;
+
+
+	/* if we needed to count newlines. currently not:
+
 	while(count)
 	{
-		if(!_index_current) 
-			return check_status(zs_eof);
 
 		if( _index_current+count>_end)
 			return check_status(zs_eof);
@@ -118,6 +123,7 @@ z_status zp_text_parser::advance(size_t count)
 		_index_current++;
 		count--;
 	}
+	*/
 	return zs_ok;
 }
 
@@ -282,7 +288,17 @@ z_status zp_text_parser::test_to_eob()
 	set_index(_end);
 	return zs_matched;
 }
-
+z_status zp_text_parser::_peek_next_char(char c)
+{
+	z_status status;
+ 	if( _index_current==_end)
+		return zs_eof;
+	if(*(_index_current+1) == c)
+	{
+		return zs_matched;
+	}
+	return zs_no_match;
+}
 z_status zp_text_parser::test_char(char c)
 {
 	z_status status;
@@ -386,8 +402,16 @@ z_status zp_text_parser::test_code_string()
 	if((status=_test_char('\"'))) 
 		return status;
 	_match_start=get_index();
-	if((_test_end_char('\"'))) 
-		return check_status(zs_template_syntax_error);
+
+	while(1)
+	{
+		if((_test_end_char('\"'))) 
+			return check_status(zs_template_syntax_error);
+	
+		if(_test_char('\"')!=zs_matched)
+			break;
+	}
+
 	_match_end=get_index()-1;
 	return zs_matched;
 

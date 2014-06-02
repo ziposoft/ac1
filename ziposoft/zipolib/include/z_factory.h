@@ -12,8 +12,13 @@ ________________________________________________________________________*/
 #include "zipolib/include/z_error.h"
 #include "zipolib/include/z_type_converter.h"
 #include "zipolib/include/z_stl_vector.h"
+#ifdef UNIX
+typedef unsigned long long z_memptr;
+#else
+typedef unsigned long long z_memptr;
 
-
+//typedef size_t z_memptr;
+#endif
 enum zf_feature_type
 {
 	zf_ft_none,
@@ -56,7 +61,7 @@ typedef  const zf_var_funcs_base* (*funcp_var_funcs_get)();
 struct zf_var_entry
 {
 	const char* name;
-	size_t offset;
+	z_memptr offset;
 	zf_feature_type type;  //currently not used for anything
 	funcp_var_funcs_get fp_var_func_get;
 };
@@ -106,9 +111,9 @@ public:
 
 
 
-	virtual z_status get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs) const;
-	virtual z_status get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const;
-	virtual int execute_act_ptr(void* obj,size_t  act_addr) const=0;
+	virtual z_status get_var_info_i(size_t index,ctext& name,z_memptr &offset,const zf_var_funcs_base*& funcs) const;
+	virtual z_status get_var_info(ctext name,z_memptr &offset,const zf_var_funcs_base*& funcs) const;
+	virtual int execute_act_ptr(void* obj,z_memptr  act_addr) const=0;
 
 
 
@@ -125,12 +130,22 @@ public:
 
 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
 
-	virtual int add_act(ctext name,size_t act_addr,ctext desc); 
-	virtual int add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,size_t act_addr,ctext desc); 
+	virtual int add_act(ctext name,z_memptr act_addr,ctext desc); 
+	virtual int add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
 	z_status get_feature(ctext name,zf_feature& f) const;
 
 };
-
+class zf_obj
+{
+public:
+    zf_obj()
+	{
+		_fact=0;	
+		_obj=0;	
+	}
+	const z_factory* _fact;
+	void* _obj;
+};
 z_obj_vector_map<z_factory>& get_factories_dynamic();
 template <class C >  class z_factory_T :public  z_factory
 {
@@ -154,17 +169,17 @@ public:
 	{
 		delete reinterpret_cast<C*>(v);
 	}
-	virtual int execute_act_ptr(void* vobj,size_t act_addr) const
+	virtual int execute_act_ptr(void* vobj,z_memptr act_addr) const
 	{
 		typedef int (C::*funcptr)();
 		C*  cobj=reinterpret_cast<C*>(vobj);
-		void* pp=&act_addr;
+		z_memptr* pp=&act_addr;
 		funcptr fp=*( funcptr*) (pp);
 		return (cobj->*fp)();
 	}
 	virtual int add_act_T(ctext name,fn_act act_addr,ctext desc) 
 	{
-		add_act(name,*(size_t*)(void*)&act_addr,desc);
+		add_act(name,*(z_memptr*)&act_addr,desc);
 		return 0;
 	}
 
@@ -190,13 +205,13 @@ public:
 
 
 	zf_feature();
-	zf_feature(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,size_t offset,ctext desc="");
+	zf_feature(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
 	ctext get_map_key() { return _name; }
 
 	z_string _name;
 	z_string _description;
 	const zf_var_funcs_base* df;
-	size_t _offset;
+	z_memptr _offset;
 	zf_feature_type _type;
 	void dump(z_file& f,void* obj);
 
