@@ -784,9 +784,10 @@ z_status zp_parser::_f_create_string(zp_flags flags,int type)
 		{
 			if(_ctx_current->_obj)
 			{
-				z_string temp;
+				z_string temp,unescaped;
 				temp.assign( match_start,match_len);
-				status=_ctx_current->_obj_factory->set_var_as_string( _ctx_current->_obj,_ctx_current->_member_var_name,temp.c_str());
+				z_str_unescape(temp,unescaped);
+				status=_ctx_current->_obj_factory->set_var_as_string( _ctx_current->_obj,_ctx_current->_member_var_name,unescaped.c_str());
 				//status=feature_set_string(_ctx_current->_obj,_ctx_current->_member_var_name,match_start,match_len);
 			}
 		}
