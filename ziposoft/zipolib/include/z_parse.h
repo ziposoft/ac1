@@ -52,30 +52,6 @@ public:
 	};
 };
 
-class zp_str_list 
-{
-public:
-	zp_str_list()
-	{
-	}
-	z_strlist  _list;
-};
-
-class zp_cfg_obj ;
-class zp_value 
-{
-public:
-	zp_value() 
-	{
-		_string_list=0;//setting obj pointers to 0 is critical!!!
-		_obj=0;//setting obj pointers to 0 is critical!!!
-	}
-	//zp_cfg_obj* _child;
-	zp_str_list* _string_list;
-	int  _integer;
-	z_string _string;
-	zp_cfg_obj *_obj;
-};
 
 class zp_subscript 
 {
@@ -142,32 +118,7 @@ public:
 
 	bool has_path();
 };
-class zp_cfg_obj;
 
-class zp_cfg_feature
-{
-public:
-	zp_cfg_feature() 
-	{
-	}
-	z_string _name;
-	zp_value _val;
-	ctext get_map_key () { return _name;}
-
-};
-
-class zp_cfg_obj
-{
-public:
-	zp_cfg_obj() 
-	{
-	}
-	ctext get_map_key () { return _obj_type;}
-	z_string _obj_type;
-	z_obj_vector_map<zp_cfg_feature> _features;
-	zf_obj createobj();
-	z_status load_obj(void* obj,const z_factory* f);
-};
 class zp_cfg_file
 {
 public:
@@ -187,7 +138,7 @@ public:
 	}
 	template <class C> z_status load_obj(C* obj)
 	{
-		z_factory* f=&z_factory_T<CLASS>::self;
+		z_factory* f=&z_factory_T<C>::self;
 		ctext name=f->get_name();
 		zp_cfg_obj* cfg=_obj.get_by_name(name);
 		if(cfg)

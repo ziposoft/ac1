@@ -392,7 +392,11 @@ ZFACT(root)
 	ZACT(show);
 
 };
+#ifdef BUILD_VX
+int ztest(int argc, char* argv[])
+#else
 int main(int argc, char* argv[])
+#endif
 {
 	z_status status=zs_no_match;
 	testAd A,*pa;
@@ -425,6 +429,7 @@ int main(int argc, char* argv[])
 	gz_out << "load save args...\n";
 	z_debug_load_save_args(&argc,&argv);
 	gz_out << "load save args done\n";
+
 	root o;
 	o.console.setroot(&o);
 
