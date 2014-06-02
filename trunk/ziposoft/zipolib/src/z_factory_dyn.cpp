@@ -17,13 +17,13 @@ z_obj_vector_map<z_factory>& get_factories_dynamic()
 
 
  }
- int z_factory::add_act(ctext name,size_t act_addr,ctext desc)
+ int z_factory::add_act(ctext name,z_memptr act_addr,ctext desc)
  {
-	get_dyn().features.add(z_new	zf_feature(name,zf_ft_act,0,*(size_t*)(void*)&act_addr));
+	get_dyn().features.add(z_new	zf_feature(name,zf_ft_act,0,*(z_memptr*)&act_addr));
 		return 0;
 
  }
- int z_factory::add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,size_t offset,ctext desc)
+ int z_factory::add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr offset,ctext desc)
  {
  	get_dyn().features.add(z_new	zf_feature(name,type,f,offset,desc));
 		return 0;
@@ -38,7 +38,7 @@ z_obj_vector_map<z_factory>& get_factories_dynamic()
 	_type=zf_ft_none;
 
 }
-zf_feature::zf_feature(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,size_t offset,ctext desc) 
+zf_feature::zf_feature(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc) 
 {
 	_name=name;
 	df=funcs;

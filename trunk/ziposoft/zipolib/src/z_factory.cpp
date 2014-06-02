@@ -49,15 +49,28 @@ ________________________________________________________________________*/
 VF<z_string>::get(z_string& s, void* v,int index) const{RECAST(z_string,str); s=str;    }
 VF<z_string>::set(ctext s, void* v,int index) const{RECAST(z_string,str); str=s;   }
 VF<z_string>::clear(void* v) const{	RECAST(z_string,str); str="";}
+VF<z_string>::dump(z_file& file, void* v) const{	RECAST(z_string,str);z_string out;str.stringize(out);file <<out;}
+
 /*________________________________________________________________________
 
 zf_var_funcs<z_strlist> 
 ________________________________________________________________________*/
 VF<z_strlist>::dump(z_file& file, void* v)	const{RECAST(z_strlist,list);
+	size_t i;
+	file<<'{';
 	z_string s;
-	list.get_as_string(s);
-	file<<s;
+	for(i=0;i<list.size();i++)
+	{
+		if(i)
+			file<<',';
+		list[i].stringize(s);
+		file<<s;
+	}
+
+	file<<'}';
 }
+
+
 VF<z_strlist>::get(z_string& s, void* v,int index)	const
 {	
 	RECAST(z_strlist,list);	
@@ -92,7 +105,6 @@ VF<z_strlist>::set_from_value(zp_value* val, void* v,int index)		const{	RECAST(z
 	if(index<(int)list.size())
 		list[index]=val->_string; 
 
-
 }
 
 
@@ -125,6 +137,11 @@ VF<zp_obj_vector>::dump(z_file& file, void* v) const
 	{
 		list[i]._fact->dump_obj(file,list[i]._obj);
 	}
+}
+VF<zp_obj_vector>::set_from_value(zp_value* val, void* v,int index)		const{	
+	RECAST(z_strlist,list);
+
+
 }
 /*________________________________________________________________________
 
@@ -231,7 +248,7 @@ ctext z_factory::get_map_key() const
 
 z_status z_factory::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter) const
 {
-	size_t offset;
+	z_memptr offset;
 	const zf_var_funcs_base* funcs;
 	z_status status=get_var_info(var_name,offset,funcs);
 	if(status)
@@ -247,7 +264,7 @@ z_status z_factory::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* ite
 
 z_status z_factory::set_var_as_string(void* obj,ctext var_name,ctext value)	const
 {
-	size_t offset;
+	z_memptr offset;
 	const zf_var_funcs_base* funcs;
 	z_status status=get_var_info(var_name,offset,funcs);
 	if(status)
@@ -261,7 +278,7 @@ z_status z_factory::set_var_as_string(void* obj,ctext var_name,ctext value)	cons
 }
 z_status z_factory::get_var_as_string(void* obj,ctext var_name,z_string& value) const
 {
-	size_t offset;
+	z_memptr offset;
 	const zf_var_funcs_base* funcs;
 	z_status status=get_var_info(var_name,offset,funcs);
 	if(status)
@@ -274,7 +291,7 @@ z_status z_factory::get_var_as_string(void* obj,ctext var_name,z_string& value) 
 }
 z_status z_factory::create_child(void* obj,ctext var_name,const z_factory* new_child_type,void** ppChild) const
 {
-	size_t offset;
+	z_memptr offset;
 	const zf_var_funcs_base* funcs;
 	z_status status=get_var_info(var_name,offset,funcs);
 	if(status)
@@ -286,7 +303,9 @@ z_status z_factory::create_child(void* obj,ctext var_name,const z_factory* new_c
 
 	void* newobj=funcs->create_obj(pvar,new_child_type);
 	*ppChild=newobj;
-	return zs_success;
+	if(newobj)
+		return zs_success;
+	return Z_ERROR_MSG(zs_error,"Could not create child object %s->%s[%s]\n", get_name(),var_name,	new_child_type->get_name());
 
 }
 void z_factory::clear_all_vars (void* obj) const
@@ -294,7 +313,7 @@ void z_factory::clear_all_vars (void* obj) const
 	size_t index=0;
 	const zf_var_funcs_base* funcs=0;
 	ctext name=0;
-	size_t offset=0;
+	z_memptr offset=0;
 	while(get_var_info_i(index,name,offset,funcs)==zs_ok)	 
 	{
 		char* pvar=(char*)obj+offset;
@@ -306,7 +325,7 @@ void z_factory::clear_all_vars (void* obj) const
 z_status z_factory::execute_act(void* obj,ctext name,int* pret) const
 {
 	const zf_var_funcs_base* funcs=0;
-	size_t offset=0;
+	z_memptr offset=0;
 	z_status status=get_var_info(name,offset,funcs);
 	if(status)
 		return status; 
@@ -320,7 +339,7 @@ void z_factory::dump_obj(z_file& f,void* obj) const
 {
 	size_t index=0;
 	ctext name=0;
-	size_t offset=0;
+	z_memptr offset=0;
 	const zf_var_funcs_base* funcs=0;
 	z_string value;
 	
@@ -349,7 +368,7 @@ void z_factory::dump_static(z_file& f) const
 {
 	size_t index=0;
 	ctext name=0;
-	size_t offset=0;
+	z_memptr offset=0;
 	const zf_var_funcs_base* funcs=0;
 	
 	z_string value;
@@ -395,7 +414,7 @@ z_status z_factory::get_list_features(z_strlist& list) const
 {
 	int index=0;
 	ctext name;
-	size_t offset;
+	z_memptr offset;
 	const zf_var_funcs_base* funcs;
 	while(	get_var_info_i(index,name,offset,funcs)==zs_ok)
 	{
@@ -404,7 +423,7 @@ z_status z_factory::get_list_features(z_strlist& list) const
 	}
 	return zs_ok;
 }
-z_status z_factory::get_var_info_i(size_t index,ctext& name,size_t &offset,
+z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
 								   const zf_var_funcs_base*& funcs)  const
 {
 	const zf_var_entry* ent=0;
@@ -460,7 +479,7 @@ z_status z_factory::get_feature(ctext name,zf_feature& feat_out) const
 		
 }
 
-z_status z_factory::get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const
+z_status z_factory::get_var_info(ctext name,z_memptr &offset,const zf_var_funcs_base*& funcs) const
 {
 	if(_dynamic)
 	{
@@ -477,7 +496,10 @@ z_status z_factory::get_var_info(ctext name,size_t &offset,const zf_var_funcs_ba
 	if(!ent)
 		return zs_item_not_found;
 	offset=ent->offset;
-	funcs=ent->fp_var_func_get();
+	if(ent->fp_var_func_get)
+		funcs=ent->fp_var_func_get();
+	else
+		funcs=0;
 	return zs_ok;		
 		
 }

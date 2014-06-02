@@ -224,6 +224,7 @@ int z_terminal::get_resp(char* buff,char token)
 {
 	int n=0;
 	char c=0;
+	// This is terrible. I don't know how it is working.
 	while(c!=token)
 	{
 		c=fgetc(stdin);
@@ -231,7 +232,7 @@ int z_terminal::get_resp(char* buff,char token)
 
 		buff[n]=c;
 		n++;
-		if(n>5)
+		if(n>15)
 			break;
 	}
 	buff[n]=0;

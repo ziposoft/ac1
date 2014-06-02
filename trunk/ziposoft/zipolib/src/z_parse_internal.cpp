@@ -1,8 +1,10 @@
 #include "zipolib_cpp_pch.h"
 #include "z_parse_internal.h"
-
+#if 1
 #undef	ZT
 #define	ZT(...)
+#endif  
+
 
 typedef z_status (zp_parser::*type_obj_parser_fp)(const void* p1);
 typedef z_status (zp_parser::*type_obj_parser_fp_flags)(zp_flags p1);
@@ -630,7 +632,7 @@ z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 				status=zs_no_match;
 			if(test_result==zp_result_eof)
 				status=zs_eof;
-			ZT("<<EXIT#%d -%s",testnum,zs_get_text(status));
+			ZT("<<EXIT#%d -%d:%s",testnum,status,zs_get_text(status));
 			return status;
 		}
 	}
@@ -1000,6 +1002,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 	{
 		if(tmpl.test_any_identifier()==zs_matched)
 		{
+			z_status status=zs_ok;
 			void* sub_obj=0;
 			if(mode.skip_test)
 				return zs_skipped;
@@ -1017,21 +1020,20 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 				{
 					if(flags.parent_data)
 					{
-						_ctx_current->_obj_factory->create_child(_ctx_current->_obj,
+						status=_ctx_current->_obj_factory->create_child(_ctx_current->_obj,
 							_ctx_current->_member_var_name,fact_new_obj,
 							&sub_obj);
-					}
-					/*
-					if(!sub_obj)
-					{
-						sub_obj=ie->create_obj();
-					}
-					else
-						feature_clear(sub_obj);
-					//sub_obj->_templ_offset=	 						context_get_current_template_parser().get_index_offset();
-					*/
+						if(status)
+						{
+							return Z_ERROR_MSG(zs_cannot_create_virtual_obj,"Cannot assign \"%s\" to \"%s\"\n",fact_new_obj->get_name(),_ctx_current->_member_var_name.c_str());
 
+						}
+					}
 				}
+				ZT("created sub obj %s->%s %s:%p\n", _ctx_current->_obj_factory->get_name(),
+					_ctx_current->_member_var_name.c_str(),
+					fact_new_obj->get_name(),sub_obj);
+
 			}
 
 			if(mode.output)
@@ -1088,6 +1090,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 				{
 					if(flags.parent_data)
 					{
+						
 						//ASSIGNMENT of child object? 
 						/*
 						item_result=feature_objlist_add(_ctx_current->_obj,	_ctx_current->_member_var_name,sub_obj);

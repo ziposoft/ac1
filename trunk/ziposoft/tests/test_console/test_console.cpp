@@ -318,6 +318,7 @@ z_status z_console_ntf::loadcfg()
 		_parser.report_error();
 		return status;
 	}
+	cfg.load_obj(_root._obj,_root._fact);
 	//cfg._obj.get_by_name(
 	return zs_ok;
 
@@ -392,13 +393,33 @@ ZFACT(root)
 int main(int argc, char* argv[])
 {
 	z_status status=zs_no_match;
-	/*
-	testA A;
+	testAd A,*pa;
+#if 0
+	pa=&A;
 
-	zfs_get_static_factory("testA")->execute_act(&A,"func");
-	zfs_get_static_factory("testA")->set_var_as_string(&A,"i","67");
+	 typedef int (testAd::*fptr)();
+	 fptr f=&testAd::func;
+	 printf("sizeof(f)=%x sizeof(z_memptr)=%x sizeof(pa)=%x \n",sizeof(f),sizeof(z_memptr),sizeof(pa));
+
+	 z_memptr it=*(z_memptr*)&f;
+	 printf("f=%llx i=%llx\n",f,it);
+ 		(pa->*f)();
+
+	z_memptr* pp=&it;
+	
+	fptr f2=*( fptr*) (pp);
+	 printf("f2=%p pp=%p\n",f2,pp);
+
+	return (pa->*f2)();
+
+	zf_get_factory("testAd")->execute_act(&A,"func");
+
+	return 0;
+ #endif
+	/*zfs_get_static_factory("testA")->set_var_as_string(&A,"i","67");
 	zfs_get_static_factory("testA")->execute_act(&A,"func2");
 	*/
+
 	gz_out << "load save args...\n";
 	z_debug_load_save_args(&argc,&argv);
 	gz_out << "load save args done\n";
