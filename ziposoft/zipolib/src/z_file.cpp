@@ -12,6 +12,17 @@ using namespace std;
 #include <sys/types.h>
 #include <sys/stat.h>
 #endif
+
+#if 0
+extern "C" void* _stdin;
+extern "C" void* _stdout;
+z_file gz_in((size_t)_stdin);
+z_file gz_out((size_t)_stdout);
+
+#else
+z_file gz_in((size_t)stdin);
+z_file gz_out((size_t)stdout);
+#endif
 void z_file::init()
 {
 	_file_handle=0;
@@ -38,6 +49,10 @@ z_file::~z_file()
 z_file::z_file(size_t h)
 {
 	init();
+	_file_handle=h;
+}
+void z_file::set_handle(size_t h)
+{
 	_file_handle=h;
 }
 z_file::z_file(ctext filename,ctext mode)
@@ -231,8 +246,6 @@ int z_file::delete_file()
 	return z_file_delete(_file_name);
 }
 
-z_file gz_in((size_t)stdin);
-z_file gz_out((size_t)stdout);
 
 //____________________________________________________________________
 //

@@ -43,6 +43,8 @@ public:
 
 	void init();
 
+	void set_handle(size_t t);
+
 	int open(ctext filename,ctext mode);
 	void close();
 	void flush();
@@ -80,17 +82,17 @@ public:
 	virtual z_file  &operator <<  (double x) { return put(x); }
     virtual z_file  &operator <<  (const char x)
 	{ 
-		write(&x,1);
+    	z_file::write(&x,1);
 		return *this;
 	}
     virtual z_file  &operator <<  (const char* x)
 	{ 
-		write(x,strlen(x));
+    	z_file::write(x,strlen(x));
 		return *this;
 	}
     virtual z_file  &operator <<  (const z_string &x)
 	{ 
-		write(x.c_str(),x.length());
+    	z_file::write(x.c_str(),x.length());
 		return *this;
 	}
     virtual z_file  &operator <<  (I64 x){ return put(x); }

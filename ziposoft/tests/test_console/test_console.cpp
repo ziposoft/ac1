@@ -393,43 +393,29 @@ ZFACT(root)
 
 };
 #ifdef BUILD_VX
-int ztest(int argc, char* argv[])
+int ztest()
+{
+	gz_out.set_handle((size_t)stdout);
+	gz_in.set_handle((size_t)stdin);
+	gz_out << "starting ztest\n";
+	
+	root o;
+	o.console.setroot(&o);
+	o.console.run();
+	return 0;
+
+}
 #else
 int main(int argc, char* argv[])
-#endif
 {
-	z_status status=zs_no_match;
-	testAd A,*pa;
-#if 0
-	pa=&A;
-
-	 typedef int (testAd::*fptr)();
-	 fptr f=&testAd::func;
-	 printf("sizeof(f)=%x sizeof(z_memptr)=%x sizeof(pa)=%x \n",sizeof(f),sizeof(z_memptr),sizeof(pa));
-
-	 z_memptr it=*(z_memptr*)&f;
-	 printf("f=%llx i=%llx\n",f,it);
- 		(pa->*f)();
-
-	z_memptr* pp=&it;
-	
-	fptr f2=*( fptr*) (pp);
-	 printf("f2=%p pp=%p\n",f2,pp);
-
-	return (pa->*f2)();
-
-	zf_get_factory("testAd")->execute_act(&A,"func");
-
-	return 0;
- #endif
-	/*zfs_get_static_factory("testA")->set_var_as_string(&A,"i","67");
-	zfs_get_static_factory("testA")->execute_act(&A,"func2");
-	*/
-
 	gz_out << "load save args...\n";
 	z_debug_load_save_args(&argc,&argv);
 	gz_out << "load save args done\n";
 
+
+
+
+	z_status status=zs_no_match;
 	root o;
 	o.console.setroot(&o);
 
@@ -447,13 +433,12 @@ int main(int argc, char* argv[])
 	if(argc==1)
 		o.console.run();
 
-	printf("gz_temp_buff_outstanding=%d\n",gz_temp_buff_outstanding);
-	printf("gz_temp_buff_count=%d\n",gz_temp_buff_count);
+
 
 	return 0;
 }
 
-
+#endif
 
 
 
