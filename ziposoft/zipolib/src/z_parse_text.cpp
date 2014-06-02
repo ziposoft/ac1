@@ -416,19 +416,21 @@ z_status zp_text_parser::test_code_string()
 	return zs_matched;
 
 }
-z_status zp_text_parser::test_cset(const cset &set,size_t limit)
+z_status zp_text_parser::test_cset(const cset &set)
 {
 	z_status status;
 	if((status=start_test())) return status;
 
-	size_t match_len=0;
-	while( (*(get_index()+match_len)) &set) 
-	{ 
-		match_len++;
-		if(match_len>=limit) break;
+	if(!(*_index_current & set))
+		return zs_no_match;
+	_index_current++;
+	while( _index_current<_end)
+	{
+		if(!(*_index_current & set))
+			break;
+		_index_current++;
 	}
-	advance(match_len);
-	return (match_len!=0 ? zs_matched : zs_no_match);
+	return  zs_matched;
 }
 
 
@@ -534,7 +536,7 @@ void zp_text_parser::get_match(z_string& s)
 void zp_text_parser::get_match(ctext& match_start,size_t& len)
 {
 	match_start=_match_start;
-	if(_match_end==(ctext)-1)
+	if(_match_end==(ctext)-1)	 //there is some voodoo happening here.
 		_match_end=get_index();
 
 	len=_match_end-match_start;

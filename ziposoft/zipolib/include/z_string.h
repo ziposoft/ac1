@@ -95,7 +95,7 @@ public:
         return *this;
     }
 };
-void z_str_escape(std::string& in,std::string& out);
+void z_str_escape(ctext in,std::string& out);
 
 extern const z_string z_string_null;
 

@@ -1,6 +1,6 @@
 #include "zipolib_cpp_pch.h"
 #include "z_parse_internal.h"
-#if 1
+#if 0
 #undef	ZT
 #define	ZT(...)
 #endif  
@@ -204,7 +204,10 @@ z_status zp_parser::_process_group(zp_flags flags,zp_mode mode)
 
 		status=_process_stage(local_mode,&stage_flags);
 		if(status>zs_fatal_error)
+		{
 			return check_status(status);
+			//return Z_ERROR(status);
+		}
 
 		if(status==zs_no_match)
 		{
@@ -898,7 +901,8 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 	if(get_index()>_furthest_index)
 	{
 		_furthest_index=get_index();
-		_furthest_obj=	_ctx_current->_obj_factory->get_name();
+		if(_ctx_current->_obj_factory)
+			_furthest_obj=	_ctx_current->_obj_factory->get_name();
 	//	_furthest_tmpl=	tmpl.;
 
 	}

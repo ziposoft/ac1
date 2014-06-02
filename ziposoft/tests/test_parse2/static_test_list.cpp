@@ -67,7 +67,7 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*('a'|'b')","bd",zs_unparsed_data,"",""},
 	{"*('a'|'b')|*('c'|'d')","bd",zs_unparsed_data,"",""},
 	{"*('a'|'b')|*('c'|'d')","ccc",zs_matched,"",""},
-	{"(string|string_sq|ident)","ba",zs_matched,"a","a"},
+	{"(string|string_sq|ident)","ba",zs_matched,"",""},
 
 	{"('<?':^'?>':'?>')","<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>",zs_matched,"<??>","<??>"},
 
@@ -86,17 +86,7 @@ const st_test_tmpl_entry test_tmpl_list[]=
 
 
 
-	//objects
-	{"test1","a",zs_matched,"a","a"},
-	{"*test1","a",zs_matched,"a",""},
-	{"+test1","a",zs_matched,"a","a"},
-	{"+test1","aaaa",zs_matched,"aaaa","a"},
-	{"test2","a",zs_matched,"a","a"},
-	{"test3","abc",zs_matched,"abc","abc"},
-	{"test4","b",zs_matched," b"," tired"},
-	{"+(test3:'x')","abcxabcxabcx",zs_matched,"abcx","abcx"},
-	{"pair","x=2",zs_matched,"x=2,","=,"},
-	{"test5","x y z",zs_matched," tired tired tired x y z"," tired tired tired"},
+
 	//ident
 	{"ident","anthony corriveau",zs_unparsed_data,"anthony",""},
 	{"*' '&+ident","anthony corriveau",zs_matched,"anthonycorriveau",""},
@@ -121,15 +111,34 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*('a'&'b'):*('c'&'d')","cdab",zs_unparsed_data,"",""},
 	{"*('a'&'b'):*('c'&'d')","abbaabcddc",zs_matched,"",""},
 	//identlist
+	//objects
+	{"badobject","a",zs_no_entry_for_item,"",""},
+	{"testA","a=2",zs_matched,"a=2","defaultstr=123"},
+
+
+
+
+/*
+	{"*test1","a",zs_matched,"a",""},
+	{"+test1","a",zs_matched,"a","a"},
+	{"+test1","aaaa",zs_matched,"aaaa","a"},
+	{"test2","a",zs_matched,"a","a"},
+	{"test3","abc",zs_matched,"abc","abc"},
+	{"test4","b",zs_matched," b"," tired"},
+	{"+(test3:'x')","abcxabcxabcx",zs_matched,"abcx","abcx"},
+	{"pair","x=2",zs_matched,"x=2,","=,"},
+	{"test5","x y z",zs_matched," tired tired tired x y z"," tired tired tired"},
+
+	//PROBLEMS!!
+
+
 	{"test7","z,x,y:",zs_matched,"A,x,y,z:B","A:B"},
 	{"test7","z:x,a",zs_matched,"A,z:B,a,x","A:B"},
 	{"test7",":x,a",zs_matched,"A:B,a,x","A:B"},
 	{"test6","dudley",zs_matched," dudley"," overwrite!"},
 
 
-	//PROBLEMS!!
-/*
-	{"identlist","x,y,x",zs_matched,"x,y,x",""},
+{"identlist","x,y,x",zs_matched,"x,y,x",""},
 	{"*'a'&'b'","ab",zs_matched,"b","b"},
 	{"*'a'&'b'","ba",zs_matched,"b","b"},
 	{"*'a'&'b'","aba",zs_matched,"b","b"},
