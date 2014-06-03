@@ -121,11 +121,11 @@ z_status z_console_ntf::navigate_to_obj()
 z_status z_console_ntf::evaluate_feature(zf_obj& o)
 {
 	z_status status;
-	zf_feature f;
+	zf_feature feature;
 	int index=-1;
 	if(!_cmdline._feature)
 		return Z_ERROR(zs_error);
-	status=o._fact->get_feature(_cmdline._feature->_name,f);
+	status=o._fact->get_feature(_cmdline._feature->_name,feature);
 
 
 	if(status)
@@ -134,56 +134,80 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 
 		//return Z_ERROR_MSG(status,"Feature \"%s\" not found\n",_cmdline._feature->_name.c_str());
 
-	void* ftr_ptr=(char*)o._obj+f._offset;
+	void* ftr_ptr=(char*)o._obj+feature._offset;
 	if(_cmdline._feature->_sub)
 		index=_cmdline._feature->_sub->_id.GetDecVal();
 
 	if(_cmdline._assignment)
 	{
-		if(!f.df)
+		if(!feature.df)
 			return Z_ERROR_MSG(zs_error,"Cannot assign value to function\n");//???
 		if(!_cmdline._assign_val)
 		{
-			gz_out<<"Clearing member \""<<f._name<<"\"\n";
-			f.df->clear(ftr_ptr);
+			gz_out<<"Clearing member \""<<feature._name<<"\"\n";
+			feature.df->clear(ftr_ptr);
 			return zs_ok;
 
 
 		}
-		f.df->set_from_value(_cmdline._assign_val,ftr_ptr,index);
+		feature.df->set_from_value(_cmdline._assign_val,ftr_ptr,index);
 
 		return zs_ok;
 	}
-	if(f._type==zf_ft_act)
+	if(feature._type==zf_ft_act)
 	{
-		int ret=o._fact->execute_act_ptr	(o._obj,f._offset);
+		if(_cmdline._params)
+		{
+			zf_action* action=feature.get_action();
+			if(!action)
+			{
+				return Z_ERROR_MSG(zs_error,"Action not an action\n");//???
+			}
+			size_t num_valid_params=action->_params.size();
+			int i;
+			for(i=0;i<_cmdline._params->_param_list.size();i++)
+			{
+				zp_value* value=_cmdline._params->_param_list[i];
+				if(i>=num_valid_params)
+				{
+					return Z_ERROR_MSG(zs_error,"Too many parameters\n");//???
+				}
+				zf_feature* param=action->_params[i];
+				void* ftr_ptr=(char*)o._obj+param->_offset;
+				param->df->set_from_value(value,ftr_ptr);//TODO check status
+
+			}
+
+		}
+
+		int ret=o._fact->execute_act_ptr	(o._obj,feature._offset);
 		return zs_ok;//???
 	}
-	if(!f.df)
+	if(!feature.df)
 		return Z_ERROR(zs_error);//???
 
-	if(f._type==zf_ft_var)
+	if(feature._type==zf_ft_var)
 	{
 		z_string str;
-		f.df->get(str,ftr_ptr,index);
-		gz_out << f._name<<"="<<str<<"\n";
+		feature.df->get(str,ftr_ptr,index);
+		gz_out << feature._name<<"="<<str<<"\n";
 		return zs_ok;//???
 
 	}
-	if(f._type==zf_ft_obj)
+	if(feature._type==zf_ft_obj)
 	{
-		void* obj=f.get_var_ptr(o._obj);
+		void* obj=feature.get_var_ptr(o._obj);
 		if(!obj)
-			return Z_ERROR_MSG(zs_error,"Cannot select NULL object \"%s\".",f._name.c_str());
+			return Z_ERROR_MSG(zs_error,"Cannot select NULL object \"%s\".",feature._name.c_str());
 
-		_temp_path<< f._name;
+		_temp_path<< feature._name;
 
-		_selected._fact=f.df->get_child_obj_fact();
-		_selected._obj=f.get_var_ptr(o._obj);
+		_selected._fact=feature.df->get_child_obj_fact();
+		_selected._obj=feature.get_var_ptr(o._obj);
 		_path=_temp_path;
 
 	}
-	//f.df->dump(gz_out,ftr_ptr);
+	//feature.df->dump(gz_out,ftr_ptr);
 	//gz_out<<"\n";
 
 	return zs_ok;//???
@@ -256,6 +280,10 @@ z_status z_console_ntf:: ExecuteLine(ctext text)
 	if(status)
 		return status;
 	_temp= _selected;
+
+	if(_dump_cmd_line)
+		zf_dump_obj(&_cmdline);
+
 	if(!_cmdline.has_path())
 	{
 		//if no path is specified, then try the built in commands
@@ -352,6 +380,7 @@ ZFACT(z_console_ntf)
 	ZACT(help);
 	ZACT(exit);
 	ZACT(run);
+	ZPROP_X(_dump_cmd_line,"dump_cmdline","Dump the parsed command line contents");
 	ZPROP_X(_path,"path","Current path");
 	ZPROP_X(_history,"history","Command line history");
 	ZPROP_X(_config_file,"cfgfile","Filename of configuration file");
@@ -387,9 +416,8 @@ ZFACT(root)
 	//ZOBJ(a);
 	ZPROP(x);
 	ZPROP(i);
-	ZPROP(s);
 	ZACT(add);
-	ZACT(show);
+	ZACT_XP(show,"show","desc",1,ZPARAM(s));
 
 };
 #ifdef BUILD_VX
