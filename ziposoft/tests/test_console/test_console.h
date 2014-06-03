@@ -16,6 +16,7 @@ public:
 		_root._fact=0;
 		_root._obj=0;
 		_config_file="console.cfg";
+		_dump_cmd_line=false;
 	}
  	z_status load_config_file(ctext exe_name)
 	{
@@ -50,6 +51,7 @@ public:
 	//void get_auto_complete_list(z_string& partial);
 
 	//command line props
+	bool _dump_cmd_line;
 	z_string _script_file;
 	z_string _config_file;
 	z_string _startup_path;

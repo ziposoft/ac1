@@ -23,6 +23,7 @@ enum zf_feature_type
 {
 	zf_ft_none,
 	zf_ft_var,
+	zf_ft_param,
 	zf_ft_obj,
 	//zf_ft_pobj,
 	zf_ft_act,
@@ -31,6 +32,7 @@ enum zf_feature_type
 };
 class z_factory;
 class zp_value;
+class zf_action;
 
 class zf_var_funcs_base
 {
@@ -129,9 +131,10 @@ public:
 	virtual z_status get_list_features(z_strlist& list)const;
 
 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
+	virtual zf_action* add_act_params(ctext name,z_memptr act_addr,ctext desc,int num_params,...) ;
 
-	virtual int add_act(ctext name,z_memptr act_addr,ctext desc); 
-	virtual int add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
+	virtual zf_action* add_act(ctext name,z_memptr act_addr,ctext desc); 
+	virtual zf_feature* add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
 	z_status get_feature(ctext name,zf_feature& f) const;
 
 };
@@ -177,17 +180,27 @@ public:
 		funcptr fp=*( funcptr*) (pp);
 		return (cobj->*fp)();
 	}
-	virtual int add_act_T(ctext name,fn_act act_addr,ctext desc) 
-	{
-		add_act(name,*(z_memptr*)&act_addr,desc);
-		return 0;
-	}
 
 	virtual void add_features();
 	virtual const z_factory_info& get_info() const;
 
 };
-
+/*
+void PrintFloats (int n, ...)
+{
+  int i;
+  double val;
+  printf ("Printing floats:");
+  va_list vl;
+  va_start(vl,n);
+  for (i=0;i<n;i++)
+  {
+    val=va_arg(vl,double);
+    printf (" [%.2f]",val);
+  }
+  va_end(vl);
+  printf ("\n");
+}*/
 const z_factory*  zf_get_factory(ctext name);
 template <class CLASS> const z_factory*  zf_get_factory_T()
 {
@@ -216,6 +229,15 @@ public:
 	void dump(z_file& f,void* obj);
 
 	void* get_var_ptr(void* obj,int* iter=0) ;
+	virtual zf_action* get_action(){return 0;}
+
+};
+class zf_action  : public  zf_feature
+{
+public:
+	zf_action(ctext name,z_memptr offset,ctext desc="");
+	z_obj_vector_map<zf_feature> _params;
+	virtual zf_action* get_action(){return this;}
 
 };
 
@@ -232,11 +254,6 @@ public:
 
 };
 
-class zf_action  : public  zf_feature
-{
-public:
-
-};
 
 
 #define ZFACT(_CLASS_)  z_factory_T<_CLASS_> ZFACT##_CLASS_(#_CLASS_); \
@@ -245,11 +262,16 @@ public:
 	template <> z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=ZFACT##_CLASS_;\
 	template <> void z_factory_T<_CLASS_>	::add_features()
 
-#define ZOBJ(_VAR_)						add_prop(#_VAR_,zf_ft_obj,zp_child_obj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"");
-#define ZPROP(_VAR_)					add_prop(#_VAR_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"");
-#define ZPROP_X(_VAR_,_NAME_,_DESC_)	add_prop(_NAME_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),_DESC_);
-#define ZACT(_ACT_) add_act_T(#_ACT_,&THECLASS::_ACT_ ,"");
-#define ZACT_X(_ACT_,_NAME_,_DESC_) add_act_T(_NAME_,&THECLASS::_ACT_ ,_DESC_);
+#define ZOBJ(_VAR_)						add_prop(#_VAR_,zf_ft_obj,zp_child_obj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
+#define ZPROP(_VAR_)					add_prop(#_VAR_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
+#define ZPROP_X(_VAR_,_NAME_,_DESC_)	add_prop(_NAME_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),_DESC_)
+//#define ZACT(_ACT_) add_act_T(#_ACT_,*(z_memptr*)&(&THECLASS::_ACT_) ,"");
+#define ZPARAM_X(_VAR_,_NAME_,_DESC_) ZPROP_X(_VAR_,_NAME_,_DESC_)
+#define ZPARAM(_VAR_) ZPROP(_VAR_)
+
+#define ZACT_X(_ACT_,_NAME_,_DESC_) {fn_act _func_##_ACT_=&THECLASS::_ACT_;add_act(_NAME_,*(z_memptr*)(&_func_##_ACT_) ,_DESC_);}
+#define ZACT(_ACT_) ZACT_X(_ACT_,#_ACT_,"")
+#define ZACT_XP(_ACT_,_NAME_,_DESC_,_N_,...) {fn_act _func_##_ACT_=&THECLASS::_ACT_;add_act_params(_NAME_,*(z_memptr*)(&_func_##_ACT_) ,_DESC_,_N_,__VA_ARGS__);}
 
 #endif
 
