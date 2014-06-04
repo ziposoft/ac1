@@ -135,7 +135,7 @@ public:
 
 	virtual zf_action* add_act(ctext name,z_memptr act_addr,ctext desc); 
 	virtual zf_feature* add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
-	z_status get_feature(ctext name,zf_feature& f) const;
+	z_status get_feature(ctext name,zf_feature* & feat_out) const;
 
 };
 class zf_obj

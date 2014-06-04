@@ -451,14 +451,15 @@ z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
 		
 }
 
-z_status z_factory::get_feature(ctext name,zf_feature& feat_out) const
+zf_feature* z_factory::get_feature(ctext name) const
 {
+	zf_feature* f;
 	if(_dynamic)
 	{
  		zf_feature* f=_dynamic->features.get_by_name(name);
 		if(f)
 		{
-			feat_out=*f;
+			feat_out=f;
 			return zs_ok;
 		}
 	}
@@ -466,15 +467,15 @@ z_status z_factory::get_feature(ctext name,zf_feature& feat_out) const
 	ent=get_var_entry(name);
 	if(!ent)
 		return zs_item_not_found;
-	feat_out._offset=ent->offset;
-	feat_out._name=ent->name;
-	feat_out._type=ent->type;
+	feat_out->_offset=ent->offset;
+	feat_out->_name=ent->name;
+	feat_out->_type=ent->type;
 
-	feat_out._description="?";
+	feat_out->_description="?";
 	if(ent->fp_var_func_get)
-		feat_out.df=ent->fp_var_func_get();
+		feat_out->df=ent->fp_var_func_get();
 	else
-		feat_out.df=0;
+		feat_out->df=0;
 	return zs_ok;		
 		
 }

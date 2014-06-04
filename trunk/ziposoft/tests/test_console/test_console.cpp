@@ -121,7 +121,7 @@ z_status z_console_ntf::navigate_to_obj()
 z_status z_console_ntf::evaluate_feature(zf_obj& o)
 {
 	z_status status;
-	zf_feature feature;
+	zf_feature*  feature;
 	int index=-1;
 	if(!_cmdline._feature)
 		return Z_ERROR(zs_error);
@@ -158,7 +158,7 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 	{
 		if(_cmdline._params)
 		{
-			zf_action* action=feature.get_action();
+			zf_action* action=(&feature)->get_action();
 			if(!action)
 			{
 				return Z_ERROR_MSG(zs_error,"Action not an action\n");//???
