@@ -5,7 +5,7 @@
 z_status zp_cfg_obj::load_obj(void* obj,const z_factory* fact)
 {
 	size_t i;
-	zf_feature f;
+	zf_feature *f;
 	for(i=0;i<_features.size();i++)
 	{
 		if(fact->get_feature(_features[i]->_name,f)==zs_ok)
@@ -23,13 +23,13 @@ zf_obj zp_cfg_obj::createobj()
 	o._fact=zf_get_static_factory_by_name(_obj_type);
   	o._obj=o._fact->create_obj();
 	size_t i;
-	zf_feature f;
+	zf_feature* f;
 	for(i=0;i<_features.size();i++)
 	{
 		if(o._fact->get_feature(_features[i]->_name,f)==zs_ok)
 		{
-			void* ftr_ptr=(char*)o._obj+f._offset;
-			f.df->set_from_value(&_features[i]->_val,ftr_ptr);
+			void* ftr_ptr=(char*)o._obj+f->_offset;
+			f->df->set_from_value(&_features[i]->_val,ftr_ptr);
 		}
 	}
 	return o;
