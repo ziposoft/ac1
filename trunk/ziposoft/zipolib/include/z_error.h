@@ -29,6 +29,7 @@ enum {
 	zs_internal_error,
 	zs_bad_argument_2,
 	zs_wrong_object_type,
+	zs_out_of_range
 
 };
 ctext zs_get_text(z_status status);

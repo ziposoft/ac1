@@ -5,8 +5,80 @@
 #include "zipolib/include/z_parse.h"
 #include "zipolib/include/z_error.h"
 
+class Animal
+{
+public:
+	virtual int makesound()
+	{
+		printf("could be anything!\n");
+		return 0;
+	}
+};
 
+class Dog : public Animal
+{
+public:
+	Dog()
+	{
+		barks=1;
+	}
+	int barks;
+	virtual int makesound()
+	{
+		int i;
+		for (i=0;i<barks;i++)
+			printf("woof!\n");
+		return 0;
+	}
+};
+class Bird : public Animal
+{
+public:
+	virtual int makesound()
+	{
+		printf("chirp!\n");
+		return 0;
+	}
+};
+class Cat : public Animal
+{
+public:
+	virtual int makesound()
+	{
+		printf("meow!\n");
+		return 0;
+	}
+};
+class House
+{
+public:
+	House()
+	{
+		pet=new Cat();
+	}
+	Animal* pet;
 
+};
+ZFACT(Animal)
+{
+	ZACT(makesound);
+};
+ZFACT(House) 
+{
+ZVOBJ(pet);
+};
+ZFACT(Dog) 
+{
+	ZPROP(barks);
+	ZACT(makesound);
+
+};
+ZFACT(Cat) 
+{
+	ZACT(makesound);
+
+};
+/*
 class testAs 
 {
 public:
@@ -36,20 +108,21 @@ public:
 		return 0;
 	}
 };
+
+*/
 z_status z_console_ntf::select_obj(ctext name)
 {
-	z_status status;
-	zf_feature f;
-	status=_temp._fact->get_feature(name,f);
-	if(status)
-		return status;
-	if(f._type==zf_ft_obj)
+	zf_feature *f;
+	f=_temp._fact->get_feature(name);
+	if(!f)
+		return Z_ERROR(zs_feature_not_found);
+	if(f->_type==zf_ft_obj)
 	{
-		void* v=f.get_var_ptr(_temp._obj);
+		void* v=f->get_var_ptr(_temp._obj);
 		if(!v)
 			return Z_ERROR(zs_feature_not_found);
 
-		const z_factory* fact=f.df->get_child_obj_fact();
+		z_factory* fact=f->df->get_fact_from_obj(v);
 		if(!fact)
 			return Z_ERROR(zs_error);			
 		_temp._obj=v;
@@ -125,46 +198,46 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 	int index=-1;
 	if(!_cmdline._feature)
 		return Z_ERROR(zs_error);
-	status=o._fact->get_feature(_cmdline._feature->_name,feature);
+	feature=o._fact->get_feature(_cmdline._feature->_name);
 
 
-	if(status)
+	if(!feature)
 		//May not be an error. If it is searching multiple objects.
 		return zs_feature_not_found; 
 
 		//return Z_ERROR_MSG(status,"Feature \"%s\" not found\n",_cmdline._feature->_name.c_str());
 
-	void* ftr_ptr=(char*)o._obj+feature._offset;
+	void* ftr_ptr=(char*)o._obj+feature->_offset;
 	if(_cmdline._feature->_sub)
 		index=_cmdline._feature->_sub->_id.GetDecVal();
 
 	if(_cmdline._assignment)
 	{
-		if(!feature.df)
+		if(!feature->df)
 			return Z_ERROR_MSG(zs_error,"Cannot assign value to function\n");//???
 		if(!_cmdline._assign_val)
 		{
-			gz_out<<"Clearing member \""<<feature._name<<"\"\n";
-			feature.df->clear(ftr_ptr);
+			gz_out<<"Clearing member \""<<feature->_name<<"\"\n";
+			feature->df->clear(ftr_ptr);
 			return zs_ok;
 
 
 		}
-		feature.df->set_from_value(_cmdline._assign_val,ftr_ptr,index);
+		status=feature->df->set_from_value(_cmdline._assign_val,ftr_ptr,index);
 
-		return zs_ok;
+		return status;
 	}
-	if(feature._type==zf_ft_act)
+	if(feature->_type==zf_ft_act)
 	{
 		if(_cmdline._params)
 		{
-			zf_action* action=(&feature)->get_action();
+			zf_action* action=feature->get_action();
 			if(!action)
 			{
 				return Z_ERROR_MSG(zs_error,"Action not an action\n");//???
 			}
 			size_t num_valid_params=action->_params.size();
-			int i;
+			size_t i;
 			for(i=0;i<_cmdline._params->_param_list.size();i++)
 			{
 				zp_value* value=_cmdline._params->_param_list[i];
@@ -180,34 +253,34 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 
 		}
 
-		int ret=o._fact->execute_act_ptr	(o._obj,feature._offset);
+		int ret=o._fact->execute_act_ptr	(o._obj,feature->_offset);
 		return zs_ok;//???
 	}
-	if(!feature.df)
+	if(!feature->df)
 		return Z_ERROR(zs_error);//???
 
-	if(feature._type==zf_ft_var)
+	if(feature->_type==zf_ft_var)
 	{
 		z_string str;
-		feature.df->get(str,ftr_ptr,index);
-		gz_out << feature._name<<"="<<str<<"\n";
+		feature->df->get(str,ftr_ptr,index);
+		gz_out << feature->_name<<"="<<str<<"\n";
 		return zs_ok;//???
 
 	}
-	if(feature._type==zf_ft_obj)
+	if(feature->_type==zf_ft_obj)
 	{
-		void* obj=feature.get_var_ptr(o._obj);
-		if(!obj)
-			return Z_ERROR_MSG(zs_error,"Cannot select NULL object \"%s\".",feature._name.c_str());
+		void* subobj=feature->get_var_ptr(o._obj);
+		if(!subobj)
+			return Z_ERROR_MSG(zs_error,"Cannot select NULL object \"%s\".",feature->_name.c_str());
 
-		_temp_path<< feature._name;
+		_temp_path<< feature->_name;
+		_selected._obj=subobj;
 
-		_selected._fact=feature.df->get_child_obj_fact();
-		_selected._obj=feature.get_var_ptr(o._obj);
+		_selected._fact=feature->df->get_fact_from_obj(subobj);
 		_path=_temp_path;
 
 	}
-	//feature.df->dump(gz_out,ftr_ptr);
+	//feature->df->dump(gz_out,ftr_ptr);
 	//gz_out<<"\n";
 
 	return zs_ok;//???
@@ -401,7 +474,7 @@ public:
 
 	}
 	z_console_ntf console;
-	testAd a;
+	House house;
 	z_strlist x;
 	int i;
 	z_string s;
@@ -413,7 +486,7 @@ public:
 ZFACT(root)
 {
 	ZOBJ(console);
-	//ZOBJ(a);
+	ZOBJ(house);
 	ZPROP(x);
 	ZPROP(i);
 	ZACT(add);
@@ -436,13 +509,15 @@ int ztest()
 #else
 int main(int argc, char* argv[])
 {
-	gz_out << "load save args...\n";
+	//gz_out << "load save args...\n";
 	z_debug_load_save_args(&argc,&argv);
-	gz_out << "load save args done\n";
+	//gz_out << "load save args done\n";
+	Cat *cat;
+	Dog* dog;
+	Animal* animal=new Cat();
 
-
-
-
+	//gz_out << "\ncat pointer:" << typeid(cat).name();
+	//gz_out << "\nanimal :" << typeid(*animal).name();
 	z_status status=zs_no_match;
 	root o;
 	o.console.setroot(&o);
@@ -469,16 +544,16 @@ int main(int argc, char* argv[])
 #endif
 
 
-
+/*
 #define ZO_OBJ_LIST \
 	ZCLS(testAs,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) ACT(func2) VAR(i) POBJ(child))  \
 	ZCLS(testAd,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) VAR(sl)  VAR(_str) OBJ(child)) 
-
-
-#include "zipolib/include/z_obj.inc"
 ZP_MODULE_DEFINE(testmod);
+#include "zipolib/include/z_obj.inc"
+
+*/
 
 
-ZP_MODULE_INCLUDE(ZP_MOD(testmod), ZP_MOD(parse));
+ZP_MODULE_INCLUDE( ZP_MOD(parse));
 
 #pragma comment(linker, "/alternatename:zp_module_master_list_size=zp_module_master_list_size_exe")

@@ -22,11 +22,11 @@ template <class V> void zf_var_funcs<V>::dump(z_file& file, void* v) const {	zf_
 template <class V> void zf_var_funcs<V>::add(void* list,void* obj) const {}
 template <class V> void* zf_var_funcs<V>::get_item(void* list,size_t index) const {	return 0;}
 template <class V> size_t zf_var_funcs<V>::get_size(void* list) const{	return 0;}
-template <class V> void* zf_var_funcs<V>::create_obj(void* list,const z_factory* fact) const{	return 0;}
+template <class V> void* zf_var_funcs<V>::create_obj(void* list,z_factory* fact) const{	return 0;}
 template <class V> void zf_var_funcs<V>::get(z_string& s, void* v,int index)	const{}
 template <class V> void zf_var_funcs<V>::set(ctext s, void* v,int index)	const{}
 template <class V> void zf_var_funcs<V>::clear( void* v)	const{}
-template <class V> void zf_var_funcs<V>::set_from_value(zp_value* val, void* var,int index)	const{  set(val->_string,var);}
+template <class V> z_status zf_var_funcs<V>::set_from_value(zp_value* val, void* var,int index)	const{  set(val->_string,var); return zs_ok;}
 
 /*________________________________________________________________________
 
@@ -93,17 +93,22 @@ VF<z_strlist>::set(ctext s, void* v,int index)		const
 	}
 	if(index<(int)list.size()) list[index]=s;  
 }
-VF<z_strlist>::set_from_value(zp_value* val, void* v,int index)		const{	RECAST(z_strlist,list);
+template <> z_status zf_var_funcs<z_strlist>::set_from_value(zp_value* val, void* v,int index)		const{	RECAST(z_strlist,list);
 	if(index==-1)
 	{
 		if(val->_string_list)
 			list=val->_string_list->_list ;
 		else
 			list<<val->_string;//if we are passed a single string, then just append it.
-		return;
+		return zs_ok;
 	}
 	if(index<(int)list.size())
-		list[index]=val->_string; 
+	{
+		list[index]=val->_string;
+		return zs_ok;
+	}
+	return zs_out_of_range;
+	
 
 }
 
@@ -112,7 +117,7 @@ VF<z_strlist>::set_from_value(zp_value* val, void* v,int index)		const{	RECAST(z
 
 zf_var_funcs<zp_obj_vector> 
 ________________________________________________________________________*/
-template <> void* zf_var_funcs<zp_obj_vector>::create_obj(void* v,const z_factory* fact) const
+template <> void* zf_var_funcs<zp_obj_vector>::create_obj(void* v,z_factory* fact) const
 {
 	RECAST(zp_obj_vector,list);
 	zf_obj obj;
@@ -138,10 +143,11 @@ VF<zp_obj_vector>::dump(z_file& file, void* v) const
 		list[i]._fact->dump_obj(file,list[i]._obj);
 	}
 }
-VF<zp_obj_vector>::set_from_value(zp_value* val, void* v,int index)		const{	
+template <> z_status zf_var_funcs<zp_obj_vector>::set_from_value(zp_value* val, void* v,int index)		const{	
 	RECAST(z_strlist,list);
 
-
+	Z_ASSERT(0);//TODO
+	return Z_ERROR(zs_operation_not_supported);
 }
 /*________________________________________________________________________
 
@@ -212,7 +218,7 @@ zf_var_funcs<z_obj_vector>
 ________________________________________________________________________*/
 
 #if 0
-template <> template <class TYPE> void* zf_var_funcs<z_obj_vector<TYPE>>::create_obj(void* v,const z_factory* new_child_type) const
+template <> template <class TYPE> void* zf_var_funcs<z_obj_vector<TYPE>>::create_obj(void* v,z_factory* new_child_type) const
 {
 	RECAST(zp_obj_vector,list);
 	zf_obj obj;
@@ -289,7 +295,7 @@ z_status z_factory::get_var_as_string(void* obj,ctext var_name,z_string& value) 
 	funcs->get(value,pvar);
 	return zs_success;
 }
-z_status z_factory::create_child(void* obj,ctext var_name,const z_factory* new_child_type,void** ppChild) const
+z_status z_factory::create_child(void* obj,ctext var_name,z_factory* new_child_type,void** ppChild) const
 {
 	z_memptr offset;
 	const zf_var_funcs_base* funcs;
@@ -451,32 +457,28 @@ z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
 		
 }
 
-zf_feature* z_factory::get_feature(ctext name) const
+zf_feature* z_factory::get_feature(ctext name) 
 {
 	zf_feature* f;
 	if(_dynamic)
 	{
- 		zf_feature* f=_dynamic->features.get_by_name(name);
+ 		f=_dynamic->features.get_by_name(name);
 		if(f)
 		{
-			feat_out=f;
-			return zs_ok;
+			return f;
 		}
 	}
 	const zf_var_entry* ent=0;
 	ent=get_var_entry(name);
 	if(!ent)
-		return zs_item_not_found;
-	feat_out->_offset=ent->offset;
-	feat_out->_name=ent->name;
-	feat_out->_type=ent->type;
+		return 0;
+	const zf_var_funcs_base* funcs=0;
+	if(ent->fp_var_func_get) 
+		funcs=ent->fp_var_func_get();
+	f=add_prop(ent->name,ent->type,funcs,(z_memptr)ent->offset,"?");
 
-	feat_out->_description="?";
-	if(ent->fp_var_func_get)
-		feat_out->df=ent->fp_var_func_get();
-	else
-		feat_out->df=0;
-	return zs_ok;		
+
+	return f;		
 		
 }
 
@@ -518,7 +520,7 @@ extern const  int zp_module_master_list_size_default=0;
 }
 
 
-const z_factory*  zf_get_static_factory_by_name(ctext name)
+z_factory*  _zf_get_static_factory(ctext text,bool getbyname)
 {
 	int i_module;
 	for(i_module=0;i_module<zp_module_master_list_size;i_module++)
@@ -528,26 +530,39 @@ const z_factory*  zf_get_static_factory_by_name(ctext name)
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const zp_module_fact_entry& p_obj_entry=p_module->facts[i_obj];
-			const z_factory* fact=p_obj_entry.fact;
-			if(strcmp(fact->get_name(),name)==0)
+			z_factory* fact=p_obj_entry.fact;
+			ctext name_or_type;
+			if(getbyname)
+				name_or_type=fact->get_name();
+			else
+				name_or_type=fact->get_type_info_name();
+			if(strcmp(name_or_type,text)==0)
 				return fact;
 		}
 	}
 	return 0;
 }
-const z_factory*  zf_get_factory(ctext name)
+z_factory*  zf_get_factory(ctext name)
 {
 	
-	const z_factory* f=	 get_factories_dynamic().get_by_name(name);
+	z_factory* f=	 get_factories_dynamic().get_by_name(name);
 	if(f)
 		return f;
 
-	f=zf_get_static_factory_by_name(name);
+	f=_zf_get_static_factory(name,true);
+	return f;
+}
+z_factory*  zf_get_factory_by_type(ctext type)
+{
+	z_factory* f=	 get_factories_dynamic().get_by_type(type);
+	if(f)
+		return f;
+	f=_zf_get_static_factory(type,false);
 	return f;
 }
 void*  zfs_create_obj_by_type(ctext name)
 {
-	const z_factory*  f=zf_get_static_factory_by_name( name);
+	z_factory*  f=zf_get_factory( name);
 	if(f)
 		return f->create_obj();
 	return 0;
@@ -566,7 +581,7 @@ void  zo_factory_list_dump()
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const zp_module_fact_entry& p_obj_entry=p_module->facts[i_obj];
-			const z_factory* fact=p_obj_entry.fact;
+			z_factory* fact=p_obj_entry.fact;
 			gz_out.indent_reset();
 			fact->dump_static(gz_out);
 

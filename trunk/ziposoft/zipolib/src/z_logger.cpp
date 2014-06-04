@@ -1,7 +1,7 @@
 #include "zipolib_cpp_pch.h"
 #include "z_logger.h"
 
-#define BUFF_SIZE 100
+#define BUFF_SIZE 1024
 
 /*
 enum z_logger_level

@@ -1,6 +1,6 @@
 #include "zipolib_cpp_pch.h"
 #include "z_parse_internal.h"
-#if 0
+#if 1
 #undef	ZT
 #define	ZT(...)
 #endif  
@@ -645,7 +645,7 @@ z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 
 
 z_status zp_parser::_process_sub_item(void* sub_obj,
-										  const z_factory* ie,
+										  z_factory* ie,
 										  zp_mode mode,zp_flags flags)
 {
 	//ZTF;
@@ -1012,7 +1012,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 			if(mode.skip_test)
 				return zs_skipped;
 			tmpl.get_match(match_start,match_len);
-			const z_factory* fact_new_obj=find_item(match_start,match_len);
+			z_factory* fact_new_obj=find_item(match_start,match_len);
 			if(fact_new_obj==0)
 				return check_status(zs_no_entry_for_item);
 			if(mode.create)

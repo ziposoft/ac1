@@ -47,8 +47,8 @@ public:
 	ctext get_map_key () { return _obj_type;}
 	z_string _obj_type;
 	z_obj_vector_map<zp_cfg_feature> _features;
-	zf_obj createobj();
-	z_status load_obj(void* obj,const z_factory* f);
+	z_status createobj(zf_obj& o);
+	z_status load_obj(void* obj, z_factory* f);
 };
 
 /*
@@ -64,15 +64,15 @@ public:
 	virtual void* get_item(void* list,size_t index) const;
 	virtual size_t get_size(void* list) const;
 	virtual void dump(z_file& s, void* v) const;
-	virtual void* create_obj(void* var,const z_factory* fact) const;
-	virtual void set_from_value(zp_value* val, void* var,int index=-1) const ;
+	virtual void* create_obj(void* var,z_factory* fact) const;
+	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const ;
 };	
 class zp_var_list_funcs_base  : public zf_var_funcs_base
 {
 public:
 	virtual void clear(void* v) const;
 
-	virtual const z_factory* get_fact() const=0;
+	virtual z_factory* get_fact() const=0;
 	virtual z_obj_vector_base* get_list(void * v) const=0;
 	void dump(z_file& f, void* v) const;
 	virtual void* get_ptr(void* v,int* iter ) const;
@@ -83,12 +83,12 @@ WARNING- overloaded funcs must match exactly! otherwise they will quietly not be
 template <class TYPE >  class zp_var_list_funcs  : public zp_var_list_funcs_base
 {
 public:
-	virtual const z_factory* get_fact()	const
+	virtual z_factory* get_fact()	const
 	{
 		return &z_factory_T<TYPE>::self;
 	}
 
-	virtual void* create_obj(void* v,const z_factory* fact) const
+	virtual void* create_obj(void* v,z_factory* fact) const
 	{
 		z_obj_vector<TYPE>& list= *reinterpret_cast<z_obj_vector<TYPE>*>(v);
 		TYPE* obj=reinterpret_cast<TYPE*>(fact->create_obj());
@@ -110,11 +110,11 @@ This interface manipulates child objects
 template <class CLASS >  class zp_child_obj_funcs  : public zf_var_funcs_base
 {
 public:
-	virtual void* create_obj(void* var /* pointer to obj */,const z_factory* new_child_type) const
+	virtual void* create_obj(void* var /* pointer to obj */,z_factory* new_child_type) const
 	{
 		//OBJ instance is part of parent, so it is already created.
 		//Just reset it and return a pointer to it.
-		const z_factory* f=&z_factory_T<CLASS>::self;
+		z_factory* f=&z_factory_T<CLASS>::self;
 		if(new_child_type!=f)
 		{
 			Z_ERROR_MSG(zs_wrong_object_type,"Objects type does not match member variable");
@@ -128,13 +128,14 @@ public:
 		return var;
 	}
 	virtual void clear(void* v) const{
-		const z_factory* f=&z_factory_T<CLASS>::self;
+		z_factory* f=&z_factory_T<CLASS>::self;
 		f->clear_all_vars(v);
 	}
-	virtual const  z_factory*  get_child_obj_fact() const 
+	virtual z_factory*  get_fact_from_obj(void* obj) const 
 	{ 
 		return &z_factory_T<CLASS>::self;
 	}
+
 	virtual void dump(z_file& file, void* v) const
 	{
 		file.indent_inc();
@@ -142,18 +143,16 @@ public:
 		z_factory_T<CLASS>::self.dump_obj(file,v);
 		file.indent_dec();
 	}
-	virtual void set_from_value(zp_value* val, void* var,int index=-1) const 
+	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const 
 	{
 		z_status status;
 		//TODO - change all these to return status
-		const z_factory* f=&z_factory_T<CLASS>::self;
+		z_factory* f=&z_factory_T<CLASS>::self;
 		if(!val->_obj)
-			return; //ERROR!!!!
+			return Z_ERROR_MSG(zs_bad_parameter,"No object specified");
 		status=val->_obj->load_obj(var,f);
 		Z_ASSERT(status==zs_ok);
-
-
-
+		return status;
 	}
 };
 template <class CLASS >  const zf_var_funcs_base* zp_child_obj_funcs_get(CLASS& obj)
@@ -167,10 +166,12 @@ This interface manipulates child object pointers
 template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
 {
 public:
-	virtual const  z_factory*  get_child_obj_fact() const 
+
+	virtual z_factory*  get_fact_from_obj(void* obj) const 
 	{ 
 		return &z_factory_T<CLASS>::self;
 	}
+
 
 	virtual void* get_ptr(void* var,int* iter ) const
 	{
@@ -179,11 +180,11 @@ public:
 	}
 
 
-	virtual void* create_obj(void* var /* pointer to obj pointer*/,const z_factory* new_child_type) const
+	virtual void* create_obj(void* var /* pointer to obj pointer*/,z_factory* new_child_type) const
 	{
 		void** ppObj=reinterpret_cast<void**>(var); 
 
-		const z_factory* f=&z_factory_T<CLASS>::self;
+		z_factory* f=&z_factory_T<CLASS>::self;
 		if(new_child_type!=f)
 		{
 			Z_ERROR_MSG(zs_wrong_object_type,"Objects type does not match member variable");
@@ -196,13 +197,18 @@ public:
 	virtual void dump(z_file& file, void* v) const
 	{
 		void** ppObj=reinterpret_cast<void**>(v); 
+
 		if(*ppObj == 0)
 			file<< "NULL";
 		else
 		{
-	 		file.indent_inc();
+			z_factory* fact=get_fact_from_obj(*ppObj);
+			Z_ASSERT(fact);
+			if(!fact)
+				return;//Z_ERROR
+			file.indent_inc();
 			file << "\n";
-			z_factory_T<CLASS>::self.dump_obj(file,*ppObj);
+			fact->dump_obj(file,*ppObj);
 			file.indent_dec();
 		}
 	}
@@ -217,13 +223,50 @@ public:
 			delete *ppObj;
 		*ppObj=0;
 	}
-	virtual void set_from_value(zp_value* val, void* var,int index=-1) const 
+	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const 
 	{
 		//TODO - change all these to return status
-			void** ppObj=reinterpret_cast<void**>(var); 
+		void** ppObj=reinterpret_cast<void**>(var); 
+		if(!val->_obj)
+		{
+			return Z_ERROR_MSG(zs_bad_parameter,"No object specified");
+		}
+		zf_obj o;
+		z_status status=val->_obj->createobj(o);
+		if(status)
+			return status;
+		*ppObj=o._obj;
+		return zs_ok;
+
+
+	}
+};
+template <class CLASS >  class zp_child_vobj_funcs  : public zp_child_pobj_funcs<CLASS>
+{
+public:
+	virtual z_factory*  get_fact_from_obj(void* vobj) const 
+	{ 
+		CLASS* pObj=0;
+		if(vobj)
+		{
+			pObj=reinterpret_cast<CLASS*>(vobj); 
+		}
+		if(!pObj) 
+		{
+			Z_ERROR(zs_bad_parameter);
+			return 0;
+		}
+		ctext typetext=Z_TYPEINFO_O(*pObj);
+
+		return zf_get_factory_by_type(typetext);
 	}
 
+};
 
+template <class CLASS >  const zf_var_funcs_base* zp_child_vobj_funcs_get(CLASS*& obj)
+{
+	static const zp_child_vobj_funcs<CLASS> f;
+	return &f;
 };
 template <class CLASS >  const zf_var_funcs_base* zp_child_pobj_funcs_get(CLASS*& obj)
 {

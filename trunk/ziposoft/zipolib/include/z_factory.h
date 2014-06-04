@@ -14,11 +14,16 @@ ________________________________________________________________________*/
 #include "zipolib/include/z_stl_vector.h"
 #ifdef UNIX
 typedef unsigned long long z_memptr;
+#define Z_TYPEINFO_P(_X_) (typeid(_X_).name()+1)
+#define Z_TYPEINFO_O(_X_) (typeid(_X_).name())
 #else
 typedef unsigned long long z_memptr;
-
+#define Z_TYPEINFO_P(_X_) (typeid(_X_).raw_name()+2)
+#define Z_TYPEINFO_O(_X_) (typeid(_X_).raw_name()+2)
 //typedef size_t z_memptr;
 #endif
+
+
 enum zf_feature_type
 {
 	zf_ft_none,
@@ -46,9 +51,9 @@ public:
 	virtual size_t get_size(void* list) const { return 0;} 
 	virtual void* get_ptr(void* var,int* iter) const { return var;}  /*could be pointer to obj, or pointer to obj pointer */
 	//This is if the member var is an obj, pointer to obj, or obj list		
-	virtual void* create_obj(void* var,const z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
-	virtual const z_factory*  get_child_obj_fact() const { return 0;}
-	virtual void set_from_value(zp_value* val, void* var,int index=-1) const {};
+	virtual void* create_obj(void* var,z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
+	virtual z_factory*  get_fact_from_obj(void* obj) const { return 0;}
+	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const { return Z_ERROR(zs_operation_not_supported);};
 
 } ;
 
@@ -110,6 +115,7 @@ public:
 	virtual const z_factory_info& get_info() const=0;
 	virtual ctext get_parse_string() const { return  get_info().parse;}
 	virtual ctext get_map_key()const;
+	virtual ctext get_type_info_name()const =0;
 
 
 
@@ -119,7 +125,7 @@ public:
 
 
 
-	virtual z_status create_child(void* obj,ctext var_name,const z_factory* new_child_type,void** ppChild) const;
+	virtual z_status create_child(void* obj,ctext var_name,z_factory* new_child_type,void** ppChild) const;
 
 	virtual z_status get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter=0) const;
 	virtual z_status set_var_as_string(void* obj,ctext var_name,ctext value) const;
@@ -135,7 +141,7 @@ public:
 
 	virtual zf_action* add_act(ctext name,z_memptr act_addr,ctext desc); 
 	virtual zf_feature* add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
-	z_status get_feature(ctext name,zf_feature* & feat_out) const;
+	zf_feature* get_feature(ctext name) ;
 
 };
 class zf_obj
@@ -146,10 +152,24 @@ public:
 		_fact=0;	
 		_obj=0;	
 	}
-	const z_factory* _fact;
+	z_factory* _fact;
 	void* _obj;
 };
-z_obj_vector_map<z_factory>& get_factories_dynamic();
+
+
+
+
+class z_dynamic_factory_list
+{
+public:
+	z_obj_vector_map<z_factory> _list;	
+	z_factory* get_by_name(ctext name);
+	z_factory* get_by_type(ctext type);
+	void add(z_factory* f);
+
+};
+
+z_dynamic_factory_list& get_factories_dynamic();
 template <class C >  class z_factory_T :public  z_factory
 {
 public:
@@ -183,26 +203,18 @@ public:
 
 	virtual void add_features();
 	virtual const z_factory_info& get_info() const;
+	virtual ctext get_type_info_name()const 
+	{
+		C* nullobj=0;
+		return Z_TYPEINFO_P(nullobj);
+	}
+
 
 };
-/*
-void PrintFloats (int n, ...)
-{
-  int i;
-  double val;
-  printf ("Printing floats:");
-  va_list vl;
-  va_start(vl,n);
-  for (i=0;i<n;i++)
-  {
-    val=va_arg(vl,double);
-    printf (" [%.2f]",val);
-  }
-  va_end(vl);
-  printf ("\n");
-}*/
-const z_factory*  zf_get_factory(ctext name);
-template <class CLASS> const z_factory*  zf_get_factory_T()
+
+z_factory*  zf_get_factory(ctext name);
+z_factory*  zf_get_factory_by_type(ctext type);
+template <class CLASS> z_factory*  zf_get_factory_T()
 {
 	return &z_factory_T<CLASS>::self;
 
@@ -262,6 +274,8 @@ public:
 	template <> z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=ZFACT##_CLASS_;\
 	template <> void z_factory_T<_CLASS_>	::add_features()
 
+#define ZVOBJ(_VAR_)					add_prop(#_VAR_,zf_ft_obj,zp_child_vobj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
+#define ZPOBJ(_VAR_)					add_prop(#_VAR_,zf_ft_obj,zp_child_pobj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
 #define ZOBJ(_VAR_)						add_prop(#_VAR_,zf_ft_obj,zp_child_obj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
 #define ZPROP(_VAR_)					add_prop(#_VAR_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
 #define ZPROP_X(_VAR_,_NAME_,_DESC_)	add_prop(_NAME_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),_DESC_)

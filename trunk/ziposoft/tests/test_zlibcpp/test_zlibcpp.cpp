@@ -164,7 +164,7 @@ int main(int argc, char** argv)
 	z_debug_load_save_args(&argc,&argv);
 	testA A;
 	z_factory_T<testA>::self.dump_static(gz_out);
-	const z_factory* f=zf_get_factory("testA");
+	z_factory* f=zf_get_factory("testA");
 	f->dump_obj(gz_out,&A);
 
 	f=	zf_get_factory_T<testA>();

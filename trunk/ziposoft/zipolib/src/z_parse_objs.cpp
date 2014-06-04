@@ -2,37 +2,45 @@
 #include "zipolib_cpp_pch.h"
 #include "z_parse.h"
 
-z_status zp_cfg_obj::load_obj(void* obj,const z_factory* fact)
+z_status zp_cfg_obj::load_obj(void* obj, z_factory* fact)
 {
 	size_t i;
 	zf_feature *f;
 	for(i=0;i<_features.size();i++)
 	{
-		if(fact->get_feature(_features[i]->_name,f)==zs_ok)
+		f=fact->get_feature(_features[i]->_name);
+		if(f)
 		{
-			void* ftr_ptr=(char*)obj+f._offset;
-			f.df->set_from_value(&_features[i]->_val,ftr_ptr);
+			void* ftr_ptr=(char*)obj+f->_offset;
+			f->df->set_from_value(&_features[i]->_val,ftr_ptr);
 		}
 	}
 	return zs_ok;
 }
 
-zf_obj zp_cfg_obj::createobj()
+z_status zp_cfg_obj::createobj(zf_obj& o)
 {
-	zf_obj o;
-	o._fact=zf_get_static_factory_by_name(_obj_type);
+	o._fact=zf_get_factory(_obj_type);
+	if(!o._fact)
+	{
+		return Z_ERROR_MSG(zs_item_not_found,"Object type \"%s\" not found",_obj_type.c_str());
+	}
   	o._obj=o._fact->create_obj();
+	if(!o._obj)
+	{
+		return Z_ERROR_MSG(zs_cannot_create_virtual_obj,"Object \"%s\" cannot be created",_obj_type.c_str());
+	}
 	size_t i;
 	zf_feature* f;
 	for(i=0;i<_features.size();i++)
 	{
-		if(o._fact->get_feature(_features[i]->_name,f)==zs_ok)
+		if( (f=o._fact->get_feature(_features[i]->_name))  )
 		{
 			void* ftr_ptr=(char*)o._obj+f->_offset;
 			f->df->set_from_value(&_features[i]->_val,ftr_ptr);
 		}
 	}
-	return o;
+	return zs_ok;
 }
 
 bool zp_cmdline::has_path()

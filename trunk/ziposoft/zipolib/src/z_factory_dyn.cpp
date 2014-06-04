@@ -3,9 +3,30 @@
 #include "zipolib/include/z_factory.h"
 
 
-z_obj_vector_map<z_factory>& get_factories_dynamic()
+
+void z_dynamic_factory_list::add(z_factory* f)
 {
-	static z_obj_vector_map<z_factory> g_factories_dynamic;
+	_list.add(f);
+}
+z_factory*  z_dynamic_factory_list::get_by_name(ctext name)
+{
+	return _list.get_by_name(name);
+}
+z_factory*  z_dynamic_factory_list::get_by_type(ctext t)
+{
+	size_t i;
+	for(i=0;i<_list.size();i++)
+	{
+		ctext tin=_list[i]->get_type_info_name();
+		if (strcmp(tin,t)==0)
+			return _list[i];
+	}
+	return 0;
+}
+
+z_dynamic_factory_list& get_factories_dynamic()
+{
+	static z_dynamic_factory_list g_factories_dynamic;
 	return 	g_factories_dynamic;
 
 }
@@ -30,7 +51,7 @@ zf_action* z_factory::add_act_params(ctext name,z_memptr act_addr,ctext desc,int
 	int i;
 	zf_action* action=add_act(name,act_addr,desc);
 	va_list ArgList;
-	va_start (ArgList, desc);
+	va_start (ArgList, num_params);
 	for (i=0;i<num_params;i++)
 	{
 		zf_feature* p=va_arg(ArgList,zf_feature*);
@@ -88,37 +109,3 @@ void zf_feature::dump(z_file& f,void* obj)
 	}
 	f <<'\n';
 }
-/*
-ctext z_factory::get_name() const
-{
-return _name;
-
-}
-z_factory::z_factory(ctext name) 
-{
-_name=name;
-get_factories_dynamic().add(this);
-}
-
-z_status z_factory::get_var_info_i(size_t index,ctext& name,size_t &offset,const zf_var_funcs_base*& funcs)  const
-{
-zf_feature* f=_features[index];
-if(!f)
-return zs_item_not_found;
-name=f->_name;
-offset=f->_offset;
-funcs=f->df;
-return zs_ok;		
-
-}
-z_status z_factory::get_var_info(ctext name,size_t &offset,const zf_var_funcs_base*& funcs) const
-{
-zf_feature* f=_features.get_by_name(name);
-if(!f)
-return zs_item_not_found;
-offset=f->_offset;
-funcs=f->df;
-return zs_ok;		
-
-}
-*/

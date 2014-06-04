@@ -29,7 +29,7 @@ public:
 struct zp_module_fact_entry 
 {
 	ctext name;
-	const z_factory* fact;
+	z_factory* fact;
 };
 
 struct zp_module_entry 
@@ -60,19 +60,19 @@ extern const  int zp_module_master_list_size_default;
 #pragma comment(linker, "/alternatename:_zp_module_master_list=_zp_module_master_list_default")
 #pragma comment(linker, "/alternatename:_zp_module_master_list_size=_zp_module_master_list_size_default")
 
-const z_factory*  zf_get_static_factory_by_name(ctext name);
+z_factory*  zf_get_static_factory_by_name(ctext name);
 void*  zfs_create_obj_by_type(ctext name);
 void  zo_factory_list_dump();
 
 template <class CLASS> void zf_dump_obj(CLASS* p_obj)
 {
-	const z_factory* factory=&z_factory_T<CLASS>::self;
+	z_factory* factory=&z_factory_T<CLASS>::self;
 	factory->dump_obj(gz_out,p_obj);
 
 }
  template <class CLASS> void zf_dump_static(CLASS* p_obj)
 {
-	const z_factory* factory=&z_factory_T<CLASS>::self;
+	z_factory* factory=&z_factory_T<CLASS>::self;
 	factory->dump_static(gz_out);
 
 }
