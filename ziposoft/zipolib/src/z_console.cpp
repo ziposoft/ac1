@@ -545,7 +545,7 @@ void zo_console::OnTab()
 
 void zo_console::dump_feature_outline(void* obj)
 {
-	const z_factory* fact=obj->get_fact();
+	z_factory* fact=obj->get_fact();
 	if(!fact)
 		return;
 	int i_var;
@@ -570,7 +570,7 @@ void zo_console::dump_all()
 		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
 		{
 			const z_module_obj_entry& p_obj_entry=p_module->facts[i_obj];
-			const z_factory* fact=p_obj_entry.fact;
+			z_factory* fact=p_obj_entry.fact;
 			gz_out<< "\t"<< p_obj_entry.name;
 			if(fact->base_fact)
 				gz_out<< "::"<< z_obj_fact_get_name(fact->base_fact);
@@ -580,7 +580,7 @@ void zo_console::dump_all()
 }
 void zo_console::dump_obj2(void* obj)
 {
-	const z_factory* fact=obj->get_fact();
+	z_factory* fact=obj->get_fact();
 	gz_out<< z_obj_fact_get_name(fact)<<"\n";
 	gz_out<< fact->desc<<"\n";
 }

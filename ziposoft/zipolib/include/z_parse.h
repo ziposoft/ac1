@@ -12,21 +12,21 @@ public:
 	//TODO UG!!!
 	template <class CLASS> z_status parse_obj(CLASS* p_obj,ctext data,ctext tmpl=0)
 	{
-		const z_factory* factory=&z_factory_T<CLASS>::self;//TODO UG!!!
+		z_factory* factory=&z_factory_T<CLASS>::self;//TODO UG!!!
 		return 	parse_obj_f(p_obj, factory,data);
 
 	}
 	template <class CLASS> z_status parse_obj_d(CLASS* p_obj,ctext data,ctext tmpl=0)
 	{
-		const z_factory* factory=&z_factory_T<CLASS>::self;	  //TODO UG!!!
+		z_factory* factory=&z_factory_T<CLASS>::self;	  //TODO UG!!!
 		return 	parse_obj_f(p_obj, factory,data,tmpl);
 
 	}
  	z_status report_error();
 	z_status output_default_template(z_file* fp,ctext tmpl);
-	z_status output_obj(z_file* fp,const z_factory* factory,void* obj);
+	z_status output_obj(z_file* fp,z_factory* factory,void* obj);
 	z_status parse_template(ctext tmpl,ctext data);
-	z_status parse_obj_f(void* p_obj,const z_factory* factory,ctext data,ctext tmpl=0);
+	z_status parse_obj_f(void* p_obj,z_factory* factory,ctext data,ctext tmpl=0);
 
 
 };
@@ -125,7 +125,7 @@ public:
 	zp_cfg_file() 
 	{
 	}
-	 z_status load_obj(void* obj,const z_factory* f)
+	 z_status load_obj(void* obj, z_factory* f)
 	{
 		ctext name=f->get_name();
 		zp_cfg_obj* cfg=_obj.get_by_name(name);

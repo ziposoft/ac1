@@ -82,7 +82,7 @@ zpi_context::zpi_context()
 }
 
 void zpi_context::init(zpi_context* parent,
-					  const z_factory* ie, ctext parse_string	 )
+					  z_factory* ie, ctext parse_string	 )
 {
 	_parent=parent;
 	_obj_factory=ie;
@@ -106,7 +106,7 @@ void* zpi_context::get_next_child_obj()
 
 
 void zp_parser::context_set_root(void* p_obj,
-									 const z_factory* ie,
+									 z_factory* ie,
 									 ctext parse_string
 									 )
 {
@@ -123,7 +123,7 @@ void zp_parser::context_set_root(void* p_obj,
 	//_ctx_root._output_result_index=0;
 
 }
-void zp_parser::context_sub_item_push(void* obj,const z_factory* ie)
+void zp_parser::context_sub_item_push(void* obj,z_factory* ie)
 {
 	//TODO need to change this so that we can remember where we failed
 	//and give an accurate parse error message
@@ -221,7 +221,7 @@ z_status zp_parser::report_error()
 
 
 
-z_status zp_parser::parse_obj_f(void* p_obj,const z_factory* factory,ctext data,ctext tmpl)
+z_status zp_parser::parse_obj_f(void* p_obj,z_factory* factory,ctext data,ctext tmpl)
 {
 	Z_ASSERT(p_obj);
 	set_source(data,strlen(data));
@@ -246,7 +246,7 @@ z_status zp_parser::parse_item(void*& p_item,
 {
 	//ZTF;
 	z_status status;
-	const z_factory* ie=zf_get_factory(item_entry_name);
+	z_factory* ie=zf_get_factory(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
 	void* obj=ie->create_obj();
@@ -273,7 +273,7 @@ z_status zp_parser::create_obj(ctext item_entry_name,void* &p_obj)
 {
 
 	//ZTF;
-	const z_factory* ie=zf_get_factory(item_entry_name);
+	z_factory* ie=zf_get_factory(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
 	p_obj=ie->create_obj();
@@ -283,7 +283,7 @@ z_status zp_parser::create_obj(ctext item_entry_name,void* &p_obj)
 
 }
 
-z_status zp_parser::output_obj(z_file* fp,const z_factory* factory,void* obj)
+z_status zp_parser::output_obj(z_file* fp,z_factory* factory,void* obj)
 {
 	if(!factory)
 		return -1;
@@ -312,7 +312,7 @@ z_status zp_parser::create_empty_item(void*& p_item,
 {
 	//ZTF;
 	z_status status;
-	const z_factory* ie=zf_get_factory(item_entry_name);
+	z_factory* ie=zf_get_factory(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
 	void* obj=ie->create_obj();
@@ -378,7 +378,7 @@ z_status zp_parser::parse_template(	ctext tmpl)
 }
 
 //item table
-const z_factory* zp_parser::find_item(ctext item_name,size_t len)
+z_factory* zp_parser::find_item(ctext item_name,size_t len)
 {
 	z_string s;
 	s.assign( item_name,len);
