@@ -58,13 +58,14 @@ bool zp_cmdline::has_path()
 	"{_root_slash}?'/':*({_path_list}ident:'/'):?({_object}ident:'.'):{_feature}?zp_feature:"\
 	"?( ({_assignment}'=':{_assign_val}zp_value)|{_params}zp_params)",\
 	POBJ(_feature)  VAR(_object) POBJ(_assign_val)  VAR(_assignment) POBJ(_params) VAR(_root_slash)   VAR(_path_list) )\
-	ZCLS(zp_str_list,none,"strlist","'{':*(({_list}ident|{_list}string|{_list}string_sq):?','):'}'",VAR(_list) )\
+	ZCLS(zp_str_list,none,"strlist","'{':*(({_list}string|{_list}string_sq):?','):'}'",VAR(_list) )\
 	ZCLS(zp_params,none,"params","('(':*({_param_list}zp_value:?','):')')",VAR(_param_list) )\
 	ZCLS(zp_pair,none,"pair","{_name}ident:'=':{_val}?ident:#','",VAR(_name) VAR(_val) )\
-	ZCLS(zp_value,none,"value","{_string}string|{_string}string_sq|{_string_list}zp_str_list|{_obj}zp_cfg_obj|{_string}ident",\
-		 POBJ(_string_list) POBJ(_obj) VAR(_string)   )\
+	ZCLS(zp_value,none,	"value","{_string}string|{_string}string_sq|{_string_list}zp_str_list|{_obj}zp_cfg_obj|{_obj_list}zp_cfg_obj_list|{_string}ident",\
+		 POBJ(_string_list)  POBJ(_obj_list) POBJ(_obj) VAR(_string)   )\
 	ZCLS(zp_subscript,none,"","'[':({_id}ident):']'",VAR(_id) )	\
 	ZCLS(zp_feature,none,"","{_name}ident:?{_sub}zp_subscript",VAR(_name) POBJ(_sub)   )\
+	ZCLS(zp_cfg_obj_list,none,"","%whsp:'{':{_list}*zp_cfg_obj:'}':?whsp",VAR(_list))\
 	ZCLS(zp_cfg_file,none,"","%whsp:{_obj}*zp_cfg_obj:?whsp",VAR(_obj))\
 	ZCLS(zp_cfg_obj,none,"","%whsp:{_obj_type}ident:'{':{_features}*zp_cfg_feature:'}'",VAR(_obj_type) VAR(_features))\
 	ZCLS(zp_cfg_feature,none,"","%whsp:{_name}ident:'=':{_val}zp_value", OBJ(_val)  VAR(_name))
@@ -72,6 +73,7 @@ bool zp_cmdline::has_path()
 
 //	ZCLS(zp_path,none,"","{_root_slash}?'/':*({_path_list}ident:'/')",	VAR(_root_slash)   VAR(_path_list) )
 
+//	ZCLS(zp_value,none,	"value","{_string}string|{_string}string_sq|{_string_list}zp_str_list|{_obj}zp_cfg_obj|{_obj_list}zp_cfg_obj_list|{_string}ident",\
 
 
 

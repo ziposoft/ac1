@@ -11,11 +11,13 @@ public:
 };
 
 class zp_cfg_obj ;
+class zp_cfg_obj_list ;
 class zp_value 
 {
 public:
 	zp_value() 
 	{
+		_obj_list=0;//setting obj pointers to 0 is critical!!!
 		_string_list=0;//setting obj pointers to 0 is critical!!!
 		_obj=0;//setting obj pointers to 0 is critical!!!
 	}
@@ -24,6 +26,7 @@ public:
 	int  _integer;
 	z_string _string;
 	zp_cfg_obj *_obj;
+	zp_cfg_obj_list *_obj_list;
 };
 
 class zp_cfg_feature
@@ -35,7 +38,6 @@ public:
 	z_string _name;
 	zp_value _val;
 	ctext get_map_key () { return _name;}
-
 };
 
 class zp_cfg_obj
@@ -50,6 +52,16 @@ public:
 	z_status createobj(zf_obj& o);
 	z_status load_obj(void* obj, z_factory* f);
 };
+class zp_cfg_obj_list
+{
+public:
+	zp_cfg_obj_list() 
+	{
+	}
+	z_obj_vector_map<zp_cfg_obj> _list;
+
+};
+
 
 /*
 This interface manipulates simple member variables 
@@ -100,6 +112,47 @@ public:
 	{
 		z_obj_vector<TYPE>* list= reinterpret_cast<z_obj_vector<TYPE>*>(v);
 		return list;
+	}
+	virtual z_status set_from_value(zp_value* value, void* var,int index=-1) const 
+	{
+		//TODO - change all these to return status
+		z_obj_vector<TYPE>& list= *reinterpret_cast<z_obj_vector<TYPE>*>(var);
+		zf_obj o;
+		z_status status;
+		if(value->_obj)
+		{
+			status=value->_obj->createobj(o);
+			if(status)
+				return status;
+			TYPE* obj=reinterpret_cast<TYPE*>(o._obj);
+			list.add(obj);
+		}
+		// HOLY CRAP THIS IS UGLY. TODO-FIX THIS!!
+		if(value->_obj_list)
+		{
+			size_t i;
+			for(i=0;i<value->_obj_list->_list.size();i++)
+			{
+				status=value->_obj_list->_list[i]->createobj(o);
+				if(status)
+					return status;
+				TYPE* obj=reinterpret_cast<TYPE*>(o._obj);
+				list.add(obj);
+			}
+		}
+
+		return zs_ok;
+	}
+	virtual z_factory*  get_fact_from_obj(void* vobj) const 
+	{ 
+		TYPE* pObj=reinterpret_cast<TYPE*>(vobj); 
+		if(!pObj) 
+		{
+			Z_ERROR(zs_bad_parameter);
+			return 0;
+		}
+		ctext typetext=Z_TYPEINFO_O(*pObj);
+		return zf_get_factory_by_type(typetext);
 	}
 };
 
@@ -237,8 +290,6 @@ public:
 			return status;
 		*ppObj=o._obj;
 		return zs_ok;
-
-
 	}
 };
 template <class CLASS >  class zp_child_vobj_funcs  : public zp_child_pobj_funcs<CLASS>
@@ -246,18 +297,13 @@ template <class CLASS >  class zp_child_vobj_funcs  : public zp_child_pobj_funcs
 public:
 	virtual z_factory*  get_fact_from_obj(void* vobj) const 
 	{ 
-		CLASS* pObj=0;
-		if(vobj)
-		{
-			pObj=reinterpret_cast<CLASS*>(vobj); 
-		}
+		CLASS* pObj=reinterpret_cast<CLASS*>(vobj); 
 		if(!pObj) 
 		{
 			Z_ERROR(zs_bad_parameter);
 			return 0;
 		}
 		ctext typetext=Z_TYPEINFO_O(*pObj);
-
 		return zf_get_factory_by_type(typetext);
 	}
 

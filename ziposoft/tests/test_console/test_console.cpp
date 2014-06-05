@@ -11,6 +11,7 @@ public:
 	Animal()
 	{
 		legs=2;
+		name="george";
 	}
 	virtual int makesound()
 	{
@@ -18,7 +19,7 @@ public:
 		return 0;
 	}
 	int legs;
-
+	z_string name;
 };
 
 class Dog : public Animal
@@ -69,19 +70,22 @@ class House
 public:
 	House()
 	{
-		pet=new Cat();
+		onepet=new Cat();
 	}
-	Animal* pet;
+	z_obj_vector<Animal> pets;
+	Animal* onepet;
 
 };
 ZFACT(Animal)
 {
 	ZACT(makesound);
 	ZPROP(legs);
+	ZPROP(name);
 };
 ZFACT(House) 
 {
-ZVOBJ(pet);
+	ZVOBJ(onepet);
+	ZPROP(pets);
 };
 ZFACT_V(Dog,Animal) 
 {
