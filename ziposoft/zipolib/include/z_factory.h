@@ -75,6 +75,7 @@ struct zf_var_entry
 struct z_factory_info
 {
 	ctext name;
+	z_factory* baseclass;
 	ctext parse;
 	const size_t num_features;
 	const zf_var_entry* list;
@@ -84,7 +85,6 @@ class z_factory_dyn
 {
 public:
 	z_string _name;
-	z_factory* _parent;
 	z_obj_vector_map<zf_feature> features;
 
 
@@ -92,14 +92,14 @@ public:
 };
 class z_factory
 {
-
+	virtual const zf_var_entry*  _get_var_entry(ctext name) const;
+	virtual const zf_var_entry*  _get_var_entry(size_t index) const;
 protected:
 	//Static stuff
 	virtual const zf_var_entry* get_var_list() const{ return  get_info().list;}
 	virtual const size_t get_var_list_size() const{ return  get_info().num_features;}
-	virtual const zf_var_entry*  get_var_entry(ctext name) const;
-	virtual const zf_var_entry*  get_var_entry(size_t index) const;
 
+	int get_num_features() const;
 	//Static stuff
 	z_factory_dyn* _dynamic;
 	z_factory_dyn& get_dyn();
@@ -116,6 +116,7 @@ public:
 	virtual ctext get_parse_string() const { return  get_info().parse;}
 	virtual ctext get_map_key()const;
 	virtual ctext get_type_info_name()const =0;
+	z_factory* get_base_factory() const;
 
 
 
@@ -265,14 +266,18 @@ public:
 	zf_feature* df;
 
 };
+extern z_factory* _pgz_factory_none;
+#define _gz_factory_none *_pgz_factory_none
 
-
-
-#define ZFACT(_CLASS_)  z_factory_T<_CLASS_> ZFACT##_CLASS_(#_CLASS_); \
-	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,0,0,0 };   \
+#define ZFACT_V(_CLASS_,_BASECLASS_)   z_factory_T<_CLASS_> _gz_factory_##_CLASS_(#_CLASS_); \
+	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,&_gz_factory_##_BASECLASS_,0,0,0 };\
 	template <>  const z_factory_info& z_factory_T<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; }	  \
-	template <> z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=ZFACT##_CLASS_;\
+	template <> z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=_gz_factory_##_CLASS_;\
 	template <> void z_factory_T<_CLASS_>	::add_features()
+
+
+#define ZFACT(_CLASS_) ZFACT_V(_CLASS_,none) 
+
 
 #define ZVOBJ(_VAR_)					add_prop(#_VAR_,zf_ft_obj,zp_child_vobj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
 #define ZPOBJ(_VAR_)					add_prop(#_VAR_,zf_ft_obj,zp_child_pobj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")

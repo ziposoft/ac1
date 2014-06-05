@@ -5,6 +5,7 @@
 
 #define RECAST(_TYPE_,_NAME_) _TYPE_& _NAME_= *reinterpret_cast<_TYPE_*>(v);
 #define VF template <> void zf_var_funcs
+z_factory* _pgz_factory_none=0;
 
 void zf_var_funcs_base::dump(z_file& file, void* v) const
 {
@@ -250,6 +251,11 @@ ctext z_factory::get_map_key() const
 	return get_name();
 
 }
+z_factory* z_factory::get_base_factory() const
+{
+	return get_info().baseclass;
+
+}
 
 
 z_status z_factory::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter) const
@@ -397,7 +403,21 @@ void z_factory::dump_static(z_file& f) const
 
 z_factory
 ________________________________________________________________________*/
-const zf_var_entry* z_factory::get_var_entry (ctext name) const
+
+int z_factory::get_num_features() const
+{
+	int total=0;
+	if(get_base_factory())
+	{
+		total=get_base_factory()->get_num_features();
+	}
+	total+=get_var_list_size();
+	total+=_dynamic->features.size();
+	return total;
+}
+
+
+const zf_var_entry* z_factory::_get_var_entry (ctext name) const
 {
 	size_t i;
 	const zf_var_entry* list=get_var_list();
@@ -409,7 +429,7 @@ const zf_var_entry* z_factory::get_var_entry (ctext name) const
 	return 0;		
 
 }
-const zf_var_entry* z_factory::get_var_entry (size_t i) const
+const zf_var_entry* z_factory::_get_var_entry (size_t i) const
 {
 	if(i>=get_var_list_size())
 		return 0;		
@@ -432,6 +452,15 @@ z_status z_factory::get_list_features(z_strlist& list) const
 z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
 								   const zf_var_funcs_base*& funcs)  const
 {
+
+	z_factory* base=get_base_factory();
+	if(base)
+	{
+		int numbase=base->get_num_features();
+		if(index<numbase)
+			return base->get_var_info_i(index,name,offset,funcs);
+		index-=numbase;
+	}
 	const zf_var_entry* ent=0;
 	if(_dynamic)
 	{
@@ -445,7 +474,7 @@ z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
 		}
 		index-=_dynamic->features.size();
 	}
-	ent=get_var_entry(index);
+	ent=_get_var_entry(index);
 	if(!ent)
 		return zs_item_not_found;
 	name=ent->name;
@@ -469,9 +498,14 @@ zf_feature* z_factory::get_feature(ctext name)
 		}
 	}
 	const zf_var_entry* ent=0;
-	ent=get_var_entry(name);
+	ent=_get_var_entry(name);
 	if(!ent)
+	{
+		z_factory* base=get_base_factory();
+		if(base)
+			return base->get_feature(name);
 		return 0;
+	}
 	const zf_var_funcs_base* funcs=0;
 	if(ent->fp_var_func_get) 
 		funcs=ent->fp_var_func_get();
@@ -495,9 +529,15 @@ z_status z_factory::get_var_info(ctext name,z_memptr &offset,const zf_var_funcs_
 		}
 	}
 	const zf_var_entry* ent=0;
-	ent=get_var_entry(name);
+	ent=_get_var_entry(name);
+
 	if(!ent)
+	{
+		z_factory* base=get_base_factory();
+		if(base)
+			return base->get_var_info(name,offset,funcs);
 		return zs_item_not_found;
+	}
 	offset=ent->offset;
 	if(ent->fp_var_func_get)
 		funcs=ent->fp_var_func_get();

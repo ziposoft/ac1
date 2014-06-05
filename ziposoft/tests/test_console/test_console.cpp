@@ -8,11 +8,17 @@
 class Animal
 {
 public:
+	Animal()
+	{
+		legs=2;
+	}
 	virtual int makesound()
 	{
 		printf("could be anything!\n");
 		return 0;
 	}
+	int legs;
+
 };
 
 class Dog : public Animal
@@ -21,6 +27,7 @@ public:
 	Dog()
 	{
 		barks=1;
+		legs=4;
 	}
 	int barks;
 	virtual int makesound()
@@ -34,6 +41,10 @@ public:
 class Bird : public Animal
 {
 public:
+	Bird()
+	{
+		legs=2;
+	}
 	virtual int makesound()
 	{
 		printf("chirp!\n");
@@ -43,6 +54,10 @@ public:
 class Cat : public Animal
 {
 public:
+	Cat()
+	{
+		legs=4;
+	}
 	virtual int makesound()
 	{
 		printf("meow!\n");
@@ -62,22 +77,18 @@ public:
 ZFACT(Animal)
 {
 	ZACT(makesound);
+	ZPROP(legs);
 };
 ZFACT(House) 
 {
 ZVOBJ(pet);
 };
-ZFACT(Dog) 
+ZFACT_V(Dog,Animal) 
 {
 	ZPROP(barks);
-	ZACT(makesound);
-
 };
-ZFACT(Cat) 
-{
-	ZACT(makesound);
-
-};
+ZFACT_V(Cat,Animal){};
+ZFACT_V(Bird,Animal){};
 /*
 class testAs 
 {
@@ -546,8 +557,8 @@ int main(int argc, char* argv[])
 
 /*
 #define ZO_OBJ_LIST \
-	ZCLS(testAs,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) ACT(func2) VAR(i) POBJ(child))  \
-	ZCLS(testAd,void,"cmdline","{_val}ident:'=':{i123}int",ACT(func) VAR(sl)  VAR(_str) OBJ(child)) 
+	ZCLS(testAs,none,"cmdline","{_val}ident:'=':{i123}int",ACT(func) ACT(func2) VAR(i) POBJ(child))  \
+	ZCLS(testAd,none,"cmdline","{_val}ident:'=':{i123}int",ACT(func) VAR(sl)  VAR(_str) OBJ(child)) 
 ZP_MODULE_DEFINE(testmod);
 #include "zipolib/include/z_obj.inc"
 
