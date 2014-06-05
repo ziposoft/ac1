@@ -207,7 +207,7 @@ void zp_var_list_funcs_base::dump(z_file& f, void* v) const
 	for(i=0;i<count;i++)
 	{
 		void* p= plist->get_void(i);
-		get_fact()->dump_obj(f,p);
+		get_fact_from_obj(p)->dump_obj(f,p);
 	}
 	f.indent_dec();
 	f.indent();
