@@ -64,7 +64,11 @@ public:
 	{
 		return (void*)get(i);
 	}
-
+    virtual z_obj_vector<ITEM_CLASS> & operator << (ITEM_CLASS *x)
+    {
+		_vector.push_back(x);
+		return *this;
+    };
 };
 template <class ITEM_CLASS > class z_obj_vector_map  : public z_obj_vector<ITEM_CLASS>
 {

@@ -650,11 +650,14 @@ z_status zp_parser::_process_sub_item(void* sub_obj,
 {
 	//ZTF;
 	context_sub_item_push(sub_obj,ie);
+#ifdef DEBUG
 	z_string raw;
 	debug(raw);
 	ZT("%c %s[%s]-> %s",(mode.create?'C':'T'),
 		ie->get_name()
 		,ie->get_parse_string(),raw.c_str());
+
+#endif
 	U32 ng=mode.nested_group;
 	mode.nested_group=0;
 

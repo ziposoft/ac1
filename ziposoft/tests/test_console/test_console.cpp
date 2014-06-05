@@ -71,9 +71,23 @@ public:
 	House()
 	{
 		onepet=new Cat();
+		newanimals=9;
 	}
 	z_obj_vector<Animal> pets;
+	int newanimals;
 	Animal* onepet;
+	int hoard()
+	{
+		int i;
+		for(i=0;i<newanimals;i++)
+		{
+			pets << new Cat();
+			pets << new Bird();
+			pets << new Dog();
+
+		}
+		return 0;
+	}
 
 };
 ZFACT(Animal)
@@ -84,8 +98,10 @@ ZFACT(Animal)
 };
 ZFACT(House) 
 {
+	ZACT(hoard);
 	ZVOBJ(onepet);
 	ZPROP(pets);
+	ZPROP(newanimals);
 };
 ZFACT_V(Dog,Animal) 
 {
@@ -422,6 +438,21 @@ z_status z_console_ntf::dumpcfg()
 
 	return zs_ok;
 }
+z_status z_console_ntf::testreadall()
+{
+	z_file f(_config_file,"rb");
+	zp_cfg_file cfg;
+	z_string data_in;
+	f.read_all(data_in);
+	z_status status=_parser.parse_obj(&cfg,data_in);
+	if(status!=zs_ok)
+	{
+		_parser.report_error();
+		return status;
+	}
+
+	return zs_ok;
+}
 z_status z_console_ntf::loadcfg()
 {
 	z_file f(_config_file,"rb");
@@ -466,6 +497,7 @@ ZFACT(z_console_ntf)
 	ZACT(loadcfg);
 	ZACT(savecfg);
 	ZACT(help);
+	ZACT(testreadall);
 	ZACT(exit);
 	ZACT(run);
 	ZPROP_X(_dump_cmd_line,"dump_cmdline","Dump the parsed command line contents");
