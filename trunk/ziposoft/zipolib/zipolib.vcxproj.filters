@@ -70,9 +70,6 @@
     <ClInclude Include="include\z_string.h">
       <Filter>cpp</Filter>
     </ClInclude>
-    <ClInclude Include="include\z_trace.h">
-      <Filter>cpp</Filter>
-    </ClInclude>
     <ClInclude Include="include\z_type_converter.h">
       <Filter>cpp</Filter>
     </ClInclude>
@@ -178,9 +175,6 @@
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="src\z_string.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="src\z_trace.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="src\z_type_converter.cpp">

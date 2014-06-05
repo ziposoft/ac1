@@ -64,6 +64,7 @@ public:
 	z_status help();
 	z_status shell();
 	z_status exit();
+	z_status testreadall();
 
 };
 
