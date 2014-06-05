@@ -318,7 +318,7 @@ void z_console::OnDoubleBack()
 #if 0
 #define Z_MODULE _Z_MODULE(console)
 #define ZO_OBJ_LIST \
-	OBJ(zo_console,void,"console","console desc",0,\
+	OBJ(zo_console,none,"console","console desc",0,\
 		PROP(_config_file,"cfgfile","cfg","Name of configuration file",0)\
 		PROP(_startup_path,"path","path","Startup Path",0)\
 		LIST(_history,"history",0,0,0)\

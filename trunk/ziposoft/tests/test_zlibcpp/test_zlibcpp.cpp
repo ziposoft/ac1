@@ -209,7 +209,7 @@ ZFACT(testA)
 }
 
  #define ZO_OBJ_LIST \
-	ZCLS(testB,void,"cmdline","{_xi}ident:'=':{i123}int",ACT(func)  VAR(_name) VAR(_xi)) 
+	ZCLS(testB,none,"cmdline","{_xi}ident:'=':{i123}int",ACT(func)  VAR(_name) VAR(_xi)) 
 
 		  
 #include "zipolib/include/z_obj.inc"

@@ -55,10 +55,10 @@ ZO_OBJ_LIST;
 
 #define ZCLS(_CLASS_,_BASE_,_NAME_,_PARSE_,_EXTRA_) \
 	namespace Z_PARSE_NS(_CLASS_) {typedef  _CLASS_ THECLASS; const zf_var_entry varlist[]={ _EXTRA_ }; const size_t varlist_length=sizeof( varlist)/sizeof(	zf_var_entry);  }	 \
-	z_factory_T<_CLASS_> static_instance_factory##_CLASS_;  \
-	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,_PARSE_,Z_PARSE_NS(_CLASS_)::varlist_length,&Z_PARSE_NS(_CLASS_)::varlist[0] };   \
+	z_factory_T<_CLASS_> _gz_factory_##_CLASS_;  \
+	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,&_gz_factory_##_BASE_,_PARSE_,Z_PARSE_NS(_CLASS_)::varlist_length,&Z_PARSE_NS(_CLASS_)::varlist[0] };   \
 	template <>  const z_factory_info& z_factory_T<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; }	  \
-	template <> z_factory_T<_CLASS_>&  z_factory_T<_CLASS_>::self=static_instance_factory##_CLASS_;\
+	template <> z_factory_T<_CLASS_>&  z_factory_T<_CLASS_>::self=_gz_factory_##_CLASS_;\
 	template <> void z_factory_T<_CLASS_>::add_features(){}
 
 ZO_OBJ_LIST;
@@ -69,7 +69,7 @@ ZO_OBJ_LIST;
 #undef LIST
 #undef VAR
 #undef POBJ
-#define ZCLS(_CLASS_,_BASE_,_NAME_,_DESC_,...) { #_CLASS_,&static_instance_factory##_CLASS_ }, 
+#define ZCLS(_CLASS_,_BASE_,_NAME_,_DESC_,...) { #_CLASS_,&_gz_factory_##_CLASS_ }, 
 #define ZP_MODULE_DEFINE(_NAME_) zp_module_fact_entry zp_module_##_NAME_##_fact_list[]={\
 ZO_OBJ_LIST };\
 const zp_module_entry ZP_MODULE(_NAME_)= \
