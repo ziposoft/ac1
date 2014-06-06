@@ -78,8 +78,10 @@ public:
 	virtual void dump(z_file& s, void* v) const;
 	virtual void* create_obj(void* var,z_factory* fact) const;
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const ;
+	virtual zf_feature_type get_type() const { return zf_ft_var; }
+
 };	
-class zp_var_list_funcs_base  : public zf_var_funcs_base
+class zf_funcs_obj_list_base  : public zf_var_funcs_base
 {
 public:
 	virtual void clear(void* v) const;
@@ -88,11 +90,14 @@ public:
 	virtual z_obj_vector_base* get_list(void * v) const=0;
 	void dump(z_file& f, void* v) const;
 	virtual void* get_ptr(void* v,int* iter ) const;
+	virtual zf_feature_type get_type() const{ return zf_ft_obj_list; }
+	virtual void* get_item(void* list,size_t index) const; 
+
 };
 
 /*
 WARNING- overloaded funcs must match exactly! otherwise they will quietly not be called */
-template <class TYPE >  class zp_var_list_funcs  : public zp_var_list_funcs_base
+template <class TYPE >  class zp_var_list_funcs  : public zf_funcs_obj_list_base
 {
 public:
 	virtual z_factory* get_fact()	const
@@ -163,6 +168,8 @@ This interface manipulates child objects
 template <class CLASS >  class zp_child_obj_funcs  : public zf_var_funcs_base
 {
 public:
+	virtual zf_feature_type get_type() const{ return zf_ft_obj; }
+
 	virtual void* create_obj(void* var /* pointer to obj */,z_factory* new_child_type) const
 	{
 		//OBJ instance is part of parent, so it is already created.
@@ -220,6 +227,7 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
 {
 public:
 
+	virtual zf_feature_type get_type() const{ return zf_ft_obj; }
 	virtual z_factory*  get_fact_from_obj(void* obj) const 
 	{ 
 		return &z_factory_T<CLASS>::self;

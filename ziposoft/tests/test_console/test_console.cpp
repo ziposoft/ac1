@@ -290,7 +290,7 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 	if(!feature->df)
 		return Z_ERROR(zs_error);//???
 
-	if(feature->_type==zf_ft_var)
+	if(feature->df->get_type()==zf_ft_var)
 	{
 		z_string str;
 		feature->df->get(str,ftr_ptr,index);
@@ -298,7 +298,22 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 		return zs_ok;//???
 
 	}
-	if(feature->_type==zf_ft_obj)
+	if(feature->df->get_type()==zf_ft_obj_list)
+	{
+
+		void* subobj=feature->df->get_item(ftr_ptr,index);
+		if(!subobj)
+			return Z_ERROR_MSG(zs_error,"Cannot select NULL object \"%s\".",feature->_name.c_str());
+
+		z_string name= feature->_name;
+		name<<'['<<index<<']';
+		_temp_path<< name;
+		_selected._obj=subobj;
+
+		_selected._fact=feature->df->get_fact_from_obj(subobj);
+		_path=_temp_path;
+	}
+	if(feature->df->get_type()==zf_ft_obj)
 	{
 		void* subobj=feature->get_var_ptr(o._obj);
 		if(!subobj)
@@ -309,7 +324,6 @@ z_status z_console_ntf::evaluate_feature(zf_obj& o)
 
 		_selected._fact=feature->df->get_fact_from_obj(subobj);
 		_path=_temp_path;
-
 	}
 	//feature->df->dump(gz_out,ftr_ptr);
 	//gz_out<<"\n";
@@ -466,6 +480,9 @@ z_status z_console_ntf::loadcfg()
 		return status;
 	}
 	cfg.load_obj(_root._obj,_root._fact);
+
+	select_obj_from_path(_root,_path);
+	_selected=_temp;
 	//cfg._obj.get_by_name(
 	return zs_ok;
 
