@@ -85,7 +85,16 @@ public:
 	zp_subscript* _sub;
 
 	//int get_num_chars();
-	ctext get_full_name(z_string& fullname);
+	ctext get_full_name(z_string& fullname)
+	{
+		fullname=_name;
+		if(_sub)
+		{
+			fullname<<'['<<_sub->_id<<']';
+		}
+		return fullname.c_str();
+
+	}
 };
 class zp_path 
 {
@@ -102,7 +111,6 @@ public:
 	zp_cmdline() 
 	{
 		_assignment=false;
-		_feature=0;
 		//_path=0;
 		_assign_val=0;
 		_params=0;
@@ -112,11 +120,10 @@ public:
 	//zp_path* _path;
 	zp_params* _params;
 
-	z_string _object;
-	zp_feature* _feature;
 	zp_value* _assign_val;
 	bool _root_slash;
-	z_strlist _path_list;
+	z_obj_vector_map<zp_feature> _path;
+	zp_feature* get_feature();
 
 
 	bool has_path();

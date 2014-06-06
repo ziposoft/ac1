@@ -108,10 +108,12 @@ zf_action::zf_action(ctext name,z_memptr offset,ctext desc) : zf_feature(name,zf
 {
 
 }
-void* zf_feature::get_var_ptr(void* obj,int* iter)
+void* zf_feature::get_memvar_ptr(void* obj,int* iter)
 {
 	char* pvar=(char*)obj+_offset;
-	return df->get_ptr(pvar,iter);
+	if(df)
+		return df->get_ptr(pvar,iter);
+	return pvar;
 
 
 }

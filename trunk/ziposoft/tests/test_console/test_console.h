@@ -26,6 +26,7 @@ public:
 	}
     virtual void OnDoubleBack();
 	virtual z_status ExecuteLine(ctext text);
+	virtual z_status EvaluateLine(ctext text);
     virtual void OnTab();
 
 
@@ -33,7 +34,8 @@ public:
 	zf_obj _self;
 	zf_obj _selected;
 	zf_obj _temp;
-	z_strlist _temp_path;
+	z_string _temp_path;
+	bool _has_feature;
 
 
 	template <class CLASS> void setroot(CLASS * obj)
@@ -46,8 +48,8 @@ public:
 
 	z_status evaluate_feature(zf_obj& o);
  	z_status navigate_to_obj();
- 	z_status select_obj(ctext name);
- 	z_status select_obj_from_path(zf_obj& start,z_strlist& list);
+ 	z_status select_obj(zp_feature* zpf);
+ 	z_status select_obj_from_path(zf_obj& start,z_string& path);
 	//void get_auto_complete_list(z_string& partial);
 
 	//command line props

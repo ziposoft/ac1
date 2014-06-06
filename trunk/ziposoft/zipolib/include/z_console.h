@@ -49,7 +49,7 @@ protected:
     virtual void OnDoubleBack();
     virtual void put_prompt();
 public:
-	z_strlist _path;
+	z_string  _path;
 	z_strlist _history;
 
 

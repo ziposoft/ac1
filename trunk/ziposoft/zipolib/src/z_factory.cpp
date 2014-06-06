@@ -21,7 +21,7 @@ ________________________________________________________________________*/
 
 template <class V> void zf_var_funcs<V>::dump(z_file& file, void* v) const {	zf_var_funcs_base::dump( file,  v) ; }
 template <class V> void zf_var_funcs<V>::add(void* list,void* obj) const {}
-template <class V> void* zf_var_funcs<V>::get_item(void* list,size_t index) const {	return 0;}
+template <class V> void* zf_var_funcs<V>::get_sub_obj(void* list,size_t index) const {	return 0;}
 template <class V> size_t zf_var_funcs<V>::get_size(void* list) const{	return 0;}
 template <class V> void* zf_var_funcs<V>::create_obj(void* list,z_factory* fact) const{	return 0;}
 template <class V> void zf_var_funcs<V>::get(z_string& s, void* v,int index)	const{}
@@ -171,7 +171,7 @@ void zf_funcs_obj_list_base::clear(void* v) const
 
 }
 
-void* zf_funcs_obj_list_base::get_item(void* v,size_t index ) const
+void* zf_funcs_obj_list_base::get_sub_obj(void* v,size_t index ) const
 {
 	z_obj_vector_base* plist=get_list(v);
 	if(!plist)
@@ -196,18 +196,23 @@ void* zf_funcs_obj_list_base::get_ptr(void* v,int* iter ) const
 		//Z_ERROR_MSG(zs_bad_parameter,"Objects type does not match member variable");
 		return 0;
 	}
-	if(*iter==-1)
-		*iter=0;
-	else 
+	int index=0;
+	if(iter)
 	{
-		(*iter)++;
-		if(*iter>=(int)plist->size())
+		if(*iter==-1)
+			*iter=0;
+		else 
 		{
-			*iter=-1;
-			return 0;
+			(*iter)++;
+			if(*iter>=(int)plist->size())
+			{
+				*iter=-1;
+				return 0;
+			}
 		}
+		index=*iter;
 	}
-	return plist->get_void(*iter);
+	return plist->get_void(index);
 }
 void zf_funcs_obj_list_base::dump(z_file& f, void* v) const 
 {

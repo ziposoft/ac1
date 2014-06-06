@@ -73,7 +73,7 @@ public:
 	virtual void set(ctext  s, void* v,int index=-1) const;
 	virtual void clear(void* v) const;
 	virtual void add(void* list,void* obj) const ;
-	virtual void* get_item(void* list,size_t index) const;
+	virtual void* get_sub_obj(void* list,size_t index) const;
 	virtual size_t get_size(void* list) const;
 	virtual void dump(z_file& s, void* v) const;
 	virtual void* create_obj(void* var,z_factory* fact) const;
@@ -91,7 +91,7 @@ public:
 	void dump(z_file& f, void* v) const;
 	virtual void* get_ptr(void* v,int* iter ) const;
 	virtual zf_feature_type get_type() const{ return zf_ft_obj_list; }
-	virtual void* get_item(void* list,size_t index) const; 
+	virtual void* get_sub_obj(void* list,size_t index) const; 
 
 };
 
@@ -214,6 +214,8 @@ public:
 		Z_ASSERT(status==zs_ok);
 		return status;
 	}
+	virtual void* get_sub_obj(void* var,size_t index) const { return  var;} 
+
 };
 template <class CLASS >  const zf_var_funcs_base* zp_child_obj_funcs_get(CLASS& obj)
 {

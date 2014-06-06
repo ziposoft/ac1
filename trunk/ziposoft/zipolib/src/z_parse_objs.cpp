@@ -42,10 +42,17 @@ z_status zp_cfg_obj::createobj(zf_obj& o)
 	}
 	return zs_ok;
 }
+zp_feature* zp_cmdline::get_feature()
+{
+	if(_path.size()==0)
+		return 0;
+	return _path[_path.size()-1];
+
+}
 
 bool zp_cmdline::has_path()
 {
-	return (_path_list.size())|| _root_slash;
+	return (  _root_slash || _path.size()>1);
 }
 
 //________________________________________________________________
@@ -55,9 +62,8 @@ bool zp_cmdline::has_path()
 
 #define ZO_OBJ_LIST \
 	ZCLS(zp_cmdline,none,"",\
-	"{_root_slash}?'/':*({_path_list}ident:'/'):?({_object}ident:'.'):{_feature}?zp_feature:"\
-	"?( ({_assignment}'=':{_assign_val}zp_value)|{_params}zp_params)",\
-	POBJ(_feature)  VAR(_object) POBJ(_assign_val)  VAR(_assignment) POBJ(_params) VAR(_root_slash)   VAR(_path_list) )\
+	"{_root_slash}?'/':*({_path}zp_feature:?('/'|'.')):?( ({_assignment}'=':{_assign_val}zp_value)|{_params}zp_params)",\
+	 POBJ(_assign_val)  VAR(_assignment) POBJ(_params) VAR(_root_slash)  VAR(_path) )\
 	ZCLS(zp_str_list,none,"strlist","'{':*(({_list}string|{_list}string_sq):?','):'}'",VAR(_list) )\
 	ZCLS(zp_params,none,"params","('(':*({_param_list}zp_value:?','):')')",VAR(_param_list) )\
 	ZCLS(zp_pair,none,"pair","{_name}ident:'=':{_val}?ident:#','",VAR(_name) VAR(_val) )\
