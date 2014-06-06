@@ -69,7 +69,7 @@ z_obj_vector_map<z_factory>& get_factories_dynamic();
 
 	virtual void add_features();
 	virtual const zf_var_entry* get_var_list() const;
-	virtual const size_t get_var_list_size() const;
+	virtual const size_t get_static_feature_count() const;
 	virtual ctext get_name()const;
 	virtual ctext get_parse_string() const;
  };	  */

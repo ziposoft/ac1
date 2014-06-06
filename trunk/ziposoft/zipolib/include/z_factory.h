@@ -30,6 +30,7 @@ enum zf_feature_type
 	zf_ft_var,
 	zf_ft_param,
 	zf_ft_obj,
+	zf_ft_obj_list,
 	//zf_ft_pobj,
 	zf_ft_act,
 
@@ -42,6 +43,7 @@ class zf_action;
 class zf_var_funcs_base
 {
 public:
+	virtual zf_feature_type get_type()const =0;
 	virtual void dump(z_file& s, void* v) const;
 	virtual void get(z_string& s, void* v,int index=-1) const {};
 	virtual void set(ctext s, void* v,int index=-1) const {};
@@ -97,12 +99,12 @@ class z_factory
 protected:
 	//Static stuff
 	virtual const zf_var_entry* get_var_list() const{ return  get_info().list;}
-	virtual const size_t get_var_list_size() const{ return  get_info().num_features;}
+	virtual const size_t get_static_feature_count() const{ return  get_info().num_features;}
 
 	int get_num_features() const;
 	//Static stuff
 	z_factory_dyn* _dynamic;
-	z_factory_dyn& get_dyn();
+	z_factory_dyn& init_dynamic();
 
 public:
 	z_factory()
@@ -135,7 +137,7 @@ public:
 	virtual void dump_obj(z_file& f,void* obj) const;
 	virtual void dump_static(z_file& f) const;
 
-	virtual z_status get_list_features(z_strlist& list)const;
+	virtual z_status get_list_features(z_strlist& list);
 
 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
 	virtual zf_action* add_act_params(ctext name,z_memptr act_addr,ctext desc,int num_params,...) ;
@@ -182,7 +184,7 @@ public:
 	z_factory_T(ctext name)	 : z_factory()
 	{
 		//DYNAMIC
-		get_dyn();
+		init_dynamic();
 		add_features();
 		get_factories_dynamic().add(this);
 	}

@@ -30,10 +30,28 @@ z_dynamic_factory_list& get_factories_dynamic()
 	return 	g_factories_dynamic;
 
 }
-z_factory_dyn& z_factory::get_dyn()
+z_factory_dyn& z_factory::init_dynamic()
 {
-	if(!_dynamic)
-		_dynamic=new z_factory_dyn();
+	if(_dynamic)
+		return *_dynamic;
+
+	_dynamic=new z_factory_dyn();
+	if(get_static_feature_count()==0)
+		return *_dynamic;
+
+	int index;
+	for(index=0;index<get_static_feature_count();index++)
+	{
+		const zf_var_entry* ent=0;
+		const zf_var_funcs_base* funcs=0;
+
+		ent=_get_var_entry(index);
+		if(ent->fp_var_func_get) 
+			funcs=ent->fp_var_func_get();
+		add_prop(ent->name,ent->type,funcs,(z_memptr)ent->offset,"?");
+	}
+
+
 	return *_dynamic;
 
 
@@ -42,7 +60,7 @@ z_factory_dyn& z_factory::get_dyn()
 zf_action* z_factory::add_act(ctext name,z_memptr act_addr,ctext desc)
 {
 	zf_action* action=z_new	zf_action(name,*(z_memptr*)&act_addr);
-	get_dyn().features.add(action);
+	init_dynamic().features.add(action);
 	return action;
 }
 
@@ -64,7 +82,7 @@ zf_action* z_factory::add_act_params(ctext name,z_memptr act_addr,ctext desc,int
 zf_feature* z_factory::add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr offset,ctext desc)
 {
 	zf_feature* feat=z_new	zf_feature(name,type,f,offset,desc);
-	get_dyn().features.add(feat);
+	init_dynamic().features.add(feat);
 	return feat;
 
 

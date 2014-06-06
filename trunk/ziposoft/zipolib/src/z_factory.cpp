@@ -152,10 +152,10 @@ template <> z_status zf_var_funcs<zp_obj_vector>::set_from_value(zp_value* val, 
 }
 /*________________________________________________________________________
 
-zp_var_list_funcs<zp_obj_vector> 
+zf_funcs_obj_list_base 
 ________________________________________________________________________*/
 
-void zp_var_list_funcs_base::clear(void* v) const 
+void zf_funcs_obj_list_base::clear(void* v) const 
 {
 
 	z_obj_vector_base* plist=get_list(v);
@@ -170,12 +170,30 @@ void zp_var_list_funcs_base::clear(void* v) const
 	plist->clear();
 
 }
-void* zp_var_list_funcs_base::get_ptr(void* v,int* iter ) const
+
+void* zf_funcs_obj_list_base::get_item(void* v,size_t index ) const
 {
 	z_obj_vector_base* plist=get_list(v);
-	if(!iter)
+	if(!plist)
 	{
-		Z_ERROR_MSG(zs_bad_parameter,"Objects type does not match member variable");
+		Z_ERROR(zs_bad_parameter);
+		return 0;
+	}
+	if(plist->size()<=index)
+	{
+		Z_ERROR(zs_out_of_range);
+		return 0;
+	}
+	return plist->get_void(index);
+}
+
+void* zf_funcs_obj_list_base::get_ptr(void* v,int* iter ) const
+{
+	z_obj_vector_base* plist=get_list(v);
+	if(!plist)
+	{
+		//this will never happen because it is a static cast
+		//Z_ERROR_MSG(zs_bad_parameter,"Objects type does not match member variable");
 		return 0;
 	}
 	if(*iter==-1)
@@ -191,7 +209,7 @@ void* zp_var_list_funcs_base::get_ptr(void* v,int* iter ) const
 	}
 	return plist->get_void(*iter);
 }
-void zp_var_list_funcs_base::dump(z_file& f, void* v) const 
+void zf_funcs_obj_list_base::dump(z_file& f, void* v) const 
 {
 	z_obj_vector_base* plist=get_list(v);
 
@@ -411,7 +429,7 @@ int z_factory::get_num_features() const
 	{
 		total=get_base_factory()->get_num_features();
 	}
-	total+=get_var_list_size();
+	total+=get_static_feature_count();
 	total+=_dynamic->features.size();
 	return total;
 }
@@ -421,7 +439,7 @@ const zf_var_entry* z_factory::_get_var_entry (ctext name) const
 {
 	size_t i;
 	const zf_var_entry* list=get_var_list();
-	for(i=0;i<get_var_list_size();i++)
+	for(i=0;i<get_static_feature_count();i++)
 		if(strcmp(name,	list[i].name)==0)
 		{
 			return &list[i];
@@ -431,22 +449,24 @@ const zf_var_entry* z_factory::_get_var_entry (ctext name) const
 }
 const zf_var_entry* z_factory::_get_var_entry (size_t i) const
 {
-	if(i>=get_var_list_size())
+	if(i>=get_static_feature_count())
 		return 0;		
 	return &get_var_list()[i];
 
 }
-z_status z_factory::get_list_features(z_strlist& list) const
+z_status z_factory::get_list_features(z_strlist& list) 
 {
-	int index=0;
-	ctext name;
-	z_memptr offset;
-	const zf_var_funcs_base* funcs;
-	while(	get_var_info_i(index,name,offset,funcs)==zs_ok)
+	init_dynamic();
+	size_t i=0;
+
+	for(i=0;i<_dynamic->features.size();i++)
 	{
-		list<<name;
-		index++;
+		list<<_dynamic->features[i]->_name;
+
 	}
+	z_factory* base=get_base_factory();
+	if(base)
+		return base->get_list_features(list);
 	return zs_ok;
 }
 z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
@@ -456,7 +476,7 @@ z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
 	z_factory* base=get_base_factory();
 	if(base)
 	{
-		int numbase=base->get_num_features();
+		size_t numbase=base->get_num_features();
 		if(index<numbase)
 			return base->get_var_info_i(index,name,offset,funcs);
 		index-=numbase;
@@ -472,47 +492,33 @@ z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
 			funcs=f->df;
 			return zs_ok;
 		}
-		index-=_dynamic->features.size();
 	}
-	ent=_get_var_entry(index);
-	if(!ent)
-		return zs_item_not_found;
-	name=ent->name;
-	offset=ent->offset;
-	funcs=0;
-	if(ent->fp_var_func_get)
-		funcs=ent->fp_var_func_get();
-	return zs_ok;		
-		
+	else
+	{
+		ent=_get_var_entry(index);
+		if(ent)
+		{	
+			name=ent->name;
+			offset=ent->offset;
+			funcs=0;
+			if(ent->fp_var_func_get)
+				funcs=ent->fp_var_func_get();
+			return zs_ok;	
+		}
+	}
+	return zs_item_not_found;	
 }
 
 zf_feature* z_factory::get_feature(ctext name) 
 {
-	zf_feature* f;
-	if(_dynamic)
-	{
- 		f=_dynamic->features.get_by_name(name);
-		if(f)
-		{
-			return f;
-		}
-	}
-	const zf_var_entry* ent=0;
-	ent=_get_var_entry(name);
-	if(!ent)
-	{
-		z_factory* base=get_base_factory();
-		if(base)
-			return base->get_feature(name);
-		return 0;
-	}
-	const zf_var_funcs_base* funcs=0;
-	if(ent->fp_var_func_get) 
-		funcs=ent->fp_var_func_get();
-	f=add_prop(ent->name,ent->type,funcs,(z_memptr)ent->offset,"?");
-
-
-	return f;		
+	init_dynamic();
+	zf_feature* f=_dynamic->features.get_by_name(name);
+	if(f)
+		return f;
+	z_factory* base=get_base_factory();
+	if(base)
+		return base->get_feature(name);
+	return 0;
 		
 }
 
@@ -528,22 +534,24 @@ z_status z_factory::get_var_info(ctext name,z_memptr &offset,const zf_var_funcs_
 			return zs_ok;
 		}
 	}
-	const zf_var_entry* ent=0;
-	ent=_get_var_entry(name);
-
-	if(!ent)
+	else //static OR dynamic. NOT BOTH
 	{
-		z_factory* base=get_base_factory();
-		if(base)
-			return base->get_var_info(name,offset,funcs);
-		return zs_item_not_found;
+		const zf_var_entry* ent=0;
+		ent=_get_var_entry(name);
+		if(ent)
+		{
+			offset=ent->offset;
+			if(ent->fp_var_func_get)
+				funcs=ent->fp_var_func_get();
+			else
+				funcs=0;
+			return zs_ok;		
+		}
 	}
-	offset=ent->offset;
-	if(ent->fp_var_func_get)
-		funcs=ent->fp_var_func_get();
-	else
-		funcs=0;
-	return zs_ok;		
+	z_factory* base=get_base_factory();
+	if(base)
+		return base->get_var_info(name,offset,funcs);
+	return zs_item_not_found;
 		
 }
 
