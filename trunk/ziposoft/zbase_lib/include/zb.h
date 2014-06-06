@@ -30,23 +30,6 @@ class zb_src_sl3;
 class zb_ds_table_sl3;
 
 
-enum 
-{
-	zb_status_ok,
-	zb_status_end_of_data,
-	zb_status_not_supported,
-	zb_status_not_implemented,
-	zb_status_bad_param,
-	zb_status_cant_open_file,
-	zb_status_unknown_data_error,
-	zb_status_index_out_of_range,
-	zb_status_ds_not_open,
-	zb_status_ds_data_error,
-
-};
-extern ctext zb_status_text[];
-#define	ZB_ERROR(status)   gz_logger.add_msg (__FILE__,__FUNCTION__,__LINE__,status,zb_status_text[status]);
-
 #ifdef ZB_NO_OBJ_CLEANUP
 
 class z_refcount

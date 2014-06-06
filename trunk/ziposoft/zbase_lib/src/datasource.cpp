@@ -7,10 +7,10 @@
 
 	zb_ds_field
 ____________________________________________________________________________*/
-z_status zb_ds_field::set_string(zb_ds_rec_ptr *rec,ctext s){ return ZB_ERROR(zb_status_not_implemented);}
-z_status zb_ds_field::get_string(zb_ds_rec_ptr *rec,z_string& s){ return ZB_ERROR(zb_status_not_implemented);}
-z_status zb_ds_field::set_int32(zb_ds_rec_ptr *rec,I32 i){ return ZB_ERROR(zb_status_not_implemented);}
-z_status zb_ds_field::get_int32(zb_ds_rec_ptr *rec,I32& i){ return ZB_ERROR(zb_status_not_implemented);}
+z_status zb_ds_field::set_string(zb_ds_rec_ptr *rec,ctext s){ return Z_ERROR(zs_not_implemented);}
+z_status zb_ds_field::get_string(zb_ds_rec_ptr *rec,z_string& s){ return Z_ERROR(zs_not_implemented);}
+z_status zb_ds_field::set_int32(zb_ds_rec_ptr *rec,I32 i){ return Z_ERROR(zs_not_implemented);}
+z_status zb_ds_field::get_int32(zb_ds_rec_ptr *rec,I32& i){ return Z_ERROR(zs_not_implemented);}
 
 /*____________________________________________________________________________
 	zb_ds_rec_ptr
@@ -27,7 +27,7 @@ ____________________________________________________________________________*/
 }
 void zb_ds_rec_ptr::set(zb_ds_table* rs,size_t index)
 {
-	  ZB_ERROR(zb_status_not_implemented);
+	  Z_ERROR(zs_not_implemented);
 
 }
 
@@ -37,28 +37,28 @@ void zb_ds_rec_ptr::set(zb_ds_table* rs,size_t index)
 ____________________________________________________________________________*/
 z_status zb_ds_table::record_add(zb_ds_rec_ptr* rec)
 {
-	 return ZB_ERROR(zb_status_not_implemented);
+	 return Z_ERROR(zs_not_implemented);
 }
 z_status zb_ds_table::open(bool writable)
 {
-	 return ZB_ERROR(zb_status_not_implemented);
+	 return Z_ERROR(zs_not_implemented);
 }
 size_t zb_ds_table::get_record_count()
 {
-	ZB_ERROR(zb_status_not_implemented);
+	Z_ERROR(zs_not_implemented);
 	 return 0;
 }
 z_status zb_ds_table::get_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
 {
-	 return ZB_ERROR(zb_status_not_implemented);
+	 return Z_ERROR(zs_not_implemented);
 }
 z_status zb_ds_table::test_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
 {
-	 return ZB_ERROR(zb_status_not_implemented);
+	 return Z_ERROR(zs_not_implemented);
 }
 z_status zb_ds_table::delete_record_by_index(size_t index)
 {
-	 return ZB_ERROR(zb_status_not_implemented);
+	 return Z_ERROR(zs_not_implemented);
 }
 ctext zb_ds_table::get_map_key()
 {

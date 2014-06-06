@@ -1,5 +1,6 @@
 #include "zipolib_cpp_pch.h"
 #include "z_logger.h"
+#include "z_factory_static.h"
 
 #define BUFF_SIZE 1024
 
@@ -47,7 +48,7 @@ void z_logger::out(z_logger_level lvl,z_file* f,ctext file,ctext func,int line,z
 		line,
 		func);
 	if(status)
-		*f<<':'<<zs_get_text(status);
+		*f<<':'<<zs_get_status_text(status);
 	if(msg)
 		*f<<':'<<msg;
 	*f<<'\n';
@@ -94,3 +95,14 @@ void z_logger_dump()
 }
 
 z_logger gz_logger;
+
+
+
+#define ZO_OBJ_LIST \
+	ZCLS(z_logger,none,"","", VAR(_log_level) )
+
+
+
+
+#include "zipolib/include/z_obj.inc"
+ZP_MODULE_DEFINE(logger);

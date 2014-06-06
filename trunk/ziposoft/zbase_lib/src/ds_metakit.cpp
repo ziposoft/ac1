@@ -14,7 +14,7 @@ void  d4_assert(bool a)
 	if(!a)
 	{
 		Z_ASSERT(0);
-		Z_ERROR_MSG(zb_status_ds_data_error,"metakit error");
+		Z_ERROR_MSG(zs_error,"metakit error");
 	}
 }
 /*____________________________________________________________________________
@@ -52,7 +52,7 @@ z_status zb_ds_metakit::ds_table_open(zb_ds_table* tbl)
 {
 	zb_ds_table_mk* mtbl= dynamic_cast<zb_ds_table_mk*>(tbl);
 	_get_view(mtbl->get_mk_view(),mtbl->get_ds_id(),mtbl->get_desc());
-	return zb_status_ok;
+	return zs_ok;
 }
 
 zb_ds_field* zb_ds_metakit::ds_field_string_new(ctext id)
@@ -72,13 +72,13 @@ z_status zb_ds_metakit::open(bool create,bool writable)
 		_status=status_opened_read;
 		if(writable) 
 			_status=status_opened_write;
-		return zb_status_ok;
+		return zs_ok;
 	}
 	delete _pStore;
 	_pStore=0;
 	_status=status_cant_open;
 
-	return zb_status_cant_open_file;
+	return zs_could_not_open_file;
 
 }
 z_status zb_ds_metakit::commit() 
@@ -98,14 +98,14 @@ z_status zb_ds_metakit::commit()
 		ZT("file=%x, %s commit not needed ",this,	_filename.c_str() );
 	}
 
-	return zb_status_ok;
+	return zs_ok;
 }
 z_status zb_ds_metakit::close() 
 {
 	if (_pStore) delete _pStore;
 	_pStore=0;
 	_status=status_closed;
-	return zb_status_ok;
+	return zs_ok;
 }
 /*____________________________________________________________________________
 
@@ -158,10 +158,10 @@ z_status zb_ds_metakit::_get_view(c4_View& view,ctext viewid,zb_ds_desc & desc)
 	{
 		_status=status_corrupt;
 		//Z_ASSERT(0);
-		return Z_ERROR_MSG(	zb_status_ds_data_error,"Error accessing %s",viewid);
+		return Z_ERROR_MSG(	zs_data_error,"Error accessing %s",viewid);
 
 	}
-	return zb_status_ok;
+	return zs_ok;
 }
 
 z_status zb_ds_metakit::_get_view_for_table(c4_View& view,zb_table_base* tbl)
@@ -211,10 +211,10 @@ z_status zb_ds_metakit::_get_view_for_table(c4_View& view,zb_table_base* tbl)
 	{
 		_status=status_corrupt;
 		//Z_ASSERT(0);
-		return Z_ERROR_MSG(	zb_status_ds_data_error,"Error accessing %s",tbl->get_name());
+		return Z_ERROR_MSG(	zs_data_error,"Error accessing %s",tbl->get_name());
 
 	}
-	return zb_status_ok;
+	return zs_ok;
 }
 
  /*____________________________________________________________________________
@@ -244,20 +244,20 @@ z_status zb_ds_field_mk_string::set_string(zb_ds_rec_ptr *rec,ctext s)
 	
 	zb_rec_ptr_mk* mk_rec=dynamic_cast<zb_rec_ptr_mk*>(rec);
 	if(!mk_rec)
-		return ZB_ERROR(zb_status_bad_param);
+		return Z_ERROR(zs_bad_parameter);
  	(*_pStrProp).Set(mk_rec->get_row_ref(),s);
 
-	return zb_status_ok;
+	return zs_ok;
 }
 z_status zb_ds_field_mk_string::get_string(zb_ds_rec_ptr *rec,z_string& s)
 { 
 	zb_rec_ptr_mk* mk_rec=dynamic_cast<zb_rec_ptr_mk*>(rec);
 	if(!mk_rec)
-		return ZB_ERROR(zb_status_bad_param);
+		return Z_ERROR(zs_bad_parameter);
 	c4_RowRef rr=mk_rec->get_row_ref();
 	s=(*_pStrProp).Get(rr);
 
-	return zb_status_ok;
+	return zs_ok;
 }
 /*____________________________________________________________________________
 
@@ -316,7 +316,7 @@ z_status zb_ds_table_mk::record_add(zb_ds_rec_ptr* rec)
 	int index=_mk_view.Add(mk_rec->get_row_ref());
 
 	_ds->_status=zb_ds_metakit::status_opened_need_commit;
-	return zb_status_ok;
+	return zs_ok;
 }
 
 z_status zb_ds_table_mk::open(bool writable)
@@ -332,9 +332,9 @@ size_t zb_ds_table_mk::get_record_count()
 z_status zb_ds_table_mk::get_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
 {
 	if( index>=(size_t)_mk_view.GetSize())
-		return ZB_ERROR(zb_status_index_out_of_range);
+		return Z_ERROR(zs_out_of_range);
 	if(cursor==0)
-		return ZB_ERROR(zb_status_bad_param);
+		return Z_ERROR(zs_bad_parameter);
 
 	zb_rec_ptr_mk* r=dynamic_cast<zb_rec_ptr_mk*>(*cursor);
 	if(r==0)
@@ -342,14 +342,14 @@ z_status zb_ds_table_mk::get_record_by_index(size_t index,zb_ds_rec_ptr** cursor
 	r->set(this,index);
 	*cursor=r;
 	//r->get_row_ref()=_mk_view[index];
-	return zb_status_ok;
+	return zs_ok;
 }
 z_status zb_ds_table_mk::test_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
 {
 	if( index>=(size_t)_mk_view.GetSize())
-		return ZB_ERROR(zb_status_index_out_of_range);
+		return Z_ERROR(zs_out_of_range);
 	if(cursor==0)
-		return ZB_ERROR(zb_status_bad_param);
+		return Z_ERROR(zs_bad_parameter);
 
 	c4_StringProp p("field1str");
 

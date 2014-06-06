@@ -56,12 +56,12 @@ zb_field_int32::zb_field_int32(zb_key key,ctext name):zb_field(key,name)
 z_status zb_field_int32::get_data_text(zb_recset* rec,z_string& text)
 {
 	
-	return zb_status_ok;
+	return zs_ok;
 }
 z_status zb_field_int32::set_default(zb_rec_ptr* rec)
 {
 	
-	return ZB_ERROR(zb_status_not_implemented);
+	return Z_ERROR(zs_not_implemented);
 }
 
  /*____________________________________________________________________________
@@ -77,7 +77,7 @@ zb_field_key::zb_field_key():zb_field_int32(zk_sf_1_key,"Key")
 z_status zb_field_key::set_default(zb_rec_ptr* rec)
 {
 	
-	return ZB_ERROR(zb_status_not_implemented);
+	return Z_ERROR(zs_not_implemented);
 }
 
 
@@ -98,12 +98,12 @@ z_status zb_field_string::get_data_text(zb_recset* rec,z_string& text)
 z_status zb_field_string::set_default(zb_rec_ptr* rec)
 {
 	
-	return ZB_ERROR(zb_status_not_implemented);
+	return Z_ERROR(zs_not_implemented);
 }
 z_status zb_field_string::set(zb_rec_ptr *rec,ctext s)
 {
 	//return get_ds_field()->set_string(rec,s);
-	return ZB_ERROR(zb_status_not_implemented);
+	return Z_ERROR(zs_not_implemented);
 
 
 }
@@ -122,7 +122,7 @@ z_status zb_desc::get_default_rec(zb_record *rec)
 
 	}
 
-	return zb_status_ok;
+	return zs_ok;
 }
 
 

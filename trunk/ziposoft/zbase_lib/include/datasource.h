@@ -114,26 +114,26 @@ public:
 
 	zb_source(ctext name);
 	virtual ~zb_source(){};
-	virtual z_status commit(){ return ZB_ERROR(zb_status_not_implemented);};
-	virtual z_status open(bool create,bool writable){ return ZB_ERROR(zb_status_not_implemented);};
-	virtual z_status close(){ return ZB_ERROR(zb_status_not_implemented);};
-	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return ZB_ERROR(zb_status_not_implemented);};
+	virtual z_status commit(){ return Z_ERROR(zs_not_implemented);};
+	virtual z_status open(bool create,bool writable){ return Z_ERROR(zs_not_implemented);};
+	virtual z_status close(){ return Z_ERROR(zs_not_implemented);};
+	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return Z_ERROR(zs_not_implemented);};
 	virtual bool is_open();
-	virtual zb_st_master* get_tbl_master(){ ZB_ERROR(zb_status_not_implemented);return 0;};
-	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_ds_field& desc){ZB_ERROR(zb_status_not_implemented); return 0;};
+	virtual zb_st_master* get_tbl_master(){ Z_ERROR(zs_not_implemented);return 0;};
+	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_ds_field& desc){Z_ERROR(zs_not_implemented); return 0;};
 
-	virtual zb_ds_table* ds_table_new(ctext ds_table_name){ZB_ERROR(zb_status_not_implemented); return 0;};
- 	virtual z_status     ds_table_open(zb_ds_table* tbl){ return ZB_ERROR(zb_status_not_implemented);};
+	virtual zb_ds_table* ds_table_new(ctext ds_table_name){Z_ERROR(zs_not_implemented); return 0;};
+ 	virtual z_status     ds_table_open(zb_ds_table* tbl){ return Z_ERROR(zs_not_implemented);};
 
-	virtual zb_ds_field* ds_field_string_new(ctext id){ ZB_ERROR(zb_status_not_implemented);return 0;};
-	virtual zb_ds_field* ds_field_int32_new(ctext id){ ZB_ERROR(zb_status_not_implemented);return 0;};
-	virtual zb_ds_rec_ptr* record_solo_new(){ ZB_ERROR(zb_status_not_implemented);return 0;};
+	virtual zb_ds_field* ds_field_string_new(ctext id){ Z_ERROR(zs_not_implemented);return 0;};
+	virtual zb_ds_field* ds_field_int32_new(ctext id){ Z_ERROR(zs_not_implemented);return 0;};
+	virtual zb_ds_rec_ptr* record_solo_new(){ Z_ERROR(zs_not_implemented);return 0;};
 
 	z_map_obj<zb_ds_table> _ds_tables;
 
 
 	//crap
-	virtual z_status get_tables(){ return ZB_ERROR(zb_status_not_implemented);};
+	virtual z_status get_tables(){ return Z_ERROR(zs_not_implemented);};
 
 };
 

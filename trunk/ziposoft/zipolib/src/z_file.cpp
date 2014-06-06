@@ -313,7 +313,7 @@ int z_file_string_buffer::write(const char* buf, size_t count )
 
 z_status z_csv_encode_string(z_string& output)
 {
-	Z_ASSERT(0);//THIS doesnt work
+	//Z_ASSERT(0);//THIS doesnt work
 	size_t dq=0;
 	if(output.find_first_of(",\"\n")==z_string::npos)
 		return zs_success;
