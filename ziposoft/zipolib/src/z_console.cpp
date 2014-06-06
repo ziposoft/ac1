@@ -194,13 +194,8 @@ int z_console::run()
 void z_console::put_prompt()
 {
 	size_t i;
-	gz_out  << "/";
-	for (i=0;i<_path.size();i++)
-	{
-		if(i) gz_out  << "/";
-		gz_out<< _path[i] ;
-	}
-	gz_out  << ">";
+	gz_out  << "/"<<_path<<">";
+
 	//_obj_current->get_path(_path);
 	reset_line();
 }

@@ -49,13 +49,15 @@ public:
 	virtual void set(ctext s, void* v,int index=-1) const {};
 	virtual void clear(void* v) const {} 
 	virtual void add(void* list,void* obj) const {} 
-	virtual void* get_item(void* list,size_t index) const { return 0;} 
+	virtual void* get_sub_obj(void* list,size_t index) const { return 0;} 
 	virtual size_t get_size(void* list) const { return 0;} 
 	virtual void* get_ptr(void* var,int* iter) const { return var;}  /*could be pointer to obj, or pointer to obj pointer */
 	//This is if the member var is an obj, pointer to obj, or obj list		
 	virtual void* create_obj(void* var,z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
 	virtual z_factory*  get_fact_from_obj(void* obj) const { return 0;}
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const { return Z_ERROR(zs_operation_not_supported);};
+
+
 
 } ;
 
@@ -243,7 +245,7 @@ public:
 	zf_feature_type _type;
 	void dump(z_file& f,void* obj);
 
-	void* get_var_ptr(void* obj,int* iter=0) ;
+	void* get_memvar_ptr(void* obj,int* iter=0) ;
 	virtual zf_action* get_action(){return 0;}
 
 };

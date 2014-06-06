@@ -21,8 +21,8 @@ public:
 	ZCLS(testStrList,none,"cmdline","+({_list}ident:?',')",VAR(_list)  )\
 	ZCLS(testDrv,none,"cmdline","{_val}ident:'=':{i123}int",VAR(i123) VAR(_val) VAR(_val2))\
 	ZCLS(testObjList,none,"cmdline","*({_list}testA:?',')",VAR(_list) )\
-	ZCLS(zp_xml_elm,base,"zp_xml_elm","%whsp:'<':{_name}ident:{_attribs}*zp_xml_atr:(('>': *(^'<'|{_children}zp_xml_elm):'</':ident:'>')|'/>')",VAR(_name) VAR(_attribs) VAR(_children) )\
-	ZCLS(zp_xml_atr,base,"zp_xml_atr","%whsp:{_name}scoped:'=':{_val}string_sq",VAR(_name) VAR(_val))
+	ZCLS(zp_xml_elm,none,"zp_xml_elm","%whsp:'<':{_name}ident:{_attribs}*zp_xml_atr:(('>': *(^'<'|{_children}zp_xml_elm):'</':ident:'>')|'/>')",VAR(_name) VAR(_attribs) VAR(_children) )\
+	ZCLS(zp_xml_atr,none,"zp_xml_atr","%whsp:{_name}scoped:'=':{_val}string_sq",VAR(_name) VAR(_val))
 
 		  
 #include "zipolib/include/z_obj.inc"
