@@ -22,7 +22,7 @@ z_status zb_ds_text::open(bool create,bool writable)
 	size_t i;
 	status=_dir.open(_name,create);
 	if(status)
-		return Z_ERROR_MSG(zb_status_cant_open_file,"can't open directory");
+		return Z_ERROR_MSG(zs_could_not_open_file,"can't open directory");
 
 	z_strlist list;
 	_dir.get_files_by_extension("txt",list);
@@ -36,14 +36,14 @@ z_status zb_ds_text::open(bool create,bool writable)
 
 	status=z_change_dir(_name,false);
 	if(status)
-  		return Z_ERROR_MSG(zb_status_cant_open_file,"can't change to directory");
+  		return Z_ERROR_MSG(zs_could_not_open_file,"can't change to directory");
 
 
 	 return 0;
 }
 z_status zb_ds_text::close()
 {
-	 return ZB_ERROR(zb_status_not_implemented);
+	 return Z_ERROR(zs_not_implemented);
 
 }
 zb_ds_table* zb_ds_text::ds_table_new(ctext ds_table_name)
@@ -71,7 +71,7 @@ z_status zb_ds_text::commit()
 		t->commit();
 
 	}
-	return zb_status_ok;
+	return zs_ok;
 
 }
 
@@ -95,17 +95,17 @@ z_status zb_ds_table_txt::record_add(zb_ds_rec_ptr* rec)
 	
 	if(!_current_row)
 	{
-		return ZB_ERROR(zb_status_bad_param);
+		return Z_ERROR(zs_bad_parameter);
 	}
 	_data.push_back(_current_row);
 	
-	return zb_status_ok;
+	return zs_ok;
 }
 z_status zb_ds_table_txt::commit()
 {
 	z_status s=_file.open(_id,"wb");
 	if(s)
-		return ZB_ERROR(zb_status_cant_open_file);
+		return Z_ERROR(zs_could_not_open_file);
 
 	size_t i_rec;
 	zb_ds_field *fld;
@@ -130,7 +130,7 @@ z_status zb_ds_table_txt::commit()
 		_file <<'\n';
 	}
 	_file.close();
-	return zb_status_ok;
+	return zs_ok;
 
 }
 z_status zb_ds_table_txt::open(bool writable)
@@ -151,9 +151,9 @@ z_status zb_ds_table_txt::open(bool writable)
 	if(s)
 	{
 		if(writable)
-			return zb_status_ok; //this is a new file, it will be created on commit
+			return zs_ok; //this is a new file, it will be created on commit
 
-		return ZB_ERROR(zb_status_cant_open_file);
+		return Z_ERROR(zs_could_not_open_file);
 	}
 
 	z_string data;
@@ -171,13 +171,13 @@ z_status zb_ds_table_txt::get_record_by_index(size_t index,
 											  zb_ds_rec_ptr** cursor)
 {
 	if(index>=get_record_count())
-		return ZB_ERROR(zb_status_index_out_of_range);
+		return Z_ERROR(zs_out_of_range);
 	if(cursor==0)
-		return ZB_ERROR(zb_status_bad_param);
+		return Z_ERROR(zs_bad_parameter);
 
 	//zb_rec_ptr_txt* r=dynamic_cast<zb_rec_ptr_txt*>(*cursor);
 	*cursor=_data[index];
-	return zb_status_ok;
+	return zs_ok;
 }
 bool zb_ds_table_txt::NewRowCallback()
 {
@@ -196,7 +196,7 @@ bool zb_ds_table_txt::NewValueCallback(const z_string & value)
 {
 	if(_current_row==0)
 	{
-		ZB_ERROR(zb_status_unknown_data_error);
+		Z_ERROR(zs_data_error);
 		return false;
 	}
 	_current_row->set_string(_current_column,value);
@@ -302,20 +302,20 @@ z_status zb_ds_field_text_string::set_string(zb_ds_rec_ptr *rec,ctext s)
 	
 	zb_rec_ptr_txt* rectxt=dynamic_cast<zb_rec_ptr_txt*>(rec);
 	if(!rectxt)
-		return ZB_ERROR(zb_status_bad_param);
+		return Z_ERROR(zs_bad_parameter);
 	int i=index_get();
 	rectxt->set_string(i,s);
-	return zb_status_ok;
+	return zs_ok;
 }
 z_status zb_ds_field_text_string::get_string(zb_ds_rec_ptr *rec,z_string& s)
 { 
 	zb_rec_ptr_txt* rectxt=dynamic_cast<zb_rec_ptr_txt*>(rec);
 	if(!rectxt)
-		return ZB_ERROR(zb_status_bad_param);
+		return Z_ERROR(zs_bad_parameter);
 	int i=index_get();
 	ctext str=	   rectxt->get_string(i);
 	if(!str)
-		return ZB_ERROR(zb_status_index_out_of_range);
+		return Z_ERROR(zs_out_of_range);
 	s=str;
-	return zb_status_ok;
+	return zs_ok;
 }

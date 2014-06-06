@@ -12,7 +12,6 @@
 #define	HANDLE size_t
 #endif
 
-void z_debug_load_save_args(int* pargc, char*** pargv);
 
 
 class z_file

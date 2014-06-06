@@ -16,11 +16,14 @@ enum {
 	zs_fatal_error,//fatal errors below. Status above!
 	zs_error,
 	zs_could_not_open_dir,
+	zs_could_not_open_file,
+	zs_not_open,
 	zs_already_open,
 	zs_bad_parameter,
 	zs_item_not_found,
  	zs_feature_not_found,
 	zs_operation_not_supported,
+	zs_not_implemented,
 	zs_cannot_create_virtual_obj,
 	zs_no_entry_for_item,
 	zs_syntax_error,
@@ -29,10 +32,12 @@ enum {
 	zs_internal_error,
 	zs_bad_argument_2,
 	zs_wrong_object_type,
-	zs_out_of_range
+	zs_out_of_range,
+	zs_data_error,
+
 
 };
-ctext zs_get_text(z_status status);
+ctext zs_get_status_text(z_status status);
 
 #ifdef	__cplusplus
 #include "zipolib/include/z_file.h"

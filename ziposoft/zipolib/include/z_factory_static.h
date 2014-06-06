@@ -77,4 +77,7 @@ template <class CLASS> void zf_dump_obj(CLASS* p_obj)
 
 }
 
+
+
+ ZP_MODULE_DECLARE(logger);
 #endif

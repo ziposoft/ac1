@@ -2,6 +2,10 @@
 #define z_parse_h
 #include "zipolib/include/z_factory_static.h"
 #include "zipolib/include/z_factory.h"
+
+ZP_MODULE_DECLARE(parse);
+
+
 class zp_parser;
 class z_parser
 {
@@ -32,7 +36,6 @@ public:
 };
 
 
-ZP_MODULE_DECLARE(parse);
 class zp_pair
 {
 public:

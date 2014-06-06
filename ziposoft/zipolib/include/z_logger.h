@@ -3,6 +3,7 @@
 #include "zipolib/include/zipolib_cpp.h"
 
 
+
 enum z_logger_level
 {
 	z_logger_lvl_error,
@@ -45,7 +46,7 @@ public:
 	{
 		_log_level=lvl;
 	}
-	z_logger_level _log_level;
+	int _log_level;
 
 };
 

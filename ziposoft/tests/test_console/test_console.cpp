@@ -518,9 +518,11 @@ public:
 		x<<"y";
 		s="ant\"hony";
 		i=27;
+		_p_logger=&gz_logger;
 
 	}
 	z_console_ntf console;
+	z_logger* _p_logger;
 	House house;
 	z_strlist x;
 	int i;
@@ -534,6 +536,7 @@ ZFACT(root)
 {
 	ZOBJ(console);
 	ZOBJ(house);
+	ZPOBJ(_p_logger);
 	ZPROP(x);
 	ZPROP(i);
 	ZACT(add);
@@ -601,6 +604,6 @@ ZP_MODULE_DEFINE(testmod);
 */
 
 
-ZP_MODULE_INCLUDE( ZP_MOD(parse));
+ZP_MODULE_INCLUDE( ZP_MOD(parse), ZP_MOD(logger));
 
 #pragma comment(linker, "/alternatename:zp_module_master_list_size=zp_module_master_list_size_exe")

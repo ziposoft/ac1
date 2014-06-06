@@ -38,11 +38,12 @@ ERR(zs_bad_parameter,	0)
 ERR(zs_wrong_object_type,	0)
 ERR(zs_template_syntax_error,	0)
 ERR(zs_skipped,	0)
+ERR(zs_not_implemented,	0)
 ERR(zs_unparsed_data,	0)
 
 };
 
-ctext zs_get_text(z_status status)
+ctext zs_get_status_text(z_status status)
 {
 	size_t  i;
 	for (i=0;i<(sizeof(status_text)/ sizeof(st_error_msg) );i++)
@@ -57,5 +58,7 @@ ctext zs_get_text(z_status status)
 
 		}
 	}
-	return "error msg not found";
+	static char buff[0x20];
+	sprintf(buff,"error msg not found:%d",status);
+	return buff;
 }

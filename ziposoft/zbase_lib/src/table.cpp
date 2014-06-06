@@ -28,9 +28,9 @@ z_status zb_table_base::load_from_ds()
 {
 	_ds_table=_ds->get_tbl(_id,get_desc());
 	if(_ds_table)
-		return zb_status_ok;
+		return zs_ok;
 
-	return ZB_ERROR(zb_status_ds_data_error);
+	return Z_ERROR(zs_data_error);
 
 }
 */
@@ -38,12 +38,12 @@ z_status zb_table_base::load_from_ds()
 z_status zb_table_base::dump()
 {
 
-	 return ZB_ERROR(zb_status_not_implemented);
+	 return Z_ERROR(zs_not_implemented);
 
 }
 zb_record* zb_table_base::new_default_rec()
 {
-	//ZB_ERROR(zb_status_not_implemented);
+	//Z_ERROR(zs_not_implemented);
 	zb_record* rec=0;
 //	rec=_ds->record_solo_new();
 
@@ -53,6 +53,6 @@ zb_record* zb_table_base::new_default_rec()
 z_status zb_table_base::record_add(zb_record *rec)
 {
 
-	return ZB_ERROR(zb_status_not_implemented);
+	return Z_ERROR(zs_not_implemented);
 
 }
