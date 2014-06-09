@@ -415,7 +415,7 @@ void z_console_ntf:: OnTab()
 z_status z_console_ntf:: ExecuteLine(ctext text)
 {
 	z_status status=EvaluateLine(text);
-	if(status==zs_eof) //just a path change
+	if((status==zs_ok)||(status==zs_eof)) //just a path change
 	{
 		_path=_temp_path;
 		_selected=_temp;
