@@ -129,6 +129,9 @@
     <ClInclude Include="test_console.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Debug\console.cfg">
+      <FileType>Document</FileType>
+    </None>
     <None Include="Makefile" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

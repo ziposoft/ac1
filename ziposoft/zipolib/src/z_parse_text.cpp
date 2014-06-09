@@ -144,6 +144,7 @@ z_status zp_text_parser::skip_ws()
 		const char c= current_ch();
 		if((c==' ')||
 			(c=='\t')||
+			(c=='\n')||
 			(c=='\r'))
 		{
 			inc();
@@ -370,7 +371,7 @@ z_status zp_text_parser::test_single_quoted_string()
 		return status;
 	_match_start=get_index();
 	if((_test_end_char('\''))) 
-		return check_status(zs_template_syntax_error);
+		return check_status(zs_syntax_error);
 	_match_end=get_index()-1;
 	return zs_matched;
 }
@@ -384,10 +385,10 @@ z_status zp_text_parser::test_not_single_quoted_string(const void *dummy)
 		return status;
 	//inc();
 	if((status=_test_char('\''))) 
-		return check_status(zs_template_syntax_error);
+		return check_status(zs_syntax_error);
 	_match_start=get_index();
 	if((_test_end_char('\''))) 
-		return check_status(zs_template_syntax_error);
+		return check_status(zs_syntax_error);
 	_match_end=get_index()-1;
 	return zs_matched;
 }
@@ -422,7 +423,7 @@ z_status zp_text_parser::test_code_string()
 		escape=false;
 		inc();
 	}
-	return check_status(zs_template_syntax_error);
+	return check_status(zs_syntax_error);
 }
 z_status zp_text_parser::test_cset(const cset &set)
 {

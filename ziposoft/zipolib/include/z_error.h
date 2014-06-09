@@ -34,6 +34,7 @@ enum {
 	zs_wrong_object_type,
 	zs_out_of_range,
 	zs_data_error,
+	zs_parse_error,
 
 
 };
