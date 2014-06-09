@@ -80,6 +80,10 @@ public:
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const ;
 	virtual zf_feature_type get_type() const { return zf_ft_var; }
 
+ 	virtual z_status load(zp_text_parser *parser, void* v) const ;
+ 	virtual z_status assign(zp_text_parser *parser, void* v) const ;
+ 	virtual z_status evaluate(zp_text_parser *parser, void* v) const ;
+
 };	
 class zf_funcs_obj_list_base  : public zf_var_funcs_base
 {
@@ -92,6 +96,7 @@ public:
 	virtual void* get_ptr(void* v,int* iter ) const;
 	virtual zf_feature_type get_type() const{ return zf_ft_obj_list; }
 	virtual void* get_sub_obj(void* list,size_t index) const; 
+  	virtual z_status load(zp_text_parser *parser, void* v) const ;
 
 };
 
@@ -160,15 +165,21 @@ public:
 		return zf_get_factory_by_type(typetext);
 	}
 };
+class zf_funcs_obj_base  : public zf_var_funcs_base
+{
+public:
+	virtual zf_feature_type get_type() const{ return zf_ft_obj; }
+  	virtual z_status load(zp_text_parser *parser, void* v) const ;
+	virtual void dump(z_file& file, void* memvar) const;
+};
 
 
 /*
 This interface manipulates child objects 
 */
-template <class CLASS >  class zp_child_obj_funcs  : public zf_var_funcs_base
+template <class CLASS >  class zp_child_obj_funcs  : public zf_funcs_obj_base
 {
 public:
-	virtual zf_feature_type get_type() const{ return zf_ft_obj; }
 
 	virtual void* create_obj(void* var /* pointer to obj */,z_factory* new_child_type) const
 	{
@@ -183,14 +194,12 @@ public:
 		f->clear_all_vars(var); 
 		return var;
 	}
+	virtual void* get_sub_obj(void* var,size_t index) const { return  var;} 
 	virtual void* get_ptr(void* var,int* iter ) const
 	{
 		return var;
 	}
-	virtual void clear(void* v) const{
-		z_factory* f=&z_factory_T<CLASS>::self;
-		f->clear_all_vars(v);
-	}
+
 	virtual z_factory*  get_fact_from_obj(void* obj) const 
 	{ 
 		return &z_factory_T<CLASS>::self;
@@ -214,7 +223,7 @@ public:
 		Z_ASSERT(status==zs_ok);
 		return status;
 	}
-	virtual void* get_sub_obj(void* var,size_t index) const { return  var;} 
+
 
 };
 template <class CLASS >  const zf_var_funcs_base* zp_child_obj_funcs_get(CLASS& obj)
@@ -225,12 +234,12 @@ template <class CLASS >  const zf_var_funcs_base* zp_child_obj_funcs_get(CLASS& 
 /*
 This interface manipulates child object pointers 
 */
-template <class CLASS >  class zp_child_pobj_funcs  : public zf_var_funcs_base
+template <class CLASS >  class zp_child_pobj_funcs  : public zf_funcs_obj_base
 {
 public:
 
 	virtual zf_feature_type get_type() const{ return zf_ft_obj; }
-	virtual z_factory*  get_fact_from_obj(void* obj) const 
+	virtual z_factory*  get_fact_from_obj(void* pobj) const 
 	{ 
 		return &z_factory_T<CLASS>::self;
 	}
@@ -241,39 +250,19 @@ public:
 		void** ppObj=reinterpret_cast<void**>(var); 
 		return *ppObj;
 	}
-
-
-	virtual void* create_obj(void* var /* pointer to obj pointer*/,z_factory* new_child_type) const
-	{
+	virtual void* get_sub_obj(void* var,size_t index) const 
+	{ 
 		void** ppObj=reinterpret_cast<void**>(var); 
-
-		z_factory* f=&z_factory_T<CLASS>::self;
-		if(new_child_type!=f)
-		{
-			Z_ERROR_MSG(zs_wrong_object_type,"Objects type does not match member variable");
-			return 0;
-		}
-
-		*ppObj=f->create_obj();
 		return *ppObj;
-	}
-	virtual void dump(z_file& file, void* v) const
-	{
-		void** ppObj=reinterpret_cast<void**>(v); 
+	} 
 
-		if(*ppObj == 0)
-			file<< "NULL";
-		else
-		{
-			z_factory* fact=get_fact_from_obj(*ppObj);
-			Z_ASSERT(fact);
-			if(!fact)
-				return;//Z_ERROR
-			file.indent_inc();
-			file << "\n";
-			fact->dump_obj(file,*ppObj);
-			file.indent_dec();
-		}
+
+	virtual void* create_obj(void* ppmvar /* pointer to obj pointer*/,z_factory* new_child_type) const
+	{
+		void** ppObj=reinterpret_cast<void**>(ppmvar); 
+		//TODO - we could do a dynamic cast here to check that the new child type is valid for the memvar pointer.
+		*ppObj=new_child_type->create_obj();
+		return *ppObj;
 	}
 
 	virtual void get(z_string& s, void* v,int index=-1) const

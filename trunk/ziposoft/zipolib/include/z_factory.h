@@ -39,6 +39,8 @@ enum zf_feature_type
 class z_factory;
 class zp_value;
 class zf_action;
+class zp_text_parser;
+
 
 class zf_var_funcs_base
 {
@@ -57,7 +59,9 @@ public:
 	virtual z_factory*  get_fact_from_obj(void* obj) const { return 0;}
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const { return Z_ERROR(zs_operation_not_supported);};
 
-
+ 	virtual z_status load(zp_text_parser *parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
+ 	virtual z_status assign(zp_text_parser *parser, void* v) const;
+ 	virtual z_status evaluate(zp_text_parser *parser, void* v) const  {return Z_ERROR(zs_operation_not_supported);}
 
 } ;
 
@@ -137,6 +141,8 @@ public:
 	virtual z_status get_var_as_string(void* obj,ctext var_name,z_string& value) const;
 	virtual void clear_all_vars(void* obj) const;
 	virtual void dump_obj(z_file& f,void* obj) const;
+	virtual void dump_obj_contents(z_file& f,void* obj) const;
+	z_status load_obj_contents(zp_text_parser *parser,void* obj) const;
 	virtual void dump_static(z_file& f) const;
 
 	virtual z_status get_list_features(z_strlist& list);
@@ -219,6 +225,9 @@ public:
 
 z_factory*  zf_get_factory(ctext name);
 z_factory*  zf_get_factory_by_type(ctext type);
+z_status zf_create_obj_from_text_stream(zp_text_parser *parser, z_factory* &factory,void* &objpointer);
+
+
 template <class CLASS> z_factory*  zf_get_factory_T()
 {
 	return &z_factory_T<CLASS>::self;

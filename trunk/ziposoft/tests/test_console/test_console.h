@@ -3,6 +3,7 @@
 
 #include "zipolib/include/zipolib_cpp.h"
 #include "zipolib/include/z_console.h"
+#include "zipolib/include/z_parse_text.h"
 
 
 class z_console_ntf : public z_console
@@ -25,9 +26,33 @@ public:
 		loadcfg();
 	}
     virtual void OnDoubleBack();
+
+/*	
+	NEW METHOD
+*/
 	virtual z_status ExecuteLine(ctext text);
-	virtual z_status EvaluateLine(ctext text);
+	virtual z_status EvaluateLine(ctext  text);
+	z_string _cmd_line_feature;
+	z_string _cmd_line_feature_index;
+	bool _has_path;
+	z_status evaluate_feature(zf_obj& o);
+	z_status get_feature_and_index();
+	z_status select_obj();
     virtual void OnTab();
+	zp_text_parser _tparser;
+
+/*	
+	OLD METHOD
+*/
+	virtual z_status ExecuteLine_old(ctext text);
+	virtual z_status EvaluateLine_old(ctext text);
+	z_status evaluate_feature_old(zf_obj& o);
+ 	z_status select_obj_old(zp_feature* zpf);
+
+    virtual void OnTab_old();
+ 	z_status select_obj_from_path(zf_obj& start,z_string& path);
+	//void get_auto_complete_list(z_string& partial);
+
 
 
 	zf_obj _root;
@@ -46,11 +71,7 @@ public:
 
 	}
 
-	z_status evaluate_feature(zf_obj& o);
- 	z_status navigate_to_obj();
- 	z_status select_obj(zp_feature* zpf);
- 	z_status select_obj_from_path(zf_obj& start,z_string& path);
-	//void get_auto_complete_list(z_string& partial);
+
 
 	//command line props
 	bool _dump_cmd_line;

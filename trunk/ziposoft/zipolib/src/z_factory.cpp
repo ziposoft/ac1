@@ -2,267 +2,11 @@
 
 #include "zipolib/include/z_factory_dyn.h"
 #include "zipolib/include/z_parse.h"
+#include "zipolib/include/z_parse_text.h"
 
-#define RECAST(_TYPE_,_NAME_) _TYPE_& _NAME_= *reinterpret_cast<_TYPE_*>(v);
-#define VF template <> void zf_var_funcs
+
 z_factory* _pgz_factory_none=0;
 
-void zf_var_funcs_base::dump(z_file& file, void* v) const
-{
-	z_string s;
-	get(s,v);
-	file<<s;
-}
-
-/*________________________________________________________________________
-
- zf_var_funcs<TYPE> defaults
-________________________________________________________________________*/
-
-template <class V> void zf_var_funcs<V>::dump(z_file& file, void* v) const {	zf_var_funcs_base::dump( file,  v) ; }
-template <class V> void zf_var_funcs<V>::add(void* list,void* obj) const {}
-template <class V> void* zf_var_funcs<V>::get_sub_obj(void* list,size_t index) const {	return 0;}
-template <class V> size_t zf_var_funcs<V>::get_size(void* list) const{	return 0;}
-template <class V> void* zf_var_funcs<V>::create_obj(void* list,z_factory* fact) const{	return 0;}
-template <class V> void zf_var_funcs<V>::get(z_string& s, void* v,int index)	const{}
-template <class V> void zf_var_funcs<V>::set(ctext s, void* v,int index)	const{}
-template <class V> void zf_var_funcs<V>::clear( void* v)	const{}
-template <class V> z_status zf_var_funcs<V>::set_from_value(zp_value* val, void* var,int index)	const{  set(val->_string,var); return zs_ok;}
-
-/*________________________________________________________________________
-
- zf_var_funcs<bool> 
-________________________________________________________________________*/
-VF<bool>::clear(void* v)            const {RECAST(bool,b); b=false;    }
-VF<bool>::get(z_string& s, void* v,int index) const {RECAST(bool,b); s=(b?"true":"false");  }
-VF<bool>::set(ctext s, void* v,int index)     const {RECAST(bool,b); b=(strcmp(s,"true")==0);    }
-/*________________________________________________________________________
-
- zf_var_funcs<int> 
-________________________________________________________________________*/
-VF<int>::clear(void* v) const			{RECAST(int,i); i=0;    }
-VF<int>::get(z_string& s, void* v,int index) const	{RECAST(int,i); s=i;   }
-VF<int>::set(ctext s, void* v,int index) const		{RECAST(int,i); i=atoi(s);    }
-/*________________________________________________________________________
-
-zf_var_funcs<z_string> 
-________________________________________________________________________*/
-VF<z_string>::get(z_string& s, void* v,int index) const{RECAST(z_string,str); s=str;    }
-VF<z_string>::set(ctext s, void* v,int index) const{RECAST(z_string,str); str=s;   }
-VF<z_string>::clear(void* v) const{	RECAST(z_string,str); str="";}
-VF<z_string>::dump(z_file& file, void* v) const{	RECAST(z_string,str);z_string out;z_str_escape(str,out);file <<out;}
-
-/*________________________________________________________________________
-
-zf_var_funcs<z_strlist> 
-________________________________________________________________________*/
-VF<z_strlist>::dump(z_file& file, void* v)	const{RECAST(z_strlist,list);
-	size_t i;
-	file<<'{';
-	z_string s;
-	for(i=0;i<list.size();i++)
-	{
-		if(i)
-			file<<',';
-		z_str_escape(list[i],s);
-		file<<s;
-	}
-
-	file<<'}';
-}
-
-
-VF<z_strlist>::get(z_string& s, void* v,int index)	const
-{	
-	RECAST(z_strlist,list);	
-	if(index==-1)
-	{
-		list.get_as_string(s);
-		return;
-	}
-	if(index<(int)list.size()) 
-		s=list[index];    
-}
-VF<z_strlist>::clear(void* v)				const{	RECAST(z_strlist,list);	list.clear();}
-VF<z_strlist>::set(ctext s, void* v,int index)		const
-{	
-	RECAST(z_strlist,list);
-	if(index==-1)
-	{
-		list<<s; //this is important for multi-stage items in  the parser. 
-		return;
-	}
-	if(index<(int)list.size()) list[index]=s;  
-}
-template <> z_status zf_var_funcs<z_strlist>::set_from_value(zp_value* val, void* v,int index)		const{	RECAST(z_strlist,list);
-	if(index==-1)
-	{
-		if(val->_string_list)
-			list=val->_string_list->_list ;
-		else
-			list<<val->_string;//if we are passed a single string, then just append it.
-		return zs_ok;
-	}
-	if(index<(int)list.size())
-	{
-		list[index]=val->_string;
-		return zs_ok;
-	}
-	return zs_out_of_range;
-	
-
-}
-
-
-/*________________________________________________________________________
-
-zf_var_funcs<zp_obj_vector> 
-________________________________________________________________________*/
-template <> void* zf_var_funcs<zp_obj_vector>::create_obj(void* v,z_factory* fact) const
-{
-	RECAST(zp_obj_vector,list);
-	zf_obj obj;
-	obj._obj=fact->create_obj();
-	obj._fact=fact;
-	list.push_back(obj);
-
-	return obj._obj;
-}
-template <> size_t zf_var_funcs<zp_obj_vector>::get_size(void* v) const
-{
-	RECAST(zp_obj_vector,list);
-	return list.size();
-}
-
-VF<zp_obj_vector>::dump(z_file& file, void* v) const
-{
-	RECAST(zp_obj_vector,list);
-	size_t count=list.size();
-	size_t i;
-	for(i=0;i<count;i++)
-	{
-		list[i]._fact->dump_obj(file,list[i]._obj);
-	}
-}
-template <> z_status zf_var_funcs<zp_obj_vector>::set_from_value(zp_value* val, void* v,int index)		const{	
-	RECAST(z_strlist,list);
-
-	Z_ASSERT(0);//TODO
-	return Z_ERROR(zs_operation_not_supported);
-}
-/*________________________________________________________________________
-
-zf_funcs_obj_list_base 
-________________________________________________________________________*/
-
-void zf_funcs_obj_list_base::clear(void* v) const 
-{
-
-	z_obj_vector_base* plist=get_list(v);
-	Z_ASSERT(plist);
-	size_t count=plist->size();
-	size_t i;
-	for(i=0;i<count;i++)
-	{
-		void* p=plist->get_void(i);
-		get_fact()->delete_obj(p);
-	}
-	plist->clear();
-
-}
-
-void* zf_funcs_obj_list_base::get_sub_obj(void* v,size_t index ) const
-{
-	z_obj_vector_base* plist=get_list(v);
-	if(!plist)
-	{
-		Z_ERROR(zs_bad_parameter);
-		return 0;
-	}
-	if(plist->size()<=index)
-	{
-		Z_ERROR(zs_out_of_range);
-		return 0;
-	}
-	return plist->get_void(index);
-}
-
-void* zf_funcs_obj_list_base::get_ptr(void* v,int* iter ) const
-{
-	z_obj_vector_base* plist=get_list(v);
-	if(!plist)
-	{
-		//this will never happen because it is a static cast
-		//Z_ERROR_MSG(zs_bad_parameter,"Objects type does not match member variable");
-		return 0;
-	}
-	int index=0;
-	if(iter)
-	{
-		if(*iter==-1)
-			*iter=0;
-		else 
-		{
-			(*iter)++;
-			if(*iter>=(int)plist->size())
-			{
-				*iter=-1;
-				return 0;
-			}
-		}
-		index=*iter;
-	}
-	return plist->get_void(index);
-}
-void zf_funcs_obj_list_base::dump(z_file& f, void* v) const 
-{
-	z_obj_vector_base* plist=get_list(v);
-
-	size_t count=plist->size();
-	if(!count)
-	{
-		f << "{}";
-		return;
-	}
-	size_t i;
-	f << "{\n";
-	f.indent_inc();
-	for(i=0;i<count;i++)
-	{
-		void* p= plist->get_void(i);
-		get_fact_from_obj(p)->dump_obj(f,p);
-	}
-	f.indent_dec();
-	f.indent();
-	f << "}";
-}
-/*________________________________________________________________________
-
-zf_var_funcs<z_obj_vector> 
-________________________________________________________________________*/
-
-#if 0
-template <> template <class TYPE> void* zf_var_funcs<z_obj_vector<TYPE>>::create_obj(void* v,z_factory* new_child_type) const
-{
-	RECAST(zp_obj_vector,list);
-	zf_obj obj;
-	obj._obj=new_child_type->create_obj();
-	obj._fact=new_child_type;
-	list.push_back(obj);
-
-	return obj._obj;
-}
-
-#endif
-
-
-
-
-template class zf_var_funcs<z_string>;
-template class zf_var_funcs<int>;
-template class zf_var_funcs<bool>;
-template class zf_var_funcs<z_strlist>;
-template class zf_var_funcs<zp_obj_vector>;
 
 /*________________________________________________________________________
 
@@ -369,18 +113,44 @@ z_status z_factory::execute_act(void* obj,ctext name,int* pret) const
 		*pret=ret;
 	return zs_success;
 }
+z_status z_factory::load_obj_contents(zp_text_parser *parser,void* pObj) const
+{
+	z_string s;
 
-void z_factory::dump_obj(z_file& f,void* obj) const
+	z_status status=zs_ok;
+	while(status==zs_ok)
+	{
+		parser->skip_ws();
+		status=parser->test_any_identifier();
+		if(status==zs_no_match)
+			return zs_ok;
+		if(status)
+			break;
+		parser->get_match(s);
+		z_memptr offset;
+		const zf_var_funcs_base* funcs;
+		status=get_var_info(s.c_str(),offset,funcs);
+ 		if(status)
+			break;
+
+		char* memvar=(char*)pObj +offset; 
+		status=funcs->assign(parser,memvar);
+ 		if(status)
+			break;
+	}
+	if(status==zs_eof)
+		return zs_ok;
+	return Z_ERROR(status);
+}
+
+
+void z_factory::dump_obj_contents(z_file& f,void* obj) const
 {
 	size_t index=0;
 	ctext name=0;
 	z_memptr offset=0;
 	const zf_var_funcs_base* funcs=0;
 	z_string value;
-	
-	f.indent();
-	f << get_name()<<"{\n";
-	f.indent_inc();
 	while(get_var_info_i(index,name,offset,funcs)==zs_ok)	 
 	{
 		char* pvar=(char*)obj+offset;
@@ -394,10 +164,17 @@ void z_factory::dump_obj(z_file& f,void* obj) const
 		}
 		index++;
 	}
+
+}
+void z_factory::dump_obj(z_file& f,void* obj) const
+{
+	f.indent();
+	f << get_name()<<"{\n";
+	f.indent_inc();
+	dump_obj_contents(f,obj);
 	f.indent_dec();
 	f.indent();
 	f<< "}\n";
-
 }
 void z_factory::dump_static(z_file& f) const
 {
@@ -640,5 +417,44 @@ void  zo_factory_list_dump()
 
 		}
 	}
+
+}
+z_status zf_create_obj_from_text_stream(zp_text_parser *parser, z_factory* &factory,void* &objpointer) 
+{
+	parser->skip_ws();
+	z_status status=parser->test_any_identifier();
+	if(status==zs_no_match)
+		return status;
+	if(status)
+		return Z_ERROR_MSG(status,"Error loading obj type");
+	z_string s;
+	parser->get_match(s);
+	factory=zf_get_factory(s);
+	if(!factory)
+		return Z_ERROR_MSG(zs_cannot_create_virtual_obj,"Unknown obj type");
+
+	if(objpointer==0)//we need to create it
+	{
+		objpointer=factory->create_obj();
+
+	}
+	parser->skip_ws();
+	status=parser->test_char('{');
+	if(status)
+		return Z_ERROR_MSG(status,"Expected '{' ");
+
+
+	status=factory->load_obj_contents(parser,objpointer);
+ 	if(status)
+		return status;
+
+	parser->skip_ws();
+	status=parser->test_char('}');
+	if(status)
+		return Z_ERROR_MSG(status,"Expected '}' ");
+
+
+
+	return zs_ok;
 
 }

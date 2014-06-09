@@ -234,6 +234,9 @@
     <ClCompile Include="src\z_terminal_keys.cpp">
       <Filter>console</Filter>
     </ClCompile>
+    <ClCompile Include="src\z_factory_var_funcs.cpp">
+      <Filter>factory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
