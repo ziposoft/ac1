@@ -36,7 +36,7 @@ z_status z_factory::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* ite
 	if(!funcs)
 		return zs_operation_not_supported; //could be ACT
 
-	*ppChild=funcs->get_ptr(pvar,iter);
+	*ppChild=pvar;//funcs->get_ptr(pvar,iter);
 	return zs_success;
 
 }

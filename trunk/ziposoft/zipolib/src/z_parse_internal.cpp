@@ -1059,7 +1059,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 					}
 					else
 					{*/
-					_ctx_current->_obj_factory->get_var_ptr(
+					_ctx_current->_obj_factory->get_child_obj_ptr(
 						_ctx_current->_obj,
 						_ctx_current->_member_var_name,
 						&sub_obj, 
