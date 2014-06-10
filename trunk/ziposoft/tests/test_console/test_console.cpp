@@ -184,13 +184,9 @@ int ztest()
 int main(int argc, char* argv[])
 {
 
-	z_status status;
 	root o;
 	o.console.setroot(&o);
 	o.console.runapp(argc,argv);
-
-
-
 
 
 	return 0;
