@@ -183,28 +183,13 @@ int ztest()
 #else
 int main(int argc, char* argv[])
 {
-	//gz_out << "load save args...\n";
-	z_debug_load_save_args(&argc,&argv);
-	//gz_out << "load save args done\n";
-
 
 	z_status status;
 	root o;
 	o.console.setroot(&o);
-
-	int i;
-	for(i=1;i<argc;i++)
-	{
-
-		status=o.console.ExecuteLine(argv[i]);
-		if(status)
-			gz_logger.dump();
+	o.console.runapp(argc,argv);
 
 
-
-	}
-	if(argc==1)
-		o.console.run();
 
 
 
@@ -221,8 +206,8 @@ ZP_MODULE_INCLUDE(  ZP_MOD(logger));
 
 #pragma comment(linker, "/alternatename:zp_module_master_list_size=zp_module_master_list_size_exe")
 
-
 /*
+
 OLD
 */
 #if OLD
