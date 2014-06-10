@@ -85,7 +85,7 @@ class House
 public:
 	House()
 	{
-		onepet=new Cat();
+		onepet=0;//new Cat();
 		newanimals=9;
 	}
 	z_obj_vector<Animal> pets;
