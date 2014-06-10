@@ -26,7 +26,29 @@ ZFACT(z_console)
 
 z_console
 ________________________________________________________________________*/
+z_status  z_console::runapp(int argc, char* argv[])
+{
+ 	z_status status;
+ 	z_debug_load_save_args(&argc,&argv);
 
+	int i;
+	for(i=1;i<argc;i++)
+	{
+
+		status=ExecuteLine(argv[i]);
+		if(status)
+			gz_logger.dump();
+
+
+
+	}
+	if(argc==1)
+		run();
+
+
+	return zs_ok;
+
+}
 void z_console::OnDoubleBack()
 {
 	

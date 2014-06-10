@@ -123,7 +123,7 @@ public:
 
 	}
 
-
+	 z_status  runapp(int argc, char* argv[]);
 
 	//command line props
 	bool _dump_cmd_line;
