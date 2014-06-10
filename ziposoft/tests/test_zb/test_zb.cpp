@@ -1,8 +1,36 @@
 
-
+#include "zipolib/include/z_console.h"
+#include "zipolib/include/z_factory_static.h"
 
 #include "zbase_lib/include/zipobase_lib.h"
 
+class root
+{
+public:
+	root()
+	{
+
+	}
+	z_console console;
+	z_logger* _p_logger;
+	zb_ds_text dbtext;
+
+
+};
+ZFACT(root)
+{
+	ZOBJ(console);
+	ZOBJ(dbtext);
+	ZPOBJ(_p_logger);
+
+	/*
+	ZPROP(x);
+	ZPROP(i);
+	ZACT(add);
+	ZACT_XP(show,"show","desc",1,ZPARAM(s));
+	*/
+
+};
 int test_ds_table(zb_source* p_ds)
 {
 	z_status status;
@@ -124,24 +152,12 @@ int test_table(zb_source* p_ds)
 
 int main(int argc, char* argv[])
 {
-	z_status status;
+
+	root o;
+	o.console.setroot(&o);
+	o.console.runapp(argc,argv);
 
 
-	/*____________________________________________________________________________
-		Test Metakit 
-	____________________________________________________________________________*/
-	/*
-	zb_ds_metakit test_ds_mk("test");
-	test_ds_table(&test_ds_mk);
-	*/
- 	/*____________________________________________________________________________
-
-	Test Text 
-	____________________________________________________________________________*/
-
-	zb_ds_text test_ds_text("test");
-	test_ds_table(&test_ds_text);
-	z_logger_dump();
-
-
+	return 0;
 }
+

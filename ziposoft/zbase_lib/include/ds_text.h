@@ -68,8 +68,8 @@ public:
  	virtual ~zb_rec_ptr_txt();
 	virtual void set(zb_ds_table* rs,size_t index);
 
-	ctext get_string(int index);
-	void set_string(int index,ctext str);
+	ctext get_string(size_t index);
+	void set_string(size_t index,ctext str);
 	void output_csv(z_file& out);
 
 };

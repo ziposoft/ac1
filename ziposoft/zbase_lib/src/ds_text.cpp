@@ -247,13 +247,13 @@ void zb_rec_ptr_txt::set(zb_ds_table* rs,size_t index)
 	//_index=index;
 
 }
-void zb_rec_ptr_txt::set_string(int index,ctext str)
+void zb_rec_ptr_txt::set_string(size_t index,ctext str)
 {
 	if(size()<=index)
 		resize(index+1);
 	(*this)[index]=str;
 }
-ctext zb_rec_ptr_txt::get_string(int index)
+ctext zb_rec_ptr_txt::get_string(size_t index)
 {
 	if(size()<=index)
 		return 0;

@@ -100,8 +100,8 @@ class zb_source
 
 protected:	
 	
-	z_string _name;
 public:
+	z_string _name;
 	enum status {
 		status_corrupt,
 		status_closed,

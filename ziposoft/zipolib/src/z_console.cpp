@@ -190,7 +190,7 @@ z_status z_console::evaluate_feature(zf_obj& o)
 			{
 				return Z_ERROR_MSG(zs_error,"Action not an action\n");//???
 			}
-			int param_index=0;
+			size_t param_index=0;
 			while( 1)
 			{
 				z_string s;
@@ -583,7 +583,6 @@ int z_console_base::run()
 
 void z_console_base::put_prompt()
 {
-	size_t i;
 	gz_out  << "/"<<_path<<">";
 
 	//_obj_current->get_path(_path);
