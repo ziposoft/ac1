@@ -1,12 +1,380 @@
 #include "zipolib_cpp_pch.h"
-#include "z_file.h"
 #include "z_console.h"
-#include "z_error.h"
+#include "z_factory_static.h"
+
+ZFACT(z_console)
+{
+	ZACT_X(exit,"q","Quit/Exit");
+	ZACT_X(list_features,"ls","List features");
+	ZACT(list_features);
+	ZACT(loadcfg);
+	ZACT(savecfg);
+	ZACT(help);
+	ZACT(exit);
+	ZACT(run);
+	ZPROP_X(_dump_cmd_line,"dump_cmdline","Dump the parsed command line contents");
+	ZPROP_X(_path,"path","Current path");
+	ZPROP_X(_history,"history","Command line history");
+	ZPROP_X(_config_file,"cfgfile","Filename of configuration file");
+	ZPROP_X(_script_file,"script","Filename of script to run/save");
+
+
+}
+
+
+/*________________________________________________________________________
+
+z_console
+________________________________________________________________________*/
+
+void z_console::OnDoubleBack()
+{
+	
+	size_t slash=_path.rfind('/');
+	if(slash==-1)
+		_path="/";
+	else
+		_path.resize(slash);
+
+	_selected=_root;
+	z_string temp=_path;
+	_path="";
+	select_obj_from_path(_root,temp);
+	_selected=_temp;
+	_path=_temp_path;
+	gz_out << "\n";
+	put_prompt();
+
+
+}
+z_status z_console::select_obj_from_path(zf_obj& start,z_string& path)
+{
+
+	ExecuteLine(path);
+
+
+	return zs_ok;
+
+}
+
+z_status z_console::get_feature_and_index()
+{
+	z_status status;	
+	status=_tparser.test_any_identifier();
+	if(status) 
+		return status;
+	_tparser.get_match(_cmd_line_feature);
+	if(_tparser.test_char('[')==zs_ok)
+	{
+		status=_tparser.test_any_identifier();
+		_tparser.get_match(_cmd_line_feature_index);
+		if(_tparser.test_char(']'))
+		{
+			return Z_ERROR_MSG(zs_parse_error,"Expecting ']'");
+		}
+	}
+
+
+	return zs_ok;
+}
+
+z_status z_console::select_obj()
+{
+	zf_feature *f;
+	f=_temp._fact->get_feature(_cmd_line_feature);
+	if(!f)
+		return zs_feature_not_found;
+	int index=-1;
+	if(_cmd_line_feature_index)
+		index=_cmd_line_feature_index.GetDecVal();
+	if(!f->df)
+		return zs_no_match; //not an object
+
+	char* membervar=(char*)_temp._obj+f->_offset;
+
+
+	void * subobj=f->df->get_sub_obj(membervar,index);
+	if(!subobj)
+	{
+		return zs_no_match; //not an object
+	}
+
+	z_factory* fact=f->df->get_fact_from_obj(subobj);
+	if(!fact)
+		return Z_ERROR(zs_error);			
+	_temp._obj=subobj;
+	_temp._fact=fact;
+
+	return zs_ok;
+}
+z_status z_console:: EvaluateLine(ctext text)
+{
+	z_status status=zs_ok;	
+	_cmd_line_feature.clear();
+	_cmd_line_feature_index.clear();
+	_tparser.set_source(text);
+ 	_has_path=false;
+
+	_temp= _selected;
+	_temp_path=_path;
+	if(_tparser.test_char('/')==zs_matched)
+	{
+		_temp=_root;
+		_temp_path="";
+		_has_path=true;
+	}
+	while (1)
+	{
+		status=get_feature_and_index();
+		if(status)
+			break;
+		status=select_obj();
+		if(status)
+		{
+			return status; //if it is not an object, thats ok
+		}
+		_has_path=true;
+
+		_temp_path<<"/"<<_cmd_line_feature;
+		if(_cmd_line_feature_index)
+			_temp_path<<'['<<_cmd_line_feature_index<<']';
+		if(_tparser.test_char('/') && _tparser.test_char('.'))
+				break;	
+		_cmd_line_feature.clear();
+		_cmd_line_feature_index.clear();
+	}
+	return status;
+}
+
+z_status z_console::evaluate_feature(zf_obj& o)
+{
+	z_status status;
+
+	zf_feature *zff;
+	zff=o._fact->get_feature(_cmd_line_feature);
+	if(!zff)
+		return zs_feature_not_found;
+	int index=-1;
+	if(_cmd_line_feature_index)
+		index=_cmd_line_feature_index.GetDecVal();
+
+
+	if(zff->_type==zf_ft_act)
+	{
+		if(_tparser.test_char('(')==zs_ok)
+		{
+			zf_action* action=zff->get_action();
+			if(!action)
+			{
+				return Z_ERROR_MSG(zs_error,"Action not an action\n");//???
+			}
+			int param_index=0;
+			while( 1)
+			{
+				z_string s;
+				if(param_index>=action->_params.size())
+				{
+					return Z_ERROR_MSG(zs_error,"Too many parameters\n");//???
+				}				
+				zf_feature* param=action->_params[param_index];
+				void* ftr_ptr=(char*)o._obj+param->_offset;
+				status=param->df->load(&_tparser,ftr_ptr);
+				if(status)
+					break;
+				status=_tparser.test_char(',');
+				if(status)
+					break;
+
+				param_index++;
+			}
+			
+				if(_tparser.test_char(')'))
+					return Z_ERROR_MSG(zs_error,"Expected ')'\n");//???
 
 
 
+		}
 
-z_console::z_console()
+		int ret=o._fact->execute_act_ptr	(o._obj,zff->_offset);
+		return zs_ok;//???
+	}
+	void* membervar=zff->get_memvar_ptr(o._obj);
+	if(!membervar)
+		return Z_ERROR(zs_feature_not_found);
+
+	if(_tparser.test_char('=')==zs_ok)
+	{
+		if(!zff->df)
+			return Z_ERROR_MSG(zs_error,"Cannot assign value to function\n");//???
+
+		status=zff->df->load( &_tparser,membervar);
+		return status;
+	}
+	if(!zff->df)
+		return Z_ERROR(zs_error);//???
+
+	if(zff->df->get_type()==zf_ft_var)
+	{
+		z_string str;
+		zff->df->get(str,membervar,index);
+		gz_out << zff->_name<<"="<<str<<"\n";
+		return zs_ok;//???
+
+	}
+
+
+	return zs_ok;//???
+}
+
+
+void z_console:: OnTab()
+{
+	if(!_tab_mode)
+	{
+		z_status status=EvaluateLine(_buffer);
+		if(status!=zs_eof)
+		{
+			/*
+			gz_out <<"\nBad path\n";
+			
+			gz_logger.dump();
+				put_prompt();
+			return ;
+			*/
+			
+		}
+
+
+		_auto_tab.clear();		
+		_temp._fact->get_list_features(_auto_tab);
+		if(!_has_path)
+		{
+			_self._fact->get_list_features(_auto_tab);
+
+		}
+
+		_tab_mode_line_index=get_line_length();
+
+
+		if(_cmd_line_feature)
+		{
+			_tab_mode_line_index-=_cmd_line_feature.size();
+			size_t i=0;
+			while(i<_auto_tab.size())
+			{
+				if(_auto_tab[i].compare(0,_cmd_line_feature.size(),_cmd_line_feature))
+					_auto_tab.del(i);
+				else
+					i++;
+			}
+		}
+
+		
+		_tab_count=_auto_tab.size();
+		_tab_mode=true;
+		_tab_index=0;
+
+	}
+	if(!_tab_count)
+		return;
+	trim_line_to(_tab_mode_line_index);
+	output(_auto_tab[_tab_index]);
+	_tab_index++;
+	if(_tab_index>=_tab_count)
+		_tab_index=0;
+
+
+}
+z_status z_console:: ExecuteLine(ctext text)
+{
+	z_status status=EvaluateLine(text);
+	if((status==zs_ok)||(status==zs_eof)) //just a path change
+	{
+		_path=_temp_path;
+		_selected=_temp;
+		return zs_ok;
+	}
+	//if no path is specified, then try the built in commands
+	status=evaluate_feature(_self);
+	if(status==zs_ok)
+		return 	zs_ok;
+	status=evaluate_feature(_temp);
+
+	return status;
+}
+
+
+
+z_status z_console::list_features()
+{
+	_temp._fact->dump_obj(gz_out,_temp._obj);
+	gz_out << "\n";
+
+	return zs_ok;
+}
+z_status z_console::dumpcfg()
+{
+
+	return zs_ok;
+}
+
+z_status z_console::loadcfg()
+{
+	z_file f(_config_file,"rb");
+	z_string data_in;
+	f.read_all(data_in);
+	zp_text_parser parser;
+
+	parser.set_source(data_in,data_in.size());
+
+
+	z_status status=_root._fact->load_obj_contents(&parser,_root._obj);
+ 	if(status!=zs_ok)
+	{
+		return status;
+	}
+
+#if 0 //Old Way
+	z_status status=_parser.parse_obj(&cfg,data_in);
+	if(status!=zs_ok)
+	{
+		_parser.report_error();
+		return status;
+	}
+	cfg.load_obj(_root._obj,_root._fact);
+#endif
+
+	select_obj_from_path(_root,_path);
+	_selected=_temp;
+	//cfg._obj.get_by_name(
+	return zs_ok;
+
+	return zs_ok;
+}
+z_status z_console::savecfg()
+{
+	z_file f(_config_file,"wb");
+	_root._fact->dump_obj_contents(f,_root._obj);
+	return zs_ok;
+}
+z_status z_console::help()
+{
+	gz_out << "help..\n";
+	return zs_ok;
+}
+z_status z_console::exit()
+{
+	gz_out<< "exiting.\n";
+	_running=false;
+	return zs_ok;
+}
+
+/*________________________________________________________________________
+
+z_console_base
+________________________________________________________________________*/
+
+z_console_base::z_console_base()
 {
 	index=0;
 	cur_start=0;
@@ -14,9 +382,9 @@ z_console::z_console()
 	insertmode=true;
 	_tab_mode=false;
 }
-U32 z_console::get_index() { return index;}
-U32 z_console::get_line_length() { return len;}
-void z_console::AppendChar(char ch)
+U32 z_console_base::get_index() { return index;}
+U32 z_console_base::get_line_length() { return len;}
+void z_console_base::AppendChar(char ch)
 {
 	
 	_buffer+=ch;
@@ -25,7 +393,7 @@ void z_console::AppendChar(char ch)
 	cur_x++;
 	index++;
 }
-void z_console::RedrawLine(int blanks)
+void z_console_base::RedrawLine(int blanks)
 {
 	const char* s;
 	s=_buffer;
@@ -34,7 +402,7 @@ void z_console::RedrawLine(int blanks)
 	while(blanks--) gz_out << ' ';
 	curGotoXY(cur_x,cur_y);
 }
-void z_console::InsertChar(char ch)
+void z_console_base::InsertChar(char ch)
 {
 	cur_x++;
 	_buffer.insert(index,1,ch);
@@ -42,14 +410,14 @@ void z_console::InsertChar(char ch)
 	len++;
 	index++;
 }
-void z_console::OverwriteChar(char ch)
+void z_console_base::OverwriteChar(char ch)
 {
 	cur_x++;
 	_buffer.replace(index,1,1,ch);
 	RedrawLine();
 	index++;
 }
-void z_console::hChar(char ch)
+void z_console_base::hChar(char ch)
 {
 	if (len==index)
 	{
@@ -59,7 +427,7 @@ void z_console::hChar(char ch)
 	if(insertmode)  InsertChar(ch);
 	else OverwriteChar(ch);
 }
-void z_console::reset_line()
+void z_console_base::reset_line()
 {
 	index=0;
 	len=0;
@@ -68,7 +436,7 @@ void z_console::reset_line()
 	cur_start=cur_x;
 	
 }
-void z_console::output(ctext text)
+void z_console_base::output(ctext text)
 {
 	U32 l=(U32)strlen(text);
 	gz_out << text;
@@ -77,7 +445,7 @@ void z_console::output(ctext text)
 	index+=l;
 	cur_x+=l;
 }
-void z_console::clear_line()
+void z_console_base::clear_line()
 {
 	curLeft(index);
 	while(len--) gz_out << ' ';
@@ -86,7 +454,7 @@ void z_console::clear_line()
 	len=0;
 	_buffer="";
 }
-void z_console::trim_line_to(int trim_point)
+void z_console_base::trim_line_to(int trim_point)
 {
 	int amount_to_trim=len-trim_point;
 	cur_x=cur_start+trim_point;
@@ -98,7 +466,7 @@ void z_console::trim_line_to(int trim_point)
 	//del(_buffer,trim_point);
 	len=trim_point;
 }
-int z_console::run()
+int z_console_base::run()
 {
 	terminal_open();
 	_running=true;
@@ -191,7 +559,7 @@ int z_console::run()
 	return 0;
 }
 
-void z_console::put_prompt()
+void z_console_base::put_prompt()
 {
 	size_t i;
 	gz_out  << "/"<<_path<<">";
@@ -200,8 +568,8 @@ void z_console::put_prompt()
 	reset_line();
 }
 
-
-z_status z_console::parse_line(ctext text)
+ /*
+z_status z_console_base::parse_line(ctext text)
 {
  	z_status status=_parser.parse_obj(&_cmdline,text);
 	if(status==	zs_ok)
@@ -212,18 +580,20 @@ z_status z_console::parse_line(ctext text)
 		_parser.report_error();
 	return zs_error;
 }
-z_status z_console::ExecuteLine(ctext text)
+*/
+z_status z_console_base::ExecuteLine(ctext text)
 {
+	/*
 	z_status status=parse_line(text);
 	if(status)
 		return status;
-
-
+	  */
+	z_status status=zs_ok;
 
 
 	return status;
 }
-void z_console::OnEnter()
+void z_console_base::OnEnter()
 {
 	int i;
 	z_status result;
@@ -262,7 +632,7 @@ void z_console::OnEnter()
 
 }
 
-void z_console::inc_history(int i)
+void z_console_base::inc_history(int i)
 {
 	int history_count=(int)_history.size();
 	if(history_count==0) return;
@@ -281,16 +651,16 @@ void z_console::inc_history(int i)
 
 
 }
-void z_console::OnUp()
+void z_console_base::OnUp()
 {
 	inc_history(-1);
 };
-void z_console::OnDown()
+void z_console_base::OnDown()
 {
 	inc_history(1);
 
 };
-void z_console::OnTab()
+void z_console_base::OnTab()
 {
 	gz_out << "\nTab.\n";
 
@@ -299,7 +669,7 @@ void z_console::OnTab()
 
 
 
-void z_console::OnDoubleBack()
+void z_console_base::OnDoubleBack()
 {
 	if(	_path.size())
 		_path.pop_back();
@@ -308,366 +678,3 @@ void z_console::OnDoubleBack()
 
 
 }
-
-
-#if 0
-#define Z_MODULE _Z_MODULE(console)
-#define ZO_OBJ_LIST \
-	OBJ(zo_console,none,"console","console desc",0,\
-		PROP(_config_file,"cfgfile","cfg","Name of configuration file",0)\
-		PROP(_startup_path,"path","path","Startup Path",0)\
-		LIST(_history,"history",0,0,0)\
-		VAR(_executable_name)\
-		ACT(list_features,0,"lf",0,0,NO_PARAMS)\
-		ACT(savecfg,0,"sc",0,0,PRM("cfgfile"))\
-		ACT(dumpcfg,0,"dc",0,0,NO_PARAMS)\
-		ACT(loadcfg,0,"lc",0,0,PRM("cfgfile"))\
-		ACT(help,0,"h",0,0,NO_PARAMS)\
-		ACT(shell,0,0,0,0,NO_PARAMS)\
-		ACT(exit,0,"quit",0,0,NO_PARAMS)\
-		)\
-	OBJ(zo_root,z_obj_vect<void>,"root","root desc",0,\
-		CHILD(_console,"console","console","console desc",0)\
-		PCHILD(_p_trace,"trace","trace","trace desc",0)\
-		/*LIST(_child_list,"children",0,0,0)\ */ \
-		)
-
-	
-
-#include "zipolib/include/z_obj.macro"
-
-
-
-zo_root::zo_root()
-{
-	_p_trace=&g_z_trace;
-	_console.set_root(this);
-
-}
-ctext zo_root::get_map_key()
-{
-	return "";
-}
-
-
-
-
-void zo_console::refresh()
-{
-	//prompt();
-}
-
-void zo_console::OnDoubleBack()
-{
-	//if(!use_double_back) return;
-	if(!_obj_current)
-		return;
-	void* p=_obj_current->get_parent_obj();
-	if(!p)
-		return;
-	_obj_current=p;
-	gz_out << '\n';
-	put_prompt();
-
-}
-void zo_console::runz(void* obj)
-{
-	_history_index=-1;
-	_feature_index=0;
-	if(obj)
-		_obj_current=obj;
-	else
-		_obj_current=this;
-
-	//np.exec(_zc,this);
-	put_prompt();
-	run();
-}
-void zo_console::show_history()
-{
-	U32 i;
-	gz_out<<'\n';
-	for (i=0;i<_history.size();i++)
-	{
-		gz_out<<'\t' <<_history[i]<<'\n';
-
-	}
-
-}
-void zo_console::inc_history(int i)
-{
-	int history_count=(int)_history.size();
-	if(history_count==0) return;
-	clear_line();
-	_history_index+=i;
-	if(_history_index>=history_count)
-	{
-		_history_index=0;
-	}		
-	if(_history_index<0)
-	{
-		_history_index=history_count-1;
-	}
-	output( _history[_history_index]);
-
-
-
-}
-void zo_console::OnUp()
-{
-	inc_history(-1);
-};
-void zo_console::OnDown()
-{
-	inc_history(1);
-
-};
-void zo_console::display_text(const z_string& s)
-{
-	gz_out<< s << '\n';
-}
-void zo_console::put_prompt()
-{
-	path="";
-	_obj_current->get_path(path);
-	gz_out  << path << ">";
-	reset_line();
-}
-
-void zo_console::get_auto_complete_list(zp_feature& parse_feature)
-{
-	zf_var_entry* f;
-
-
-	int i=0;
-
-	z_string partial_string=parse_feature._name;
-	zo_feature_list full_list;
-	_obj_current->get_feature_map(this,full_list,ZO_MT_ALL,true);
-	get_feature_map(this,full_list,ZO_MT_ALL,true);
-
-	_auto_tab.clear();
-	_auto_tab.reset_iter();
-	full_list.reset_iter();
-
-	
-	while(f=full_list.get_next())
-	{
-		ctext name=full_list._internal_iter.key;
-
-		if(strncmp(partial_string.c_str(),name,partial_string.size())==0)
-			_auto_tab.add(name,f);
-
-	}
-	return ;
-
-}
-
-void zo_console::OnEnter()
-{
-	int i;
-	z_status result;
-	gz_out << '\n';
-	if(_buffer.size())
-	{
-		i=_history.find(_buffer);
-		if(i!=-1)
-		{
-			_history.del(i);
-		}
-		_history<<_buffer;
-		_history_index=(U32)_history.size();
-	}
-	if(_buffer.size())
-	{
-		//parse_line(_buffer,_zc);
-		result=ExecuteLine(_buffer);
-		if(result) 
-		{
-			switch(result)
-			{
-			case zs_no_match:
-			case zs_unparsed_data:
-				gz_out << "\nsyntax error at \"" << _parser.get_char_under_test()<<"\"\n";
-				_parser.print_context();
-				break;
-			default:
-				break;
-			}
-			gz_out << "\ncommand failed.\n";
-
-		}
-
-	}
-	put_prompt();
-}
-void zo_console::OnTab()
-{
-	z_string feature_name="";
-	
-	if(!TabMode)
-	{
-		int len=0;
-		z_status status=parse_line(_buffer);
-		if(status==zs_ok)
-		{
-			//TODO - user hits tab with bad line		
-			//return;
-		}
-		get_auto_complete_list(_cmd_line_obj._feature);
-
-		len=(int)_cmd_line_obj._feature.get_num_chars();
-		
-		_tab_count=(U32)_auto_tab.size();
-		_auto_tab.reset_iter();
-		TabMode=true;
-		_tab_mode_line_index=get_line_length()-len;
-	}
-	if(!_tab_count)
-		return;
-	zf_var_entry* fe=_auto_tab.get_next();
-	if(!fe)
-	{
-		_auto_tab.reset_iter();
-		fe=_auto_tab.get_next();
-	}
-	ctext name=_auto_tab._internal_iter.key; //UGLY!!! TODO
-	trim_line_to(_tab_mode_line_index);
-	output(name);
-	return;
-	
-}
-
-void zo_console::dump_feature_outline(void* obj)
-{
-	z_factory* fact=obj->get_fact();
-	if(!fact)
-		return;
-	int i_var;
-	for(i_var=0;i_var<fact->var_list_size;i_var++)
-	{
-		zf_var_entry& p_var_entry=fact->var_list[i_var];
-		gz_out<< "\t\t"<< p_var_entry._internal_name;
-		if(obj)
-			gz_out<<"="<<feature_get_as_string(obj,&p_var_entry);
-
-		gz_out<<"\n";
-	}
-}
-void zo_console::dump_all()
-{
-	int i_module;
-	for(i_module=0;i_module<z_module_master_list_size;i_module++)
-	{
-		const z_module_entry* p_module=z_module_master_list[i_module];
-		gz_out<< "MODULE: "<< p_module->module_name<<"\n";
-		int i_obj;
-		for(i_obj=0;i_obj<p_module->num_facts;i_obj++)
-		{
-			const z_module_obj_entry& p_obj_entry=p_module->facts[i_obj];
-			z_factory* fact=p_obj_entry.fact;
-			gz_out<< "\t"<< p_obj_entry.name;
-			if(fact->base_fact)
-				gz_out<< "::"<< z_obj_fact_get_name(fact->base_fact);
-			gz_out<<"\n";
-		}
-	}
-}
-void zo_console::dump_obj2(void* obj)
-{
-	z_factory* fact=obj->get_fact();
-	gz_out<< z_obj_fact_get_name(fact)<<"\n";
-	gz_out<< fact->desc<<"\n";
-}
-
-
-z_status zo_console::list_features()
-{
-	return dump_features(&gz_out,_obj_current);
-	
-	
-}
-z_status zo_console::shell()
-{
-	terminal_open();
-	runz(_obj_current);
-	return zs_ok;
-}
-
-z_status zo_console::help()
-{
-	return dump_features(&gz_out,this);
-	return zs_ok;
-}
-z_status zo_console::exit()
-{
-	gz_out<< "exit!!\n";
-	_running=false;
-	return zs_ok;
-}
-
-
-
-
-z_status zo_console::dumpcfg()
-{
-	dump_obj(&gz_out,_root_obj);
-	gz_out<< "\n\n";
-	return zs_ok;
-}
-z_status zo_console::savecfg()
-{
-	z_file f(_config_file,"wb");
-	dump_obj(&f,_root_obj);
-	return zs_ok;
-}
-z_status zo_console::loadcfg()
-{
-	z_string filename=_config_file;
-	z_file f(filename,"rb");
-	void_parse o;
-	z_string data_in;
-	f.read_all(data_in);
-	z_status status=_parser.parse_obj(&o,data_in);
-	if(status!=zs_ok)
-	{
-		_parser.report_error();
-		return status;
-	}
-	//dump_obj(&gz_out,&o);
-	load_obj(_root_obj,&o);
-	_config_file=filename;
-	return zs_ok;
-}
-
-
-z_status zo_console::process_args(int argc, char** argv)
-{
-	if(argc<1)
-	{
-		return zs_bad_argument_1;
-	}
-	_executable_name=argv[0];
-	if(_executable_name.size()>4)
-	{
-		std::string ext=_executable_name.substr(_executable_name.size()-4,4);
-		if(stricmp(ext.c_str(),".exe")==0)
-			_executable_name.resize(_executable_name.size()-4);
-	}
-	_config_file=_executable_name;
-	_config_file+=".cfg";
-
-
-	if(argc>1)
-	{
-		int i;
-		for(i=1;i<argc;i++)
-			ExecuteLine(argv[i]);
-	}
-	else
-		list_features();
-
-	return zs_ok;
-
-}
-#endif

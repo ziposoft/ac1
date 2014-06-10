@@ -1,10 +1,11 @@
 #ifndef z_console_h
 #define z_console_h
 #include "zipolib/include/zipo.h"
-#include "zipolib/include/z_parse.h"
+#include "zipolib/include/z_parse_text.h"
 #include "zipolib/include/z_terminal.h"
+#include "zipolib/include/z_factory.h"
 
-class z_console : public z_terminal
+class z_console_base : public z_terminal
 {
 
 
@@ -38,9 +39,7 @@ protected:
 
 	z_string _buffer;
 	bool _running;
-	zp_cmdline 	_cmdline ;
-	z_parser _parser;
-	z_status parse_line(ctext text);
+
 	virtual z_status ExecuteLine(ctext text);
     virtual void OnEnter();
     virtual void OnTab();
@@ -53,61 +52,82 @@ public:
 	z_strlist _history;
 
 
-	z_console();
+	z_console_base();
 	int run();
 
 };
-#if 0
-class z_console_ntf : public z_console
+class z_console : public z_console_base
 {
 public:
-	z_console_ntf()
+	z_console()
 	{
-		_dummy=0;
-		debug=true;
+		_self._fact=&z_factory_T<z_console>::self;
+		_self._obj=this;
+		_selected= _self;
+		_root._fact=0;
+		_root._obj=0;
+		_config_file="console.cfg";
+		_dump_cmd_line=false;
 	}
-	int _dummy;
-	bool debug;
-	z_string _executable_name;
-	z_string path;
-	//virtual void 
-	//z_status execute_line2();
+ 	z_status load_config_file(ctext exe_name)
+	{
+		_config_file= exe_name;
+		_config_file<<".cfg";
+		loadcfg();
+	}
+    virtual void OnDoubleBack();
 
-
-	U32 _feature_index;
-	U32 _feature_count;
-	zo_feature_list _auto_tab;
-	z_strlist _history;
-	int _history_index;
-	z_string _partial;
-	U32  _tab_count;
-	U32  _tab_mode_line_index;
-
-	virtual void refresh();
-	
-	void OnDoubleBack();
-	void runz(void* obj);
-	void show_history();
-	void inc_history(int i);
-    virtual void OnUp();
-    virtual void OnDown();
-	virtual void display_text(const z_string& s);
-    virtual void put_prompt();
-    virtual void OnEnter();
+/*	
+	NEW METHOD
+*/
+	virtual z_status ExecuteLine(ctext text);
+	virtual z_status EvaluateLine(ctext  text);
+	z_string _cmd_line_feature;
+	z_string _cmd_line_feature_index;
+	bool _has_path;
+	z_status evaluate_feature(zf_obj& o);
+	z_status get_feature_and_index();
+	z_status select_obj();
     virtual void OnTab();
-    virtual void get_auto_complete_list(zp_feature& parse_feature);
+	zp_text_parser _tparser;
 
-	z_status process_args(int argc, char** pargv);
+/*	
+	OLD METHOD
+*/
+#if OLD
+	virtual z_status ExecuteLine_old(ctext text);
+	virtual z_status EvaluateLine_old(ctext text);
+	z_status evaluate_feature_old(zf_obj& o);
+ 	z_status select_obj_old(zp_feature* zpf);
+
+    virtual void OnTab_old();
+#endif
+ 	z_status select_obj_from_path(zf_obj& start,z_string& path);
+	//void get_auto_complete_list(z_string& partial);
 
 
-	void dump_all();
-	void dump_feature_outline(void* obj);
-	void dump_obj2(void* obj);
 
-	//command line functions
+	zf_obj _root;
+	zf_obj _self;
+	zf_obj _selected;
+	zf_obj _temp;
+	z_string _temp_path;
+	bool _has_feature;
+
+
+	template <class CLASS> void setroot(CLASS * obj)
+	{
+		_root._obj=obj;
+		_root._fact=&z_factory_T<CLASS>::self;
+		_selected= _root;
+
+	}
+
 
 
 	//command line props
+	bool _dump_cmd_line;
+	z_string _script_file;
 	z_string _config_file;
 	z_string _startup_path;
 
@@ -121,102 +141,8 @@ public:
 	z_status exit();
 
 };
-class zo_root : public z_obj_vect<void>
-{
-public:
-	ZO_OBJ_H;
-	zo_root();
-	zo_console	_console;
-	z_trace		*_p_trace;
-	z_trace		*_p_child;
-
-	virtual ctext get_map_key();
 
 
-
-};
-#endif
-#if 0
-class zo_console : public z_console,public zo_man_cmd
-{
-public:
-	ZO_OBJ_H;
-	zo_console(void* obj=0) : zo_man_cmd(obj)
-	{
-		_dummy=0;
-		debug=true;
-	}
-	int _dummy;
-	bool debug;
-	z_string _executable_name;
-	z_string path;
-	//virtual void 
-	//z_status execute_line2();
-
-
-	U32 _feature_index;
-	U32 _feature_count;
-	zo_feature_list _auto_tab;
-	zo_str_vect _history;
-	int _history_index;
-	z_string _partial;
-	U32  _tab_count;
-	U32  _tab_mode_line_index;
-
-	virtual void refresh();
-	
-	void OnDoubleBack();
-	void runz(void* obj);
-	void show_history();
-	void inc_history(int i);
-    virtual void OnUp();
-    virtual void OnDown();
-	virtual void display_text(const z_string& s);
-    virtual void put_prompt();
-    virtual void OnEnter();
-    virtual void OnTab();
-    virtual void get_auto_complete_list(zp_feature& parse_feature);
-
-	z_status process_args(int argc, char** pargv);
-
-
-	void dump_all();
-	void dump_feature_outline(void* obj);
-	void dump_obj2(void* obj);
-
-	//command line functions
-
-
-	//command line props
-	z_string _config_file;
-	z_string _startup_path;
-
-	//command line functions
-	z_status list_features();
-	z_status dumpcfg();
-	z_status loadcfg();
-	z_status savecfg();
-	z_status help();
-	z_status shell();
-	z_status exit();
-
-};
-class zo_root : public z_obj_vect<void>
-{
-public:
-	ZO_OBJ_H;
-	zo_root();
-	zo_console	_console;
-	z_trace		*_p_trace;
-	z_trace		*_p_child;
-
-	virtual ctext get_map_key();
-
-
-
-};
-
-#endif
 #endif
 
 
