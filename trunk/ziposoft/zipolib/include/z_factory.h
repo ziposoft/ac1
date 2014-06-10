@@ -290,12 +290,16 @@ extern z_factory* _pgz_factory_none;
 
 
 #define ZFACT(_CLASS_) ZFACT_V(_CLASS_,none) 
+#define ZFEAT(_VAR_,_TYPE_,__FUNCTYPE_)		add_prop(#_VAR_,_TYPE_,__FUNCTYPE_( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
+
+#define ZVOBJ(_VAR_) ZFEAT(_VAR_,zf_ft_obj,zp_child_vobj_funcs_get)
+#define ZPOBJ(_VAR_) ZFEAT(_VAR_,zf_ft_obj,zp_child_pobj_funcs_get)
+#define ZOBJ(_VAR_) ZFEAT(_VAR_,zf_ft_obj,zp_child_obj_funcs_get)
+#define ZPROP(_VAR_) ZFEAT(_VAR_,zf_ft_var,zp_var_funcs_get)
 
 
-#define ZVOBJ(_VAR_)					add_prop(#_VAR_,zf_ft_obj,zp_child_vobj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
-#define ZPOBJ(_VAR_)					add_prop(#_VAR_,zf_ft_obj,zp_child_pobj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
-#define ZOBJ(_VAR_)						add_prop(#_VAR_,zf_ft_obj,zp_child_obj_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
-#define ZPROP(_VAR_)					add_prop(#_VAR_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
+
+
 #define ZPROP_X(_VAR_,_NAME_,_DESC_)	add_prop(_NAME_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),_DESC_)
 //#define ZACT(_ACT_) add_act_T(#_ACT_,*(z_memptr*)&(&THECLASS::_ACT_) ,"");
 #define ZPARAM_X(_VAR_,_NAME_,_DESC_) ZPROP_X(_VAR_,_NAME_,_DESC_)

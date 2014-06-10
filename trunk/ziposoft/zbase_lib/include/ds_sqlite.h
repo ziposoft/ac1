@@ -55,8 +55,8 @@ public:
 
 
 	int _last_error;
-	zb_src_sl3(ctext  path);
-	virtual z_status open();
+	zb_src_sl3();
+	virtual z_status open(ctext name);
 	virtual z_status close();
 	z_status dump_master();
 	z_status get_table_info();

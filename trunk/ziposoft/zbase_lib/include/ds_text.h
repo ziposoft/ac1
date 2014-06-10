@@ -37,9 +37,9 @@ class zb_ds_text: public zb_source
 	z_map_obj<zb_ds_table_txt> _tables;
 
 public:
-	zb_ds_text(ctext name);
+	zb_ds_text();
 	virtual ~zb_ds_text();
-	virtual z_status open(bool create,bool writable);
+	virtual z_status open(ctext name,bool create,bool writable);
 	virtual z_status close();
 	virtual z_status commit();
  	virtual zb_ds_table* ds_table_new(ctext ds_table_name);

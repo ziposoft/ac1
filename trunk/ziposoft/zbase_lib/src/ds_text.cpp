@@ -6,7 +6,7 @@
 
 	zb_ds_text 
 ____________________________________________________________________________*/
-zb_ds_text::zb_ds_text(ctext name) : zb_source(name)
+zb_ds_text::zb_ds_text() : zb_source()
 {
 
 }
@@ -16,10 +16,11 @@ zb_ds_text::~zb_ds_text()
 {
 	//TODO delete 
 }
-z_status zb_ds_text::open(bool create,bool writable)
+z_status zb_ds_text::open(ctext name,bool create,bool writable)
 {
 	z_status status;
 	size_t i;
+	_name=name;
 	status=_dir.open(_name,create);
 	if(status)
 		return Z_ERROR_MSG(zs_could_not_open_file,"can't open directory");
