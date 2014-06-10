@@ -5,7 +5,7 @@
 #include "zipolib/include/z_filesystem.h"
 #include "zipolib/include/z_trace.h"
 #include "zipolib/include/z_ntf.h"
-#include "zipolib/include/z_console.h"
+#include "zipolib/include/z_console_base.h"
 #include "zipolib/include/z_factory_static.h"
 /*
  class test	 : public 	z_ntf_obj

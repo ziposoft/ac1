@@ -2,13 +2,13 @@
 //
 
 #include "zipolib/include/zipolib_cpp.h"
-#include "zipolib/include/z_console.h"
+#include "zipolib/include/z_console_base.h"
 
 #if 0
-class z_console_ntf : public z_console
+class z_console : public z_console_base
 {
 public:
-	z_console_ntf()
+	z_console()
 	{
 		_dummy=0;
 		debug=true;
