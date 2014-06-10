@@ -4,9 +4,8 @@
 #ifdef ZB_SQLITE
 #include "zbase_lib/include/ds_sqlite.h"
 
-zb_src_sl3::zb_src_sl3(ctext  path) : zb_source(path)
+zb_src_sl3::zb_src_sl3() : zb_source()
 {
-	_path=path;
 	_last_error=SQLITE_OK;
 	_handle=0;
 }
@@ -78,9 +77,11 @@ z_status get_zb_status_sqlite(int sql_status)
 }
 
 
-z_status zb_src_sl3::open()
+z_status zb_src_sl3::open(ctext  path)
 {
 	ZTF;
+	_path=path;
+
 	int retval;
 	retval = sqlite3_open(_name,&_handle);
 	ZT("opening=%s",_name.c_str());

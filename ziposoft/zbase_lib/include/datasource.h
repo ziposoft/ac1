@@ -112,10 +112,10 @@ public:
 		status_opened_need_commit
 	} _status;
 
-	zb_source(ctext name);
+	zb_source();
 	virtual ~zb_source(){};
 	virtual z_status commit(){ return Z_ERROR(zs_not_implemented);};
-	virtual z_status open(bool create,bool writable){ return Z_ERROR(zs_not_implemented);};
+	virtual z_status open(ctext name,bool create,bool writable){ return Z_ERROR(zs_not_implemented);};
 	virtual z_status close(){ return Z_ERROR(zs_not_implemented);};
 	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return Z_ERROR(zs_not_implemented);};
 	virtual bool is_open();

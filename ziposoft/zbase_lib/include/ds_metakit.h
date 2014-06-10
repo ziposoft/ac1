@@ -15,9 +15,9 @@ class zb_ds_metakit: public zb_source
  	z_status _get_view_for_table(c4_View& view,zb_table_base* tbl);
 
 public:
-	zb_ds_metakit(ctext name);
+	zb_ds_metakit();
 	virtual ~zb_ds_metakit(void);
-	virtual z_status open(bool create,bool writable);
+	virtual z_status open(ctext name,bool create,bool writable);
 	virtual z_status close();
 	virtual z_status commit();
 	virtual zb_ds_field* ds_field_string_new(ctext id);

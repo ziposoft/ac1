@@ -75,9 +75,9 @@ zb_ds_table::zb_ds_table(zb_source* ds,ctext unique_id)
 	zb_source
 ____________________________________________________________________________*/
 
-zb_source::zb_source(ctext name)
+zb_source::zb_source()
 {
-	_name=name;
+	_name="";
 	_status=status_closed;
 }
 bool zb_source::is_open()
