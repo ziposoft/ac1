@@ -24,7 +24,7 @@ z_factory* z_factory::get_base_factory() const
 
 }
 
-
+	   
 z_status z_factory::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter) const
 {
 	z_memptr offset;
@@ -33,14 +33,25 @@ z_status z_factory::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* ite
 	if(status)
 		return status;
 	char* pvar=(char*)obj+offset;
-	if(!funcs)
-		return zs_operation_not_supported; //could be ACT
 
 	*ppChild=pvar;//funcs->get_ptr(pvar,iter);
 	return zs_success;
 
 }
+z_status z_factory::get_child_obj_ptr(void* obj,ctext var_name,void** ppChild,int* iter) const
+{
+	z_memptr offset;
+	const zf_var_funcs_base* funcs;
+	z_status status=get_var_info(var_name,offset,funcs);
+	if(status)
+		return status;
+	char* pvar=(char*)obj+offset;
 
+	*ppChild=funcs->get_ptr(pvar,iter);
+	return zs_success;
+
+
+}
 z_status z_factory::set_var_as_string(void* obj,ctext var_name,ctext value)	const
 {
 	z_memptr offset;
