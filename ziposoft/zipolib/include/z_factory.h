@@ -136,6 +136,7 @@ public:
 
 	virtual z_status create_child(void* obj,ctext var_name,z_factory* new_child_type,void** ppChild) const;
 
+	virtual z_status get_child_obj_ptr(void* obj,ctext var_name,void** ppChild,int* iter=0) const;
 	virtual z_status get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter=0) const;
 	virtual z_status set_var_as_string(void* obj,ctext var_name,ctext value) const;
 	virtual z_status get_var_as_string(void* obj,ctext var_name,z_string& value) const;
