@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <trails>
   <trail name="Company Mill">
-    <segment name="cm1" length="1">
+    <segment name="cm1" length="0.98">
       From trail head to bridge
     </segment>
-    <segment name="cm2" length="0.9">
+    <segment name="cm2" length="1.47">
       West side, from bridge to Reedy Creek Trail
     </segment>
-    <segment name="cm3" length="1.1">
+    <segment name="cm3" length="1.5">
       North side, from Company Mill Spur to Reedy Creek Trail
     </segment>
-    <segment name="cm4" length="0.4">
+    <segment name="cm4" length="0.36">
       East side, from Reedy Creek Trail to Company Mill Spur
     </segment>
-    <segment name="cm5" length="1.47">
+    <segment name="cm5" length="1.1">
       East side, from bridge to Reedy Creek Trail
     </segment>
     <segment name="cm6" length="0.024">
@@ -21,13 +21,13 @@
     </segment>
   </trail> 
   <trail name="Sycamore">
-    <segment name="syc1" length="1.1">
+    <segment name="syc1" length="1.0">
       Sycamore West from Graylyn to fork
     </segment>
     <segment name="syc2" length="0.12">
       Sycamore fork to Graylyn
     </segment>
-    <segment name="syc3" length="2.6">
+    <segment name="syc3" length="1.85">
       Sycamore
     </segment>
     <segment name="syc4" length="0.59">

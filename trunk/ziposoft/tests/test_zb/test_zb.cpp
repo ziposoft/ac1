@@ -4,6 +4,22 @@
 
 #include "zbase_lib/include/zipobase_lib.h"
 
+
+class table
+{
+public:
+	z_string name;
+	z_strlist fields;
+	int get_desc_from_source()
+	{
+		return 0;
+	}
+	int open()
+	{
+
+	}
+
+};
 class root
 {
 public:
@@ -14,8 +30,33 @@ public:
 	z_console console;
 	z_logger* _p_logger;
 	zb_ds_text dbtext;
+	zb_source* p_ds;
+
+	z_string dbname;
+	int open()
+	{
 
 
+
+		return 0;
+	}
+	int close()
+	{
+
+
+
+		return 0;
+	}
+	z_string _newtblname;
+
+	int addtable()
+	{
+		zb_ds_table* tbl=0;
+		tbl=  p_ds->ds_table_new(_newtblname);
+		if(!tbl)
+
+		return 0;
+	}
 };
 ZFACT(root)
 {
@@ -35,7 +76,6 @@ int test_ds_table(zb_source* p_ds)
 {
 	z_status status;
 	zb_ds_rec_ptr* pRec=0;
-	zb_ds_table* tbl=0;
 	zb_ds_field* fld=0;
 	zb_ds_field* fld2=0;
 	zb_ds_rec_ptr* ptr=0;
@@ -115,39 +155,6 @@ int test_ds_table(zb_source* p_ds)
 	return 0;
 }
 
-/*
-int test_table(zb_source* p_ds)
-{
-	z_status status;
-	zb_record* pRec=0;
-	zb_st_test table_test(p_ds);
-	do
-	{
-		status=p_ds->open(true);
-		if(status)
-			break;
-		zb_record* pRec= table_test.new_default_rec();
-		if(!pRec)
-			break;
-		status=table_test._f_name->set(pRec,"hello?");
-		if(status)
-			break;
-
-		status=table_test.record_add(pRec);
-		if(status)
-			break;
-		status=p_ds->commit();
-		
-	}while(0);
-	
-	p_ds->close();
-	if(pRec)
-		delete pRec;
-	return 0;
-}
-
-
-*/
 
 
 int main(int argc, char* argv[])
