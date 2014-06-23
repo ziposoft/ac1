@@ -8,10 +8,10 @@ class zb_ds_rec_ptr;
 class zb_ds_field  
 {
 protected:
-	z_string _id;
-	int _index;
 
 public:
+	z_string _id;
+	int _index;
 	virtual void index_set(int i) {  _index=i; };
 	virtual int index_get(){  return _index; };
 
@@ -41,10 +41,10 @@ public:
 class zb_ds_table 
 {
 protected:
+public:
 	zb_source* _ds;
 	z_string _id;
 	zb_ds_desc _ds_desc;
-public:
 	zb_ds_table(zb_source* ds,ctext unique_id);
 	virtual  ~zb_ds_table(){};
 
