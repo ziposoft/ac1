@@ -5,19 +5,22 @@
 #include "zbase_lib/include/zipobase_lib.h"
 
 
-class table
+ZFACT(zb_ds_field)
 {
-public:
-	z_string name;
-	z_strlist fields;
-	int get_desc_from_source()
-	{
-		return 0;
-	}
-	int open()
-	{
+	ZPROP(_id);
+	ZPROP(_index);
 
-	}
+
+};
+
+
+ZFACT(zb_ds_table)
+{
+	ZPROP(_id);
+	/*
+	ZPROP(fields);
+	ZACT(add);
+	ZACT_XP(open,"open","desc",1,ZPARAM(name));	  */
 
 };
 class root
@@ -58,6 +61,8 @@ public:
 		return 0;
 	}
 };
+
+#if 0
 ZFACT(root)
 {
 	ZOBJ(console);
@@ -154,7 +159,7 @@ int test_ds_table(zb_source* p_ds)
 		delete tbl;
 	return 0;
 }
-
+#endif
 
 
 int main(int argc, char* argv[])

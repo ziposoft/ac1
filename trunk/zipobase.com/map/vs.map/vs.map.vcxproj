@@ -94,7 +94,9 @@
     <Xml Include="..\trailmap_menu.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="..\Umstead.xml" />
+    <Xml Include="..\Umstead.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\cgi-bin\trailmap.cgi" />

@@ -185,6 +185,7 @@ z_dynamic_factory_list& get_factories_dynamic();
 template <class C >  class z_factory_T :public  z_factory
 {
 public:
+	friend  C;
 	typedef int (C::*fn_act)();
 	typedef C THECLASS;
 	z_factory_T()	 : z_factory()
