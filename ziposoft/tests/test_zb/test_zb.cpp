@@ -4,52 +4,16 @@
 
 #include "zbase_lib/include/zipobase_lib.h"
 
-
-ZFACT(zb_ds_field)
-{
-	ZPROP(_id);
-	ZPROP(_index);
-
-
-};
-
-
-ZFACT(zb_ds_table)
-{
-	ZPROP(_id);
-	/*
-	ZPROP(fields);
-	ZACT(add);
-	ZACT_XP(open,"open","desc",1,ZPARAM(name));	  */
-
-};
-class root
+class source
 {
 public:
-	root()
+	source()
 	{
 
 	}
-	z_console console;
-	z_logger* _p_logger;
-	zb_ds_text dbtext;
 	zb_source* p_ds;
 
-	z_string dbname;
-	int open()
-	{
 
-
-
-		return 0;
-	}
-	int close()
-	{
-
-
-
-		return 0;
-	}
 	z_string _newtblname;
 
 	int addtable()
@@ -60,8 +24,44 @@ public:
 
 		return 0;
 	}
-};
+}	  ;
 
+
+class root
+{
+public:
+	root()
+	{
+		dbname="default.db";
+
+	}
+	z_console console;
+	z_logger* _p_logger;
+	source* p_ds;
+	z_string dbname;
+	int open()
+	{
+		return 0;
+	}
+	int close()
+	{
+		return 0;
+	}
+};
+ZFACT(root)
+{
+	ZOBJ(console);
+	ZPOBJ(p_ds);
+	ZPOBJ(_p_logger);
+
+	/*
+	ZPROP(x);
+	ZPROP(i);
+	ZACT(add);
+	ZACT_XP(show,"show","desc",1,ZPARAM(s));
+	*/
+
+};
 #if 0
 ZFACT(root)
 {

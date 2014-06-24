@@ -45,6 +45,7 @@ public:
 	zb_source* _ds;
 	z_string _id;
 	zb_ds_desc _ds_desc;
+	zb_ds_table();
 	zb_ds_table(zb_source* ds,ctext unique_id);
 	virtual  ~zb_ds_table(){};
 
