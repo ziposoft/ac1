@@ -69,7 +69,11 @@ zb_ds_table::zb_ds_table(zb_source* ds,ctext unique_id)
 	_ds=ds;
 	_id=unique_id;
 }
-
+zb_ds_table::zb_ds_table()
+{
+	_ds=0;
+	Z_ASSERT(0);
+}
 /*__________________________________________________________________________
 
 	zb_source
