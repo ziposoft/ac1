@@ -9,18 +9,36 @@ class source
 public:
 	source()
 	{
-
+		dbname="default.db";
+		p_ds=new zb_ds_text();
+	}
+	virtual ~source()
+	{
+		p_ds->close();
+		delete p_ds;
 	}
 	zb_source* p_ds;
 
+	z_string dbname;
 
 	z_string _newtblname;
+	int open()
+	{
+		p_ds->open(dbname,true,true);
 
+		return 0;
+	}
+	int close()
+	{
+		return p_ds->close();
+	}	
+	
 	int addtable()
 	{
 		zb_ds_table* tbl=0;
 		tbl=  p_ds->ds_table_new(_newtblname);
-		if(!tbl)
+	
+
 
 		return 0;
 	}
@@ -32,26 +50,35 @@ class root
 public:
 	root()
 	{
-		dbname="default.db";
+		_p_logger=&gz_logger;
+
 
 	}
 	z_console console;
 	z_logger* _p_logger;
-	source* p_ds;
-	z_string dbname;
-	int open()
-	{
-		return 0;
-	}
-	int close()
-	{
-		return 0;
-	}
+	source ds;
+
+};
+
+ZFACT(source)
+{
+	ZACT_XP(addtable,"addtable","desc",1,ZPARAM(_newtblname));
+	ZPROP(_newtblname);
+	ZACT_XP(open,"opendb","desc",1,ZPARAM(dbname));
+	ZACT(close);
+
+	/*
+	ZPROP(x);
+	ZPROP(i);
+	ZACT(add);
+	ZACT_XP(show,"show","desc",1,ZPARAM(s));
+	*/
+
 };
 ZFACT(root)
 {
 	ZOBJ(console);
-	ZPOBJ(p_ds);
+	ZOBJ(ds);
 	ZPOBJ(_p_logger);
 
 	/*
@@ -167,7 +194,9 @@ int main(int argc, char* argv[])
 
 	root o;
 	o.console.setroot(&o);
+	o.console.loadcfg();
 	o.console.runapp(argc,argv);
+	o.console.savecfg();
 
 
 	return 0;
