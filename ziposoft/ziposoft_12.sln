@@ -58,6 +58,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Performance1.psess = Performance1.psess
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "acdiag", "acdiag\acdiag.vcxproj", "{D1F8647D-E988-494B-996E-6EC5F439631F}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -240,6 +242,18 @@ Global
 		{D5ED5AFF-697F-4D3D-942A-C1BE2A68D10D}.release_trace|Win32.Build.0 = Release|Win32
 		{D5ED5AFF-697F-4D3D-942A-C1BE2A68D10D}.Release|Win32.ActiveCfg = Release|Win32
 		{D5ED5AFF-697F-4D3D-942A-C1BE2A68D10D}.Release|Win32.Build.0 = Release|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.Debug_NoTrace|Win32.ActiveCfg = Debug_Trace|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.Debug_NoTrace|Win32.Build.0 = Debug_Trace|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.Debug_Trace|Win32.ActiveCfg = Debug_Trace|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.Debug_Trace|Win32.Build.0 = Debug_Trace|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.Debug|Win32.Build.0 = Debug|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.dll_release|Win32.ActiveCfg = Debug|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.dll_release|Win32.Build.0 = Debug|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.release_trace|Win32.ActiveCfg = Release|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.release_trace|Win32.Build.0 = Release|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.Release|Win32.ActiveCfg = Release|Win32
+		{D1F8647D-E988-494B-996E-6EC5F439631F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
