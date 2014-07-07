@@ -151,7 +151,7 @@ z_status z_factory::load_obj_contents(zp_text_parser *parser,void* pObj) const
 	}
 	if(status==zs_eof)
 		return zs_ok;
-	return Z_ERROR(status);
+	return status;//Don't log error, should already be logged.
 }
 
 
@@ -247,13 +247,35 @@ const zf_var_entry* z_factory::_get_var_entry (size_t i) const
 	return &get_var_list()[i];
 
 }
+z_status z_factory::get_map_features(zf_feature_list&  list,zf_feature_type desired_type)
+{
+	init_dynamic();
+	size_t i=0;
+	zf_feature* p_feature;
+
+	for(i=0;i<_dynamic->features.size();i++)
+	{
+		p_feature=	   _dynamic->features[i];
+		if(desired_type	!=zf_ft_all)
+		{
+			if(	desired_type!=	p_feature->_type)
+				continue;
+
+		}
+		list<<p_feature;
+	}
+	z_factory* base=get_base_factory();
+	if(base)
+		return base->get_map_features(list,desired_type);
+	return zs_ok;
+}
 z_status z_factory::get_list_features(z_strlist& list) 
 {
 	init_dynamic();
 	size_t i=0;
-
 	for(i=0;i<_dynamic->features.size();i++)
 	{
+
 		list<<_dynamic->features[i]->_name;
 
 	}
@@ -442,7 +464,7 @@ z_status zf_create_obj_from_text_stream(zp_text_parser *parser, z_factory* &fact
 	parser->get_match(s);
 	factory=zf_get_factory(s);
 	if(!factory)
-		return Z_ERROR_MSG(zs_cannot_create_virtual_obj,"Unknown obj type");
+		return Z_ERROR_MSG(zs_cannot_create_virtual_obj,"Unknown obj type \"%s\"",s.c_str());
 
 	if(objpointer==0)//we need to create it
 	{

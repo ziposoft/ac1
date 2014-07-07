@@ -39,7 +39,7 @@ zb_desc* zb_recset::get_desc()
 z_status zb_recset::create_desc_from_source()
 {
 	//return _ds_recset->ds_create_desc_from_source(&_desc);
-	return Z_ERROR(zs_not_implemented);
+	return Z_ERROR_NOT_IMPLEMENTED;
 
 }
 zb_field* zb_recset::get_field(ctext name)
@@ -52,13 +52,13 @@ zb_field* zb_recset::get_field(ctext name)
 z_status zb_recset::get_val_string(z_string& val,zb_field* field)
 {
 	//return _ds_recset->ds_get_val_string(val,field);
-	return Z_ERROR(zs_not_implemented);
+	return Z_ERROR_NOT_IMPLEMENTED;
 }
 
 z_status zb_recset::ptr_increment()
 {
 	//return _ds_recset->ptr_increment();
-	return Z_ERROR(zs_not_implemented);
+	return Z_ERROR_NOT_IMPLEMENTED;
 }
 
 

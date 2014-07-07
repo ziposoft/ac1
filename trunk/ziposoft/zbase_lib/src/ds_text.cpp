@@ -44,7 +44,7 @@ z_status zb_ds_text::open(ctext name,bool create,bool writable)
 }
 z_status zb_ds_text::close()
 {
-	 return Z_ERROR(zs_not_implemented);
+	 return Z_ERROR_NOT_IMPLEMENTED;
 
 }
 zb_ds_table* zb_ds_text::ds_table_new(ctext ds_table_name)
