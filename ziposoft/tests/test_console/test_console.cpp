@@ -131,7 +131,17 @@ ZFACT_V(Cat,Animal){};
 ZFACT_V(Bird,Animal){};
 
 
+ZFACT(z_random_access)
+{
+	ZOBJ(console);
+	ZOBJ(house);
+	ZPOBJ(_p_logger);
+	ZPROP(x);
+	ZPROP(i);
+	ZACT(add);
+	ZACT_XP(show,"show","desc",1,ZPARAM(s));
 
+};
 
 class root
 {

@@ -6,3 +6,33 @@
 
 
 
+class z_random_access
+{
+public:
+	char* _p_data;
+
+	int offset;
+	int width;
+	int length;
+
+	virtual int dump()
+	{
+		return 0;
+	}
+	virtual int write_pattern_incrementing()
+	{
+		return 0;
+	}
+	virtual int write_pattern_set()
+	{
+
+		return 0;
+	}
+
+
+
+
+
+
+
+};
