@@ -34,12 +34,16 @@ z_logger_msg::z_logger_msg(z_logger_level lvl,ctext file,ctext func,int line,z_s
 	_source_line=line;
 
 }
-void z_logger_msg::dump(z_file *fp)
+void z_logger_msg::dump(z_file *fp,z_logger_level lvl,bool debug)
 {
-	gz_logger.out(_lvl,fp,_source_file, _source_function,_source_line,_status,_msg.c_str());
+	if(debug)
+	gz_logger.out_dbg(_lvl,fp,_source_file, _source_function,_source_line,_status,_msg.c_str());
+	else
+	gz_logger.out(_lvl,fp,_status,_msg.c_str());
 
 }
-void z_logger::out(z_logger_level lvl,z_file* f,ctext file,ctext func,int line,z_status status,ctext msg)
+void z_logger::out_dbg(z_logger_level lvl,z_file* f,ctext file,ctext func,int line,
+				   z_status status,ctext msg)
 {
 	ctext fn=z_get_filename_from_path(file);
 	f->putf("%s-%s[%d] %s()",
@@ -53,6 +57,23 @@ void z_logger::out(z_logger_level lvl,z_file* f,ctext file,ctext func,int line,z
 		*f<<':'<<msg;
 	*f<<'\n';
 }
+void z_logger::out(z_logger_level lvl,z_file* f, z_status status,ctext msg)
+{
+	f->putf("%s-",	log_level_type[lvl]);
+	if(status)
+		*f<<zs_get_status_text(status);
+	if(msg)
+		*f<<','<<msg;
+	*f<<'\n';
+}
+
+z_status z_logger::report_not_implemented(ctext file,ctext func,int line)
+{
+	add_msg(z_logger_lvl_error,file,func,line,zs_not_implemented,"Function \"%s\" not implemented",func);
+	return zs_not_implemented;
+
+}
+
 
 z_status z_logger::add_msg(z_logger_level lvl,ctext file,ctext func,int line,z_status status,const char*  lpszFormat,  ... )
 {
@@ -67,7 +88,7 @@ z_status z_logger::add_msg(z_logger_level lvl,ctext file,ctext func,int line,z_s
 		c=vsnprintf (buff,BUFF_SIZE-1, lpszFormat, ArgList);
 	}
 
-	out(lvl,&gz_debug,file,func,line,status,buff);
+	out_dbg(lvl,&gz_debug,file,func,line,status,buff);
 	if(lvl<=_log_level)
 		_log << new z_logger_msg(lvl, file, func, line, status, buff);
 	if(buff)
@@ -75,12 +96,12 @@ z_status z_logger::add_msg(z_logger_level lvl,ctext file,ctext func,int line,z_s
 	return status;
 }
 
-void z_logger::dump( )
+void z_logger::dump(z_logger_level lvl,bool debug )
 {
 	size_t i;
 	for(i=0;i<_log.size();i++)
 	{
-		_log[i]->dump(&gz_out);
+		_log[i]->dump(&gz_out,lvl,debug);
 		delete _log[i];
 
 	}
@@ -90,8 +111,7 @@ void z_logger::dump( )
 }
 void z_logger_dump()
 {
-	gz_out << "Dumping logger:\n";
-	gz_logger.dump();
+	gz_logger.dump(z_logger_lvl_warning,false);
 }
 
 z_logger gz_logger;

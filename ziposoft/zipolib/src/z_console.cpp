@@ -7,6 +7,7 @@ ZFACT(z_console)
 	ZACT_X(exit,"q","Quit/Exit");
 	ZACT_X(list_features,"ls","List features");
 	ZACT(list_features);
+	ZACT(dumpcfg);
 	ZACT(loadcfg);
 	ZACT(savecfg);
 	ZACT(help);
@@ -37,7 +38,7 @@ z_status  z_console::runapp(int argc, char* argv[])
 
 		status=ExecuteLine(argv[i]);
 		if(status)
-			gz_logger.dump();
+			z_logger_dump();
 
 
 
@@ -218,7 +219,7 @@ z_status z_console::evaluate_feature(zf_obj& o)
 		}
 
 		int ret=o._fact->execute_act_ptr	(o._obj,zff->_offset);
-		return zs_ok;//???
+		return ret;//???
 	}
 	void* membervar=zff->get_memvar_ptr(o._obj);
 	if(!membervar)
@@ -326,16 +327,48 @@ z_status z_console:: ExecuteLine(ctext text)
 }
 
 
-
+#define INDENT "  "
 z_status z_console::list_features()
 {
-	_temp._fact->dump_obj(gz_out,_temp._obj);
+	z_map_iter iter;
+	zf_feature* p_feature;
+
+	zf_feature_list list;
+
+	_temp._fact->get_map_features(list,zf_ft_var);
+	gz_out << "\nVariables:\n";
+	while(p_feature=list.get_next(iter))
+	{
+ 		gz_out <<INDENT<<p_feature->_name;
+		
+		
+		gz_out<<'\n';
+	}
+	iter.reset();
+	list.clear();
+	_temp._fact->get_map_features(list,zf_ft_act);
+	gz_out << "\nActions:\n";
+	while(p_feature=list.get_next(iter))
+	{
+ 		gz_out <<INDENT<<p_feature->_name<<'\n';
+	}
+	list.clear();
+	iter.reset();
+	_temp._fact->get_map_features(list,zf_ft_obj);
+	gz_out << "\nChild Objects:\n";
+	while(p_feature=list.get_next(iter))
+	{
+ 		gz_out << INDENT<<p_feature->_name <<'\n';
+	}
+
 	gz_out << "\n";
 
 	return zs_ok;
 }
 z_status z_console::dumpcfg()
 {
+ 	_temp._fact->dump_obj(gz_out,_temp._obj);
+	gz_out << "\n";
 
 	return zs_ok;
 }
@@ -351,8 +384,10 @@ z_status z_console::loadcfg()
 
 
 	z_status status=_root._fact->load_obj_contents(&parser,_root._obj);
- 	if(status!=zs_ok)
+	if(status!=zs_ok)
 	{
+		Z_ERROR_MSG(status,"Load config file failed!");
+ 		z_logger_dump();
 		return status;
 	}
 
@@ -369,7 +404,6 @@ z_status z_console::loadcfg()
 	select_obj_from_path(_root,_path);
 	_selected=_temp;
 	//cfg._obj.get_by_name(
-	return zs_ok;
 
 	return zs_ok;
 }
@@ -381,8 +415,8 @@ z_status z_console::savecfg()
 }
 z_status z_console::help()
 {
-	gz_out << "help..\n";
-	return zs_ok;
+	_temp=_self;
+	return list_features();
 }
 z_status z_console::exit()
 {
@@ -643,7 +677,7 @@ void z_console_base::OnEnter()
 			default:
 				break;
 			}
-			gz_logger.dump();
+			z_logger_dump();
 			gz_out << "\ncommand failed.\n";
 
 		}

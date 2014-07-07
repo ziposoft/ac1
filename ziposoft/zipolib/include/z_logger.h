@@ -26,7 +26,7 @@ public:
 
 	z_logger_msg(z_logger_level lvl,ctext file,ctext func,int line,z_status status,const char*  msg=0);
 
-	void dump(z_file *fp);
+	void dump(z_file *fp,z_logger_level lvl,bool debug);
 
 };
 
@@ -39,9 +39,11 @@ public:
 	{
 		_log_level=z_logger_lvl_warning;
 	}
+	z_status report_not_implemented(ctext file,ctext func,int line); 
 	z_status add_msg(z_logger_level lvl,ctext file,ctext func,int line,z_status status,const char*  lpszFormat,   ... );
-	void out(z_logger_level lvl,z_file* f,ctext file,ctext func,int line,z_status status,ctext msg);
-	void dump();
+	void out_dbg(z_logger_level lvl,z_file* f,ctext file,ctext func,int line,z_status status,ctext msg);
+	void out(z_logger_level lvl,z_file* f,z_status status,ctext msg);
+	void dump(z_logger_level lvl,bool debug);
 	void set_capture_level(z_logger_level lvl)
 	{
 		_log_level=lvl;

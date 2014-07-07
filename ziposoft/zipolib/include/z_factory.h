@@ -33,6 +33,7 @@ enum zf_feature_type
 	zf_ft_obj_list,
 	//zf_ft_pobj,
 	zf_ft_act,
+	zf_ft_all,
 
 
 };
@@ -147,6 +148,7 @@ public:
 	virtual void dump_static(z_file& f) const;
 
 	virtual z_status get_list_features(z_strlist& list);
+	virtual z_status get_map_features(zf_feature_list&  list,zf_feature_type type);
 
 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
 	virtual zf_action* add_act_params(ctext name,z_memptr act_addr,ctext desc,int num_params,...) ;
@@ -255,6 +257,7 @@ public:
 	z_memptr _offset;
 	zf_feature_type _type;
 	void dump(z_file& f,void* obj);
+	virtual void display(z_file& f,void* obj)=0;
 
 	void* get_memvar_ptr(void* obj,int* iter=0) ;
 	virtual zf_action* get_action(){return 0;}
@@ -266,12 +269,15 @@ public:
 	zf_action(ctext name,z_memptr offset,ctext desc="");
 	z_obj_vector_map<zf_feature> _params;
 	virtual zf_action* get_action(){return this;}
+	virtual void display(z_file& f,void* obj);
 
 };
 
 class zf_prop  : public  zf_feature
 {
 public:
+	zf_prop(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
+	virtual void display(z_file& f,void* obj);
 
 
 };

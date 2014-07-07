@@ -89,6 +89,9 @@ ZFACT(root)
 	*/
 
 };
+ZP_MODULE_INCLUDE(  ZP_MOD(logger));
+
+
 #if 0
 ZFACT(root)
 {

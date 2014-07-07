@@ -38,12 +38,12 @@ z_status zb_table_base::load_from_ds()
 z_status zb_table_base::dump()
 {
 
-	 return Z_ERROR(zs_not_implemented);
+	 return Z_ERROR_NOT_IMPLEMENTED;
 
 }
 zb_record* zb_table_base::new_default_rec()
 {
-	//Z_ERROR(zs_not_implemented);
+	//Z_ERROR_NOT_IMPLEMENTED;
 	zb_record* rec=0;
 //	rec=_ds->record_solo_new();
 
@@ -53,6 +53,6 @@ zb_record* zb_table_base::new_default_rec()
 z_status zb_table_base::record_add(zb_record *rec)
 {
 
-	return Z_ERROR(zs_not_implemented);
+	return Z_ERROR_NOT_IMPLEMENTED;
 
 }
