@@ -12,5 +12,6 @@
     <None Include="..\Umstead.svg" />
     <None Include="..\trailmap.css" />
     <None Include="..\..\cgi-bin\trailmap.cgi" />
+    <None Include="..\map.php" />
   </ItemGroup>
 </Project>
