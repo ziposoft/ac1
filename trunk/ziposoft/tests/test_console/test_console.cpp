@@ -4,131 +4,56 @@
 #include "test_console.h"
 #include "zipolib/include/z_factory_static.h"
 
-class Animal
+class z_random_access
 {
 public:
-	Animal()
-	{
-		legs=2;
-		name="george";
-	}
-	virtual int makesound()
-	{
-		printf("could be anything!\n");
-		return 0;
-	}
-	int legs;
-	z_strlist nicknames;
+	char* _p_data;
+ 	int total_size;
 
-	z_string name;
-};
-class Flea : public Animal
-{
-public:
-	Flea()
-	{
-		legs=6;
-	}
-	virtual int makesound()
-	{
-			printf("itch!\n");
-		return 0;
-	}
-};
-class Dog : public Animal
-{
-public:
-	Dog()
-	{
-		barks=1;
-		legs=4;
-	}
-	int barks;
-	z_obj_vector<Flea> fleas;
+	int offset;
+	int width;
+	int length;
 
-	virtual int makesound()
+	virtual int dump()
 	{
-		int i;
-		for (i=0;i<barks;i++)
-			printf("woof!\n");
 		return 0;
 	}
-};
-class Bird : public Animal
-{
-public:
-	Bird()
+	virtual int write_pattern_incrementing()
 	{
-		legs=2;
-	}
-	virtual int makesound()
-	{
-		printf("chirp!\n");
 		return 0;
 	}
-};
-class Cat : public Animal
-{
-public:
-	Cat()
+	virtual int write_pattern_set()
 	{
-		legs=4;
-	}
-	virtual int makesound()
-	{
-		printf("meow!\n");
-		return 0;
-	}
-};
-class House
-{
-public:
-	House()
-	{
-		onepet=0;//new Cat();
-		newanimals=9;
-	}
-	z_obj_vector<Animal> pets;
-	int newanimals;
-	Animal* onepet;
-	int hoard()
-	{
-		int i;
-		for(i=0;i<newanimals;i++)
-		{
-			pets << new Cat();
-			pets << new Bird();
-			pets << new Dog();
 
-		}
 		return 0;
 	}
+};
+class z_binary_file	: public  z_random_access
+{
+public:
+
+
+
 
 };
-ZFACT(Animal)
+
+ZFACT(z_random_access)
 {
-	ZACT(makesound);
+	ZACT(dump);
+	ZACT(write_pattern_incrementing);
+	ZACT(write_pattern_set);
 
 	
-	ZPROP(nicknames);
-	ZPROP(legs);
-	ZPROP(name);
+	ZPROP(offset);
+	ZPROP(width);
+	ZPROP(length);
 };
-ZFACT(House) 
+
+ZFACT_V(z_binary_file,z_random_access)
 {
-	ZACT(hoard);
-	ZVOBJ(onepet);
-	ZPROP(pets);
-	ZPROP(newanimals);
+
+
 };
-ZFACT_V(Dog,Animal) 
-{
-	ZPROP(barks);
-	ZPROP(fleas);
-};
-ZFACT_V(Flea,Animal){};
-ZFACT_V(Cat,Animal){};
-ZFACT_V(Bird,Animal){};
 
 
 ZFACT(z_random_access)
