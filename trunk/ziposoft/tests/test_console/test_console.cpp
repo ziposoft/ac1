@@ -4,18 +4,61 @@
 #include "test_console.h"
 #include "zipolib/include/z_factory_static.h"
 
-class z_random_access
+class z_intf_random_access
 {
 public:
-	char* _p_data;
- 	int total_size;
+	z_intf_random_access()
+	{
+		total_size=0;
+		offset=0;
+		width=1;
+		length=0x10;
+
+	}
+ 	size_t total_size;
 
 	int offset;
 	int width;
 	int length;
-
+	virtual int read(int offset,int width,U64& data)
+	{
+		return zs_not_implemented;
+	}
+	virtual int write(int offset,int width,U64 data)
+	{
+		return zs_not_implemented;
+	}
 	virtual int dump()
 	{
+
+		int i;
+		z_status status;
+		for (i = offset; i < (offset+length); i+=width)
+		{
+			U64 data;
+			if( (i%0x10)==0)
+				printf("\n%02x : ",i);
+
+			status=read(i,width,data);
+			if(status)
+				return status;
+			switch(width)
+			{
+			case 1:		
+				//TODO support BIG endian
+				printf("%02x ",(U8) data);break; 
+			case 2:			
+				printf("%04x ",(U16) data);break;
+			case 4:			
+				printf("%04x ",(U32) data);break;
+			case 8:			
+				printf("%08llx ",(U64) data);break;
+			default:
+				printf("Invalid width: %d\n",width);
+				break;
+			}
+		}
+		printf("\n");
 		return 0;
 	}
 	virtual int write_pattern_incrementing()
@@ -28,16 +71,78 @@ public:
 		return 0;
 	}
 };
-class z_binary_file	: public  z_random_access
+
+class z_intf_mapped_access: public  z_intf_random_access
 {
 public:
 
+	z_intf_mapped_access()
+	{
+		_p_data=0;
 
+	}
+	char* _p_data;
+	virtual int read(int offset,int width,U64& data)
+	{
+		U8* p;
+		p=(U8*)_p_data+offset;
+
+
+		switch(width)
+		{
+		case 1:		
+			data=*(U8*)p;
+			break;
+		case 2:			
+			data=*(U16*)p;
+			break;
+		case 4:			
+			data=*(U32*)p;
+			break;
+		case 8:			
+			data=*(U64*)p;
+			break;
+		default:
+			break;
+		}
+		return 0;
+	}
+	virtual int write(int offset,int width,U64 data)
+	{
+		return zs_not_implemented;
+	}
+};
+class z_binary_file	: public  z_intf_mapped_access
+{
+public:
+	z_file _file;
+
+	z_string filename;
+	virtual int load()
+	{
+		z_status status=_file.open(filename,"rb");
+		if(status==zs_ok)
+		{
+			_file.read_all(_p_data,total_size);
+			_file.close();
+		}
+		return status;
+	}
+	virtual int save()
+	{
+		z_status status=_file.open(filename,"wb");
+		if(status==zs_ok)
+		{
+			_file.write(_p_data,total_size);
+			_file.close();
+		}
+		return status;
+	}
 
 
 };
 
-ZFACT(z_random_access)
+ZFACT(z_intf_random_access)
 {
 	ZACT(dump);
 	ZACT(write_pattern_incrementing);
@@ -49,24 +154,17 @@ ZFACT(z_random_access)
 	ZPROP(length);
 };
 
-ZFACT_V(z_binary_file,z_random_access)
+ZFACT_V(z_binary_file,z_intf_random_access)
 {
-
+	ZPROP(filename);
+	ZACT_XP(save,"save","Save to file",1,ZPARAM(filename));
+	ZACT_XP(load,"load","Load from file",1,ZPARAM(filename));
+	
 
 };
 
 
-ZFACT(z_random_access)
-{
-	ZOBJ(console);
-	ZOBJ(house);
-	ZPOBJ(_p_logger);
-	ZPROP(x);
-	ZPROP(i);
-	ZACT(add);
-	ZACT_XP(show,"show","desc",1,ZPARAM(s));
 
-};
 
 class root
 {
@@ -82,7 +180,7 @@ public:
 	}
 	z_console console;
 	z_logger* _p_logger;
-	House house;
+	z_binary_file binfile;
 	z_strlist x;
 	int i;
 	z_string s;
@@ -94,7 +192,7 @@ public:
 ZFACT(root)
 {
 	ZOBJ(console);
-	ZOBJ(house);
+	ZOBJ(binfile);
 	ZPOBJ(_p_logger);
 	ZPROP(x);
 	ZPROP(i);
