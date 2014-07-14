@@ -87,7 +87,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Xml Include="..\..\menu\zs_menu.xsl" />
+    <Xml Include="..\..\menu\zs_menu.xsl">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\trailmap.xsl">
       <SubType>Designer</SubType>
     </Xml>
@@ -101,10 +103,15 @@
   <ItemGroup>
     <None Include="..\..\cgi-bin\trailmap.cgi" />
     <None Include="..\dir.php" />
+    <None Include="..\main.js" />
+    <None Include="..\map.html" />
     <None Include="..\map.php" />
     <None Include="..\trailmap.css" />
     <None Include="..\trailmap.js" />
     <None Include="..\Umstead.svg" />
+    <None Include="..\zs_menu.css" />
+    <None Include="..\zs_menu.js" />
+    <None Include="..\zs_menu.php" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

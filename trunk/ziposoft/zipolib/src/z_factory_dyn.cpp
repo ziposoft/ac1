@@ -70,13 +70,18 @@ void zf_action::display(z_file& f,void* obj)
 {
 	char* pvar=(char*)obj+_offset;
 	f.indent();
-	f << _name;
-	if(df)
+	f << _name<<'(';
+	int i;
+	
+	for(i=0;i<_params.size();i++)
 	{
-		f << "=";
-		df->dump(f,pvar);
+		if(i)
+			f <<',';
+		f <<_params[i]->_name;
+
 	}
-	f <<'\n';
+
+	f <<")\n";
 }
 /*________________________________________________________________________
 
