@@ -13,5 +13,10 @@
     <None Include="..\trailmap.css" />
     <None Include="..\..\cgi-bin\trailmap.cgi" />
     <None Include="..\map.php" />
+    <None Include="..\zs_menu.php" />
+    <None Include="..\zs_menu.css" />
+    <None Include="..\zs_menu.js" />
+    <None Include="..\main.js" />
+    <None Include="..\map.html" />
   </ItemGroup>
 </Project>

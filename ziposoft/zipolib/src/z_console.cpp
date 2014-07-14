@@ -154,7 +154,7 @@ z_status z_console:: EvaluateLine(ctext text)
 		status=select_obj();
 		if(status)
 		{
-			return status; //if it is not an object, thats ok
+			break; //if it is not an object, thats ok
 		}
 		_has_path=true;
 
@@ -166,6 +166,9 @@ z_status z_console:: EvaluateLine(ctext text)
 		_cmd_line_feature.clear();
 		_cmd_line_feature_index.clear();
 	}
+	if(!_tparser.eob())
+		return Z_ERROR_DBG(zs_unparsed_data);
+		
 	return status;
 }
 
@@ -254,9 +257,17 @@ void z_console:: OnTab()
 {
 	if(!_tab_mode)
 	{
+		//This is just to find the target object.
 		z_status status=EvaluateLine(_buffer);
+		if(zs_unparsed_data==status)
+		{
+			//if we could not parse the line, then dont try to auto-tab
+			return;
+		}
+		Z_ERROR_DBG(status);
 		if(status!=zs_eof)
 		{
+			
 			/*
 			gz_out <<"\nBad path\n";
 			
@@ -335,14 +346,12 @@ z_status z_console::list_features()
 
 	zf_feature_list list;
 
+	gz_out.indent_inc();
 	_temp._fact->get_map_features(list,zf_ft_var);
 	gz_out << "\nVariables:\n";
 	while(p_feature=list.get_next(iter))
 	{
- 		gz_out <<INDENT<<p_feature->_name;
-		
-		
-		gz_out<<'\n';
+		p_feature->display(	gz_out,	_temp._obj);
 	}
 	iter.reset();
 	list.clear();
@@ -350,7 +359,7 @@ z_status z_console::list_features()
 	gz_out << "\nActions:\n";
 	while(p_feature=list.get_next(iter))
 	{
- 		gz_out <<INDENT<<p_feature->_name<<'\n';
+		p_feature->display(	gz_out,	_temp._obj);
 	}
 	list.clear();
 	iter.reset();
@@ -358,7 +367,7 @@ z_status z_console::list_features()
 	gz_out << "\nChild Objects:\n";
 	while(p_feature=list.get_next(iter))
 	{
- 		gz_out << INDENT<<p_feature->_name <<'\n';
+		p_feature->display(	gz_out,	_temp._obj);
 	}
 
 	gz_out << "\n";

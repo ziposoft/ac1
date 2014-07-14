@@ -1,0 +1,54 @@
+<html>
+<head>
+	<title>Umstead Trail Map</title>
+
+	<style type="text/css">
+		@import url(trailmap.css);
+	</style>
+</head>
+
+<body>
+				<table id="debug_table" visibility="hidden" rules="all" style="display: block;border: solid 1px black">
+				<tr>
+					<td>window=</td>
+					<td id="stat_window">--</td>
+					<td>svgrect=</td>
+					<td id="stat_svgrect">--</td>
+					<td>viewBox=</td>
+					<td >
+						<input onchange="onViewBoxSet()" id="stat_viewBox"  value="--" type="text"/>
+					</td>
+					<td>Mouse=</td>
+					<td id="stat_mouse">--</td>													 0
+					<td>viewXY=</td>
+					<td id="stat_viewXY">--</td>
+					<td>scale=</td>
+					<td id="stat_scale">--</td>
+					<td>Zoom=</td>
+					<td id="browser_info">--</td>
+				</tr>
+				<tr>
+					<td>route=</td>
+					<td>
+						<input onchange="route_string_change()"  id="stat_route_string"  value="--" type="text"/>
+					</td>
+				</tr>
+			</table>
+	<!-- status/menu bar-->
+	<div style="display:inline;width:300px">
+	 fdfsdf
+
+	</div>
+   	<div>
+	<?php include 'map.php';?>
+
+
+	</div>
+</body>
+<script type="text/javascript" src="../util/jquery.dev.js"></script>
+<script type="text/javascript" src="../util/util.js" ></script>
+<script type="text/javascript" src="trailmap.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+
+</html>
