@@ -68,10 +68,11 @@ zf_action::zf_action(ctext name,z_memptr offset,ctext desc) : zf_feature(name,zf
 }
 void zf_action::display(z_file& f,void* obj)
 {
-	char* pvar=(char*)obj+_offset;
 	f.indent();
+
+	char* pvar=(char*)obj+_offset;
 	f << _name<<'(';
-	int i;
+	size_t i;
 	
 	for(i=0;i<_params.size();i++)
 	{
@@ -83,6 +84,32 @@ void zf_action::display(z_file& f,void* obj)
 
 	f <<")\n";
 }
+int zf_action::execute(z_file* f,zf_obj* obj)
+{
+
+	if(f)
+	{
+		*f << _name<<'(';
+		size_t i;
+	
+		for(i=0;i<_params.size();i++)
+		{
+			if(i)
+				*f <<',';
+			*f << _params[i]->_name;
+			*f << "=";
+			 _params[i]->df->dump(*f,pvar);
+
+		}
+
+		*f <<")\n";
+	}
+
+	int ret=obj->_fact->execute_act_ptr	(obj->_obj,_offset);
+	return ret;
+}
+
+
 /*________________________________________________________________________
 
 zf_prop
@@ -119,7 +146,7 @@ z_factory_dyn& z_factory::init_dynamic()
 	if(get_static_feature_count()==0)
 		return *_dynamic;
 
-	int index;
+	size_t index;
 	for(index=0;index<get_static_feature_count();index++)
 	{
 		const zf_var_entry* ent=0;
@@ -128,7 +155,20 @@ z_factory_dyn& z_factory::init_dynamic()
 		ent=_get_var_entry(index);
 		if(ent->fp_var_func_get) 
 			funcs=ent->fp_var_func_get();
-		add_prop(ent->name,ent->type,funcs,(z_memptr)ent->offset,"?");
+		switch(ent->type)
+		{
+		case zf_ft_act:
+			add_act(ent->name,(z_memptr)ent->offset,"?");
+			break;
+		case zf_ft_obj:
+		case zf_ft_param:
+		case zf_ft_var:
+		case zf_ft_obj_list:
+			add_prop(ent->name,ent->type,funcs,(z_memptr)ent->offset,"?");
+		default:
+			Z_ERROR_MSG(zs_error,"Unknown feature type: %d",ent->type);
+			break;
+		}
 	}
 	return *_dynamic;
 }

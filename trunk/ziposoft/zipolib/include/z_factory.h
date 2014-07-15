@@ -243,7 +243,10 @@ template <class CLASS> z_factory*  zf_get_factory_T()
 
 class zf_feature
 {
-
+	friend class z_factory;
+protected:
+	const zf_var_funcs_base* df;
+	z_memptr _offset;
 public:
 
 
@@ -253,8 +256,7 @@ public:
 
 	z_string _name;
 	z_string _description;
-	const zf_var_funcs_base* df;
-	z_memptr _offset;
+
 	zf_feature_type _type;
 	void dump(z_file& f,void* obj);
 	virtual void display(z_file& f,void* obj)=0;
@@ -270,6 +272,7 @@ public:
 	z_obj_vector_map<zf_feature> _params;
 	virtual zf_action* get_action(){return this;}
 	virtual void display(z_file& f,void* obj);
+	int execute(z_file* f,zf_obj* obj);
 
 };
 
