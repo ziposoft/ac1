@@ -187,13 +187,14 @@ z_status z_console::evaluate_feature(zf_obj& o)
 
 	if(zff->_type==zf_ft_act)
 	{
+		zf_action* action=zff->get_action();
+		if(!action)
+		{
+			return Z_ERROR_MSG(zs_error,"Action not an action\n");//???
+		}
 		if(_tparser.test_char('(')==zs_ok)
 		{
-			zf_action* action=zff->get_action();
-			if(!action)
-			{
-				return Z_ERROR_MSG(zs_error,"Action not an action\n");//???
-			}
+
 			size_t param_index=0;
 			while( 1)
 			{
@@ -221,7 +222,7 @@ z_status z_console::evaluate_feature(zf_obj& o)
 
 		}
 
-		int ret=o._fact->execute_act_ptr	(o._obj,zff->_offset);
+		int ret=action->execute(&gz_out,&o);
 		return ret;//???
 	}
 	void* membervar=zff->get_memvar_ptr(o._obj);
