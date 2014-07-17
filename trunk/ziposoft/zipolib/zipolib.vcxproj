@@ -164,7 +164,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zipolib_cpp.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
-    <ClCompile Include="src\z_factory_dyn.cpp" />
+    <ClCompile Include="src\z_factory_features.cpp" />
     <ClCompile Include="src\z_factory_var_funcs.cpp" />
     <ClCompile Include="src\z_file.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>

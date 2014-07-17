@@ -228,13 +228,13 @@
     <ClCompile Include="src\z_parse_internal.cpp">
       <Filter>parse</Filter>
     </ClCompile>
-    <ClCompile Include="src\z_factory_dyn.cpp">
-      <Filter>factory</Filter>
-    </ClCompile>
     <ClCompile Include="src\z_terminal_keys.cpp">
       <Filter>console</Filter>
     </ClCompile>
     <ClCompile Include="src\z_factory_var_funcs.cpp">
+      <Filter>factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_factory_features.cpp">
       <Filter>factory</Filter>
     </ClCompile>
   </ItemGroup>
