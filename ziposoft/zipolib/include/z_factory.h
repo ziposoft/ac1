@@ -263,6 +263,8 @@ public:
 
 	void* get_memvar_ptr(void* obj,int* iter=0) ;
 	virtual zf_action* get_action(){return 0;}
+   	virtual z_status set_from_value(zp_value* val,void *obj) 	 {Z_ERROR_NOT_IMPLEMENTED; 	}
+
 
 };
 class zf_action  : public  zf_feature
@@ -281,6 +283,7 @@ class zf_prop  : public  zf_feature
 public:
 	zf_prop(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
 	virtual void display(z_file& f,void* obj);
+	virtual z_status set_from_value(zp_value* val,void *obj) ;
 
 
 };

@@ -10,10 +10,7 @@ z_status zp_cfg_obj::load_obj(void* obj, z_factory* fact)
 	{
 		f=fact->get_feature(_features[i]->_name);
 		if(f)
-		{
-			void* ftr_ptr=(char*)obj+f->_offset;
-			f->df->set_from_value(&_features[i]->_val,ftr_ptr);
-		}
+			f->set_from_value(&_features[i]->_val,obj);
 	}
 	return zs_ok;
 }
@@ -36,8 +33,7 @@ z_status zp_cfg_obj::createobj(zf_obj& o)
 	{
 		if( (f=o._fact->get_feature(_features[i]->_name))  )
 		{
-			void* ftr_ptr=(char*)o._obj+f->_offset;
-			f->df->set_from_value(&_features[i]->_val,ftr_ptr);
+			f->set_from_value(&_features[i]->_val,o._obj);
 		}
 	}
 	return zs_ok;

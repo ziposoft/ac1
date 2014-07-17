@@ -119,6 +119,13 @@ zf_prop::zf_prop(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_m
 {
 
 }
+z_status zf_prop::set_from_value(zp_value* val,void *obj) 
+{
+			void* ftr_ptr=(char*)obj+_offset;
+			df->set_from_value(val,ftr_ptr);
+
+}
+
 
 void zf_prop::display(z_file& f,void* obj)
 {
