@@ -132,6 +132,7 @@ public:
 
 	z_map_obj<zb_ds_table> _ds_tables;
 
+	virtual z_status get_table_list(z_obj_vector_map<zb_ds_table> & list){ return Z_ERROR_NOT_IMPLEMENTED;};
 
 	//crap
 	virtual z_status get_tables(){ return Z_ERROR_NOT_IMPLEMENTED;};

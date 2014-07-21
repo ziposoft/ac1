@@ -3,6 +3,16 @@
 #include "zipolib/include/z_factory_static.h"
 
 #include "zbase_lib/include/zipobase_lib.h"
+class dstable
+{
+public:
+	dstable()
+	{
+
+	}
+
+
+};
 
 class source
 {
@@ -23,7 +33,7 @@ public:
 	zb_ds_table* _ptbl;
 
 	z_string dbname;
-
+	z_obj_vector<dstable> _tbl_list;
 	z_string _newtblname;
 	int open()
 	{
