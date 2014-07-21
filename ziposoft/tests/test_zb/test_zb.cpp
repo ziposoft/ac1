@@ -63,7 +63,6 @@ public:
 ZFACT(source)
 {
 	ZACT_XP(addtable,"addtable","desc",1,ZPARAM(_newtblname));
-	ZPROP(_newtblname);
 	ZACT_XP(open,"opendb","desc",1,ZPARAM(dbname));
 	ZACT(close);
 

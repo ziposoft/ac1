@@ -1,6 +1,6 @@
 #include "zipolib_cpp_pch.h"
 
-#include "zipolib/include/z_factory_dyn.h"
+#include "zipolib/include/z_factory.h"
 #include "zipolib/include/z_parse.h"
 #include "zipolib/include/z_parse_text.h"
 
@@ -124,20 +124,20 @@ z_status z_factory::execute_act(void* obj,ctext name,int* pret) const
 		*pret=ret;
 	return zs_success;
 }
-z_status z_factory::load_obj_contents(zp_text_parser *parser,void* pObj) const
+z_status z_factory::load_obj_contents(zp_text_parser &parser,void* pObj) const
 {
 	z_string s;
 
 	z_status status=zs_ok;
 	while(status==zs_ok)
 	{
-		parser->skip_ws();
-		status=parser->test_any_identifier();
+		parser.skip_ws();
+		status=parser.test_any_identifier();
 		if(status==zs_no_match)
 			return zs_ok;
 		if(status)
 			break;
-		parser->get_match(s);
+		parser.get_match(s);
 		z_memptr offset;
 		const zf_var_funcs_base* funcs;
 		status=get_var_info(s.c_str(),offset,funcs);
@@ -452,16 +452,16 @@ void  zo_factory_list_dump()
 	}
 
 }
-z_status zf_create_obj_from_text_stream(zp_text_parser *parser, z_factory* &factory,void* &objpointer) 
+z_status zf_create_obj_from_text_stream(zp_text_parser &parser, z_factory* &factory,void* &objpointer) 
 {
-	parser->skip_ws();
-	z_status status=parser->test_any_identifier();
+	parser.skip_ws();
+	z_status status=parser.test_any_identifier();
 	if(status==zs_no_match)
 		return status;
 	if(status)
 		return Z_ERROR_MSG(status,"Error loading obj type");
 	z_string s;
-	parser->get_match(s);
+	parser.get_match(s);
 	factory=zf_get_factory(s);
 	if(!factory)
 		return Z_ERROR_MSG(zs_cannot_create_virtual_obj,"Unknown obj type \"%s\"",s.c_str());
@@ -471,8 +471,8 @@ z_status zf_create_obj_from_text_stream(zp_text_parser *parser, z_factory* &fact
 		objpointer=factory->create_obj();
 
 	}
-	parser->skip_ws();
-	status=parser->test_char('{');
+	parser.skip_ws();
+	status=parser.test_char('{');
 	if(status)
 		return Z_ERROR_MSG(status,"Expected '{' ");
 
@@ -481,8 +481,8 @@ z_status zf_create_obj_from_text_stream(zp_text_parser *parser, z_factory* &fact
  	if(status)
 		return status;
 
-	parser->skip_ws();
-	status=parser->test_char('}');
+	parser.skip_ws();
+	status=parser.test_char('}');
 	if(status)
 		return Z_ERROR_MSG(status,"Expected '}' ");
 

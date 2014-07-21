@@ -1,6 +1,6 @@
 #include "zipolib_cpp_pch.h"
 
-#include "zipolib/include/z_factory_dyn.h"
+#include "zipolib/include/z_factory.h"
 #include "zipolib/include/z_parse.h"
 #include "zipolib/include/z_parse_text.h"
 
@@ -13,9 +13,9 @@ void zf_var_funcs_base::dump(z_file& file, void* v) const
 	get(s,v);
 	file<<s;
 }
- z_status zf_var_funcs_base::assign(zp_text_parser *parser, void* v) const
+ z_status zf_var_funcs_base::assign(zp_text_parser &parser, void* v) const
 {
-	z_status status=parser->test_char('=');
+	z_status status=parser.test_char('=');
 	if(status)
 		return Z_ERROR_MSG(status,"Expected '=' ");
 	return load( parser,v);
@@ -35,14 +35,14 @@ template <class V> void zf_var_funcs<V>::get(z_string& s, void* v,int index)	con
 template <class V> void zf_var_funcs<V>::set(ctext s, void* v,int index)	const{}
 template <class V> void zf_var_funcs<V>::clear( void* v)	const{}
 template <class V> z_status zf_var_funcs<V>::set_from_value(zp_value* val, void* var,int index)	const{  set(val->_string,var); return zs_ok;}
-template <class V> z_status zf_var_funcs<V>::assign(zp_text_parser *parser, void* v) const 
+template <class V> z_status zf_var_funcs<V>::assign(zp_text_parser &parser, void* v) const 
 {
-	z_status status=parser->test_char('=');
+	z_status status=parser.test_char('=');
 	if(status)
 		return Z_ERROR_MSG(status,"Expected '=' ");
 	return load( parser,v);
 }
-template <class V> z_status zf_var_funcs<V>::evaluate(zp_text_parser *parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
+template <class V> z_status zf_var_funcs<V>::evaluate(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
 
 
 
@@ -53,13 +53,13 @@ ________________________________________________________________________*/
 VF<bool>::clear(void* v)            const {RECAST(bool,b); b=false;    }
 VF<bool>::get(z_string& s, void* v,int index) const {RECAST(bool,b); s=(b?"true":"false");  }
 VF<bool>::set(ctext s, void* v,int index)     const {RECAST(bool,b); b=(strcmp(s,"true")==0);    }
-template <> z_status zf_var_funcs<bool>::load(zp_text_parser *parser, void* v) const 
+template <> z_status zf_var_funcs<bool>::load(zp_text_parser &parser, void* v) const 
 {
-	z_status status=parser->test_any_identifier();
+	z_status status=parser.test_any_identifier();
 	if(status)
 		return Z_ERROR_MSG(status,"Error loading bool type");
 	z_string s;
-	parser->get_match(s);
+	parser.get_match(s);
 	set(s,v,0);
 	return zs_ok;
 }
@@ -70,13 +70,13 @@ ________________________________________________________________________*/
 VF<int>::clear(void* v) const			{RECAST(int,i); i=0;    }
 VF<int>::get(z_string& s, void* v,int index) const	{RECAST(int,i); s=i;   }
 VF<int>::set(ctext s, void* v,int index) const		{RECAST(int,i); i=atoi(s);    }
-template <> z_status zf_var_funcs<int>::load(zp_text_parser *parser, void* v) const 
+template <> z_status zf_var_funcs<int>::load(zp_text_parser &parser, void* v) const 
 {
-	z_status status=parser->test_any_identifier();
+	z_status status=parser.test_any_identifier();
 	if(status)
 		return Z_ERROR_MSG(status,"Error loading int type");
 	z_string s;
-	parser->get_match(s);
+	parser.get_match(s);
 	set(s,v,0);
 	return zs_ok;
 }
@@ -88,16 +88,16 @@ VF<z_string>::get(z_string& s, void* v,int index) const{RECAST(z_string,str); s=
 VF<z_string>::set(ctext s, void* v,int index) const{RECAST(z_string,str); str=s;   }
 VF<z_string>::clear(void* v) const{	RECAST(z_string,str); str="";}
 VF<z_string>::dump(z_file& file, void* v) const{	RECAST(z_string,str);z_string out;z_str_escape(str,out);file <<out;}
- template <> z_status zf_var_funcs<z_string>::load(zp_text_parser *parser, void* v) const 
+ template <> z_status zf_var_funcs<z_string>::load(zp_text_parser &parser, void* v) const 
 {
-	z_status status=parser->test_code_string();
+	z_status status=parser.test_code_string();
 	if(status)
-		status=parser->test_single_quoted_string();
+		status=parser.test_single_quoted_string();
 
 	if(status)
 		return Z_ERROR_MSG(status,"Expecting quoted string");
 	z_string match,unesc;
-	parser->get_match(match);
+	parser.get_match(match);
 	z_str_unescape(match,unesc);
 	set(unesc,v,0);
 	return zs_ok;
@@ -120,38 +120,38 @@ VF<z_strlist>::dump(z_file& file, void* v)	const{RECAST(z_strlist,list);
 
 	file<<'}';
 }
-z_status zf_var_funcs<z_strlist>::load(zp_text_parser *parser, void* v) const
+z_status zf_var_funcs<z_strlist>::load(zp_text_parser &parser, void* v) const
 {
 	RECAST(z_strlist,list);
 	list.clear();
 	z_status status;
-	parser->skip_ws();
-	status=parser->test_char('{');
+	parser.skip_ws();
+	status=parser.test_char('{');
 	if(status)
 		return Z_ERROR_MSG(status,"Expected '{' ");
 	z_string s;
 
 	while(status==zs_ok)
 	{
-		parser->skip_ws();
-		status=parser->test_code_string();
+		parser.skip_ws();
+		status=parser.test_code_string();
 		if(status)
-			status=parser->test_single_quoted_string();
+			status=parser.test_single_quoted_string();
 		if(status)
 			break;
-		parser->get_match(s);
+		parser.get_match(s);
 
 		z_string unesc;
 		z_str_unescape(s,unesc);
 		list<<unesc;
 
- 		status=parser->test_char(',');
+ 		status=parser.test_char(',');
 		if(status)
 			break;
 
 	}
-	parser->skip_ws();
-	status=parser->test_char('}');
+	parser.skip_ws();
+	status=parser.test_char('}');
 	if(status)
 		return Z_ERROR_MSG(status,"Expected '}' ");
 
@@ -223,7 +223,7 @@ void zf_funcs_obj_base::dump(z_file& file, void* memvar) const
 		file.indent_dec();
 	}
 }
-z_status zf_funcs_obj_base::load(zp_text_parser *parser, void* v) const
+z_status zf_funcs_obj_base::load(zp_text_parser &parser, void* v) const
 {
 	void* pObj=get_sub_obj(v,0);
 	z_factory* factory=0;
@@ -270,7 +270,7 @@ template <> z_status zf_var_funcs<zp_obj_vector>::set_from_value(zp_value* val, 
 	Z_ASSERT(0);//TODO
 	return Z_ERROR(zs_operation_not_supported);
 }
-template <> z_status zf_var_funcs<zp_obj_vector>::load(zp_text_parser *parser, void* v) const 
+template <> z_status zf_var_funcs<zp_obj_vector>::load(zp_text_parser &parser, void* v) const 
 {
 	return Z_ERROR(zs_operation_not_supported);
 }
@@ -360,13 +360,13 @@ void zf_funcs_obj_list_base::dump(z_file& f, void* v) const
 	f.indent();
 	f << "}";
 }
-z_status zf_funcs_obj_list_base::load(zp_text_parser *parser, void* v) const 
+z_status zf_funcs_obj_list_base::load(zp_text_parser &parser, void* v) const 
 {
 	z_obj_vector_base* plist=get_list(v);
 	plist->clear();
 	z_status status=zs_ok;
-	parser->skip_ws();
-	status=parser->test_char('{');
+	parser.skip_ws();
+	status=parser.test_char('{');
 	if(status)
 		return Z_ERROR_MSG(status,"Expected '{' ");
 	z_string membervarname;
@@ -374,7 +374,7 @@ z_status zf_funcs_obj_list_base::load(zp_text_parser *parser, void* v) const
 
 	while(status==zs_ok)
 	{
-		parser->skip_ws();
+		parser.skip_ws();
 		void* pObj=0;
 		z_factory* factory=0;
 		status= zf_create_obj_from_text_stream(parser, factory,pObj);;
@@ -382,8 +382,8 @@ z_status zf_funcs_obj_list_base::load(zp_text_parser *parser, void* v) const
 			break;
 		plist->add_void(pObj);
 	}
-	parser->skip_ws();
-	status=parser->test_char('}');
+	parser.skip_ws();
+	status=parser.test_char('}');
 	if(status)
 		return Z_ERROR_MSG(status,"Expected '}' ");
 	return zs_ok;

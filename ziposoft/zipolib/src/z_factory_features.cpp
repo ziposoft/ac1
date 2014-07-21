@@ -1,6 +1,7 @@
 #include "zipolib_cpp_pch.h"
 
 #include "zipolib/include/z_factory.h"
+#include "zipolib/include/z_parse_text.h"
 
 /*________________________________________________________________________
 
@@ -58,6 +59,31 @@ void zf_feature::display(z_file& f,void* obj)
 	}
 	f <<'\n';
 }
+ z_status zf_feature::get_zf_obj(zf_obj& out, int index,zf_obj& parent)
+ {
+	 if(!df)
+		 return zs_no_match;
+
+
+	 char* membervar=(char*)parent._obj+_offset;
+
+
+	void * subobj=df->get_sub_obj(membervar,index);
+	if(!subobj)
+	{
+		return zs_no_match; //not an object
+	}
+
+	z_factory* fact=df->get_fact_from_obj(subobj);
+	if(!fact)
+		return Z_ERROR(zs_error);			
+	out._obj=subobj;
+	out._fact=fact;
+
+	return zs_ok;
+ }
+
+
 /*________________________________________________________________________
 
 zf_action
@@ -84,9 +110,9 @@ void zf_action::display(z_file& f,void* obj)
 
 	f <<")\n";
 }
-int zf_action::execute(z_file* f,zf_obj* obj)
+int zf_action::execute(z_file* f,zf_obj& obj)
 {
-
+	z_string s;
 	if(f)
 	{
 		*f << _name<<'(';
@@ -94,19 +120,69 @@ int zf_action::execute(z_file* f,zf_obj* obj)
 	
 		for(i=0;i<_params.size();i++)
 		{
+
 			if(i)
 				*f <<',';
 			*f << _params[i]->_name;
 			*f << "=";
-			 _params[i]->df->dump(*f,pvar);
+			_params[i]->get_string_val(s,obj._obj);
+			*f<<s;
 
 		}
 
 		*f <<")\n";
 	}
 
-	int ret=obj->_fact->execute_act_ptr	(obj->_obj,_offset);
+	int ret=obj._fact->execute_act_ptr	(obj._obj,_offset);
 	return ret;
+}
+ z_status zf_action::load(zp_text_parser &parser, zf_obj& o) 
+ {
+	z_status status;
+ 	if(parser.test_char('(')==zs_ok)
+	{
+
+		size_t param_index=0;
+		while( 1)
+		{
+			z_string s;
+			if(param_index>=_params.size())
+			{
+				return Z_ERROR_MSG(zs_error,"Too many parameters\n");//???
+			}				
+			zf_feature* param=_params[param_index];
+			status=param->load(parser,o);
+			if(status)
+				break;
+			status=parser.test_char(',');
+			if(status)
+				break;
+
+			param_index++;
+		}
+		if(parser.test_char(')'))
+			return Z_ERROR_MSG(zs_error,"Expected ')'\n");//???
+	}											   
+
+	return zs_ok;//???
+ }
+
+ z_status zf_action::evaluate(zp_text_parser &parser, zf_obj& o,int index)
+ {
+	z_status status=load(parser,o);
+	if(status==zs_ok)				   
+		return 	execute(&gz_out,o);
+	return status;
+ }
+
+/*________________________________________________________________________
+
+zf_child_obj
+________________________________________________________________________*/
+zf_child_obj::zf_child_obj(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc)
+	: zf_feature(name,t,funcs,offset,desc) 
+{
+
 }
 
 
@@ -119,10 +195,39 @@ zf_prop::zf_prop(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_m
 {
 
 }
+ z_status zf_prop::get_string_val(z_string& out, void* object,int index)
+ {
+ 	void* ftr_ptr=(char*)object+_offset;
+
+  	df->get(out,ftr_ptr,index);
+	return zs_ok;
+ }
+ z_status zf_prop::load(zp_text_parser &parser, zf_obj& o) 
+ {
+	void* ftr_ptr=(char*)o._obj+_offset;
+	return df->load(parser,ftr_ptr);
+
+ }
+ z_status zf_prop::evaluate(zp_text_parser &parser, zf_obj& o,int index)
+ {
+	z_status status=load(parser,o);
+	if(parser.test_char('=')==zs_ok)
+	{
+		status=load( parser,o);
+		return status;
+	}
+	z_string str;
+	get_string_val(str,o._obj,index);
+	gz_out << _name<<"="<<str<<"\n";
+	return zs_ok;//???
+
+	
+ } 
+ 
 z_status zf_prop::set_from_value(zp_value* val,void *obj) 
 {
-			void* ftr_ptr=(char*)obj+_offset;
-			df->set_from_value(val,ftr_ptr);
+	void* ftr_ptr=(char*)obj+_offset;
+	return df->set_from_value(val,ftr_ptr);
 
 }
 

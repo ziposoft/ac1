@@ -130,6 +130,7 @@ public:
 	z_string _script_file;
 	z_string _config_file;
 	z_string _startup_path;
+	z_status get_config_file_path(z_string& path);
 
 	//command line functions
 	z_status list_features();

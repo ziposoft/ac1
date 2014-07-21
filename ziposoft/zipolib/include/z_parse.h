@@ -1,7 +1,6 @@
 #ifndef z_parse_h
 #define z_parse_h
 #include "zipolib/include/z_factory_static.h"
-#include "zipolib/include/z_factory.h"
 
 ZP_MODULE_DECLARE(parse);
 

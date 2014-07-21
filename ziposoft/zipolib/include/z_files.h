@@ -22,6 +22,7 @@ int    z_fopen(z_file_h* filep,utf8 _Filename,ascii _Mode);
 int    z_file_delete(utf8 name);
 int    z_file_exists(utf8 name);
 
+int    z_filesys_get_current_dir(utf8 dir,int length);
 int    z_change_dir(utf8 dir,int create);
 int    z_dir_create(utf8 dir_name);
 

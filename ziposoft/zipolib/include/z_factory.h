@@ -60,9 +60,9 @@ public:
 	virtual z_factory*  get_fact_from_obj(void* obj) const { return 0;}
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const { return Z_ERROR(zs_operation_not_supported);};
 
- 	virtual z_status load(zp_text_parser *parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
- 	virtual z_status assign(zp_text_parser *parser, void* v) const;
- 	virtual z_status evaluate(zp_text_parser *parser, void* v) const  {return Z_ERROR(zs_operation_not_supported);}
+ 	virtual z_status load(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
+ 	virtual z_status assign(zp_text_parser &parser, void* v) const;
+ 	virtual z_status evaluate(zp_text_parser &parser, void* v) const  {return Z_ERROR(zs_operation_not_supported);}
 
 } ;
 
@@ -144,7 +144,7 @@ public:
 	virtual void clear_all_vars(void* obj) const;
 	virtual void dump_obj(z_file& f,void* obj) const;
 	virtual void dump_obj_contents(z_file& f,void* obj) const;
-	z_status load_obj_contents(zp_text_parser *parser,void* obj) const;
+	z_status load_obj_contents(zp_text_parser &parser,void* obj) const;
 	virtual void dump_static(z_file& f) const;
 
 	virtual z_status get_list_features(z_strlist& list);
@@ -229,7 +229,7 @@ public:
 
 z_factory*  zf_get_factory(ctext name);
 z_factory*  zf_get_factory_by_type(ctext type);
-z_status zf_create_obj_from_text_stream(zp_text_parser *parser, z_factory* &factory,void* &objpointer);
+z_status zf_create_obj_from_text_stream(zp_text_parser &parser, z_factory* &factory,void* &objpointer);
 
 
 template <class CLASS> z_factory*  zf_get_factory_T()
@@ -241,58 +241,6 @@ template <class CLASS> z_factory*  zf_get_factory_T()
 
 #define zp_offsetof_class(_class_,_member_)   (size_t)&reinterpret_cast<const volatile char&>((((_class_*)0)->_member_))
 
-class zf_feature
-{
-	friend class z_factory;
-protected:
-	const zf_var_funcs_base* df;
-	z_memptr _offset;
-public:
-
-
-	zf_feature();
-	zf_feature(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
-	ctext get_map_key() { return _name; }
-
-	z_string _name;
-	z_string _description;
-
-	zf_feature_type _type;
-	void dump(z_file& f,void* obj);
-	virtual void display(z_file& f,void* obj)=0;
-
-	void* get_memvar_ptr(void* obj,int* iter=0) ;
-	virtual zf_action* get_action(){return 0;}
-   	virtual z_status set_from_value(zp_value* val,void *obj) 	 {Z_ERROR_NOT_IMPLEMENTED; 	}
-
-
-};
-class zf_action  : public  zf_feature
-{
-public:
-	zf_action(ctext name,z_memptr offset,ctext desc="");
-	z_obj_vector_map<zf_feature> _params;
-	virtual zf_action* get_action(){return this;}
-	virtual void display(z_file& f,void* obj);
-	int execute(z_file* f,zf_obj* obj);
-
-};
-
-class zf_prop  : public  zf_feature
-{
-public:
-	zf_prop(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
-	virtual void display(z_file& f,void* obj);
-	virtual z_status set_from_value(zp_value* val,void *obj) ;
-
-
-};
-class zf_alias  : public  zf_feature
-{
-public:
-	zf_feature* df;
-
-};
 extern z_factory* _pgz_factory_none;
 #define _gz_factory_none *_pgz_factory_none
 
@@ -304,15 +252,8 @@ extern z_factory* _pgz_factory_none;
 
 
 #define ZFACT(_CLASS_) ZFACT_V(_CLASS_,none) 
-#define ZFEAT(_VAR_,_TYPE_,__FUNCTYPE_)		add_prop(#_VAR_,_TYPE_,__FUNCTYPE_( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
 
-#define ZVOBJ(_VAR_) ZFEAT(_VAR_,zf_ft_obj,zp_child_vobj_funcs_get)
-#define ZPOBJ(_VAR_) ZFEAT(_VAR_,zf_ft_obj,zp_child_pobj_funcs_get)
-#define ZOBJ(_VAR_) ZFEAT(_VAR_,zf_ft_obj,zp_child_obj_funcs_get)
-#define ZPROP(_VAR_) ZFEAT(_VAR_,zf_ft_var,zp_var_funcs_get)
-
-
-
+#include "zipolib/include/z_factory_features.h"
 
 #define ZPROP_X(_VAR_,_NAME_,_DESC_)	add_prop(_NAME_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),_DESC_)
 //#define ZACT(_ACT_) add_act_T(#_ACT_,*(z_memptr*)&(&THECLASS::_ACT_) ,"");
