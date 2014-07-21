@@ -8,6 +8,7 @@
 class z_directory
 {
 	z_directory_h _hDir;
+	z_string _path;
 public:
 	z_directory(); //current directory.
 	virtual ~z_directory(); //current directory.
@@ -15,10 +16,11 @@ public:
 	void close();
 	 
 	z_status  get_files_by_extension(ctext ext,z_strlist &str);
-
+	z_status  set_to_cwdir();
 
 };
-
+z_status z_filesys_getcwd(z_string& path);
+z_status z_filesys_setcwd(z_string& path);
 
 #endif
 

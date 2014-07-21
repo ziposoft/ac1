@@ -2,7 +2,34 @@
 #include "z_filesystem.h"
 #include "z_error.h"
 
+ 
 
+z_status z_filesys_getcwd(z_string& path)
+{
+	utf8 current_dir=new char[128];
+	if(z_filesys_get_current_dir(current_dir,128))
+	{
+		return Z_ERROR_MSG(zs_error,"Could not get current directory");
+	}
+	else
+		path= current_dir;
+	delete 	current_dir;
+
+	return zs_ok;
+}
+z_status z_filesys_setcwd(z_string& path)
+{
+	int s= z_change_dir(path.c_str(),false);
+	if(s)
+		return zs_could_not_open_dir;
+	return zs_ok;
+}
+
+z_status z_directory::set_to_cwdir()
+{
+	return z_filesys_getcwd(_path);
+
+}
 z_status z_directory::open(ctext path,bool create)
 {
 	z_status status;

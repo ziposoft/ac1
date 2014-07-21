@@ -1,6 +1,7 @@
 #include "zipolib_cpp_pch.h"
 #include "z_console.h"
 #include "z_factory_static.h"
+#include "z_filesystem.h"
 
 ZFACT(z_console)
 {
@@ -31,6 +32,8 @@ z_status  z_console::runapp(int argc, char* argv[])
 {
  	z_status status;
  	z_debug_load_save_args(&argc,&argv);
+	z_filesys_getcwd(_startup_path);
+	
 
 	int i;
 	for(i=1;i<argc;i++)
@@ -110,25 +113,10 @@ z_status z_console::select_obj()
 	int index=-1;
 	if(_cmd_line_feature_index)
 		index=_cmd_line_feature_index.GetDecVal();
-	if(!f->df)
-		return zs_no_match; //not an object
-
-	char* membervar=(char*)_temp._obj+f->_offset;
 
 
-	void * subobj=f->df->get_sub_obj(membervar,index);
-	if(!subobj)
-	{
-		return zs_no_match; //not an object
-	}
+	return f->get_zf_obj(_temp,index,_temp);
 
-	z_factory* fact=f->df->get_fact_from_obj(subobj);
-	if(!fact)
-		return Z_ERROR(zs_error);			
-	_temp._obj=subobj;
-	_temp._fact=fact;
-
-	return zs_ok;
 }
 z_status z_console:: EvaluateLine(ctext text)
 {
@@ -174,8 +162,6 @@ z_status z_console:: EvaluateLine(ctext text)
 
 z_status z_console::evaluate_feature(zf_obj& o)
 {
-	z_status status;
-
 	zf_feature *zff;
 	zff=o._fact->get_feature(_cmd_line_feature);
 	if(!zff)
@@ -183,6 +169,11 @@ z_status z_console::evaluate_feature(zf_obj& o)
 	int index=-1;
 	if(_cmd_line_feature_index)
 		index=_cmd_line_feature_index.GetDecVal();
+
+
+
+	return zff->evaluate(_tparser,o);
+#if 0
 
 
 	if(zff->_type==zf_ft_act)
@@ -220,7 +211,7 @@ z_status z_console::evaluate_feature(zf_obj& o)
 
 
 
-		}
+		}											   
 
 		int ret=action->execute(&gz_out,&o);
 		return ret;//???
@@ -249,7 +240,7 @@ z_status z_console::evaluate_feature(zf_obj& o)
 
 	}
 
-
+#endif
 	return zs_ok;//???
 }
 
@@ -382,10 +373,21 @@ z_status z_console::dumpcfg()
 
 	return zs_ok;
 }
+z_status z_console::get_config_file_path(z_string& path)
+{
+	path=_startup_path;
+	path+='/';	
+	path+= _config_file;
+	return zs_ok;
+
+}
 
 z_status z_console::loadcfg()
 {
-	z_file f(_config_file,"rb");
+	z_string config_file_path;
+	get_config_file_path(config_file_path);
+
+	z_file f(config_file_path,"rb");
 	z_string data_in;
 	f.read_all(data_in);
 	zp_text_parser parser;
@@ -393,7 +395,7 @@ z_status z_console::loadcfg()
 	parser.set_source(data_in,data_in.size());
 
 
-	z_status status=_root._fact->load_obj_contents(&parser,_root._obj);
+	z_status status=_root._fact->load_obj_contents(parser,_root._obj);
 	if(status!=zs_ok)
 	{
 		Z_ERROR_MSG(status,"Load config file failed!");
@@ -419,7 +421,9 @@ z_status z_console::loadcfg()
 }
 z_status z_console::savecfg()
 {
-	z_file f(_config_file,"wb");
+	z_string config_file_path;
+	get_config_file_path(config_file_path);
+	z_file f(config_file_path,"wb");
 	_root._fact->dump_obj_contents(f,_root._obj);
 	return zs_ok;
 }

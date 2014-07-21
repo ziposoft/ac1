@@ -80,9 +80,9 @@ public:
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const ;
 	virtual zf_feature_type get_type() const { return zf_ft_var; }
 
- 	virtual z_status load(zp_text_parser *parser, void* v) const ;
- 	virtual z_status assign(zp_text_parser *parser, void* v) const ;
- 	virtual z_status evaluate(zp_text_parser *parser, void* v) const ;
+ 	virtual z_status load(zp_text_parser &parser, void* v) const ;
+ 	virtual z_status assign(zp_text_parser &parser, void* v) const ;
+ 	virtual z_status evaluate(zp_text_parser &parser, void* v) const ;
 
 };	
 class zf_funcs_obj_list_base  : public zf_var_funcs_base
@@ -96,7 +96,7 @@ public:
 	virtual void* get_ptr(void* v,int* iter ) const;
 	virtual zf_feature_type get_type() const{ return zf_ft_obj_list; }
 	virtual void* get_sub_obj(void* list,size_t index) const; 
-  	virtual z_status load(zp_text_parser *parser, void* v) const ;
+  	virtual z_status load(zp_text_parser &parser, void* v) const ;
 
 };
 
@@ -169,7 +169,7 @@ class zf_funcs_obj_base  : public zf_var_funcs_base
 {
 public:
 	virtual zf_feature_type get_type() const{ return zf_ft_obj; }
-  	virtual z_status load(zp_text_parser *parser, void* v) const ;
+  	virtual z_status load(zp_text_parser &parser, void* v) const ;
 	virtual void dump(z_file& file, void* memvar) const;
 };
 

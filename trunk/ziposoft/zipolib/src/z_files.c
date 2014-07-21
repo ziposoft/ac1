@@ -50,6 +50,15 @@ int    z_file_exists(utf8 fname)
 	
 }
 
+int z_filesys_get_current_dir(utf8 dir,int length)
+{
+	if(getcwd(dir,length)==NULL)
+		return -1;
+	return 0;
+}
+
+
+
 
 U8* z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  )
 {
