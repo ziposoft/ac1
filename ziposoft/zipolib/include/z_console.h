@@ -59,16 +59,7 @@ public:
 class z_console : public z_console_base
 {
 public:
-	z_console()
-	{
-		_self._fact=&z_factory_T<z_console>::self;
-		_self._obj=this;
-		_selected= _self;
-		_root._fact=0;
-		_root._obj=0;
-		_config_file="console.cfg";
-		_dump_cmd_line=false;
-	}
+	z_console();
  	z_status load_config_file(ctext exe_name)
 	{
 		_config_file= exe_name;

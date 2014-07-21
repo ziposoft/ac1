@@ -184,7 +184,16 @@ zf_child_obj::zf_child_obj(ctext name,zf_feature_type t,const zf_var_funcs_base*
 {
 
 }
+void zf_child_obj::display(z_file& f,void* obj)
+{
+	char* pvar=(char*)obj+_offset;
+	f.indent();
+	z_factory* fact=df->get_fact_from_obj(pvar);
 
+	f<<fact->get_name()<<" " << _name;
+
+	f <<'\n';
+}
 
 /*________________________________________________________________________
 
@@ -210,7 +219,7 @@ zf_prop::zf_prop(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_m
  }
  z_status zf_prop::evaluate(zp_text_parser &parser, zf_obj& o,int index)
  {
-	z_status status=load(parser,o);
+	z_status status;
 	if(parser.test_char('=')==zs_ok)
 	{
 		status=load( parser,o);
@@ -312,7 +321,12 @@ zf_feature* z_factory::add_prop(ctext name,zf_feature_type type,const zf_var_fun
 	init_dynamic().features.add(feat);
 	return feat;
 }
-
+zf_child_obj* z_factory::add_obj(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr offset,ctext desc)
+{
+	zf_child_obj* feat=z_new	zf_child_obj(name,type,f,offset,desc);
+	init_dynamic().features.add(feat);
+	return feat;
+}
 
 
 /*________________________________________________________________________
