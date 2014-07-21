@@ -28,11 +28,23 @@ ZFACT(z_console)
 
 z_console
 ________________________________________________________________________*/
+
+z_console::z_console()
+{
+	_self._fact=&z_factory_T<z_console>::self;
+	_self._obj=this;
+	_selected= _self;
+	_root._fact=0;
+	_root._obj=0;
+	_config_file="console.cfg";
+	_dump_cmd_line=false;
+	z_filesys_getcwd(_startup_path);
+}
+
 z_status  z_console::runapp(int argc, char* argv[])
 {
  	z_status status;
  	z_debug_load_save_args(&argc,&argv);
-	z_filesys_getcwd(_startup_path);
 	
 
 	int i;
@@ -40,8 +52,12 @@ z_status  z_console::runapp(int argc, char* argv[])
 	{
 
 		status=ExecuteLine(argv[i]);
+
 		if(status)
+		{
+			Z_ERROR_MSG(status,"command failed: \"%s\"",argv[i]);
 			z_logger_dump();
+		}
 
 
 
@@ -173,74 +189,7 @@ z_status z_console::evaluate_feature(zf_obj& o)
 
 
 	return zff->evaluate(_tparser,o);
-#if 0
 
-
-	if(zff->_type==zf_ft_act)
-	{
-		zf_action* action=zff->get_action();
-		if(!action)
-		{
-			return Z_ERROR_MSG(zs_error,"Action not an action\n");//???
-		}
-		if(_tparser.test_char('(')==zs_ok)
-		{
-
-			size_t param_index=0;
-			while( 1)
-			{
-				z_string s;
-				if(param_index>=action->_params.size())
-				{
-					return Z_ERROR_MSG(zs_error,"Too many parameters\n");//???
-				}				
-				zf_feature* param=action->_params[param_index];
-				void* ftr_ptr=(char*)o._obj+param->_offset;
-				status=param->df->load(&_tparser,ftr_ptr);
-				if(status)
-					break;
-				status=_tparser.test_char(',');
-				if(status)
-					break;
-
-				param_index++;
-			}
-			
-				if(_tparser.test_char(')'))
-					return Z_ERROR_MSG(zs_error,"Expected ')'\n");//???
-
-
-
-		}											   
-
-		int ret=action->execute(&gz_out,&o);
-		return ret;//???
-	}
-	void* membervar=zff->get_memvar_ptr(o._obj);
-	if(!membervar)
-		return Z_ERROR(zs_feature_not_found);
-
-	if(_tparser.test_char('=')==zs_ok)
-	{
-		if(!zff->df)
-			return Z_ERROR_MSG(zs_error,"Cannot assign value to function\n");//???
-
-		status=zff->df->load( &_tparser,membervar);
-		return status;
-	}
-	if(!zff->df)
-		return Z_ERROR(zs_error);//???
-
-	if(zff->df->get_type()==zf_ft_var)
-	{
-		z_string str;
-		zff->df->get(str,membervar,index);
-		gz_out << zff->_name<<"="<<str<<"\n";
-		return zs_ok;//???
-
-	}
-
-#endif
 	return zs_ok;//???
 }
 
@@ -325,6 +274,7 @@ z_status z_console:: ExecuteLine(ctext text)
 	if(status==zs_ok)
 		return 	zs_ok;
 	status=evaluate_feature(_temp);
+	Z_ERROR_MSG(status,"\"%s\" not a feature of \"%s\"",_cmd_line_feature.c_str(),_path.c_str());
 
 	return status;
 }
@@ -400,24 +350,15 @@ z_status z_console::loadcfg()
 	{
 		Z_ERROR_MSG(status,"Load config file failed!");
  		z_logger_dump();
-		return status;
+		// return status;   - still set the path, just in case it got loaded
 	}
 
-#if 0 //Old Way
-	z_status status=_parser.parse_obj(&cfg,data_in);
-	if(status!=zs_ok)
-	{
-		_parser.report_error();
-		return status;
-	}
-	cfg.load_obj(_root._obj,_root._fact);
-#endif
 
 	select_obj_from_path(_root,_path);
 	_selected=_temp;
 	//cfg._obj.get_by_name(
 
-	return zs_ok;
+	return status;
 }
 z_status z_console::savecfg()
 {

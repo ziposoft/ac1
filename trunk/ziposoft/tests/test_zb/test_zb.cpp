@@ -10,35 +10,97 @@ public:
 	source()
 	{
 		dbname="default.db";
+		_newtblname="table1";
 		p_ds=new zb_ds_text();
+		_ptbl=0;
 	}
 	virtual ~source()
 	{
-		p_ds->close();
+		close();
 		delete p_ds;
 	}
 	zb_source* p_ds;
+	zb_ds_table* _ptbl;
 
 	z_string dbname;
 
 	z_string _newtblname;
 	int open()
 	{
-		p_ds->open(dbname,true,true);
+		z_status s=p_ds->open(dbname,true,true);
+		printf(" db open\n");
+		return s;
+	}
+	int dumpdata()
+	{
+		z_status status;
 
-		return 0;
+		status=_ptbl->open(true);
+		if(status)
+			break;
+		
+		size_t count=tbl->get_record_count();
+
+		printf("count=%d\n",count);
+
+		for (i=0;i<3;i++)
+		{
+			if(count>i)
+			{
+				status=tbl->get_record_by_index(i,&ptr);
+				if(status)
+				{
+					gz_out << "get_record_by_index failed:"<<i<<"\n";
+					break;
+				}
+				if(!ptr)
+				{
+					gz_out << "could not get record"<<i<<"\n";
+					break;
+				}
+
+				fld->get_string(ptr,data);
+				gz_out <<  "record"<<i<<":"<< data <<"\n";
+			}
+		}
+
+	}
+	int adddata()
+	{
+		z_status status;
+		zb_ds_rec_ptr* pRec=0;
+		zb_ds_field* fld=0;
+		zb_ds_field* fld2=0;
+		zb_ds_rec_ptr* ptr=0;
+		z_string data;
+		pRec=p_ds->record_solo_new();
+		
+		if(!pRec)
+			break;
+		data="record number";
+		data <<count;
+		status=fld->set_string(pRec,data);
+		if(status)
+			break;
+		status=fld2->set_string(pRec,"teabag");
+		if(status)
+			break;
+		status=tbl->record_add(pRec);
+		if(status)
+			break;
+		status=p_ds->commit();
+
+		return s;
 	}
 	int close()
 	{
+		z_status status=p_ds->commit();
 		return p_ds->close();
 	}	
 	
 	int addtable()
 	{
-		zb_ds_table* tbl=0;
-		tbl=  p_ds->ds_table_new(_newtblname);
-	
-
+		_ptbl=  p_ds->ds_table_new(_newtblname);
 
 		return 0;
 	}
@@ -62,8 +124,10 @@ public:
 
 ZFACT(source)
 {
-	ZACT_XP(addtable,"addtable","desc",1,ZPARAM(_newtblname));
-	ZACT_XP(open,"opendb","desc",1,ZPARAM(dbname));
+	ZACT_XP(addtable,"addtable","desc",1,
+		ZPARAM_X(_newtblname,"table_name","Name of new table"));
+	ZACT_XP(open,"opendb","desc",1,
+		ZPARAM_X(dbname,"db_name","Name of DB to open"));
 	ZACT(close);
 
 	/*

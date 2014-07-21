@@ -40,6 +40,7 @@ enum zf_feature_type
 class z_factory;
 class zp_value;
 class zf_action;
+class zf_child_obj;
 class zp_text_parser;
 
 
@@ -155,6 +156,7 @@ public:
 
 	virtual zf_action* add_act(ctext name,z_memptr act_addr,ctext desc); 
 	virtual zf_feature* add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
+	virtual zf_child_obj* add_obj(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
 	zf_feature* get_feature(ctext name) ;
 
 };
@@ -254,15 +256,6 @@ extern z_factory* _pgz_factory_none;
 #define ZFACT(_CLASS_) ZFACT_V(_CLASS_,none) 
 
 #include "zipolib/include/z_factory_features.h"
-
-#define ZPROP_X(_VAR_,_NAME_,_DESC_)	add_prop(_NAME_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),_DESC_)
-//#define ZACT(_ACT_) add_act_T(#_ACT_,*(z_memptr*)&(&THECLASS::_ACT_) ,"");
-#define ZPARAM_X(_VAR_,_NAME_,_DESC_) ZPROP_X(_VAR_,_NAME_,_DESC_)
-#define ZPARAM(_VAR_) ZPROP(_VAR_)
-
-#define ZACT_X(_ACT_,_NAME_,_DESC_) {fn_act _func_##_ACT_=&THECLASS::_ACT_;add_act(_NAME_,*(z_memptr*)(&_func_##_ACT_) ,_DESC_);}
-#define ZACT(_ACT_) ZACT_X(_ACT_,#_ACT_,"")
-#define ZACT_XP(_ACT_,_NAME_,_DESC_,_N_,...) {fn_act _func_##_ACT_=&THECLASS::_ACT_;add_act_params(_NAME_,*(z_memptr*)(&_func_##_ACT_) ,_DESC_,_N_,__VA_ARGS__);}
 
 #endif
 
