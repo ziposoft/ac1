@@ -162,9 +162,27 @@ ZFACT_V(z_binary_file,z_intf_random_access)
 	
 
 };
+class dog
+{
+public:
+	dog()
+	{
+		_name="george";
+	}
+	dog(ctext name)
+	{
+		_name=name;
+	}
+	z_string _name;
+	ctext get_map_key() { return _name.c_str(); }
+
+};
+ZFACT(dog)
+{
+	ZPROP(_name);
 
 
-
+};
 
 class root
 {
@@ -177,10 +195,13 @@ public:
 		i=27;
 		_p_logger=&gz_logger;
 
+		dogs << new dog("fido")<< new dog("jorge");
+
 	}
 	z_console console;
 	z_logger* _p_logger;
 	z_binary_file binfile;
+	z_obj_vector_map <dog> dogs;
 	z_strlist x;
 	int i;
 	z_string s;
@@ -194,6 +215,7 @@ ZFACT(root)
 	ZOBJ(console);
 	ZOBJ(binfile);
 	ZPOBJ(_p_logger);
+	ZPROP(dogs);
 	ZPROP(x);
 	ZPROP(i);
 	ZACT(add);

@@ -42,6 +42,18 @@ z_status zb_ds_text::open(ctext name,bool create,bool writable)
 
 	 return 0;
 }
+
+z_status zb_ds_text::get_table_list(z_obj_vector_map<zb_ds_table> & list)
+{
+	z_map_iter i;
+	zb_ds_table_txt* tbl=0;
+	while((tbl=	_tables.get_next(i)))
+	{
+		list<<tbl;
+	}
+
+}
+
 z_status zb_ds_text::close()
 {
 	 return Z_ERROR_NOT_IMPLEMENTED;
