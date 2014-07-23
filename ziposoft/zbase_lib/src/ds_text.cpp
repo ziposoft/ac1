@@ -51,6 +51,7 @@ z_status zb_ds_text::get_table_list(z_obj_vector_map<zb_ds_table> & list)
 	{
 		list<<tbl;
 	}
+	 return 0;
 
 }
 
