@@ -34,7 +34,7 @@ public:
 class zb_ds_text: public zb_source
 {
 	z_directory _dir;
-	z_map_obj<zb_ds_table_txt> _tables;
+	z_obj_map<zb_ds_table_txt> _tables;
 
 public:
 	zb_ds_text();

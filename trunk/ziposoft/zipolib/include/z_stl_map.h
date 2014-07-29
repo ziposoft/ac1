@@ -132,8 +132,8 @@ public:
 	{
 		key=0;
 	};
-	z_map_iterator i;
 	ctext key;
+	z_map_iterator i;
 };
 
 template <class ITEM_CLASS > class z_map 
@@ -207,29 +207,6 @@ public:
 		if(i==_map.end()) return false;
 		_map.erase(i);
 		return true;
-	}
-};
-template <class ITEM_CLASS > class z_map_obj  : public z_map<ITEM_CLASS> 
-{
-public:
-
-	virtual void init_child(ITEM_CLASS *obj)
-	{
-
-	}
-	virtual z_map_obj<ITEM_CLASS> & operator , (ITEM_CLASS *obj)
-	{
- 		Z_ASSERT(obj);
-		this->add(obj->get_map_key(),obj); 
-		init_child(obj);
-		return *this;
-	}
-	virtual z_map_obj<ITEM_CLASS> & operator << (ITEM_CLASS *obj)
-	{
- 		Z_ASSERT(obj);
-		this->add(obj->get_map_key(),obj); 
-		init_child(obj);
-		return *this;
 	}
 };
 

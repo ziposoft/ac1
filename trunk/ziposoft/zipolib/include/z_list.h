@@ -15,7 +15,7 @@ ________________________________________________________________________*/
 \*_______________________________________________________________________*/
 #include "zipolib/include/zipo.h"
 #include "zipolib/include/z_string.h"
-#include "zipolib/include/z_stl_map.h"
+#include "zipolib/include/z_obj_list.h"
 #include "zipolib/include/z_list.h"
 
 class z_file;

@@ -23,7 +23,7 @@ public:
 	virtual z_status get_int32(zb_ds_rec_ptr *rec,I32& i);
 
 };
-class zb_ds_desc : public z_map_obj<zb_ds_field>,public z_refcount
+class zb_ds_desc : public z_obj_map<zb_ds_field>,public z_refcount
 {
 public:
 	zb_ds_desc(){}
@@ -130,7 +130,7 @@ public:
 	virtual zb_ds_field* ds_field_int32_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
 	virtual zb_ds_rec_ptr* record_solo_new(){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
 
-	z_map_obj<zb_ds_table> _ds_tables;
+	z_obj_map<zb_ds_table> _ds_tables;
 
 	virtual z_status get_table_list(z_obj_vector_map<zb_ds_table> & list){ return Z_ERROR_NOT_IMPLEMENTED;};
 

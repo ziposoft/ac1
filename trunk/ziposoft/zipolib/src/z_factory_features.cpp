@@ -11,15 +11,13 @@ zf_feature::zf_feature()
 {
 	df=0;
 	_offset=0;
-	_type=zf_ft_none;
 
 }
-zf_feature::zf_feature(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc) 
+zf_feature::zf_feature(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc) 
 {
 	_name=name;
 	df=funcs;
 	_offset=offset;
-	_type=t;
 	_description=desc;
 
 }
@@ -27,10 +25,7 @@ zf_feature::zf_feature(ctext name,zf_feature_type t,const zf_var_funcs_base* fun
 void* zf_feature::get_memvar_ptr(void* obj,int* iter)
 {
 	char* pvar=(char*)obj+_offset;
-	/*
-	if(df)
-		return df->get_ptr(pvar,iter);
-		*/
+
 	return pvar;
 
 
@@ -82,13 +77,26 @@ void zf_feature::display(z_file& f,void* obj)
 
 	return zs_ok;
  }
+ /*________________________________________________________________________
+
+zf_list
+________________________________________________________________________*/
+zf_list::zf_list(ctext name,const zf_funcs_obj_list_base* funcs,z_memptr offset,ctext desc)
+{
+
+}
+void zf_list::display(z_file& f,void* obj)
+{
+	char* plist=(char*)obj+_offset;
+
+}
 
 
 /*________________________________________________________________________
 
 zf_action
 ________________________________________________________________________*/
-zf_action::zf_action(ctext name,z_memptr offset,ctext desc) : zf_feature(name,zf_ft_act,0,offset,desc) 
+zf_action::zf_action(ctext name,z_memptr offset,ctext desc) : zf_feature(name,0,offset,desc) 
 {
 
 }
@@ -179,8 +187,8 @@ int zf_action::execute(z_file* f,zf_obj& obj)
 
 zf_child_obj
 ________________________________________________________________________*/
-zf_child_obj::zf_child_obj(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc)
-	: zf_feature(name,t,funcs,offset,desc) 
+zf_child_obj::zf_child_obj(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc)
+	: zf_feature(name,funcs,offset,desc) 
 {
 
 }
@@ -199,8 +207,8 @@ void zf_child_obj::display(z_file& f,void* obj)
 
 zf_prop
 ________________________________________________________________________*/
-zf_prop::zf_prop(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc)
-	: zf_feature(name,t,funcs,offset,desc) 
+zf_prop::zf_prop(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc)
+	: zf_feature(name,funcs,offset,desc) 
 {
 
 }
@@ -272,11 +280,15 @@ z_factory_dyn& z_factory::init_dynamic()
 	{
 		const zf_var_entry* ent=0;
 		const zf_var_funcs_base* funcs=0;
+		zf_feature_type type;
 
 		ent=_get_var_entry(index);
-		if(ent->fp_var_func_get) 
-			funcs=ent->fp_var_func_get();
-		switch(ent->type)
+		Z_ASSERT(ent);
+		Z_ASSERT(ent->fp_var_func_get);
+		funcs=ent->fp_var_func_get();
+		type=funcs->get_type();
+
+		switch(type)
 		{
 		case zf_ft_act:
 			add_act(ent->name,(z_memptr)ent->offset,"?");
@@ -285,7 +297,7 @@ z_factory_dyn& z_factory::init_dynamic()
 		case zf_ft_param:
 		case zf_ft_var:
 		case zf_ft_obj_list:
-			add_prop(ent->name,ent->type,funcs,(z_memptr)ent->offset,"?");
+			add_prop(ent->name,funcs,(z_memptr)ent->offset,"?");
 		default:
 			Z_ERROR_MSG(zs_error,"Unknown feature type: %d",ent->type);
 			break;
@@ -315,19 +327,26 @@ zf_action* z_factory::add_act_params(ctext name,z_memptr act_addr,ctext desc,int
 	return action;
 }
 
-zf_feature* z_factory::add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr offset,ctext desc)
+zf_feature* z_factory::add_prop(ctext name,const zf_var_funcs_base* f,z_memptr offset,ctext desc)
 {
-	zf_feature* feat=z_new	zf_prop(name,type,f,offset,desc);
+	zf_feature* feat=z_new	zf_prop(name,f,offset,desc);
 	init_dynamic().features.add(feat);
 	return feat;
 }
-zf_child_obj* z_factory::add_obj(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr offset,ctext desc)
+zf_child_obj* z_factory::add_obj(ctext name,const zf_var_funcs_base* f,z_memptr offset,ctext desc)
 {
-	zf_child_obj* feat=z_new	zf_child_obj(name,type,f,offset,desc);
+	zf_child_obj* feat=z_new	zf_child_obj(name,f,offset,desc);
 	init_dynamic().features.add(feat);
 	return feat;
 }
 
+
+zf_list* z_factory::add_list(ctext name,const zf_funcs_obj_list_base* f,z_memptr offset,ctext desc)
+{
+	zf_list* feat=z_new	zf_list(name,f,offset,desc);
+	init_dynamic().features.add(feat);
+	return feat;
+}
 
 /*________________________________________________________________________
 

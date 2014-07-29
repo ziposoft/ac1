@@ -1063,7 +1063,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 						_ctx_current->_obj,
 						_ctx_current->_member_var_name,
 						&sub_obj, 
-						&_ctx_current->_output_obj_index);
+						_ctx_current->_output_obj_iter);
 					if(!sub_obj)
 						return zs_no_match;
 					
@@ -1073,7 +1073,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 					/*
 					void* obj=
 						_ctx_current->_obj->get_child_by_offset(
-						_ctx_current->_output_obj_index,
+						_ctx_current->_output_obj_iter,
 						context_get_current_template_parser().get_index_offset(),
 						0
 						);

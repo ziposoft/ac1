@@ -39,10 +39,13 @@ enum zf_feature_type
 };
 class z_factory;
 class zp_value;
+class zf_list;
 class zf_action;
 class zf_child_obj;
 class zp_text_parser;
+class zf_funcs_obj_list_base;
 
+class zf_feature;
 
 class zf_var_funcs_base
 {
@@ -55,7 +58,7 @@ public:
 	virtual void add(void* list,void* obj) const {} 
 	virtual void* get_sub_obj(void* list,size_t index) const { return 0;} 
 	virtual size_t get_size(void* list) const { return 0;} 
-	virtual void* get_ptr(void* var,int* iter) const { return var;}  /*could be pointer to obj, or pointer to obj pointer */
+	virtual void* get_ptr(void* var,z_obj_list_iter& iter) const { return var;}  /*could be pointer to obj, or pointer to obj pointer */
 	//This is if the member var is an obj, pointer to obj, or obj list		
 	virtual void* create_obj(void* var,z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
 	virtual z_factory*  get_fact_from_obj(void* obj) const { return 0;}
@@ -64,11 +67,10 @@ public:
  	virtual z_status load(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
  	virtual z_status assign(zp_text_parser &parser, void* v) const;
  	virtual z_status evaluate(zp_text_parser &parser, void* v) const  {return Z_ERROR(zs_operation_not_supported);}
-
+	virtual zf_feature* get_feature();
 } ;
 
-class zf_feature;
-class zf_feature_list : public z_map_obj<zf_feature>
+class zf_feature_list : public z_obj_map<zf_feature>
 {
 
 
@@ -138,7 +140,7 @@ public:
 
 	virtual z_status create_child(void* obj,ctext var_name,z_factory* new_child_type,void** ppChild) const;
 
-	virtual z_status get_child_obj_ptr(void* obj,ctext var_name,void** ppChild,int* iter=0) const;
+	virtual z_status get_child_obj_ptr(void* obj,ctext var_name,void** ppChild,z_obj_list_iter& iter) const;
 	virtual z_status get_var_ptr(void* obj,ctext var_name,void** ppChild,int* iter=0) const;
 	virtual z_status set_var_as_string(void* obj,ctext var_name,ctext value) const;
 	virtual z_status get_var_as_string(void* obj,ctext var_name,z_string& value) const;
@@ -155,8 +157,9 @@ public:
 	virtual zf_action* add_act_params(ctext name,z_memptr act_addr,ctext desc,int num_params,...) ;
 
 	virtual zf_action* add_act(ctext name,z_memptr act_addr,ctext desc); 
-	virtual zf_feature* add_prop(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
-	virtual zf_child_obj* add_obj(ctext name,zf_feature_type type,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
+	virtual zf_feature* add_prop(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
+	virtual zf_child_obj* add_obj(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
+	virtual zf_list* add_list(ctext name,const zf_funcs_obj_list_base* f,z_memptr act_addr,ctext desc); 
 	zf_feature* get_feature(ctext name) ;
 
 };

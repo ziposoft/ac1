@@ -282,14 +282,13 @@ ________________________________________________________________________*/
 void zf_funcs_obj_list_base::clear(void* v) const 
 {
 
-	z_obj_vector_base* plist=get_list(v);
+	z_obj_list_base* plist=get_list(v);
 	Z_ASSERT(plist);
-	size_t count=plist->size();
-	size_t i;
-	for(i=0;i<count;i++)
+	z_obj_list_iter i;
+	void* p;
+	while((p=plist->get_next(i)))
 	{
-		void* p=plist->get_void(i);
-		get_fact()->delete_obj(p);
+		get_list_obj_fact()->delete_obj(p);
 	}
 	plist->clear();
 
@@ -297,7 +296,7 @@ void zf_funcs_obj_list_base::clear(void* v) const
 
 void* zf_funcs_obj_list_base::get_sub_obj(void* v,size_t index ) const
 {
-	z_obj_vector_base* plist=get_list(v);
+	z_obj_list_base* plist=get_list(v);
 	if(!plist)
 	{
 		Z_ERROR(zs_bad_parameter);
@@ -311,36 +310,22 @@ void* zf_funcs_obj_list_base::get_sub_obj(void* v,size_t index ) const
 	return plist->get_void(index);
 }
 
-void* zf_funcs_obj_list_base::get_ptr(void* v,int* iter ) const
+void* zf_funcs_obj_list_base::get_ptr(void* v,z_obj_list_iter& iter ) const
 {
-	z_obj_vector_base* plist=get_list(v);
+	z_obj_list_base* plist=get_list(v);
 	if(!plist)
 	{
 		//this will never happen because it is a static cast
 		//Z_ERROR_MSG(zs_bad_parameter,"Objects type does not match member variable");
 		return 0;
 	}
-	int index=0;
-	if(iter)
-	{
-		if(*iter==-1)
-			*iter=0;
-		else 
-		{
-			(*iter)++;
-			if(*iter>=(int)plist->size())
-			{
-				*iter=-1;
-				return 0;
-			}
-		}
-		index=*iter;
-	}
-	return plist->get_void(index);
+
+	return plist->get_next(iter);
 }
 void zf_funcs_obj_list_base::dump(z_file& f, void* v) const 
 {
-	z_obj_vector_base* plist=get_list(v);
+	z_obj_list_base* plist=get_list(v);
+	z_obj_list_iter iter;
 
 	size_t count=plist->size();
 	if(!count)
@@ -348,12 +333,11 @@ void zf_funcs_obj_list_base::dump(z_file& f, void* v) const
 		f << "{}";
 		return;
 	}
-	size_t i;
 	f << "{\n";
 	f.indent_inc();
-	for(i=0;i<count;i++)
+	void* p;
+	while((p=plist->get_next(iter)))
 	{
-		void* p= plist->get_void(i);
 		get_fact_from_obj(p)->dump_obj(f,p);
 	}
 	f.indent_dec();
@@ -362,7 +346,7 @@ void zf_funcs_obj_list_base::dump(z_file& f, void* v) const
 }
 z_status zf_funcs_obj_list_base::load(zp_text_parser &parser, void* v) const 
 {
-	z_obj_vector_base* plist=get_list(v);
+	z_obj_list_base* plist=get_list(v);
 	plist->clear();
 	z_status status=zs_ok;
 	parser.skip_ws();
@@ -415,3 +399,9 @@ template class zf_var_funcs<int>;
 template class zf_var_funcs<bool>;
 template class zf_var_funcs<z_strlist>;
 template class zf_var_funcs<zp_obj_vector>;
+
+const zf_var_funcs_base* zp_act_funcs_get()
+{
+	static const zf_var_funcs_act f;
+	return &f;
+};

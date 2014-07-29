@@ -11,8 +11,8 @@
 #include "zipolib/include/z_string.h"
 #include "zipolib/include/z_type_converter.h"
 #include "zipolib/include/z_file.h"
-#include "zipolib/include/z_stl_list.h"
-#include "zipolib/include/z_stl_map.h"
+
+#include "zipolib/include/z_obj_list.h"
 #include "zipolib/include/z_list.h"
 #include "zipolib/include/z_logger.h"
 

@@ -195,13 +195,15 @@ public:
 		i=27;
 		_p_logger=&gz_logger;
 
-		dogs << new dog("fido")<< new dog("jorge");
+		dog_vect << new dog("fido")<< new dog("jorge");
+		dog_map << new dog("ralph")<< new dog("dooright");
 
 	}
 	z_console console;
 	z_logger* _p_logger;
 	z_binary_file binfile;
-	z_obj_vector_map <dog> dogs;
+	z_obj_vector_map <dog> dog_vect;
+	z_obj_map  <dog> dog_map;
 	z_strlist x;
 	int i;
 	z_string s;
@@ -215,7 +217,8 @@ ZFACT(root)
 	ZOBJ(console);
 	ZOBJ(binfile);
 	ZPOBJ(_p_logger);
-	ZPROP(dogs);
+	ZPROP(dog_vect);
+	ZPROP(dog_map);
 	ZPROP(x);
 	ZPROP(i);
 	ZACT(add);

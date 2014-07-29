@@ -117,7 +117,7 @@ public:
 	z_factory* _obj_factory;
 	zp_text_parser _current_template_parser;
 	//U32 _output_result_index;
-	int _output_obj_index;
+	z_obj_list_iter _output_obj_iter;
 	
 	//current stage
 	zp_flags _flags;
