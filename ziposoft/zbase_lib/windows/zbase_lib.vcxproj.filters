@@ -97,5 +97,8 @@
     <ClInclude Include="..\include\datum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\zipolib\include\z_obj_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

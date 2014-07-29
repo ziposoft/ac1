@@ -11,7 +11,7 @@
 
 #define NOFTR
 #define POBJ(_VAR)  const zf_var_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_child_pobj_funcs_get(nullobj->_VAR); }
-#define LIST(_VAR)  const zf_var_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_var_list_funcs(nullobj->_VAR); }
+#define LIST(_VAR)  const zf_var_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_var_funcs_list_vect(nullobj->_VAR); }
 #define OBJ(_VAR)  const zf_var_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_child_obj_funcs_get(nullobj->_VAR); }
 #define VAR(_VAR)  const zf_var_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_var_funcs_get(nullobj->_VAR); }
 #define ZCLS(_CLASS_,_BASE_,_NAME_,_PARSE_,_EXTRA_) namespace Z_PARSE_NS(_CLASS_) { _CLASS_* nullobj=0;	_EXTRA_ }
@@ -51,7 +51,7 @@ ZO_OBJ_LIST;
 #define VAR(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_var,__zp_var_funcs_get_##_VAR },
 #define POBJ(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_obj,__zp_var_funcs_get_##_VAR },
 #define OBJ(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_obj,__zp_var_funcs_get_##_VAR },
-#define ACT(_VAR)  { #_VAR, *(z_memptr*)&act_##_VAR,zf_ft_act,0 },
+#define ACT(_VAR)  { #_VAR, *(z_memptr*)&act_##_VAR,zf_ft_act,zp_act_funcs_get },
 
 #define ZCLS(_CLASS_,_BASE_,_NAME_,_PARSE_,_EXTRA_) \
 	namespace Z_PARSE_NS(_CLASS_) {typedef  _CLASS_ THECLASS; const zf_var_entry varlist[]={ _EXTRA_ }; const size_t varlist_length=sizeof( varlist)/sizeof(	zf_var_entry);  }	 \

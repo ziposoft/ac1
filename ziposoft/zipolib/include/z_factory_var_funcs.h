@@ -62,7 +62,12 @@ public:
 
 };
 
+class zf_var_funcs_act : public zf_var_funcs_base
+{
+public:
+	virtual zf_feature_type get_type()const { return zf_ft_act; } 
 
+};
 /*
 This interface manipulates simple member variables 
 */
@@ -90,10 +95,10 @@ class zf_funcs_obj_list_base  : public zf_var_funcs_base
 public:
 	virtual void clear(void* v) const;
 
-	virtual z_factory* get_fact() const=0;
-	virtual z_obj_vector_base* get_list(void * v) const=0;
+	virtual z_factory* get_list_obj_fact() const=0;
+	virtual z_obj_list_base* get_list(void * v) const=0;
 	void dump(z_file& f, void* v) const;
-	virtual void* get_ptr(void* v,int* iter ) const;
+	virtual void* get_ptr(void* v,z_obj_list_iter& iter ) const;
 	virtual zf_feature_type get_type() const{ return zf_ft_obj_list; }
 	virtual void* get_sub_obj(void* list,size_t index) const; 
   	virtual z_status load(zp_text_parser &parser, void* v) const ;
@@ -102,10 +107,10 @@ public:
 
 /*
 WARNING- overloaded funcs must match exactly! otherwise they will quietly not be called */
-template <class TYPE >  class zp_var_list_funcs  : public zf_funcs_obj_list_base
+template <class TYPE >  class zf_funcs_obj_list_base_t  : public zf_funcs_obj_list_base
 {
 public:
-	virtual z_factory* get_fact()	const
+	virtual z_factory* get_list_obj_fact()	const
 	{
 		return &z_factory_T<TYPE>::self;
 	}
@@ -118,7 +123,7 @@ public:
 		return obj;
 	}
 
-	virtual z_obj_vector_base* get_list(void* v ) const
+	virtual z_obj_list_base* get_list(void* v ) const
 	{
 		z_obj_vector<TYPE>* list= reinterpret_cast<z_obj_vector<TYPE>*>(v);
 		return list;
@@ -165,6 +170,14 @@ public:
 		return zf_get_factory_by_type(typetext);
 	}
 };
+template <class TYPE >  class zp_var_funcs_list_vect  : public zf_funcs_obj_list_base_t<TYPE>
+{
+
+};
+template <class TYPE >  class zp_var_funcs_list_map  : public zf_funcs_obj_list_base_t<TYPE>
+{
+
+};
 class zf_funcs_obj_base  : public zf_var_funcs_base
 {
 public:
@@ -195,7 +208,7 @@ public:
 		return var;
 	}
 	virtual void* get_sub_obj(void* var,size_t index) const { return  var;} 
-	virtual void* get_ptr(void* var,int* iter ) const
+	virtual void* get_ptr(void* var,z_obj_list_iter& iter) const
 	{
 		return var;
 	}
@@ -245,7 +258,7 @@ public:
 	}
 
 
-	virtual void* get_ptr(void* var,int* iter ) const
+	virtual void* get_ptr(void* var,z_obj_list_iter& iter ) const
 	{
 		void** ppObj=reinterpret_cast<void**>(var); 
 		return *ppObj;
@@ -327,7 +340,7 @@ public:
 	virtual void get(z_string& s, void* v,int index=0) const;
 	virtual void set(ctext  s, void* v,int index=0) const;
 };
-
+const zf_var_funcs_base* zp_act_funcs_get();
 template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(VAR& item)
 {
 	static const zf_var_funcs<VAR> f;
@@ -335,13 +348,17 @@ template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(VAR& item)
 };
 template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(z_obj_vector<VAR>& list)
 {
-	static const zp_var_list_funcs<VAR> f;
+	static const zp_var_funcs_list_vect<VAR> f;
 	return &f;
 };
 template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(z_obj_vector_map<VAR>& list)
 {
-	static const zp_var_list_funcs<VAR> f;
+	static const zp_var_funcs_list_vect<VAR> f;
 	return &f;
 };
-
+template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(z_obj_map<VAR>& list)
+{
+	static const zp_var_funcs_list_map<VAR> f;
+	return &f;
+};
 #endif

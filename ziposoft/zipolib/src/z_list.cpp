@@ -1,6 +1,13 @@
 #include "zipolib_cpp_pch.h"
 #include "z_list.h"
 #include "z_file.h"
+#include "z_obj_list.h"
+
+
+
+
+
+
 void z_strlist::dump(z_file &out)
 {
 	size_t  i;

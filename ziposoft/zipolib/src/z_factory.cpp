@@ -34,11 +34,11 @@ z_status z_factory::get_var_ptr(void* obj,ctext var_name,void** ppChild,int* ite
 		return status;
 	char* pvar=(char*)obj+offset;
 
-	*ppChild=pvar;//funcs->get_ptr(pvar,iter);
+	*ppChild=pvar;
 	return zs_success;
 
 }
-z_status z_factory::get_child_obj_ptr(void* obj,ctext var_name,void** ppChild,int* iter) const
+z_status z_factory::get_child_obj_ptr(void* obj,ctext var_name,void** ppChild,z_obj_list_iter& iter) const
 {
 	z_memptr offset;
 	const zf_var_funcs_base* funcs;
@@ -258,7 +258,7 @@ z_status z_factory::get_map_features(zf_feature_list&  list,zf_feature_type desi
 		p_feature=	   _dynamic->features[i];
 		if(desired_type	!=zf_ft_all)
 		{
-			if(	desired_type!=	p_feature->_type)
+			if(	desired_type!=	p_feature->get_type())
 				continue;
 
 		}

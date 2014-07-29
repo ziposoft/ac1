@@ -133,6 +133,9 @@
     <ClInclude Include="include\z_factory_features.h">
       <Filter>factory</Filter>
     </ClInclude>
+    <ClInclude Include="include\z_obj_list.h">
+      <Filter>container</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\z_time.c">

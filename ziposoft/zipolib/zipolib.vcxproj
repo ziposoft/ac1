@@ -94,6 +94,7 @@
     <ClInclude Include="include\z_logger.h" />
     <ClInclude Include="include\z_ntf.h" />
     <ClInclude Include="include\z_obj.inc" />
+    <ClInclude Include="include\z_obj_list.h" />
     <ClInclude Include="include\z_os_specific.h" />
     <ClInclude Include="include\z_parse.h" />
     <ClInclude Include="include\z_parse_internal.h" />

@@ -13,7 +13,7 @@ ________________________________________________________________________*/
 
 
 
-#define ZPROP_X(_VAR_,_NAME_,_DESC_)	add_prop(_NAME_,zf_ft_var,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),_DESC_)
+#define ZPROP_X(_VAR_,_NAME_,_DESC_)	add_prop(_NAME_,zp_var_funcs_get( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),_DESC_)
 //#define ZACT(_ACT_) add_act_T(#_ACT_,*(z_memptr*)&(&THECLASS::_ACT_) ,"");
 #define ZPARAM_X(_VAR_,_NAME_,_DESC_) ZPROP_X(_VAR_,_NAME_,_DESC_)
 #define ZPARAM(_VAR_) ZPROP(_VAR_)
@@ -23,13 +23,15 @@ ________________________________________________________________________*/
 #define ZACT_XP(_ACT_,_NAME_,_DESC_,_N_,...) {fn_act _func_##_ACT_=&THECLASS::_ACT_;add_act_params(_NAME_,*(z_memptr*)(&_func_##_ACT_) ,_DESC_,_N_,__VA_ARGS__);}
 
 
-#define ZFEAT(_VAR_,_TYPE_,__FUNCTYPE_)		add_prop(#_VAR_,_TYPE_,__FUNCTYPE_( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
-#define ZVOBJ(_VAR_) ZFEAT(_VAR_,zf_ft_obj,zp_child_vobj_funcs_get)
-#define ZPROP(_VAR_) ZFEAT(_VAR_,zf_ft_var,zp_var_funcs_get)
+#define ZFEAT(_VAR_,__FUNCTYPE_)		add_prop(#_VAR_,__FUNCTYPE_( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
+#define ZVOBJ(_VAR_) ZFEAT(_VAR_,zp_child_vobj_funcs_get)
+#define ZPROP(_VAR_) ZFEAT(_VAR_,zp_var_funcs_get)
 
-#define ZOBJ_X(_VAR_,_TYPE_,__FUNCTYPE_)		add_obj(#_VAR_,_TYPE_,__FUNCTYPE_( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
-#define ZPOBJ(_VAR_) ZOBJ_X(_VAR_,zf_ft_obj,zp_child_pobj_funcs_get)
-#define ZOBJ(_VAR_) ZOBJ_X(_VAR_,zf_ft_obj,zp_child_obj_funcs_get)
+#define ZOBJ_X(_VAR_,__FUNCTYPE_)		add_obj(#_VAR_,__FUNCTYPE_( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
+#define ZPOBJ(_VAR_) ZOBJ_X(_VAR_,zp_child_pobj_funcs_get)
+#define ZOBJ(_VAR_) ZOBJ_X(_VAR_,zp_child_obj_funcs_get)
+
+#define ZLIST(_VAR_)		add_list(#_VAR_,__FUNCTYPE_( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
 
 
 class zf_feature
@@ -42,13 +44,14 @@ public:
 
 
 	zf_feature();
-	zf_feature(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
+	zf_feature(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
 	ctext get_map_key() { return _name; }
 
 	z_string _name;
 	z_string _description;
+	virtual zf_feature_type get_type()const =0;
 
-	zf_feature_type _type;
+	//zf_feature_type _type;
 	void dump(z_file& f,void* obj);
 	virtual void display(z_file& f,void* obj)=0;
 
@@ -72,25 +75,45 @@ public:
 	int execute(z_file* f,zf_obj& obj);
   	virtual z_status load(zp_text_parser &parser, zf_obj& o) ;
  	virtual z_status evaluate(zp_text_parser &parser, zf_obj& o,int index=-1) ;
+	virtual zf_feature_type get_type() const { return zf_ft_act; }
 
 };
 class zf_child_obj  : public  zf_feature
 {
 public:
- 	zf_child_obj(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
+ 	zf_child_obj(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
 	virtual void display(z_file& f,void* obj);
+	virtual zf_feature_type get_type() const { return zf_ft_obj; }
 
 };
 class zf_prop  : public  zf_feature
 {
 public:
-	zf_prop(ctext name,zf_feature_type t,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
+	zf_prop(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
 	virtual void display(z_file& f,void* obj);
 	virtual z_status set_from_value(zp_value* val,void *obj) ;
 
   	virtual z_status load(zp_text_parser &parser, zf_obj& o) ;
  	virtual z_status get_string_val(z_string& out, void* v,int index=-1);
  	virtual z_status evaluate(zp_text_parser &parser, zf_obj& o,int index=-1) ;
+	virtual zf_feature_type get_type() const { return zf_ft_var; }
+
+};
+class zf_funcs_obj_list_base;
+class zf_list  : public  zf_feature
+{
+public:
+	zf_list(ctext name,const zf_funcs_obj_list_base* funcs,z_memptr offset,ctext desc="");
+	virtual void display(z_file& f,void* obj);
+	/*
+	virtual z_status set_from_value(zp_value* val,void *obj) ;
+
+  	virtual z_status load(zp_text_parser &parser, zf_obj& o) ;
+ 	virtual z_status get_string_val(z_string& out, void* v,int index=-1);
+ 	virtual z_status evaluate(zp_text_parser &parser, zf_obj& o,int index=-1) ;
+	*/
+	virtual zf_feature_type get_type() const { return zf_ft_obj_list; }
+
 };
 class zf_alias  : public  zf_feature
 {
