@@ -67,7 +67,7 @@ public:
  	virtual z_status load(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
  	virtual z_status assign(zp_text_parser &parser, void* v) const;
  	virtual z_status evaluate(zp_text_parser &parser, void* v) const  {return Z_ERROR(zs_operation_not_supported);}
-	//virtual zf_feature* get_feature();
+	virtual zf_feature* get_feature()=0;
 } ;
 
 class zf_feature_list : public z_obj_map<zf_feature>
