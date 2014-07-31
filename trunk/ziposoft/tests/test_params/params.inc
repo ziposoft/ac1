@@ -1,23 +1,22 @@
 
+#undef PARAM
+#undef OPER
+#define PARAM(_TYPE_,_VAR_,_DEFAULT_,_DESC_) _TYPE_ _VAR_=_DEFAULT_;
+#define OPER(_FUNC_,_DESC_)  int _FUNC_();  
+
+PARAM_LIST
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#undef PARAM
+#undef OPER
+#define PARAM(_TYPE_,_VAR_,_DEFAULT_,_DESC_)  
+#define OPER(_FUNC_,_DESC_)  { _FUNC_, #_FUNC_, _DESC_ },
 
 
+st_param_func list_param_funcs[]={
+PARAM_LIST
+};
+int list_param_funcs_count=sizeof(list_param_funcs)/sizeof(st_param_func);
 
-int main()
-{
-	char* str1="ant";
-	char* str2="anthony";
-	int x=2;
-	int* p=0;
-	int* xp=0;
-	xp=&*p;
-	printf("xp=%p\n",xp);
-	printf("strcmp(%s,%s)=%d\n",str1,str2,strcmp(str1,str2));
-	printf("strcmp(%s,%s)=%d\n",str2,str1,strcmp(str2,str1));
-
-
-	return 0;//ZS_RET(base,feature_not_found);
-}
+#undef PARAM
+#undef OPER
