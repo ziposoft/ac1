@@ -727,6 +727,10 @@ class canidate {
 			echo ("<div class='leg_thumb' ><a href='/guide/canidate.php?key=$this->key'>");
 			echo ("<img src='$photo'/></a></div>");
 		}
+		else {
+			echo ("<div class='leg_thumb' ><img src='/img/unknown.png'/></div>");
+				
+		}
 
 		echo ("<div class='leg_info' ><a href='/guide/canidate.php?key=$this->key'><h2>$this->displayname</h2></a><table><tr><td/><td/></tr>");
 		$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
