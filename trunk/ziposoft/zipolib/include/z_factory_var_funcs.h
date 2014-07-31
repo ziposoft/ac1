@@ -74,6 +74,8 @@ This interface manipulates simple member variables
 template <class VAR >  class zf_var_funcs  : public zf_var_funcs_base
 {
 public:
+	virtual zf_feature_type get_type() const { return zf_ft_var; }
+	virtual zf_feature* get_feature() const;
 	virtual void get(z_string& s, void* v,int index=-1) const;
 	virtual void set(ctext  s, void* v,int index=-1) const;
 	virtual void clear(void* v) const;
@@ -83,7 +85,6 @@ public:
 	virtual void dump(z_file& s, void* v) const;
 	virtual void* create_obj(void* var,z_factory* fact) const;
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const ;
-	virtual zf_feature_type get_type() const { return zf_ft_var; }
 
  	virtual z_status load(zp_text_parser &parser, void* v) const ;
  	virtual z_status assign(zp_text_parser &parser, void* v) const ;
@@ -93,13 +94,15 @@ public:
 class zf_funcs_obj_list_base  : public zf_var_funcs_base
 {
 public:
+	virtual zf_feature* get_feature();
+	virtual zf_feature_type get_type() const{ return zf_ft_obj_list; }
+
 	virtual void clear(void* v) const;
 
 	virtual z_factory* get_list_obj_fact() const=0;
 	virtual z_obj_list_base* get_list(void * v) const=0;
 	void dump(z_file& f, void* v) const;
 	virtual void* get_ptr(void* v,z_obj_list_iter& iter ) const;
-	virtual zf_feature_type get_type() const{ return zf_ft_obj_list; }
 	virtual void* get_sub_obj(void* list,size_t index) const; 
   	virtual z_status load(zp_text_parser &parser, void* v) const ;
 

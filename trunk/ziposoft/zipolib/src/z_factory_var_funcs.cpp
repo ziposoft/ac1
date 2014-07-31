@@ -43,6 +43,13 @@ template <class V> z_status zf_var_funcs<V>::assign(zp_text_parser &parser, void
 	return load( parser,v);
 }
 template <class V> z_status zf_var_funcs<V>::evaluate(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
+template <class V> zf_feature* zf_var_funcs<V>::get_feature() const 
+{
+	zf_feature* feat=z_new	zf_prop(name,f,offset,desc);
+	return feat;
+
+
+}
 
 
 
