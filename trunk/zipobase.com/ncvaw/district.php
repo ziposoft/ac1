@@ -43,10 +43,11 @@ if($distobj)
 	<H4>Counties: <?php echo($counties);?>
 	</h4>
 	<div style='clear:both'></div>
+	<!--  
 	<h3>Primary Election 5/6/2014</h3>
 <?php 
 getobj('canidates')->printlist($chamber,$distnum,"primary");
-?>		
+?>		-->
 <h3>General Election 11/4/2014</h3>
 <?php	
 	getobj('canidates')->printlist($chamber,$distnum,"gen");
