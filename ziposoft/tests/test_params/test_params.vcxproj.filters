@@ -18,7 +18,7 @@
     <ClCompile Include="test_params.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="params.cpp">
+    <ClCompile Include="params.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

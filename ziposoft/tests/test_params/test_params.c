@@ -1,23 +1,26 @@
+#include "params.h"
+
+#define PARAM_LIST \
+	PARAM(int,g_sample_int,99,"sample integer params")\
+	PARAM(ctext ,g_sample_string,"default","description")\
+	OPER(function1,"") \
+	OPER(function2,"")
+
+#include "params.inc"
 
 
-
-#include <stdio.h>
-#include <stdlib.h>
-
-
-
-int main()
+int main(int argc,char* argv[])
 {
-	char* str1="ant";
-	char* str2="anthony";
-	int x=2;
-	int* p=0;
-	int* xp=0;
-	xp=&*p;
-	printf("xp=%p\n",xp);
-	printf("strcmp(%s,%s)=%d\n",str1,str2,strcmp(str1,str2));
-	printf("strcmp(%s,%s)=%d\n",str2,str1,strcmp(str2,str1));
+	return param_process(argc,argv);	
+}
 
-
-	return 0;//ZS_RET(base,feature_not_found);
+int function1()
+{
+	printf("function1\n");
+	return 0;
+}
+int function2()
+{
+	printf("function2\n");
+	return 0;
 }

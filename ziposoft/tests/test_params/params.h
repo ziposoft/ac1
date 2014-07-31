@@ -1,23 +1,20 @@
 
 
-
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+typedef const char* ctext;
+typedef int (*param_func)();
 
 
 
-int main()
+typedef struct _st_param_func 
 {
-	char* str1="ant";
-	char* str2="anthony";
-	int x=2;
-	int* p=0;
-	int* xp=0;
-	xp=&*p;
-	printf("xp=%p\n",xp);
-	printf("strcmp(%s,%s)=%d\n",str1,str2,strcmp(str1,str2));
-	printf("strcmp(%s,%s)=%d\n",str2,str1,strcmp(str2,str1));
+	param_func _func_ptr;
+	ctext	_name;
+	ctext	_desc;
+} st_param_func;
+extern  st_param_func list_param_funcs[];
+extern int list_param_funcs_count;
 
-
-	return 0;//ZS_RET(base,feature_not_found);
-}
+int param_process(int argc,char* argv[]);
