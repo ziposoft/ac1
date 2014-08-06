@@ -38,10 +38,13 @@ public:
 	virtual size_t size() const=0;
 	
 	virtual void* get_void(size_t i) =0;
-	virtual void* get_void(ctext key) =0;
+	virtual void* get_void_by_key(ctext key) =0;
 	
 	virtual void add_void(void* o)=0;
 	virtual void* get_next(z_obj_list_iter& i)=0;
+	virtual z_status get_next_key(z_obj_list_iter& i,z_string &s)=0;
+	
+
 
 };
 
@@ -57,7 +60,16 @@ public:
 		i.vect++;
 		return v;
 	}
+	virtual z_status get_next_key(z_obj_list_iter& iter,z_string &s)
+	{
+		
+		if(iter.vect>=size())
+			return zs_end_of_list;
+		s=iter.vect;
+		iter.vect++;
+		return zs_ok;
 
+	}
  	void add_void(void* v)
 	{
 		ITEM_CLASS* i=reinterpret_cast<ITEM_CLASS*>(v);
@@ -90,7 +102,12 @@ public:
 			return 0;
 		return _vector[i];
 	}
-	void* get_void(ctext i)  { return 0; }
+	void* get_void_by_key(ctext key)  
+	{ 
+		size_t i=atoi(key);
+		return get_void(i); 
+	}
+
  	void* get_void(size_t i) 
 	{
 		return (void*)get(i);
@@ -100,6 +117,8 @@ public:
 		_vector.push_back(x);
 		return *this;
     };
+
+
 };
 template <class ITEM_CLASS > class z_obj_vector_map  : public z_obj_vector<ITEM_CLASS>
 {
@@ -136,6 +155,7 @@ public:
 	{
 		return get_next(i.map);
 	}
+
  	void add_void(void* v)
 	{
 		ITEM_CLASS* i=reinterpret_cast<ITEM_CLASS*>(v);
@@ -179,6 +199,18 @@ public:
 			iter.i++;
 		return (ITEM_CLASS*)data_out;
 	}
+	virtual z_status get_next_key(z_obj_list_iter& iter,z_string &s)
+	{
+		if(iter.map.key==0)
+			iter.map.i=_map.begin();
+		if(iter.map.i==_map.end())
+			return zs_end_of_list;
+		iter.map.key=iter.map.i->first;
+		s=iter.map.key;
+		iter.map.i++;
+		return zs_ok;
+
+	}
 	ITEM_CLASS* operator [](ctext key)
 	{
 		z_map_iterator i=_map.find(key);
@@ -194,7 +226,7 @@ public:
 		return (ITEM_CLASS*)data_out;
 	}
 	virtual void* get_void(size_t i)  { return 0; }
-	virtual void* get_void(ctext key)  { return get(key); }
+	virtual void* get_void_by_key(ctext key)  { return get(key); }
 
 	bool del(ctext key)
 	{

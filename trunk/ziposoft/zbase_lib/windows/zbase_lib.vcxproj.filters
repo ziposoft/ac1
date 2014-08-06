@@ -100,5 +100,8 @@
     <ClInclude Include="..\..\zipolib\include\z_obj_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\zipobase_lib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

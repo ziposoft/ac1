@@ -5,6 +5,7 @@
 #include "zbase_lib/include/ds_text.h"
 #include "zbase_lib/include/ds_metakit.h"
 
+ ZP_MODULE_DECLARE(zipobase);
 
 
 #endif

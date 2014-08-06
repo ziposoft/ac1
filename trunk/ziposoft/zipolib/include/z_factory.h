@@ -56,7 +56,7 @@ public:
 	virtual void set(ctext s, void* v,int index=-1) const {};
 	virtual void clear(void* v) const {} 
 	virtual void add(void* list,void* obj) const {} 
-	virtual void* get_sub_obj(void* list,size_t index) const { return 0;} 
+	virtual void* get_sub_obj(void* list,ctext key) const { return 0;} 
 	virtual size_t get_size(void* list) const { return 0;} 
 	virtual void* get_ptr(void* var,z_obj_list_iter& iter) const { return var;}  /*could be pointer to obj, or pointer to obj pointer */
 	//This is if the member var is an obj, pointer to obj, or obj list		
@@ -67,7 +67,7 @@ public:
  	virtual z_status load(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
  	virtual z_status assign(zp_text_parser &parser, void* v) const;
  	virtual z_status evaluate(zp_text_parser &parser, void* v) const  {return Z_ERROR(zs_operation_not_supported);}
-	virtual zf_feature* get_feature()=0;
+	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const=0;
 } ;
 
 class zf_feature_list : public z_obj_map<zf_feature>
@@ -150,12 +150,13 @@ public:
 	z_status load_obj_contents(zp_text_parser &parser,void* obj) const;
 	virtual void dump_static(z_file& f) const;
 
-	virtual z_status get_list_features(z_strlist& list);
+	virtual z_status get_list_features(z_strlist& list,void* obj);
 	virtual z_status get_map_features(zf_feature_list&  list,zf_feature_type type);
 
 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
 	virtual zf_action* add_act_params(ctext name,z_memptr act_addr,ctext desc,int num_params,...) ;
 
+	virtual zf_feature* add_feature(zf_feature* f); 
 	virtual zf_action* add_act(ctext name,z_memptr act_addr,ctext desc); 
 	virtual zf_feature* add_prop(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
 	virtual zf_child_obj* add_obj(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 

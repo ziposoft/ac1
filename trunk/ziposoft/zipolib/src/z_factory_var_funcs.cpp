@@ -6,7 +6,10 @@
 
 #define RECAST(_TYPE_,_NAME_) _TYPE_& _NAME_= *reinterpret_cast<_TYPE_*>(v);
 #define VF template <> void zf_var_funcs
+/*________________________________________________________________________
 
+ zf_var_funcs_base
+________________________________________________________________________*/
 void zf_var_funcs_base::dump(z_file& file, void* v) const
 {
 	z_string s;
@@ -21,6 +24,22 @@ void zf_var_funcs_base::dump(z_file& file, void* v) const
 	return load( parser,v);
 }
 
+ /*________________________________________________________________________
+
+ zf_var_funcs_act
+________________________________________________________________________*/
+
+zf_feature* zf_var_funcs_act::create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const
+{
+
+	zf_action* action=z_new	zf_action(name,*(z_memptr*)&offset);
+	return action;
+
+
+
+}
+
+
 /*________________________________________________________________________
 
  zf_var_funcs<TYPE> defaults
@@ -28,7 +47,7 @@ ________________________________________________________________________*/
 
 template <class V> void zf_var_funcs<V>::dump(z_file& file, void* v) const {	zf_var_funcs_base::dump( file,  v) ; }
 template <class V> void zf_var_funcs<V>::add(void* list,void* obj) const {}
-template <class V> void* zf_var_funcs<V>::get_sub_obj(void* list,size_t index) const {	return 0;}
+template <class V> void* zf_var_funcs<V>::get_sub_obj(void* list,ctext key) const {	return 0;}
 template <class V> size_t zf_var_funcs<V>::get_size(void* list) const{	return 0;}
 template <class V> void* zf_var_funcs<V>::create_obj(void* list,z_factory* fact) const{	return 0;}
 template <class V> void zf_var_funcs<V>::get(z_string& s, void* v,int index)	const{}
@@ -43,9 +62,9 @@ template <class V> z_status zf_var_funcs<V>::assign(zp_text_parser &parser, void
 	return load( parser,v);
 }
 template <class V> z_status zf_var_funcs<V>::evaluate(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
-template <class V> zf_feature* zf_var_funcs<V>::get_feature() const 
+template <class V> zf_feature* zf_var_funcs<V>::create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const 
 {
-	zf_feature* feat=z_new	zf_prop(name,f,offset,desc);
+	zf_feature* feat=z_new	zf_prop(name,this,offset,desc);
 	return feat;
 
 
@@ -239,6 +258,13 @@ z_status zf_funcs_obj_base::load(zp_text_parser &parser, void* v) const
 
 }
 
+zf_feature* zf_funcs_obj_base::create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const 
+{
+	zf_feature* feat=z_new	zf_child_obj(name,this,offset,desc);
+	return feat;
+
+
+}
 
 
 /*________________________________________________________________________
@@ -285,6 +311,11 @@ template <> z_status zf_var_funcs<zp_obj_vector>::load(zp_text_parser &parser, v
 
 zf_funcs_obj_list_base 
 ________________________________________________________________________*/
+zf_feature* zf_funcs_obj_list_base::create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const 
+{
+	zf_feature* feat=z_new	zf_list(name,this,offset,desc);
+	return feat;
+}
 
 void zf_funcs_obj_list_base::clear(void* v) const 
 {
@@ -301,7 +332,7 @@ void zf_funcs_obj_list_base::clear(void* v) const
 
 }
 
-void* zf_funcs_obj_list_base::get_sub_obj(void* v,size_t index ) const
+void* zf_funcs_obj_list_base::get_sub_obj(void* v,ctext key) const
 {
 	z_obj_list_base* plist=get_list(v);
 	if(!plist)
@@ -309,12 +340,8 @@ void* zf_funcs_obj_list_base::get_sub_obj(void* v,size_t index ) const
 		Z_ERROR(zs_bad_parameter);
 		return 0;
 	}
-	if(plist->size()<=index)
-	{
-		Z_ERROR(zs_out_of_range);
-		return 0;
-	}
-	return plist->get_void(index);
+
+	return plist->get_void_by_key(key);
 }
 
 void* zf_funcs_obj_list_base::get_ptr(void* v,z_obj_list_iter& iter ) const

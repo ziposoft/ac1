@@ -60,3 +60,14 @@ void z_obj_ptr_delete(z_refcount* p)
 
 #include "zipolib/include/z_obj.macro"
 #endif
+
+int whatthefuck=9;
+
+#define ZO_OBJ_LIST \
+	ZCLS(zb_source,none,"","",  VAR(_name)  VAR(_ds_tables)  ) \
+	ZCLS(zb_ds_table,none,"","",  VAR(_id)    ) 
+
+
+#include "zipolib/include/z_obj.inc"
+ZP_MODULE_DEFINE(zipobase);
+
