@@ -127,11 +127,13 @@ z_status z_console::select_obj()
 	if(!f)
 		return zs_feature_not_found;
 	int index=-1;
+	/*
 	if(_cmd_line_feature_index)
 		index=_cmd_line_feature_index.GetDecVal();
+		*/
 
 
-	return f->get_zf_obj(_temp,index,_temp);
+	return f->get_zf_obj(_temp,_cmd_line_feature_index,_temp);
 
 }
 z_status z_console:: EvaluateLine(ctext text)
@@ -155,6 +157,9 @@ z_status z_console:: EvaluateLine(ctext text)
 		status=get_feature_and_index();
 		if(status)
 			break;
+
+
+
 		status=select_obj();
 		if(status)
 		{
@@ -200,15 +205,17 @@ void z_console:: OnTab()
 	{
 		//This is just to find the target object.
 		z_status status=EvaluateLine(_buffer);
+		Z_ERROR_DBG(status);
 		if(zs_unparsed_data==status)
 		{
 			//if we could not parse the line, then dont try to auto-tab
 			return;
 		}
-		Z_ERROR_DBG(status);
-		if(status!=zs_eof)
+		if(status!=zs_feature_not_found)
 		{
-			
+
+
+			return;
 			/*
 			gz_out <<"\nBad path\n";
 			
@@ -221,10 +228,10 @@ void z_console:: OnTab()
 
 
 		_auto_tab.clear();		
-		_temp._fact->get_list_features(_auto_tab);
+		_temp._fact->get_list_features(_auto_tab,_temp._obj);
 		if(!_has_path)
 		{
-			_self._fact->get_list_features(_auto_tab);
+			_self._fact->get_list_features(_auto_tab,_self._obj);
 
 		}
 
@@ -274,7 +281,7 @@ z_status z_console:: ExecuteLine(ctext text)
 	if(status==zs_ok)
 		return 	zs_ok;
 	status=evaluate_feature(_temp);
-	Z_ERROR_MSG(status,"\"%s\" not a feature of \"%s\"",_cmd_line_feature.c_str(),_path.c_str());
+	//Z_ERROR_MSG(status,"\"%s\" not a feature of \"%s\"",_cmd_line_feature.c_str(),_path.c_str());
 
 	return status;
 }
@@ -290,6 +297,7 @@ z_status z_console::list_features()
 
 	gz_out.indent_inc();
 	_temp._fact->get_map_features(list,zf_ft_var);
+	_temp._fact->get_map_features(list,zf_ft_obj_list);
 	gz_out << "\nVariables:\n";
 	while(p_feature=list.get_next(iter))
 	{
@@ -688,3 +696,16 @@ void z_console_base::OnDoubleBack()
 
 
 }
+
+/* 
+should be a static factory, but... whatever
+
+#define ZO_OBJ_LIST \
+	ZCLS(z_console,none,"","", VAR(_log_level) )
+
+
+
+
+#include "zipolib/include/z_obj.inc"
+ZP_MODULE_DEFINE(logger);
+*/

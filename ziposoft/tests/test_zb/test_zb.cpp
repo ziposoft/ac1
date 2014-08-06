@@ -1,6 +1,5 @@
 
 #include "zipolib/include/z_console.h"
-#include "zipolib/include/z_factory_static.h"
 
 #include "zbase_lib/include/zipobase_lib.h"
 class dstable
@@ -43,8 +42,8 @@ public:
 	}
 	int dumpdata()
 	{
-		z_status status;
-
+		z_status status=zs_ok;
+		/*
 		status=_ptbl->open(true);
 		if(status)
 			break;
@@ -73,10 +72,13 @@ public:
 				gz_out <<  "record"<<i<<":"<< data <<"\n";
 			}
 		}
+		*/
+		return status;
 
 	}
 	int adddata()
 	{
+		/*
 		z_status status;
 		zb_ds_rec_ptr* pRec=0;
 		zb_ds_field* fld=0;
@@ -99,8 +101,9 @@ public:
 		if(status)
 			break;
 		status=p_ds->commit();
+		*/
 
-		return s;
+		return 0;
 	}
 	int close()
 	{
@@ -130,6 +133,8 @@ public:
 	z_logger* _p_logger;
 	source ds;
 
+	zb_source zbs;
+
 };
 
 ZFACT(source)
@@ -152,6 +157,7 @@ ZFACT(root)
 {
 	ZOBJ(console);
 	ZOBJ(ds);
+	ZOBJ(zbs);
 	ZPOBJ(_p_logger);
 
 	/*
@@ -162,7 +168,9 @@ ZFACT(root)
 	*/
 
 };
-ZP_MODULE_INCLUDE(  ZP_MOD(logger));
+ZP_MODULE_INCLUDE(   ZP_MOD(zipobase));
+
+
 
 
 #if 0
@@ -264,9 +272,12 @@ int test_ds_table(zb_source* p_ds)
 }
 #endif
 
+extern int whatthefuck;
 
 int main(int argc, char* argv[])
 {
+
+	whatthefuck=99;
 
 	root o;
 	o.console.setroot(&o);

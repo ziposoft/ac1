@@ -1,6 +1,7 @@
 #include "zipolib_cpp_pch.h"
 
 #include "zipolib/include/z_factory.h"
+#include "zipolib/include/z_factory_var_funcs.h"
 #include "zipolib/include/z_parse_text.h"
 
 /*________________________________________________________________________
@@ -54,7 +55,7 @@ void zf_feature::display(z_file& f,void* obj)
 	}
 	f <<'\n';
 }
- z_status zf_feature::get_zf_obj(zf_obj& out, int index,zf_obj& parent)
+ z_status zf_feature::get_zf_obj(zf_obj& out, ctext key,zf_obj& parent)
  {
 	 if(!df)
 		 return zs_no_match;
@@ -63,7 +64,7 @@ void zf_feature::display(z_file& f,void* obj)
 	 char* membervar=(char*)parent._obj+_offset;
 
 
-	void * subobj=df->get_sub_obj(membervar,index);
+	void * subobj=df->get_sub_obj(membervar,key);
 	if(!subobj)
 	{
 		return zs_no_match; //not an object
@@ -82,13 +83,45 @@ void zf_feature::display(z_file& f,void* obj)
 zf_list
 ________________________________________________________________________*/
 zf_list::zf_list(ctext name,const zf_funcs_obj_list_base* funcs,z_memptr offset,ctext desc)
+	: zf_feature(name,funcs,offset,desc) 
 {
+	_list_funcs=funcs;
 
 }
 void zf_list::display(z_file& f,void* obj)
 {
-	char* plist=(char*)obj+_offset;
+	char* plist_ptr=(char*)obj+_offset;
+	z_obj_list_base* list=_list_funcs->get_list(plist_ptr);
+	z_obj_list_iter i;
+	size_t size=list->size();
+	f.indent();
+	z_factory* fact=_list_funcs->get_list_obj_fact();
 
+	f<<fact->get_name()<<" " << _name<<'['<<(int)size<<']';
+
+	f <<'\n';
+
+}
+z_status zf_list::on_tab(z_console* console) 
+
+ { 
+	 return zs_ok; 
+}
+z_status zf_list::add_to_list(z_strlist& list,void* obj)
+{
+	char* plist_ptr=(char*)obj+_offset;
+	z_obj_list_base* objlist=_list_funcs->get_list(plist_ptr);
+	z_obj_list_iter i;
+	z_string fullname;
+	z_string key;
+	
+	while((objlist->get_next_key(i,key))==zs_ok)
+	{
+		fullname=_name;
+		fullname<<'['<<key<<']';
+		list<<fullname;
+	}
+	return zs_ok;
 }
 
 
@@ -305,6 +338,14 @@ z_factory_dyn& z_factory::init_dynamic()
 	}
 	return *_dynamic;
 }
+ zf_feature* z_factory::add_feature(zf_feature* f)
+ {
+
+	init_dynamic().features.add(f);
+	return f;
+
+
+ }
 
 zf_action* z_factory::add_act(ctext name,z_memptr act_addr,ctext desc)
 {

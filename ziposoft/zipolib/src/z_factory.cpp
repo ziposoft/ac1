@@ -269,19 +269,20 @@ z_status z_factory::get_map_features(zf_feature_list&  list,zf_feature_type desi
 		return base->get_map_features(list,desired_type);
 	return zs_ok;
 }
-z_status z_factory::get_list_features(z_strlist& list) 
+z_status z_factory::get_list_features(z_strlist& list,void* obj) 
 {
 	init_dynamic();
 	size_t i=0;
 	for(i=0;i<_dynamic->features.size();i++)
 	{
 
-		list<<_dynamic->features[i]->_name;
+
+		_dynamic->features[i]->add_to_list(list,obj);
 
 	}
 	z_factory* base=get_base_factory();
 	if(base)
-		return base->get_list_features(list);
+		return base->get_list_features(list,obj);
 	return zs_ok;
 }
 z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
