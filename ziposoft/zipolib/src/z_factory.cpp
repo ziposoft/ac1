@@ -164,9 +164,9 @@ void z_factory::dump_obj_contents(z_file& f,void* obj) const
 	z_string value;
 	while(get_var_info_i(index,name,offset,funcs)==zs_ok)	 
 	{
-		char* pvar=(char*)obj+offset;
 		if(funcs)//only vars, not acts
 		{
+			char* pvar=(char*)obj+offset;
 			f.indent();
 			f << name;
 			f << "=";

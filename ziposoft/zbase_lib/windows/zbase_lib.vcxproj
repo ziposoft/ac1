@@ -109,13 +109,12 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../include;../../;../../../third/</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>Z_TRACE=1;WIN32;_DEBUG;_LIB;DEBUG=1;VISUALC=1;Z_MODULE=zbase_lib;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>Z_TRACE=1;WIN32;_DEBUG;_LIB;DEBUG=1;VISUALC=1;</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -235,6 +234,9 @@
     <ClCompile Include="..\src\ds_sqlite.cpp" />
     <ClCompile Include="..\src\ds_text.cpp" />
     <ClCompile Include="..\src\field.cpp" />
+    <ClCompile Include="..\src\module.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\src\record.cpp" />
     <ClCompile Include="..\src\table.cpp" />
     <ClCompile Include="..\src\table_static.cpp" />
