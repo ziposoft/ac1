@@ -168,7 +168,7 @@ ZFACT(root)
 	*/
 
 };
-ZP_MODULE_INCLUDE(   ZP_MOD(zipobase));
+ZP_MODULE_INCLUDE(   ZP_MOD(zipobase) ,ZP_MOD(logger));
 
 
 
@@ -272,12 +272,10 @@ int test_ds_table(zb_source* p_ds)
 }
 #endif
 
-extern int whatthefuck;
 
 int main(int argc, char* argv[])
 {
 
-	whatthefuck=99;
 
 	root o;
 	o.console.setroot(&o);

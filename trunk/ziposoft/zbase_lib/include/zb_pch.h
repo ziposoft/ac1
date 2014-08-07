@@ -10,7 +10,7 @@
 #include "zipolib/include/z_obj_list.h"
 #include "zipolib/include/z_filesystem.h"
 
-#include "zipolib/include/z_factory_static.h"
+
 #ifdef ZB_SQLITE
 #include "sqlite/include/sqlite3.h"
 
