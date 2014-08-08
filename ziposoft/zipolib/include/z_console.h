@@ -105,6 +105,8 @@ public:
 	z_string _temp_path;
 	bool _has_feature;
 
+	void init(ctext appname);
+
 
 	template <class CLASS> void setroot(CLASS * obj)
 	{

@@ -2,122 +2,6 @@
 #include "zipolib/include/z_console.h"
 
 #include "zbase_lib/include/zipobase_lib.h"
-class dstable
-{
-public:
-	dstable()
-	{
-
-	}
-
-
-};
-
-class source
-{
-public:
-	source()
-	{
-		dbname="default.db";
-		_newtblname="table1";
-		p_ds=new zb_ds_text();
-		_ptbl=0;
-	}
-	virtual ~source()
-	{
-		close();
-		delete p_ds;
-	}
-	zb_source* p_ds;
-	zb_ds_table* _ptbl;
-
-	z_string dbname;
-	z_obj_vector<dstable> _tbl_list;
-	z_string _newtblname;
-	int open()
-	{
-		z_status s=p_ds->open(dbname,true,true);
-		printf(" db open\n");
-		return s;
-	}
-	int dumpdata()
-	{
-		z_status status=zs_ok;
-		/*
-		status=_ptbl->open(true);
-		if(status)
-			break;
-		
-		size_t count=tbl->get_record_count();
-
-		printf("count=%d\n",count);
-
-		for (i=0;i<3;i++)
-		{
-			if(count>i)
-			{
-				status=tbl->get_record_by_index(i,&ptr);
-				if(status)
-				{
-					gz_out << "get_record_by_index failed:"<<i<<"\n";
-					break;
-				}
-				if(!ptr)
-				{
-					gz_out << "could not get record"<<i<<"\n";
-					break;
-				}
-
-				fld->get_string(ptr,data);
-				gz_out <<  "record"<<i<<":"<< data <<"\n";
-			}
-		}
-		*/
-		return status;
-
-	}
-	int adddata()
-	{
-		/*
-		z_status status;
-		zb_ds_rec_ptr* pRec=0;
-		zb_ds_field* fld=0;
-		zb_ds_field* fld2=0;
-		zb_ds_rec_ptr* ptr=0;
-		z_string data;
-		pRec=p_ds->record_solo_new();
-		
-		if(!pRec)
-			break;
-		data="record number";
-		data <<count;
-		status=fld->set_string(pRec,data);
-		if(status)
-			break;
-		status=fld2->set_string(pRec,"teabag");
-		if(status)
-			break;
-		status=tbl->record_add(pRec);
-		if(status)
-			break;
-		status=p_ds->commit();
-		*/
-
-		return 0;
-	}
-	int close()
-	{
-		z_status status=p_ds->commit();
-		return p_ds->close();
-	}	
-	
-	int addtable()
-	{
-		_ptbl=  p_ds->ds_table_new(_newtblname);
-
-		return 0;
-	}
-}	  ;
 
 
 class root
@@ -131,12 +15,11 @@ public:
 	}
 	z_console console;
 	z_logger* _p_logger;
-	source ds;
 
 	zb_source zbs;
 
 };
-
+/*
 ZFACT(source)
 {
 	ZACT_XP(addtable,"addtable","desc",1,
@@ -145,18 +28,13 @@ ZFACT(source)
 		ZPARAM_X(dbname,"db_name","Name of DB to open"));
 	ZACT(close);
 
-	/*
-	ZPROP(x);
-	ZPROP(i);
-	ZACT(add);
-	ZACT_XP(show,"show","desc",1,ZPARAM(s));
-	*/
+
 
 };
+*/
 ZFACT(root)
 {
 	ZOBJ(console);
-	ZOBJ(ds);
 	ZOBJ(zbs);
 	ZPOBJ(_p_logger);
 
@@ -279,6 +157,7 @@ int main(int argc, char* argv[])
 
 	root o;
 	o.console.setroot(&o);
+	o.console.init(argv[0]);
 	o.console.loadcfg();
 	o.console.runapp(argc,argv);
 	o.console.savecfg();
