@@ -40,6 +40,14 @@ z_console::z_console()
 	_dump_cmd_line=false;
 	z_filesys_getcwd(_startup_path);
 }
+void z_console::init(ctext appname)
+{
+	_config_file=appname;
+	_config_file+=".cfg";
+
+
+
+}
 
 z_status  z_console::runapp(int argc, char* argv[])
 {

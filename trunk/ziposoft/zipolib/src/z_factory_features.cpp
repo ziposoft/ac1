@@ -137,7 +137,6 @@ void zf_action::display(z_file& f,void* obj)
 {
 	f.indent();
 
-	char* pvar=(char*)obj+_offset;
 	f << _name<<'(';
 	size_t i;
 	
