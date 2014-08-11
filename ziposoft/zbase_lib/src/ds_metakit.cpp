@@ -1,5 +1,7 @@
 #include "zb_pch.h"
 
+
+#ifdef ZB_INCLUDE_DS_METAKIT
 #include "zbase_lib/include/ds_metakit.h"
 
 
@@ -41,13 +43,15 @@ zb_ds_rec_ptr* zb_ds_metakit::record_solo_new()
 	zb_rec_ptr_mk* pRec=	z_new zb_rec_ptr_mk(true);
 	return pRec;
 }
-zb_ds_table* zb_ds_metakit::ds_table_new(ctext ds_table_name)
+z_status zb_ds_metakit::ds_table_new(ctext ds_table_name,zb_ds_table*& tbl)
 {
 
 	zb_ds_table_mk* tbl=z_new zb_ds_table_mk(this,ds_table_name);
+	_ds_tables<<tbl;
+
 	return  tbl;
 }
-z_status zb_ds_metakit::ds_table_open(zb_ds_table* tbl)
+z_status zb_ds_metakit::ds_table_open(ctext ds_table_name,zb_ds_table*& tbl)
 {
 	zb_ds_table_mk* mtbl= dynamic_cast<zb_ds_table_mk*>(tbl);
 	_get_view(mtbl->get_mk_view(),mtbl->get_ds_id(),mtbl->get_desc());
@@ -369,3 +373,6 @@ z_status zb_ds_table_mk::test_record_by_index(size_t index,zb_ds_rec_ptr** curso
 	return 0;
 
 }
+
+
+#endif

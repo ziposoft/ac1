@@ -100,6 +100,7 @@ class zb_source
 {
 
 protected:	
+	virtual z_status _table_new(ctext ds_table_name,zb_ds_table*& tbl){ return Z_ERROR_NOT_IMPLEMENTED;};
 	
 public:
 	z_string _name;
@@ -123,8 +124,8 @@ public:
 	virtual zb_st_master* get_tbl_master(){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
 	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_ds_field& desc){Z_ERROR_NOT_IMPLEMENTED; return 0;};
 
-	virtual zb_ds_table* ds_table_new(ctext ds_table_name){Z_ERROR_NOT_IMPLEMENTED; return 0;};
- 	virtual z_status     ds_table_open(zb_ds_table* tbl){ return Z_ERROR_NOT_IMPLEMENTED;};
+	virtual z_status ds_table_new(ctext ds_table_name,zb_ds_table*& tbl);
+ 	virtual z_status ds_table_get(ctext ds_table_name,zb_ds_table*& tbl);
 
 	virtual zb_ds_field* ds_field_string_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
 	virtual zb_ds_field* ds_field_int32_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
@@ -136,6 +137,13 @@ public:
 
 	//crap
 	virtual z_status get_tables(){ return Z_ERROR_NOT_IMPLEMENTED;};
+
+
+	//Instrumentation
+	z_string table_new_name;
+ 	z_status table_new();
+
+
 
 };
 

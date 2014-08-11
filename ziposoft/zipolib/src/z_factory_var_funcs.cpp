@@ -61,7 +61,7 @@ template <class V> z_status zf_var_funcs<V>::assign(zp_text_parser &parser, void
 		return Z_ERROR_MSG(status,"Expected '=' ");
 	return load( parser,v);
 }
-template <class V> z_status zf_var_funcs<V>::evaluate(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
+template <class V> z_status zf_var_funcs<V>::evaluate1(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
 template <class V> zf_feature* zf_var_funcs<V>::create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const 
 {
 	zf_feature* feat=z_new	zf_prop(name,this,offset,desc);
@@ -372,7 +372,13 @@ void zf_funcs_obj_list_base::dump(z_file& f, void* v) const
 	void* p;
 	while((p=plist->get_next(iter)))
 	{
-		get_fact_from_obj(p)->dump_obj(f,p);
+		z_factory* fact=get_fact_from_obj(p);
+		if(!fact)
+		{
+			Z_ERROR_MSG(zs_error,"Could not get factory from object ");
+		}
+		else
+		fact->dump_obj(f,p);
 	}
 	f.indent_dec();
 	f.indent();

@@ -89,7 +89,7 @@ public:
 
  	virtual z_status load(zp_text_parser &parser, void* v) const ;
  	virtual z_status assign(zp_text_parser &parser, void* v) const ;
- 	virtual z_status evaluate(zp_text_parser &parser, void* v) const ;
+ 	virtual z_status evaluate1(zp_text_parser &parser, void* v) const ;
 
 };	
 class zf_funcs_obj_list_base  : public zf_var_funcs_base

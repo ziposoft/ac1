@@ -1,10 +1,10 @@
-#ifdef ZB_SQLITE
 #ifndef DSSQL_H
 #define DSSQL_H
 
+#include "zbase_lib/include/zb.h"
+#ifdef ZB_INCLUDE_DS_SQLITE
+
 #include "zbase_lib/include/datasource.h"
-
-
 
 class zb_record_sqlite3: public zb_record
 {

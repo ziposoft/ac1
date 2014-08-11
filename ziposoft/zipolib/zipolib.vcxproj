@@ -51,6 +51,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SmallerTypeCheck>true</SmallerTypeCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -82,6 +83,7 @@
     <ClInclude Include="include\zipo.h" />
     <ClInclude Include="include\zipolib_cpp.h" />
     <ClInclude Include="include\zipolib_cpp_pch.h" />
+    <ClInclude Include="include\z_factory_controller.h" />
     <ClInclude Include="include\z_factory_features.h" />
     <ClInclude Include="include\z_factory_static.h" />
     <ClInclude Include="include\z_console.h" />

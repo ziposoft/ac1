@@ -5,6 +5,13 @@
 #define Z_PROFILING
 
 
+#define ZB_INCLUDE_DS_TEXT
+//#define ZB_INCLUDE_DS_METAKIT
+//#define ZB_INCLUDE_DS_SQLITE
+//#define ZB_INCLUDE_DS_HAMSTER
+
+
+
 typedef U32 zb_key_size;
 typedef zb_key_size zb_key;
 

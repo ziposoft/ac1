@@ -8,7 +8,10 @@
 #undef OBJV
 #undef NOFTR
 #undef ACT
-
+#undef ACT_XP
+/*	this is the very ugly way to assign the function list based on the type 
+	Each member variable has a function defined for it. Bloated, but the only way I know.
+*/
 #define NOFTR
 #define POBJ(_VAR)  const zf_var_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_child_pobj_funcs_get(nullobj->_VAR); }
 #define LIST(_VAR)  const zf_var_funcs_base* __zp_var_funcs_get_##_VAR (){ return zp_var_funcs_list_vect(nullobj->_VAR); }
@@ -26,12 +29,15 @@ ZO_OBJ_LIST;
 #undef POBJ
 #undef NOFTR
 #undef ACT
-
+#undef ACT_XP
+/* this declares the member pointer type for the class functions */
 #define NOFTR 
 #define VAR(_VAR) 
 #define POBJ(_VAR)  
 #define OBJ(_VAR)  
 #define ACT(_VAR)  const fptr act_##_VAR=&THECLASS::_VAR;
+#define ACT_XP(_VAR,_PARAMS) ACT(_VAR) 
+/* TODO add act params here? Do we care about static anymore?*/
 
 #define ZCLS(_CLASS_,_BASE_,_NAME_,_PARSE_,_EXTRA_) \
 	namespace Z_PARSE_NS(_CLASS_) {typedef  _CLASS_ THECLASS; typedef int (THECLASS::*fptr)();_EXTRA_ };
@@ -46,12 +52,14 @@ ZO_OBJ_LIST;
 #undef POBJ
 #undef NOFTR
 #undef ACT
-
+#undef ACT_XP
+/* this is the actual entries for the features */
 #define NOFTR {"",0,zf_ft_none,0},
 #define VAR(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_var,__zp_var_funcs_get_##_VAR },
 #define POBJ(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_obj,__zp_var_funcs_get_##_VAR },
 #define OBJ(_VAR)  { #_VAR, zp_offsetof(_VAR),zf_ft_obj,__zp_var_funcs_get_##_VAR },
 #define ACT(_VAR)  { #_VAR, *(z_memptr*)&act_##_VAR,zf_ft_act,zp_act_funcs_get },
+#define ACT_XP(_VAR,_PARAMS) ACT(_VAR) 
 
 #define ZCLS(_CLASS_,_BASE_,_NAME_,_PARSE_,_EXTRA_) \
 	namespace Z_PARSE_NS(_CLASS_) {typedef  _CLASS_ THECLASS; const zf_var_entry varlist[]={ _EXTRA_ }; const size_t varlist_length=sizeof( varlist)/sizeof(	zf_var_entry);  }	 \
@@ -66,6 +74,7 @@ ZO_OBJ_LIST;
 #undef OBJ
 #undef ZCLS
 #undef ACT
+#undef ACT_XP
 #undef LIST
 #undef VAR
 #undef POBJ

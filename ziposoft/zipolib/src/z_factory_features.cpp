@@ -1,6 +1,6 @@
 #include "zipolib_cpp_pch.h"
 
-#include "zipolib/include/z_factory.h"
+#include "zipolib/include/z_factory_controller.h"
 #include "zipolib/include/z_factory_var_funcs.h"
 #include "zipolib/include/z_parse_text.h"
 
@@ -72,7 +72,7 @@ void zf_feature::display(z_file& f,void* obj)
 
 	z_factory* fact=df->get_fact_from_obj(subobj);
 	if(!fact)
-		return Z_ERROR(zs_error);			
+		return Z_ERROR_MSG(zs_item_not_found,"Object type not found");			
 	out._obj=subobj;
 	out._fact=fact;
 
@@ -123,7 +123,11 @@ z_status zf_list::add_to_list(z_strlist& list,void* obj)
 	}
 	return zs_ok;
 }
+ z_status zf_list::evaluate(z_factory_controller& controller, zf_obj& o)
+ {
 
+	return zs_end_of_list;	 //Evaluation is done!
+ }
 
 /*________________________________________________________________________
 
@@ -207,14 +211,20 @@ int zf_action::execute(z_file* f,zf_obj& obj)
 	return zs_ok;//???
  }
 
- z_status zf_action::evaluate(zp_text_parser &parser, zf_obj& o,int index)
+ z_status zf_action::evaluate1(zp_text_parser &parser, zf_obj& o,int index)
  {
 	z_status status=load(parser,o);
 	if(status==zs_ok)				   
 		return 	execute(&gz_out,o);
 	return status;
  }
-
+  z_status zf_action::evaluate(z_factory_controller& controller, zf_obj& o)
+ {
+	z_status status=load(controller.get_parser(),o);
+	if(status==zs_ok)				   
+		return 	execute(&gz_out,o);
+	return zs_end_of_list;	 //Evaluation is done!
+ }
 /*________________________________________________________________________
 
 zf_child_obj
@@ -234,7 +244,11 @@ void zf_child_obj::display(z_file& f,void* obj)
 
 	f <<'\n';
 }
+ z_status zf_child_obj::evaluate(z_factory_controller& controller, zf_obj& o)
+ {
 
+	return zs_end_of_list;	 //Evaluation is done!
+ }
 /*________________________________________________________________________
 
 zf_prop
@@ -257,7 +271,7 @@ zf_prop::zf_prop(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext
 	return df->load(parser,ftr_ptr);
 
  }
- z_status zf_prop::evaluate(zp_text_parser &parser, zf_obj& o,int index)
+ z_status zf_prop::evaluate1(zp_text_parser &parser, zf_obj& o,int index)
  {
 	z_status status;
 	if(parser.test_char('=')==zs_ok)
@@ -272,7 +286,11 @@ zf_prop::zf_prop(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext
 
 	
  } 
- 
+  z_status zf_prop::evaluate(z_factory_controller& controller, zf_obj& o)
+ {
+
+	return zs_end_of_list;	 //Evaluation is done!
+ }
 z_status zf_prop::set_from_value(zp_value* val,void *obj) 
 {
 	void* ftr_ptr=(char*)obj+_offset;

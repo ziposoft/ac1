@@ -40,9 +40,11 @@ ________________________________________________________________________*/
 #define ZLIST(_VAR_)		add_list(#_VAR_,__FUNCTYPE_( ((THECLASS*)0)->_VAR_),zp_offsetof_class(THECLASS,_VAR_),"")
 */
 class z_console;
+class z_factory_controller;
 class zf_feature
 {
 	friend class z_factory;
+	friend class z_factory_controller;
 protected:
 	const zf_var_funcs_base* df;
 	z_memptr _offset;
@@ -65,7 +67,22 @@ public:
 	virtual zf_action* get_action(){return 0;}
    	virtual z_status set_from_value(zp_value* val,void *obj) {return Z_ERROR_NOT_IMPLEMENTED; 	}
   	virtual z_status load(zp_text_parser &parser, zf_obj& o){return Z_ERROR_NOT_IMPLEMENTED;}
- 	virtual z_status evaluate(zp_text_parser &parser, zf_obj& o,int index=-1) 
+	/* 
+	evaluate 
+	evaluate a feature as part of a command line
+	Returns:
+		zs_ok- processed OK, continue processing
+		zs_end_of_list- processed OK, command complete (check for extraneous chars after)
+		zs_feature_not_found-
+		zs_syntax_error-
+	*/
+		
+	virtual z_status evaluate(z_factory_controller& controller,zf_obj& o)
+	{
+		return Z_ERROR_NOT_IMPLEMENTED;
+	}
+
+ 	virtual z_status evaluate1(zp_text_parser &parser, zf_obj& o,int index=-1) 
 	{
 		return Z_ERROR_NOT_IMPLEMENTED;
 	}
@@ -86,9 +103,9 @@ public:
 	virtual void display(z_file& f,void* obj);
 	int execute(z_file* f,zf_obj& obj);
   	virtual z_status load(zp_text_parser &parser, zf_obj& o) ;
- 	virtual z_status evaluate(zp_text_parser &parser, zf_obj& o,int index=-1) ;
+ 	virtual z_status evaluate1(zp_text_parser &parser, zf_obj& o,int index=-1) ;
 	virtual zf_feature_type get_type() const { return zf_ft_act; }
-
+	virtual z_status evaluate(z_factory_controller& controller,zf_obj& o) ;
 };
 class zf_child_obj  : public  zf_feature
 {
@@ -96,6 +113,7 @@ public:
  	zf_child_obj(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");
 	virtual void display(z_file& f,void* obj);
 	virtual zf_feature_type get_type() const { return zf_ft_obj; }
+	virtual z_status evaluate(z_factory_controller& controller,zf_obj& o) ;
 
 };
 class zf_prop  : public  zf_feature
@@ -107,8 +125,9 @@ public:
 
   	virtual z_status load(zp_text_parser &parser, zf_obj& o) ;
  	virtual z_status get_string_val(z_string& out, void* v,int index=-1);
- 	virtual z_status evaluate(zp_text_parser &parser, zf_obj& o,int index=-1) ;
+ 	virtual z_status evaluate1(zp_text_parser &parser, zf_obj& o,int index=-1) ;
 	virtual zf_feature_type get_type() const { return zf_ft_var; }
+	virtual z_status evaluate(z_factory_controller& controller,zf_obj& o) ;
 
 };
 class zf_funcs_obj_list_base;
@@ -123,11 +142,12 @@ public:
 
   	virtual z_status load(zp_text_parser &parser, zf_obj& o) ;
  	virtual z_status get_string_val(z_string& out, void* v,int index=-1);
- 	virtual z_status evaluate(zp_text_parser &parser, zf_obj& o,int index=-1) ;
+ 	virtual z_status evaluate1(zp_text_parser &parser, zf_obj& o,int index=-1) ;
 	*/
 	virtual zf_feature_type get_type() const { return zf_ft_obj_list; }
 	virtual z_status on_tab(z_console* console) ;
 	virtual z_status add_to_list(z_strlist& list,void* obj);
+	virtual z_status evaluate(z_factory_controller& controller,zf_obj& o) ;
 
 
 

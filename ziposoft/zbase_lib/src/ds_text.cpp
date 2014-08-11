@@ -1,6 +1,11 @@
 #include "zb_pch.h"
+#include "zb.h"
 
-#include "zbase_lib/include/ds_text.h"
+
+
+#ifdef ZB_INCLUDE_DS_TEXT
+
+#include "ds_text.h"
 
 /*___________________________________________________________________________
 
@@ -43,29 +48,20 @@ z_status zb_ds_text::open(ctext name,bool create,bool writable)
 	 return 0;
 }
 
-z_status zb_ds_text::get_table_list(z_obj_vector_map<zb_ds_table> & list)
-{
-	z_map_iter i;
-	zb_ds_table_txt* tbl=0;
-	while((tbl=	_tables.get_next(i)))
-	{
-		list<<tbl;
-	}
-	 return 0;
 
-}
+
 
 z_status zb_ds_text::close()
 {
 	 return Z_ERROR_NOT_IMPLEMENTED;
 
 }
-zb_ds_table* zb_ds_text::ds_table_new(ctext ds_table_name)
+z_status zb_ds_text::_table_new(ctext ds_table_name,zb_ds_table*& tbl)
 {
 
-	zb_ds_table_txt* tbl=z_new zb_ds_table_txt(this,ds_table_name);
-	_tables<<tbl;
-	return  tbl;
+	zb_ds_table_txt* tbl_text=z_new zb_ds_table_txt(this,ds_table_name);
+	tbl=tbl_text;
+	return  zs_ok;
 }
 zb_ds_field* zb_ds_text::ds_field_string_new(ctext id)
 {
@@ -333,3 +329,6 @@ z_status zb_ds_field_text_string::get_string(zb_ds_rec_ptr *rec,z_string& s)
 	s=str;
 	return zs_ok;
 }
+
+
+#endif

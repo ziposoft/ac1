@@ -16,7 +16,7 @@ public:
 	z_console console;
 	z_logger* _p_logger;
 
-	zb_source zbs;
+	zb_ds_text zbs;
 
 };
 /*
@@ -46,8 +46,10 @@ ZFACT(root)
 	*/
 
 };
-ZP_MODULE_INCLUDE(   ZP_MOD(zipobase) ,ZP_MOD(logger));
 
+/* static modules */
+ZP_MODULE_INCLUDE(  ZP_MOD(logger));
+/*  ZP_MOD(zipobase) ,*/
 
 
 
