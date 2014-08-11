@@ -92,5 +92,39 @@ bool zb_source::is_open()
 }
 
 
+z_status zb_source::ds_table_new(ctext ds_table_name,zb_ds_table*& tbl)
+{
+	if(_ds_tables.get(ds_table_name))
+		return Z_ERROR(zs_already_exists);
+
+	z_status status=_table_new(ds_table_name,tbl);
+	if(status)
+		return 	status;
+
+	_ds_tables<<tbl;
+	return zs_success;
+}
+z_status zb_source::ds_table_get(ctext ds_table_name,zb_ds_table*& tbl)
+{ 
+	tbl=_ds_tables.get(ds_table_name);
+	if(!tbl)
+		return Z_ERROR(zs_not_found);
+	return zs_success;
+};
+
+
+z_status zb_source::table_new()
+{
+	zb_ds_table* tbl=0;
+	if(	table_new_name=="")
+	{
+		Z_ERROR_MSG(zs_bad_parameter,"You must specify a table name");
+	}
+
+
+	return ds_table_new(table_new_name,tbl);
+}
+
+
 
 

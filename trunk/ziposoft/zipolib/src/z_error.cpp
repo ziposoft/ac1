@@ -45,6 +45,8 @@ ERR(zs_wrong_object_type,0)
 ERR(zs_out_of_range,0)
 ERR(zs_data_error,0)
 ERR(zs_parse_error,0)
+ERR(zs_already_exists,"already exists")
+ERR(zs_not_found,"not found")
 
 
 };

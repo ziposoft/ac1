@@ -135,15 +135,58 @@ z_status z_console::select_obj()
 	if(!f)
 		return zs_feature_not_found;
 	int index=-1;
-	/*
-	if(_cmd_line_feature_index)
-		index=_cmd_line_feature_index.GetDecVal();
-		*/
+
 
 
 	return f->get_zf_obj(_temp,_cmd_line_feature_index,_temp);
 
 }
+
+z_status z_console:: EvaluateLine2(ctext text)
+{
+	z_status status=zs_ok;	
+
+
+	_tparser.set_source(text);
+ 	_has_path=false;
+
+	_temp= _selected;
+	_temp_path=_path;
+	if(_tparser.test_char('/')==zs_matched)
+	{
+		_temp=_root;
+		_temp_path="";
+		_has_path=true;
+	}
+	while (1)
+	{
+		status=get_feature_and_index();
+		if(status)
+			break;
+
+
+
+		status=select_obj();
+		if(status)
+		{
+			break; //if it is not an object, thats ok
+		}
+		_has_path=true;
+
+		_temp_path<<"/"<<_cmd_line_feature;
+		if(_cmd_line_feature_index)
+			_temp_path<<'['<<_cmd_line_feature_index<<']';
+		if(_tparser.test_char('/') && _tparser.test_char('.'))
+				break;	
+		_cmd_line_feature.clear();
+		_cmd_line_feature_index.clear();
+	}
+	if(!_tparser.eob())
+		return Z_ERROR_DBG(zs_unparsed_data);
+		
+	return status;
+}
+
 z_status z_console:: EvaluateLine(ctext text)
 {
 	z_status status=zs_ok;	
@@ -201,7 +244,7 @@ z_status z_console::evaluate_feature(zf_obj& o)
 
 
 
-	return zff->evaluate(_tparser,o);
+	return zff->evaluate1(_tparser,o);
 
 	return zs_ok;//???
 }
@@ -284,6 +327,8 @@ z_status z_console:: ExecuteLine(ctext text)
 		_selected=_temp;
 		return zs_ok;
 	}
+	Z_ERROR_DBG(  status);
+
 	//if no path is specified, then try the built in commands
 	status=evaluate_feature(_self);
 	if(status==zs_ok)

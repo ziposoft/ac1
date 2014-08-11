@@ -1,7 +1,8 @@
 #include "zb_pch.h"
 #include "zbase_lib/include/zb.h"
 
-#ifdef ZB_SQLITE
+#ifdef ZB_INCLUDE_DS_SQLITE
+
 #include "zbase_lib/include/ds_sqlite.h"
 
 zb_src_sl3::zb_src_sl3() : zb_source()
@@ -465,3 +466,4 @@ act_rtn zb_src_sl3::get_data_test()
 }
 
 */
+

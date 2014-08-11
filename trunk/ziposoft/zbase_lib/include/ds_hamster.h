@@ -1,6 +1,9 @@
 #ifndef DSTEXT_H
 #define DSTEXT_H
 #include "zbase_lib/include/zb.h"
+
+#ifdef ZB_INCLUDE_DS_HAMSTER
+
 #include "zbase_lib/include/datasource.h"
 
 
@@ -16,4 +19,5 @@ public:
 };
 
 
+#endif
 #endif

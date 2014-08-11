@@ -3,7 +3,7 @@
 #include "zipolib/include/zipo.h"
 #include "zipolib/include/z_parse_text.h"
 #include "zipolib/include/z_terminal.h"
-#include "zipolib/include/z_factory.h"
+#include "zipolib/include/z_factory_controller.h"
 
 class z_console_base : public z_terminal
 {
@@ -56,7 +56,8 @@ public:
 	int run();
 
 };
-class z_console : public z_console_base
+
+class z_console : public z_console_base	,public   z_factory_controller
 {
 public:
 	z_console();
@@ -73,6 +74,7 @@ public:
 */
 	virtual z_status ExecuteLine(ctext text);
 	virtual z_status EvaluateLine(ctext  text);
+	virtual z_status EvaluateLine2(ctext  text);
 	z_string _cmd_line_feature;
 	z_string _cmd_line_feature_index;
 	bool _has_path;
@@ -80,7 +82,6 @@ public:
 	z_status get_feature_and_index();
 	z_status select_obj();
     virtual void OnTab();
-	zp_text_parser _tparser;
 
 /*	
 	OLD METHOD
@@ -98,11 +99,7 @@ public:
 
 
 
-	zf_obj _root;
-	zf_obj _self;
-	zf_obj _selected;
-	zf_obj _temp;
-	z_string _temp_path;
+
 	bool _has_feature;
 
 	void init(ctext appname);

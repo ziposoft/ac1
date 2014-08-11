@@ -1,6 +1,8 @@
 #ifndef DSTEXT_H
 #define DSTEXT_H
 #include "zbase_lib/include/zb.h"
+
+#ifdef ZB_INCLUDE_DS_TEXT
 #include "zbase_lib/include/datasource.h"
 
 class zb_ds_text;
@@ -36,6 +38,8 @@ class zb_ds_text: public zb_source
 	z_directory _dir;
 	z_obj_map<zb_ds_table_txt> _tables;
 
+protected:
+ 	virtual z_status _table_new(ctext ds_table_name,zb_ds_table*& tbl);
 public:
 	zb_ds_text();
 	virtual ~zb_ds_text();
@@ -43,10 +47,13 @@ public:
 	virtual z_status open(ctext name,bool create,bool writable);
 	virtual z_status close();
 	virtual z_status commit();
- 	virtual zb_ds_table* ds_table_new(ctext ds_table_name);
+
 	virtual zb_ds_rec_ptr* record_solo_new();
 	virtual zb_ds_field* ds_field_string_new(ctext id);
-	virtual z_status get_table_list(z_obj_vector_map<zb_ds_table> & list);
+	
+	
+	//crap
+	//virtual z_status get_table_list(z_obj_vector_map<zb_ds_table> & list);
 
 };
 
@@ -101,4 +108,5 @@ public:
 	virtual z_status get_string(zb_ds_rec_ptr *rec,z_string& s);
 };
 
+#endif
 #endif

@@ -35,6 +35,8 @@ enum {
 	zs_out_of_range,
 	zs_data_error,
 	zs_parse_error,
+	zs_already_exists,
+	zs_not_found,
 
 
 };

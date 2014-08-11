@@ -1,6 +1,8 @@
 #ifndef DS_METAKIT_H
 #define DS_METAKIT_H
 #include "zbase_lib/include/zb.h"
+#ifdef ZB_INCLUDE_DS_METAKIT
+
 #include "zbase_lib/include/datasource.h"
 #include "metakit/include/mk4.h"
 #include "metakit/include/mk4str.h"
@@ -22,8 +24,8 @@ public:
 	virtual z_status commit();
 	virtual zb_ds_field* ds_field_string_new(ctext id);
 	virtual zb_ds_rec_ptr* record_solo_new();
- 	virtual zb_ds_table* ds_table_new(ctext ds_table_name);
-	virtual z_status     ds_table_open(zb_ds_table* tbl);
+ 	virtual z_status ds_table_new(ctext ds_table_name,zb_ds_table*& tbl);
+	virtual z_status ds_table_open(ctext ds_table_name,zb_ds_table*& tbl);
 
 	//METAKIT SPECIFIC
 	z_status _get_view(c4_View& view,ctext viewid,zb_ds_desc & desc);
@@ -110,4 +112,6 @@ public:
  	virtual z_status set_string(zb_ds_rec_ptr *rec,ctext s);
 	virtual z_status get_string(zb_ds_rec_ptr *rec,z_string& s);
 };
+#endif
+
 #endif
