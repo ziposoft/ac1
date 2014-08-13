@@ -1,0 +1,2 @@
+rm votes.csv
+scrapy crawl votes -o votes.csv -t csv
