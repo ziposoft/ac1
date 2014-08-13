@@ -532,6 +532,7 @@ class legislator{
 
 				
 		}
+		$running.="<div><a href=$district_url>Click here for 2014 district race</a></div>";
 		$this->print_table_row ( '2014 Election', $running );
 		$this->print_table_row ( 'Party', $this->party );
 		$this->print_table_row ( 'Counties', $this->county );
