@@ -1,5 +1,15 @@
 <?php
-
+/*
+ * bill_list - tab 1- 
+ * canidates - tab 2-
+ * leg_list  - tab 3-
+ * districts - tab 4
+ * vote_data - tab 5-
+ * links 	 - tab 6-
+ * 
+ * 
+ * 
+ */
 
 $obj_array=array();
 
@@ -809,7 +819,97 @@ class canidates extends data_source
 				$x->print_list_row();
 	}	
 }
+function file_get_contents_curl($url)
+{
+	$ch = curl_init();
 
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+
+	$data = curl_exec($ch);
+	curl_close($ch);
+
+	return $data;
+}
+class exlink {
+	public $link;
+	public $canidate;
+	public $year;
+	public $bill;
+	public $image;
+	public $title;	
+	public $description;	
+	public function __construct($d) {
+		$this->link =getj($d,'link');
+		$this->bill =getj($d,'bill');
+		$this->canidate =getj($d,'canidate');
+		if($this->link)
+			$this->fetch();
+	}
+	public function fetch()
+	{
+		try {
+		//parsing begins here:
+		$html = file_get_contents_curl($this->link);
+		
+		$doc = new DOMDocument();
+		@$doc->loadHTML($html);
+		$nodes = $doc->getElementsByTagName('title');
+		
+		//get and display what you need:
+		$title = $nodes->item(0)->nodeValue;
+		$keywords="";
+		$description="";
+		$image="";
+		
+		$metas = $doc->getElementsByTagName('meta');
+		
+		for ($i = 0; $i < $metas->length; $i++)
+		{
+			$meta = $metas->item($i);
+			if($description=="")
+				if($meta->getAttribute('name') == 'description')
+					$description = $meta->getAttribute('content');
+		
+				if($image=="")
+					if($meta->getAttribute('property') == 'og:image')
+						$image = $meta->getAttribute('content');
+		}
+		$this->image=$image;
+		$this->title=$title;
+		$this->description=$description;
+		}
+		catch (Exception $e) {
+			$this->title=$e->getMessage();
+  
+			}
+		
+	
+	}	
+
+	
+	
+}
+
+class exlinks extends data_source
+{
+	function create_from_spreadsheet()
+	{
+		$this->get_json_data(6,'exlink');
+	}
+	public function print_list()
+	{
+		foreach ( $this->list as $row )
+		{
+			echo ("<a href='$row->link'><img src='$row->image'/></a>");
+			echo ("<h4>$row->title</h4>");
+			echo ("<p>$row->description</p>");
+		}
+	}	
+
+}
 class district {
     public $counties;
     public $ch;
@@ -836,8 +936,6 @@ class districts extends data_source
         }
         return null;
 	}
-	
-
 }
 class survey_question 
 {
