@@ -7,7 +7,8 @@ from ncleg.items import NclegItem,VoteItem
 from scrapy.exceptions import CloseSpider
 from urlparse import urlparse,parse_qsl
 
-bills = [ 'HB66','HB33','HB612','HB930','HB905','HB956','SB626','SB689','SB648']
+#bills = [ 'HB66','HB33','HB612','HB930','HB905','HB956','SB626','SB689','SB648','SB744']
+bills = ['SB744']
 class voteSpider(CrawlSpider):
 	name = "votes"
 	count = 0
