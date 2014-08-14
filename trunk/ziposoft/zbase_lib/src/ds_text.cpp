@@ -90,7 +90,13 @@ z_status zb_ds_text::commit()
 	zb_ds_table_txt 
 ____________________________________________________________________________*/
 
-
+zb_ds_table_txt::zb_ds_table_txt():zb_ds_table(0,0)
+{
+	_ds=0;
+	_current_row=0;
+	_current_column=0;
+	_dirty=false;
+}
 
 zb_ds_table_txt::zb_ds_table_txt(zb_ds_text* ds,ctext unique_id):zb_ds_table(ds,unique_id)
 {

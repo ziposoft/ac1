@@ -275,7 +275,7 @@ template <> void* zf_var_funcs<zp_obj_vector>::create_obj(void* v,z_factory* fac
 {
 	RECAST(zp_obj_vector,list);
 	zf_obj obj;
-	obj._obj=fact->create_obj();
+	obj._obj=fact->create_default_obj();
 	obj._fact=fact;
 	list.push_back(obj);
 
@@ -417,19 +417,6 @@ z_status zf_funcs_obj_list_base::load(zp_text_parser &parser, void* v) const
 zf_var_funcs<z_obj_vector> 
 ________________________________________________________________________*/
 
-#if 0
-template <> template <class TYPE> void* zf_var_funcs<z_obj_vector<TYPE>>::create_obj(void* v,z_factory* new_child_type) const
-{
-	RECAST(zp_obj_vector,list);
-	zf_obj obj;
-	obj._obj=new_child_type->create_obj();
-	obj._fact=new_child_type;
-	list.push_back(obj);
-
-	return obj._obj;
-}
-
-#endif
 
 
 

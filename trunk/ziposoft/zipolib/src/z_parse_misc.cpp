@@ -248,7 +248,7 @@ z_status zp_parser::parse_item(void*& p_item,
 	z_factory* ie=zf_get_factory(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
-	void* obj=ie->create_obj();
+	void* obj=ie->create_default_obj();
 	context_set_root(obj,ie,0);
 	reset_results();
 
@@ -275,7 +275,7 @@ z_status zp_parser::create_obj(ctext item_entry_name,void* &p_obj)
 	z_factory* ie=zf_get_factory(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
-	p_obj=ie->create_obj();
+	p_obj=ie->create_default_obj();
 
 
 	return zs_ok;
@@ -314,7 +314,7 @@ z_status zp_parser::create_empty_item(void*& p_item,
 	z_factory* ie=zf_get_factory(item_entry_name);
 	if(ie==0)
 		return zs_no_entry_for_item;
-	void* obj=ie->create_obj();
+	void* obj=ie->create_default_obj();
 	context_set_root(obj,ie,0);
 
 	status=_process_template(zp_mode_create_empty);

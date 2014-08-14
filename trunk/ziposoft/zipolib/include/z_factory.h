@@ -121,7 +121,7 @@ public:
 	{
 		_dynamic=0;
 	}
-	virtual void* create_obj() const=0;
+	virtual void* create_default_obj() const=0;
 	virtual void delete_obj(void*) const=0;
 	virtual ctext get_name()const  { return  get_info().name;}
 	virtual const z_factory_info& get_info() const=0;
@@ -208,7 +208,7 @@ public:
 	}
 
 	static z_factory_T<C> &self;
-	virtual void* create_obj() const {return z_new C(); }
+	virtual void* create_default_obj() const {return z_new C(); }
 	virtual void delete_obj(void* v) const
 	{
 		delete reinterpret_cast<C*>(v);

@@ -122,7 +122,7 @@ public:
 	virtual void* create_obj(void* v,z_factory* fact) const
 	{
 		z_obj_vector<TYPE>& list= *reinterpret_cast<z_obj_vector<TYPE>*>(v);
-		TYPE* obj=reinterpret_cast<TYPE*>(fact->create_obj());
+		TYPE* obj=reinterpret_cast<TYPE*>(fact->create_default_obj());
 		list.add(obj);
 		return obj;
 	}
@@ -284,7 +284,7 @@ public:
 	{
 		void** ppObj=reinterpret_cast<void**>(ppmvar); 
 		//TODO - we could do a dynamic cast here to check that the new child type is valid for the memvar pointer.
-		*ppObj=new_child_type->create_obj();
+		*ppObj=new_child_type->create_default_obj();
 		return *ppObj;
 	}
 

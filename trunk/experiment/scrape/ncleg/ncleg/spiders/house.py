@@ -29,7 +29,7 @@ class voteSpider(CrawlSpider):
 			 
 			  Rule(SgmlLinkExtractor(allow=('viewMember\.pl', ))),  
 			  Rule(SgmlLinkExtractor(allow=('introducedBills\.pl',)), callback='parse_bills', follow= True),
-			  Rule(SgmlLinkExtractor(allow=('MemberVoteHistory\.pl',)), callback='parse_votes', follow= True),
+			  Rule(SgmlLinkExtractor(allow=('MemberVoteHistoryTabs\.pl',)), callback='parse_votes', follow= True),
 
 			 )
 	
