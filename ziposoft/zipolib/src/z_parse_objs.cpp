@@ -22,7 +22,7 @@ z_status zp_cfg_obj::createobj(zf_obj& o)
 	{
 		return Z_ERROR_MSG(zs_item_not_found,"Object type \"%s\" not found",_obj_type.c_str());
 	}
-  	o._obj=o._fact->create_obj();
+  	o._obj=o._fact->create_default_obj();
 	if(!o._obj)
 	{
 		return Z_ERROR_MSG(zs_cannot_create_virtual_obj,"Object \"%s\" cannot be created",_obj_type.c_str());

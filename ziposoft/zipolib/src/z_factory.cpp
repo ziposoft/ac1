@@ -428,7 +428,7 @@ void*  zfs_create_obj_by_type(ctext name)
 {
 	z_factory*  f=zf_get_factory( name);
 	if(f)
-		return f->create_obj();
+		return f->create_default_obj();
 	return 0;
 
 
@@ -469,7 +469,7 @@ z_status zf_create_obj_from_text_stream(zp_text_parser &parser, z_factory* &fact
 
 	if(objpointer==0)//we need to create it
 	{
-		objpointer=factory->create_obj();
+		objpointer=factory->create_default_obj();
 
 	}
 	parser.skip_ws();

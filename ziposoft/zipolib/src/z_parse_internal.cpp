@@ -1085,7 +1085,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 				{
 					if(!(flags.required || flags.create_default))
 						return zs_skipped;
-					sub_obj=fact_new_obj->create_obj();
+					sub_obj=fact_new_obj->create_default_obj();
 				}
 				//Reset all of the member var iterators.
 
