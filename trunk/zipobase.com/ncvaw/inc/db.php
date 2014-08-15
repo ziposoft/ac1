@@ -68,6 +68,7 @@ class data_source
 		
 		$this->list=array();
 		$cn=get_class($this);
+		/*
 		$filename=$root."/data/$cn.json";
 		if(! file_exists ( $filename ))	
 			$refresh_data=1;
@@ -85,8 +86,18 @@ class data_source
 			fwrite ( $fp, $file );
 			fclose ( $fp );
 		}
-			
+				
 		$json = json_decode (  file_get_contents ( $filename ) );
+		*/
+		if(!$spreadsheetid)
+		{
+			$spreadsheetid = '0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc';
+		}
+		$url = "http://spreadsheets.google.com/feeds/list/$spreadsheetid/$tab/public/values?alt=json";
+		$json = json_decode (  file_get_contents ( $url ) );
+		
+		
+		
 		if($json)
 			$jdata = $json->{'feed' }->{'entry' };	
 		else 
@@ -818,7 +829,7 @@ class canidates extends data_source
 		foreach ( $set as $x )
 		{
 
-			$link_string.="<div><a href='/guide/canidate.php?key=$x->key'>$x->displayname</a></div>";
+			$link_string.="<div>$x->party_id: <a href='/guide/canidate.php?key=$x->key'>$x->displayname</a></div>";
 
 			
 		}
