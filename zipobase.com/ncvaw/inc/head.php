@@ -107,10 +107,11 @@ make_menu ( [
 		z_mi("How You Can Help","/about/getinvolved.html","")]),		
 		z_menu ( "Voters Guide", [ 
 				z_mi ( "Find your district", "/guide/find.html", "" ),
+				z_mi ( "District Lists", "/districts.php", "" ),
 				z_mi ( "Recent Legislation", "/bills.php", "" ),
 				z_mi ( "Canidates Survey", "/guide/survey.html", "" ),
 				
-				// z_menu_sub("Search Legislature",[
+				
 				z_mi ( "Senate List", "/guide/leglist.html?ch=S", "HOME" ),
 		z_mi("House List","/guide/leglist.html?ch=H",""),
 		z_mi("Complete List","/guide/leglist.html",""),

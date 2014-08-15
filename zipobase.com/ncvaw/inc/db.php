@@ -736,7 +736,7 @@ class canidate {
 		{
 
 			echo ("<div class='leg_thumb' ><a href='/guide/canidate.php?key=$this->key'>");
-			echo ("<img src='$photo'/></a></div>");
+			echo ("<img src='$this->photo'/></a></div>");
 		}
 		else {
 			echo ("<div class='leg_thumb' ><img src='/img/unknown.png'/></div>");
@@ -764,7 +764,7 @@ class canidate {
 		
 		if($this->website)
 		{
-			$link="<a href='".$website."' target='_blank'>".$this->website."</a>";
+			$link="<a href='".$this->website."' target='_blank'>".$this->website."</a>";
 			$this->print_table_row ( 'Webiste', $link );
 				
 		}
@@ -810,7 +810,25 @@ class canidates extends data_source
 		}
 		return $set;
 	}
-	
+	public function get_candate_links($ch,$num,$elect)
+	{
+		$link_string="";
+		$set=$this->getlist($ch,$num,$elect);
+
+		foreach ( $set as $x )
+		{
+
+			$link_string.="<div><a href='/guide/canidate.php?key=$x->key'>$x->displayname</a></div>";
+
+			
+		}
+		if(count($set)==1)
+		{
+			$link_string.="<div>(uncontested)</div>";
+			
+		}
+		return $link_string;
+	}	
 	public function printlist($ch,$num,$elect)
 	{
 		
@@ -915,7 +933,8 @@ class district {
     public $ch;
     public $dist;
 	public function __construct($d) {
-    		$this->counties =getj($d,'counties');
+    		$counties =getj($d,'counties');
+    		$this->counties=str_replace(",",", ",$counties);
     		$this->ch =getj($d,'chamber');
     		$this->dist =getj($d,'district');
 	}	
@@ -936,6 +955,30 @@ class districts extends data_source
         }
         return null;
 	}
+	public function print_list()
+	{
+		$leglist=getobj("leg_list");
+		$canlist=getobj("canidates");
+		
+		
+		echo("<table class='votes' style='width:100%;'><tr><th>Chamber</th><th>District#</th><th>Election</th><th>Canidates</th>
+				<th style=' max-width: 45px;'>Counties</th><th>Current Representative</th></tr>");
+		foreach ( $this->list as $d )
+		{
+			$leg=$leglist->get_leg_by_district($d->ch,$d->dist);
+			$chamber=($d->ch=='H'?'House':'Senate');
+			$canidates=$canlist->get_candate_links($d->ch,$d->dist,"gen");
+		
+			echo ("<tr><td>$chamber</td>");
+			echo ("<td><a href='/district.php?ch=$d->ch&dist=$d->dist'>$d->dist</a></td>");
+			echo ("<td>$canidates</td>");
+			echo ("<td><a href='/district.php?ch=$d->ch&dist=$d->dist'>Election Coverage</a></td>");
+			echo ("<td ><div style='word-break:normal; '>$d->counties</div></td>");
+			echo ("<td><a  href='/guide/legpage.php?id=$leg->key'>$leg->name</a></td></tr>");
+		
+		}
+		echo("</table>");
+	}	
 }
 class survey_question 
 {
