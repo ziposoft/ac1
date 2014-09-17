@@ -86,6 +86,8 @@ public:
 	virtual int read(int offset,int width,U64& data)
 	{
 		U8* p;
+		if(!_p_data)
+			return zs_not_open;
 		p=(U8*)_p_data+offset;
 
 
@@ -139,13 +141,26 @@ public:
 		}
 		return status;
 	}
+	virtual int newfile()
+	{
+		_p_data=new char[total_size];
+		z_status status=save();
 
+
+		return status;
+	}
 
 };
 
 ZFACT(z_intf_random_access)
 {
-	ZACT(dump);
+	ZACT_XP(dump,"dump",0,"Dump data",3,
+		ZPARAM(offset),
+		ZPARAM(length),
+
+		ZPARAM(width)
+		);
+
 	ZACT(write_pattern_incrementing);
 	ZACT(write_pattern_set);
 
@@ -154,12 +169,20 @@ ZFACT(z_intf_random_access)
 	ZPROP(width);
 	ZPROP(length);
 };
+ZFACT_V(z_intf_mapped_access,z_intf_random_access)
+{
 
-ZFACT_V(z_binary_file,z_intf_random_access)
+
+
+}
+ZFACT_V(z_binary_file,z_intf_mapped_access)
 {
 	ZPROP(filename);
-	ZACT_XP(save,"save","Save to file",1,ZPARAM(filename));
-	ZACT_XP(load,"load","Load from file",1,ZPARAM(filename));
+	ZACT_XP(save,"save",0,"Save to file",1,ZPARAM(filename));
+	ZACT_XP(newfile,"new",0,"Create new file",2,
+		ZPARAM(filename),ZPARAM(length)
+		);
+	ZACT_XP(load,"load",0,"Load from file",1,ZPARAM(filename));
 	
 
 };
@@ -177,17 +200,20 @@ class Vme
 public:
 	Vme()
 	{
+		int i;
+		for(i=0;i<8;i++)
+			master << new VmeMaster();
 	}
-	z_obj_vector <VmeMaster> masters;
+	z_obj_vector <VmeMaster> master;
 
 };
-ZFACT(VmeMaster)
+ZFACT_V(VmeMaster,z_intf_mapped_access)
 {
 };
 
 ZFACT(Vme)
 {
-	ZPROP(masters);
+	ZPROP(master);
 };
 
 class root
@@ -231,10 +257,10 @@ int main(int argc, char* argv[])
 
 	root o;
 	o.console.setroot(&o);
+	o.console.init(argv[0]);
 	o.console.loadcfg();
 	o.console.runapp(argc,argv);
 	o.console.savecfg();
-
 
 	return 0;
 }

@@ -78,7 +78,7 @@ ZO_OBJ_LIST;
 #undef LIST
 #undef VAR
 #undef POBJ
-#define ZCLS(_CLASS_,_BASE_,_NAME_,_DESC_,...) { #_CLASS_,&_gz_factory_##_CLASS_ }, 
+#define ZCLS(_CLASS_,_BASE_,_NAME_,_FLAGS_,_DESC_,...) { #_CLASS_,&_gz_factory_##_CLASS_ }, 
 #define ZP_MODULE_DEFINE(_NAME_) zp_module_fact_entry zp_module_##_NAME_##_fact_list[]={\
 ZO_OBJ_LIST };\
 const zp_module_entry ZP_MODULE(_NAME_)= \
