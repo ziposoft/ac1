@@ -12,7 +12,7 @@ ZFACT(zb_source)
 	
 	ZPROP(_name);
 	ZPROP(_ds_tables);
-	ZACT_XP(table_new,"table_new","Create a new table",1,ZPARAM(table_new_name));
+	ZACT_XP(table_new,"table_new",0,"Create a new table",1,ZPARAM(table_new_name));
 };
 ZFACT_V( zb_ds_table_txt, zb_ds_table)
 {};

@@ -11,22 +11,36 @@ ________________________________________________________________________*/
 #ifndef z_factory_dyn_h
 #define z_factory_dyn_h
 
+#define ZFF_LOAD		0x00000001
+#define ZFF_SAVE		0x00000002
+#define ZFF_LIST		0x00000004
+#define ZFF_SET			0x00000008
+#define ZFF_LIST3		0x00000010
+#define ZFF_LIST4		0x00000020
 
 
-#define __ZPROP_X(_VFUNCS_,_VAR_,_NAME_,_DESC_)	\
+#define ZFF_HEX			0x01000000
+
+#define ZFF_PROP (ZFF_LOAD|ZFF_SAVE|ZFF_LIST|ZFF_SET)
+#define ZFF_PARAM (ZFF_LOAD|ZFF_SAVE|ZFF_SET)
+#define ZFF_STAT (ZFF_SAVE|ZFF_LIST)
+
+
+
+#define __ZPROP_X(_VFUNCS_,_VAR_,_NAME_,_FLAGS_,_DESC_)	\
 	add_feature(_VFUNCS_( ((THECLASS*)0)->_VAR_)->create_feature(_NAME_,zp_offsetof_class(THECLASS,_VAR_),_DESC_,0 /*flags*/))
-#define ZPROP_X(_VAR_,_NAME_,_DESC_)	__ZPROP_X(zp_var_funcs_get,_VAR_,_NAME_,_DESC_)
+#define ZPROP_X(_VAR_,_NAME_,_FLAGS_,_DESC_)	__ZPROP_X(zp_var_funcs_get,_VAR_,_NAME_,_FLAGS_,_DESC_)
 
-#define  ZPROP(_VAR_) ZPROP_X( _VAR_,#_VAR_,"")
+#define  ZPROP(_VAR_) ZPROP_X( _VAR_,#_VAR_,0,"")
 //#define ZACT(_ACT_) add_act_T(#_ACT_,*(z_memptr*)&(&THECLASS::_ACT_) ,"");
-#define ZPARAM_X(_VAR_,_NAME_,_DESC_) ZPROP_X(_VAR_,_NAME_,_DESC_)
+#define ZPARAM_X(_VAR_,_NAME_,_FLAGS_,_DESC_) ZPROP_X(_VAR_,_NAME_,_FLAGS_,_DESC_)
 #define ZPARAM(_VAR_) ZPROP(_VAR_)
 
-#define ZACT_X(_ACT_,_NAME_,_DESC_) {fn_act _func_##_ACT_=&THECLASS::_ACT_;add_act(_NAME_,*(z_memptr*)(&_func_##_ACT_) ,_DESC_);}
-#define ZACT(_ACT_) ZACT_X(_ACT_,#_ACT_,"")
-#define ZACT_XP(_ACT_,_NAME_,_DESC_,_N_,...) {fn_act _func_##_ACT_=&THECLASS::_ACT_;add_act_params(_NAME_,*(z_memptr*)(&_func_##_ACT_) ,_DESC_,_N_,__VA_ARGS__);}
-#define ZPOBJ(_VAR_) __ZPROP_X(zp_child_pobj_funcs_get,_VAR_,#_VAR_,"")
-#define ZOBJ(_VAR_) __ZPROP_X(zp_child_obj_funcs_get,_VAR_,#_VAR_,"")
+#define ZACT_X(_ACT_,_NAME_,_FLAGS_,_DESC_) {fn_act _func_##_ACT_=&THECLASS::_ACT_;add_act(_NAME_,*(z_memptr*)(&_func_##_ACT_) ,_DESC_);}
+#define ZACT(_ACT_) ZACT_X(_ACT_,#_ACT_,0,"")
+#define ZACT_XP(_ACT_,_NAME_,_FLAGS_,_DESC_,_N_,...) {fn_act _func_##_ACT_=&THECLASS::_ACT_;add_act_params(_NAME_,*(z_memptr*)(&_func_##_ACT_) ,_DESC_,_N_,__VA_ARGS__);}
+#define ZPOBJ(_VAR_) __ZPROP_X(zp_child_pobj_funcs_get,_VAR_,#_VAR_,0,"")
+#define ZOBJ(_VAR_) __ZPROP_X(zp_child_obj_funcs_get,_VAR_,#_VAR_,0,"")
 
 /*
 

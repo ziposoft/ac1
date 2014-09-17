@@ -51,7 +51,7 @@ void z_obj_ptr_delete(z_refcount* p)
 		)\
 	OBJ(zb_table_static,zb_table_base,0,"ZB Table", 0 , NO_FTR\
 		)\
-	OBJ(zb_src_sl3,zb_source,"sqlite","SQLite3", 0 , \
+	OBJ(zb_src_sl3,zb_source,"sqlite",0,"SQLite3", 0 , \
 		PROP(_handle,"handle",NO_ID,NO_DESC,DEF_OPT) \
 		PROP(_path,"path",NO_ID,NO_DESC,DEF_OPT) \
 		PROP(_param_table_name,"table_name",NO_ID,NO_DESC,DEF_OPT) \

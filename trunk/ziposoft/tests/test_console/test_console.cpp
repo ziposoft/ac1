@@ -157,8 +157,8 @@ ZFACT(z_intf_random_access)
 ZFACT_V(z_binary_file,z_intf_random_access)
 {
 	ZPROP(filename);
-	ZACT_XP(save,"save","Save to file",1,ZPARAM(filename));
-	ZACT_XP(load,"load","Load from file",1,ZPARAM(filename));
+	ZACT_XP(save,"save",0,"Save to file",1,ZPARAM(filename));
+	ZACT_XP(load,"load",0,"Load from file",1,ZPARAM(filename));
 	
 
 };
@@ -222,7 +222,7 @@ ZFACT(root)
 	ZPROP(x);
 	ZPROP(i);
 	ZACT(add);
-	ZACT_XP(show,"show","desc",1,ZPARAM(s));
+	ZACT_XP(show,"show",0,"desc",1,ZPARAM(s));
 
 };
 #ifdef BUILD_VX

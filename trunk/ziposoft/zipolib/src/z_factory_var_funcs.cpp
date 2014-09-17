@@ -95,7 +95,18 @@ template <> z_status zf_var_funcs<bool>::load(zp_text_parser &parser, void* v) c
 ________________________________________________________________________*/
 VF<int>::clear(void* v) const			{RECAST(int,i); i=0;    }
 VF<int>::get(z_string& s, void* v,int index) const	{RECAST(int,i); s=i;   }
-VF<int>::set(ctext s, void* v,int index) const		{RECAST(int,i); i=atoi(s);    }
+VF<int>::set(ctext s, void* v,int index) const		
+{
+	RECAST(int,i);
+	if(strncmp(s,"0x",2)==0)
+	{
+		if(sscanf(s,"%x",&i)!=1)
+			i=0;
+			//return zs_bad_parameter;
+	}
+	else
+		i=atoi(s);    
+}
 template <> z_status zf_var_funcs<int>::load(zp_text_parser &parser, void* v) const 
 {
 	z_status status=parser.test_any_identifier();

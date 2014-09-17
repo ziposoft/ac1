@@ -5,8 +5,8 @@
 
 ZFACT(z_console)
 {
-	ZACT_X(exit,"q","Quit/Exit");
-	ZACT_X(list_features,"ls","List features");
+	ZACT_X(exit,"q",0,"Quit/Exit");
+	ZACT_X(list_features,"ls",0,"List features");
 	ZACT(list_features);
 	ZACT(dumpcfg);
 	ZACT(loadcfg);
@@ -14,11 +14,11 @@ ZFACT(z_console)
 	ZACT(help);
 	ZACT(exit);
 	ZACT(run);
-	ZPROP_X(_dump_cmd_line,"dump_cmdline","Dump the parsed command line contents");
-	ZPROP_X(_path,"path","Current path");
-	ZPROP_X(_history,"history","Command line history");
-	ZPROP_X(_config_file,"cfgfile","Filename of configuration file");
-	ZPROP_X(_script_file,"script","Filename of script to run/save");
+	ZPROP_X(_dump_cmd_line,"dump_cmdline",0,"Dump the parsed command line contents");
+	ZPROP_X(_path,"path",0,"Current path");
+	ZPROP_X(_history,"history",0,"Command line history");
+	ZPROP_X(_config_file,"cfgfile",0,"Filename of configuration file");
+	ZPROP_X(_script_file,"script",0,"Filename of script to run/save");
 
 
 }
@@ -693,8 +693,9 @@ void z_console_base::OnEnter()
 			default:
 				break;
 			}
+			//z_logger_dump();
+			Z_ERROR_MSG(result,"command failed: \"%s\"",zs_get_status_text(result));
 			z_logger_dump();
-			gz_out << "\ncommand failed.\n";
 
 		}
 
@@ -754,7 +755,7 @@ void z_console_base::OnDoubleBack()
 should be a static factory, but... whatever
 
 #define ZO_OBJ_LIST \
-	ZCLS(z_console,none,"","", VAR(_log_level) )
+	ZCLS(z_console,none,"",0,"", VAR(_log_level) )
 
 
 
