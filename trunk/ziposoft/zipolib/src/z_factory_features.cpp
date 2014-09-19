@@ -12,6 +12,7 @@ zf_feature::zf_feature()
 {
 	df=0;
 	_offset=0;
+	_flags=ZFF_PROP;
 
 }
 zf_feature::zf_feature(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc) 
@@ -20,6 +21,7 @@ zf_feature::zf_feature(ctext name,const zf_var_funcs_base* funcs,z_memptr offset
 	df=funcs;
 	_offset=offset;
 	_description=desc;
+	_flags=ZFF_PROP;
 
 }
 
@@ -355,11 +357,21 @@ z_factory_dyn& z_factory::init_dynamic()
 	}
 	return *_dynamic;
 }
- zf_feature* z_factory::add_feature(zf_feature* f)
- {
+ zf_feature* z_factory::add_feature(const zf_var_funcs_base* vfuncs,ctext name,z_memptr offset,ctext desc,U32 flags)
+{
+	zf_feature* feat=get_feature(name);
 
-	init_dynamic().features.add(f);
-	return f;
+	if(feat)
+	{
+		feat->_flags |=flags;
+		
+	}
+	else
+	{
+		feat=  vfuncs->create_feature(name,offset,desc,flags);
+	 	init_dynamic().features.add(feat);
+	}
+	return feat;
 
 
  }
@@ -387,8 +399,19 @@ zf_action* z_factory::add_act_params(ctext name,z_memptr act_addr,ctext desc,int
 
 zf_feature* z_factory::add_prop(ctext name,const zf_var_funcs_base* f,z_memptr offset,ctext desc)
 {
-	zf_feature* feat=z_new	zf_prop(name,f,offset,desc);
-	init_dynamic().features.add(feat);
+
+	zf_feature* feat=get_feature(name);
+	
+	if(feat)
+	{
+		
+		
+	}
+	else
+	{
+		feat=z_new	zf_prop(name,f,offset,desc);
+	 	init_dynamic().features.add(feat);
+	}
 	return feat;
 }
 zf_child_obj* z_factory::add_obj(ctext name,const zf_var_funcs_base* f,z_memptr offset,ctext desc)
