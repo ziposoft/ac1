@@ -262,7 +262,7 @@ void z_console:: OnTab()
 			//if we could not parse the line, then dont try to auto-tab
 			return;
 		}
-		if(status!=zs_feature_not_found)
+		if((status!=zs_feature_not_found) &&(status!=zs_eof)	   )
 		{
 
 

@@ -66,7 +66,7 @@ public:
 
  	virtual z_status load(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
  	virtual z_status assign(zp_text_parser &parser, void* v) const;
- 	virtual z_status evaluate1(zp_text_parser &parser, void* v) const  {return Z_ERROR(zs_operation_not_supported);}
+ 	virtual z_status evaluate(zp_text_parser &parser, void* v) const  {return Z_ERROR(zs_operation_not_supported);}
 	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const=0;
 } ;
 
@@ -121,7 +121,7 @@ public:
 	{
 		_dynamic=0;
 	}
-	virtual void* create_default_obj() const=0;
+	virtual void* create_obj() const=0;
 	virtual void delete_obj(void*) const=0;
 	virtual ctext get_name()const  { return  get_info().name;}
 	virtual const z_factory_info& get_info() const=0;
@@ -156,7 +156,7 @@ public:
 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
 	virtual zf_action* add_act_params(ctext name,z_memptr act_addr,ctext desc,int num_params,...) ;
 
-	virtual zf_feature* add_feature(const zf_var_funcs_base* vfuncs,ctext name,z_memptr offset,ctext desc,U32 flags); 
+	virtual zf_feature* add_feature(zf_feature* f); 
 	virtual zf_action* add_act(ctext name,z_memptr act_addr,ctext desc); 
 	virtual zf_feature* add_prop(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
 	virtual zf_child_obj* add_obj(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
@@ -190,6 +190,8 @@ public:
 };
 
 z_dynamic_factory_list& get_factories_dynamic();
+
+
 template <class C >  class z_factory_T :public  z_factory
 {
 public:
@@ -207,8 +209,7 @@ public:
 		get_factories_dynamic().add(this);
 	}
 
-	static z_factory_T<C> &self;
-	virtual void* create_default_obj() const {return z_new C(); }
+	virtual void* create_obj() const =0;
 	virtual void delete_obj(void* v) const
 	{
 		delete reinterpret_cast<C*>(v);
@@ -229,10 +230,24 @@ public:
 		C* nullobj=0;
 		return Z_TYPEINFO_P(nullobj);
 	}
+};
+template <class C >  class z_factory_T_pure_virtual :public  z_factory_T<C>
+{
+public:
+ 	virtual void* create_obj() const {return 0; }
+	static z_factory_T_pure_virtual<C> &self;
+	z_factory_T_pure_virtual(ctext name) : z_factory_T(name) {}
+
+};
+template <class C >  class z_factory_T_create :public  z_factory_T<C>
+{
+public:
+	static z_factory_T_create<C> &self;
+	z_factory_T_create(ctext name) : z_factory_T(name) {}
+	virtual void* create_obj() const {return z_new C(); }
 
 
 };
-
 z_factory*  zf_get_factory(ctext name);
 z_factory*  zf_get_factory_by_type(ctext type);
 z_status zf_create_obj_from_text_stream(zp_text_parser &parser, z_factory* &factory,void* &objpointer);
@@ -250,14 +265,18 @@ template <class CLASS> z_factory*  zf_get_factory_T()
 extern z_factory* _pgz_factory_none;
 #define _gz_factory_none *_pgz_factory_none
 
-#define ZFACT_V(_CLASS_,_BASECLASS_)   z_factory_T<_CLASS_> _gz_factory_##_CLASS_(#_CLASS_); \
+#define _ZFACT_V(_CLASS_,_BASECLASS_,_FACTTYPE_)   _FACTTYPE_<_CLASS_> _gz_factory_##_CLASS_(#_CLASS_); \
 	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,&_gz_factory_##_BASECLASS_,0,0,0 };\
-	template <>  const z_factory_info& z_factory_T<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; }	  \
-	template <> z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=_gz_factory_##_CLASS_;\
-	template <> void z_factory_T<_CLASS_>	::add_features()
+	template <>  const z_factory_info& _FACTTYPE_<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; }	  \
+	template <> _FACTTYPE_<_CLASS_>& _FACTTYPE_<_CLASS_>::self=_gz_factory_##_CLASS_;\
+	template <> void _FACTTYPE_<_CLASS_>	::add_features()
 
 
-#define ZFACT(_CLASS_) ZFACT_V(_CLASS_,none) 
+#define ZFACT_PV(_CLASS_) _ZFACT_V(_CLASS_,none,z_factory_T_pure_virtual) 
+#define ZFACT_V(_CLASS_,_BASECLASS_) _ZFACT_V(_CLASS_,_BASECLASS_,z_factory_T_create) 
+#define ZFACT(_CLASS_) _ZFACT_V(_CLASS_,none,z_factory_T_create) 
+
+
 
 #include "zipolib/include/z_factory_features.h"
 

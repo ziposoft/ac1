@@ -11,6 +11,8 @@ ________________________________________________________________________*/
 #ifndef z_factory_dyn_h
 #define z_factory_dyn_h
 
+
+typedef  U64 zf_feature_flags; 
 #define ZFF_LOAD		0x00000001
 #define ZFF_SAVE		0x00000002
 #define ZFF_LIST		0x00000004
@@ -28,7 +30,7 @@ ________________________________________________________________________*/
 
 
 #define __ZPROP_X(_VFUNCS_,_VAR_,_NAME_,_FLAGS_,_DESC_)	\
-	add_feature(_VFUNCS_( ((THECLASS*)0)->_VAR_)->create_feature(_NAME_,zp_offsetof_class(THECLASS,_VAR_),_DESC_,0 /*flags*/))
+	add_feature(_VFUNCS_( ((THECLASS*)0)->_VAR_),_NAME_,zp_offsetof_class(THECLASS,_VAR_),_DESC_,0 /*flags*/)
 #define ZPROP_X(_VAR_,_NAME_,_FLAGS_,_DESC_)	__ZPROP_X(zp_var_funcs_get,_VAR_,_NAME_,_FLAGS_,_DESC_)
 
 #define  ZPROP(_VAR_) ZPROP_X( _VAR_,#_VAR_,0,"")
@@ -71,6 +73,7 @@ public:
 
 	z_string _name;
 	z_string _description;
+	zf_feature_flags _flags;
 	virtual zf_feature_type get_type()const =0;
 
 	//zf_feature_type _type;
