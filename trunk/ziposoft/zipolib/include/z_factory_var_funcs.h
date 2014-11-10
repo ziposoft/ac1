@@ -77,8 +77,8 @@ template <class VAR >  class zf_var_funcs  : public zf_var_funcs_base
 public:
 	virtual zf_feature_type get_type() const { return zf_ft_var; }
 	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const;
-	virtual void get(z_string& s, void* v,int index=-1) const;
-	virtual void set(ctext  s, void* v,int index=-1) const;
+	virtual void get(z_string& s, void* v,ctext format,int index=-1) const;
+	virtual void set(ctext s, void* v,ctext format,int index=-1) const;
 	virtual void clear(void* v) const;
 	virtual void add(void* list,void* obj) const ;
 	virtual void* get_sub_obj(void* list,ctext key) const;
@@ -288,7 +288,7 @@ public:
 		return *ppObj;
 	}
 
-	virtual void get(z_string& s, void* v,int index=-1) const
+	virtual void get(z_string& s, void* v,ctext format,int index=-1) const
 	{
 		s="???";
 	}
@@ -344,11 +344,16 @@ template <class CLASS >  const zf_var_funcs_base* zp_child_pobj_funcs_get(CLASS*
 /*
 This is custom HEX interface 
 */
-template <class VAR >  class zp_var_funcs_hex  : public zf_var_funcs_base
+template <class VAR >  class zf_var_funcs_hex  : public zf_var_funcs<VAR>
 {
 public:
-	virtual void get(z_string& s, void* v,int index=0) const;
-	virtual void set(ctext  s, void* v,int index=0) const;
+	virtual void get(z_string& s, void* v,ctext format,int index=0) const;
+	virtual void set(ctext s, void* v,ctext format,int index=0) const;
+};
+template <class VAR >  const zf_var_funcs_base* zp_var_funcs_hex_get(VAR& item)
+{
+	static const zf_var_funcs_hex<VAR> f;
+	return &f;
 };
 const zf_var_funcs_base* zp_act_funcs_get();
 template <class VAR >  const zf_var_funcs_base* zp_var_funcs_get(VAR& item)

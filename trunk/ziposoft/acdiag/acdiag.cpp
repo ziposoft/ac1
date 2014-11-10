@@ -165,7 +165,7 @@ ZFACT(z_intf_random_access)
 	ZACT(write_pattern_set);
 
 	
-	ZPROP(offset);
+	ZPROP_HEX(offset,"offset",ZFF_HEX|ZFF_PROP,"Offset for operation");
 	ZPROP(width);
 	ZPROP(length);
 };

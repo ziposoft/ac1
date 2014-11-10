@@ -13,7 +13,7 @@ ________________________________________________________________________*/
 void zf_var_funcs_base::dump(z_file& file, void* v) const
 {
 	z_string s;
-	get(s,v);
+	get(s,v,0);
 	file<<s;
 }
  z_status zf_var_funcs_base::assign(zp_text_parser &parser, void* v) const
@@ -50,10 +50,10 @@ template <class V> void zf_var_funcs<V>::add(void* list,void* obj) const {}
 template <class V> void* zf_var_funcs<V>::get_sub_obj(void* list,ctext key) const {	return 0;}
 template <class V> size_t zf_var_funcs<V>::get_size(void* list) const{	return 0;}
 template <class V> void* zf_var_funcs<V>::create_obj(void* list,z_factory* fact) const{	return 0;}
-template <class V> void zf_var_funcs<V>::get(z_string& s, void* v,int index)	const{}
-template <class V> void zf_var_funcs<V>::set(ctext s, void* v,int index)	const{}
+template <class V> void zf_var_funcs<V>::get(z_string& s, void* v,ctext format,int index)	const{}
+template <class V> void zf_var_funcs<V>::set(ctext s, void* v,ctext format,int index)	const{}
 template <class V> void zf_var_funcs<V>::clear( void* v)	const{}
-template <class V> z_status zf_var_funcs<V>::set_from_value(zp_value* val, void* var,int index)	const{  set(val->_string,var); return zs_ok;}
+template <class V> z_status zf_var_funcs<V>::set_from_value(zp_value* val, void* var,int index)	const{  set(val->_string,var,0); return zs_ok;}
 template <class V> z_status zf_var_funcs<V>::assign(zp_text_parser &parser, void* v) const 
 {
 	z_status status=parser.test_char('=');
@@ -77,8 +77,8 @@ template <class V> zf_feature* zf_var_funcs<V>::create_feature(ctext name,z_memp
  zf_var_funcs<bool> 
 ________________________________________________________________________*/
 VF<bool>::clear(void* v)            const {RECAST(bool,b); b=false;    }
-VF<bool>::get(z_string& s, void* v,int index) const {RECAST(bool,b); s=(b?"true":"false");  }
-VF<bool>::set(ctext s, void* v,int index)     const {RECAST(bool,b); b=(strcmp(s,"true")==0);    }
+VF<bool>::get(z_string& s, void* v,ctext format,int index) const {RECAST(bool,b); s=(b?"true":"false");  }
+VF<bool>::set(ctext s, void* v,ctext format,int index)     const {RECAST(bool,b); b=(strcmp(s,"true")==0);    }
 template <> z_status zf_var_funcs<bool>::load(zp_text_parser &parser, void* v) const 
 {
 	z_status status=parser.test_any_identifier();
@@ -89,13 +89,31 @@ template <> z_status zf_var_funcs<bool>::load(zp_text_parser &parser, void* v) c
 	set(s,v,0);
 	return zs_ok;
 }
+
+/*________________________________________________________________________
+
+ zf_var_funcs_hex<int> 
+________________________________________________________________________*/
+template <>  void zf_var_funcs_hex<int>::get(z_string& s, void* v,ctext format,int index) const	
+{RECAST(int,i); s.Format("0x%x",i);  }
+template <> void  zf_var_funcs_hex<int> ::set(ctext s, void* v,ctext format,int index) const		
+{
+	RECAST(int,i);
+	if(sscanf(s,"%x",&i)!=1)
+	{
+			i=0;
+			//return zs_bad_parameter;
+	}
+}
+
+
 /*________________________________________________________________________
 
  zf_var_funcs<int> 
 ________________________________________________________________________*/
 VF<int>::clear(void* v) const			{RECAST(int,i); i=0;    }
-VF<int>::get(z_string& s, void* v,int index) const	{RECAST(int,i); s=i;   }
-VF<int>::set(ctext s, void* v,int index) const		
+VF<int>::get(z_string& s, void* v,ctext format,int index) const	{RECAST(int,i); s=i;   }
+VF<int>::set(ctext s, void* v,ctext format,int index) const		
 {
 	RECAST(int,i);
 	if(strncmp(s,"0x",2)==0)
@@ -121,8 +139,8 @@ template <> z_status zf_var_funcs<int>::load(zp_text_parser &parser, void* v) co
 
 zf_var_funcs<z_string> 
 ________________________________________________________________________*/
-VF<z_string>::get(z_string& s, void* v,int index) const{RECAST(z_string,str); s=str;    }
-VF<z_string>::set(ctext s, void* v,int index) const{RECAST(z_string,str); str=s;   }
+VF<z_string>::get(z_string& s, void* v,ctext format,int index) const{RECAST(z_string,str); s=str;    }
+VF<z_string>::set(ctext s, void* v,ctext format,int index) const{RECAST(z_string,str); str=s;   }
 VF<z_string>::clear(void* v) const{	RECAST(z_string,str); str="";}
 VF<z_string>::dump(z_file& file, void* v) const{	RECAST(z_string,str);z_string out;z_str_escape(str,out);file <<out;}
  template <> z_status zf_var_funcs<z_string>::load(zp_text_parser &parser, void* v) const 
@@ -197,7 +215,7 @@ z_status zf_var_funcs<z_strlist>::load(zp_text_parser &parser, void* v) const
 }
 
 
-VF<z_strlist>::get(z_string& s, void* v,int index)	const
+VF<z_strlist>::get(z_string& s, void* v,ctext format,int index)	const
 {	
 	RECAST(z_strlist,list);	
 	if(index==-1)
@@ -209,7 +227,7 @@ VF<z_strlist>::get(z_string& s, void* v,int index)	const
 		s=list[index];    
 }
 VF<z_strlist>::clear(void* v)				const{	RECAST(z_strlist,list);	list.clear();}
-VF<z_strlist>::set(ctext s, void* v,int index)		const
+VF<z_strlist>::set(ctext s, void* v,ctext format,int index)		const
 {	
 	RECAST(z_strlist,list);
 	if(index==-1)

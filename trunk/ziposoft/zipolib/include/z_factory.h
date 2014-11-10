@@ -52,8 +52,8 @@ class zf_var_funcs_base
 public:
 	virtual zf_feature_type get_type()const =0;
 	virtual void dump(z_file& s, void* v) const;
-	virtual void get(z_string& s, void* v,int index=-1) const {};
-	virtual void set(ctext s, void* v,int index=-1) const {};
+	virtual void get(z_string& s, void* v,ctext format,int index=-1) const {};
+	virtual void set(ctext s, void* v,ctext format,int index=-1) const {};
 	virtual void clear(void* v) const {} 
 	virtual void add(void* list,void* obj) const {} 
 	virtual void* get_sub_obj(void* list,ctext key) const { return 0;} 
@@ -156,7 +156,12 @@ public:
 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
 	virtual zf_action* add_act_params(ctext name,z_memptr act_addr,ctext desc,int num_params,...) ;
 
+<<<<<<< .mine
+	virtual zf_feature* add_feature(const zf_var_funcs_base* vfuncs,ctext name,
+		z_memptr offset,ctext desc,U32 flags); 
+=======
 	virtual zf_feature* add_feature(const zf_var_funcs_base* vfuncs,ctext name,z_memptr offset,ctext desc,U32 flags); 
+>>>>>>> .r405
 	virtual zf_action* add_act(ctext name,z_memptr act_addr,ctext desc); 
 	virtual zf_feature* add_prop(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
 	virtual zf_child_obj* add_obj(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 

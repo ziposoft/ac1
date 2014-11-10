@@ -63,7 +63,7 @@ z_status z_factory::set_var_as_string(void* obj,ctext var_name,ctext value)	cons
 		return zs_operation_not_supported; //could be ACT
 
 	char* pvar=(char*)obj+offset;
-	funcs->set(value,pvar);
+	funcs->set(value,pvar,0);
 	return zs_success;
 }
 z_status z_factory::get_var_as_string(void* obj,ctext var_name,z_string& value) const
@@ -76,7 +76,7 @@ z_status z_factory::get_var_as_string(void* obj,ctext var_name,z_string& value) 
 	if(!funcs)
 		return zs_operation_not_supported; //could be ACT
 	char* pvar=(char*)obj+offset;
-	funcs->get(value,pvar);
+	funcs->get(value,pvar,0);
 	return zs_success;
 }
 z_status z_factory::create_child(void* obj,ctext var_name,z_factory* new_child_type,void** ppChild) const

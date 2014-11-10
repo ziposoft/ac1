@@ -264,7 +264,7 @@ zf_prop::zf_prop(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext
  {
  	void* ftr_ptr=(char*)object+_offset;
 
-  	df->get(out,ftr_ptr,index);
+  	df->get(out,ftr_ptr,0,index);
 	return zs_ok;
  }
  z_status zf_prop::load(zp_text_parser &parser, zf_obj& o) 
