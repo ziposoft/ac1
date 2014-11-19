@@ -143,6 +143,7 @@ public:
 	}
 	virtual int newfile()
 	{
+		total_size=length;
 		_p_data=new char[total_size];
 		z_status status=save();
 
@@ -154,6 +155,8 @@ public:
 
 ZFACT(z_intf_random_access)
 {
+	ZPROP_HEX(offset,"offset",ZFF_HEX|ZFF_PROP,"Offset for operation");
+	ZPROP_HEX(length,"length",ZFF_HEX|ZFF_PROP,"Length of operation");
 	ZACT_XP(dump,"dump",0,"Dump data",3,
 		ZPARAM(offset),
 		ZPARAM(length),
@@ -165,9 +168,7 @@ ZFACT(z_intf_random_access)
 	ZACT(write_pattern_set);
 
 	
-	ZPROP_HEX(offset,"offset",ZFF_HEX|ZFF_PROP,"Offset for operation");
 	ZPROP(width);
-	ZPROP(length);
 };
 ZFACT_V(z_intf_mapped_access,z_intf_random_access)
 {

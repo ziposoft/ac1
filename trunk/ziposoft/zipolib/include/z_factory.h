@@ -51,11 +51,11 @@ class zf_var_funcs_base
 {
 public:
 	virtual zf_feature_type get_type()const =0;
-	virtual void dump(z_file& s, void* v) const;
-	virtual void get(z_string& s, void* v,ctext format,int index=-1) const {};
-	virtual void set(ctext s, void* v,ctext format,int index=-1) const {};
-	virtual void clear(void* v) const {} 
-	virtual void add(void* list,void* obj) const {} 
+	virtual z_status dump(z_file& s, void* v) const;
+	virtual z_status get(z_string& s, void* v,ctext format,int index=-1) const {return Z_ERROR(zs_operation_not_supported);};
+	virtual z_status set(ctext s, void* v,ctext format,int index=-1) const {return Z_ERROR(zs_operation_not_supported);};
+	virtual z_status clear(void* v) const {return Z_ERROR(zs_operation_not_supported);} 
+	virtual z_status add(void* list,void* obj) const {return Z_ERROR(zs_operation_not_supported);} 
 	virtual void* get_sub_obj(void* list,ctext key) const { return 0;} 
 	virtual size_t get_size(void* list) const { return 0;} 
 	virtual void* get_ptr(void* var,z_obj_list_iter& iter) const { return var;}  /*could be pointer to obj, or pointer to obj pointer */
@@ -156,12 +156,7 @@ public:
 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
 	virtual zf_action* add_act_params(ctext name,z_memptr act_addr,ctext desc,int num_params,...) ;
 
-<<<<<<< .mine
-	virtual zf_feature* add_feature(const zf_var_funcs_base* vfuncs,ctext name,
-		z_memptr offset,ctext desc,U32 flags); 
-=======
 	virtual zf_feature* add_feature(const zf_var_funcs_base* vfuncs,ctext name,z_memptr offset,ctext desc,U32 flags); 
->>>>>>> .r405
 	virtual zf_action* add_act(ctext name,z_memptr act_addr,ctext desc); 
 	virtual zf_feature* add_prop(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
 	virtual zf_child_obj* add_obj(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
