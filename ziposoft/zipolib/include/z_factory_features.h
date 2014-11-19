@@ -30,11 +30,7 @@ typedef  U64 zf_feature_flags;
 
 
 #define __ZPROP_X(_VFUNCS_,_VAR_,_NAME_,_FLAGS_,_DESC_)	\
-<<<<<<< .mine
 	add_feature(_VFUNCS_ (( (THECLASS*)0)->_VAR_),_NAME_,zp_offsetof_class(THECLASS,_VAR_),_DESC_,_FLAGS_ /*flags*/)
-=======
-	add_feature(_VFUNCS_( ((THECLASS*)0)->_VAR_),_NAME_,zp_offsetof_class(THECLASS,_VAR_),_DESC_,0 /*flags*/)
->>>>>>> .r405
 #define ZPROP_X(_VAR_,_NAME_,_FLAGS_,_DESC_)	__ZPROP_X(zp_var_funcs_get,_VAR_,_NAME_,_FLAGS_,_DESC_)
 
 #define ZPROP_HEX(_VAR_,_NAME_,_FLAGS_,_DESC_)	__ZPROP_X(zp_var_funcs_hex_get,_VAR_,_NAME_,_FLAGS_,_DESC_)
@@ -72,7 +68,6 @@ protected:
 	const zf_var_funcs_base* df;
 	z_memptr _offset;
 public:
-	U32 _flags;
 
 	zf_feature();
 	zf_feature(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc="");

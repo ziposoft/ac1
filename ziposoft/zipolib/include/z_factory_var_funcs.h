@@ -77,13 +77,13 @@ template <class VAR >  class zf_var_funcs  : public zf_var_funcs_base
 public:
 	virtual zf_feature_type get_type() const { return zf_ft_var; }
 	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const;
-	virtual void get(z_string& s, void* v,ctext format,int index=-1) const;
-	virtual void set(ctext s, void* v,ctext format,int index=-1) const;
-	virtual void clear(void* v) const;
-	virtual void add(void* list,void* obj) const ;
+	virtual z_status get(z_string& s, void* v,ctext format,int index=-1) const;
+	virtual z_status set(ctext s, void* v,ctext format,int index=-1) const;
+	virtual z_status clear(void* v) const;
+	virtual z_status add(void* list,void* obj) const ;
 	virtual void* get_sub_obj(void* list,ctext key) const;
 	virtual size_t get_size(void* list) const;
-	virtual void dump(z_file& s, void* v) const;
+	virtual z_status dump(z_file& s, void* v) const;
 	virtual void* create_obj(void* var,z_factory* fact) const;
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const ;
 
@@ -98,11 +98,11 @@ public:
 	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const;
 	virtual zf_feature_type get_type() const{ return zf_ft_obj_list; }
 
-	virtual void clear(void* v) const;
+	virtual z_status clear(void* v) const;
 
 	virtual z_factory* get_list_obj_fact() const=0;
 	virtual z_obj_list_base* get_list(void * v) const=0;
-	void dump(z_file& f, void* v) const;
+	z_status dump(z_file& f, void* v) const;
 	virtual void* get_ptr(void* v,z_obj_list_iter& iter ) const;
 	virtual void* get_sub_obj(void* list,ctext key) const; 
   	virtual z_status load(zp_text_parser &parser, void* v) const ;
@@ -191,7 +191,7 @@ class zf_funcs_obj_base  : public zf_var_funcs_base
 public:
 	virtual zf_feature_type get_type() const{ return zf_ft_obj; }
   	virtual z_status load(zp_text_parser &parser, void* v) const ;
-	virtual void dump(z_file& file, void* memvar) const;
+	virtual z_status dump(z_file& file, void* memvar) const;
 	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const;
 
 };
@@ -228,12 +228,13 @@ public:
 		return &z_factory_T<CLASS>::self;
 	}
 
-	virtual void dump(z_file& file, void* v) const
+	virtual z_status dump(z_file& file, void* v) const
 	{
 		file.indent_inc();
 		file << "\n";
 		z_factory_T<CLASS>::self.dump_obj(file,v);
 		file.indent_dec();
+		 return zs_ok;
 	}
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const 
 	{
@@ -288,15 +289,17 @@ public:
 		return *ppObj;
 	}
 
-	virtual void get(z_string& s, void* v,ctext format,int index=-1) const
+	virtual z_status get(z_string& s, void* v,ctext format,int index=-1) const
 	{
 		s="???";
+		return zs_ok;
 	}
-	virtual void clear(void* v) const{
+	virtual z_status clear(void* v) const{
 		CLASS** ppObj=reinterpret_cast<CLASS**>(v); 
 		if(*ppObj )
 			delete *ppObj;
 		*ppObj=0;
+		return zs_ok;
 	}
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const 
 	{
@@ -347,8 +350,8 @@ This is custom HEX interface
 template <class VAR >  class zf_var_funcs_hex  : public zf_var_funcs<VAR>
 {
 public:
-	virtual void get(z_string& s, void* v,ctext format,int index=0) const;
-	virtual void set(ctext s, void* v,ctext format,int index=0) const;
+	virtual z_status get(z_string& s, void* v,ctext format,int index=0) const;
+	virtual z_status set(ctext s, void* v,ctext format,int index=0) const;
 };
 template <class VAR >  const zf_var_funcs_base* zp_var_funcs_hex_get(VAR& item)
 {
