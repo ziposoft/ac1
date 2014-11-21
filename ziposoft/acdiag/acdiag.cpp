@@ -51,9 +51,9 @@ public:
 			case 2:			
 				printf("%04x ",(U16) data);break;
 			case 4:			
-				printf("%04x ",(U32) data);break;
+				printf("%08x ",(U32) data);break;
 			case 8:			
-				printf("%08llx ",(U64) data);break;
+				printf("%016llx ",(U64) data);break;
 			default:
 				printf("Invalid width: %d\n",width);
 				break;
@@ -64,13 +64,31 @@ public:
 	}
 	virtual int write_pattern_incrementing()
 	{
+		int i;
+		z_status status;
+		for (i = offset; i < (offset+length); i+=width)
+		{
+			status=write(i,width,i);
+			if(status)
+				return status;
+		}
 		return 0;
 	}
+
 	virtual int write_pattern_set()
 	{
 
+		int i;
+		z_status status;
+		for (i = offset; i < (offset+length); i+=width)
+		{
+			status=write(i,width,i);
+			if(status)
+				return status;
+		}
 		return 0;
 	}
+
 };
 
 class z_intf_mapped_access: public  z_intf_random_access
@@ -112,7 +130,30 @@ public:
 	}
 	virtual int write(int offset,int width,U64 data)
 	{
-		return zs_not_implemented;
+		U8* p;
+		if(!_p_data)
+			return zs_not_open;
+		p=(U8*)_p_data+offset;
+
+
+		switch(width)
+		{
+		case 1:		
+			*(U8*)p=(U8)data;
+			break;
+		case 2:			
+			*(U16*)p=(U16)data;
+			break;
+		case 4:			
+			*(U32*)p=(U32)data;
+			break;
+		case 8:			
+			*(U64*)p=(U64)data;
+			break;
+		default:
+			break;
+		}
+		return 0;
 	}
 };
 class z_binary_file	: public  z_intf_mapped_access
@@ -160,7 +201,6 @@ ZFACT(z_intf_random_access)
 	ZACT_XP(dump,"dump",0,"Dump data",3,
 		ZPARAM(offset),
 		ZPARAM(length),
-
 		ZPARAM(width)
 		);
 
@@ -228,6 +268,7 @@ public:
 	z_logger* _p_logger;
 	z_binary_file binfile;
 	Vme vme;
+	z_obj_map<z_binary_file> _files;
 
 
 };
