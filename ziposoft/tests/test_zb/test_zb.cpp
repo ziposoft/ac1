@@ -17,7 +17,7 @@ public:
 	z_logger* _p_logger;
 
 	zb_ds_text zbs;
-
+	z_status create();
 };
 /*
 ZFACT(source)
@@ -37,12 +37,12 @@ ZFACT(root)
 	ZOBJ(console);
 	ZOBJ(zbs);
 	ZPOBJ(_p_logger);
+ 	ZACT_XP(create,"create","create",0,0);
 
 	/*
 	ZPROP(x);
 	ZPROP(i);
 	ZACT(add);
-	ZACT_XP(show,"show","desc",1,ZPARAM(s));
 	*/
 
 };
@@ -53,22 +53,8 @@ ZP_MODULE_INCLUDE(  ZP_MOD(logger));
 
 
 
-#if 0
-ZFACT(root)
-{
-	ZOBJ(console);
-	ZOBJ(dbtext);
-	ZPOBJ(_p_logger);
 
-	/*
-	ZPROP(x);
-	ZPROP(i);
-	ZACT(add);
-	ZACT_XP(show,"show","desc",1,ZPARAM(s));
-	*/
-
-};
-int test_ds_table(zb_source* p_ds)
+z_status root::create()
 {
 	z_status status;
 	zb_ds_rec_ptr* pRec=0;
@@ -76,24 +62,37 @@ int test_ds_table(zb_source* p_ds)
 	zb_ds_field* fld2=0;
 	zb_ds_rec_ptr* ptr=0;
 	z_string data;
+	zb_source* p_ds=& zbs;
+	zb_ds_table* tbl;
 	int i;
 	do
 	{
 
-		tbl=  p_ds->ds_table_new("table1");
-		if(!tbl)
-			break;		
-		fld=p_ds->ds_field_string_new("field1str");
-		if(!fld)
-			break;
-		fld2=p_ds->ds_field_string_new("field2str");
-		if(!fld2)
-			break;
-
-		tbl->get_desc() ,fld,fld2;
-		status=p_ds->open(true,true);
+		status=p_ds->open("datasource",true,true);
 		if(status)
 			break;
+
+		status=p_ds->ds_table_get("table1",tbl);
+		if( status)
+		{
+			status=  p_ds->ds_table_new("table1",tbl);
+			fld=p_ds->ds_field_string_new("field1str");
+			if(!fld)
+				break;
+			fld2=p_ds->ds_field_string_new("field2str");
+			if(!fld2)
+				break;
+
+			tbl->get_desc() ,fld,fld2;
+		}
+		else
+		{
+			fld=tbl->get_desc().get_ds_field("field1str");
+			fld2=tbl->get_desc().get_ds_field("field2str");
+
+
+		}
+
 		status=tbl->open(true);
 		if(status)
 			break;
@@ -146,11 +145,10 @@ int test_ds_table(zb_source* p_ds)
 		delete pRec;
 	if(fld)
 		delete fld;
-	if(tbl)
-		delete tbl;
+	//if(tbl)
+		//delete tbl;
 	return 0;
 }
-#endif
 
 
 int main(int argc, char* argv[])
