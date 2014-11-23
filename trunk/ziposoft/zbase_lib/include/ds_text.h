@@ -32,6 +32,9 @@ public:
 	virtual bool EndRowCallback();
 	virtual bool NewRowCallback();
 	virtual bool NewValueCallback(const z_string & value);
+	//Interface
+ 	virtual z_status add_field();
+
 };
 
 class zb_ds_text: public zb_source

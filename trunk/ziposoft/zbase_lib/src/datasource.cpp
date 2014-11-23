@@ -3,6 +3,13 @@
 #include "zbase_lib/include/datasource.h"
 
 
+zb_ds_field* zb_ds_desc::get_ds_field(ctext name)
+{
+	return (*this)[name];
+
+}
+
+
 /*__________________________________________________________________________
 
 	zb_ds_field
@@ -40,6 +47,10 @@ z_status zb_ds_table::record_add(zb_ds_rec_ptr* rec)
 	 return Z_ERROR_NOT_IMPLEMENTED;
 }
 z_status zb_ds_table::open(bool writable)
+{
+	 return Z_ERROR_NOT_IMPLEMENTED;
+}
+z_status zb_ds_table::add_field()
 {
 	 return Z_ERROR_NOT_IMPLEMENTED;
 }
@@ -94,8 +105,11 @@ bool zb_source::is_open()
 
 z_status zb_source::ds_table_new(ctext ds_table_name,zb_ds_table*& tbl)
 {
-	if(_ds_tables.get(ds_table_name))
+	tbl=_ds_tables.get(ds_table_name);
+	if(tbl)
+	{
 		return Z_ERROR(zs_already_exists);
+	}
 
 	z_status status=_table_new(ds_table_name,tbl);
 	if(status)

@@ -179,6 +179,14 @@ z_status zb_ds_table_txt::open(bool writable)
 
 	return 0;
 }
+ z_status zb_ds_table_txt::add_field()
+ {
+
+
+	return 0;
+
+ }
+
 size_t zb_ds_table_txt::get_record_count()
 {
 	return _data.size();

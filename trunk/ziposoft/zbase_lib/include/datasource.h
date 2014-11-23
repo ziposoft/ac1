@@ -28,7 +28,7 @@ class zb_ds_desc : public z_obj_map<zb_ds_field>,public z_refcount
 public:
 	zb_ds_desc(){}
 	virtual ~zb_ds_desc(){}
-	zb_field* get_field(ctext name);
+	zb_ds_field* get_ds_field(ctext name);
 	z_status get_default_rec(zb_record *rec);
 	virtual void init_child(zb_ds_field *fld)
 	{
@@ -65,6 +65,13 @@ public:
 	virtual void  dump(z_file* fp)=0; 
 	virtual z_status ptr_increment()=0; 
 	*/
+
+public:
+
+	//Interface
+	z_string _new_field_name;
+ 	virtual z_status add_field();
+
 
 };
 

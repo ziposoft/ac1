@@ -4,6 +4,7 @@
 ZFACT(zb_ds_table)
 {
 	ZPROP(_id);
+	ZACT_XP(add_field,"add_field",0,"Add field",1,ZPARAM(_new_field_name));
 };
 
 
@@ -15,9 +16,14 @@ ZFACT(zb_source)
 	ZACT_XP(table_new,"table_new",0,"Create a new table",1,ZPARAM(table_new_name));
 };
 ZFACT_V( zb_ds_table_txt, zb_ds_table)
-{};
+{
+
+};
 ZFACT_V( zb_ds_text, zb_source)
-{};
+{
+
+
+};
 
 
 /*
