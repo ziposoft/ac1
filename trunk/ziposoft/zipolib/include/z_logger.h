@@ -37,7 +37,7 @@ class z_logger
 public:
 	z_logger()
 	{
-		_log_level=z_logger_lvl_warning;
+		_log_level=z_logger_lvl_trace;
 	}
 	z_status report_not_implemented(ctext file,ctext func,int line); 
 	z_status add_msg(z_logger_level lvl,ctext file,ctext func,int line,z_status status,const char*  lpszFormat,   ... );

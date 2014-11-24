@@ -31,7 +31,7 @@ z_status zb_ds_text::open(ctext name,bool create,bool writable)
 		return Z_ERROR_MSG(zs_could_not_open_file,"can't open directory");
 
 	z_strlist list;
-	_dir.get_files_by_extension("txt",list);
+	_dir.get_files_by_extension("csv",list);
 
 	for(i=0;i<list.size();i++)
 	{
@@ -74,14 +74,8 @@ zb_ds_rec_ptr* zb_ds_text::record_solo_new()
 }
 z_status zb_ds_text::commit()
 {
-	z_map_iter i;
-	zb_ds_table_txt* t;
-	while(t=_tables.get_next(i))
-	{
-		t->commit();
 
-	}
-	return zs_ok;
+	return zb_source::commit();
 
 }
 
@@ -119,12 +113,14 @@ z_status zb_ds_table_txt::record_add(zb_ds_rec_ptr* rec)
 }
 z_status zb_ds_table_txt::commit()
 {
-	z_status s=_file.open(_id,"wb");
+
+	z_status s=_file.open(_file_name,"wb");
 	if(s)
 		return Z_ERROR(zs_could_not_open_file);
-
+	ZT("opened file %s",_file_name.c_str());
 	size_t i_rec;
 	zb_ds_field *fld;
+	bool header=true;
 	z_string data;
 	zb_ds_rec_ptr* rec;
 	for(i_rec=0;i_rec<get_record_count();i_rec++)
@@ -135,15 +131,27 @@ z_status zb_ds_table_txt::commit()
 		{
 			if(comma)
 				_file <<',';
+			if(header)
+			{
+				data=fld->_id;
 
-			rec=_data[i_rec];
-			fld->get_string(rec,data);
+			}
+			else
+			{
+				rec=_data[i_rec];
+				fld->get_string(rec,data);
+
+			}
 			z_csv_encode_string(data);
 			_file <<data;
 			comma=true;
-
 		}
 		_file <<'\n';
+		if(header)
+		{
+			i_rec=0;
+			header=false;
+		}
 	}
 	_file.close();
 	return zs_ok;
@@ -163,7 +171,9 @@ z_status zb_ds_table_txt::open(bool writable)
 
 	}
 	*/
-	z_status s=_file.open(_id,flags);
+	_file_name=	_id+".csv";
+
+	z_status s=_file.open(_file_name,flags);
 	if(s)
 	{
 		if(writable)
@@ -205,9 +215,13 @@ z_status zb_ds_table_txt::get_record_by_index(size_t index,
 }
 bool zb_ds_table_txt::NewRowCallback()
 {
-	
-	_current_row=new zb_rec_ptr_txt();
-	_data.push_back(_current_row);
+	if(_row_idx>0)
+	{
+
+
+		_current_row=new zb_rec_ptr_txt();
+		_data.push_back(_current_row);
+	}
 	_current_column=0;
 	return true;
 }
@@ -218,12 +232,23 @@ bool zb_ds_table_txt::EndRowCallback()
 }
 bool zb_ds_table_txt::NewValueCallback(const z_string & value)
 {
-	if(_current_row==0)
+	if(_row_idx==0)
 	{
-		Z_ERROR(zs_data_error);
-		return false;
+		//get fields.
+		zb_ds_field* fld=_ds->ds_field_string_new(value);
+		get_desc()<<fld;
+
 	}
-	_current_row->set_string(_current_column,value);
+	else
+	{
+		if(_current_row==0)
+		{
+			Z_ERROR(zs_data_error);
+			return false;
+		}
+
+		_current_row->set_string(_current_column,value);
+	}
 	_current_column++;
 	return true;
 }

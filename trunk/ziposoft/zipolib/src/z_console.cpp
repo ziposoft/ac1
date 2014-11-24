@@ -17,7 +17,7 @@ ZFACT(z_console)
 	ZPROP_X(_dump_cmd_line,"dump_cmdline",0,"Dump the parsed command line contents");
 	ZPROP_X(_path,"path",0,"Current path");
 	ZPROP_X(_history,"history",0,"Command line history");
-	ZPROP_X(_config_file,"cfgfile",0,"Filename of configuration file");
+	//ZPROP_X(_config_file,"cfgfile",0,"Filename of configuration file");
 	ZPROP_X(_script_file,"script",0,"Filename of script to run/save");
 
 
@@ -42,7 +42,7 @@ z_console::z_console()
 }
 void z_console::init(ctext appname)
 {
-	_config_file=appname;
+	_config_file=z_get_filename_from_path(appname);
 	_config_file+=".cfg";
 
 

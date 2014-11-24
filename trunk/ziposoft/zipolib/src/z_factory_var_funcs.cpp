@@ -49,13 +49,13 @@ zf_feature* zf_var_funcs_act::create_feature(ctext name,z_memptr offset,ctext de
 ________________________________________________________________________*/
 
 template <class V> z_status zf_var_funcs<V>::dump(z_file& file, void* v) const {	zf_var_funcs_base::dump( file,  v) ; return zs_ok;  }
-template <class V> z_status zf_var_funcs<V>::add(void* list,void* obj) const {return Z_ERROR(zs_operation_not_supported);}
+template <class V> z_status zf_var_funcs<V>::add(void* list,void* obj) const {return Z_ERROR_NOT_IMPLEMENTED;}
 template <class V> void* zf_var_funcs<V>::get_sub_obj(void* list,ctext key) const {	return 0;}
 template <class V> size_t zf_var_funcs<V>::get_size(void* list) const{	return 0;}
 template <class V> void* zf_var_funcs<V>::create_obj(void* list,z_factory* fact) const{	return 0;}
-template <class V> z_status zf_var_funcs<V>::get(z_string& s, void* v,ctext format,int index)	const{return Z_ERROR(zs_operation_not_supported);}
-template <class V> z_status zf_var_funcs<V>::set(ctext s, void* v,ctext format,int index)	const{return Z_ERROR(zs_operation_not_supported);}
-template <class V> z_status zf_var_funcs<V>::clear( void* v)	const{return Z_ERROR(zs_operation_not_supported);}
+template <class V> z_status zf_var_funcs<V>::get(z_string& s, void* v,ctext format,int index)	const{return Z_ERROR_NOT_IMPLEMENTED;}
+template <class V> z_status zf_var_funcs<V>::set(ctext s, void* v,ctext format,int index)	const{return Z_ERROR_NOT_IMPLEMENTED;}
+template <class V> z_status zf_var_funcs<V>::clear( void* v)	const{return Z_ERROR_NOT_IMPLEMENTED;}
 template <class V> z_status zf_var_funcs<V>::set_from_value(zp_value* val, void* var,int index)	const{  set(val->_string,var,0); return zs_ok;}
 template <class V> z_status zf_var_funcs<V>::assign(zp_text_parser &parser, void* v) const 
 {
@@ -64,7 +64,7 @@ template <class V> z_status zf_var_funcs<V>::assign(zp_text_parser &parser, void
 		return Z_ERROR_MSG(status,"Expected '=' ");
 	return load( parser,v);
 }
-template <class V> z_status zf_var_funcs<V>::evaluate1(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
+template <class V> z_status zf_var_funcs<V>::evaluate1(zp_text_parser &parser, void* v) const {return Z_ERROR_NOT_IMPLEMENTED;}
 template <class V> zf_feature* zf_var_funcs<V>::create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const 
 {
 	zf_feature* feat=z_new	zf_prop(name,this,offset,desc);
@@ -346,11 +346,11 @@ template <> z_status zf_var_funcs<zp_obj_vector>::set_from_value(zp_value* val, 
 	RECAST(z_strlist,list);
 
 	Z_ASSERT(0);//TODO
-	return Z_ERROR(zs_operation_not_supported);
+	return Z_ERROR_NOT_IMPLEMENTED;
 }
 template <> z_status zf_var_funcs<zp_obj_vector>::load(zp_text_parser &parser, void* v) const 
 {
-	return Z_ERROR(zs_operation_not_supported);
+	return Z_ERROR_NOT_IMPLEMENTED;
 }
 /*________________________________________________________________________
 

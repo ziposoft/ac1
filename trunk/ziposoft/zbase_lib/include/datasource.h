@@ -59,6 +59,10 @@ public:
 	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 	virtual z_status delete_record_by_index(size_t index);
 
+	virtual z_status commit()
+	{
+		return Z_ERROR_NOT_IMPLEMENTED;;
+	}
 
 	/*
 	virtual int get_num_cols()=0; 
@@ -123,7 +127,6 @@ public:
 
 	zb_source();
 	virtual ~zb_source(){};
-	virtual z_status commit(){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status open(ctext name,bool create,bool writable){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status close(){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return Z_ERROR_NOT_IMPLEMENTED;};
@@ -149,6 +152,7 @@ public:
 	//Instrumentation
 	z_string table_new_name;
  	z_status table_new();
+	virtual z_status commit();
 
 
 
