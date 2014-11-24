@@ -52,7 +52,6 @@ public:
 
 };
 
-#define	Z_LOG_ERROR(status,...)  gz_logger.add_msg (__FILE__,__FUNCTION__,__LINE__,status, __VA_ARGS__);
 #define	ZT(...)   {if(gz_logger._log_level>=z_logger_lvl_trace) gz_logger.add_msg (z_logger_lvl_trace,__FILE__,__FUNCTION__,__LINE__,0, __VA_ARGS__);}
 
 
