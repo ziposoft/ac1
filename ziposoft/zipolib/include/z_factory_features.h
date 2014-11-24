@@ -26,6 +26,7 @@ typedef  U64 zf_feature_flags;
 #define ZFF_PROP (ZFF_LOAD|ZFF_SAVE|ZFF_LIST|ZFF_SET)
 #define ZFF_PARAM (ZFF_LOAD|ZFF_SAVE|ZFF_SET)
 #define ZFF_STAT (ZFF_SAVE|ZFF_LIST)
+#define ZFF_DYN   (ZFF_LIST|ZFF_SET)
 
 
 

@@ -73,6 +73,7 @@ z_status root::create()
 			break;
 
 		status=p_ds->ds_table_get("table1",tbl);
+
 		if( status)
 		{
 			status=  p_ds->ds_table_new("table1",tbl);
@@ -87,8 +88,11 @@ z_status root::create()
 		}
 		else
 		{
+			tbl->open(true);
 			fld=tbl->get_desc().get_ds_field("field1str");
 			fld2=tbl->get_desc().get_ds_field("field2str");
+			if(! fld) break;
+			if(! fld2) break;
 
 
 		}

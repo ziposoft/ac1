@@ -102,6 +102,18 @@ bool zb_source::is_open()
 	return false;
 }
 
+z_status zb_source::commit()
+{
+	z_map_iter i;
+	zb_ds_table* t;
+	while(t=_ds_tables.get_next(i))
+	{
+		t->commit();
+
+	}
+	return zs_ok;
+
+}
 
 z_status zb_source::ds_table_new(ctext ds_table_name,zb_ds_table*& tbl)
 {
@@ -123,6 +135,7 @@ z_status zb_source::ds_table_get(ctext ds_table_name,zb_ds_table*& tbl)
 	tbl=_ds_tables.get(ds_table_name);
 	if(!tbl)
 		return Z_ERROR(zs_not_found);
+	
 	return zs_success;
 };
 

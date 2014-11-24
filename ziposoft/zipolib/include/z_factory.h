@@ -52,21 +52,21 @@ class zf_var_funcs_base
 public:
 	virtual zf_feature_type get_type()const =0;
 	virtual z_status dump(z_file& s, void* v) const;
-	virtual z_status get(z_string& s, void* v,ctext format,int index=-1) const {return Z_ERROR(zs_operation_not_supported);};
-	virtual z_status set(ctext s, void* v,ctext format,int index=-1) const {return Z_ERROR(zs_operation_not_supported);};
-	virtual z_status clear(void* v) const {return Z_ERROR(zs_operation_not_supported);} 
-	virtual z_status add(void* list,void* obj) const {return Z_ERROR(zs_operation_not_supported);} 
+	virtual z_status get(z_string& s, void* v,ctext format,int index=-1) const {return Z_ERROR_NOT_IMPLEMENTED;};
+	virtual z_status set(ctext s, void* v,ctext format,int index=-1) const {return Z_ERROR_NOT_IMPLEMENTED;};
+	virtual z_status clear(void* v) const {return Z_ERROR_NOT_IMPLEMENTED;} 
+	virtual z_status add(void* list,void* obj) const {return Z_ERROR_NOT_IMPLEMENTED;} 
 	virtual void* get_sub_obj(void* list,ctext key) const { return 0;} 
 	virtual size_t get_size(void* list) const { return 0;} 
 	virtual void* get_ptr(void* var,z_obj_list_iter& iter) const { return var;}  /*could be pointer to obj, or pointer to obj pointer */
 	//This is if the member var is an obj, pointer to obj, or obj list		
 	virtual void* create_obj(void* var,z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
 	virtual z_factory*  get_fact_from_obj(void* obj) const { return 0;}
-	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const { return Z_ERROR(zs_operation_not_supported);};
+	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const { return Z_ERROR_NOT_IMPLEMENTED;};
 
- 	virtual z_status load(zp_text_parser &parser, void* v) const {return Z_ERROR(zs_operation_not_supported);}
+ 	virtual z_status load(zp_text_parser &parser, void* v) const {return Z_ERROR_NOT_IMPLEMENTED;}
  	virtual z_status assign(zp_text_parser &parser, void* v) const;
- 	virtual z_status evaluate1(zp_text_parser &parser, void* v) const  {return Z_ERROR(zs_operation_not_supported);}
+ 	virtual z_status evaluate1(zp_text_parser &parser, void* v) const  {return Z_ERROR_NOT_IMPLEMENTED;}
 	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const=0;
 } ;
 
