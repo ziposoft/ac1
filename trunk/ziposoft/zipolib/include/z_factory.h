@@ -148,6 +148,7 @@ public:
 	virtual void dump_obj(z_file& f,void* obj) const;
 	virtual void dump_obj_contents(z_file& f,void* obj) const;
 	z_status load_obj_contents(zp_text_parser &parser,void* obj) const;
+	z_status load_cfg(zp_text_parser &parser,void* obj) ;
 	virtual void dump_static(z_file& f) const;
 
 	virtual z_status get_list_features(z_strlist& list,void* obj);
