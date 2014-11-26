@@ -285,6 +285,48 @@ z_status z_factory::get_list_features(z_strlist& list,void* obj)
 		return base->get_list_features(list,obj);
 	return zs_ok;
 }
+z_status z_factory::load_cfg(zp_text_parser &parser,void* pObj) 
+{
+	z_string s;
+	init_dynamic();
+
+	z_status status=zs_ok;
+	while(status==zs_ok)
+	{
+		parser.skip_ws();
+		status=parser.test_any_identifier();
+		if(status==zs_no_match)
+			return zs_ok;
+		if(status)
+			break;
+		parser.get_match(s);
+		
+		zf_feature *f=_dynamic->features.get_by_name(s);
+		if(!(f->_flags & ZFF_LOAD))
+			continue;
+
+		z_memptr offset;
+		const zf_var_funcs_base* funcs;
+
+
+		status=get_var_info(s.c_str(),offset,funcs);
+ 		if(status)
+			break;
+
+		char* memvar=(char*)pObj +offset; 
+		status=funcs->assign(parser,memvar);
+ 		if(status)
+			break;
+	}
+	if(status==zs_eof)
+		return zs_ok;
+	return status;//Don't log error, should already be logged.
+}
+
+
+
+
+
 z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
 								   const zf_var_funcs_base*& funcs)  const
 {
