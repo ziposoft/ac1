@@ -165,7 +165,7 @@ int main(int argc, char** argv)
 	testA A;
 	z_factory_T<testA>::self.dump_static(gz_out);
 	z_factory* f=zf_get_factory("testA");
-	f->dump_obj(gz_out,&A);
+	f->dump_obj_static(gz_out,&A);
 
 	f=	zf_get_factory_T<testA>();
 	z_parser p;
@@ -178,21 +178,21 @@ int main(int argc, char** argv)
 	}
 
 
-	f->dump_obj(gz_out,&A);
+	f->dump_obj_static(gz_out,&A);
 
 	A._i=27;
 	A._str="go run!";
- 	f->dump_obj(gz_out,&A);
+ 	f->dump_obj_static(gz_out,&A);
 
 	f->set_var_as_string(&A,"_str","ok ok");
 	f->set_var_as_string(&A,"_i","1");
 	f->execute_act(&A,"func");
 
-  	f->dump_obj(gz_out,&A);
+  	f->dump_obj_static(gz_out,&A);
 	/*
 	testc c;
 	c.execute_act(&c,"func");
-	c.dump_obj(gz_out,&c);
+	c.dump_obj_static(gz_out,&c);
 
 	*/
 

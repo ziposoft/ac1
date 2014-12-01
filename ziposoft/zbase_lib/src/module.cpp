@@ -11,9 +11,12 @@ ZFACT(zb_ds_table)
 ZFACT(zb_source)
 {
 	
-	ZPROP(_name);
-	ZPROP(_ds_tables);
-	ZACT_XP(table_new,"table_new",0,"Create a new table",1,ZPARAM(table_new_name));
+	ZPROP_X(_param_db_name,"name",ZFF_PROP,"DB Name");
+	ZPROP_X(_param_table_new_name,"new_table_name",ZFF_PROP,"Table Name");
+	ZPROP_X(_ds_tables,"tables",ZFF_PROP_NOLOAD,"Tables");
+	ZACT_XP(act_table_new,"new_table",0,"Create a new table",1,ZPARAM(_param_table_new_name));
+	ZACT_XP(act_open,"open",0,"Open the DB",1,ZPARAM(_param_db_name));
+	ZACT_XP(commit,"commit",0,"Commit the DB",0,0);
 };
 ZFACT_V( zb_ds_table_txt, zb_ds_table)
 {

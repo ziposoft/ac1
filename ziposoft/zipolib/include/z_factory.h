@@ -23,7 +23,7 @@ typedef unsigned long long z_memptr;
 //typedef size_t z_memptr;
 #endif
 
-
+typedef  U64 zf_feature_flags; 
 enum zf_feature_type
 {
 	zf_ft_none,
@@ -64,10 +64,10 @@ public:
 	virtual z_factory*  get_fact_from_obj(void* obj) const { return 0;}
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const { return Z_ERROR_NOT_IMPLEMENTED;};
 
- 	virtual z_status load(zp_text_parser &parser, void* v) const {return Z_ERROR_NOT_IMPLEMENTED;}
- 	virtual z_status assign(zp_text_parser &parser, void* v) const;
+ 	virtual z_status load(zp_text_parser &parser, void* v,zf_feature_flags oper) const {return Z_ERROR_NOT_IMPLEMENTED;}
+ 	virtual z_status assign(zp_text_parser &parser, void* v,zf_feature_flags oper) const;
  	virtual z_status evaluate1(zp_text_parser &parser, void* v) const  {return Z_ERROR_NOT_IMPLEMENTED;}
-	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const=0;
+	virtual zf_feature* create_feature(ctext id,ctext name,z_memptr offset,zf_feature_flags flags,ctext desc) const=0;
 } ;
 
 class zf_feature_list : public z_obj_map<zf_feature>
@@ -93,11 +93,16 @@ struct z_factory_info
 	const zf_var_entry* list;
 };
 
+class zf_features : public 	 z_obj_vector_map<zf_feature>
+{
+public:
+ 	zf_feature* get_by_name(ctext t)   const;
+} ;
 class z_factory_dyn 
 {
 public:
 	z_string _name;
-	z_obj_vector_map<zf_feature> features;
+	zf_features features;
 
 
 
@@ -145,24 +150,35 @@ public:
 	virtual z_status set_var_as_string(void* obj,ctext var_name,ctext value) const;
 	virtual z_status get_var_as_string(void* obj,ctext var_name,z_string& value) const;
 	virtual void clear_all_vars(void* obj) const;
-	virtual void dump_obj(z_file& f,void* obj) const;
-	virtual void dump_obj_contents(z_file& f,void* obj) const;
-	z_status load_obj_contents(zp_text_parser &parser,void* obj) const;
+	virtual void dump_obj_static(z_file& f,void* obj) const;
 	z_status load_cfg(zp_text_parser &parser,void* obj) ;
 	virtual void dump_static(z_file& f) const;
 
 	virtual z_status get_list_features(z_strlist& list,void* obj);
-	virtual z_status get_map_features(zf_feature_list&  list,zf_feature_type type);
+	//___________________________________________________________________________________
+	// Dynamic Functions 
+	//___________________________________________________________________________________
+	virtual z_status get_map_features(zf_feature_list&  list,
+		zf_feature_type type,zf_feature_flags oper);
 
 	virtual z_status execute_act(void* obj,ctext act_name,int* ret=0) const;
-	virtual zf_action* add_act_params(ctext name,z_memptr act_addr,ctext desc,int num_params,...) ;
+	virtual zf_action* add_act_params(ctext id,ctext name,z_memptr act_addr,zf_feature_flags flags,ctext desc,int num_params,...) ;
 
-	virtual zf_feature* add_feature(const zf_var_funcs_base* vfuncs,ctext name,z_memptr offset,ctext desc,U32 flags); 
-	virtual zf_action* add_act(ctext name,z_memptr act_addr,ctext desc); 
-	virtual zf_feature* add_prop(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
-	virtual zf_child_obj* add_obj(ctext name,const zf_var_funcs_base* f,z_memptr act_addr,ctext desc); 
-	virtual zf_list* add_list(ctext name,const zf_funcs_obj_list_base* f,z_memptr act_addr,ctext desc); 
+	virtual zf_feature* add_feature(const zf_var_funcs_base* vfuncs,ctext id,ctext name,z_memptr offset,zf_feature_flags flags,ctext desc); 
+	virtual zf_action* add_act(ctext id,ctext name,z_memptr act_addr,zf_feature_flags flags,ctext desc); 
+	virtual zf_feature* add_prop(ctext id,ctext name,const zf_var_funcs_base* f,z_memptr act_addr,zf_feature_flags flags,ctext desc); 
+	virtual zf_child_obj* add_obj(ctext id,ctext name,const zf_var_funcs_base* f,z_memptr act_addr,zf_feature_flags flags,ctext desc); 
+	virtual zf_list* add_list(ctext id,ctext name,const zf_funcs_obj_list_base* f,z_memptr act_addr,zf_feature_flags flags,ctext desc); 
+	zf_feature* get_feature_by_id(ctext id) ;
 	zf_feature* get_feature(ctext name) ;
+	z_status load_obj_contents(zp_text_parser &parser,void* pObj,zf_feature_flags oper) ;
+
+	//___________________________________________________________________________________
+	// Static Functions 
+	//___________________________________________________________________________________
+	z_status load_obj_contents_static(zp_text_parser &parser,void* obj) const;
+	virtual void dump_obj_contents_static(z_file& f,void* obj) const;
+
 
 };
 class zf_obj
@@ -172,6 +188,11 @@ public:
 	{
 		_fact=0;	
 		_obj=0;	
+	}
+    zf_obj(z_factory* f,void* o)
+	{
+		_fact=f;	
+		_obj=o;	
 	}
 	z_factory* _fact;
 	void* _obj;
@@ -236,7 +257,8 @@ public:
 
 z_factory*  zf_get_factory(ctext name);
 z_factory*  zf_get_factory_by_type(ctext type);
-z_status zf_create_obj_from_text_stream(zp_text_parser &parser, z_factory* &factory,void* &objpointer);
+z_status zf_create_obj_from_text_stream_static(zp_text_parser &parser, z_factory* &factory,void* &objpointer);
+z_status zf_create_obj_from_text_stream_dyn(zp_text_parser &parser, z_factory* &factory,void* &objpointer,zf_feature_flags oper);
 
 
 template <class CLASS> z_factory*  zf_get_factory_T()

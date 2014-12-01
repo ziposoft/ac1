@@ -137,7 +137,7 @@ public:
 	 z_status load_obj(void* obj, z_factory* f)
 	{
 		ctext name=f->get_name();
-		zp_cfg_obj* cfg=_obj.get_by_name(name);
+		zp_cfg_obj* cfg=_obj.get_by_key(name);
 		if(cfg)
 		{
 			cfg->load_obj(obj,f);
@@ -149,7 +149,7 @@ public:
 	{
 		z_factory* f=&z_factory_T<C>::self;
 		ctext name=f->get_name();
-		zp_cfg_obj* cfg=_obj.get_by_name(name);
+		zp_cfg_obj* cfg=_obj.get_by_key(name);
 		if(cfg)
 		{
 			cfg->load_obj(obj,f);

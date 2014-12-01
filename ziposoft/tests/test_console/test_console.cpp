@@ -142,26 +142,7 @@ public:
 
 };
 
-ZFACT(z_intf_random_access)
-{
-	ZACT(dump);
-	ZACT(write_pattern_incrementing);
-	ZACT(write_pattern_set);
 
-	
-	ZPROP(offset);
-	ZPROP(width);
-	ZPROP(length);
-};
-
-ZFACT_V(z_binary_file,z_intf_random_access)
-{
-	ZPROP(filename);
-	ZACT_XP(save,"save",0,"Save to file",1,ZPARAM(filename));
-	ZACT_XP(load,"load",0,"Load from file",1,ZPARAM(filename));
-	
-
-};
 class dog
 {
 public:
@@ -177,13 +158,46 @@ public:
 	ctext get_map_key() { return _name.c_str(); }
 
 };
-ZFACT(dog)
+
+
+class test2
 {
-	ZPROP(_name);
+public:
+	test2()
+	{
+	  _name="defname";
+	  _load="defload";
+	}
+  	z_string _name;
+  	z_string _load;
+};
+class test1
+{
+public:
+	test1()
+	{
 
+	}
+	z_console console;
+//	dog d;
 
+	test2 a;
+	test2 b;
 };
 
+
+ZFACT(test2)
+{
+	ZPROP_X(_name,"name",ZFF_SAVE |ZFF_LIST|ZFF_SET ," no load ") ;
+	ZPROP_X(_load,"l",ZFF_SAVE |ZFF_LIST|ZFF_SET|ZFF_LOAD ," no load ") ;
+
+};
+ZFACT(test1)
+{
+	ZOBJ_X(a,"a",ZFF_SAVE |ZFF_LIST|ZFF_SET ," load") ;
+	ZOBJ_X(b,"b",ZFF_SAVE |ZFF_LIST|ZFF_SET|ZFF_LOAD ," load") ;
+//	ZOBJ(d);
+};
 class root
 {
 public:
@@ -212,6 +226,36 @@ public:
 
 
 };
+
+
+	   /*
+ZFACT(z_intf_random_access)
+{
+	ZACT(dump);
+	ZACT(write_pattern_incrementing);
+	ZACT(write_pattern_set);
+
+	
+	ZPROP(offset);
+	ZPROP(width);
+	ZPROP(length);
+};
+
+ZFACT_V(z_binary_file,z_intf_random_access)
+{
+	ZPROP(filename);
+	ZACT_XP(save,"save",0,"Save to file",1,ZPARAM(filename));
+	ZACT_XP(load,"load",0,"Load from file",1,ZPARAM(filename));
+	
+
+};	
+
+ZFACT(dog)
+{
+	ZPROP(_name);
+};
+	 
+
 ZFACT(root)
 {
 	ZOBJ(console);
@@ -224,7 +268,7 @@ ZFACT(root)
 	ZACT(add);
 	ZACT_XP(show,"show",0,"desc",1,ZPARAM(s));
 
-};
+};	  */
 #ifdef BUILD_VX
 int ztest()
 {
@@ -242,8 +286,11 @@ int ztest()
 int main(int argc, char* argv[])
 {
 
-	root o;
+	//root o;
+	test1 o;
 	o.console.setroot(&o);
+	o.console.init(argv[0]);
+
 	o.console.runapp(argc,argv);
 
 

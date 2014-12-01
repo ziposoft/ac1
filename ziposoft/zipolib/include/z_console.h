@@ -113,7 +113,7 @@ public:
 
 	}
 
-	 z_status  runapp(int argc, char* argv[]);
+	 z_status  runapp(int argc, char* argv[],bool loadcfg);
 
 	//command line props
 	bool _dump_cmd_line;

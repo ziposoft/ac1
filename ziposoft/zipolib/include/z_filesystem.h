@@ -21,6 +21,7 @@ public:
 };
 z_status z_filesys_getcwd(z_string& path);
 z_status z_filesys_setcwd(z_string& path);
+z_status z_filesys_get_filename_from_path(z_string& fullpath,z_string& path_out,z_string& name_out,z_string& ext_out);
 
 #endif
 

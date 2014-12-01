@@ -4,6 +4,21 @@
 #include "zipolib/include/z_factory_var_funcs.h"
 #include "zipolib/include/z_parse_text.h"
 
+
+
+zf_feature* zf_features::get_by_name(ctext t)   const
+{
+	size_t i=0;
+	while(i<this->size())
+	{
+		zf_feature* obj= this->get(i);
+		if(strcmp(obj->get_name(),t)==0)
+			return obj;
+		i++;
+	}
+	return 0;
+}
+
 /*________________________________________________________________________
 
 zf_feature
@@ -15,13 +30,14 @@ zf_feature::zf_feature()
 	_flags=ZFF_PROP;
 
 }
-zf_feature::zf_feature(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc) 
+zf_feature::zf_feature(ctext id,ctext name,const zf_var_funcs_base* funcs,z_memptr offset,zf_feature_flags flags,ctext desc) 
 {
+	_id=id;
 	_name=name;
 	df=funcs;
 	_offset=offset;
 	_description=desc;
-	_flags=ZFF_PROP;
+	_flags=flags;
 
 }
 
@@ -45,6 +61,22 @@ void zf_feature::dump(z_file& f,void* obj)
 	}
 	f <<'\n';
 }
+
+ z_status zf_feature::load(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper) 
+ {
+	void* ftr_ptr=0;
+	if(!(oper & _flags))
+	{
+	  oper=ZFF_SKIP;
+	}
+	else
+	{
+		ftr_ptr=(char*)o._obj+_offset;
+
+	}
+	return df->load(parser,ftr_ptr,oper);
+
+ }
 void zf_feature::display(z_file& f,void* obj)
 {
 	char* pvar=(char*)obj+_offset;
@@ -84,8 +116,8 @@ void zf_feature::display(z_file& f,void* obj)
 
 zf_list
 ________________________________________________________________________*/
-zf_list::zf_list(ctext name,const zf_funcs_obj_list_base* funcs,z_memptr offset,ctext desc)
-	: zf_feature(name,funcs,offset,desc) 
+zf_list::zf_list(ctext id,ctext name,const zf_funcs_obj_list_base* funcs,z_memptr offset,zf_feature_flags flags,ctext desc)
+	: zf_feature(id,name,funcs,offset,flags,desc) 
 {
 	_list_funcs=funcs;
 
@@ -99,7 +131,7 @@ void zf_list::display(z_file& f,void* obj)
 	f.indent();
 	z_factory* fact=_list_funcs->get_list_obj_fact();
 
-	f<<fact->get_name()<<" " << _name<<'['<<(int)size<<']';
+	f<<fact->get_name()<<" " << get_name()<<'['<<(int)size<<']';
 
 	f <<'\n';
 
@@ -119,13 +151,13 @@ z_status zf_list::add_to_list(z_strlist& list,void* obj)
 	
 	while((objlist->get_next_key(i,key))==zs_ok)
 	{
-		fullname=_name;
+		fullname= get_name();
 		fullname<<'['<<key<<']';
 		list<<fullname;
 	}
 	return zs_ok;
 }
- z_status zf_list::evaluate(z_factory_controller& controller, zf_obj& o)
+ z_status zf_list::evaluate(z_factory_controller& controller, zf_obj& o,zf_feature_flags oper)
  {
 
 	return zs_end_of_list;	 //Evaluation is done!
@@ -135,7 +167,8 @@ z_status zf_list::add_to_list(z_strlist& list,void* obj)
 
 zf_action
 ________________________________________________________________________*/
-zf_action::zf_action(ctext name,z_memptr offset,ctext desc) : zf_feature(name,0,offset,desc) 
+zf_action::zf_action(ctext id,ctext name,z_memptr offset,zf_feature_flags flags,ctext desc) 
+	: zf_feature(id,name,0,offset,flags,desc) 
 {
 
 }
@@ -143,14 +176,14 @@ void zf_action::display(z_file& f,void* obj)
 {
 	f.indent();
 
-	f << _name<<'(';
+	f <<  get_name()<<'(';
 	size_t i;
 	
 	for(i=0;i<_params.size();i++)
 	{
 		if(i)
 			f <<',';
-		f <<_params[i]->_name;
+		f <<_params[i]-> get_name();
 
 	}
 
@@ -161,7 +194,7 @@ int zf_action::execute(z_file* f,zf_obj& obj)
 	z_string s;
 	if(f)
 	{
-		*f << _name<<'(';
+		*f <<  get_name()<<'(';
 		size_t i;
 	
 		for(i=0;i<_params.size();i++)
@@ -169,7 +202,7 @@ int zf_action::execute(z_file* f,zf_obj& obj)
 
 			if(i)
 				*f <<',';
-			*f << _params[i]->_name;
+			*f << _params[i]-> get_name();
 			*f << "=";
 			_params[i]->get_string_val(s,obj._obj);
 			*f<<s;
@@ -182,7 +215,7 @@ int zf_action::execute(z_file* f,zf_obj& obj)
 	int ret=obj._fact->execute_act_ptr	(obj._obj,_offset);
 	return ret;
 }
- z_status zf_action::load(zp_text_parser &parser, zf_obj& o) 
+ z_status zf_action::load(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper) 
  {
 	z_status status;
  	if(parser.test_char('(')==zs_ok)
@@ -197,7 +230,7 @@ int zf_action::execute(z_file* f,zf_obj& obj)
 				return Z_ERROR_MSG(zs_error,"Too many parameters\n");//???
 			}				
 			zf_feature* param=_params[param_index];
-			status=param->load(parser,o);
+			status=param->load(parser,o,oper);
 			if(status)
 				break;
 			status=parser.test_char(',');
@@ -213,16 +246,16 @@ int zf_action::execute(z_file* f,zf_obj& obj)
 	return zs_ok;//???
  }
 
- z_status zf_action::evaluate1(zp_text_parser &parser, zf_obj& o,int index)
+ z_status zf_action::evaluate1(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper,int index)
  {
-	z_status status=load(parser,o);
+	z_status status=load(parser,o,oper);
 	if(status==zs_ok)				   
 		return 	execute(&gz_out,o);
 	return status;
  }
-  z_status zf_action::evaluate(z_factory_controller& controller, zf_obj& o)
+  z_status zf_action::evaluate(z_factory_controller& controller, zf_obj& o,zf_feature_flags oper)
  {
-	z_status status=load(controller.get_parser(),o);
+	z_status status=load(controller.get_parser(),o,oper);
 	if(status==zs_ok)				   
 		return 	execute(&gz_out,o);
 	return zs_end_of_list;	 //Evaluation is done!
@@ -231,8 +264,8 @@ int zf_action::execute(z_file* f,zf_obj& obj)
 
 zf_child_obj
 ________________________________________________________________________*/
-zf_child_obj::zf_child_obj(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc)
-	: zf_feature(name,funcs,offset,desc) 
+zf_child_obj::zf_child_obj(ctext id,ctext name,const zf_var_funcs_base* funcs,z_memptr offset,zf_feature_flags flags,ctext desc)
+	: zf_feature(id,name,funcs,offset,flags,desc) 
 {
 
 }
@@ -242,11 +275,11 @@ void zf_child_obj::display(z_file& f,void* obj)
 	f.indent();
 	z_factory* fact=df->get_fact_from_obj(pvar);
 
-	f<<fact->get_name()<<" " << _name;
+	f<<fact->get_name()<<" " <<  get_name();
 
 	f <<'\n';
 }
- z_status zf_child_obj::evaluate(z_factory_controller& controller, zf_obj& o)
+ z_status zf_child_obj::evaluate(z_factory_controller& controller, zf_obj& o,zf_feature_flags oper)
  {
 
 	return zs_end_of_list;	 //Evaluation is done!
@@ -255,8 +288,8 @@ void zf_child_obj::display(z_file& f,void* obj)
 
 zf_prop
 ________________________________________________________________________*/
-zf_prop::zf_prop(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext desc)
-	: zf_feature(name,funcs,offset,desc) 
+zf_prop::zf_prop(ctext id,ctext name,const zf_var_funcs_base* funcs,z_memptr offset,zf_feature_flags flags,ctext desc)
+	: zf_feature(id,name,funcs,offset,flags,desc) 
 {
 
 }
@@ -267,28 +300,30 @@ zf_prop::zf_prop(ctext name,const zf_var_funcs_base* funcs,z_memptr offset,ctext
   	df->get(out,ftr_ptr,0,index);
 	return zs_ok;
  }
- z_status zf_prop::load(zp_text_parser &parser, zf_obj& o) 
+ /*
+ z_status zf_prop::load(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper) 
  {
+	 if(!(oper & _flags)) return zs_skipped;
 	void* ftr_ptr=(char*)o._obj+_offset;
-	return df->load(parser,ftr_ptr);
+	return df->load(parser,ftr_ptr,oper);
 
- }
- z_status zf_prop::evaluate1(zp_text_parser &parser, zf_obj& o,int index)
+ }	*/
+ z_status zf_prop::evaluate1(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper,int index)
  {
 	z_status status;
 	if(parser.test_char('=')==zs_ok)
 	{
-		status=load( parser,o);
+		status=load( parser,o,oper);
 		return status;
 	}
 	z_string str;
 	get_string_val(str,o._obj,index);
-	gz_out << _name<<"="<<str<<"\n";
+	gz_out <<  get_name()<<"="<<str<<"\n";
 	return zs_ok;//???
 
 	
  } 
-  z_status zf_prop::evaluate(z_factory_controller& controller, zf_obj& o)
+  z_status zf_prop::evaluate(z_factory_controller& controller, zf_obj& o,zf_feature_flags oper)
  {
 
 	return zs_end_of_list;	 //Evaluation is done!
@@ -305,7 +340,7 @@ void zf_prop::display(z_file& f,void* obj)
 {
 	char* pvar=(char*)obj+_offset;
 	f.indent();
-	f << _name;
+	f <<  get_name();
 	if(df)
 	{
 		f << "=";
@@ -343,13 +378,13 @@ z_factory_dyn& z_factory::init_dynamic()
 		switch(type)
 		{
 		case zf_ft_act:
-			add_act(ent->name,(z_memptr)ent->offset,"?");
+			add_act(ent->name,ent->name,(z_memptr)ent->offset,0 /* flags! */,"?");
 			break;
 		case zf_ft_obj:
 		case zf_ft_param:
 		case zf_ft_var:
 		case zf_ft_obj_list:
-			add_prop(ent->name,funcs,(z_memptr)ent->offset,"?");
+			add_prop(ent->name,ent->name,funcs,(z_memptr)ent->offset,0/* flags! */,"?");
 		default:
 			Z_ERROR_MSG(zs_error,"Unknown feature type: %d",ent->type);
 			break;
@@ -357,9 +392,9 @@ z_factory_dyn& z_factory::init_dynamic()
 	}
 	return *_dynamic;
 }
- zf_feature* z_factory::add_feature(const zf_var_funcs_base* vfuncs,ctext name,z_memptr offset,ctext desc,U32 flags)
+ zf_feature* z_factory::add_feature(const zf_var_funcs_base* vfuncs,ctext id,ctext name,z_memptr offset,zf_feature_flags flags,ctext desc)
 {
-	zf_feature* feat=get_feature(name);
+	zf_feature* feat=get_feature_by_id(id);
 
 	if(feat)
 	{
@@ -368,7 +403,7 @@ z_factory_dyn& z_factory::init_dynamic()
 	}
 	else
 	{
-		feat=  vfuncs->create_feature(name,offset,desc,flags);
+		feat=  vfuncs->create_feature(id,name,offset,flags,desc);
 	 	init_dynamic().features.add(feat);
 	}
 	return feat;
@@ -376,17 +411,17 @@ z_factory_dyn& z_factory::init_dynamic()
 
  }
 
-zf_action* z_factory::add_act(ctext name,z_memptr act_addr,ctext desc)
+zf_action* z_factory::add_act(ctext id,ctext name,z_memptr act_addr,zf_feature_flags flags,ctext desc)
 {
-	zf_action* action=z_new	zf_action(name,*(z_memptr*)&act_addr);
+	zf_action* action=z_new	zf_action(id,name,*(z_memptr*)&act_addr,flags,desc);
 	init_dynamic().features.add(action);
 	return action;
 }
 
-zf_action* z_factory::add_act_params(ctext name,z_memptr act_addr,ctext desc,int num_params,...)
+zf_action* z_factory::add_act_params(ctext id,ctext name,z_memptr act_addr,zf_feature_flags flags,ctext desc,int num_params,...)
 {
 	int i;
-	zf_action* action=add_act(name,act_addr,desc);
+	zf_action* action=add_act(id,name,act_addr,flags,desc);
 	va_list ArgList;
 	va_start (ArgList, num_params);
 	for (i=0;i<num_params;i++)
@@ -397,10 +432,10 @@ zf_action* z_factory::add_act_params(ctext name,z_memptr act_addr,ctext desc,int
 	return action;
 }
 
-zf_feature* z_factory::add_prop(ctext name,const zf_var_funcs_base* f,z_memptr offset,ctext desc)
+zf_feature* z_factory::add_prop(ctext id,ctext name,const zf_var_funcs_base* f,z_memptr offset,zf_feature_flags flags,ctext desc)
 {
 
-	zf_feature* feat=get_feature(name);
+	zf_feature* feat=get_feature(id);
 	
 	if(feat)
 	{
@@ -409,22 +444,22 @@ zf_feature* z_factory::add_prop(ctext name,const zf_var_funcs_base* f,z_memptr o
 	}
 	else
 	{
-		feat=z_new	zf_prop(name,f,offset,desc);
+		feat=z_new	zf_prop(id,name,f,offset,flags,desc);
 	 	init_dynamic().features.add(feat);
 	}
 	return feat;
 }
-zf_child_obj* z_factory::add_obj(ctext name,const zf_var_funcs_base* f,z_memptr offset,ctext desc)
+zf_child_obj* z_factory::add_obj(ctext id,ctext name,const zf_var_funcs_base* f,z_memptr offset,zf_feature_flags flags,ctext desc)
 {
-	zf_child_obj* feat=z_new	zf_child_obj(name,f,offset,desc);
+	zf_child_obj* feat=z_new	zf_child_obj(id,name,f,offset,flags,desc);
 	init_dynamic().features.add(feat);
 	return feat;
 }
 
 
-zf_list* z_factory::add_list(ctext name,const zf_funcs_obj_list_base* f,z_memptr offset,ctext desc)
+zf_list* z_factory::add_list(ctext id,ctext name,const zf_funcs_obj_list_base* f,z_memptr offset,zf_feature_flags flags,ctext desc)
 {
-	zf_list* feat=z_new	zf_list(name,f,offset,desc);
+	zf_list* feat=z_new	zf_list(id,name,f,offset,flags,desc);
 	init_dynamic().features.add(feat);
 	return feat;
 }
@@ -440,7 +475,7 @@ void z_dynamic_factory_list::add(z_factory* f)
 }
 z_factory*  z_dynamic_factory_list::get_by_name(ctext name)
 {
-	return _list.get_by_name(name);
+	return _list.get_by_key(name);
 }
 z_factory*  z_dynamic_factory_list::get_by_type(ctext t)
 {

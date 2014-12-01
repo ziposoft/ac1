@@ -41,6 +41,15 @@ public:
 class zb_ds_table 
 {
 protected:
+	enum status {
+		status_closed,
+		status_corrupt,
+		status_cant_open,
+		status_created,
+		status_opened_read,
+		status_opened_write,
+		status_opened_need_commit
+	} _status;
 public:
 	zb_source* _ds;
 	z_string _id;
@@ -58,6 +67,9 @@ public:
 	virtual z_status test_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 	virtual z_status delete_record_by_index(size_t index);
+
+
+	virtual z_status field_add(zb_ds_field* fld);
 
 	virtual z_status commit()
 	{
@@ -137,6 +149,8 @@ public:
 	virtual z_status ds_table_new(ctext ds_table_name,zb_ds_table*& tbl);
  	virtual z_status ds_table_get(ctext ds_table_name,zb_ds_table*& tbl);
 
+
+
 	virtual zb_ds_field* ds_field_string_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
 	virtual zb_ds_field* ds_field_int32_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
 	virtual zb_ds_rec_ptr* record_solo_new(){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
@@ -150,9 +164,11 @@ public:
 
 
 	//Instrumentation
-	z_string table_new_name;
- 	z_status table_new();
+	z_string _param_db_name;
+	z_string _param_table_new_name;
+ 	z_status act_table_new();
 	virtual z_status commit();
+	virtual z_status act_open();
 
 
 

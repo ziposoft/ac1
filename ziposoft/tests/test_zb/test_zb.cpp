@@ -35,9 +35,9 @@ ZFACT(source)
 ZFACT(root)
 {
 	ZOBJ(console);
-	ZOBJ(zbs);
+	ZOBJ_X(zbs,"db",ZFF_PROP,"database");
 	ZPOBJ(_p_logger);
- 	ZACT_XP(create,"create","create",0,0);
+ 	ZACT_XP(create,"create",0,"create",0,0);
 
 	/*
 	ZPROP(x);
@@ -77,29 +77,29 @@ z_status root::create()
 		if( status)
 		{
 			status=  p_ds->ds_table_new("table1",tbl);
+		}
+
+		tbl->open(true);
+		if(status)
+			break;
+		fld=tbl->get_desc().get_ds_field("field1str");
+ 		if(!fld)
+		{
 			fld=p_ds->ds_field_string_new("field1str");
 			if(!fld)
 				break;
+			tbl->field_add(fld);
+		}
+		fld2=tbl->get_desc().get_ds_field("field2str");
+ 		if(!fld2)
+		{
 			fld2=p_ds->ds_field_string_new("field2str");
 			if(!fld2)
 				break;
-
-			tbl->get_desc() ,fld,fld2;
-		}
-		else
-		{
-			tbl->open(true);
-			fld=tbl->get_desc().get_ds_field("field1str");
-			fld2=tbl->get_desc().get_ds_field("field2str");
-			if(! fld) break;
-			if(! fld2) break;
-
-
+			tbl->field_add(fld2);
 		}
 
-		status=tbl->open(true);
-		if(status)
-			break;
+
 		
 		size_t count=tbl->get_record_count();
 
@@ -161,12 +161,7 @@ int main(int argc, char* argv[])
 
 	root o;
 	o.console.setroot(&o);
-	o.console.init(argv[0]);
-	o.console.loadcfg();
-	o.console.runapp(argc,argv);
-	o.console.savecfg();
-
-
+	o.console.runapp(argc,argv,true);
 	return 0;
 }
 

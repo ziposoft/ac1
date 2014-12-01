@@ -5,8 +5,8 @@
 
 ZFACT(z_console)
 {
-	ZACT_X(exit,"q",0,"Quit/Exit");
-	ZACT_X(list_features,"ls",0,"List features");
+	ZACT_X(exit,"q",ZFF_ACT_DEF,"Quit/Exit");
+	ZACT_X(list_features,"ls",ZFF_ACT_DEF,"List features");
 	ZACT(list_features);
 	ZACT(dumpcfg);
 	ZACT(loadcfg);
@@ -14,11 +14,11 @@ ZFACT(z_console)
 	ZACT(help);
 	ZACT(exit);
 	ZACT(run);
-	ZPROP_X(_dump_cmd_line,"dump_cmdline",0,"Dump the parsed command line contents");
-	ZPROP_X(_path,"path",0,"Current path");
-	ZPROP_X(_history,"history",0,"Command line history");
+	ZPROP_X(_dump_cmd_line,"dump_cmdline",ZFF_PROP,"Dump the parsed command line contents");
+	ZPROP_X(_path,"path",ZFF_PROP,"Current path");
+	ZPROP_X(_history,"history",ZFF_PROP,"Command line history");
 	//ZPROP_X(_config_file,"cfgfile",0,"Filename of configuration file");
-	ZPROP_X(_script_file,"script",0,"Filename of script to run/save");
+	ZPROP_X(_script_file,"script",ZFF_PROP,"Filename of script to run/save");
 
 
 }
@@ -42,18 +42,26 @@ z_console::z_console()
 }
 void z_console::init(ctext appname)
 {
-	_config_file=z_get_filename_from_path(appname);
+	z_string full= appname;
+	z_string name,path,ext;
+	z_filesys_get_filename_from_path(full,path,name,ext);
+
+	_config_file=z_get_filename_from_path(name);
 	_config_file+=".cfg";
 
 
 
 }
 
-z_status  z_console::runapp(int argc, char* argv[])
+z_status  z_console::runapp(int argc, char* argv[],bool autoloadcfg)
 {
  	z_status status;
+
+
  	z_debug_load_save_args(&argc,&argv);
-	
+	init(argv[0]);
+	if(autoloadcfg)
+		loadcfg();
 
 	int i;
 	for(i=1;i<argc;i++)
@@ -73,7 +81,8 @@ z_status  z_console::runapp(int argc, char* argv[])
 	if(argc==1)
 		run();
 
-
+	if(autoloadcfg)
+		savecfg();
 	return zs_ok;
 
 }
@@ -244,7 +253,7 @@ z_status z_console::evaluate_feature(zf_obj& o)
 
 
 
-	return zff->evaluate1(_tparser,o);
+	return zff->evaluate1(_tparser,o,ZFF_LIST);
 
 	return zs_ok;//???
 }
@@ -379,7 +388,7 @@ z_status z_console::list_features()
 }
 z_status z_console::dumpcfg()
 {
- 	_temp._fact->dump_obj(gz_out,_temp._obj);
+ 	_temp._fact->dump_obj_static(gz_out,_temp._obj);
 	gz_out << "\n";
 
 	return zs_ok;
@@ -397,6 +406,7 @@ z_status z_console::loadcfg()
 {
 	z_string config_file_path;
 	get_config_file_path(config_file_path);
+	ZT("file=%s",config_file_path.c_str());
 
 	z_file f(config_file_path,"rb");
 	z_string data_in;
@@ -406,7 +416,7 @@ z_status z_console::loadcfg()
 	parser.set_source(data_in,data_in.size());
 
 
-	z_status status=_root._fact->load_obj_contents(parser,_root._obj);
+	z_status status=_root._fact->load_obj_contents(parser,_root._obj,ZFF_LOAD);
 	if(status!=zs_ok)
 	{
 		Z_ERROR_MSG(status,"Load config file failed!");
@@ -426,7 +436,7 @@ z_status z_console::savecfg()
 	z_string config_file_path;
 	get_config_file_path(config_file_path);
 	z_file f(config_file_path,"wb");
-	_root._fact->dump_obj_contents(f,_root._obj);
+	_root._fact->dump_obj_contents_static(f,_root._obj);
 	return zs_ok;
 }
 z_status z_console::help()

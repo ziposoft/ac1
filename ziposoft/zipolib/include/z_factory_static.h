@@ -67,7 +67,7 @@ void  zo_factory_list_dump();
 template <class CLASS> void zf_dump_obj(CLASS* p_obj)
 {
 	z_factory* factory=&z_factory_T<CLASS>::self;
-	factory->dump_obj(gz_out,p_obj);
+	factory->dump_obj_static(gz_out,p_obj);
 
 }
  template <class CLASS> void zf_dump_static(CLASS* p_obj)

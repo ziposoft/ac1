@@ -124,7 +124,7 @@ template <class ITEM_CLASS > class z_obj_vector_map  : public z_obj_vector<ITEM_
 {
 public:
  
-	ITEM_CLASS* get_by_name(ctext t)   const
+	ITEM_CLASS* get_by_key(ctext t)   const
 	{
 		size_t i=0;
 		while(i<this->size())

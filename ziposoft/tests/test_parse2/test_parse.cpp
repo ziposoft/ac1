@@ -88,7 +88,7 @@ int  run_test_only()
 	if(g_arg_dump=="on")
 		if(g_parse_obj)
 		{
-			g_parse_fact->dump_obj(gz_out,g_parse_obj);
+			g_parse_fact->dump_obj_static(gz_out,g_parse_obj);
 		}
 
 	return 0;
@@ -273,7 +273,7 @@ int run_parse_xml()
 	if(g_arg_dump=="on")
 	{
 		printf("dumping...\n");
-			p.dump_obj(&gz_out,&xml_file);
+			p.dump_obj_static(&gz_out,&xml_file);
 	}
 
 	return 0;
