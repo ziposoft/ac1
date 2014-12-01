@@ -124,7 +124,7 @@ z_status z_factory::execute_act(void* obj,ctext name,int* pret) const
 		*pret=ret;
 	return zs_success;
 }
-z_status z_factory::load_obj_contents(zp_text_parser &parser,void* pObj) const
+z_status z_factory::load_obj_contents_static(zp_text_parser &parser,void* pObj) const
 {
 	z_string s;
 
@@ -145,7 +145,7 @@ z_status z_factory::load_obj_contents(zp_text_parser &parser,void* pObj) const
 			break;
 
 		char* memvar=(char*)pObj +offset; 
-		status=funcs->assign(parser,memvar);
+		status=funcs->assign(parser,memvar,0);
  		if(status)
 			break;
 	}
@@ -155,7 +155,7 @@ z_status z_factory::load_obj_contents(zp_text_parser &parser,void* pObj) const
 }
 
 
-void z_factory::dump_obj_contents(z_file& f,void* obj) const
+void z_factory::dump_obj_contents_static(z_file& f,void* obj) const
 {
 	size_t index=0;
 	ctext name=0;
@@ -175,14 +175,13 @@ void z_factory::dump_obj_contents(z_file& f,void* obj) const
 		}
 		index++;
 	}
-
 }
-void z_factory::dump_obj(z_file& f,void* obj) const
+void z_factory::dump_obj_static(z_file& f,void* obj) const
 {
 	f.indent();
 	f << get_name()<<"{\n";
 	f.indent_inc();
-	dump_obj_contents(f,obj);
+	dump_obj_contents_static(f,obj);
 	f.indent_dec();
 	f.indent();
 	f<< "}\n";
@@ -215,17 +214,7 @@ void z_factory::dump_static(z_file& f) const
 z_factory
 ________________________________________________________________________*/
 
-int z_factory::get_num_features() const
-{
-	int total=0;
-	if(get_base_factory())
-	{
-		total=get_base_factory()->get_num_features();
-	}
-	total+=get_static_feature_count();
-	total+=_dynamic->features.size();
-	return total;
-}
+
 
 
 const zf_var_entry* z_factory::_get_var_entry (ctext name) const
@@ -247,82 +236,6 @@ const zf_var_entry* z_factory::_get_var_entry (size_t i) const
 	return &get_var_list()[i];
 
 }
-z_status z_factory::get_map_features(zf_feature_list&  list,zf_feature_type desired_type)
-{
-	init_dynamic();
-	size_t i=0;
-	zf_feature* p_feature;
-
-	for(i=0;i<_dynamic->features.size();i++)
-	{
-		p_feature=	   _dynamic->features[i];
-		if(desired_type	!=zf_ft_all)
-		{
-			if(	desired_type!=	p_feature->get_type())
-				continue;
-
-		}
-		list<<p_feature;
-	}
-	z_factory* base=get_base_factory();
-	if(base)
-		return base->get_map_features(list,desired_type);
-	return zs_ok;
-}
-z_status z_factory::get_list_features(z_strlist& list,void* obj) 
-{
-	init_dynamic();
-	size_t i=0;
-	for(i=0;i<_dynamic->features.size();i++)
-	{
-
-
-		_dynamic->features[i]->add_to_list(list,obj);
-
-	}
-	z_factory* base=get_base_factory();
-	if(base)
-		return base->get_list_features(list,obj);
-	return zs_ok;
-}
-z_status z_factory::load_cfg(zp_text_parser &parser,void* pObj) 
-{
-	z_string s;
-	init_dynamic();
-
-	z_status status=zs_ok;
-	while(status==zs_ok)
-	{
-		parser.skip_ws();
-		status=parser.test_any_identifier();
-		if(status==zs_no_match)
-			return zs_ok;
-		if(status)
-			break;
-		parser.get_match(s);
-		
-		zf_feature *f=_dynamic->features.get_by_name(s);
-		if(!(f->_flags & ZFF_LOAD))
-			continue;
-
-		z_memptr offset;
-		const zf_var_funcs_base* funcs;
-
-
-		status=get_var_info(s.c_str(),offset,funcs);
- 		if(status)
-			break;
-
-		char* memvar=(char*)pObj +offset; 
-		status=funcs->assign(parser,memvar);
- 		if(status)
-			break;
-	}
-	if(status==zs_eof)
-		return zs_ok;
-	return status;//Don't log error, should already be logged.
-}
-
 
 
 
@@ -366,7 +279,17 @@ z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
 	}
 	return zs_item_not_found;	
 }
-
+zf_feature* z_factory::get_feature_by_id(ctext name) 
+{
+	init_dynamic();
+	zf_feature* f=_dynamic->features.get_by_key(name);
+	if(f)
+		return f;
+	z_factory* base=get_base_factory();
+	if(base)
+		return base->get_feature_by_id(name);
+	return 0;
+}
 zf_feature* z_factory::get_feature(ctext name) 
 {
 	init_dynamic();
@@ -377,7 +300,6 @@ zf_feature* z_factory::get_feature(ctext name)
 	if(base)
 		return base->get_feature(name);
 	return 0;
-		
 }
 
 z_status z_factory::get_var_info(ctext name,z_memptr &offset,const zf_var_funcs_base*& funcs) const
@@ -495,7 +417,7 @@ void  zo_factory_list_dump()
 	}
 
 }
-z_status zf_create_obj_from_text_stream(zp_text_parser &parser, z_factory* &factory,void* &objpointer) 
+z_status zf_create_obj_from_text_stream_static(zp_text_parser &parser, z_factory* &factory,void* &objpointer) 
 {
 	parser.skip_ws();
 	z_status status=parser.test_any_identifier();
@@ -520,7 +442,7 @@ z_status zf_create_obj_from_text_stream(zp_text_parser &parser, z_factory* &fact
 		return Z_ERROR_MSG(status,"Expected '{' ");
 
 
-	status=factory->load_obj_contents(parser,objpointer);
+	status=factory->load_obj_contents_static(parser,objpointer);
  	if(status)
 		return status;
 

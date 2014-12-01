@@ -79,12 +79,27 @@ zb_ds_table::zb_ds_table(zb_source* ds,ctext unique_id)
 {
 	_ds=ds;
 	_id=unique_id;
+	_status=status_closed;
 }
 zb_ds_table::zb_ds_table()
 {
 	_ds=0;
 	Z_ASSERT(0);
 }
+
+z_status zb_ds_table::field_add(zb_ds_field* fld)
+{
+	Z_ASSERT(fld);
+	if(	 _ds_desc.get_ds_field(fld->_id))
+		return zs_already_exists;
+
+
+	_ds_desc<<fld;
+	 return 0;
+
+}
+
+
 /*__________________________________________________________________________
 
 	zb_source
@@ -139,17 +154,29 @@ z_status zb_source::ds_table_get(ctext ds_table_name,zb_ds_table*& tbl)
 	return zs_success;
 };
 
-
-z_status zb_source::table_new()
+z_status zb_source::act_open()
 {
 	zb_ds_table* tbl=0;
-	if(	table_new_name=="")
+	if(	_param_db_name=="")
+	{
+		Z_ERROR_MSG(zs_bad_parameter,"You must specify a DB name");
+	}
+
+	return	 open(_param_db_name,true,true);
+}
+
+
+
+z_status zb_source::act_table_new()
+{
+	zb_ds_table* tbl=0;
+	if(	_param_table_new_name=="")
 	{
 		Z_ERROR_MSG(zs_bad_parameter,"You must specify a table name");
 	}
 
 
-	return ds_table_new(table_new_name,tbl);
+	return ds_table_new(_param_table_new_name,tbl);
 }
 
 

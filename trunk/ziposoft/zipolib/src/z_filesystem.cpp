@@ -2,7 +2,34 @@
 #include "z_filesystem.h"
 #include "z_error.h"
 
- 
+
+#ifdef UNIX
+const char path_slash='/';
+#else
+const char path_slash='\\';
+#endif
+z_status z_filesys_get_filename_from_path(z_string& fullpath,z_string& path_out,z_string& name_out,z_string& ext_out)
+{
+	size_t dot=fullpath.rfind(	'.');
+	size_t slash=fullpath.rfind(path_slash,dot);
+	if(dot==-1)
+	{
+		dot=fullpath.length();
+	}
+	else
+	{
+		ext_out.assign(fullpath,dot+1,fullpath.length()-dot);
+	}
+	
+	if(slash==z_string::npos)
+		slash=0;
+	name_out.assign(fullpath,slash,dot-slash);
+	path_out.assign(fullpath,0,slash);
+
+
+	return zs_ok;
+}
+
 
 z_status z_filesys_getcwd(z_string& path)
 {

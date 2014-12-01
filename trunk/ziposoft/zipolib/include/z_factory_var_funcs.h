@@ -66,7 +66,7 @@ class zf_var_funcs_act : public zf_var_funcs_base
 {
 public:
 	virtual zf_feature_type get_type()const { return zf_ft_act; } 
-	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const;
+	virtual zf_feature* create_feature(ctext id,ctext name,z_memptr offset,zf_feature_flags flags,ctext desc) const;
 
 };
 /*
@@ -76,7 +76,7 @@ template <class VAR >  class zf_var_funcs  : public zf_var_funcs_base
 {
 public:
 	virtual zf_feature_type get_type() const { return zf_ft_var; }
-	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const;
+	virtual zf_feature* create_feature(ctext id,ctext name,z_memptr offset,zf_feature_flags flags,ctext desc) const;
 	virtual z_status get(z_string& s, void* v,ctext format,int index=-1) const;
 	virtual z_status set(ctext s, void* v,ctext format,int index=-1) const;
 	virtual z_status clear(void* v) const;
@@ -87,15 +87,15 @@ public:
 	virtual void* create_obj(void* var,z_factory* fact) const;
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const ;
 
- 	virtual z_status load(zp_text_parser &parser, void* v) const ;
- 	virtual z_status assign(zp_text_parser &parser, void* v) const ;
+ 	virtual z_status load(zp_text_parser &parser, void* v,zf_feature_flags oper) const ;
+ 	virtual z_status assign(zp_text_parser &parser, void* v,zf_feature_flags oper) const ;
  	virtual z_status evaluate1(zp_text_parser &parser, void* v) const ;
 
 };	
 class zf_funcs_obj_list_base  : public zf_var_funcs_base
 {
 public:
-	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const;
+	virtual zf_feature* create_feature(ctext id,ctext name,z_memptr offset,zf_feature_flags flags,ctext desc) const;
 	virtual zf_feature_type get_type() const{ return zf_ft_obj_list; }
 
 	virtual z_status clear(void* v) const;
@@ -105,7 +105,7 @@ public:
 	z_status dump(z_file& f, void* v) const;
 	virtual void* get_ptr(void* v,z_obj_list_iter& iter ) const;
 	virtual void* get_sub_obj(void* list,ctext key) const; 
-  	virtual z_status load(zp_text_parser &parser, void* v) const ;
+  	virtual z_status load(zp_text_parser &parser, void* v,zf_feature_flags oper) const ;
 
 };
 
@@ -190,9 +190,9 @@ class zf_funcs_obj_base  : public zf_var_funcs_base
 {
 public:
 	virtual zf_feature_type get_type() const{ return zf_ft_obj; }
-  	virtual z_status load(zp_text_parser &parser, void* v) const ;
+  	virtual z_status load(zp_text_parser &parser, void* v,zf_feature_flags oper) const ;
 	virtual z_status dump(z_file& file, void* memvar) const;
-	virtual zf_feature* create_feature(ctext name,z_memptr offset,ctext desc,U32 flags) const;
+	virtual zf_feature* create_feature(ctext id,ctext name,z_memptr offset,zf_feature_flags flags,ctext desc) const;
 
 };
 
@@ -232,7 +232,7 @@ public:
 	{
 		file.indent_inc();
 		file << "\n";
-		z_factory_T<CLASS>::self.dump_obj(file,v);
+		z_factory_T<CLASS>::self.dump_obj_static(file,v);
 		file.indent_dec();
 		 return zs_ok;
 	}

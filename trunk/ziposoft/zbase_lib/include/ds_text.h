@@ -41,7 +41,7 @@ public:
 class zb_ds_text: public zb_source
 {
 	z_directory _dir;
-	z_obj_map<zb_ds_table_txt> _tables;
+	//z_obj_map<zb_ds_table_txt> _tables;
 
 protected:
  	virtual z_status _table_new(ctext ds_table_name,zb_ds_table*& tbl);

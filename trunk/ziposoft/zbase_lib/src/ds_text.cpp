@@ -25,6 +25,11 @@ z_status zb_ds_text::open(ctext name,bool create,bool writable)
 {
 	z_status status;
 	size_t i;
+
+
+	if(_status!=status_closed)
+		return zs_already_open;
+
 	_name=name;
 	status=_dir.open(_name,create);
 	if(status)
@@ -35,8 +40,12 @@ z_status zb_ds_text::open(ctext name,bool create,bool writable)
 
 	for(i=0;i<list.size();i++)
 	{
-		_tables << new 
-			zb_ds_table_txt(this,list[i]);
+		z_string name,path,ext;
+		z_filesys_get_filename_from_path(list[i],path,name,ext);
+		
+		_ds_tables << new 
+		//_tables << new 
+			zb_ds_table_txt(this,name);
 
 	}
 
@@ -44,7 +53,7 @@ z_status zb_ds_text::open(ctext name,bool create,bool writable)
 	if(status)
   		return Z_ERROR_MSG(zs_could_not_open_file,"can't change to directory");
 
-
+	_status=status_opened_write;
 	 return 0;
 }
 
@@ -123,35 +132,37 @@ z_status zb_ds_table_txt::commit()
 	bool header=true;
 	z_string data;
 	zb_ds_rec_ptr* rec;
+
+
+	z_map_iter i_fld;
+	bool comma=false;
+	while(fld=_ds_desc.get_next(i_fld))
+	{
+		if(comma)
+			_file <<',';
+		data=fld->_id;
+		z_csv_encode_string(data);
+		_file <<data;
+		comma=true;
+	}
+	_file <<'\n';
+
+
 	for(i_rec=0;i_rec<get_record_count();i_rec++)
 	{
-		z_map_iter i_fld;
-		bool comma=false;
+		i_fld.reset();
+		comma=false;
 		while(fld=_ds_desc.get_next(i_fld))
 		{
 			if(comma)
 				_file <<',';
-			if(header)
-			{
-				data=fld->_id;
-
-			}
-			else
-			{
-				rec=_data[i_rec];
-				fld->get_string(rec,data);
-
-			}
+			rec=_data[i_rec];
+			fld->get_string(rec,data);
 			z_csv_encode_string(data);
 			_file <<data;
 			comma=true;
 		}
 		_file <<'\n';
-		if(header)
-		{
-			i_rec=0;
-			header=false;
-		}
 	}
 	_file.close();
 	return zs_ok;
@@ -159,6 +170,10 @@ z_status zb_ds_table_txt::commit()
 }
 z_status zb_ds_table_txt::open(bool writable)
 {
+
+	if(_status!=status_closed)
+		return zs_already_open;
+
 	ctext flags="r";
 	/*
 	current we just read it all in then write it all out on commit
@@ -186,6 +201,7 @@ z_status zb_ds_table_txt::open(bool writable)
 	_file.read_all(data);
 	ParseBuffer(data.c_str(),data.size());
 	_file.close();
+	_status=(writable? status_opened_write:status_opened_read);
 
 	return 0;
 }
