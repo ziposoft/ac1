@@ -22,7 +22,7 @@ public:
 /*
 ZFACT(source)
 {
-	ZACT_XP(addtable,"addtable","desc",1,
+	ZACT_XP(addtable,"addtable","desc",ZFF_ACT_DEF,
 		ZPARAM_X(_newtblname,"table_name","Name of new table"));
 	ZACT_XP(open,"opendb","desc",1,
 		ZPARAM_X(dbname,"db_name","Name of DB to open"));
@@ -37,7 +37,7 @@ ZFACT(root)
 	ZOBJ(console);
 	ZOBJ_X(zbs,"db",ZFF_PROP,"database");
 	ZPOBJ(_p_logger);
- 	ZACT_XP(create,"create",0,"create",0,0);
+ 	ZACT_XP(create,"create",ZFF_ACT_DEF,"create",0,0);
 
 	/*
 	ZPROP(x);

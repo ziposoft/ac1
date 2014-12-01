@@ -358,8 +358,8 @@ z_status z_console::list_features()
 	zf_feature_list list;
 
 	gz_out.indent_inc();
-	_temp._fact->get_map_features(list,zf_ft_var);
-	_temp._fact->get_map_features(list,zf_ft_obj_list);
+	_temp._fact->get_map_features(list,zf_ft_var,ZFF_LIST);
+	_temp._fact->get_map_features(list,zf_ft_obj_list,ZFF_LIST);
 	gz_out << "\nVariables:\n";
 	while(p_feature=list.get_next(iter))
 	{
@@ -367,7 +367,7 @@ z_status z_console::list_features()
 	}
 	iter.reset();
 	list.clear();
-	_temp._fact->get_map_features(list,zf_ft_act);
+	_temp._fact->get_map_features(list,zf_ft_act,ZFF_LIST);
 	gz_out << "\nActions:\n";
 	while(p_feature=list.get_next(iter))
 	{
@@ -375,7 +375,7 @@ z_status z_console::list_features()
 	}
 	list.clear();
 	iter.reset();
-	_temp._fact->get_map_features(list,zf_ft_obj);
+	_temp._fact->get_map_features(list,zf_ft_obj,ZFF_LIST);
 	gz_out << "\nChild Objects:\n";
 	while(p_feature=list.get_next(iter))
 	{

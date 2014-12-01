@@ -34,6 +34,8 @@ z_status z_factory::get_map_features(zf_feature_list&  list,
 				continue;
 
 		}
+		if(!(p_feature->_flags & oper))
+			continue;
 		list<<p_feature;
 	}
 	z_factory* base=get_base_factory();
