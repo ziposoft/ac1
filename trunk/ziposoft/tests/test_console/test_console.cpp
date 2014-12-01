@@ -244,8 +244,8 @@ ZFACT(z_intf_random_access)
 ZFACT_V(z_binary_file,z_intf_random_access)
 {
 	ZPROP(filename);
-	ZACT_XP(save,"save",0,"Save to file",1,ZPARAM(filename));
-	ZACT_XP(load,"load",0,"Load from file",1,ZPARAM(filename));
+	ZACT_XP(save,"save",ZFF_ACT_DEF,"Save to file",1,ZPARAM(filename));
+	ZACT_XP(load,"load",ZFF_ACT_DEF,"Load from file",1,ZPARAM(filename));
 	
 
 };	
@@ -266,7 +266,7 @@ ZFACT(root)
 	ZPROP(x);
 	ZPROP(i);
 	ZACT(add);
-	ZACT_XP(show,"show",0,"desc",1,ZPARAM(s));
+	ZACT_XP(show,"show",ZFF_ACT_DEF,"desc",1,ZPARAM(s));
 
 };	  */
 #ifdef BUILD_VX
@@ -289,9 +289,8 @@ int main(int argc, char* argv[])
 	//root o;
 	test1 o;
 	o.console.setroot(&o);
-	o.console.init(argv[0]);
 
-	o.console.runapp(argc,argv);
+	o.console.runapp(argc,argv,false);
 
 
 	return 0;

@@ -4,7 +4,7 @@
 ZFACT(zb_ds_table)
 {
 	ZPROP(_id);
-	ZACT_XP(add_field,"add_field",0,"Add field",1,ZPARAM(_new_field_name));
+	ZACT_XP(add_field,"add_field",ZFF_ACT_DEF,"Add field",1,ZPARAM(_new_field_name));
 };
 
 
@@ -14,9 +14,9 @@ ZFACT(zb_source)
 	ZPROP_X(_param_db_name,"name",ZFF_PROP,"DB Name");
 	ZPROP_X(_param_table_new_name,"new_table_name",ZFF_PROP,"Table Name");
 	ZPROP_X(_ds_tables,"tables",ZFF_PROP_NOLOAD,"Tables");
-	ZACT_XP(act_table_new,"new_table",0,"Create a new table",1,ZPARAM(_param_table_new_name));
-	ZACT_XP(act_open,"open",0,"Open the DB",1,ZPARAM(_param_db_name));
-	ZACT_XP(commit,"commit",0,"Commit the DB",0,0);
+	ZACT_XP(act_table_new,"new_table",ZFF_ACT_DEF,"Create a new table",1,ZPARAM(_param_table_new_name));
+	ZACT_XP(act_open,"open",ZFF_ACT_DEF,"Open the DB",1,ZPARAM(_param_db_name));
+	ZACT_XP(commit,"commit",ZFF_ACT_DEF,"Commit the DB",0,0);
 };
 ZFACT_V( zb_ds_table_txt, zb_ds_table)
 {

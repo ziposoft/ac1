@@ -198,7 +198,7 @@ ZFACT(z_intf_random_access)
 {
 	ZPROP_HEX(offset,"offset",ZFF_HEX|ZFF_PROP,"Offset for operation");
 	ZPROP_HEX(length,"length",ZFF_HEX|ZFF_PROP,"Length of operation");
-	ZACT_XP(dump,"dump",0,"Dump data",3,
+	ZACT_XP(dump,"dump",ZFF_ACT_DEF,"Dump data",3,
 		ZPARAM(offset),
 		ZPARAM(length),
 		ZPARAM(width)
@@ -219,11 +219,11 @@ ZFACT_V(z_intf_mapped_access,z_intf_random_access)
 ZFACT_V(z_binary_file,z_intf_mapped_access)
 {
 	ZPROP(filename);
-	ZACT_XP(save,"save",0,"Save to file",1,ZPARAM(filename));
-	ZACT_XP(newfile,"new",0,"Create new file",2,
+	ZACT_XP(save,"save",ZFF_ACT_DEF,"Save to file",1,ZPARAM(filename));
+	ZACT_XP(newfile,"new",ZFF_ACT_DEF,"Create new file",2,
 		ZPARAM(filename),ZPARAM(length)
 		);
-	ZACT_XP(load,"load",0,"Load from file",1,ZPARAM(filename));
+	ZACT_XP(load,"load",ZFF_ACT_DEF,"Load from file",1,ZPARAM(filename));
 	
 
 };
