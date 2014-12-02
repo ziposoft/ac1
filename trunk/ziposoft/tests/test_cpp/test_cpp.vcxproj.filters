@@ -24,6 +24,12 @@
     <ClCompile Include="extra.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="funcptrs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="templates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test_cpp.h">

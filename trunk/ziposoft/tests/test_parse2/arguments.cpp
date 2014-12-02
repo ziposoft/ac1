@@ -77,10 +77,10 @@ option* get_option(argument& a,z_string& optname)
 void show_valid_options(argument& a)
 {
 	size_t i;
-	gz_out<<"\tValid options:\n";
+	zout<<"\tValid options:\n";
 	for(i=0;i<a.num_valid_options;i++)
 	{
-		gz_out <<'\t' << a.option_list[i].name <<" - " <<a.option_list[i].desc<<"\n";
+		zout <<'\t' << a.option_list[i].name <<" - " <<a.option_list[i].desc<<"\n";
 	}
 }
 int run_help()
@@ -89,7 +89,7 @@ int run_help()
 	for(j=0;j<arg_list_count;j++)
 	{
 		argument& a= arg_list[j];
-		gz_out << '\n' << a.name << " - " << a.desc<<"\n";
+		zout << '\n' << a.name << " - " << a.desc<<"\n";
 		show_valid_options(a);
 	}
 	return 0;

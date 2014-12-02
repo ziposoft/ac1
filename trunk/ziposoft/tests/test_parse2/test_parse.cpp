@@ -88,7 +88,7 @@ int  run_test_only()
 	if(g_arg_dump=="on")
 		if(g_parse_obj)
 		{
-			g_parse_fact->dump_obj_static(gz_out,g_parse_obj);
+			g_parse_fact->dump_obj_static(zout,g_parse_obj);
 		}
 
 	return 0;
@@ -160,7 +160,7 @@ int run_test_output()
 			return 0;
 		}
 		printf("Output:\n");
-		gz_out<<fp_output_buffer.get_buffer()<<'\n';
+		zout<<fp_output_buffer.get_buffer()<<'\n';
 		return status;
 	}
 	/*
@@ -273,7 +273,7 @@ int run_parse_xml()
 	if(g_arg_dump=="on")
 	{
 		printf("dumping...\n");
-			p.dump_obj_static(&gz_out,&xml_file);
+			p.dump_obj_static(&zout,&xml_file);
 	}
 
 	return 0;
@@ -303,7 +303,7 @@ int run_static_tests()
 		U32 test_number=g_arg_test_num.GetDecVal();
 		if(test_number>=num_tests)
 		{
-			gz_out << "Invalid test number \""<<g_arg_test_num <<"\"";
+			zout << "Invalid test number \""<<g_arg_test_num <<"\"";
 			return -1;
 		}
 		start=end=test_number;

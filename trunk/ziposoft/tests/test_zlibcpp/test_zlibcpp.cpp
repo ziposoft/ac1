@@ -37,7 +37,7 @@
 	test x;
 	x.set_prop("_i","123");
 	x.get_prop("_i",larry);
-	gz_out
+	zout
 		<<larry
 		<<','
 		<<x._i 
@@ -45,10 +45,10 @@
 
 	x._i=982;
 	x.get_prop("_i",larry);
-	gz_out <<larry<<','<<x._i <<'\n';
+	zout <<larry<<','<<x._i <<'\n';
  	x._hex=982;
 	x.get_prop("_hex",larry);
-	gz_out <<larry<<','<<x._hex <<'\n';
+	zout <<larry<<','<<x._hex <<'\n';
 
 
 
@@ -62,12 +62,12 @@
  {
 	z_directory localdir;
 	z_strlist list;
-	gz_out << "list of exe files:\n";
+	zout << "list of exe files:\n";
 
 	localdir.get_files_by_extension("exe",list);
-	list.dump(gz_out);
+	list.dump(zout);
 	localdir.get_files_by_extension("lib",list);
-	list.dump(gz_out);
+	list.dump(zout);
 
 	z_file test_file;
 	test_file.open(TEST_FILE,"w");
@@ -163,9 +163,9 @@ int main(int argc, char** argv)
 	//dummy.add_features();
 	z_debug_load_save_args(&argc,&argv);
 	testA A;
-	z_factory_T<testA>::self.dump_static(gz_out);
+	z_factory_T<testA>::self.dump_static(zout);
 	z_factory* f=zf_get_factory("testA");
-	f->dump_obj_static(gz_out,&A);
+	f->dump_obj_static(zout,&A);
 
 	f=	zf_get_factory_T<testA>();
 	z_parser p;
@@ -178,21 +178,21 @@ int main(int argc, char** argv)
 	}
 
 
-	f->dump_obj_static(gz_out,&A);
+	f->dump_obj_static(zout,&A);
 
 	A._i=27;
 	A._str="go run!";
- 	f->dump_obj_static(gz_out,&A);
+ 	f->dump_obj_static(zout,&A);
 
 	f->set_var_as_string(&A,"_str","ok ok");
 	f->set_var_as_string(&A,"_i","1");
 	f->execute_act(&A,"func");
 
-  	f->dump_obj_static(gz_out,&A);
+  	f->dump_obj_static(zout,&A);
 	/*
 	testc c;
 	c.execute_act(&c,"func");
-	c.dump_obj_static(gz_out,&c);
+	c.dump_obj_static(zout,&c);
 
 	*/
 

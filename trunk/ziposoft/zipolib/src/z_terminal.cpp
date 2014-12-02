@@ -259,7 +259,7 @@ void z_terminal::curGotoXY(U32 x,U32 y)
 {
 	//<ESC>[{ROW};{COLUMN}f
 	
-	gz_out.putf("\x01b[%d;%df",y,x+1);
+	zout.putf("\x01b[%d;%df",y,x+1);
 	//tcdrain(1);
 }
 void z_terminal::curLeft(U32 x)
@@ -281,7 +281,7 @@ void z_terminal::curRight(U32 x)
 void z_terminal::SetUnderscore()
 {
 	//<ESC>[ {Ps} ; {Ps} m
-	gz_out.putf("\x01b[0m");
+	zout.putf("\x01b[0m");
 }
 */
 int z_terminal::mode_normal()

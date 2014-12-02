@@ -358,9 +358,9 @@ z_status zb_ds_table_mk::test_record_by_index(size_t index,zb_ds_rec_ptr** curso
 	c4_StringProp p("field1str");
 
 	get_record_by_index(index,cursor);
-	gz_out << p.Get(_mk_view[index])<<"\n";
+	zout << p.Get(_mk_view[index])<<"\n";
 	c4_RowRef& rr=_mk_view[index];
-	gz_out << p.Get(rr)<<"\n";
+	zout << p.Get(rr)<<"\n";
 
 	//Apparently dynamic_cast is slow. change to static for release build
 	zb_rec_ptr_mk* r=dynamic_cast<zb_rec_ptr_mk*>(*cursor);
@@ -369,7 +369,7 @@ z_status zb_ds_table_mk::test_record_by_index(size_t index,zb_ds_rec_ptr** curso
 	r->set(this,index);
 	rr=r->get_row_ref();
 	
-	gz_out << p.Get(rr)<<"\n";
+	zout << p.Get(rr)<<"\n";
 	return 0;
 
 }

@@ -120,35 +120,38 @@ z_status zb_ds_table::act_dump_records()
 
 	printf("count=%d\n",count);
 
-	gz_out <<"\t";
+	zout <<"\t";
+
+		return zs_ok;
+
 	fld_iter.reset();
 	while (fld=desc.get_next( fld_iter))
 	{
 		fld->get_name(data);
-		gz_out <<  data << "\t";
+		zout <<  data << "\t";
 	}
-	gz_out <<'\n';
+	zout <<'\n';
 	for (i=0;i<count;i++)
 	{
 		status=get_record_by_index(i,&pRec);
 		if(status)
 		{
-			gz_out << "get_record_by_index failed:"<<i<<"\n";
+			zout << "get_record_by_index failed:"<<i<<"\n";
 			break;
 		}
 		if(!pRec)
 		{
-			gz_out << "could not get record"<<i<<"\n";
+			zout << "could not get record"<<i<<"\n";
 			break;
 		}
-		gz_out << i<<":";
+		zout << i<<":";
 		fld_iter.reset();
 		while (fld=desc.get_next( fld_iter))
 		{
 			fld->get_string(pRec,data);
-			gz_out <<  data << "\t";
+			zout <<  data << "\t";
 		}
-		gz_out <<'\n';
+		zout <<'\n';
 
 	}
 	return zs_ok;
