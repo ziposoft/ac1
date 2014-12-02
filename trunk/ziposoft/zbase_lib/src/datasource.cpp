@@ -122,7 +122,6 @@ z_status zb_ds_table::act_dump_records()
 
 	zout <<"\t";
 
-		return zs_ok;
 
 	fld_iter.reset();
 	while (fld=desc.get_next( fld_iter))
