@@ -1,4 +1,3 @@
-3
+2
 test_zb.exe
-db
-ls
+create

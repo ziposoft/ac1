@@ -22,6 +22,9 @@ public:
 	virtual z_status set_int32(zb_ds_rec_ptr *rec,I32 i);
 	virtual z_status get_int32(zb_ds_rec_ptr *rec,I32& i);
 
+  	virtual z_status get_name(z_string& s);
+
+
 };
 class zb_ds_desc : public z_obj_map<zb_ds_field>,public z_refcount
 {
@@ -75,6 +78,7 @@ public:
 	{
 		return Z_ERROR_NOT_IMPLEMENTED;;
 	}
+	virtual z_status act_dump_records();
 
 	/*
 	virtual int get_num_cols()=0; 

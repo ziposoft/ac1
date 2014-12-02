@@ -4,6 +4,7 @@
 ZFACT(zb_ds_table)
 {
 	ZPROP(_id);
+	ZACT_XP(act_dump_records,"dump",ZFF_ACT_DEF,"dump",0,0);
 	ZACT_XP(add_field,"add_field",ZFF_ACT_DEF,"Add field",1,ZPARAM(_new_field_name));
 };
 
