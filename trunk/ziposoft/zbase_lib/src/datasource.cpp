@@ -113,9 +113,9 @@ z_status zb_ds_table::act_dump_records()
 	zb_ds_field* fld=0;
 	z_string data;
 	zb_ds_desc &desc=get_desc();
-
 	z_map_iter fld_iter;
 	size_t i;
+	open(false);
 	size_t count=get_record_count();
 
 	printf("count=%d\n",count);
@@ -143,7 +143,7 @@ z_status zb_ds_table::act_dump_records()
 			zout << "could not get record"<<i<<"\n";
 			break;
 		}
-		zout << i<<":";
+		zout << (int)i<<":";
 		fld_iter.reset();
 		while (fld=desc.get_next( fld_iter))
 		{

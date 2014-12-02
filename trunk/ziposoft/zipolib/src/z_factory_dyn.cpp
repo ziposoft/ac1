@@ -13,10 +13,6 @@ void z_factory::add_features_recurse()
 int z_factory::get_num_features() const
 {
 	int total=0;
-	if(get_base_factory())
-	{
-		total=get_base_factory()->get_num_features();
-	}
 	total+=get_static_feature_count();
 	total+=_dynamic->features.size();
 	return total;
@@ -44,9 +40,6 @@ z_status z_factory::get_map_features(zf_feature_list&  list,
 			continue;
 		list<<p_feature;
 	}
-	z_factory* base=get_base_factory();
-	if(base)
-		return base->get_map_features(list,desired_type,oper);
 	return zs_ok;
 }
 z_status z_factory::get_list_features(z_strlist& list,void* obj) 
@@ -60,9 +53,6 @@ z_status z_factory::get_list_features(z_strlist& list,void* obj)
 		_dynamic->features[i]->add_to_list(list,obj);
 
 	}
-	z_factory* base=get_base_factory();
-	if(base)
-		return base->get_list_features(list,obj);
 	return zs_ok;
 }
 z_status z_factory::load_obj_contents(zp_text_parser &parser,void* pObj,zf_feature_flags oper) 
