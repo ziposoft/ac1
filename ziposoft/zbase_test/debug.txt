@@ -1,3 +1,6 @@
-2
+5
 test_zb
-ls
+db
+open
+tables[table1]
+dump

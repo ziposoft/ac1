@@ -285,9 +285,6 @@ zf_feature* z_factory::get_feature_by_id(ctext name)
 	zf_feature* f=_dynamic->features.get_by_key(name);
 	if(f)
 		return f;
-	z_factory* base=get_base_factory();
-	if(base)
-		return base->get_feature_by_id(name);
 	return 0;
 }
 zf_feature* z_factory::get_feature(ctext name) 
@@ -296,9 +293,6 @@ zf_feature* z_factory::get_feature(ctext name)
 	zf_feature* f=_dynamic->features.get_by_name(name);
 	if(f)
 		return f;
-	z_factory* base=get_base_factory();
-	if(base)
-		return base->get_feature(name);
 	return 0;
 }
 
@@ -327,10 +321,11 @@ z_status z_factory::get_var_info(ctext name,z_memptr &offset,const zf_var_funcs_
 				funcs=0;
 			return zs_ok;		
 		}
+		z_factory* base=get_base_factory();
+		if(base)
+			return base->get_var_info(name,offset,funcs);	
 	}
-	z_factory* base=get_base_factory();
-	if(base)
-		return base->get_var_info(name,offset,funcs);
+
 	return zs_item_not_found;
 		
 }

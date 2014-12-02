@@ -451,8 +451,12 @@ z_status zf_funcs_obj_list_base::dump(z_file& f, void* v) const
 }
 z_status zf_funcs_obj_list_base::load(zp_text_parser &parser, void* v,zf_feature_flags oper) const 
 {
-	z_obj_list_base* plist=get_list(v);
-	plist->clear();
+	z_obj_list_base* plist=0;
+	if(v)
+	{
+		plist=get_list(v);
+		plist->clear();
+	}
 	z_status status=zs_ok;
 	parser.skip_ws();
 	status=parser.test_char('{');
