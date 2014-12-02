@@ -16,7 +16,7 @@ void z_debug_load_save_args(int* pargc, char*** pargv);
 //DEBUG MACROS
 #ifdef DEBUG
 void z_debug_logfile(ctext name);
-int gz_debug_break_on_error=0;
+extern int gz_debug_break_on_error;
 
 #ifdef BUILD_VSTUDIO  
 

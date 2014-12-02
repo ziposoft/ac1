@@ -18,6 +18,14 @@ z_status zb_ds_field::set_string(zb_ds_rec_ptr *rec,ctext s){ return Z_ERROR_NOT
 z_status zb_ds_field::get_string(zb_ds_rec_ptr *rec,z_string& s){ return Z_ERROR_NOT_IMPLEMENTED;}
 z_status zb_ds_field::set_int32(zb_ds_rec_ptr *rec,I32 i){ return Z_ERROR_NOT_IMPLEMENTED;}
 z_status zb_ds_field::get_int32(zb_ds_rec_ptr *rec,I32& i){ return Z_ERROR_NOT_IMPLEMENTED;}
+z_status zb_ds_field::get_name(z_string& s)
+{
+	s=_id;
+	return 0;
+}
+
+
+
 
 /*____________________________________________________________________________
 	zb_ds_rec_ptr
@@ -98,6 +106,56 @@ z_status zb_ds_table::field_add(zb_ds_field* fld)
 	 return 0;
 
 }
+z_status zb_ds_table::act_dump_records()
+{
+	z_status status;
+	zb_ds_rec_ptr* pRec=0;
+	zb_ds_field* fld=0;
+	z_string data;
+	zb_ds_desc &desc=get_desc();
+
+	z_map_iter fld_iter;
+	size_t i;
+	size_t count=get_record_count();
+
+	printf("count=%d\n",count);
+
+	gz_out <<"\t";
+	fld_iter.reset();
+	while (fld=desc.get_next( fld_iter))
+	{
+		fld->get_name(data);
+		gz_out <<  data << "\t";
+	}
+	gz_out <<'\n';
+	for (i=0;i<count;i++)
+	{
+		status=get_record_by_index(i,&pRec);
+		if(status)
+		{
+			gz_out << "get_record_by_index failed:"<<i<<"\n";
+			break;
+		}
+		if(!pRec)
+		{
+			gz_out << "could not get record"<<i<<"\n";
+			break;
+		}
+		gz_out << i<<":";
+		fld_iter.reset();
+		while (fld=desc.get_next( fld_iter))
+		{
+			fld->get_string(pRec,data);
+			gz_out <<  data << "\t";
+		}
+		gz_out <<'\n';
+
+	}
+	return zs_ok;
+
+
+}
+
 
 
 /*__________________________________________________________________________
@@ -178,7 +236,5 @@ z_status zb_source::act_table_new()
 
 	return ds_table_new(_param_table_new_name,tbl);
 }
-
-
 
 

@@ -79,7 +79,11 @@ z_status  z_console::runapp(int argc, char* argv[],bool autoloadcfg)
 
 	}
 	if(argc==1)
+	{
+		select_obj_from_path(_root,_path);
+		_selected=_temp;
 		run();
+	}
 
 	if(autoloadcfg)
 		savecfg();

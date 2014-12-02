@@ -8,8 +8,20 @@ z_debug.c
 #include "zipolib/include/z_util.h"
 #include "zipolib/include/z_os_specific.h"
 int g_z_dbg_trace_mask=0;
+int gz_debug_break_on_error=0;
+
+
 #define MAX_DEBUG_STR 0x1000
 #if DEBUG
+
+
+int z_debug_break()
+{
+	if(gz_debug_break_on_error)
+		Z_DEBUG_BREAK;
+	return 1;
+}
+
 
 void z_debug_printf(const char*  lpszFormat,  ...  )
 {
