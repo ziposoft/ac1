@@ -50,7 +50,7 @@ int    z_file_exists(utf8 fname)
 	
 }
 
-int z_filesys_get_current_dir(utf8 dir,int length)
+int z_filesys_get_current_dir(char* dir,int length)
 {
 	if(getcwd(dir,length)==NULL)
 		return -1;
@@ -143,11 +143,11 @@ try
 of.open();
 //int status=of.get_status();
 of.put(out.get_data());
-//gz_out.put(out.get_data());
+//zout.put(out.get_data());
 }
 catch (estream* e) 
 {
-gz_out.putf("Error: %s\n", (ctext)e->get_message());
+zout.putf("Error: %s\n", (ctext)e->get_message());
 delete e;
 }
 }

@@ -410,8 +410,8 @@ void  zo_factory_list_dump()
 		{
 			const zp_module_fact_entry& p_obj_entry=p_module->facts[i_obj];
 			z_factory* fact=p_obj_entry.fact;
-			gz_out.indent_reset();
-			fact->dump_static(gz_out);
+			zout.indent_reset();
+			fact->dump_static(zout);
 
 		}
 	}

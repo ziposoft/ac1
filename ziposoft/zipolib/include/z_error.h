@@ -56,12 +56,12 @@ To stdout, to the zipo log, to the OS debug/trace facilities (DbgPrint), to cust
 
 */
 
-#define	Z_ERROR_NOT_IMPLEMENTED  gz_logger.report_not_implemented (__FILE__,__FUNCTION__,__LINE__);
+#define	Z_ERROR_NOT_IMPLEMENTED  get_logger().report_not_implemented (__FILE__,__FUNCTION__,__LINE__);
 
-#define	Z_ERROR_DBG(status)   gz_logger.add_msg (z_logger_lvl_debug,__FILE__,__FUNCTION__,__LINE__,status,0);
+#define	Z_ERROR_DBG(status)   get_logger().add_msg (z_logger_lvl_debug,__FILE__,__FUNCTION__,__LINE__,status,0);
 
-#define	Z_ERROR(status)   (z_debug_break()?gz_logger.add_msg (z_logger_lvl_error,__FILE__,__FUNCTION__,__LINE__,status,0):0);
-#define	Z_ERROR_MSG(status,...)   gz_logger.add_msg (z_logger_lvl_error,__FILE__,__FUNCTION__,__LINE__,status,__VA_ARGS__);
+#define	Z_ERROR(status)   (z_debug_break()?get_logger().add_msg (z_logger_lvl_error,__FILE__,__FUNCTION__,__LINE__,status,0):0);
+#define	Z_ERROR_MSG(status,...)   get_logger().add_msg (z_logger_lvl_error,__FILE__,__FUNCTION__,__LINE__,status,__VA_ARGS__);
 
 //#define Z_ERROR_THROW(_error_no_,_error_msg_) {zb_error* e=new  zb_error(_error_no_);e->_error_msg.Format _error_msg_; throw e;}
 

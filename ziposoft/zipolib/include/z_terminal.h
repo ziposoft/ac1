@@ -107,7 +107,7 @@ public:
 	}
 	void  BuffAddChar(char c)
 	{
-		//gz_out.putf("%c %02x\r\n",c,c);
+		//zout.putf("%c %02x\r\n",c,c);
 		_pBuffer[_buffEnd]=c;
 		_buffEnd++;
 		if(_buffEnd >=_buffSize) _buffEnd=0;

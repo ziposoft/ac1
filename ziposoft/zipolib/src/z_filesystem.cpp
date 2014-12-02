@@ -33,7 +33,7 @@ z_status z_filesys_get_filename_from_path(z_string& fullpath,z_string& path_out,
 
 z_status z_filesys_getcwd(z_string& path)
 {
-	utf8 current_dir=new char[128];
+	char* current_dir=new char[128];
 	if(z_filesys_get_current_dir(current_dir,128))
 	{
 		return Z_ERROR_MSG(zs_error,"Could not get current directory");

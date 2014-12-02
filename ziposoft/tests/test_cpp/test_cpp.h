@@ -3,14 +3,14 @@
 #include <stddef.h>
 #include  <string>
 
-class A
+class Abc
 {
 public:
 	virtual int func1() const{ return 1; }
 	virtual void func2(int x) const {  }
 	virtual void func3(int x) const {  }
 };
- template <class VAR >  class B  : public A
+ template <class VAR >  class Bcd  : public Abc
  {
  public:
 	virtual void func2(int x) const;

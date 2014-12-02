@@ -169,11 +169,11 @@ public:
 };
 z_status z_csv_encode_string(z_string& output);
 
+z_debug& z_debug_get();
+z_file& z_stdout_get();
+#define zout z_stdout_get()
+z_file& z_stdin_get();
 
-extern z_debug gz_debug;
-
-extern z_file gz_in;
-extern z_file gz_out;
 
 #endif
 

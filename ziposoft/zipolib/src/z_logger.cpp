@@ -37,9 +37,9 @@ z_logger_msg::z_logger_msg(z_logger_level lvl,ctext file,ctext func,int line,z_s
 void z_logger_msg::dump(z_file *fp,z_logger_level lvl,bool debug)
 {
 	if(debug)
-	gz_logger.out_dbg(_lvl,fp,_source_file, _source_function,_source_line,_status,_msg.c_str());
+	get_logger().out_dbg(_lvl,fp,_source_file, _source_function,_source_line,_status,_msg.c_str());
 	else
-	gz_logger.out(_lvl,fp,_status,_msg.c_str());
+	get_logger().out(_lvl,fp,_status,_msg.c_str());
 
 }
 void z_logger::out_dbg(z_logger_level lvl,z_file* f,ctext file,ctext func,int line,
@@ -88,7 +88,7 @@ z_status z_logger::add_msg(z_logger_level lvl,ctext file,ctext func,int line,z_s
 		c=vsnprintf (buff,BUFF_SIZE-1, lpszFormat, ArgList);
 	}
 
-	out_dbg(lvl,&gz_debug,file,func,line,status,buff);
+	out_dbg(lvl,&z_debug_get(),file,func,line,status,buff);
 	if(lvl<=_log_level)
 		_log << new z_logger_msg(lvl, file, func, line, status, buff);
 	if(buff)
@@ -101,7 +101,7 @@ void z_logger::dump(z_logger_level lvl,bool debug )
 	size_t i;
 	for(i=0;i<_log.size();i++)
 	{
-		_log[i]->dump(&gz_out,lvl,debug);
+		_log[i]->dump(&zout,lvl,debug);
 		delete _log[i];
 
 	}
@@ -111,11 +111,15 @@ void z_logger::dump(z_logger_level lvl,bool debug )
 }
 void z_logger_dump()
 {
-	gz_logger.dump(z_logger_lvl_warning,false);
+	get_logger().dump(z_logger_lvl_warning,false);
 }
 
-z_logger gz_logger;
+z_logger& get_logger()
+{
+	static z_logger gz_logger;
+	return gz_logger;
 
+}
 
 
 #define ZO_OBJ_LIST \

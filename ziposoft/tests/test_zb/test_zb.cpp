@@ -9,12 +9,13 @@ class root
 public:
 	root()
 	{
-		_p_logger=&gz_logger;
+		_p_logger=&get_logger();
 
 
 	}
 	z_console console;
 	z_logger* _p_logger;
+	B fuck;
 
 	zb_ds_text zbs;
 	z_status create();
@@ -34,11 +35,11 @@ ZFACT(source)
 */
 ZFACT(root)
 {
+	ZOBJ(fuck);
 	ZOBJ(console);
 	ZOBJ_X(zbs,"db",ZFF_PROP,"database");
 	ZPOBJ(_p_logger);
  	ZACT_XP(create,"create",ZFF_ACT_DEF,"create",0,0);
-
 	/*
 	ZPROP(x);
 	ZPROP(i);
@@ -112,17 +113,17 @@ z_status root::create()
 				status=tbl->get_record_by_index(i,&ptr);
 				if(status)
 				{
-					gz_out << "get_record_by_index failed:"<<i<<"\n";
+					zout << "get_record_by_index failed:"<<i<<"\n";
 					break;
 				}
 				if(!ptr)
 				{
-					gz_out << "could not get record"<<i<<"\n";
+					zout << "could not get record"<<i<<"\n";
 					break;
 				}
 
 				fld->get_string(ptr,data);
-				gz_out <<  "record"<<i<<":"<< data <<"\n";
+				zout <<  "record"<<i<<":"<< data <<"\n";
 			}
 		}
 		pRec=p_ds->record_solo_new();

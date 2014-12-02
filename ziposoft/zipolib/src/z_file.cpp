@@ -13,16 +13,22 @@ using namespace std;
 #include <sys/stat.h>
 #endif
 
-#if 0
-extern "C" void* _stdin;
-extern "C" void* _stdout;
-z_file gz_in((size_t)_stdin);
-z_file gz_out((size_t)_stdout);
 
-#else
-z_file gz_in((size_t)stdin);
-z_file gz_out((size_t)stdout);
-#endif
+
+z_file& z_stdin_get()
+{
+	static z_file z_static_in((size_t)stdin);
+	return z_static_in;
+
+
+}
+z_file& z_stdout_get()
+{
+	static z_file z_static_out((size_t)stdout);
+	return z_static_out;
+
+}
+
 void z_file::init()
 {
 	_file_handle=0;
@@ -289,9 +295,15 @@ z_debug:: ~z_debug()
 
 }
 
+z_debug& z_debug_get()
+{
+
+	static z_debug gz_debug;
+	return gz_debug;
 
 
-z_debug gz_debug;
+}
+
 
 
 

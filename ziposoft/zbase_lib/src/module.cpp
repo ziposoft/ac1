@@ -1,6 +1,14 @@
 #include "zipobase_lib.h"
 
 
+ZFACT(A)
+{
+	ZACT(act1);
+};
+ZFACT_V(B,A)
+{
+	ZACT(act2);
+};
 ZFACT(zb_ds_table)
 {
 	ZPROP(_id);

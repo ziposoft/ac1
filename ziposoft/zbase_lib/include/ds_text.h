@@ -17,6 +17,7 @@ class zb_ds_table_txt  : public zb_ds_table	  ,public z_parse_csv
 	zb_rec_ptr_txt* _current_row;
 	int _current_column;
 	bool _dirty;
+
 public:
 	zb_ds_table_txt();
 	zb_ds_table_txt(zb_ds_text* ds,ctext unique_id);

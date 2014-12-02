@@ -4,6 +4,12 @@
 #include "zipolib/include/z_parse.h"
 #include "zipolib/include/z_parse_text.h"
 
+
+void z_factory::add_features_recurse()
+{
+}
+
+
 int z_factory::get_num_features() const
 {
 	int total=0;

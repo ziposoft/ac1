@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 						option* opt=get_option(a,val);
 						if(!opt)
 						{
-							gz_out<<"\nERROR! Invalid option \"" <<val<<"\" for argument \""<<name<<"\"\n\n";
+							zout<<"\nERROR! Invalid option \"" <<val<<"\" for argument \""<<name<<"\"\n\n";
 							show_valid_options(a);
 							return -1;
 							break;
@@ -88,7 +88,7 @@ int main(int argc, char** argv)
 			}
 			if(j==arg_list_count)
 			{
-				gz_out<<"\nERROR! Invalid argument \"" <<name<<"\"\n\n";
+				zout<<"\nERROR! Invalid argument \"" <<name<<"\"\n\n";
 				run_help();
 				exit(0);
 				
@@ -106,7 +106,7 @@ int main(int argc, char** argv)
 		z_file f;
 		if(f.open(g_arg_file_input_data,"rb")==-1)
 		{
-			gz_out<<"\nERROR! Cannot open \"" <<g_arg_file_input_data<<"\"\n\n";
+			zout<<"\nERROR! Cannot open \"" <<g_arg_file_input_data<<"\"\n\n";
 			return -1;
 		}
 		f.read_all(g_file_buffer);
@@ -137,13 +137,13 @@ int main(int argc, char** argv)
 	option* opt=get_option(arg_list[2],g_arg_test_type);
 	if(!opt)
 	{
-		gz_out << "Invalid test type  \""<<g_arg_test_type <<"\"\n";
+		zout << "Invalid test type  \""<<g_arg_test_type <<"\"\n";
 		return -1;
 	}
 	g_test_type_function_to_run=opt->pfunc;
 	if(!g_test_type_function_to_run)
 	{
-		gz_out << "No function for  \""<<opt->name <<"\"\n";
+		zout << "No function for  \""<<opt->name <<"\"\n";
 		return -1;
 	}
 	//___________________________________________________________
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
 	opt_func fp=opt->pfunc;
 	if(fp)
 		return (*fp)();
-	gz_out << "No action for "<< g_arg_operation << "\n";
+	zout << "No action for "<< g_arg_operation << "\n";
 	return 0;
 
 }

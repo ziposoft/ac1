@@ -1,4 +1,17 @@
 #include  "test_cpp.h"
+void test_func_ptrs();
+ void templates();
+;
+int main()
+{
+	test_func_ptrs();
+
+
+
+	return 0;
+};
+
+#if 0
 
 int templ_test()
 {
@@ -11,7 +24,7 @@ int templ_test()
 }
 // template <> void B<bool>::func2(int x) const { printf("bool func2 overload"); };
 // template <> void B<bool>::func3(int x) const {};
-#if 1
+
 
 
 using namespace std;
@@ -92,17 +105,7 @@ int main()
 	test_obj_funcptr pFunc=(&test::func);
 
 
-	void* pvp=&test::func;
-	size_t fp_val=(size_t)pvp;
 
-
-	
-
-	test_obj_funcptr pFunc2=*( test_obj_funcptr*) ((void*)fp_val);
-
-	printf("pFunc=%p\n",pFunc);
-	printf("pFunc2=%p\n",pFunc2);
-	printf("fp_val=%d\n",fp_val);
 
 
 

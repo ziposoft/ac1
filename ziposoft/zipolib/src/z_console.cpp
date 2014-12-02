@@ -105,7 +105,7 @@ void z_console::OnDoubleBack()
 	select_obj_from_path(_root,temp);
 	_selected=_temp;
 	_path=_temp_path;
-	gz_out << "\n";
+	zout << "\n";
 	put_prompt();
 
 
@@ -281,7 +281,7 @@ void z_console:: OnTab()
 
 			return;
 			/*
-			gz_out <<"\nBad path\n";
+			zout <<"\nBad path\n";
 			
 			gz_logger.dump();
 				put_prompt();
@@ -361,39 +361,39 @@ z_status z_console::list_features()
 
 	zf_feature_list list;
 
-	gz_out.indent_inc();
+	zout.indent_inc();
 	_temp._fact->get_map_features(list,zf_ft_var,ZFF_LIST);
 	_temp._fact->get_map_features(list,zf_ft_obj_list,ZFF_LIST);
-	gz_out << "\nVariables:\n";
+	zout << "\nVariables:\n";
 	while(p_feature=list.get_next(iter))
 	{
-		p_feature->display(	gz_out,	_temp._obj);
+		p_feature->display(	zout,	_temp._obj);
 	}
 	iter.reset();
 	list.clear();
 	_temp._fact->get_map_features(list,zf_ft_act,ZFF_LIST);
-	gz_out << "\nActions:\n";
+	zout << "\nActions:\n";
 	while(p_feature=list.get_next(iter))
 	{
-		p_feature->display(	gz_out,	_temp._obj);
+		p_feature->display(	zout,	_temp._obj);
 	}
 	list.clear();
 	iter.reset();
 	_temp._fact->get_map_features(list,zf_ft_obj,ZFF_LIST);
-	gz_out << "\nChild Objects:\n";
+	zout << "\nChild Objects:\n";
 	while(p_feature=list.get_next(iter))
 	{
-		p_feature->display(	gz_out,	_temp._obj);
+		p_feature->display(	zout,	_temp._obj);
 	}
 
-	gz_out << "\n";
+	zout << "\n";
 
 	return zs_ok;
 }
 z_status z_console::dumpcfg()
 {
- 	_temp._fact->dump_obj_static(gz_out,_temp._obj);
-	gz_out << "\n";
+ 	_temp._fact->dump_obj_static(zout,_temp._obj);
+	zout << "\n";
 
 	return zs_ok;
 }
@@ -450,7 +450,7 @@ z_status z_console::help()
 }
 z_status z_console::exit()
 {
-	gz_out<< "exiting.\n";
+	zout<< "exiting.\n";
 	_running=false;
 	return zs_ok;
 }
@@ -474,7 +474,7 @@ void z_console_base::AppendChar(char ch)
 {
 	
 	_buffer+=ch;
-	gz_out <<ch;
+	zout <<ch;
 	len++;
 	cur_x++;
 	index++;
@@ -484,8 +484,8 @@ void z_console_base::RedrawLine(int blanks)
 	const char* s;
 	s=_buffer;
 	s+=index;
-	gz_out << s;
-	while(blanks--) gz_out << ' ';
+	zout << s;
+	while(blanks--) zout << ' ';
 	curGotoXY(cur_x,cur_y);
 }
 void z_console_base::InsertChar(char ch)
@@ -525,7 +525,7 @@ void z_console_base::reset_line()
 void z_console_base::output(ctext text)
 {
 	U32 l=(U32)strlen(text);
-	gz_out << text;
+	zout << text;
 	len+=l;
 	_buffer+=text;
 	index+=l;
@@ -534,7 +534,7 @@ void z_console_base::output(ctext text)
 void z_console_base::clear_line()
 {
 	curLeft(index);
-	while(len--) gz_out << ' ';
+	while(len--) zout << ' ';
 	curGotoXY(cur_x,cur_y);
 	index=0;
 	len=0;
@@ -545,7 +545,7 @@ void z_console_base::trim_line_to(int trim_point)
 	int amount_to_trim=len-trim_point;
 	cur_x=cur_start+trim_point;
 	curGotoXY(cur_x,cur_y);
-	while(amount_to_trim--) gz_out << ' ';
+	while(amount_to_trim--) zout << ' ';
 	curGotoXY(cur_x,cur_y);
 	index=trim_point;
 	_buffer.erase(trim_point);
@@ -608,7 +608,7 @@ int z_console_base::run()
 			if(index>0)
 			{
 				curLeft(1);
-				//gz_out << char_back;
+				//zout << char_back;
 				index--;
 				len--;
 				_buffer.erase(index,1);
@@ -636,7 +636,7 @@ int z_console_base::run()
 		case key_alpha:
 			
 			hChar(ch);
-			gz_out.flush();
+			zout.flush();
 			break;
 		default:
 			break;
@@ -647,7 +647,7 @@ int z_console_base::run()
 
 void z_console_base::put_prompt()
 {
-	gz_out  << "/"<<_path<<">";
+	zout  << "/"<<_path<<">";
 
 	//_obj_current->get_path(_path);
 	reset_line();
@@ -682,7 +682,7 @@ void z_console_base::OnEnter()
 {
 	int i;
 	z_status result;
-	gz_out << '\n';
+	zout << '\n';
 	if(_buffer.size())
 	{
 		i=_history.find(_buffer);
@@ -748,7 +748,7 @@ void z_console_base::OnDown()
 };
 void z_console_base::OnTab()
 {
-	gz_out << "\nTab.\n";
+	zout << "\nTab.\n";
 
 
 }
@@ -759,7 +759,7 @@ void z_console_base::OnDoubleBack()
 {
 	if(	_path.size())
 		_path.pop_back();
-	gz_out << "\n";
+	zout << "\n";
 	put_prompt();
 
 

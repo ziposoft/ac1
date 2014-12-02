@@ -250,14 +250,14 @@ int zf_action::execute(z_file* f,zf_obj& obj)
  {
 	z_status status=load(parser,o,oper);
 	if(status==zs_ok)				   
-		return 	execute(&gz_out,o);
+		return 	execute(&zout,o);
 	return status;
  }
   z_status zf_action::evaluate(z_factory_controller& controller, zf_obj& o,zf_feature_flags oper)
  {
 	z_status status=load(controller.get_parser(),o,oper);
 	if(status==zs_ok)				   
-		return 	execute(&gz_out,o);
+		return 	execute(&zout,o);
 	return zs_end_of_list;	 //Evaluation is done!
  }
 /*________________________________________________________________________
@@ -318,7 +318,7 @@ zf_prop::zf_prop(ctext id,ctext name,const zf_var_funcs_base* funcs,z_memptr off
 	}
 	z_string str;
 	get_string_val(str,o._obj,index);
-	gz_out <<  get_name()<<"="<<str<<"\n";
+	zout <<  get_name()<<"="<<str<<"\n";
 	return zs_ok;//???
 
 	
