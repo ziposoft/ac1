@@ -101,7 +101,7 @@ ____________________________________________________________________________*/
 	virtual z_status act_dump_records();
 	virtual z_status act_record_del();
 	virtual z_status act_record_add();
- 	virtual z_status add_field();
+ 	virtual z_status act_add_field();
 
 
 };

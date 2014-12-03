@@ -136,7 +136,10 @@ ____________________________________________________________________________*/
 
 }
 
-
+z_status zb_ds_table::act_add_field()
+{
+	 return Z_ERROR_NOT_IMPLEMENTED;
+}
 
 
 
@@ -150,10 +153,7 @@ z_status zb_ds_table::open(bool writable)
 {
 	 return Z_ERROR_NOT_IMPLEMENTED;
 }
-z_status zb_ds_table::add_field()
-{
-	 return Z_ERROR_NOT_IMPLEMENTED;
-}
+
 size_t zb_ds_table::get_record_count()
 {
 	Z_ERROR_NOT_IMPLEMENTED;
