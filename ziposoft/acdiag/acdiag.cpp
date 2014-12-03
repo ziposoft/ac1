@@ -283,9 +283,9 @@ ZFACT(root)
 #ifdef BUILD_VX
 int ztest()
 {
-	gz_out.set_handle((size_t)stdout);
+	zout.set_handle((size_t)stdout);
 	gz_in.set_handle((size_t)stdin);
-	gz_out << "starting ztest\n";
+	zout << "starting ztest\n";
 	
 	root o;
 	o.console.setroot(&o);
