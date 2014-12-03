@@ -64,26 +64,31 @@ z_status  z_console::runapp(int argc, char* argv[],bool autoloadcfg)
 		loadcfg();
 
 	int i;
-	for(i=1;i<argc;i++)
-	{
-
-		status=ExecuteLine(argv[i]);
-
-		if(status)
-		{
-			Z_ERROR_MSG(status,"command failed: \"%s\"",argv[i]);
-			z_logger_dump();
-		}
-
-
-
-	}
 	if(argc==1)
 	{
 		select_obj_from_path(_root,_path);
 		_selected=_temp;
+		_path=_temp_path;
+
+		
 		run();
 	}
+	else
+	{
+		_path="";
+		for(i=1;i<argc;i++)
+		{
+
+			status=ExecuteLine(argv[i]);
+
+			if(status)
+			{
+				Z_ERROR_MSG(status,"command failed: \"%s\"",argv[i]);
+				z_logger_dump();
+			}
+		}
+	}
+
 
 	if(autoloadcfg)
 		savecfg();
@@ -429,8 +434,8 @@ z_status z_console::loadcfg()
 	}
 
 
-	select_obj_from_path(_root,_path);
-	_selected=_temp;
+	//select_obj_from_path(_root,_path);
+	//_selected=_temp;
 	//cfg._obj.get_by_name(
 
 	return status;

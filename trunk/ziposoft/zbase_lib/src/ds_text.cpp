@@ -168,6 +168,19 @@ z_status zb_ds_table_txt::commit()
 	return zs_ok;
 
 }
+z_status zb_ds_table_txt::delete_record_by_index(size_t index)
+{
+ 	if(_status<	status_opened_read)
+		return Z_ERROR(zs_not_open);
+	if(index>=get_record_count())
+		return Z_ERROR(zs_out_of_range);
+	_data.erase( _data.begin() + index)	;
+	return zs_ok;
+
+}
+
+
+
 z_status zb_ds_table_txt::open(bool writable)
 {
 

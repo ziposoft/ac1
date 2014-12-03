@@ -19,6 +19,7 @@ ________________________________________________________________________*/
 #define ZFF_SET			0x00000008
 #define ZFF_EXE 		0x00000010
 #define ZFF_SKIP		0x00000020
+#define ZFF_PRM  		0x00000040
 
 
 #define ZFF_HEX			0x01000000
@@ -26,7 +27,7 @@ ________________________________________________________________________*/
 #define ZFF_PROP (ZFF_LOAD|ZFF_SAVE|ZFF_LIST|ZFF_SET)
 #define ZFF_PROP (ZFF_LOAD|ZFF_SAVE|ZFF_LIST|ZFF_SET)
 #define ZFF_PROP_NOLOAD (ZFF_SAVE|ZFF_LIST|ZFF_SET)
-#define ZFF_PARAM (ZFF_LOAD|ZFF_SAVE|ZFF_SET)
+#define ZFF_PARAM (ZFF_LOAD|ZFF_SAVE|ZFF_SET|ZFF_PRM)
 #define ZFF_STAT (ZFF_SAVE|ZFF_LIST)
 #define ZFF_DYN   (ZFF_LIST|ZFF_SET)
 
