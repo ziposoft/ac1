@@ -230,7 +230,7 @@ int zf_action::execute(z_file* f,zf_obj& obj)
 				return Z_ERROR_MSG(zs_error,"Too many parameters\n");//???
 			}				
 			zf_feature* param=_params[param_index];
-			status=param->load(parser,o,oper);
+			status=param->load(parser,o,ZFF_PRM);
 			if(status)
 				break;
 			status=parser.test_char(',');

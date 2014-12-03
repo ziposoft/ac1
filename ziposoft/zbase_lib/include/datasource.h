@@ -41,6 +41,10 @@ public:
 	}
 	
 };
+/*__________________________________________________________________________
+
+	zb_ds_table
+____________________________________________________________________________*/
 class zb_ds_table 
 {
 protected:
@@ -53,8 +57,8 @@ protected:
 		status_opened_write,
 		status_opened_need_commit
 	} _status;
-public:
 	zb_source* _ds;
+public:
 	z_string _id;
 	zb_ds_desc _ds_desc;
 	zb_ds_table();
@@ -78,7 +82,6 @@ public:
 	{
 		return Z_ERROR_NOT_IMPLEMENTED;;
 	}
-	virtual z_status act_dump_records();
 
 	/*
 	virtual int get_num_cols()=0; 
@@ -88,13 +91,24 @@ public:
 
 public:
 
-	//Interface
-	z_string _new_field_name;
+ /*__________________________________________________________________________
+
+	zb_ds_table Interface
+____________________________________________________________________________*/
+	z_string _param_new_field_name;
+	z_strlist _param_new_data;
+	int _param_record_index;
+	virtual z_status act_dump_records();
+	virtual z_status act_record_del();
+	virtual z_status act_record_add();
  	virtual z_status add_field();
 
 
 };
+ /*__________________________________________________________________________
 
+	zb_ds_rec_ptr
+____________________________________________________________________________*/
 class zb_ds_rec_ptr 
 {
 public:

@@ -1,6 +1,2 @@
-5
-test_zb
-db
-open
-tables[table1]
-dump
+1
+test_zb.exe
