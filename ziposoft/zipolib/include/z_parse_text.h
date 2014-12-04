@@ -95,6 +95,7 @@ public:
 	z_status test_chars(const cset &set);
 	z_status test_identifier(const char* str);
 	z_status test_any_identifier();
+	z_status test_integer();
 	z_status test_file_path();
 	z_status test_code_string();
 	z_status test_cset(const cset &set);

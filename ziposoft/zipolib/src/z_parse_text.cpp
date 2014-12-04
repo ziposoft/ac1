@@ -14,6 +14,7 @@ cset *cset_identchars =0;
 cset *cset_scoped_identchars =0;
 cset *cset_path_string =0;
 cset *cset_digits =0;
+cset *cset_integer =0;
 cset *cset_white_space =0;
 
 //________________________________________________________________
@@ -63,6 +64,7 @@ void zp_text_parser::set_source(const char* code,size_t len)
 		cset_white_space=new cset(" \t\r\n");
 		cset_letters=new cset("_A-Za-z");
 		cset_digits=new cset("0-9");
+		cset_integer=new cset('-' + *cset_digits);
 		cset_identchars=new cset(*cset_letters + *cset_digits);
 		cset_scoped_identchars=new cset(*cset_letters + *cset_digits+':');
 		cset_path_string=new cset(*cset_letters + *cset_digits+"\\/.:"+'-');
@@ -323,7 +325,11 @@ size_t zp_text_parser::get_index_offset()
 {
 	return _index_current-_start;
 }
-
+		
+z_status zp_text_parser::test_integer()
+{
+	return test_cset(*cset_integer);
+}
 z_status zp_text_parser::test_any_identifier()
 {
 	return test_cset(*cset_identchars);

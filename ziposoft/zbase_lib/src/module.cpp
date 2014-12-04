@@ -14,7 +14,7 @@ ZFACT(zb_ds_table)
 	ZPROP(_id);
 	ZACT_XP(commit,"commit",ZFF_ACT_DEF,"commit",0,0);
 	ZACT_XP(act_dump_records,"dump",ZFF_ACT_DEF,"dump",0,0);
-	ZACT_XP(add_field,"add_field",ZFF_ACT_DEF,"Add field",1,ZPARAM(_param_new_field_name));
+	ZACT_XP(act_add_field,"add_field",ZFF_ACT_DEF,"Add field",1,ZPARAM(_param_new_field_name));
 	ZACT_XP(act_record_del,"del",ZFF_ACT_DEF,"Delete Record",1,ZPARAM(_param_record_index));
 	ZACT_XP(act_record_add,"add",ZFF_ACT_DEF,"Add Record",1,ZPARAM(_param_new_data));
 };

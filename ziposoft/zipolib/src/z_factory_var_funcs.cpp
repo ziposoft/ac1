@@ -141,7 +141,7 @@ VF<int>::set(ctext s, void* v,ctext format,int index) const
 }
 template <> z_status zf_var_funcs<int>::load(zp_text_parser &parser, void* v,zf_feature_flags oper) const 
 {
-	z_status status=parser.test_any_identifier();
+	z_status status=parser.test_integer();
 	if(status)
 		return Z_ERROR_MSG(status,"Error loading int type");
 	z_string s;
