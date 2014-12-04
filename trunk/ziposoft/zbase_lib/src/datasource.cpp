@@ -9,11 +9,10 @@ zb_ds_field* zb_ds_desc::get_ds_field(ctext name)
 
 }
 
-
-/*__________________________________________________________________________
+/*===========================================================================
 
 	zb_ds_field
-____________________________________________________________________________*/
+=============================================================================*/
 z_status zb_ds_field::set_string(zb_ds_rec_ptr *rec,ctext s){ return Z_ERROR_NOT_IMPLEMENTED;}
 z_status zb_ds_field::get_string(zb_ds_rec_ptr *rec,z_string& s){ return Z_ERROR_NOT_IMPLEMENTED;}
 z_status zb_ds_field::set_int32(zb_ds_rec_ptr *rec,I32 i){ return Z_ERROR_NOT_IMPLEMENTED;}
@@ -24,7 +23,11 @@ z_status zb_ds_field::get_name(z_string& s)
 	return 0;
 }
 
-
+zb_ds_field::zb_ds_field()
+{
+	_index=0;
+	_type=type_ds_field_invalid;
+}
 
 
 /*____________________________________________________________________________
@@ -63,11 +66,9 @@ zb_ds_table::zb_ds_table()
 	_param_record_index=0;
 	Z_ASSERT(0);
 }
-/*__________________________________________________________________________
-
+/*______________________________
 	zb_ds_table	Virtual funcs 
-____________________________________________________________________________*/
-
+_______________________________*/
 
 z_status zb_ds_table::record_add(zb_ds_rec_ptr* rec)
 {
@@ -113,11 +114,9 @@ z_status zb_ds_table::field_add(zb_ds_field* fld)
 
 }
 
-
-/*__________________________________________________________________________
-
-	zb_ds_table	INTERFACE
-____________________________________________________________________________*/
+/*______________________________
+	zb_ds_table	INTERFACE funcs 
+_______________________________*/
  z_status zb_ds_table::act_record_add()
  {
 	zb_ds_field* fld=0;
@@ -206,6 +205,7 @@ z_status zb_ds_table::act_add_field()
 {
 	 return Z_ERROR_NOT_IMPLEMENTED;
 }
+
 
 
 
