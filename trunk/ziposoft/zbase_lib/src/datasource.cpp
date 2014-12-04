@@ -46,12 +46,78 @@ void zb_ds_rec_ptr::set(zb_ds_table* rs,size_t index)
 
 }
 
-/*__________________________________________________________________________
+/*===========================================================================
 
 	zb_ds_table
+=============================================================================*/
+zb_ds_table::zb_ds_table(zb_source* ds,ctext unique_id)
+{
+	_ds=ds;
+	_id=unique_id;
+	_status=status_closed;
+	_param_record_index=0;
+}
+zb_ds_table::zb_ds_table()
+{
+	_ds=0;
+	_param_record_index=0;
+	Z_ASSERT(0);
+}
+/*__________________________________________________________________________
+
+	zb_ds_table	Virtual funcs 
 ____________________________________________________________________________*/
 
-/* Interface */
+
+z_status zb_ds_table::record_add(zb_ds_rec_ptr* rec)
+{
+	 return Z_ERROR_NOT_IMPLEMENTED;
+}
+z_status zb_ds_table::open(bool writable)
+{
+	 return Z_ERROR_NOT_IMPLEMENTED;
+}
+
+size_t zb_ds_table::get_record_count()
+{
+	Z_ERROR_NOT_IMPLEMENTED;
+	 return 0;
+}
+z_status zb_ds_table::get_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
+{
+	 return Z_ERROR_NOT_IMPLEMENTED;
+}
+z_status zb_ds_table::test_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
+{
+	 return Z_ERROR_NOT_IMPLEMENTED;
+}
+z_status zb_ds_table::delete_record_by_index(size_t index)
+{
+	 return Z_ERROR_NOT_IMPLEMENTED;
+}
+ctext zb_ds_table::get_map_key()
+{
+	return _id;
+}
+
+
+z_status zb_ds_table::field_add(zb_ds_field* fld)
+{
+	Z_ASSERT(fld);
+	if(	 _ds_desc.get_ds_field(fld->_id))
+		return zs_already_exists;
+
+
+	_ds_desc<<fld;
+	 return 0;
+
+}
+
+
+/*__________________________________________________________________________
+
+	zb_ds_table	INTERFACE
+____________________________________________________________________________*/
  z_status zb_ds_table::act_record_add()
  {
 	zb_ds_field* fld=0;
@@ -141,63 +207,6 @@ z_status zb_ds_table::act_add_field()
 	 return Z_ERROR_NOT_IMPLEMENTED;
 }
 
-
-
-/* Virtual funcs */
-
-z_status zb_ds_table::record_add(zb_ds_rec_ptr* rec)
-{
-	 return Z_ERROR_NOT_IMPLEMENTED;
-}
-z_status zb_ds_table::open(bool writable)
-{
-	 return Z_ERROR_NOT_IMPLEMENTED;
-}
-
-size_t zb_ds_table::get_record_count()
-{
-	Z_ERROR_NOT_IMPLEMENTED;
-	 return 0;
-}
-z_status zb_ds_table::get_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
-{
-	 return Z_ERROR_NOT_IMPLEMENTED;
-}
-z_status zb_ds_table::test_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
-{
-	 return Z_ERROR_NOT_IMPLEMENTED;
-}
-z_status zb_ds_table::delete_record_by_index(size_t index)
-{
-	 return Z_ERROR_NOT_IMPLEMENTED;
-}
-ctext zb_ds_table::get_map_key()
-{
-	return _id;
-}
-zb_ds_table::zb_ds_table(zb_source* ds,ctext unique_id)
-{
-	_ds=ds;
-	_id=unique_id;
-	_status=status_closed;
-}
-zb_ds_table::zb_ds_table()
-{
-	_ds=0;
-	Z_ASSERT(0);
-}
-
-z_status zb_ds_table::field_add(zb_ds_field* fld)
-{
-	Z_ASSERT(fld);
-	if(	 _ds_desc.get_ds_field(fld->_id))
-		return zs_already_exists;
-
-
-	_ds_desc<<fld;
-	 return 0;
-
-}
 
 
 /*__________________________________________________________________________

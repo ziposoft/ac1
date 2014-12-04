@@ -37,13 +37,14 @@ class z_logger
 public:
 	z_logger()
 	{
-		_log_level=z_logger_lvl_trace;
+		_log_level=z_logger_lvl_warning;
 	}
 	z_status report_not_implemented(ctext file,ctext func,int line); 
 	z_status add_msg(z_logger_level lvl,ctext file,ctext func,int line,z_status status,const char*  lpszFormat,   ... );
 	void out_dbg(z_logger_level lvl,z_file* f,ctext file,ctext func,int line,z_status status,ctext msg);
 	void out(z_logger_level lvl,z_file* f,z_status status,ctext msg);
 	void dump(z_logger_level lvl,bool debug);
+	int get_log_count();
 	void set_capture_level(z_logger_level lvl)
 	{
 		_log_level=lvl;

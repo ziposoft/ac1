@@ -81,7 +81,7 @@ z_status z_factory::load_obj_contents(zp_text_parser &parser,void* pObj,zf_featu
 		z_status status=parser.test_char('=');
 		if(status)
 			return Z_ERROR_MSG(status,"Expected '=' ");
-
+		 ZT("load feature=%s oper=%llx\n",s.c_str(),oper); 
 		status=f->load(parser,fobj,oper);
 	 
  		if(status)
@@ -107,7 +107,7 @@ z_status zf_create_obj_from_text_stream_dyn(zp_text_parser &parser, z_factory* &
 	factory=zf_get_factory(s);
 	if(!factory)
 		return Z_ERROR_MSG(zs_cannot_create_virtual_obj,"Unknown obj type \"%s\"",s.c_str());
-
+	ZT("create obj name=%s oper=%llx\n",s.c_str(),oper);
 	if(!(oper&ZFF_SKIP))
 		if(objpointer==0)//we need to create it
 		{

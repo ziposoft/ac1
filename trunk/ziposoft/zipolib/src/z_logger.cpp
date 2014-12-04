@@ -23,7 +23,10 @@ ctext log_level_type[]=
 	"DBG",
 	"TRC",
 };
+ /*__________________________________________________________________________
 
+	z_logger_msg 
+____________________________________________________________________________*/
 z_logger_msg::z_logger_msg(z_logger_level lvl,ctext file,ctext func,int line,z_status status,const char*  msg)
 {
 	_msg=msg;
@@ -34,6 +37,8 @@ z_logger_msg::z_logger_msg(z_logger_level lvl,ctext file,ctext func,int line,z_s
 	_source_line=line;
 
 }
+
+
 void z_logger_msg::dump(z_file *fp,z_logger_level lvl,bool debug)
 {
 	if(debug)
@@ -42,6 +47,13 @@ void z_logger_msg::dump(z_file *fp,z_logger_level lvl,bool debug)
 	get_logger().out(_lvl,fp,_status,_msg.c_str());
 
 }
+
+ /*__________________________________________________________________________
+
+	z_logger 
+____________________________________________________________________________*/
+
+
 void z_logger::out_dbg(z_logger_level lvl,z_file* f,ctext file,ctext func,int line,
 				   z_status status,ctext msg)
 {
@@ -95,6 +107,11 @@ z_status z_logger::add_msg(z_logger_level lvl,ctext file,ctext func,int line,z_s
 		z_temp_buffer_release(buff);
 	return status;
 }
+int z_logger::get_log_count()
+{
+	return _log.size();
+
+}
 
 void z_logger::dump(z_logger_level lvl,bool debug )
 {
@@ -106,8 +123,6 @@ void z_logger::dump(z_logger_level lvl,bool debug )
 
 	}
 	_log.clear();
-
-
 }
 void z_logger_dump()
 {

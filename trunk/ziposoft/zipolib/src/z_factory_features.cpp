@@ -170,7 +170,7 @@ ________________________________________________________________________*/
 zf_action::zf_action(ctext id,ctext name,z_memptr offset,zf_feature_flags flags,ctext desc) 
 	: zf_feature(id,name,0,offset,flags,desc) 
 {
-	ZT("act id=%s name=%s offset=%llx flags=%llx\n",id,name,offset,flags);
+	//ZT("act id=%s name=%s offset=%llx flags=%llx\n",id,name,offset,flags);
 }
 void zf_action::display(z_file& f,void* obj)
 {
@@ -385,6 +385,7 @@ z_factory_dyn& z_factory::init_dynamic()
 		case zf_ft_var:
 		case zf_ft_obj_list:
 			add_prop(ent->name,ent->name,funcs,(z_memptr)ent->offset,0/* flags! */,"?");
+			break;
 		default:
 			Z_ERROR_MSG(zs_error,"Unknown feature type: %d",ent->type);
 			break;

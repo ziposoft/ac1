@@ -713,10 +713,14 @@ void z_console_base::OnEnter()
 				break;
 			}
 			//z_logger_dump();
-			Z_ERROR_MSG(result,"command failed: \"%s\"",zs_get_status_text(result));
-			z_logger_dump();
+			if(get_logger().get_log_count()==0)
+			{
+				Z_ERROR_MSG(result,"command failed: \"%s\"",zs_get_status_text(result));
+			}
 
 		}
+		z_logger_dump();
+		zout << '\n';
 
 	}
 	put_prompt();
