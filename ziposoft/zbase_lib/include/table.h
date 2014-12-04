@@ -7,7 +7,7 @@
 
 
 
-
+class zb_ds_table;
 
 class zb_table_base : public z_refcount
 {

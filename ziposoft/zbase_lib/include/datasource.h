@@ -4,12 +4,17 @@
 #include "zbase_lib/include/table_static.h"
 
 class zb_ds_rec_ptr;
-
+enum type_ds_field {
+	type_ds_field_invalid,
+	type_ds_field_int,
+	type_ds_field_string
+};
 class zb_ds_field  
 {
 protected:
-
+	type_ds_field _type;
 public:
+	zb_ds_field();
 	z_string _id;
 	int _index;
 	virtual void index_set(int i) {  _index=i; };
@@ -75,6 +80,7 @@ public:
 	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 	virtual z_status delete_record_by_index(size_t index);
 
+	virtual z_status field_new(type_ds_field type,ctext id);
 
 	virtual z_status field_add(zb_ds_field* fld);
 

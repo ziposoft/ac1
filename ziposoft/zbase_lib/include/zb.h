@@ -27,7 +27,7 @@ class zb_rec_ptr;
 class zb_table_dynamic;
 class zb_table_static;
 class zb_table_base;
-class zb_ds_table;
+
 class zb_ds_field;
 
 
