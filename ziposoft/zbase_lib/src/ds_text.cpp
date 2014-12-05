@@ -72,15 +72,7 @@ z_status zb_ds_text::_table_new(ctext ds_table_name,zb_ds_table*& tbl)
 	tbl=tbl_text;
 	return  zs_ok;
 }
-zb_ds_field* zb_ds_text::ds_field_string_new(ctext id)
-{
-	return z_new zb_ds_field_text_string(id);
-}
-zb_ds_rec_ptr* zb_ds_text::record_solo_new()
-{
-	zb_rec_ptr_txt* pRec=	z_new zb_rec_ptr_txt(true);
-	return pRec;
-}
+
 z_status zb_ds_text::commit()
 {
 
@@ -120,6 +112,41 @@ z_status zb_ds_table_txt::record_add(zb_ds_rec_ptr* rec)
 	
 	return zs_ok;
 }
+
+z_status zb_ds_table_txt::field_new(type_ds_field type,ctext id,zb_ds_field*& fld)
+{
+	fld=0;
+	if((type>=type_ds_field_max)||(type<=type_ds_field_invalid))
+		return Z_ERROR(zs_bad_parameter);
+
+	switch(	type)
+	{
+ 	case type_ds_field_string:
+		fld=z_new zb_ds_field_text_string(id);
+
+		break;
+
+	case type_ds_field_int:
+
+	default:
+		return Z_ERROR(zs_operation_not_supported);
+
+	};
+	return 	 zs_ok;
+
+}
+
+
+zb_ds_field* zb_ds_table_txt::field_string_new(ctext id)
+{
+	return z_new zb_ds_field_text_string(id);
+}
+zb_ds_rec_ptr* zb_ds_table_txt::record_solo_new()
+{
+	zb_rec_ptr_txt* pRec=	z_new zb_rec_ptr_txt(true);
+	return pRec;
+}
+
 z_status zb_ds_table_txt::commit()
 {
 
@@ -218,13 +245,7 @@ z_status zb_ds_table_txt::open(bool writable)
 
 	return 0;
 }
- z_status zb_ds_table_txt::add_field()
- {
 
-
-	return 0;
-
- }
 
 size_t zb_ds_table_txt::get_record_count()
 {
@@ -264,7 +285,7 @@ bool zb_ds_table_txt::NewValueCallback(const z_string & value)
 	if(_row_idx==0)
 	{
 		//get fields.
-		zb_ds_field* fld=_ds->ds_field_string_new(value);
+		zb_ds_field* fld=field_string_new(value);
 		get_desc()<<fld;
 
 	}

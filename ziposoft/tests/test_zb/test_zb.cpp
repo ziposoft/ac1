@@ -86,7 +86,7 @@ z_status root::create()
 		fld=tbl->get_desc().get_ds_field("field1str");
  		if(!fld)
 		{
-			fld=p_ds->ds_field_string_new("field1str");
+			fld=tbl->ds_field_string_new("field1str");
 			if(!fld)
 				break;
 			tbl->field_add(fld);
@@ -94,7 +94,7 @@ z_status root::create()
 		fld2=tbl->get_desc().get_ds_field("field2str");
  		if(!fld2)
 		{
-			fld2=p_ds->ds_field_string_new("field2str");
+			fld2=tbl->ds_field_string_new("field2str");
 			if(!fld2)
 				break;
 			tbl->field_add(fld2);
@@ -126,7 +126,7 @@ z_status root::create()
 				zout <<  "record"<<i<<":"<< data <<"\n";
 			}
 		}
-		pRec=p_ds->record_solo_new();
+		pRec=tbl->record_solo_new();
 		
 		if(!pRec)
 			break;

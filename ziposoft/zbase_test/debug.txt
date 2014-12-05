@@ -1,6 +1,5 @@
-5
+4
 test_zb.exe
 db
-open('d')
-tbl[a]
+open('b')
 run
