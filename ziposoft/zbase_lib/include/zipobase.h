@@ -41,4 +41,3 @@ public:
 	virtual z_status close();
 	z_map<zb_table_base> _tables;
 };
-

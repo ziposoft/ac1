@@ -115,6 +115,10 @@ z_status zb_ds_table_txt::record_add(zb_ds_rec_ptr* rec)
 
 z_status zb_ds_table_txt::field_new(type_ds_field type,ctext id,zb_ds_field*& fld)
 {
+	z_status status=zb_validate_identifier(id);
+	if(status)
+		return Z_ERROR_MSG(zs_syntax_error,"cannot create CSV field. id=\"%s\" is invalid\n",id);
+
 	fld=0;
 	if((type>=type_ds_field_max)||(type<=type_ds_field_invalid))
 		return Z_ERROR(zs_bad_parameter);
@@ -139,6 +143,13 @@ z_status zb_ds_table_txt::field_new(type_ds_field type,ctext id,zb_ds_field*& fl
 
 zb_ds_field* zb_ds_table_txt::field_string_new(ctext id)
 {
+	z_status status=zb_validate_identifier(id);
+	if(status)
+	{
+		Z_ERROR_MSG(zs_syntax_error,"cannot create CSV field. id=\"%s\" is invalid\n",id);
+		return 	0;
+	}
+
 	return z_new zb_ds_field_text_string(id);
 }
 zb_ds_rec_ptr* zb_ds_table_txt::record_solo_new()
@@ -146,14 +157,21 @@ zb_ds_rec_ptr* zb_ds_table_txt::record_solo_new()
 	zb_rec_ptr_txt* pRec=	z_new zb_rec_ptr_txt(true);
 	return pRec;
 }
+ctext zb_ds_table_txt::get_file_name()
+{
+	if(!_file_name)
+		_file_name=	_id+".csv";
+	return _file_name;
+
+}
 
 z_status zb_ds_table_txt::commit()
 {
-
-	z_status s=_file.open(_file_name,"wb");
+	Z_ASSERT(_id);
+	z_status s=_file.open(get_file_name(),"wb");
 	if(s)
 		return Z_ERROR(zs_could_not_open_file);
-	ZT("opened file %s",_file_name.c_str());
+	ZT("opened file %s",get_file_name());
 	size_t i_rec;
 	zb_ds_field *fld;
 	bool header=true;
@@ -226,9 +244,8 @@ z_status zb_ds_table_txt::open(bool writable)
 
 	}
 	*/
-	_file_name=	_id+".csv";
 
-	z_status s=_file.open(_file_name,flags);
+	z_status s=_file.open(get_file_name(),flags);
 	if(s)
 	{
 		if(writable)
@@ -286,6 +303,8 @@ bool zb_ds_table_txt::NewValueCallback(const z_string & value)
 	{
 		//get fields.
 		zb_ds_field* fld=field_string_new(value);
+		if(!fld)
+			return false;
 		get_desc()<<fld;
 
 	}

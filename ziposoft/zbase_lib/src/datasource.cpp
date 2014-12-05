@@ -192,7 +192,7 @@ _______________________________*/
 		while (fld=desc.get_next( fld_iter))
 		{
 			fld->get_string(pRec,data);
-			zout <<  data << "\t";
+			zout << "\t"<<  data ;
 		}
 		zout <<'\n';
 
@@ -255,13 +255,19 @@ z_status zb_source::commit()
 
 z_status zb_source::ds_table_new(ctext ds_table_name,zb_ds_table*& tbl)
 {
+	z_status status=zb_validate_identifier(ds_table_name);
+	if(status)
+	{
+		return Z_ERROR_MSG(zs_syntax_error,"cannot create table. id=\"%s\" is invalid\n",ds_table_name);
+	}
+
 	tbl=_ds_tables.get(ds_table_name);
 	if(tbl)
 	{
 		return Z_ERROR(zs_already_exists);
 	}
 
-	z_status status=_table_new(ds_table_name,tbl);
+	status=_table_new(ds_table_name,tbl);
 	if(status)
 		return 	status;
 

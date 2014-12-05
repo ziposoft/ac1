@@ -3,6 +3,12 @@
 #include "zbase_lib/include/zb.h"
 #include "zbase_lib/include/table_static.h"
 
+
+z_status zb_validate_identifier(ctext text);
+
+
+
+
 class zb_ds_rec_ptr;
 enum type_ds_field {
 	type_ds_field_invalid,

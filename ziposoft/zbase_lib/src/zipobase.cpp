@@ -2,9 +2,19 @@
 
 
 #include "zbase_lib/include/zipobase.h"
+#include "zipolib/include/z_parse_text.h"
 
 
-
+z_status zb_validate_identifier(ctext text)
+{
+	static zp_text_parser p;
+	p.set_source(text);
+	if(p.test_any_identifier()!=zs_matched)
+		return zs_syntax_error;
+	if(p.eob())
+		return zs_ok;
+	return zs_error;
+}
 
 z_refcount::z_refcount()
 {
