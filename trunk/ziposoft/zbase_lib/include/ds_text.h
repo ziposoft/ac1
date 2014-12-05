@@ -38,6 +38,8 @@ public:
 	virtual bool EndRowCallback();
 	virtual bool NewRowCallback();
 	virtual bool NewValueCallback(const z_string & value);
+
+	ctext get_file_name();
 	//Interface
 
 };

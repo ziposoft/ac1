@@ -1,5 +1,6 @@
-4
+5
 test_zb.exe
 db
-open('b')
-run
+open
+tbl[t]
+dump
