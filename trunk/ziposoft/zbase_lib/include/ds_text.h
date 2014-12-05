@@ -30,13 +30,15 @@ public:
 	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 	virtual z_status delete_record_by_index(size_t index);
 
+	virtual z_status field_new(type_ds_field type,ctext id,zb_ds_field*& fld);
+	virtual zb_ds_field* field_string_new(ctext id);
+	virtual zb_ds_rec_ptr* record_solo_new();
 
 
 	virtual bool EndRowCallback();
 	virtual bool NewRowCallback();
 	virtual bool NewValueCallback(const z_string & value);
 	//Interface
- 	virtual z_status add_field();
 
 };
 
@@ -55,8 +57,6 @@ public:
 	virtual z_status close();
 	virtual z_status commit();
 
-	virtual zb_ds_rec_ptr* record_solo_new();
-	virtual zb_ds_field* ds_field_string_new(ctext id);
 	
 	
 	//crap

@@ -53,7 +53,7 @@ public:
 
 };
 
-#define	ZT(...)   {if(get_logger()._log_level>=z_logger_lvl_trace) get_logger().add_msg (z_logger_lvl_trace,__FILE__,__FUNCTION__,__LINE__,0, __VA_ARGS__);}
+#define	ZT(...)   { get_logger().add_msg (z_logger_lvl_trace,__FILE__,__FUNCTION__,__LINE__,0, __VA_ARGS__);}
 
 
 void z_logger_dump();

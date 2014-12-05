@@ -22,9 +22,7 @@ public:
 	virtual z_status open(ctext name,bool create,bool writable);
 	virtual z_status close();
 	virtual z_status commit();
-	virtual zb_ds_field* ds_field_string_new(ctext id);
-	virtual zb_ds_rec_ptr* record_solo_new();
- 	virtual z_status ds_table_new(ctext ds_table_name,zb_ds_table*& tbl);
+	virtual z_status ds_table_new(ctext ds_table_name,zb_ds_table*& tbl);
 	virtual z_status ds_table_open(ctext ds_table_name,zb_ds_table*& tbl);
 
 	//METAKIT SPECIFIC
@@ -64,7 +62,9 @@ public:
 	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 	virtual z_status test_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 
-	
+	virtual zb_ds_field* ds_field_string_new(ctext id);
+	virtual zb_ds_rec_ptr* record_solo_new();
+ 	
 };
 
 

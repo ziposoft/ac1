@@ -6,8 +6,9 @@
 class zb_ds_rec_ptr;
 enum type_ds_field {
 	type_ds_field_invalid,
+	type_ds_field_string,
 	type_ds_field_int,
-	type_ds_field_string
+	type_ds_field_max,
 };
 class zb_ds_field  
 {
@@ -80,7 +81,11 @@ public:
 	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 	virtual z_status delete_record_by_index(size_t index);
 
-	virtual z_status field_new(type_ds_field type,ctext id);
+ 	virtual zb_ds_field* ds_field_string_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
+	virtual zb_ds_field* ds_field_int32_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
+	virtual zb_ds_rec_ptr* record_solo_new(){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
+	virtual z_status field_new(type_ds_field type,ctext id,zb_ds_field*& fld)
+		{ return Z_ERROR_NOT_IMPLEMENTED;};
 
 	virtual z_status field_add(zb_ds_field* fld);
 
@@ -95,15 +100,15 @@ public:
 	virtual z_status ptr_increment()=0; 
 	*/
 
-public:
 
- /*__________________________________________________________________________
+	/*______________________________________
 
-	zb_ds_table Interface
-____________________________________________________________________________*/
+		zb_ds_table Interface
+	______________________________________*/
 	z_string _param_new_field_name;
 	z_strlist _param_new_data;
 	int _param_record_index;
+	int _param_new_field_type;
 	virtual z_status act_dump_records();
 	virtual z_status act_record_del();
 	virtual z_status act_record_add();
@@ -175,9 +180,6 @@ public:
 
 
 
-	virtual zb_ds_field* ds_field_string_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
-	virtual zb_ds_field* ds_field_int32_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
-	virtual zb_ds_rec_ptr* record_solo_new(){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
 
 	z_obj_map<zb_ds_table> _ds_tables;
 

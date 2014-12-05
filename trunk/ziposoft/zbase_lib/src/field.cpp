@@ -88,7 +88,7 @@ ____________________________________________________________________________*/
 
 zb_field_string::zb_field_string(zb_source* ds,zb_key key,ctext name):zb_field(key,name)
 {
-	_ds_field=ds->ds_field_string_new(get_id());
+//	_ds_field=ds->ds_field_string_new(get_id());
 }
 z_status zb_field_string::get_data_text(zb_recset* rec,z_string& text)
 {

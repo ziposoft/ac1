@@ -59,6 +59,7 @@ zb_ds_table::zb_ds_table(zb_source* ds,ctext unique_id)
 	_id=unique_id;
 	_status=status_closed;
 	_param_record_index=0;
+	_param_new_field_type=0;
 }
 zb_ds_table::zb_ds_table()
 {
@@ -124,13 +125,13 @@ _______________________________*/
 	zb_ds_rec_ptr* pRec=0;
 	z_map_iter fld_iter;
 	z_status status;
-	int count_fields=0;
+	size_t count_fields=0;
 	status=open(true);
 	if(! status)
 		return status;
 
 
-	pRec=_ds->record_solo_new();
+	pRec=record_solo_new();
 	while (fld=desc.get_next( fld_iter))
 	{
 		z_string data;
@@ -203,7 +204,20 @@ _______________________________*/
 
 z_status zb_ds_table::act_add_field()
 {
-	 return Z_ERROR_NOT_IMPLEMENTED;
+	z_status status;
+	zb_ds_field* fld=0;
+	status= field_new((type_ds_field)_param_new_field_type,_param_new_field_name,fld);
+	if(status!=zs_ok)
+		return status;
+
+	status= field_add(fld);
+	if(status!=zs_ok)
+	{
+		if(fld)
+			z_delete( fld);
+		return status;
+	}
+	return	zs_ok;
 }
 
 
