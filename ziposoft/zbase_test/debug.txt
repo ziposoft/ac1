@@ -1,6 +1,2 @@
-5
+1
 test_zb.exe
-db
-open
-tbl[t]
-dump

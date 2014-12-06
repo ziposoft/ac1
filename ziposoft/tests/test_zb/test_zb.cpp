@@ -15,8 +15,8 @@ public:
 	}
 	z_console console;
 	z_logger* _p_logger;
-	B fuck;
 
+	zb_ds_sqlite zbs;
 	zb_ds_text zbs;
 	z_status create();
 };
@@ -35,7 +35,6 @@ ZFACT(source)
 */
 ZFACT(root)
 {
-	ZOBJ(fuck);
 	ZOBJ(console);
 	ZOBJ_X(zbs,"db",ZFF_PROP,"database");
 	ZPOBJ(_p_logger);

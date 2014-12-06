@@ -7,7 +7,7 @@
 
 #define ZB_INCLUDE_DS_TEXT
 //#define ZB_INCLUDE_DS_METAKIT
-//#define ZB_INCLUDE_DS_SQLITE
+#define ZB_INCLUDE_DS_SQLITE
 //#define ZB_INCLUDE_DS_HAMSTER
 
 

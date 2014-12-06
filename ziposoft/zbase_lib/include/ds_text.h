@@ -35,6 +35,9 @@ public:
 	virtual zb_ds_rec_ptr* record_solo_new();
 
 
+	virtual z_status close();
+
+
 	virtual bool EndRowCallback();
 	virtual bool NewRowCallback();
 	virtual bool NewValueCallback(const z_string & value);
