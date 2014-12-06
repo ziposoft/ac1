@@ -1,17 +1,12 @@
 #include "zipobase_lib.h"
 
 
-ZFACT(A)
-{
-	ZACT(act1);
-};
-ZFACT_V(B,A)
-{
-	ZACT(act2);
-};
+
 ZFACT(zb_ds_table)
 {
 	ZPROP(_id);
+	ZACT_XP(close,"close",ZFF_ACT_DEF,"close",0,0);
+	ZACT_XP(act_open,"open",ZFF_ACT_DEF,"open",0,0);
 	ZACT_XP(commit,"commit",ZFF_ACT_DEF,"commit",0,0);
 	ZACT_XP(act_dump_records,"dump",ZFF_ACT_DEF,"dump",0,0);
 	ZACT_XP(act_add_field,"addfield",ZFF_ACT_DEF,"Add field",2,

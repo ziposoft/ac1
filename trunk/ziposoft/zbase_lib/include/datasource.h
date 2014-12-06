@@ -95,10 +95,8 @@ public:
 
 	virtual z_status field_add(zb_ds_field* fld);
 
-	virtual z_status commit()
-	{
-		return Z_ERROR_NOT_IMPLEMENTED;;
-	}
+	virtual z_status commit(){	return Z_ERROR_NOT_IMPLEMENTED;	}
+	virtual z_status close(){	return Z_ERROR_NOT_IMPLEMENTED;	}
 
 	/*
 	virtual int get_num_cols()=0; 
@@ -119,7 +117,10 @@ public:
 	virtual z_status act_record_del();
 	virtual z_status act_record_add();
  	virtual z_status act_add_field();
-
+ 	virtual z_status act_open()
+	{
+		return open(true);;
+	}
 
 };
  /*__________________________________________________________________________

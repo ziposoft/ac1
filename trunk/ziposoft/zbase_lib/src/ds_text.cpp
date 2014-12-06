@@ -164,6 +164,24 @@ ctext zb_ds_table_txt::get_file_name()
 	return _file_name;
 
 }
+z_status zb_ds_table_txt::close()
+{
+	int i;
+	for(i=0;i<_data.size();i++)
+	{
+ 		zb_ds_rec_ptr* rec=_data[i];
+		if(rec)
+		{
+			z_delete rec;
+		}
+	}
+	_data.clear();
+	get_desc().clear();
+
+	_status=status_closed;
+	return zs_ok;
+
+}
 
 z_status zb_ds_table_txt::commit()
 {
@@ -229,6 +247,7 @@ z_status zb_ds_table_txt::delete_record_by_index(size_t index)
 z_status zb_ds_table_txt::open(bool writable)
 {
 
+	_current_column=0;
 	if(_status!=status_closed)
 		return zs_already_open;
 

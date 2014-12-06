@@ -7,6 +7,12 @@
 
 z_status zb_validate_identifier(ctext text)
 {
+
+	if(strlen(text))
+		return zs_ok ;
+	return zs_error;
+
+	//TODO - 
 	static zp_text_parser p;
 	p.set_source(text);
 	if(p.test_any_identifier()!=zs_matched)
