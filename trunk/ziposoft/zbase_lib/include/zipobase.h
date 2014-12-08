@@ -3,8 +3,10 @@
 
 #include "zbase_lib/include/zb.h"
 #include "zbase_lib/include/ds_text.h"
-#include "zbase_lib/include/zipobase.h"
+#include "zbase_lib/include/z_base.h"
 #include "zbase_lib/include/ds_metakit.h"
+#include "zbase_lib/include/ds_sqlite.h"
+#include "zbase_lib/include/ds_hamster.h"
 #include "zipolib/include/z_factory_static.h"
 
  ZP_MODULE_DECLARE(zipobase);

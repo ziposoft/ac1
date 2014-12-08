@@ -18,10 +18,10 @@ public:
 class zb_ds_table_sl3 : public zb_ds_table
 {
 	sqlite3_stmt *_stmt;
-	zb_src_sl3 *_file_sqlite;
+	zb_ds_sl3 *_file_sqlite;
 public:
 
-	zb_ds_table_sl3(zb_src_sl3* ds,ctext unique_id) ;
+	zb_ds_table_sl3(zb_ds_sl3* ds,ctext unique_id) ;
 
 	//-------------------------------
 	//sqlite specific
@@ -44,7 +44,7 @@ public:
 
 z_status get_zb_status_sqlite(int sql_status);
 
-class zb_src_sl3 : public zb_source
+class zb_ds_sl3 : public zb_source
 {
 	sqlite3 *_handle;
 protected:
@@ -55,7 +55,7 @@ public:
 
 
 	int _last_error;
-	zb_src_sl3();
+	zb_ds_sl3();
 	virtual z_status open(ctext name);
 	virtual z_status close();
 	z_status dump_master();

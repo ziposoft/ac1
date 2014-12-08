@@ -7,8 +7,8 @@
 
 #define ZB_INCLUDE_DS_TEXT
 //#define ZB_INCLUDE_DS_METAKIT
-#define ZB_INCLUDE_DS_SQLITE
-//#define ZB_INCLUDE_DS_HAMSTER
+//#define ZB_INCLUDE_DS_SQLITE
+#define ZB_INCLUDE_DS_HAMSTER
 
 
 
@@ -33,7 +33,7 @@ class zb_ds_field;
 
 class zb_zipobase;
 class zb_source;
-class zb_src_sl3;
+class zb_ds_sl3;
 class zb_ds_table_sl3;
 
 

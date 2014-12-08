@@ -34,7 +34,7 @@ public:
 	virtual z_status set_int32(zb_ds_rec_ptr *rec,I32 i);
 	virtual z_status get_int32(zb_ds_rec_ptr *rec,I32& i);
 
-  	virtual z_status get_name(z_string& s);
+	virtual z_status get_name(z_string& s);
 
 
 };
@@ -51,11 +51,11 @@ public:
 		fld->index_set(i);
 
 	}
-	
+
 };
 /*__________________________________________________________________________
 
-	zb_ds_table
+zb_ds_table
 ____________________________________________________________________________*/
 class zb_ds_table 
 {
@@ -87,16 +87,18 @@ public:
 	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 	virtual z_status delete_record_by_index(size_t index);
 
- 	virtual zb_ds_field* ds_field_string_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
-	virtual zb_ds_field* ds_field_int32_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
-	virtual zb_ds_rec_ptr* record_solo_new(){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
-	virtual z_status field_new(type_ds_field type,ctext id,zb_ds_field*& fld)
-		{ return Z_ERROR_NOT_IMPLEMENTED;};
+	/*______________________________________
 
-	virtual z_status field_add(zb_ds_field* fld);
-
+	zb_ds_table Virtual Funcs
+	______________________________________*/
 	virtual z_status commit(){	return Z_ERROR_NOT_IMPLEMENTED;	}
 	virtual z_status close(){	return Z_ERROR_NOT_IMPLEMENTED;	}
+	virtual zb_ds_field* ds_field_string_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
+	virtual zb_ds_field* ds_field_int32_new(ctext id){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
+	virtual zb_ds_rec_ptr* record_solo_new(){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
+	virtual z_status field_new(type_ds_field type,ctext id,zb_ds_field*& fld)	{ return Z_ERROR_NOT_IMPLEMENTED;};
+
+	virtual z_status field_add(zb_ds_field* fld);
 
 	/*
 	virtual int get_num_cols()=0; 
@@ -107,7 +109,7 @@ public:
 
 	/*______________________________________
 
-		zb_ds_table Interface
+	zb_ds_table Interface
 	______________________________________*/
 	z_string _param_new_field_name;
 	z_strlist _param_new_data;
@@ -116,16 +118,16 @@ public:
 	virtual z_status act_dump_records();
 	virtual z_status act_record_del();
 	virtual z_status act_record_add();
- 	virtual z_status act_add_field();
- 	virtual z_status act_open()
+	virtual z_status act_add_field();
+	virtual z_status act_open()
 	{
 		return open(true);;
 	}
 
 };
- /*__________________________________________________________________________
+/*__________________________________________________________________________
 
-	zb_ds_rec_ptr
+zb_ds_rec_ptr
 ____________________________________________________________________________*/
 class zb_ds_rec_ptr 
 {
@@ -141,9 +143,9 @@ class zb_ds_rec_ptr : public zb_ds_rec_ptr
 protected:
 
 public:
-	//zb_record();
-	zb_ds_rec_ptr();
-	virtual ~zb_ds_rec_ptr(){};
+//zb_record();
+zb_ds_rec_ptr();
+virtual ~zb_ds_rec_ptr(){};
 
 };
 */
@@ -154,13 +156,16 @@ class zb_ds_recptr_native
 public:
 
 };
+/*___________________________________________________________________________
 
+						zb_source
+___________________________________________________________________________*/
 class zb_source 
 {
 
 protected:	
 	virtual z_status _table_new(ctext ds_table_name,zb_ds_table*& tbl){ return Z_ERROR_NOT_IMPLEMENTED;};
-	
+
 public:
 	z_string _name;
 	enum status {
@@ -175,36 +180,43 @@ public:
 
 	zb_source();
 	virtual ~zb_source(){};
-	virtual z_status open(ctext name,bool create,bool writable){ return Z_ERROR_NOT_IMPLEMENTED;};
-	virtual z_status close(){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual bool is_open();
 	virtual zb_st_master* get_tbl_master(){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
 	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_ds_field& desc){Z_ERROR_NOT_IMPLEMENTED; return 0;};
 
 	virtual z_status ds_table_new(ctext ds_table_name,zb_ds_table*& tbl);
- 	virtual z_status ds_table_get(ctext ds_table_name,zb_ds_table*& tbl);
+	virtual z_status ds_table_get(ctext ds_table_name,zb_ds_table*& tbl);
 
 
 
 
 	z_obj_map<zb_ds_table> _ds_tables;
 
-	virtual z_status get_table_list(z_obj_vector_map<zb_ds_table> & list){ return Z_ERROR_NOT_IMPLEMENTED;};
 
 	//crap
-	virtual z_status get_tables(){ return Z_ERROR_NOT_IMPLEMENTED;};
 
-
-	//Instrumentation
+ 	/*_________________________
+	Instrumentation
+	_________________________*/
 	z_string _param_db_name;
 	z_string _param_table_new_name;
- 	z_status act_table_new();
+	z_status act_table_new();
 	virtual z_status commit();
 	virtual z_status act_open();
 
+	/*_________________________
+	Datasource Virtual Funcs
+	_________________________*/
+	virtual z_status open(ctext name,bool create,bool writable){ return Z_ERROR_NOT_IMPLEMENTED;};
+	virtual z_status close(){ return Z_ERROR_NOT_IMPLEMENTED;};
 
 
+	/*_________________________
+	????
+	_________________________*/
+	virtual z_status get_tables(){ return Z_ERROR_NOT_IMPLEMENTED;};
+	virtual z_status get_table_list(z_obj_vector_map<zb_ds_table> & list){ return Z_ERROR_NOT_IMPLEMENTED;};
 };
 
 #endif

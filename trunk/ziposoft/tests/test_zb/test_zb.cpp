@@ -1,7 +1,7 @@
 
 #include "zipolib/include/z_console.h"
 
-#include "zbase_lib/include/zipobase_lib.h"
+#include "zbase_lib/include/zipobase.h"
 
 
 class root
