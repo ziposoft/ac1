@@ -5,14 +5,14 @@
 
 #include "zbase_lib/include/ds_sqlite.h"
 
-zb_src_sl3::zb_src_sl3() : zb_source()
+zb_ds_sl3::zb_ds_sl3() : zb_source()
 {
 	_last_error=SQLITE_OK;
 	_handle=0;
 }
 
 
-bool zb_src_sl3::is_open()
+bool zb_ds_sl3::is_open()
 {
 	if(!_handle)
 		return false;
@@ -21,14 +21,14 @@ bool zb_src_sl3::is_open()
 
 }
 
-z_status zb_src_sl3::_read_stucture()
+z_status zb_ds_sl3::_read_stucture()
 {
 	//   get_data_test( "SELECT * FROM sqlite_master WHERE type='table' ORDER BY name;");
 
 	return zs_ok;
 }
 /*
-z_status zb_src_sl3::_get_sql_recset_sql(zb_ds_table_sl3*&  recset,ctext sqltext)
+z_status zb_ds_sl3::_get_sql_recset_sql(zb_ds_table_sl3*&  recset,ctext sqltext)
 {
 	ZTF;
 	recset=z_new zb_ds_table_sl3(this);
@@ -38,12 +38,12 @@ z_status zb_src_sl3::_get_sql_recset_sql(zb_ds_table_sl3*&  recset,ctext sqltext
 }
 
 */
-z_status zb_src_sl3::_get_sql_recset(zb_ds_table_sl3*&  recset,ctext tbl_name,ctext where_clause)
+z_status zb_ds_sl3::_get_sql_recset(zb_ds_table_sl3*&  recset,ctext tbl_name,ctext where_clause)
 {
 
 	return zs_ok;
 }
-zb_st_master* zb_src_sl3::get_tbl_master()
+zb_st_master* zb_ds_sl3::get_tbl_master()
 {
 	// zb_ds_table_sl3* recset=z_new zb_ds_table_sl3(this);
 	zb_st_master* tbl= z_new zb_st_master(this);
@@ -52,7 +52,7 @@ zb_st_master* zb_src_sl3::get_tbl_master()
 	// tbl->_ds_recset
 	return 0;
 }
-zb_ds_table* zb_src_sl3::get_tbl(ctext ds_table_name)
+zb_ds_table* zb_ds_sl3::get_tbl(ctext ds_table_name)
 {
 	ZTF;
 	zb_ds_table_sl3* recset=z_new zb_ds_table_sl3(this,ds_table_name);
@@ -78,7 +78,7 @@ z_status get_zb_status_sqlite(int sql_status)
 }
 
 
-z_status zb_src_sl3::open(ctext  path)
+z_status zb_ds_sl3::open(ctext  path)
 {
 	ZTF;
 	_path=path;
@@ -89,7 +89,7 @@ z_status zb_src_sl3::open(ctext  path)
 
 	return get_zb_status_sqlite(retval);
 }
-z_status zb_src_sl3::close()
+z_status zb_ds_sl3::close()
 {
 	ZTF;
 	int retval;
@@ -97,22 +97,22 @@ z_status zb_src_sl3::close()
 	return get_zb_status_sqlite(retval);
 }
 
-sqlite3* zb_src_sl3::get_handle()
+sqlite3* zb_ds_sl3::get_handle()
 {
 	return _handle;
 }
-ctext zb_src_sl3::get_last_error_msg()
+ctext zb_ds_sl3::get_last_error_msg()
 {
 	return sqlite3_errmsg(_handle);
 
 }
-z_status zb_src_sl3::dump_master()
+z_status zb_ds_sl3::dump_master()
 {
 	int retval;
 	retval = sqlite3_open(_path,&_handle);
 	return get_zb_status_sqlite(retval);
 }
-z_status zb_src_sl3::get_tables()
+z_status zb_ds_sl3::get_tables()
 {
 
 	ZTF;
@@ -160,7 +160,7 @@ z_status zb_src_sl3::get_tables()
 	return zs_ok;
 }
 
-z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
+z_status zb_ds_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
 {
 	ZTF;
 	z_status status;
@@ -214,7 +214,7 @@ z_status zb_src_sl3::get_table_desc(ctext ds_table_name,zb_desc& desc)
 
 }
 /*
-z_status zb_src_sl3::get_table_info()
+z_status zb_ds_sl3::get_table_info()
 {
 	ZTF;
 	z_status status;
@@ -267,7 +267,7 @@ z_status zb_src_sl3::get_table_info()
 
 	return zs_ok;
 }*/
-zb_ds_table_sl3::zb_ds_table_sl3(zb_src_sl3* ds,ctext unique_id) :zb_ds_table(ds,unique_id)
+zb_ds_table_sl3::zb_ds_table_sl3(zb_ds_sl3* ds,ctext unique_id) :zb_ds_table(ds,unique_id)
 {
 	_stmt=0;
 	_file_sqlite=ds;
@@ -411,7 +411,7 @@ void zb_ds_table_sl3::dump(z_file* fp)
 #endif
 /*
 
-act_rtn zb_src_sl3::get_data_test()
+act_rtn zb_ds_sl3::get_data_test()
 {
 	int retval;
     // select those rows from the table

@@ -264,7 +264,7 @@
     <ClInclude Include="..\include\zb_pch.h" />
     <ClInclude Include="..\include\zb_sqlite.h" />
     <ClInclude Include="..\include\z_base.h" />
-    <ClInclude Include="..\include\zipobase_lib.h" />
+    <ClInclude Include="..\include\zipobase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

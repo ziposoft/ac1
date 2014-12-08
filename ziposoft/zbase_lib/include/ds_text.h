@@ -9,6 +9,10 @@ class zb_ds_text;
 class zb_rec_ptr_txt;
 class zb_ds_field_text_string;
 					 
+/*___________________________________________________________________________
+
+						zb_ds_table_txt
+___________________________________________________________________________*/
 class zb_ds_table_txt  : public zb_ds_table	  ,public z_parse_csv
 {
 	z_file _file;
@@ -17,36 +21,43 @@ class zb_ds_table_txt  : public zb_ds_table	  ,public z_parse_csv
 	zb_rec_ptr_txt* _current_row;
 	int _current_column;
 	bool _dirty;
+protected:
+	virtual bool EndRowCallback();
+	virtual bool NewRowCallback();
+	virtual bool NewValueCallback(const z_string & value);
+	zb_ds_text* _ds;
 
 public:
 	zb_ds_table_txt();
 	zb_ds_table_txt(zb_ds_text* ds,ctext unique_id);
-	zb_ds_text* _ds;
-
-	virtual z_status record_add(zb_ds_rec_ptr* rec);
-	virtual z_status open(bool writable);
-	virtual z_status commit();
-	virtual size_t get_record_count();
-	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
-	virtual z_status delete_record_by_index(size_t index);
-
-	virtual z_status field_new(type_ds_field type,ctext id,zb_ds_field*& fld);
-	virtual zb_ds_field* field_string_new(ctext id);
-	virtual zb_ds_rec_ptr* record_solo_new();
 
 
-	virtual z_status close();
-
-
-	virtual bool EndRowCallback();
-	virtual bool NewRowCallback();
-	virtual bool NewValueCallback(const z_string & value);
 
 	ctext get_file_name();
 	//Interface
 
-};
+	 /*_________________________
+	 zb_ds_table Virtual Funcs
+	 _________________________*/
+	virtual z_status record_add(zb_ds_rec_ptr* rec);
+	virtual z_status open(bool writable);
+	virtual z_status commit();
+	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
+	virtual z_status delete_record_by_index(size_t index);
+	virtual size_t get_record_count();
+	virtual z_status field_new(type_ds_field type,ctext id,zb_ds_field*& fld);
+	virtual zb_ds_field* field_string_new(ctext id);
+	virtual zb_ds_rec_ptr* record_solo_new();
+	virtual z_status close();
 
+
+
+
+};
+/*___________________________________________________________________________
+
+						zb_ds_text
+___________________________________________________________________________*/
 class zb_ds_text: public zb_source
 {
 	z_directory _dir;
@@ -58,13 +69,17 @@ public:
 	zb_ds_text();
 	virtual ~zb_ds_text();
 
+
+ 	 /*________________________________________
+	 Datasource Virtual Funcs
+	 __________________________________________*/
+	
 	virtual z_status open(ctext name,bool create,bool writable);
 	virtual z_status close();
-	virtual z_status commit();
-
-	
-	
-	//crap
+	virtual z_status commit();	
+	/*________________________________________
+	????
+	________________________________________*/
 	//virtual z_status get_table_list(z_obj_vector_map<zb_ds_table> & list);
 
 };
