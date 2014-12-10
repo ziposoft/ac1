@@ -11,7 +11,7 @@
 
 	zb_ds_text 
 ____________________________________________________________________________*/
-zb_ds_text::zb_ds_text() : zb_source()
+zb_ds_text::zb_ds_text(ctext name) : zb_source(name  )
 {
 
 }
@@ -417,9 +417,8 @@ void zb_rec_ptr_txt::output_csv(z_file& out)
 ____________________________________________________________________________*/
 
 
-zb_ds_field_text::zb_ds_field_text(ctext id)
+zb_ds_field_text::zb_ds_field_text(ctext id) : zb_ds_field(id)
 {
-	_id=id;
 
 }
 zb_ds_field_text::~zb_ds_field_text()

@@ -232,6 +232,7 @@ public:
 	}
 
 	static z_factory_T<C> &self;
+	static 
 	virtual void* create_default_obj() const {return z_new C(); }
 	virtual void delete_obj(void* v) const
 	{

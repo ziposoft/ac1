@@ -2,6 +2,83 @@
 
 #include "zbase_lib/include/ds_hamster.h"
 #ifdef ZB_INCLUDE_DS_HAMSTER
+
+/*___________________________________________________________________________
+
+	zb_rec_ptr_hmt 
+____________________________________________________________________________*/
+
+
+zb_rec_ptr_hmt::zb_rec_ptr_hmt(bool solo)
+{
+
+
+}
+
+zb_rec_ptr_hmt::~zb_rec_ptr_hmt()
+{
+
+
+
+}
+void zb_rec_ptr_hmt::set(zb_ds_table* rs,size_t index)
+{
+	//_set=dynamic_cast<zb_rec_ptr_txt*>(rs);
+	//_index=index;
+
+}
+void zb_rec_ptr_hmt::set_string(size_t index,ctext str)
+{
+
+}
+ctext zb_rec_ptr_hmt::get_string(size_t index)
+{
+	return "";
+}
+
+
+/*___________________________________________________________________________
+
+	zb_ds_field_hmt_string 
+____________________________________________________________________________*/
+
+zb_ds_field_hmt_string::zb_ds_field_hmt_string(ctext id) : zb_ds_field(id)
+{
+
+}
+zb_ds_field_hmt_string::~zb_ds_field_hmt_string()
+{
+}
+
+
+
+z_status zb_ds_field_hmt_string::set_string(zb_ds_rec_ptr *rec,ctext s)
+{ 
+	/*
+	zb_rec_ptr_txt* rectxt=dynamic_cast<zb_rec_ptr_txt*>(rec);
+	if(!rectxt)
+		return Z_ERROR(zs_bad_parameter);
+	int i=index_get();
+	rectxt->set_string(i,s);
+	*/
+	return zs_ok;
+}
+z_status zb_ds_field_hmt_string::get_string(zb_ds_rec_ptr *rec,z_string& s)
+{ 
+	/*
+	zb_rec_ptr_txt* rectxt=dynamic_cast<zb_rec_ptr_txt*>(rec);
+	if(!rectxt)
+		return Z_ERROR(zs_bad_parameter);
+	int i=index_get();
+	ctext str=	   rectxt->get_string(i);
+	if(!str)
+		return Z_ERROR(zs_out_of_range);
+	s=str;
+	*/
+	return zs_ok;
+}
+
+
 /*___________________________________________________________________________
 
 	zb_ds_hmt_tbl 
@@ -11,20 +88,21 @@ ____________________________________________________________________________*/
 zb_ds_hmt_tbl::zb_ds_hmt_tbl():zb_ds_table(0,0)
 {
 }
-
+zb_ds_hmt_tbl::~zb_ds_hmt_tbl()
+{
+}
 zb_ds_hmt_tbl::zb_ds_hmt_tbl(zb_ds_hmt* ds,ctext unique_id):zb_ds_table(ds,unique_id)
 {
 	_ds=ds;
 }
 z_status zb_ds_hmt_tbl::record_add(zb_ds_rec_ptr* rec)
 {
-	_current_row=dynamic_cast<zb_rec_ptr_hmt*>(rec);
+	_current_row=Z_RECAST(zb_rec_ptr_hmt,rec);
 	
 	if(!_current_row)
 	{
 		return Z_ERROR(zs_bad_parameter);
 	}
-	_data.push_back(_current_row);
 	
 	return zs_ok;
 }
@@ -42,7 +120,7 @@ z_status zb_ds_hmt_tbl::field_new(type_ds_field type,ctext id,zb_ds_field*& fld)
 	switch(	type)
 	{
  	case type_ds_field_string:
-		fld=z_new zb_ds_field_text_string(id);
+		fld=z_new zb_ds_field_hmt_string(id);
 
 		break;
 
@@ -66,20 +144,14 @@ zb_ds_field* zb_ds_hmt_tbl::field_string_new(ctext id)
 		return 	0;
 	}
 
-	return z_new zb_ds_field_text_string(id);
+	return z_new zb_ds_field_hmt_string(id);
 }
 zb_ds_rec_ptr* zb_ds_hmt_tbl::record_solo_new()
 {
-	zb_rec_ptr_txt* pRec=	z_new zb_rec_ptr_txt(true);
+	zb_rec_ptr_hmt* pRec=	z_new zb_rec_ptr_hmt(true);
 	return pRec;
 }
-ctext zb_ds_hmt_tbl::get_file_name()
-{
-	if(!_file_name)
-		_file_name=	_id+".csv";
-	return _file_name;
 
-}
 z_status zb_ds_hmt_tbl::close()
 {
 	int i;
@@ -94,48 +166,7 @@ z_status zb_ds_hmt_tbl::close()
 z_status zb_ds_hmt_tbl::commit()
 {
 	Z_ASSERT(_id);
-	z_status s=_file.open(get_file_name(),"wb");
-	if(s)
-		return Z_ERROR(zs_could_not_open_file);
-	ZT("opened file %s",get_file_name());
-	size_t i_rec;
-	zb_ds_field *fld;
-	bool header=true;
-	z_string data;
-	zb_ds_rec_ptr* rec;
 
-
-	z_map_iter i_fld;
-	bool comma=false;
-	while(fld=_ds_desc.get_next(i_fld))
-	{
-		if(comma)
-			_file <<',';
-		data=fld->_id;
-		z_csv_encode_string(data);
-		_file <<data;
-		comma=true;
-	}
-	_file <<'\n';
-
-
-	for(i_rec=0;i_rec<get_record_count();i_rec++)
-	{
-		i_fld.reset();
-		comma=false;
-		while(fld=_ds_desc.get_next(i_fld))
-		{
-			if(comma)
-				_file <<',';
-			rec=_data[i_rec];
-			fld->get_string(rec,data);
-			z_csv_encode_string(data);
-			_file <<data;
-			comma=true;
-		}
-		_file <<'\n';
-	}
-	_file.close();
 	return zs_ok;
 
 }
@@ -145,7 +176,7 @@ z_status zb_ds_hmt_tbl::delete_record_by_index(size_t index)
 		return Z_ERROR(zs_not_open);
 	if(index>=get_record_count())
 		return Z_ERROR(zs_out_of_range);
-	_data.erase( _data.begin() + index)	;
+
 	return zs_ok;
 
 }
@@ -155,36 +186,11 @@ z_status zb_ds_hmt_tbl::delete_record_by_index(size_t index)
 z_status zb_ds_hmt_tbl::open(bool writable)
 {
 
-	_current_column=0;
 	if(_status!=status_closed)
 		return zs_already_open;
 
 	ctext flags="r";
-	/*
-	current we just read it all in then write it all out on commit
-	if(writable)
-	{
-		if(z_file_exists(_id)==0)
-			flags="rb+";
-		else
-  			flags="wb+";
 
-	}
-	*/
-
-	z_status s=_file.open(get_file_name(),flags);
-	if(s)
-	{
-		if(writable)
-			return zs_ok; //this is a new file, it will be created on commit
-
-		return Z_ERROR(zs_could_not_open_file);
-	}
-
-	z_string data;
-	_file.read_all(data);
-	ParseBuffer(data.c_str(),data.size());
-	_file.close();
 	_status=(writable? status_opened_write:status_opened_read);
 
 	return 0;
@@ -193,7 +199,7 @@ z_status zb_ds_hmt_tbl::open(bool writable)
 
 size_t zb_ds_hmt_tbl::get_record_count()
 {
-	return _data.size();
+	return 0;
 }
 z_status zb_ds_hmt_tbl::get_record_by_index(size_t index,
 											  zb_ds_rec_ptr** cursor)
@@ -203,8 +209,6 @@ z_status zb_ds_hmt_tbl::get_record_by_index(size_t index,
 	if(cursor==0)
 		return Z_ERROR(zs_bad_parameter);
 
-	//zb_rec_ptr_txt* r=dynamic_cast<zb_rec_ptr_txt*>(*cursor);
-	*cursor=_data[index];
 	return zs_ok;
 }
 
@@ -215,7 +219,7 @@ z_status zb_ds_hmt_tbl::get_record_by_index(size_t index,
 	zb_ds_hmt 
 ____________________________________________________________________________*/
 
-zb_ds_hmt::zb_ds_hmt(ctext name) : zb_source()
+zb_ds_hmt::zb_ds_hmt(ctext name) : zb_source(name)
 {
 
 }
@@ -248,7 +252,6 @@ z_status zb_ds_hmt::open(ctext name,bool create,bool writable)
 		z_filesys_get_filename_from_path(list[i],path,name,ext);
 		
 		_ds_tables << new 
-		//_tables << new 
 			zb_ds_hmt_tbl(this,name);
 
 	}

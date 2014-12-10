@@ -7,7 +7,14 @@
 z_status zb_validate_identifier(ctext text);
 
 
-
+ enum type_ds_type {
+	type_ds_invalid,
+	type_ds_csv,
+	type_ds_hamster,
+	type_ds_metakit,
+	type_ds_sqlite3,
+	type_ds_sql,
+};
 
 class zb_ds_rec_ptr;
 enum type_ds_field {
@@ -21,7 +28,7 @@ class zb_ds_field
 protected:
 	type_ds_field _type;
 public:
-	zb_ds_field();
+	zb_ds_field(ctext id);
 	z_string _id;
 	int _index;
 	virtual void index_set(int i) {  _index=i; };
@@ -156,6 +163,8 @@ class zb_ds_recptr_native
 public:
 
 };
+
+
 /*___________________________________________________________________________
 
 						zb_source
@@ -178,7 +187,7 @@ public:
 		status_opened_need_commit
 	} _status;
 
-	zb_source();
+	zb_source(ctext name);
 	virtual ~zb_source(){};
 	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual bool is_open();
@@ -192,6 +201,7 @@ public:
 
 
 	z_obj_map<zb_ds_table> _ds_tables;
+	ctext get_map_key() { return _name; }
 
 
 	//crap
@@ -218,5 +228,7 @@ public:
 	virtual z_status get_tables(){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status get_table_list(z_obj_vector_map<zb_ds_table> & list){ return Z_ERROR_NOT_IMPLEMENTED;};
 };
+
+zb_source* zb_open_ds(type_ds_type type,ctext path);
 
 #endif

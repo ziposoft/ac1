@@ -23,9 +23,10 @@ z_status zb_ds_field::get_name(z_string& s)
 	return 0;
 }
 
-zb_ds_field::zb_ds_field()
+zb_ds_field::zb_ds_field(	ctext id)
 {
 	_index=0;
+	_id=id;
 	_type=type_ds_field_invalid;
 }
 
@@ -228,9 +229,9 @@ z_status zb_ds_table::act_add_field()
 	zb_source
 ____________________________________________________________________________*/
 
-zb_source::zb_source()
+zb_source::zb_source(ctext name)
 {
-	_name="";
+	_name=name;
 	_status=status_closed;
 }
 bool zb_source::is_open()

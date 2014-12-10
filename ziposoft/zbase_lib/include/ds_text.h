@@ -66,7 +66,7 @@ class zb_ds_text: public zb_source
 protected:
  	virtual z_status _table_new(ctext ds_table_name,zb_ds_table*& tbl);
 public:
-	zb_ds_text();
+	zb_ds_text(ctext name);
 	virtual ~zb_ds_text();
 
 
