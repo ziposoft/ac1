@@ -61,6 +61,14 @@ inline z_refcount*  z_obj_ptr_copy(z_refcount* p) ;
 inline void z_obj_ptr_delete(z_refcount* p) ;
 
 
+#ifdef DEBUG
+//TODO - add Z_ASSERT to verify dynamic_cast passes
+#define Z_RECAST(_TYPE_,_VAL_) dynamic_cast<_TYPE_*>(_VAL_) 
+#else
+#define Z_RECAST(_TYPE_,_VAL_) static_cast<_TYPE_>(_VAL_)
+
+#endif
+
 #define ZPTR_COPY(_PTR_) z_obj_ptr_copy(_PTR_);
 #define ZPTR_DEL(_PTR_) z_obj_ptr_delete(_PTR_);
 #endif

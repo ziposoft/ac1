@@ -1,6 +1,7 @@
 #include "zipobase.h"
 
-
+#include "ds_text.h"
+#include "ds_hamster.h"
 
 ZFACT(zb_ds_table)
 {

@@ -10,14 +10,15 @@ public:
 	root()
 	{
 		_p_logger=&get_logger();
+		_param_db_type=0;
 
 
 	}
+	z_string _param_db_name;
+	int  _param_db_type;
 	z_console console;
 	z_logger* _p_logger;
-
-	zb_ds_sqlite zbs;
-	zb_ds_text zbs;
+	z_obj_map<zb_source> ds;
 	z_status create();
 };
 /*
@@ -36,12 +37,14 @@ ZFACT(source)
 ZFACT(root)
 {
 	ZOBJ(console);
-	ZOBJ_X(zbs,"db",ZFF_PROP,"database");
+	//ZOBJ_X(zbs,"db",ZFF_PROP,"database");
 	ZPOBJ(_p_logger);
- 	ZACT_XP(create,"create",ZFF_ACT_DEF,"create",0,0);
+ 	ZACT_XP(create,"create",ZFF_ACT_DEF,"create",2,
+		ZPARAM_X(_param_db_name,"name",ZFF_PARAM,"Name of new database"),
+		ZPARAM_X(_param_db_type,"type",ZFF_PARAM,"Type of new database")		);
+	ZPROP(ds);
 	/*
 	ZPROP(x);
-	ZPROP(i);
 	ZACT(add);
 	*/
 
@@ -52,8 +55,15 @@ ZP_MODULE_INCLUDE(  ZP_MOD(logger));
 /*  ZP_MOD(zipobase) ,*/
 
 
-
-
+z_status root::create()
+{
+	zb_source* d=zb_open_ds((type_ds_type)_param_db_type,_param_db_name);
+	if(!d)
+		return zs_bad_parameter;
+	ds<<d;
+	return 0;
+}
+#if 0
 z_status root::create()
 {
 	z_status status;
@@ -154,6 +164,8 @@ z_status root::create()
 	return 0;
 }
 
+
+#endif
 
 int main(int argc, char* argv[])
 {

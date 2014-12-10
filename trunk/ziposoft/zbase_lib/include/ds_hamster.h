@@ -8,9 +8,48 @@
 #ifdef ZB_INCLUDE_DS_HAMSTER
 
 #include "zbase_lib/include/datasource.h"
+#include "ham/hamsterdb.hpp"
 
-class zb_rec_ptr_hmt; 
 class zb_ds_hmt; 
+
+
+/*___________________________________________________________________________
+
+	zb_rec_ptr_hmt 
+____________________________________________________________________________*/
+class zb_rec_ptr_hmt  : public zb_ds_rec_ptr 
+{
+
+public:
+	zb_rec_ptr_hmt(bool solo=false);
+ 	virtual ~zb_rec_ptr_hmt();
+	virtual void set(zb_ds_table* rs,size_t index);
+
+	ctext get_string(size_t index);
+	void set_string(size_t index,ctext str);
+
+};
+
+/*___________________________________________________________________________
+
+	zb_ds_field_hmt_string 
+____________________________________________________________________________*/
+class zb_ds_field_hmt_string  : public zb_ds_field
+{
+
+public:
+	zb_ds_field_hmt_string(ctext id);
+	virtual ~zb_ds_field_hmt_string();
+	//For creating temp row, for filtering
+	
+
+// Overrides 
+
+ 	virtual z_status set_string(zb_ds_rec_ptr *rec,ctext s);
+	virtual z_status get_string(zb_ds_rec_ptr *rec,z_string& s);
+};
+
+
 /*___________________________________________________________________________
 
 	zb_ds_hmt_tbl 

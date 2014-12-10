@@ -1,8 +1,35 @@
 #include "zb_pch.h"
+#include "zb.h"
 
-
-#include "zbase_lib/include/zipobase.h"
+#include "ds_text.h"
+#include "ds_hamster.h"
+#include "zipobase.h"
 #include "zipolib/include/z_parse_text.h"
+#ifdef ZB_SQLITE
+#include "sqlite/include/sqlite3.h"
+
+
+#endif
+
+zb_source* zb_open_ds(type_ds_type type,ctext path)
+{
+	zb_source* ds=0;
+	switch(type)
+	{
+		case type_ds_csv:
+			ds=new zb_ds_text(path);
+			break;
+ 		case type_ds_hamster:
+			ds=new zb_ds_hmt(path);
+			break;
+		default:
+			break;
+	}
+
+	return ds;
+
+}
+
 
 
 z_status zb_validate_identifier(ctext text)
