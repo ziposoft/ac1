@@ -289,7 +289,9 @@ z_status zb_source::act_open()
 	zb_ds_table* tbl=0;
 	if(	_param_db_name=="")
 	{
-		Z_ERROR_MSG(zs_bad_parameter,"You must specify a DB name");
+		_param_db_name=_name;
+		if(	_param_db_name=="")
+			Z_ERROR_MSG(zs_bad_parameter,"You must specify a DB name");
 	}
 
 	return	 open(_param_db_name,true,true);

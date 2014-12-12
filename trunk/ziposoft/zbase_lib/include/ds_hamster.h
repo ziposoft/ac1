@@ -29,12 +29,30 @@ public:
 	void set_string(size_t index,ctext str);
 
 };
+ /*___________________________________________________________________________
+
+	zb_ds_field_hmt 
+____________________________________________________________________________*/
+class zb_ds_field_hmt  : public zb_ds_field
+{
+
+public:
+	zb_ds_field_hmt(ctext id);
+	virtual ~zb_ds_field_hmt();
+
+
+
+
+// Overrides 
+
+
+};
 
 /*___________________________________________________________________________
 
 	zb_ds_field_hmt_string 
 ____________________________________________________________________________*/
-class zb_ds_field_hmt_string  : public zb_ds_field
+class zb_ds_field_hmt_string  : public zb_ds_field_hmt
 {
 
 public:
@@ -59,12 +77,17 @@ class zb_ds_hmt_tbl : public zb_ds_table
 
 
 	zb_rec_ptr_hmt* _current_row;
+	hamsterdb::env _env;
+	z_string _file_name;
 
 
 public:
 	zb_ds_hmt_tbl();
 	zb_ds_hmt_tbl(zb_ds_hmt* ds,ctext unique_id);
 	virtual ~zb_ds_hmt_tbl();
+
+	ctext get_file_name();
+
 
 	 /*_________________________
 	 zb_ds_table Virtual Funcs
@@ -90,9 +113,9 @@ class zb_ds_hmt: public zb_source
 
 protected:	
 	virtual z_status _table_new(ctext ds_table_name,zb_ds_table*& tbl);
-
 public:
 	zb_ds_hmt(ctext name);
+	zb_ds_hmt();
 	virtual ~zb_ds_hmt();
 
  	 /*________________________________________

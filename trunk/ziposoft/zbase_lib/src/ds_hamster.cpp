@@ -181,15 +181,21 @@ z_status zb_ds_hmt_tbl::delete_record_by_index(size_t index)
 
 }
 
+ctext zb_ds_table_txt::get_file_name()
+{
+	if(!_file_name)
+		_file_name=	_id+".ham";
+	return _file_name;
 
+}
 
 z_status zb_ds_hmt_tbl::open(bool writable)
 {
 
 	if(_status!=status_closed)
 		return zs_already_open;
+	  _env.open("test.db");
 
-	ctext flags="r";
 
 	_status=(writable? status_opened_write:status_opened_read);
 
@@ -220,6 +226,10 @@ z_status zb_ds_hmt_tbl::get_record_by_index(size_t index,
 ____________________________________________________________________________*/
 
 zb_ds_hmt::zb_ds_hmt(ctext name) : zb_source(name)
+{
+
+}
+ zb_ds_hmt::zb_ds_hmt() : zb_source("ham")
 {
 
 }

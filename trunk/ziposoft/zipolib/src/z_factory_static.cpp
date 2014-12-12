@@ -243,7 +243,7 @@ const zf_var_entry* z_factory::_get_var_entry (size_t i) const
 z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
 								   const zf_var_funcs_base*& funcs)  const
 {
-
+	/*
 	z_factory* base=get_base_factory();
 	if(base)
 	{
@@ -252,6 +252,7 @@ z_status z_factory::get_var_info_i(size_t index,ctext& name,z_memptr &offset,
 			return base->get_var_info_i(index,name,offset,funcs);
 		index-=numbase;
 	}
+	*/
 	const zf_var_entry* ent=0;
 	if(_dynamic)
 	{
@@ -321,9 +322,11 @@ z_status z_factory::get_var_info(ctext name,z_memptr &offset,const zf_var_funcs_
 				funcs=0;
 			return zs_ok;		
 		}
+		/*
 		z_factory* base=get_base_factory();
 		if(base)
 			return base->get_var_info(name,offset,funcs);	
+			*/
 	}
 
 	return zs_item_not_found;

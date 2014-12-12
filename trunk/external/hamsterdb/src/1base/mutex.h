@@ -25,6 +25,54 @@
 #define HAM_MUTEX_H
 
 #include "0root/root.h"
+#if 1
+namespace hamsterdb {
+	class Mutex  {
+	public:
+
+		void lock() {
+		}
+
+		void unlock() {
+		}
+	};
+	class ScopedLock : public Mutex  {
+	public:
+		ScopedLock()
+		{
+
+		}
+		ScopedLock(Mutex& m)
+		{
+
+		}
+		void lock() {
+		}
+
+		void unlock() {
+		}
+	} ;
+
+	class Thread  {
+	public:
+
+		void lock() {
+		}
+
+		void unlock() {
+		}
+	} ;
+	class Condition  {
+	public:
+
+		void lock() {
+		}
+
+		void unlock() {
+		}
+	} ;
+} // namespace hamsterdb
+#else
 
 #define BOOST_ALL_NO_LIB // disable MSVC auto-linking
 #include <boost/version.hpp>
@@ -61,5 +109,6 @@ class Mutex : public boost::mutex {
 };
 
 } // namespace hamsterdb
+#endif
 
-#endif /* HAM_MUTEX_H */
+#endif /* HAM_MUTEX_H__ */

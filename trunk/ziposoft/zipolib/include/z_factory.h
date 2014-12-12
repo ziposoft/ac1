@@ -232,8 +232,8 @@ public:
 	}
 
 	static z_factory_T<C> &self;
-	static 
-	virtual void* create_default_obj() const {return z_new C(); }
+	static C* static_create_new_obj();
+	virtual void* create_default_obj() const {return static_create_new_obj(); }
 	virtual void delete_obj(void* v) const
 	{
 		delete reinterpret_cast<C*>(v);
@@ -280,15 +280,23 @@ extern z_factory* _pgz_factory_none;
 #define __ZFACT(_CLASS_)   z_factory_T<_CLASS_> _gz_factory_##_CLASS_(#_CLASS_); \
 	template <> z_factory_T<_CLASS_>& z_factory_T<_CLASS_>::self=_gz_factory_##_CLASS_;
 
+#define ZFACT_PV(_CLASS_) __ZFACT(_CLASS_);\
+	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,0,0,0,0 };\
+	template <>  _CLASS_* z_factory_T<_CLASS_>	::static_create_new_obj(){ return 0;}; \
+	template <>  void z_factory_T<_CLASS_>	::add_features_recurse(){ add_features<_CLASS_>(this);};\
+	template <>  const z_factory_info& z_factory_T<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; } \
+	 template <> template <class OTHER >   void z_factory_T<_CLASS_>::add_features(z_factory* factobj)
 
 #define ZFACT(_CLASS_) __ZFACT(_CLASS_);\
 	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,0,0,0,0 };\
 	template <>  void z_factory_T<_CLASS_>	::add_features_recurse(){ add_features<_CLASS_>(this);};\
+	template <>  _CLASS_* z_factory_T<_CLASS_>	::static_create_new_obj(){ return z_new _CLASS_();}; \
 	template <>  const z_factory_info& z_factory_T<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; } \
 	 template <> template <class OTHER >   void z_factory_T<_CLASS_>::add_features(z_factory* factobj)
 
 #define ZFACT_V(_CLASS_,_BASECLASS_)  __ZFACT(_CLASS_);\
 	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,&_gz_factory_##_BASECLASS_,0,0,0 };\
+	template <>  _CLASS_* z_factory_T<_CLASS_>	::static_create_new_obj(){ return z_new _CLASS_();}; \
 	template <>  const z_factory_info& z_factory_T<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; } \
 	template <>  void z_factory_T<_CLASS_>	::add_features_recurse(){ z_factory_T<_BASECLASS_>::add_features<_CLASS_>(this);add_features<_CLASS_>(this);};\
 	 template <> template <class OTHER > static void z_factory_T<_CLASS_>::add_features(z_factory* factobj)

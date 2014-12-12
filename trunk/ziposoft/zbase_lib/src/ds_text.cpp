@@ -15,7 +15,10 @@ zb_ds_text::zb_ds_text(ctext name) : zb_source(name  )
 {
 
 }
+zb_ds_text::zb_ds_text() : zb_source("text"  )
+{
 
+}
 
 zb_ds_text::~zb_ds_text()
 {
