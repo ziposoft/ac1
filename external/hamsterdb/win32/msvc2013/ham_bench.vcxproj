@@ -189,10 +189,6 @@
       <Project>{10dcd767-dfbe-4096-9258-111d4caf09b0}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="server_lib.vcxproj">
-      <Project>{11dcd767-dfbe-4196-9258-111d4caf09b0}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\tools\common.c" />
