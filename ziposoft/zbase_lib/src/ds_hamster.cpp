@@ -181,7 +181,7 @@ z_status zb_ds_hmt_tbl::delete_record_by_index(size_t index)
 
 }
 
-ctext zb_ds_table_txt::get_file_name()
+ctext zb_ds_hmt_tbl::get_file_name()
 {
 	if(!_file_name)
 		_file_name=	_id+".ham";
@@ -194,7 +194,7 @@ z_status zb_ds_hmt_tbl::open(bool writable)
 
 	if(_status!=status_closed)
 		return zs_already_open;
-	  _env.open("test.db");
+	  _env.open(get_file_name());
 
 
 	_status=(writable? status_opened_write:status_opened_read);

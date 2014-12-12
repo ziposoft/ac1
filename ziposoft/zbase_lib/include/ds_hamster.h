@@ -35,6 +35,7 @@ public:
 ____________________________________________________________________________*/
 class zb_ds_field_hmt  : public zb_ds_field
 {
+	hamsterdb::db db;      /* hamsterdb database object */
 
 public:
 	zb_ds_field_hmt(ctext id);

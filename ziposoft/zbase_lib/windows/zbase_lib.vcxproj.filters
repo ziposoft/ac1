@@ -9,83 +9,54 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="ds">
+      <UniqueIdentifier>{795ec01d-7174-4165-9bcf-a8d262b9921e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zb">
+      <UniqueIdentifier>{f8802ca1-a397-42b6-b68b-7d49be6d45cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\datasource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\field.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\record.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\table.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\zipobase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ds_metakit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ds_sqlite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ds_text.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ds_hamster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\table_static.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\zb_pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\datum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\module.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\datasource.cpp">
+      <Filter>ds</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ds_hamster.cpp">
+      <Filter>ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ds_metakit.cpp">
+      <Filter>ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ds_sqlite.cpp">
+      <Filter>ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ds_text.cpp">
+      <Filter>ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\field.cpp">
+      <Filter>zb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\record.cpp">
+      <Filter>zb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\table.cpp">
+      <Filter>zb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zipobase.cpp">
+      <Filter>zb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\table_static.cpp">
+      <Filter>zb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\module.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\datasource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\db_file.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\field.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\field_static.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\record.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\table.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\table_static.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\zb_sqlite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ds_text.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ds_metakit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ds_sqlite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ds_hamster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\zb_pch.h">
@@ -97,14 +68,41 @@
     <ClInclude Include="..\include\datum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\zipolib\include\z_obj_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\z_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\datasource.h">
+      <Filter>ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ds_hamster.h">
+      <Filter>ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ds_metakit.h">
+      <Filter>ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ds_sqlite.h">
+      <Filter>ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ds_text.h">
+      <Filter>ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\table.h">
+      <Filter>zb</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\zipobase.h">
-      <Filter>Header Files</Filter>
+      <Filter>zb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\field.h">
+      <Filter>zb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\field_static.h">
+      <Filter>zb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\record.h">
+      <Filter>zb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\table_static.h">
+      <Filter>zb</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
