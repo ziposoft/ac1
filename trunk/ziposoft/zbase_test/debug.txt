@@ -1,4 +1,0 @@
-3
-test_zb.exe
-ds[h]
-ls

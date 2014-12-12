@@ -247,7 +247,6 @@
     <ClCompile Include="..\src\zipobase.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\zipolib\include\z_obj_list.h" />
     <ClInclude Include="..\include\datasource.h" />
     <ClInclude Include="..\include\datum.h" />
     <ClInclude Include="..\include\db_file.h" />
@@ -262,7 +261,6 @@
     <ClInclude Include="..\include\table_static.h" />
     <ClInclude Include="..\include\zb.h" />
     <ClInclude Include="..\include\zb_pch.h" />
-    <ClInclude Include="..\include\zb_sqlite.h" />
     <ClInclude Include="..\include\z_base.h" />
     <ClInclude Include="..\include\zipobase.h" />
   </ItemGroup>
