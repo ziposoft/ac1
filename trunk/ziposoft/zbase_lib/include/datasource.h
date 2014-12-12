@@ -68,6 +68,7 @@ class zb_ds_table
 {
 protected:
 	enum status {
+		status_error,
 		status_closed,
 		status_corrupt,
 		status_cant_open,
@@ -118,6 +119,7 @@ public:
 
 	zb_ds_table Interface
 	______________________________________*/
+	bool auto_open;
 	z_string _param_new_field_name;
 	z_strlist _param_new_data;
 	int _param_record_index;
@@ -214,6 +216,7 @@ public:
 	z_status act_table_new();
 	virtual z_status commit();
 	virtual z_status act_open();
+	bool auto_open;
 
 	/*_________________________
 	Datasource Virtual Funcs

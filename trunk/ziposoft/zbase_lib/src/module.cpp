@@ -25,6 +25,7 @@ ZFACT_PV(zb_ds_table)
 ZFACT_PV(zb_source)
 {
 	
+	ZPROP(auto_open);
 	ZPROP_X(_name,"name",ZFF_PROP,"DB Name");
 	ZPROP_X(_ds_tables,"tbl",ZFF_PROP_NOLOAD,"Tables");
 	ZACT_XP(act_table_new,"new_table",ZFF_ACT_DEF,"Create a new table",1,
@@ -44,11 +45,11 @@ ZFACT_V( zb_ds_text, zb_source)
 
 
 };
-ZFACT_V( zb_ds_hmt_tbl, zb_ds_table)
+ZFACT_V( zb_ds_ham_tbl, zb_ds_table)
 {
 
 };
-ZFACT_V( zb_ds_hmt, zb_source)
+ZFACT_V( zb_ds_ham, zb_source)
 {
 
 
