@@ -233,6 +233,8 @@ zb_source::zb_source(ctext name)
 {
 	_name=name;
 	_status=status_closed;
+	auto_open=false;
+
 }
 bool zb_source::is_open()
 { 

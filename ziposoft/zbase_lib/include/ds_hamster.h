@@ -10,19 +10,19 @@
 #include "zbase_lib/include/datasource.h"
 #include "ham/hamsterdb.hpp"
 
-class zb_ds_hmt; 
+class zb_ds_ham; 
 
 
 /*___________________________________________________________________________
 
-	zb_rec_ptr_hmt 
+	zb_rec_ptr_ham 
 ____________________________________________________________________________*/
-class zb_rec_ptr_hmt  : public zb_ds_rec_ptr 
+class zb_rec_ptr_ham  : public zb_ds_rec_ptr 
 {
 
 public:
-	zb_rec_ptr_hmt(bool solo=false);
- 	virtual ~zb_rec_ptr_hmt();
+	zb_rec_ptr_ham(bool solo=false);
+ 	virtual ~zb_rec_ptr_ham();
 	virtual void set(zb_ds_table* rs,size_t index);
 
 	ctext get_string(size_t index);
@@ -31,15 +31,15 @@ public:
 };
  /*___________________________________________________________________________
 
-	zb_ds_field_hmt 
+	zb_ds_field_ham 
 ____________________________________________________________________________*/
-class zb_ds_field_hmt  : public zb_ds_field
+class zb_ds_field_ham  : public zb_ds_field
 {
 	hamsterdb::db db;      /* hamsterdb database object */
-
+	U16 _ham_id;
 public:
-	zb_ds_field_hmt(ctext id);
-	virtual ~zb_ds_field_hmt();
+	zb_ds_field_ham(U16 ham_id,ctext id);
+	virtual ~zb_ds_field_ham();
 
 
 
@@ -51,14 +51,14 @@ public:
 
 /*___________________________________________________________________________
 
-	zb_ds_field_hmt_string 
+	zb_ds_field_ham_string 
 ____________________________________________________________________________*/
-class zb_ds_field_hmt_string  : public zb_ds_field_hmt
+class zb_ds_field_ham_string  : public zb_ds_field_ham
 {
 
 public:
-	zb_ds_field_hmt_string(ctext id);
-	virtual ~zb_ds_field_hmt_string();
+	zb_ds_field_ham_string(U16 ham_id,ctext id);
+	virtual ~zb_ds_field_ham_string();
 	//For creating temp row, for filtering
 	
 
@@ -71,24 +71,25 @@ public:
 
 /*___________________________________________________________________________
 
-	zb_ds_hmt_tbl 
+	zb_ds_ham_tbl 
 ____________________________________________________________________________*/
-class zb_ds_hmt_tbl : public zb_ds_table	 
+class zb_ds_ham_tbl : public zb_ds_table	 
 {
 
 
-	zb_rec_ptr_hmt* _current_row;
+	zb_rec_ptr_ham* _current_row;
 	hamsterdb::env _env;
 	z_string _file_name;
-
+	zb_ds_ham* _ham_ds;
 
 public:
-	zb_ds_hmt_tbl();
-	zb_ds_hmt_tbl(zb_ds_hmt* ds,ctext unique_id);
-	virtual ~zb_ds_hmt_tbl();
+	zb_ds_ham_tbl();
+	zb_ds_ham_tbl(zb_ds_ham* ds,ctext unique_id);
+	virtual ~zb_ds_ham_tbl();
 
 	ctext get_file_name();
 
+	virtual z_status create_new();
 
 	 /*_________________________
 	 zb_ds_table Virtual Funcs
@@ -106,18 +107,18 @@ public:
 };
 /*___________________________________________________________________________
 
-	zb_ds_hmt 
+	zb_ds_ham 
 ____________________________________________________________________________*/
-class zb_ds_hmt: public zb_source
+class zb_ds_ham: public zb_source
 {
 	z_directory _dir;
 
 protected:	
 	virtual z_status _table_new(ctext ds_table_name,zb_ds_table*& tbl);
 public:
-	zb_ds_hmt(ctext name);
-	zb_ds_hmt();
-	virtual ~zb_ds_hmt();
+	zb_ds_ham(ctext name);
+	zb_ds_ham();
+	virtual ~zb_ds_ham();
 
  	 /*________________________________________
 	 Datasource Virtual Funcs

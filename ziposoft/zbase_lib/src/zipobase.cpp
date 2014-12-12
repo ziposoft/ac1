@@ -20,7 +20,7 @@ zb_source* zb_open_ds(type_ds_type type,ctext path)
 			ds=new zb_ds_text(path);
 			break;
  		case type_ds_hamster:
-			ds=new zb_ds_hmt(path);
+			ds=new zb_ds_ham(path);
 			break;
 		default:
 			break;
