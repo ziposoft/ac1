@@ -8,6 +8,9 @@
 zb_rec_ptr_ham 
 ____________________________________________________________________________*/
 
+#define ZB_HAM_COL_META 1
+#define ZB_HAM_COL_NAMES 2
+
 
 zb_rec_ptr_ham::zb_rec_ptr_ham(bool solo)
 {
@@ -199,7 +202,7 @@ ctext zb_ds_ham_tbl::get_file_name()
 	return _file_name;
 
 }
-z_status zb_ds_ham_tbl::open(bool writable)
+z_status zb_ds_ham_tbl::open(bool writable)															   
 {
 
 	if(_status!=status_closed)
@@ -223,6 +226,11 @@ z_status zb_ds_ham_tbl::open(bool writable)
 	z_status s=create_new();
 	if(s==zs_ok)
 		_status=(writable? status_opened_write:status_opened_read);
+
+
+	//ham_parameter_t params;
+	//_env.get_parameters(&params);
+
 	return s;
 }
 z_status zb_ds_ham_tbl::create_new()
@@ -291,7 +299,7 @@ z_status zb_ds_ham::open(ctext name,bool create,bool writable)
 		return Z_ERROR_MSG(zs_could_not_open_file,"can't open directory");
 
 	z_strlist list;
-	_dir.get_files_by_extension("hamster",list);
+	_dir.get_files_by_extension("ham",list);
 
 	for(i=0;i<list.size();i++)
 	{
@@ -324,6 +332,7 @@ z_status zb_ds_ham::_table_new(ctext ds_table_name,zb_ds_table*& tbl)
 
 	zb_ds_ham_tbl* tbl_text=z_new zb_ds_ham_tbl(this,ds_table_name);
 	tbl=tbl_text;
+	tbl_text->create_new();
 	return  zs_ok;
 }
 
