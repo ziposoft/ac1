@@ -38,7 +38,7 @@ ZFACT(root)
 {
 	ZOBJ(console);
 	//ZOBJ_X(zbs,"db",ZFF_PROP,"database");
-	ZPOBJ(_p_logger);
+	ZPOBJ(_p_logger,"log",ZFF_PROP,"Logger");
  	ZACT_XP(create,"create",ZFF_ACT_DEF,"create",2,
 		ZPARAM_X(_param_db_name,"name",ZFF_PARAM,"Name of new database"),
 		ZPARAM_X(_param_db_type,"type",ZFF_PARAM,"Type of new database")		);
