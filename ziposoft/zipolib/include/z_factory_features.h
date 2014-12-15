@@ -49,9 +49,9 @@ ________________________________________________________________________*/
 #define ZACT_X(_ACT_,_NAME_,_FLAGS_,_DESC_) {typedef z_status (OTHER::*fn_act)();fn_act _func_##_ACT_=&OTHER::_ACT_;factobj->add_act(#_ACT_,_NAME_,*(z_memptr*)(&_func_##_ACT_) ,_FLAGS_,_DESC_);}
 #define ZACT(_ACT_) ZACT_X(_ACT_,#_ACT_,ZFF_ACT_DEF,"")
 #define ZACT_XP(_ACT_,_NAME_,_FLAGS_,_DESC_,_N_,...) {typedef z_status (OTHER::*fn_act)();fn_act _func_##_ACT_=&OTHER::_ACT_;factobj->add_act_params(#_ACT_,_NAME_,*(z_memptr*)(&_func_##_ACT_),_FLAGS_ ,_DESC_,_N_,__VA_ARGS__);}
-#define ZPOBJ(_VAR_) __ZPROP_X(zp_child_pobj_funcs_get,_VAR_,#_VAR_,ZFF_PROP,"")
 #define ZOBJ(_VAR_) __ZPROP_X(zp_child_obj_funcs_get,_VAR_,#_VAR_,ZFF_PROP,"")
 #define ZOBJ_X(_VAR_,_NAME_,_FLAGS_,_DESC_)	__ZPROP_X(zp_child_obj_funcs_get,_VAR_,_NAME_,_FLAGS_,_DESC_)
+#define ZPOBJ(_VAR_,_NAME_,_FLAGS_,_DESC_) __ZPROP_X(zp_child_pobj_funcs_get,_VAR_,_NAME_,_FLAGS_,_DESC_)
 
 /*
 
