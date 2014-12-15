@@ -83,8 +83,9 @@ z_status  z_console::runapp(int argc, char* argv[],bool autoloadcfg)
 
 			if(status)
 			{
-				Z_ERROR_MSG(status,"command failed: \"%s\"",argv[i]);
+				Z_ERROR_MSG(status,"command \"%s\" failed",argv[i]);
 				z_logger_dump();
+				return status;
 			}
 		}
 	}
@@ -251,8 +252,13 @@ z_status z_console:: EvaluateLine(ctext text)
 		
 	return status;
 }
-
-z_status z_console::evaluate_feature(zf_obj& o)
+bool z_console::is_feature(zf_obj& o)
+{
+	zf_feature *zff;
+	zff=o._fact->get_feature(_cmd_line_feature);
+	return (zff!=0);
+}
+z_status z_console::evaluate_feature(zf_obj& o,bool justatest)
 {
 	zf_feature *zff;
 	zff=o._fact->get_feature(_cmd_line_feature);
@@ -266,7 +272,6 @@ z_status z_console::evaluate_feature(zf_obj& o)
 
 	return zff->evaluate1(_tparser,o,ZFF_LIST);
 
-	return zs_ok;//???
 }
 
 
@@ -351,13 +356,17 @@ z_status z_console:: ExecuteLine(ctext text)
 	Z_ERROR_DBG(  status);
 
 	//if no path is specified, then try the built in commands
-	status=evaluate_feature(_self);
-	if(status==zs_ok)
-		return 	zs_ok;
-	status=evaluate_feature(_temp);
-	//Z_ERROR_MSG(status,"\"%s\" not a feature of \"%s\"",_cmd_line_feature.c_str(),_path.c_str());
-
-	return status;
+	if(is_feature(_self))
+	{
+		return evaluate_feature(_self,false);
+	}
+	if(is_feature(_temp))
+	{
+		return evaluate_feature(_temp,false);
+	}
+	
+	Z_ERROR_MSG(zs_feature_not_found,"\"%s\" not a feature of \"%s\"",_cmd_line_feature.c_str(),_path.c_str());
+	return zs_feature_not_found;
 }
 
 
@@ -453,17 +462,26 @@ z_status z_console::savecfg()
 }
 z_status z_console::act_exec()
 {
-	if(!_script_file)
+	//We have to be careful with act params on recursive functions
+	z_string script=_script_file;//This func can be called recursively!
+	if(!script)
 		return Z_ERROR_MSG(zs_bad_parameter,"You must specify a script filename");
 
- 	z_file f(_script_file,"r");
+	zout.putf("Executing script %s\n",script.c_str());
+ 	z_file f(script,"r");
 	z_string line;
 	z_status status;
+	int line_number=1;
 	while(f.getline(line))
 	{
 		status=ExecuteLine(line);		
 		if(status)
+		{
+			zout.putf("Error in script \"%s\" line #%d.\n",script.c_str(),line_number);
 			break;
+		}
+		line_number++;
+
 
 
 	}
@@ -583,7 +601,7 @@ void z_console_base::trim_line_to(int trim_point)
 	//del(_buffer,trim_point);
 	len=trim_point;
 }
-int z_console_base::run()
+z_status z_console_base::run()
 {
 	terminal_open();
 	_running=true;
@@ -673,7 +691,7 @@ int z_console_base::run()
 			break;
 		}
 	}
-	return 0;
+	return zs_ok;
 }
 
 void z_console_base::put_prompt()

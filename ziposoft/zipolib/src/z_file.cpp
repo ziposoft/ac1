@@ -67,12 +67,12 @@ z_file::z_file(ctext filename,ctext mode)
 	_file_name=filename;
 	_file_handle=(size_t)(void*)fopen(filename,mode);
 }
-int z_file::open(ctext filename,ctext mode)
+z_status z_file::open(ctext filename,ctext mode)
 {
 	_file_name=filename;
 	_file_handle=(size_t)(void*)fopen(filename,mode);
-	if( _file_handle==0) return -1;
-	return 0;
+	if( _file_handle==0) return zs_could_not_open_file;
+	return zs_ok;
 }
 
 void z_file::close()
@@ -249,7 +249,7 @@ void z_file::indent_dec()
 	_indent_depth--;
 
 }
-int z_file::delete_file()
+z_status z_file::delete_file()
 {
 	close();
 	return z_file_delete(_file_name);

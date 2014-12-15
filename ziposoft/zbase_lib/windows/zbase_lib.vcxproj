@@ -230,6 +230,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\datasource.cpp" />
     <ClCompile Include="..\src\datum.cpp" />
+    <ClCompile Include="..\src\ds_functions.cpp" />
     <ClCompile Include="..\src\ds_hamster.cpp" />
     <ClCompile Include="..\src\ds_metakit.cpp" />
     <ClCompile Include="..\src\ds_sqlite.cpp" />

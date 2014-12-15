@@ -139,7 +139,7 @@ public:
 
 	virtual z_status get_var_info_i(size_t index,ctext& name,z_memptr &offset,const zf_var_funcs_base*& funcs) const;
 	virtual z_status get_var_info(ctext name,z_memptr &offset,const zf_var_funcs_base*& funcs) const;
-	virtual int execute_act_ptr(void* obj,z_memptr  act_addr) const=0;
+	virtual z_status execute_act_ptr(void* obj,z_memptr  act_addr) const=0;
 
 
 
@@ -238,9 +238,9 @@ public:
 	{
 		delete reinterpret_cast<C*>(v);
 	}
-	virtual int execute_act_ptr(void* vobj,z_memptr act_addr) const
+	virtual z_status execute_act_ptr(void* vobj,z_memptr act_addr) const
 	{
-		typedef int (C::*funcptr)();
+		typedef z_status (C::*funcptr)();
 		C*  cobj=reinterpret_cast<C*>(vobj);
 		z_memptr* pp=&act_addr;
 		funcptr fp=*( funcptr*) (pp);

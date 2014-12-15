@@ -139,6 +139,9 @@
     <ClInclude Include="include\z_factory_controller.h">
       <Filter>factory</Filter>
     </ClInclude>
+    <ClInclude Include="include\z_status.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\z_time.c">
@@ -245,6 +248,9 @@
     </ClCompile>
     <ClCompile Include="src\z_factory_dyn.cpp">
       <Filter>factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_status.c">
+      <Filter>c</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

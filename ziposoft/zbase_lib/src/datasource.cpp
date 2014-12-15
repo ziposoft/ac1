@@ -2,7 +2,10 @@
 
 #include "zbase_lib/include/datasource.h"
 
+/*===========================================================================
 
+	zb_ds_desc
+=============================================================================*/
 zb_ds_field* zb_ds_desc::get_ds_field(ctext name)
 {
 	return (*this)[name];
@@ -20,7 +23,7 @@ z_status zb_ds_field::get_int32(zb_ds_rec_ptr *rec,I32& i){ return Z_ERROR_NOT_I
 z_status zb_ds_field::get_name(z_string& s)
 {
 	s=_id;
-	return 0;
+	return zs_ok;
 }
 
 zb_ds_field::zb_ds_field(	ctext id)
@@ -112,7 +115,7 @@ z_status zb_ds_table::field_add(zb_ds_field* fld)
 
 
 	_ds_desc<<fld;
-	 return 0;
+	 return zs_ok;
 
 }
 
@@ -232,6 +235,7 @@ ____________________________________________________________________________*/
 zb_source::zb_source(ctext name)
 {
 	_name=name;
+	_fullpath=name; //TODO
 	_status=status_closed;
 	auto_open=false;
 
@@ -285,17 +289,26 @@ z_status zb_source::ds_table_get(ctext ds_table_name,zb_ds_table*& tbl)
 	
 	return zs_success;
 };
-
-z_status zb_source::act_open()
+z_status zb_source::act_delete_datasource()
 {
-	zb_ds_table* tbl=0;
 	if(	_param_db_name=="")
 	{
 		_param_db_name=_name;
 		if(	_param_db_name=="")
 			Z_ERROR_MSG(zs_bad_parameter,"You must specify a DB name");
 	}
+	return delete_datasource();
 
+}
+
+z_status zb_source::act_open()
+{
+	if(	_param_db_name=="")
+	{
+		_param_db_name=_name;
+		if(	_param_db_name=="")
+			Z_ERROR_MSG(zs_bad_parameter,"You must specify a DB name");
+	}
 	return	 open(_param_db_name,true,true);
 }
 

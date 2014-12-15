@@ -26,7 +26,7 @@ class zb_datum_string : public zb_datum
 {
 	z_string _data; 
 public:
-	zb_datum_string(ctext data) { _data=data; }
+	zb_datum_string(ctext data);
 };
 
 

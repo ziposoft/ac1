@@ -20,41 +20,34 @@
 #if UNIX
 
 #endif
-int z_fopen(z_file_h* filep,utf8 _Filename,ascii _Mode)
-{
-#ifdef BUILD_VSTUDIO
-	return fopen_s((FILE**)filep,_Filename,_Mode);
-#else
-	*filep=(z_file_h)fopen(_Filename,_Mode);
-	if(*filep == 0) return -1;
-	return 0;
-#endif
-}
 
-int    z_file_exists(utf8 fname)
+/*
+
+*/
+z_status z_file_exists(utf8 fname)
 {
 	FILE *file;
 	if ((file = fopen(fname, "r")) == NULL) 
 	{
 	  if (errno == ENOENT) 
 	  {
-		return -1;
+		return zs_not_found;
 	  } else {
-		// Check for other errors too, like EACCES and EISDIR
-		return -1;
+		//TODO- Check for other errors too, like EACCES and EISDIR
+		return zs_not_found;
 	  }
 	} 
 	fclose(file);
 	
-	return 0;
+	return zs_ok;
 	
 }
 
 int z_filesys_get_current_dir(char* dir,int length)
 {
 	if(getcwd(dir,length)==NULL)
-		return -1;
-	return 0;
+		return zs_bad_parameter; //TODO check for EACCES
+	return zs_ok;
 }
 
 
@@ -103,36 +96,6 @@ U8* z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  )
 #endif
 
 }
-int z_file_open_and_write(utf8 in_filepath,U8* data,unsigned long length  )
-{
-	U32 byteswritten=0;
-#ifdef BUILD_VSTUDIO
-	//SECURITY_ATTRIBUTES sa;
-
-	WCHAR* w_filepath=WCHAR_str_allocate(in_filepath,Z_MAX_PATH_LENGTH);
-
-	HANDLE handle= CreateFile(w_filepath, GENERIC_WRITE,
-		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL /*&sa*/, CREATE_ALWAYS, 
-		FILE_FLAG_SEQUENTIAL_SCAN, 0);	
-	WCHAR_str_deallocate(w_filepath);
-
-	//memset(&sa,0,sizeof(SECURITY_ATTRIBUTES));
-
-	if(handle==INVALID_HANDLE_VALUE) return 0;
-	if(WriteFile(handle,data,length,(LPDWORD)&byteswritten,NULL)) return byteswritten;
-	return 0;
-
-#else
-	FILE* pFile=fopen(in_filepath,"wb");
-	byteswritten=fwrite(data,1,length,pFile);
-
-	fclose(pFile);
-
-	return byteswritten;
-#endif
-
-}
-
 
 /*
 void OutFile(ctext out_filepath,outmemory& out)
@@ -154,30 +117,60 @@ delete e;
 */
 
 
-/*
-file delete
 
-returns 
-'0' on success
-'1' if it cant find the file
-'-1' if it cannot delete the file
-*/
-int z_file_delete(utf8 name)
+z_status z_file_delete(utf8 name)
 {
+	z_status status=zs_error;
 #ifdef BUILD_VSTUDIO
 	ULONG error;
 	WCHAR* w_filepath=WCHAR_str_allocate(name,Z_MAX_PATH_LENGTH);
-	if(DeleteFile(w_filepath)==TRUE) return 0;
+	if(DeleteFile(w_filepath)==TRUE) 
+		status= zs_ok;
+	else
+	{
+		error=GetLastError();
+		if(error==ERROR_FILE_NOT_FOUND) 
+			status= zs_not_found;
+
+	}
 	WCHAR_str_deallocate(w_filepath);
-	error=GetLastError();
-	if(error==ERROR_FILE_NOT_FOUND) return 1;
 #else
-	return remove(name);
+	if(remove(name)==0)
+		status= zs_ok;
+
 #endif
-	return -1;
+	return status;
 }
 
-int    z_dir_create(utf8 dir_name)
+
+z_status z_directory_delete(utf8 name)
+{
+	z_status status=zs_error;
+#ifdef BUILD_VSTUDIO
+	ULONG error;
+	WCHAR* w_filepath=WCHAR_str_allocate(name,Z_MAX_PATH_LENGTH);
+	if(RemoveDirectory(w_filepath)==TRUE) 
+		status= zs_ok;
+	else
+	{
+		error=GetLastError();
+		if(error==ERROR_FILE_NOT_FOUND) 
+			status= zs_not_found;
+		else
+			PrintWin32Error();
+
+	}
+	WCHAR_str_deallocate(w_filepath);
+#else
+	if(remove(name)==0)
+		status= zs_ok;
+
+#endif
+	return status;
+}
+
+
+z_status    z_dir_create(utf8 dir_name)
 {
 #ifdef BUILD_VSTUDIO
 	return (mkdir(dir_name)) ;
@@ -189,9 +182,9 @@ int    z_dir_create(utf8 dir_name)
 
 #endif
 }
-int    z_change_dir(utf8 dir_name,int create)
+z_status    z_directory_change(utf8 dir_name,int create)
 {
-	if(chdir(dir_name)==0) return 0;
+	if(chdir(dir_name)==0) return zs_ok;
 	if(!create) return -1;
 	if(z_dir_create(dir_name)) return -2;
 	if(chdir(dir_name)) return -3;
@@ -213,7 +206,7 @@ typedef struct _z_directory_t
 } _z_directory;
 
 #ifdef BUILD_VSTUDIO
-int    z_dir_open(utf8 name,z_directory_h* h)
+z_status z_dir_open(utf8 name,z_directory_h* h)
 {
 	U32 temp;
 	int result=-1;
@@ -235,7 +228,7 @@ int    z_dir_open(utf8 name,z_directory_h* h)
 	zdir->path=(char*)malloc(MAX_PATH);
 
 	*h=(z_directory_h)zdir;
-	return 0;
+	return zs_ok;
 }
 #else 
 int    z_dir_open(utf8 name,z_directory_h* h)
@@ -252,7 +245,7 @@ int    z_dir_open(utf8 name,z_directory_h* h)
 }
 #endif
 
-int     z_dir_get_next(z_directory_h h,utf8* currentfile,int type)
+z_status  z_dir_get_next(z_directory_h h,utf8* currentfile,int type)
 {
 	int isDir;
 	int handle_dir=0;
@@ -303,9 +296,9 @@ int     z_dir_get_next(z_directory_h h,utf8* currentfile,int type)
 			if(isDir) continue;
 		if(strcmp(*currentfile,".")==0) continue;
 		if(strcmp(*currentfile,"..")==0) continue;
-		return 0;
+		return zs_ok;
 	}
-	return -1;
+	return zs_error; //TODO 
 }
 
 void   z_dir_close(z_directory_h h)
@@ -346,3 +339,49 @@ utf8 z_get_filename_from_path(utf8 fullpath)
 	else filename=fullpath;
 	return filename;
 }
+
+
+
+#if 0 //UNUSED
+int z_file_open_and_write(utf8 in_filepath,U8* data,unsigned long length  )
+{
+	U32 byteswritten=0;
+#ifdef BUILD_VSTUDIO
+	//SECURITY_ATTRIBUTES sa;
+
+	WCHAR* w_filepath=WCHAR_str_allocate(in_filepath,Z_MAX_PATH_LENGTH);
+
+	HANDLE handle= CreateFile(w_filepath, GENERIC_WRITE,
+		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL /*&sa*/, CREATE_ALWAYS, 
+		FILE_FLAG_SEQUENTIAL_SCAN, 0);	
+	WCHAR_str_deallocate(w_filepath);
+
+	//memset(&sa,0,sizeof(SECURITY_ATTRIBUTES));
+
+	if(handle==INVALID_HANDLE_VALUE) return 0;
+	if(WriteFile(handle,data,length,(LPDWORD)&byteswritten,NULL)) return byteswritten;
+	return 0;
+
+#else
+	FILE* pFile=fopen(in_filepath,"wb");
+	byteswritten=fwrite(data,1,length,pFile);
+
+	fclose(pFile);
+
+	return byteswritten;
+#endif
+
+}
+
+z_status z_fopen(z_file_h* filep,utf8 _Filename,ascii _Mode)
+{
+#ifdef BUILD_VSTUDIO
+	return fopen_s((FILE**)filep,_Filename,_Mode);
+#else
+	*filep=(z_file_h)fopen(_Filename,_Mode);
+	if(*filep == 0) return -1;
+	return 0;
+#endif
+}
+
+#endif
