@@ -189,7 +189,7 @@ void zf_action::display(z_file& f,void* obj)
 
 	f <<")\n";
 }
-int zf_action::execute(z_file* f,zf_obj& obj)
+z_status zf_action::execute(z_file* f,zf_obj& obj)
 {
 	z_string s;
 	if(f)
@@ -212,7 +212,7 @@ int zf_action::execute(z_file* f,zf_obj& obj)
 		*f <<")\n";
 	}
 
-	int ret=obj._fact->execute_act_ptr	(obj._obj,_offset);
+	z_status ret=obj._fact->execute_act_ptr	(obj._obj,_offset);
 	return ret;
 }
  z_status zf_action::load(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper) 

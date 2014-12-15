@@ -6,6 +6,8 @@
 #ifndef z_file_header
 #define z_file_header
 #include "zipolib/include/zipo.h"
+
+
 #include "zipolib/include/z_temp_buff.h"
 #include "zipolib/include/z_type_converter.h"
 #ifndef BUILD_VSTUDIO
@@ -44,13 +46,13 @@ public:
 
 	void set_handle(size_t t);
 
-	int open(ctext filename,ctext mode);
+	z_status open(ctext filename,ctext mode);
 	void close();
 	void flush();
 	//HANDLE  _file_handle_win32;
 
 	//operations
-	int delete_file();
+	z_status delete_file();
 
 	//open/close
 	bool is_open() { return _file_handle!=0; }

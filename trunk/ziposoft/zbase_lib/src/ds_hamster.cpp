@@ -168,7 +168,6 @@ zb_ds_rec_ptr* zb_ds_ham_tbl::record_solo_new()
 
 z_status zb_ds_ham_tbl::close()
 {
-	int i;
 
 	get_desc().clear();
 
@@ -202,6 +201,8 @@ ctext zb_ds_ham_tbl::get_file_name()
 	return _file_name;
 
 }
+
+
 z_status zb_ds_ham_tbl::open(bool writable)															   
 {
 
@@ -212,7 +213,7 @@ z_status zb_ds_ham_tbl::open(bool writable)
 		_env.open(get_file_name());
 		_status=(writable? status_opened_write:status_opened_read);
 
-		return 0;
+		return zs_ok;
 	}
 	catch (hamsterdb::error &e) 
 	{
@@ -245,7 +246,7 @@ z_status zb_ds_ham_tbl::create_new()
 	{
 		return Z_ERROR_MSG(zs_could_not_open_file,"Could not create DB: %s",e.get_string());
 	}
-	return 0;
+	return zs_ok;
 }
 
 size_t zb_ds_ham_tbl::get_record_count()
@@ -311,14 +312,23 @@ z_status zb_ds_ham::open(ctext name,bool create,bool writable)
 
 	}
 
-	status=z_change_dir(_name,false);
+	status=z_directory_change(_name,false);
 	if(status)
 		return Z_ERROR_MSG(zs_could_not_open_file,"can't change to directory");
 
 	_status=status_opened_write;
-	return 0;
+	return zs_ok;
 }
+z_status zb_ds_ham::delete_datasource()															   
+{
+	close();//close any handles
+	z_status s=z_directory_delete(_name);
 
+	_status=status_does_not_exist;
+	return  s;
+
+
+}
 
 
 

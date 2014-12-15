@@ -57,11 +57,13 @@ ZP_MODULE_INCLUDE(  ZP_MOD(logger));
 
 z_status root::create()
 {
-	zb_source* d=zb_open_ds((type_ds_type)_param_db_type,_param_db_name);
+	zb_source* d=0;
+	
+	z_status s=zb_datasource_open((type_ds_type)_param_db_type,_param_db_name,d);
 	if(!d)
-		return zs_bad_parameter;
+		return s;
 	ds<<d;
-	return 0;
+	return zs_ok;
 }
 #if 0
 z_status root::create()

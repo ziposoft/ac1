@@ -14,6 +14,7 @@
     <ProjectGuid>{C1FBFA01-75CF-4B32-9C48-4AC837766A26}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>dump</RootNamespace>
+    <ProjectName>metakit_dump</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

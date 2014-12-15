@@ -104,6 +104,7 @@
     <ClInclude Include="include\z_parse.h" />
     <ClInclude Include="include\z_parse_internal.h" />
     <ClInclude Include="include\z_parse_text.h" />
+    <ClInclude Include="include\z_status.h" />
     <ClInclude Include="include\z_stl_list.h" />
     <ClInclude Include="include\z_stl_map.h" />
     <ClInclude Include="include\z_stl_vector.h" />
@@ -266,6 +267,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zipolib_cpp.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
+    <ClCompile Include="src\z_status.c" />
     <ClCompile Include="src\z_str.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipo.h</PrecompiledHeaderFile>

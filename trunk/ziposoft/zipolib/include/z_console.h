@@ -53,7 +53,7 @@ public:
 
 
 	z_console_base();
-	int run();
+	z_status run();
 
 };
 
@@ -74,11 +74,12 @@ public:
 */
 	virtual z_status ExecuteLine(ctext text);
 	virtual z_status EvaluateLine(ctext  text);
-	virtual z_status EvaluateLine2(ctext  text);
+	//virtual z_status EvaluateLine2(ctext  text);
 	z_string _cmd_line_feature;
 	z_string _cmd_line_feature_index;
 	bool _has_path;
-	z_status evaluate_feature(zf_obj& o);
+	z_status evaluate_feature(zf_obj& o,bool justatest);
+	bool is_feature(zf_obj& o);
 	z_status get_feature_and_index();
 	z_status select_obj();
     virtual void OnTab();

@@ -11,24 +11,6 @@
 
 #endif
 
-zb_source* zb_open_ds(type_ds_type type,ctext path)
-{
-	zb_source* ds=0;
-	switch(type)
-	{
-		case type_ds_csv:
-			ds=new zb_ds_text(path);
-			break;
- 		case type_ds_hamster:
-			ds=new zb_ds_ham(path);
-			break;
-		default:
-			break;
-	}
-
-	return ds;
-
-}
 
 
 

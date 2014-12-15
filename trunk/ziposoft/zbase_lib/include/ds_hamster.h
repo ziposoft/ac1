@@ -96,6 +96,7 @@ public:
 	 _________________________*/
 	virtual z_status record_add(zb_ds_rec_ptr* rec);
 	virtual z_status open(bool writable);
+
 	virtual z_status commit();
 	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 	virtual z_status delete_record_by_index(size_t index);
@@ -127,6 +128,7 @@ public:
 	virtual z_status open(ctext name,bool create,bool writable);
 	virtual z_status close();
 	virtual z_status commit();	
+	virtual z_status delete_datasource();
 
 
 };

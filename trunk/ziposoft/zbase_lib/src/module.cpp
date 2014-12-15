@@ -35,6 +35,7 @@ ZFACT_PV(zb_source)
 		ZPARAM_X(_param_db_name,"db_name",ZFF_PARAM,"Name of new DB")
 		);
 	ZACT_XP(commit,"commit",ZFF_ACT_DEF,"Commit the DB",0,0);
+	ZACT_XP(act_delete_datasource,"delete",ZFF_ACT_DEF,"Delete the Datasource",0,0);
 };
 ZFACT_V( zb_ds_table_txt, zb_ds_table)
 {

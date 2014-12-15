@@ -285,7 +285,7 @@ z_status zp_parser::create_obj(ctext item_entry_name,void* &p_obj)
 z_status zp_parser::output_obj(z_file* fp,z_factory* factory,void* obj)
 {
 	if(!factory)
-		return -1;
+		return zs_bad_parameter;
 	ZT("==========TEMPLATE[%s] OUTPUT OBJ=====\n",factory->get_name());
 
 	_file_out=fp;

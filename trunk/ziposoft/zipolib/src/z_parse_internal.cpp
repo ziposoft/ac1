@@ -701,7 +701,7 @@ z_status zp_parser::_f_ident_list_test(const void* dummy)
 				size_t match_len;
 				get_match(match,match_len);
 				Z_ASSERT(0); //ADD STRING?
-				z_status i_result=0;//feature_set_string(_ctx_current->_obj,_ctx_current->_member_var_name,match,match_len);
+				z_status i_result=zs_ok;//feature_set_string(_ctx_current->_obj,_ctx_current->_member_var_name,match,match_len);
 
 				if(i_result)
 					return result;
@@ -733,7 +733,7 @@ z_status zp_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
 		{
 			ctext s="";
 			Z_ASSERT(0); //get STRING by index?
-			result=0;//feature_get_string(_ctx_current->_obj,_ctx_current->_member_var_name,s);
+			result=zs_ok;//feature_get_string(_ctx_current->_obj,_ctx_current->_member_var_name,s);
 			if(result==zs_ok)
 			{
 				if(need_comma)

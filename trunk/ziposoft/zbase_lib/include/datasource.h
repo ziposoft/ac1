@@ -179,7 +179,9 @@ protected:
 
 public:
 	z_string _name;
+	z_string _fullpath;
 	enum status {
+		status_does_not_exist,
 		status_corrupt,
 		status_closed,
 		status_cant_open,
@@ -216,6 +218,7 @@ public:
 	z_status act_table_new();
 	virtual z_status commit();
 	virtual z_status act_open();
+	virtual z_status act_delete_datasource();
 	bool auto_open;
 
 	/*_________________________
@@ -223,6 +226,7 @@ public:
 	_________________________*/
 	virtual z_status open(ctext name,bool create,bool writable){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status close(){ return Z_ERROR_NOT_IMPLEMENTED;};
+	virtual z_status delete_datasource(){ return Z_ERROR_NOT_IMPLEMENTED;};
 
 
 	/*_________________________
@@ -232,6 +236,8 @@ public:
 	virtual z_status get_table_list(z_obj_vector_map<zb_ds_table> & list){ return Z_ERROR_NOT_IMPLEMENTED;};
 };
 
-zb_source* zb_open_ds(type_ds_type type,ctext path);
+z_status zb_datasource_open(type_ds_type type,ctext path,zb_source* &ds);
+z_status zb_datasource_create(type_ds_type type,ctext path,zb_source* &ds);
+z_status zb_datasource_delete(type_ds_type type,ctext path);
 
 #endif

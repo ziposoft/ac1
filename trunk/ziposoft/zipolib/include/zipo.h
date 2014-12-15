@@ -36,7 +36,7 @@ typedef   unsigned int  U32;
 typedef   int  I32;
 typedef   unsigned short  U16;
 typedef   unsigned char  U8;
-typedef   int   z_status;
+//typedef   int   z_status;
 
 
 
@@ -175,6 +175,7 @@ _______________________________________________________________________*/
 #endif
 
 
+#include "zipolib/include/z_status.h"
 
 
 #ifdef	__cplusplus

@@ -52,14 +52,24 @@ z_status zb_ds_text::open(ctext name,bool create,bool writable)
 
 	}
 
-	status=z_change_dir(_name,false);
+	status=z_directory_change(_name,false);
 	if(status)
   		return Z_ERROR_MSG(zs_could_not_open_file,"can't change to directory");
 
 	_status=status_opened_write;
-	 return 0;
+	 return zs_ok;
 }
 
+z_status zb_ds_text::delete_datasource()															   
+{
+	close();//close any handles
+	z_directory_delete(_fullpath);
+
+	_status=status_does_not_exist;
+	return  zs_ok;
+
+
+}
 
 
 
@@ -169,7 +179,7 @@ ctext zb_ds_table_txt::get_file_name()
 }
 z_status zb_ds_table_txt::close()
 {
-	int i;
+	size_t i;
 	for(i=0;i<_data.size();i++)
 	{
  		zb_ds_rec_ptr* rec=_data[i];
@@ -282,7 +292,7 @@ z_status zb_ds_table_txt::open(bool writable)
 	_file.close();
 	_status=(writable? status_opened_write:status_opened_read);
 
-	return 0;
+	return zs_ok;
 }
 
 

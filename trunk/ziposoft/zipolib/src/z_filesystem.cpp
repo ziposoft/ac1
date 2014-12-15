@@ -46,7 +46,7 @@ z_status z_filesys_getcwd(z_string& path)
 }
 z_status z_filesys_setcwd(z_string& path)
 {
-	int s= z_change_dir(path.c_str(),false);
+	int s= z_directory_change(path.c_str(),false);
 	if(s)
 		return zs_could_not_open_dir;
 	return zs_ok;

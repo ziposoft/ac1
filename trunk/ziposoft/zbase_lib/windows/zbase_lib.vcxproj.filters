@@ -54,6 +54,9 @@
       <Filter>zb</Filter>
     </ClCompile>
     <ClCompile Include="..\src\module.cpp" />
+    <ClCompile Include="..\src\ds_functions.cpp">
+      <Filter>ds</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\db_file.h">
