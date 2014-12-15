@@ -127,6 +127,7 @@ public:
 	z_status dumpcfg();
 	z_status loadcfg();
 	z_status savecfg();
+	z_status act_exec();
 	z_status help();
 	z_status shell();
 	z_status exit();

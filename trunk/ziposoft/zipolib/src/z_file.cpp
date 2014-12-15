@@ -156,7 +156,10 @@ char z_file::get(char& c)
 const char* z_file::getline(z_string& s)
 {
 	char* tb=z_temp_buffer_get(_max_line_length);
-	fgets( tb, _max_line_length, (FILE*)_file_handle );
+	char* val=0;
+	val=fgets( tb, _max_line_length, (FILE*)_file_handle );
+	if(!val)
+		return (ctext)0;
 	size_t l=strlen(tb);
 	if(tb[l-1]=='\n')
 		tb[l-1]=0;

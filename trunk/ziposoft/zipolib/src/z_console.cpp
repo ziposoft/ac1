@@ -9,7 +9,6 @@ ZFACT(z_console)
 	ZACT_X(list_features,"ls",ZFF_ACT_DEF,"List features");
 	ZACT(list_features);
 	ZACT(dumpcfg);
-	ZACT(loadcfg);
 	ZACT(savecfg);
 	ZACT(help);
 	ZACT(exit);
@@ -17,9 +16,10 @@ ZFACT(z_console)
 	ZPROP_X(_dump_cmd_line,"dump_cmdline",ZFF_PROP,"Dump the parsed command line contents");
 	ZPROP_X(_path,"path",ZFF_PROP,"Current path");
 	ZPROP_X(_history,"history",ZFF_PROP,"Command line history");
-	//ZPROP_X(_config_file,"cfgfile",0,"Filename of configuration file");
-	ZPROP_X(_script_file,"script",ZFF_PROP,"Filename of script to run/save");
-
+ 	ZACT_XP(loadcfg,"loadcfg",ZFF_ACT_DEF,"Load Config File",1,
+		ZPARAM_X(_config_file,"file",ZFF_PARAM,"Filename of config load"));
+	ZACT_XP(act_exec,"exec",ZFF_ACT_DEF,"Execute a script",1,
+		ZPARAM_X(_script_file,"script",ZFF_PARAM,"Filename of script to run"));
 
 }
 
@@ -159,9 +159,10 @@ z_status z_console::select_obj()
 	return f->get_zf_obj(_temp,_cmd_line_feature_index,_temp);
 
 }
-
+/*
 z_status z_console:: EvaluateLine2(ctext text)
 {
+	ZT("%s",text);
 	z_status status=zs_ok;	
 
 
@@ -204,9 +205,10 @@ z_status z_console:: EvaluateLine2(ctext text)
 		
 	return status;
 }
-
+  */
 z_status z_console:: EvaluateLine(ctext text)
 {
+	ZT("%s",text);
 	z_status status=zs_ok;	
 	_cmd_line_feature.clear();
 	_cmd_line_feature_index.clear();
@@ -338,6 +340,7 @@ void z_console:: OnTab()
 }
 z_status z_console:: ExecuteLine(ctext text)
 {
+	ZT("%s",text);
 	z_status status=EvaluateLine(text);
 	if((status==zs_ok)||(status==zs_eof)) //just a path change
 	{
@@ -448,6 +451,29 @@ z_status z_console::savecfg()
 	_root._fact->dump_obj_contents_static(f,_root._obj);
 	return zs_ok;
 }
+z_status z_console::act_exec()
+{
+	if(!_script_file)
+		return Z_ERROR_MSG(zs_bad_parameter,"You must specify a script filename");
+
+ 	z_file f(_script_file,"r");
+	z_string line;
+	z_status status;
+	while(f.getline(line))
+	{
+		status=ExecuteLine(line);		
+		if(status)
+			break;
+
+
+	}
+	return status;
+
+
+
+}
+
+
 z_status z_console::help()
 {
 	_temp=_self;
