@@ -130,8 +130,16 @@ z_status z_console::get_feature_and_index()
 {
 	z_status status;	
 	status=_tparser.test_any_identifier();
+
 	if(status) 
-		return status;
+	{
+		if(status==zs_no_match)
+		{
+			char c=_tparser.get_char_under_test();
+			return Z_ERROR_MSG(zs_parse_error,"Unexpected '%c'",c);
+		}
+		return status;//End of buffer
+	}
 	_tparser.get_match(_cmd_line_feature);
 	if(_tparser.test_char('[')==zs_ok)
 	{
@@ -152,62 +160,13 @@ z_status z_console::select_obj()
 	zf_feature *f;
 	f=_temp._fact->get_feature(_cmd_line_feature);
 	if(!f)
-		return zs_feature_not_found;
+		return zs_feature_not_found; //NOT necessarly an error
 	int index=-1;
-
-
-
 	return f->get_zf_obj(_temp,_cmd_line_feature_index,_temp);
 
 }
-/*
-z_status z_console:: EvaluateLine2(ctext text)
-{
-	ZT("%s",text);
-	z_status status=zs_ok;	
 
-
-	_tparser.set_source(text);
- 	_has_path=false;
-
-	_temp= _selected;
-	_temp_path=_path;
-	if(_tparser.test_char('/')==zs_matched)
-	{
-		_temp=_root;
-		_temp_path="";
-		_has_path=true;
-	}
-	while (1)
-	{
-		status=get_feature_and_index();
-		if(status)
-			break;
-
-
-
-		status=select_obj();
-		if(status)
-		{
-			break; //if it is not an object, thats ok
-		}
-		_has_path=true;
-
-		_temp_path<<"/"<<_cmd_line_feature;
-		if(_cmd_line_feature_index)
-			_temp_path<<'['<<_cmd_line_feature_index<<']';
-		if(_tparser.test_char('/') && _tparser.test_char('.'))
-				break;	
-		_cmd_line_feature.clear();
-		_cmd_line_feature_index.clear();
-	}
-	if(!_tparser.eob())
-		return Z_ERROR_DBG(zs_unparsed_data);
-		
-	return status;
-}
-  */
-z_status z_console:: EvaluateLine(ctext text)
+z_status z_console:: EvaluatePath(ctext text)
 {
 	ZT("%s",text);
 	z_status status=zs_ok;	
@@ -226,30 +185,50 @@ z_status z_console:: EvaluateLine(ctext text)
 	}
 	while (1)
 	{
+		//This just gets next word in path
 		status=get_feature_and_index();
 		if(status)
-			break;
-
-
-
-		status=select_obj();
+		{
+			return status;
+		}
+		zf_feature *f;
+		f=_temp._fact->get_feature(_cmd_line_feature);
+		if(!f)
+		{
+			 /*
+			 not our feature. all we care about here is that it is not an
+			 object. deal with unknown features later*/
+			return zs_unparsed_data; //
+		}
+		status= f->get_zf_obj(_temp,_cmd_line_feature_index,_temp);
 		if(status)
 		{
-			break; //if it is not an object, thats ok
+			/*It is our feature, but it is not an object
+			so we are done. 
+			*/
+			return zs_unparsed_data; 
 		}
 		_has_path=true;
 
 		_temp_path<<"/"<<_cmd_line_feature;
 		if(_cmd_line_feature_index)
 			_temp_path<<'['<<_cmd_line_feature_index<<']';
+		if(_tparser.eob())
+			return zs_ok;//we are done!
+
 		if(_tparser.test_char('/') && _tparser.test_char('.'))
-				break;	
+		{
+			//if it is not a path char, stop
+			return Z_ERROR_MSG(zs_parse_error,"Expected '.' or '/'\n");
+		}
 		_cmd_line_feature.clear();
 		_cmd_line_feature_index.clear();
 	}
+	/*
 	if(!_tparser.eob())
 		return Z_ERROR_DBG(zs_unparsed_data);
-		
+		*/
+	//should never get here	
 	return status;
 }
 bool z_console::is_feature(zf_obj& o)
@@ -280,7 +259,7 @@ void z_console:: OnTab()
 	if(!_tab_mode)
 	{
 		//This is just to find the target object.
-		z_status status=EvaluateLine(_buffer);
+		z_status status=EvaluatePath(_buffer);
 		Z_ERROR_DBG(status);
 		if(zs_unparsed_data==status)
 		{
@@ -346,14 +325,18 @@ void z_console:: OnTab()
 z_status z_console:: ExecuteLine(ctext text)
 {
 	ZT("%s",text);
-	z_status status=EvaluateLine(text);
+	z_status status=EvaluatePath(text);
 	if((status==zs_ok)||(status==zs_eof)) //just a path change
 	{
 		_path=_temp_path;
 		_selected=_temp;
 		return zs_ok;
 	}
-	Z_ERROR_DBG(  status);
+	if(status!=zs_unparsed_data)
+	{
+		get_parser().print_context();
+		return status;
+	}
 
 	//if no path is specified, then try the built in commands
 	if(is_feature(_self))
@@ -470,11 +453,13 @@ z_status z_console::act_exec()
 	zout.putf("Executing script %s\n",script.c_str());
  	z_file f(script,"r");
 	z_string line;
-	z_status status;
+	z_status status=zs_ok;
 	int line_number=1;
-	while(f.getline(line))
+	while(status==zs_ok)
 	{
-		status=ExecuteLine(line);		
+		status=f.getline(line);
+		if(status==zs_ok)
+			status=ExecuteLine(line);		
 		if(status)
 		{
 			zout.putf("Error in script \"%s\" line #%d.\n",script.c_str(),line_number);

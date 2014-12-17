@@ -20,6 +20,7 @@ typedef enum  {
 	zs_could_not_open_dir,
 	zs_could_not_create_dir,
 	zs_could_not_open_file,
+	zs_read_error,
 	zs_not_open,
 	zs_already_open,
 	zs_bad_parameter,

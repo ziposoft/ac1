@@ -291,11 +291,9 @@ z_status zb_source::ds_table_get(ctext ds_table_name,zb_ds_table*& tbl)
 };
 z_status zb_source::act_delete_datasource()
 {
-	if(	_param_db_name=="")
+	if(	_name=="")
 	{
-		_param_db_name=_name;
-		if(	_param_db_name=="")
-			Z_ERROR_MSG(zs_bad_parameter,"You must specify a DB name");
+		Z_ERROR_MSG(zs_error,"Datasource name is blank");
 	}
 	return delete_datasource();
 
@@ -303,6 +301,7 @@ z_status zb_source::act_delete_datasource()
 
 z_status zb_source::act_open()
 {
+	/*
 	if(	_param_db_name=="")
 	{
 		_param_db_name=_name;
@@ -310,6 +309,12 @@ z_status zb_source::act_open()
 			Z_ERROR_MSG(zs_bad_parameter,"You must specify a DB name");
 	}
 	return	 open(_param_db_name,true,true);
+	*/
+	if(_name=="")
+		Z_ERROR_MSG(zs_error,"Datasource name is blank");
+
+	return	 open(true,true);
+
 }
 
 

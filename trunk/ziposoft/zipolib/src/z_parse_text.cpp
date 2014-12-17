@@ -293,7 +293,7 @@ z_status zp_text_parser::test_to_eob()
 }
 z_status zp_text_parser::_peek_next_char(char c)
 {
-	z_status status;
+	//z_status status;
  	if( _index_current==_end)
 		return zs_eof;
 	if(*(_index_current+1) == c)

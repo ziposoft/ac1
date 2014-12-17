@@ -154,20 +154,25 @@ char z_file::get(char& c)
 	return c;
 }
 
-const char* z_file::getline(z_string& s)
+z_status z_file::getline(z_string& s)
 {
 	char* tb=z_temp_buffer_get(_max_line_length);
 	char* val=0;
+	if(!_file_handle)
+		return zs_not_open;
 	val=fgets( tb, _max_line_length, (FILE*)_file_handle );
 	if(!val)
-		return (ctext)0;
+	{
+		//TODO handle errors
+		return zs_read_error;
+	}
 	size_t l=strlen(tb);
 	if(tb[l-1]=='\n')
 		tb[l-1]=0;
 
 	s=tb;
 	z_temp_buffer_release(tb);
-	return  s.c_str();
+	return zs_ok;
 }
 
 

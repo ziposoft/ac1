@@ -125,7 +125,7 @@ public:
 	 Datasource Virtual Funcs
 	 __________________________________________*/
 	
-	virtual z_status open(ctext name,bool create,bool writable);
+	virtual z_status open(bool create,bool writable);
 	virtual z_status close();
 	virtual z_status commit();	
 	virtual z_status delete_datasource();
