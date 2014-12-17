@@ -2,7 +2,7 @@
 
 
 #include "zipolib/include/zipo.h"
-#include "zipolib/include/z_files.h"
+#include "zipolib/include/z_directory.h"
 
 
 void z_itobase2(char* buf, I64 value, int base, int buff_length, char padchar, int _signed);

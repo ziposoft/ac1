@@ -139,7 +139,7 @@
     <ClInclude Include="include\z_status.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\z_files.h">
+    <ClInclude Include="include\z_directory.h">
       <Filter>c</Filter>
     </ClInclude>
   </ItemGroup>
@@ -249,7 +249,7 @@
     <ClCompile Include="src\z_status.c">
       <Filter>c</Filter>
     </ClCompile>
-    <ClCompile Include="src\z_files.cpp">
+    <ClCompile Include="src\z_directory.cpp">
       <Filter>c</Filter>
     </ClCompile>
   </ItemGroup>
