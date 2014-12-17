@@ -19,7 +19,7 @@ class zb_ds_metakit: public zb_source
 public:
 	zb_ds_metakit();
 	virtual ~zb_ds_metakit(void);
-	virtual z_status open(ctext name,bool create,bool writable);
+	virtual z_status open(bool create,bool writable);
 	virtual z_status close();
 	virtual z_status commit();
 	virtual z_status ds_table_new(ctext ds_table_name,zb_ds_table*& tbl);

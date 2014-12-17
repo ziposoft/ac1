@@ -193,13 +193,6 @@ public:
 
 	zb_source(ctext name);
 	virtual ~zb_source(){};
-	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return Z_ERROR_NOT_IMPLEMENTED;};
-	virtual bool is_open();
-	virtual zb_st_master* get_tbl_master(){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
-	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_ds_field& desc){Z_ERROR_NOT_IMPLEMENTED; return 0;};
-
-	virtual z_status ds_table_new(ctext ds_table_name,zb_ds_table*& tbl);
-	virtual z_status ds_table_get(ctext ds_table_name,zb_ds_table*& tbl);
 
 
 
@@ -224,7 +217,7 @@ public:
 	/*_________________________
 	Datasource Virtual Funcs
 	_________________________*/
-	virtual z_status open(ctext name,bool create,bool writable){ return Z_ERROR_NOT_IMPLEMENTED;};
+	virtual z_status open(bool create,bool writable){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status close(){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status delete_datasource(){ return Z_ERROR_NOT_IMPLEMENTED;};
 
@@ -234,6 +227,15 @@ public:
 	_________________________*/
 	virtual z_status get_tables(){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status get_table_list(z_obj_vector_map<zb_ds_table> & list){ return Z_ERROR_NOT_IMPLEMENTED;};
+	virtual z_status get_table_desc(ctext ds_table_name,zb_desc& desc){ return Z_ERROR_NOT_IMPLEMENTED;};
+	virtual bool is_open();
+	virtual zb_st_master* get_tbl_master(){ Z_ERROR_NOT_IMPLEMENTED;return 0;};
+	virtual zb_ds_table* get_tbl(ctext ds_table_name,zb_ds_field& desc){Z_ERROR_NOT_IMPLEMENTED; return 0;};
+
+	virtual z_status ds_table_new(ctext ds_table_name,zb_ds_table*& tbl);
+	virtual z_status ds_table_get(ctext ds_table_name,zb_ds_table*& tbl);
+
+
 };
 
 z_status zb_datasource_open(type_ds_type type,ctext path,zb_source* &ds);

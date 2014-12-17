@@ -65,7 +65,7 @@ zb_ds_field* zb_ds_metakit::ds_field_string_new(ctext id)
 	//virtual z_status     ds_table_open(zb_ds_table* tbl);
 
 
-z_status zb_ds_metakit::open(ctext name,bool create,bool writable) 
+z_status zb_ds_metakit::open(bool create,bool writable) 
 {
 	//TODO - only create when asked to
 	_filename<<name <<".mtk";

@@ -285,7 +285,7 @@ zb_ds_ham::~zb_ds_ham()
 {
 	//TODO delete 
 }
-z_status zb_ds_ham::open(ctext name,bool create,bool writable)
+z_status zb_ds_ham::open(bool create,bool writable)
 {
 	z_status status;
 	size_t i;
@@ -294,7 +294,6 @@ z_status zb_ds_ham::open(ctext name,bool create,bool writable)
 	if(_status!=status_closed)
 		return zs_already_open;
 
-	_name=name;
 	status=_dir.open(_name,create);
 	if(status)
 		return Z_ERROR_MSG(zs_could_not_open_file,"can't open directory");

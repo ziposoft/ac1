@@ -73,7 +73,7 @@ public:
 	NEW METHOD
 */
 	virtual z_status ExecuteLine(ctext text);
-	virtual z_status EvaluateLine(ctext  text);
+	virtual z_status EvaluatePath(ctext  text);
 	//virtual z_status EvaluateLine2(ctext  text);
 	z_string _cmd_line_feature;
 	z_string _cmd_line_feature_index;

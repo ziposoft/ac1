@@ -405,6 +405,7 @@ z_factory_dyn& z_factory::init_dynamic()
 	else
 	{
 		feat=  vfuncs->create_feature(id,name,offset,flags,desc);
+		Z_ASSERT(feat);
 	 	init_dynamic().features.add(feat);
 	}
 	return feat;
@@ -428,6 +429,11 @@ zf_action* z_factory::add_act_params(ctext id,ctext name,z_memptr act_addr,zf_fe
 	for (i=0;i<num_params;i++)
 	{
 		zf_feature* p=va_arg(ArgList,zf_feature*);
+		if(!p)
+		{
+			Z_ERROR_MSG(zs_bad_parameter,"Cannot add parameter #%d to action '%s'\n",i,id);
+			return 0;
+		}
 		action->_params.add( p);
 	}
 	return action;

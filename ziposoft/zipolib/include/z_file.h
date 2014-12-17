@@ -64,8 +64,8 @@ public:
 	//input
 	char get(char& c);
 	size_t getline(char* buff,size_t size);
+	z_status  getline(z_string & str);
 	size_t read(char* buff,size_t size);
-	const char*  getline(z_string & str);
 	bool read_all(z_string & str);
 	bool read_all(char*& data,size_t& size);
 	template <class TYPE>  z_file  &put(TYPE data)

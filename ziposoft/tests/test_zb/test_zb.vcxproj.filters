@@ -25,5 +25,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\zbase_test\debug.txt" />
+    <Text Include="..\..\zbase_test\scr_ds_test.txt" />
   </ItemGroup>
 </Project>
