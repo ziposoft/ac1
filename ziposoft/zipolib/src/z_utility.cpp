@@ -1,7 +1,8 @@
 #include "zipolib_cpp_pch.h"
 #include "z_file.h"
 #include "z_dbg.h"
-void __cdecl z_debug_load_save_args(int* pargc, char*** pargv)
+
+ void  __cdecl z_debug_load_save_args(int* pargc, char*** pargv)
 {
 	int argc=*pargc;
 	char** argv=*pargv;
@@ -41,7 +42,5 @@ void __cdecl z_debug_load_save_args(int* pargc, char*** pargv)
 		}
 	}
 }
-
-
 
 

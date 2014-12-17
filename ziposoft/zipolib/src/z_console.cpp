@@ -810,8 +810,12 @@ void z_console_base::OnTab()
 
 void z_console_base::OnDoubleBack()
 {
+	/*
+	TODO make path an array of objects instead of a string
 	if(	_path.size())
 		_path.pop_back();
+
+		*/
 	zout << "\n";
 	put_prompt();
 

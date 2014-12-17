@@ -13,6 +13,12 @@ extern "C" {
 
 void z_debug_out(const char*  s  );
 void z_debug_load_save_args(int* pargc, char*** pargv);
+int z_debug_break();
+
+void z_debug_printf(const char*  lpszFormat,  ...  );
+
+
+
 //DEBUG MACROS
 #ifdef DEBUG
 void z_debug_logfile(ctext name);
@@ -26,9 +32,7 @@ extern int gz_debug_break_on_error;
 #define Z_DEBUG_BREAK
 #endif
 
-int z_debug_break();
 
-void z_debug_printf(const char*  lpszFormat,  ...  );
 
 #define	DBG_OUT(_X_)   z_debug_printf _X_ ; 
 #if WIN32

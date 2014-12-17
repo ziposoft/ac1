@@ -196,7 +196,7 @@ VF<z_strlist>::dump(z_file& file, void* v)	const{RECAST(z_strlist,list);
 	file<<'}';
 	return zs_ok;
 }
-z_status zf_var_funcs<z_strlist>::load(zp_text_parser &parser, void* v,zf_feature_flags oper) const
+ template <>  z_status zf_var_funcs<z_strlist>::load(zp_text_parser &parser, void* v,zf_feature_flags oper) const
 {
 	RECAST(z_strlist,list);
 	if(!(oper&ZFF_SKIP))

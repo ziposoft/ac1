@@ -17,6 +17,10 @@ extern "C" {
 #define BUILD_GCC
 #define BUILD_MINGW
 
+#define OS_WINDOWS
+#define OS_UNIX
+#define OS_LINUX
+#define OS_MACOSX
 
 #define TARGET_X86
 #define TARGET_X86_32
@@ -95,6 +99,7 @@ ________________________________________________________________________*/
 
 #ifdef BUILD_GCC
 #define UNUSED  __attribute__ ((unused))
+#define __cdecl __attribute__((__cdecl__))
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

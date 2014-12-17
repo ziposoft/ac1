@@ -127,7 +127,8 @@ size_t z_file::getline(char* buff,size_t size)
 {
 	size_t i;
 	if (0==buff) return 0;
-	fgets( buff, (int)size, (FILE*)_file_handle );
+	if(fgets( buff, (int)size, (FILE*)_file_handle )==0)
+		return 0;
 	i=strlen(buff);
 	while( (i>0)&&
 		   (

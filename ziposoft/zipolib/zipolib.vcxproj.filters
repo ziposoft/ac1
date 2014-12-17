@@ -49,9 +49,6 @@
     <ClInclude Include="include\ptypes_cset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\z_files.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\z_os_specific.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -142,6 +139,9 @@
     <ClInclude Include="include\z_status.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\z_files.h">
+      <Filter>c</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\z_time.c">
@@ -160,9 +160,6 @@
       <Filter>c</Filter>
     </ClCompile>
     <ClCompile Include="src\z_debug.c">
-      <Filter>c</Filter>
-    </ClCompile>
-    <ClCompile Include="src\z_files.c">
       <Filter>c</Filter>
     </ClCompile>
     <ClCompile Include="src\z_os_specific.c">
@@ -250,6 +247,9 @@
       <Filter>factory</Filter>
     </ClCompile>
     <ClCompile Include="src\z_status.c">
+      <Filter>c</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_files.cpp">
       <Filter>c</Filter>
     </ClCompile>
   </ItemGroup>

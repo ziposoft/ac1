@@ -35,7 +35,8 @@ ifneq (,$(findstring mingw32,$(MACHINE)))
 else
 ifneq (,$(findstring linux,$(MACHINE)))
 	PLATFORM_BUILD=BUILD_GCC
-	CFLAGS+= -DUNIX -Wno-invalid-offsetof
+	CFLAGS+= -DUNIX 
+	CPPFLAGS+= -Wno-invalid-offsetof
 	LINK_OPTS+= -static  -lrt
 	OS=LINUX
 else

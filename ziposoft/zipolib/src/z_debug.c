@@ -11,6 +11,11 @@ int g_z_dbg_trace_mask=0;
 int gz_debug_break_on_error=0;
 
 
+
+
+
+
+
 #define MAX_DEBUG_STR 0x1000
 #if DEBUG
 
@@ -18,7 +23,9 @@ int gz_debug_break_on_error=0;
 int z_debug_break()
 {
 	if(gz_debug_break_on_error)
+	{
 		Z_DEBUG_BREAK;
+	}
 	return 1;
 }
 
@@ -86,6 +93,10 @@ void z_debug_out(const char*  str  )
 void z_debug_out(const char*  str  )
 {
 
+}
+int z_debug_break()
+{
+	return 1;
 }
 
 #endif

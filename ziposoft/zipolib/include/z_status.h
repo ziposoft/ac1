@@ -18,6 +18,7 @@ typedef enum  {
 	zs_fatal_error,//fatal errors below. Status above!
 	zs_error,
 	zs_could_not_open_dir,
+	zs_could_not_create_dir,
 	zs_could_not_open_file,
 	zs_not_open,
 	zs_already_open,

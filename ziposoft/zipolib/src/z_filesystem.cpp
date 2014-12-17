@@ -97,6 +97,56 @@ z_directory::~z_directory()
 		z_dir_close(_hDir);
 
 }
+z_status z_directory::traverse_tree()
+{
+	z_status status;
+	if(_hDir==0)
+	{
+		if(open(".")) 
+			return Z_ERROR_MSG(zs_could_not_open_dir,"Could not open local directory");
+	}
+	status=traverse_tree_recurse(_hDir);
+	return status;
+
+}
+void z_directory::callback_file(ctext name,ctext fullpath) 
+{
+
+	zout << name <<'\n';
+};
+void z_directory::callback_dir(ctext name,ctext fullpath) 
+{
+	zout << name <<'\n';
+
+
+};
+z_status z_directory::traverse_tree_recurse(z_directory_h dir)
+{
+	int type;
+	z_string filename;
+	ctext pname;
+	z_status status;
+	while(z_dir_get_next(dir,&pname,Z_DIR_TYPE_FILE|Z_DIR_TYPE_DIR,&type)==zs_ok)
+	{
+		if(type== Z_DIR_TYPE_DIR)
+		{
+			callback_dir(pname,pname);
+			z_directory_h subdir;
+			status=z_dir_open(pname,&subdir);
+			if(status==zs_ok)
+				traverse_tree_recurse(subdir);
+			z_dir_close(subdir);
+		}
+		else
+		{
+			callback_file(pname,pname);
+		}
+	}
+	
+	return zs_success;
+
+}
+
 z_status z_directory::get_files_by_extension(ctext ext,z_strlist &list)
 {
 	
@@ -110,7 +160,8 @@ z_status z_directory::get_files_by_extension(ctext ext,z_strlist &list)
 	z_string filename;
 	ctext pname;
 	list.clear();
-	while(z_dir_get_next(_hDir,&pname,Z_DIR_TYPE_FILE)==0)
+	int type;
+	while(z_dir_get_next(_hDir,&pname,Z_DIR_TYPE_FILE,&type)==0)
 	{
 		filename=pname;
 		size_t found=filename.find_last_of('.');

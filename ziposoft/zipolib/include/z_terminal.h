@@ -6,6 +6,12 @@
 #ifdef BUILD_VSTUDIO
 	#include <wincon.h>
 	#include <conio.h>
+#endif
+#ifdef BUILD_MINGW
+	#include <winbase.h>
+	#include <wincon.h>
+	#include <conio.h>
+
 #else
 #ifdef UNIX
 	#include <signal.h>
