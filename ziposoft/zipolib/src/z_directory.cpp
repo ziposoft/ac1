@@ -1,6 +1,7 @@
 #include "zipolib_cpp_pch.h"
 #include "zipolib/include/z_directory.h"
 #include "zipolib/include/z_temp_buff.h"
+#include "zipolib/include/z_error.h"
 #include "zipolib/include/z_util.h"
 #include "zipolib/include/z_os_specific.h"
 
@@ -122,7 +123,7 @@ z_status z_file_delete(utf8 name)
 #ifdef BUILD_VSTUDIO
 	ULONG error;
 	WCHAR* w_filepath=WCHAR_str_allocate(name,Z_MAX_PATH_LENGTH);
-	DBG_OUT(("z_file_delete: %s\n",name));
+	ZT("%s\n",name);
 	if(DeleteFile(w_filepath)==TRUE) 
 		status= zs_ok;
 	else
@@ -138,40 +139,46 @@ z_status z_file_delete(utf8 name)
 		status= zs_ok;
 
 #endif
+	if(status)
+		return Z_ERROR(status);
 	return status;
 }
 
-z_status z_directory_delete_tree(utf8 name)
+z_status z_directory_delete_tree(utf8 path)
 {
 	z_directory_h dir;
 	int type;
 	ctext pname;
 	z_status status;
-	DBG_OUT(("z_directory_delete_tree: %s\n",name));
-	status=z_dir_open(name,&dir);
+	ZT(" %s\n",path);
+	status=z_dir_open(path,&dir);
 	if(status)
 		return status;
+
 	while(z_dir_get_next(dir,&pname,Z_DIR_TYPE_FILE|Z_DIR_TYPE_DIR,&type)==zs_ok)
 	{
+		z_string subpath=path;
+		subpath<<'/'<<pname;
 		if(type== Z_DIR_TYPE_DIR)
 		{
-			status=z_directory_delete_tree(pname);
+			status=z_directory_delete_tree(subpath);
 		}
 		else
 		{
-			status=z_file_delete(pname);
+			status=z_file_delete(subpath);
 		}
  		if(status)
 			return status;
 	}
 	z_dir_close(dir);
-	return z_directory_delete(name);;
+	return z_directory_delete(path);;
 
 }
 
 z_status z_directory_delete(utf8 name)
 {
 	z_status status=zs_error;
+	ZT(" %s\n",name);
 #ifdef BUILD_VSTUDIO
 	ULONG error;
 	WCHAR* w_filepath=WCHAR_str_allocate(name,Z_MAX_PATH_LENGTH);
