@@ -93,7 +93,7 @@
     <ClInclude Include="include\z_factory.h" />
     <ClInclude Include="include\z_factory_var_funcs.h" />
     <ClInclude Include="include\z_file.h" />
-    <ClInclude Include="include\z_files.h" />
+    <ClInclude Include="include\z_directory.h" />
     <ClInclude Include="include\z_filesystem.h" />
     <ClInclude Include="include\z_list.h" />
     <ClInclude Include="include\z_logger.h" />
@@ -200,7 +200,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zipolib_cpp.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
-    <ClCompile Include="src\z_files.cpp">
+    <ClCompile Include="src\z_directory.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipo_cpp.pch</PrecompiledHeaderOutputFile>
