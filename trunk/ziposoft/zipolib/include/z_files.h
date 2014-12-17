@@ -23,6 +23,7 @@ z_status z_filesys_get_current_dir(char* dir,int length);
 
 z_status z_directory_change(utf8 dir,int create);
 z_status z_directory_delete(utf8 dir);
+z_status z_directory_delete_tree(utf8 name);
 
 z_status z_dir_create(utf8 dir_name);
 
@@ -33,7 +34,7 @@ void z_dir_close(z_directory_h h);
 
 #define Z_DIR_TYPE_DIR  1
 #define Z_DIR_TYPE_FILE 2
-z_status z_dir_get_next(z_directory_h h,utf8* currentfile,int type);
+z_status z_dir_get_next(z_directory_h h,utf8* currentfile,int requestedtypes,int *typeout);
 
 
 #if 0  //UNUSED

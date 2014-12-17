@@ -341,8 +341,8 @@ z_status z_factory::get_var_info(ctext name,z_memptr &offset,const zf_var_funcs_
 GLOBAL z_factory functions
 ________________________________________________________________________*/
 extern "C" {
-extern const zp_module_entry *zp_module_master_list_default[]={0};
-extern const  int zp_module_master_list_size_default=0;
+const zp_module_entry *zp_module_master_list_default[]={0};
+const  int zp_module_master_list_size_default=0;
 }
 
 

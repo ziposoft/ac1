@@ -39,7 +39,6 @@
 #include <string.h>
 #include <time.h>
 //#include "map.h"
-typedef const char* ctext;
 
 static ctext abb_weekdays[] = {
     "Sun",

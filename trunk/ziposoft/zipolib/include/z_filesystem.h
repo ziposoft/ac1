@@ -14,9 +14,13 @@ public:
 	virtual ~z_directory(); //current directory.
 	z_status open(ctext path,bool create =false);
 	void close();
-	 
+	z_status traverse_tree(); 
+	z_status traverse_tree_recurse(z_directory_h dir); 
 	z_status  get_files_by_extension(ctext ext,z_strlist &str);
 	z_status  set_to_cwdir();
+	virtual void callback_file(ctext name,ctext fullpath) ;
+	virtual void callback_dir(ctext name,ctext fullpath) ;
+
 
 };
 z_status z_filesys_getcwd(z_string& path);

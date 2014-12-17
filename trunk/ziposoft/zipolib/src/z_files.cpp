@@ -1,4 +1,4 @@
-#include "zipo.h"
+#include "zipolib_cpp_pch.h"
 #include "zipolib/include/z_files.h"
 #include "zipolib/include/z_temp_buff.h"
 #include "zipolib/include/z_util.h"
@@ -24,7 +24,7 @@
 /*
 
 */
-z_status z_file_exists(utf8 fname)
+z_status __cdecl z_file_exists(utf8 fname)
 {
 	FILE *file;
 	if ((file = fopen(fname, "r")) == NULL) 
@@ -43,7 +43,7 @@ z_status z_file_exists(utf8 fname)
 	
 }
 
-int z_filesys_get_current_dir(char* dir,int length)
+z_status __cdecl z_filesys_get_current_dir(char* dir,int length)
 {
 	if(getcwd(dir,length)==NULL)
 		return zs_bad_parameter; //TODO check for EACCES
@@ -124,6 +124,7 @@ z_status z_file_delete(utf8 name)
 #ifdef BUILD_VSTUDIO
 	ULONG error;
 	WCHAR* w_filepath=WCHAR_str_allocate(name,Z_MAX_PATH_LENGTH);
+	DBG_OUT(("z_file_delete: %s\n",name));
 	if(DeleteFile(w_filepath)==TRUE) 
 		status= zs_ok;
 	else
@@ -142,6 +143,33 @@ z_status z_file_delete(utf8 name)
 	return status;
 }
 
+z_status z_directory_delete_tree(utf8 name)
+{
+	z_directory_h dir;
+	int type;
+	ctext pname;
+	z_status status;
+	DBG_OUT(("z_directory_delete_tree: %s\n",name));
+	status=z_dir_open(name,&dir);
+	if(status)
+		return status;
+	while(z_dir_get_next(dir,&pname,Z_DIR_TYPE_FILE|Z_DIR_TYPE_DIR,&type)==zs_ok)
+	{
+		if(type== Z_DIR_TYPE_DIR)
+		{
+			status=z_directory_delete_tree(pname);
+		}
+		else
+		{
+			status=z_file_delete(pname);
+		}
+ 		if(status)
+			return status;
+	}
+	z_dir_close(dir);
+	return z_directory_delete(name);;
+
+}
 
 z_status z_directory_delete(utf8 name)
 {
@@ -172,23 +200,25 @@ z_status z_directory_delete(utf8 name)
 
 z_status    z_dir_create(utf8 dir_name)
 {
-#ifdef BUILD_VSTUDIO
-	return (mkdir(dir_name)) ;
-#elif defined( BUILD_MINGW) || defined(BUILD_VX)
-	return mkdir(dir_name /*S_IRUSR| S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH*/) ;
+#if defined  BUILD_VSTUDIO ||  defined( BUILD_MINGW) || defined(BUILD_VX)
+	return (mkdir(dir_name) ? zs_error : zs_ok);
 
 #else
-	return mkdir(dir_name,0xffff /*S_IRUSR| S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH*/) ;
+	return (mkdir(dir_name,0xffff /*S_IRUSR| S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH*/)  ? zs_error : zs_ok);
 
 #endif
 }
 z_status    z_directory_change(utf8 dir_name,int create)
 {
-	if(chdir(dir_name)==0) return zs_ok;
-	if(!create) return -1;
-	if(z_dir_create(dir_name)) return -2;
-	if(chdir(dir_name)) return -3;
-	return 0;
+	if(chdir(dir_name)==0) 
+		return zs_ok;
+	if(!create) 
+		return zs_could_not_open_dir;
+	if(z_dir_create(dir_name))
+		return zs_could_not_create_dir;
+	if(chdir(dir_name)) 
+		return zs_could_not_open_dir;
+	return zs_ok;
 }
 typedef struct _z_directory_t
 {
@@ -218,7 +248,7 @@ z_status z_dir_open(utf8 name,z_directory_h* h)
 	if((temp==INVALID_FILE_ATTRIBUTES) || ((FILE_ATTRIBUTE_DIRECTORY&temp)==0))
 	{
 		WCHAR_str_deallocate(wc_path);
-		return -1;
+		return zs_could_not_open_dir;
 	}
 
 	zdir=(_z_directory*)malloc(sizeof(_z_directory));
@@ -231,7 +261,7 @@ z_status z_dir_open(utf8 name,z_directory_h* h)
 	return zs_ok;
 }
 #else 
-int    z_dir_open(utf8 name,z_directory_h* h)
+z_status    z_dir_open(utf8 name,z_directory_h* h)
 {
 	_z_directory* zdir=(_z_directory*)malloc(sizeof(_z_directory));
 	zdir->handleDirectory=0;
@@ -245,61 +275,118 @@ int    z_dir_open(utf8 name,z_directory_h* h)
 }
 #endif
 
-z_status  z_dir_get_next(z_directory_h h,utf8* currentfile,int type)
+
+#ifdef BUILD_VSTUDIO
+
+z_status  z_dir_get_next(z_directory_h h,utf8* currentfile,int requestedtypes,int *typeout)
 {
-	int isDir;
+	int type;
 	int handle_dir=0;
 	_z_directory* zdir=(_z_directory*)h;
 	DBG_OUT(("z_dir_get_next\n"));
 	while(1)
 	{
-#ifdef BUILD_VSTUDIO
 		if(zdir->handleDirectory==0)
 		{
 			zdir->handleDirectory = FindFirstFile(zdir->wc_path, &(zdir->FindFileData));
 			if(INVALID_HANDLE_VALUE==zdir->handleDirectory)
 			{
 				zdir->handleDirectory=0;
-				return -1;
+				return zs_end_of_list;
 			}
 		}
 		else
 		if (FindNextFile(zdir->handleDirectory, &(zdir->FindFileData))==0) 
 		{
-			return -1;
+			return zs_end_of_list;
 		}
 
 		Unicode16ToAnsi(zdir->FindFileData.cFileName,zdir->path,MAX_PATH);
 		*currentfile=zdir->path;
-		isDir=(zdir->FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-#else
-		struct stat status;
-		zdir->entry=readdir(zdir->handleDirectory);
-		DBG_OUT(("zdir->entry=%x\n",zdir->entry));
-		if(!zdir->entry)
-			return -1;
-		*currentfile=zdir->entry->d_name;
-		DBG_OUT(("currentfile=%x %s\n",currentfile,*currentfile));
-#if defined( BUILD_MINGW) || defined(BUILD_VX)
-		isDir=opendir(zdir->entry->d_name);
-		if(isDir) close(isDir);
-		
-#else
-		isDir=(zdir->entry->d_type==DT_DIR);
-#endif
-		DBG_OUT(("isDir=%x\n",isDir));
+		type=((zdir->FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)?Z_DIR_TYPE_DIR:Z_DIR_TYPE_FILE);
 
-#endif
-		if(type&Z_DIR_TYPE_DIR)
-			if(!isDir) continue;
-		if(type&Z_DIR_TYPE_FILE)
-			if(isDir) continue;
+
+		if(!(requestedtypes&type))
+			continue;
+		*typeout=type;
 		if(strcmp(*currentfile,".")==0) continue;
 		if(strcmp(*currentfile,"..")==0) continue;
 		return zs_ok;
 	}
 	return zs_error; //TODO 
 }
+#else
+
+
+
+z_status  z_dir_get_next(z_directory_h h,utf8* currentfile,int requestedtypes,int *typeout)
+{
+	int type=0;;
+	int handle_dir=0;
+	_z_directory* zdir=(_z_directory*)h;
+	DBG_OUT(("z_dir_get_next\n"));
+	while(1)
+	{
+		struct stat status;
+		zdir->entry=readdir(zdir->handleDirectory);
+		DBG_OUT(("zdir->entry=%x\n",zdir->entry));
+		if(!zdir->entry)
+			return zs_end_of_list;
+		*currentfile=zdir->entry->d_name;
+		DBG_OUT(("currentfile=%x %s\n",currentfile,*currentfile));
+
+		type=0;
+#ifdef BUILD_GCC
+		switch(zdir->entry->d_type)
+		{
+		case DT_DIR:
+			type=Z_DIR_TYPE_DIR;
+			break;
+ 		case DT_REG:
+			type=Z_DIR_TYPE_FILE;
+			break;		
+		default:
+			type=0;
+			break;
+		}
+		DBG_OUT(("d_type=%x\n",zdir->entry->d_type));
+#endif
+		if(!type)
+		{
+			struct stat stat_struct;
+			if(stat(*currentfile,&stat_struct)==0)
+			{
+				if(S_ISDIR(stat_struct.st_mode))
+					type=Z_DIR_TYPE_DIR;
+ 				if(S_ISREG(stat_struct.st_mode))
+					type=Z_DIR_TYPE_FILE;
+			}
+
+		}
+#if 0 //all else fails, try to open it as a dir
+		handle_dir=opendir(zdir->entry->d_name);
+		if(handle_dir) 
+		{
+			type= Z_DIR_TYPE_DIR;
+			close(handle_dir);
+		}
+		else
+			type= Z_DIR_TYPE_FILE;
+#endif		
+
+		DBG_OUT(("type=%x\n",type));
+
+
+		if(!(requestedtypes&type))
+			continue;
+		*typeout=type;
+		if(strcmp(*currentfile,".")==0) continue;
+		if(strcmp(*currentfile,"..")==0) continue;
+		return zs_ok;
+	}
+	return zs_error; //TODO 
+}
+#endif
 
 void   z_dir_close(z_directory_h h)
 {
