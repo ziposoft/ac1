@@ -1,5 +1,5 @@
 #include "zipolib_cpp_pch.h"
-#include "zipolib/include/z_files.h"
+#include "zipolib/include/z_directory.h"
 #include "zipolib/include/z_temp_buff.h"
 #include "zipolib/include/z_util.h"
 #include "zipolib/include/z_os_specific.h"

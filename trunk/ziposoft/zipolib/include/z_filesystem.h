@@ -2,7 +2,7 @@
 #define z_filesystem_cpp_h
 #include "zipolib/include/zipo.h"
 #include "zipolib/include/z_list.h"
-#include "zipolib/include/z_files.h"
+#include "zipolib/include/z_directory.h"
 
 
 class z_directory
