@@ -303,8 +303,8 @@ z_status zb_ds_ham::open(bool create,bool writable)
 
 	for(i=0;i<list.size();i++)
 	{
-		z_string name,path,ext;
-		z_filesys_get_filename_from_path(list[i],path,name,ext);
+		z_string name;
+		z_filesys_get_path_parts(list[i],0,&name,0);
 
 		_ds_tables << new 
 			zb_ds_ham_tbl(this,name);

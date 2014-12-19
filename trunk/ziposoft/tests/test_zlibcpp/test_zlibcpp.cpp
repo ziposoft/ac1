@@ -38,6 +38,7 @@ public:
 	z_console console;
 	A a;
 	z_logger* _p_logger;
+	z_status act_path_parts();
 	z_status act_dir();
 	z_status act_delete_dir();
 };
@@ -60,7 +61,8 @@ ZFACT(root)
 		ZPARAM_X(_param_path,"path",ZFF_PARAM,"path ")	);
  	ZACT_XP(act_delete_dir,"deldir",ZFF_ACT_DEF,"Directory listing",1,
 		ZPARAM(_param_path)	);
-
+  	ZACT_XP(act_path_parts,"pathparts",ZFF_ACT_DEF,"pathparts",1,
+		ZPARAM(_param_path)	);
 };
 z_status root::act_dir()
 {
@@ -72,6 +74,20 @@ z_status root::act_delete_dir()
 {
 	return z_directory_delete_tree(_param_path);
 }
+z_status root::act_path_parts()
+{
+	z_string path_out;
+	z_string name_out;
+	z_string ext_out;
+	z_status st=z_filesys_get_path_parts(_param_path,&path_out,&name_out,&ext_out);
+
+	zout<<	 "path_out=" <<  path_out <<'\n';
+	zout<<	 "name_out=" <<  name_out <<'\n';
+	zout<<	 "ext_out=" <<  ext_out <<'\n';
+
+	return st;
+}
+
 /* static modules */
 ZP_MODULE_INCLUDE(  ZP_MOD(logger));
 

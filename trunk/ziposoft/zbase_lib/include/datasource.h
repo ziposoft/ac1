@@ -198,10 +198,20 @@ public:
 
 
 	z_obj_map<zb_ds_table> _ds_tables;
-	ctext get_map_key() { return _name; }
+	ctext get_map_key() 
+	{ 
+		return _name; 
+	}
 
 
-	//crap
+ 	/*_________________________
+	 
+	 Funcs
+	 _________________________*/
+
+
+	virtual z_status create_or_open();
+
 
  	/*_________________________
 	Instrumentation
@@ -217,6 +227,7 @@ public:
 	/*_________________________
 	Datasource Virtual Funcs
 	_________________________*/
+	virtual z_status check_exists(){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status open(bool create,bool writable){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status close(){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status delete_datasource(){ return Z_ERROR_NOT_IMPLEMENTED;};
@@ -238,7 +249,7 @@ public:
 
 };
 
-z_status zb_datasource_open(type_ds_type type,ctext path,zb_source* &ds);
+z_status zb_datasource_open(bool create,type_ds_type type,ctext path,zb_source* &ds);
 z_status zb_datasource_create(type_ds_type type,ctext path,zb_source* &ds);
 z_status zb_datasource_delete(type_ds_type type,ctext path);
 

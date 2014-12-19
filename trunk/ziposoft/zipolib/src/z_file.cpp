@@ -163,6 +163,8 @@ z_status z_file::getline(z_string& s)
 	val=fgets( tb, _max_line_length, (FILE*)_file_handle );
 	if(!val)
 	{
+		if(feof( (FILE*)_file_handle))
+			return 	zs_eof;
 		//TODO handle errors
 		return zs_read_error;
 	}

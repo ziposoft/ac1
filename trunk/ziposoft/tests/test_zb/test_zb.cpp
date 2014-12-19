@@ -19,7 +19,7 @@ public:
 	z_console console;
 	z_logger* _p_logger;
 	z_obj_map<zb_source> ds;
-	z_status create();
+	z_status opends();
 };
 /*
 ZFACT(source)
@@ -39,7 +39,7 @@ ZFACT(root)
 	ZOBJ(console);
 	//ZOBJ_X(zbs,"db",ZFF_PROP,"database");
 	ZPOBJ(_p_logger,"log",ZFF_PROP,"Logger");
- 	ZACT_XP(create,"create",ZFF_ACT_DEF,"create",2,
+ 	ZACT_XP(opends,"open",ZFF_ACT_DEF,"open",2,
 		ZPARAM_X(_param_db_name,"name",ZFF_PARAM,"Name of new database"),
 		ZPARAM_X(_param_db_type,"type",ZFF_PARAM,"Type of new database")		);
 	ZPROP(ds);
@@ -55,12 +55,17 @@ ZP_MODULE_INCLUDE(  ZP_MOD(logger));
 /*  ZP_MOD(zipobase) ,*/
 
 
-z_status root::create()
+z_status root::opends()
 {
 	zb_source* d=0;
-	
-	z_status s=zb_datasource_open((type_ds_type)_param_db_type,_param_db_name,d);
-	if(!d)
+	if(ds.get(	 _param_db_name))
+	  return zs_ok;
+
+	z_string path;
+	z_filesys_getcwd(path);
+	path<<'/'<<	 _param_db_name;
+	z_status s=zb_datasource_create((type_ds_type)_param_db_type,path,d);
+	if(s)
 		return s;
 	ds<<d;
 	return zs_ok;
