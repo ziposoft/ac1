@@ -202,7 +202,10 @@ public:
 	{ 
 		return _name; 
 	}
-
+	ctext get_full_path() 
+	{ 
+		return _fullpath; 
+	}
 
  	/*_________________________
 	 

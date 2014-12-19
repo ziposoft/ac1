@@ -263,7 +263,7 @@ z_status zb_source::commit()
 z_status zb_source::create_or_open()
 {
 	z_status status=open(false,true);
-	if(!status)
+	if(status)
 		return open(true,true);
 
 	return status;

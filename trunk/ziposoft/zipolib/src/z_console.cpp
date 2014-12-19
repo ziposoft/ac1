@@ -5,6 +5,7 @@
 
 ZFACT(z_console)
 {
+	ZACT_X(act_up,"up",ZFF_ACT_DEF,"Go up a level");
 	ZACT_X(exit,"q",ZFF_ACT_DEF,"Quit/Exit");
 	ZACT_X(list_features,"ls",ZFF_ACT_DEF,"List features");
 	ZACT(list_features);
@@ -395,7 +396,14 @@ z_status z_console::get_config_file_path(z_string& path)
 	return zs_ok;
 
 }
+z_status z_console::act_up()
+{
+	OnDoubleBack();
 
+
+	return zs_ok;
+
+}
 z_status z_console::loadcfg()
 {
 	z_string config_file_path;
