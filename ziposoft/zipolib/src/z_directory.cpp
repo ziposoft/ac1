@@ -198,11 +198,13 @@ z_status z_directory_delete(utf8 name)
 		if(error==ERROR_FILE_NOT_FOUND) 
 			status= zs_not_found;
 		else
+
 			PrintWin32Error();
 
 	}
 	WCHAR_str_deallocate(w_filepath);
 #else
+	//TODO! Handle linux errors
 	if(remove(name)==0)
 		status= zs_ok;
 

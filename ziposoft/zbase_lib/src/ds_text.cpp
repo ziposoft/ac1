@@ -68,11 +68,13 @@ z_status zb_ds_text::open(bool create,bool writable)
 
 z_status zb_ds_text::delete_datasource()															   
 {
-	close();//close any handles
-	z_directory_delete_tree(_fullpath);
+	z_status status=close();//close any handles
+	
+	if(status==zs_ok)
+		status=z_directory_delete_tree(_fullpath);
 
 	_status=status_does_not_exist;
-	return  zs_ok;
+	return  status;
 
 
 }
