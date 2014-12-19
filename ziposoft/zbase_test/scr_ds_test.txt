@@ -1,3 +1,5 @@
+open('csv_ds',1)
+ds[csv_ds].delete()
 create('csv_ds',1)
 ds[csv_ds]
 ls

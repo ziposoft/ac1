@@ -7,7 +7,11 @@
 
 #include <errno.h>
 #ifdef BUILD_VSTUDIO
-#include  <direct.h>
+
+//#include "Shlwapi.h"
+extern "C" {
+BOOL __stdcall  PathFileExistsW( LPCWSTR pszPath);
+}
 #else
 #include  <string.h>
 #include  <errno.h>
@@ -23,28 +27,32 @@
 /*
 
 */
-z_status __cdecl z_file_exists(utf8 fname)
+z_status __cdecl z_file_exists(utf8 in_filepath)
 {
-	FILE *file;
-	if ((file = fopen(fname, "r")) == NULL) 
-	{
-	  if (errno == ENOENT) 
-	  {
-		return zs_not_found;
-	  } else {
-		//TODO- Check for other errors too, like EACCES and EISDIR
-		return zs_not_found;
-	  }
-	} 
-	fclose(file);
+#ifdef BUILD_VSTUDIO
+
 	
-	return zs_ok;
-	
+	WCHAR* w_filepath=WCHAR_str_allocate(in_filepath,Z_MAX_PATH_LENGTH);
+
+	BOOL b=PathFileExistsW(	 w_filepath);
+
+	WCHAR_str_deallocate(w_filepath);
+	return (b? zs_ok  :zs_not_found);
+#else
+	struct stat buffer;   
+	return (stat (in_filepath, &buffer)? zs_not_found  :zs_ok);
+
+#endif
+
 }
 
 z_status __cdecl z_filesys_get_current_dir(char* dir,int length)
 {
+#ifdef BUILD_VSTUDIO
+	if(_getcwd(dir,length)==NULL)
+#else
 	if(getcwd(dir,length)==NULL)
+#endif
 		return zs_bad_parameter; //TODO check for EACCES
 	return zs_ok;
 }
@@ -167,7 +175,7 @@ z_status z_directory_delete_tree(utf8 path)
 		{
 			status=z_file_delete(subpath);
 		}
- 		if(status)
+		if(status)
 			return status;
 	}
 	z_dir_close(dir);
@@ -233,7 +241,7 @@ typedef struct _z_directory_t
 	HANDLE handleDirectory ;
 	WCHAR* wc_path;
 #else
-    DIR* handleDirectory ;
+	DIR* handleDirectory ;
 	struct dirent* entry;
 #endif
 
@@ -257,7 +265,7 @@ z_status z_dir_open(utf8 name,z_directory_h* h)
 	}
 
 	zdir=(_z_directory*)malloc(sizeof(_z_directory));
-	 _snwprintf_s( wc_path, MAX_PATH/2, MAX_PATH, L"%S//*", name);
+	_snwprintf_s( wc_path, MAX_PATH/2, MAX_PATH, L"%S//*", name);
 	zdir->handleDirectory=0;
 	zdir->wc_path=wc_path;
 	zdir->path=(char*)malloc(MAX_PATH);
@@ -301,22 +309,22 @@ z_status  z_dir_get_next(z_directory_h h,utf8* currentfile,int requestedtypes,in
 			}
 		}
 		else
-		if (FindNextFile(zdir->handleDirectory, &(zdir->FindFileData))==0) 
-		{
-			return zs_end_of_list;
-		}
+			if (FindNextFile(zdir->handleDirectory, &(zdir->FindFileData))==0) 
+			{
+				return zs_end_of_list;
+			}
 
-		Unicode16ToAnsi(zdir->FindFileData.cFileName,zdir->path,MAX_PATH);
-		*currentfile=zdir->path;
-		type=((zdir->FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)?Z_DIR_TYPE_DIR:Z_DIR_TYPE_FILE);
+			Unicode16ToAnsi(zdir->FindFileData.cFileName,zdir->path,MAX_PATH);
+			*currentfile=zdir->path;
+			type=((zdir->FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)?Z_DIR_TYPE_DIR:Z_DIR_TYPE_FILE);
 
 
-		if(!(requestedtypes&type))
-			continue;
-		*typeout=type;
-		if(strcmp(*currentfile,".")==0) continue;
-		if(strcmp(*currentfile,"..")==0) continue;
-		return zs_ok;
+			if(!(requestedtypes&type))
+				continue;
+			*typeout=type;
+			if(strcmp(*currentfile,".")==0) continue;
+			if(strcmp(*currentfile,"..")==0) continue;
+			return zs_ok;
 	}
 	return zs_error; //TODO 
 }
@@ -347,7 +355,7 @@ z_status  z_dir_get_next(z_directory_h h,utf8* currentfile,int requestedtypes,in
 		case DT_DIR:
 			type=Z_DIR_TYPE_DIR;
 			break;
- 		case DT_REG:
+		case DT_REG:
 			type=Z_DIR_TYPE_FILE;
 			break;		
 		default:
@@ -363,7 +371,7 @@ z_status  z_dir_get_next(z_directory_h h,utf8* currentfile,int requestedtypes,in
 			{
 				if(S_ISDIR(stat_struct.st_mode))
 					type=Z_DIR_TYPE_DIR;
- 				if(S_ISREG(stat_struct.st_mode))
+				if(S_ISREG(stat_struct.st_mode))
 					type=Z_DIR_TYPE_FILE;
 			}
 

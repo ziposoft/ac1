@@ -75,6 +75,7 @@ public:
  	 /*________________________________________
 	 Datasource Virtual Funcs
 	 __________________________________________*/
+	virtual z_status check_exists();
 	
 	virtual z_status open(bool create,bool writable);
 	virtual z_status close();

@@ -3,28 +3,56 @@
 #include "z_error.h"
 
 
-#ifdef UNIX
-const char path_slash='/';
-#else
-const char path_slash='\\';
-#endif
-z_status z_filesys_get_filename_from_path(z_string& fullpath,z_string& path_out,z_string& name_out,z_string& ext_out)
+const char unix_path_slash='/';
+const char win_path_slash='\\';
+z_status z_filesys_get_path_parts(z_string& fullpath,z_string* path_out,z_string* name_out,z_string* ext_out)
 {
+
+	//TODO make this UTF8 compatible
+	size_t len=fullpath.length();
+	size_t i;
+	for(i=0;i<len;i++)
+		if(fullpath[i]=='\\')
+			fullpath[i]='/';
+
+
+	size_t forslash=fullpath.rfind(unix_path_slash);
+	if(forslash==z_string::npos)  forslash=0;
+
+	size_t backslash=fullpath.rfind(win_path_slash);
+	if(backslash==z_string::npos)  backslash=0;
+	
+	size_t slash=(backslash>forslash?backslash:forslash);
+
+	if(slash)
+		slash++;
+
+
+	if(path_out)
+		path_out->assign(fullpath,0,slash);
+
+
 	size_t dot=fullpath.rfind(	'.');
-	size_t slash=fullpath.rfind(path_slash,dot);
-	if(dot==-1)
+
+	if((dot==-1)||(dot<slash))
 	{
+		//there is no extension
 		dot=fullpath.length();
+		if(ext_out)
+			*ext_out="";
+	
 	}
 	else
 	{
-		ext_out.assign(fullpath,dot+1,fullpath.length()-dot);
+		if(ext_out)
+			ext_out->assign(fullpath,dot+1,fullpath.length()-dot);
 	}
 	
-	if(slash==z_string::npos)
-		slash=0;
-	name_out.assign(fullpath,slash,dot-slash);
-	path_out.assign(fullpath,0,slash);
+
+	if(name_out)
+		name_out->assign(fullpath,slash,dot-slash);
+	if(path_out)
+	path_out->assign(fullpath,0,slash);
 
 
 	return zs_ok;

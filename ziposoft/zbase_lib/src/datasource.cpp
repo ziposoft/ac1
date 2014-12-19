@@ -232,10 +232,11 @@ z_status zb_ds_table::act_add_field()
 	zb_source
 ____________________________________________________________________________*/
 
-zb_source::zb_source(ctext name)
+zb_source::zb_source(ctext fullpath)
 {
-	_name=name;
-	_fullpath=name; //TODO
+	_fullpath=fullpath; //TODO
+	z_filesys_get_path_parts(_fullpath,0,&_name,0);
+
 	_status=status_closed;
 	auto_open=false;
 
@@ -259,6 +260,17 @@ z_status zb_source::commit()
 	return zs_ok;
 
 }
+z_status zb_source::create_or_open()
+{
+	z_status status=open(false,true);
+	if(!status)
+		return open(true,true);
+
+
+
+}
+
+
 
 z_status zb_source::ds_table_new(ctext ds_table_name,zb_ds_table*& tbl)
 {

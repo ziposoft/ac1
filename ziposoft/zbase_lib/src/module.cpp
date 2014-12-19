@@ -26,12 +26,13 @@ ZFACT_PV(zb_source)
 {
 	
 	ZPROP(auto_open);
+	ZPROP_X(_fullpath,"path",ZFF_PROP,"Path");
 	ZPROP_X(_name,"name",ZFF_PROP,"DB Name");
 	ZPROP_X(_ds_tables,"tbl",ZFF_PROP_NOLOAD,"Tables");
 	ZACT_XP(act_table_new,"new_table",ZFF_ACT_DEF,"Create a new table",1,
 		ZPARAM_X(_param_table_new_name,"tbl_name",ZFF_PARAM,"Name of new table")
 		);
-	ZACT_XP(act_open,"open",ZFF_ACT_DEF,"Open the DB",1,
+	ZACT_XP(act_open,"open",ZFF_ACT_DEF,"Open the DB",0,
 		//ZPARAM_X(_param_db_name,"db_name",ZFF_PARAM,"Name of new DB")
 		);
 	ZACT_XP(commit,"commit",ZFF_ACT_DEF,"Commit the DB",0,0);

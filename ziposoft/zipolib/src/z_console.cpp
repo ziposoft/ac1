@@ -43,8 +43,8 @@ z_console::z_console()
 void z_console::init(ctext appname)
 {
 	z_string full= appname;
-	z_string name,path,ext;
-	z_filesys_get_filename_from_path(full,path,name,ext);
+	z_string name;
+	z_filesys_get_path_parts(full,0,&name,0);
 
 	_config_file=z_get_filename_from_path(name);
 	_config_file+=".cfg";
@@ -261,24 +261,11 @@ void z_console:: OnTab()
 		//This is just to find the target object.
 		z_status status=EvaluatePath(_buffer);
 		Z_ERROR_DBG(status);
-		if(zs_unparsed_data==status)
+
+		if((status!=zs_unparsed_data) &&(status!=zs_ok)	   )
 		{
 			//if we could not parse the line, then dont try to auto-tab
 			return;
-		}
-		if((status!=zs_feature_not_found) &&(status!=zs_eof)	   )
-		{
-
-
-			return;
-			/*
-			zout <<"\nBad path\n";
-			
-			gz_logger.dump();
-				put_prompt();
-			return ;
-			*/
-			
 		}
 
 
@@ -458,6 +445,8 @@ z_status z_console::act_exec()
 	while(status==zs_ok)
 	{
 		status=f.getline(line);
+		if(status==zs_eof)
+			return zs_ok;
 		if(status==zs_ok)
 			status=ExecuteLine(line);		
 		if(status)

@@ -24,6 +24,13 @@ zb_ds_text::~zb_ds_text()
 {
 	//TODO delete 
 }
+
+z_status zb_ds_text::check_exists()
+{
+	return(z_file_exists(_name));
+
+}
+
 z_status zb_ds_text::open(bool create,bool writable)
 {
 	z_status status;
@@ -42,8 +49,8 @@ z_status zb_ds_text::open(bool create,bool writable)
 
 	for(i=0;i<list.size();i++)
 	{
-		z_string name,path,ext;
-		z_filesys_get_filename_from_path(list[i],path,name,ext);
+		z_string name;
+		z_filesys_get_path_parts(list[i],0,&name,0);
 		
 		_ds_tables << new 
 		//_tables << new 
@@ -62,7 +69,7 @@ z_status zb_ds_text::open(bool create,bool writable)
 z_status zb_ds_text::delete_datasource()															   
 {
 	close();//close any handles
-	z_directory_delete(_fullpath);
+	z_directory_delete_tree(_fullpath);
 
 	_status=status_does_not_exist;
 	return  zs_ok;
@@ -74,7 +81,8 @@ z_status zb_ds_text::delete_datasource()
 
 z_status zb_ds_text::close()
 {
-	 return Z_ERROR_NOT_IMPLEMENTED;
+	//nothing to do?
+	 return zs_ok;
 
 }
 z_status zb_ds_text::_table_new(ctext ds_table_name,zb_ds_table*& tbl)
