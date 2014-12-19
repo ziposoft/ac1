@@ -152,7 +152,13 @@ z_string & z_string::operator << (U32 i)
 #ifndef BUILD_VSTUDIO
 int itoa(int val,char* buffer,int radix);
 #endif
+const z_string & z_string::operator = (const wchar_t* wstr)
+{
+	std::wstring ws( wstr);
+	assign(ws.begin(), ws.end());
 
+	return *this;
+}
 const z_string & z_string::operator = (const int val)
 {
 	char buff[20];

@@ -266,7 +266,7 @@ z_status zb_source::create_or_open()
 	if(!status)
 		return open(true,true);
 
-
+	return status;
 
 }
 
@@ -305,7 +305,7 @@ z_status zb_source::act_delete_datasource()
 {
 	if(	_name=="")
 	{
-		Z_ERROR_MSG(zs_error,"Datasource name is blank");
+		Z_ERROR_MSG(zs_unknown_error,"Datasource name is blank");
 	}
 	return delete_datasource();
 
@@ -323,7 +323,7 @@ z_status zb_source::act_open()
 	return	 open(_param_db_name,true,true);
 	*/
 	if(_name=="")
-		Z_ERROR_MSG(zs_error,"Datasource name is blank");
+		Z_ERROR_MSG(zs_unknown_error,"Datasource name is blank");
 
 	return	 open(true,true);
 

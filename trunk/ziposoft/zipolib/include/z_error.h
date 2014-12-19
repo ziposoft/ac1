@@ -17,6 +17,9 @@ To stdout, to the zipo log, to the OS debug/trace facilities (DbgPrint), to cust
 
 */
 
+z_status z_get_os_error(z_string *msg=0);
+
+
 #define	Z_ERROR_NOT_IMPLEMENTED  get_logger().report_not_implemented (__FILE__,__FUNCTION__,__LINE__);
 
 #define	Z_ERROR_DBG(status)   get_logger().add_msg (z_logger_lvl_debug,__FILE__,__FUNCTION__,__LINE__,status,0);

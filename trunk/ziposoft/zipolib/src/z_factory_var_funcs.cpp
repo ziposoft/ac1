@@ -439,7 +439,7 @@ z_status zf_funcs_obj_list_base::dump(z_file& f, void* v) const
 		z_factory* fact=get_fact_from_obj(p);
 		if(!fact)
 		{
-			Z_ERROR_MSG(zs_error,"Could not get factory from object ");
+			Z_ERROR_MSG(zs_unknown_error,"Could not get factory from object ");
 		}
 		else
 		fact->dump_obj_static(f,p);

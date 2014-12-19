@@ -689,7 +689,7 @@ z_status z_console_base::parse_line(ctext text)
 	}
 	else
 		_parser.report_error();
-	return zs_error;
+	return zs_unknown_error;
 }
 */
 z_status z_console_base::ExecuteLine(ctext text)
@@ -728,7 +728,7 @@ void z_console_base::OnEnter()
 			switch(result)
 			{
 			case zs_success:
-			case zs_error:
+			case zs_unknown_error:
 				break;
 			default:
 				break;
