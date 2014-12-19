@@ -16,7 +16,7 @@ typedef enum  {
 	zs_end_of_list,
 	zs_child_not_found,
 	zs_fatal_error,//fatal errors below. Status above!
-	zs_error,
+	zs_unknown_error,
 	zs_could_not_open_dir,
 	zs_could_not_create_dir,
 	zs_could_not_open_file,
@@ -41,6 +41,7 @@ typedef enum  {
 	zs_parse_error,
 	zs_already_exists,
 	zs_not_found,
+	zs_access_denied,
 } z_status;
 ctext zs_get_status_text(z_status status);
 

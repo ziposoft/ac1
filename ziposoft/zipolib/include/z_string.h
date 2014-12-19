@@ -29,6 +29,9 @@ public:
 
 	z_string(int i) ;	
     U32 GetDecVal() const;
+
+	
+	const z_string & operator = (const wchar_t* wstr) ;
 	const z_string & operator = (const U32 i) ;
 	const z_string & operator = (const int i) ;
 	const z_string & operator = (std::string s) ;

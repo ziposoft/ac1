@@ -5,14 +5,13 @@ z_os_specific.h
 ________________________________________________________________________*/
 
 #include "zipolib/include/zipo.h"
-#ifndef z_windows_h
-#define z_windows_h
+#ifndef z_os_specific_h
+#define z_os_specific_h
+
+#ifdef OS_WINDOWS
 #ifdef	__cplusplus
 extern "C" {
 #endif
-
-#ifdef OS_WINDOWS
-
 
 U32 PrintWin32Error ();
 BOOL AnsiToUnicode16(utf8 in_Src, WCHAR *out_Dst, INT in_MaxLen);
@@ -24,11 +23,14 @@ char* UTF8_str_allocate(WCHAR* in_src);
 int UTF8_str_deallocate(char* in_src);
 BOOL Unicode16ToAnsi(WCHAR * in_Src, char* out_Dst, INT in_MaxLen);
 
-#endif
 
 
 #ifdef	__cplusplus
 }
+//z_status  get_win32_error (z_string);
+
+
 #endif
 #endif
 
+#endif //OS_WINDOWS

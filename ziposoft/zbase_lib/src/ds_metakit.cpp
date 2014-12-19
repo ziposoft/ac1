@@ -16,7 +16,7 @@ void  d4_assert(bool a)
 	if(!a)
 	{
 		Z_ASSERT(0);
-		Z_ERROR_MSG(zs_error,"metakit error");
+		Z_ERROR_MSG(zs_unknown_error,"metakit error");
 	}
 }
 /*____________________________________________________________________________

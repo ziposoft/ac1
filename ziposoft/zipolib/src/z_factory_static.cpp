@@ -95,7 +95,7 @@ z_status z_factory::create_child(void* obj,ctext var_name,z_factory* new_child_t
 	*ppChild=newobj;
 	if(newobj)
 		return zs_success;
-	return Z_ERROR_MSG(zs_error,"Could not create child object %s->%s[%s]\n", get_name(),var_name,	new_child_type->get_name());
+	return Z_ERROR_MSG(zs_unknown_error,"Could not create child object %s->%s[%s]\n", get_name(),var_name,	new_child_type->get_name());
 
 }
 void z_factory::clear_all_vars (void* obj) const

@@ -22,7 +22,7 @@ ERR(zs_eof,	0)
 ERR(zs_end_of_list,	0)
 ERR(zs_child_not_found,	0)
 ERR(zs_fatal_error,0)
-ERR(zs_error,0)
+ERR(zs_unknown_error,0)
 ERR(zs_could_not_open_dir,0)
 ERR(zs_could_not_open_file,0)
 ERR(zs_read_error,0)
@@ -46,7 +46,7 @@ ERR(zs_data_error,0)
 ERR(zs_parse_error,0)
 ERR(zs_already_exists,"already exists")
 ERR(zs_not_found,"not found")
-
+ERR(zs_access_denied,"Access Denied")
 
 };
 

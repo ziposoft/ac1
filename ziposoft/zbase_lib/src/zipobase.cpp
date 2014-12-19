@@ -19,7 +19,7 @@ z_status zb_validate_identifier(ctext text)
 
 	if(strlen(text))
 		return zs_ok ;
-	return zs_error;
+	return zs_unknown_error;
 
 	//TODO - 
 	static zp_text_parser p;
@@ -28,7 +28,7 @@ z_status zb_validate_identifier(ctext text)
 		return zs_syntax_error;
 	if(p.eob())
 		return zs_ok;
-	return zs_error;
+	return zs_unknown_error;
 }
 
 z_refcount::z_refcount()

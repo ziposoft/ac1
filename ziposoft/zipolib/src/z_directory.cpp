@@ -127,7 +127,7 @@ delete e;
 
 z_status z_file_delete(utf8 name)
 {
-	z_status status=zs_error;
+	z_status status=zs_unknown_error;
 #ifdef BUILD_VSTUDIO
 	ULONG error;
 	WCHAR* w_filepath=WCHAR_str_allocate(name,Z_MAX_PATH_LENGTH);
@@ -185,21 +185,17 @@ z_status z_directory_delete_tree(utf8 path)
 
 z_status z_directory_delete(utf8 name)
 {
-	z_status status=zs_error;
+	z_status status=zs_unknown_error;
 	ZT(" %s\n",name);
 #ifdef BUILD_VSTUDIO
-	ULONG error;
 	WCHAR* w_filepath=WCHAR_str_allocate(name,Z_MAX_PATH_LENGTH);
 	if(RemoveDirectory(w_filepath)==TRUE) 
 		status= zs_ok;
 	else
 	{
-		error=GetLastError();
-		if(error==ERROR_FILE_NOT_FOUND) 
-			status= zs_not_found;
-		else
-
-			PrintWin32Error();
+		z_string msg;
+		status=z_get_os_error(&msg);
+		Z_ERROR_MSG(status,"%s",msg.c_str());
 
 	}
 	WCHAR_str_deallocate(w_filepath);
@@ -216,10 +212,10 @@ z_status z_directory_delete(utf8 name)
 z_status    z_dir_create(utf8 dir_name)
 {
 #if defined  BUILD_VSTUDIO ||  defined( BUILD_MINGW) || defined(BUILD_VX)
-	return (mkdir(dir_name) ? zs_error : zs_ok);
+	return (mkdir(dir_name) ? zs_unknown_error : zs_ok);
 
 #else
-	return (mkdir(dir_name,0xffff /*S_IRUSR| S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH*/)  ? zs_error : zs_ok);
+	return (mkdir(dir_name,0xffff /*S_IRUSR| S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH*/)  ? zs_unknown_error : zs_ok);
 
 #endif
 }
@@ -328,7 +324,7 @@ z_status  z_dir_get_next(z_directory_h h,utf8* currentfile,int requestedtypes,in
 			if(strcmp(*currentfile,"..")==0) continue;
 			return zs_ok;
 	}
-	return zs_error; //TODO 
+	return zs_unknown_error; //TODO 
 }
 #else
 
@@ -399,7 +395,7 @@ z_status  z_dir_get_next(z_directory_h h,utf8* currentfile,int requestedtypes,in
 		if(strcmp(*currentfile,"..")==0) continue;
 		return zs_ok;
 	}
-	return zs_error; //TODO 
+	return zs_unknown_error; //TODO 
 }
 #endif
 

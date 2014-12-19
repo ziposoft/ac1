@@ -237,7 +237,7 @@ z_status zf_action::execute(z_file* f,zf_obj& obj)
 			param_index++;
 		}
 		if(parser.test_char(')'))
-			return Z_ERROR_MSG(zs_error,"Expected ')'\n");//???
+			return Z_ERROR_MSG(zs_unknown_error,"Expected ')'\n");//???
 	}											   
 
 	return zs_ok;//???
@@ -384,7 +384,7 @@ z_factory_dyn& z_factory::init_dynamic()
 			add_prop(ent->name,ent->name,funcs,(z_memptr)ent->offset,0/* flags! */,"?");
 			break;
 		default:
-			Z_ERROR_MSG(zs_error,"Unknown feature type: %d",ent->type);
+			Z_ERROR_MSG(zs_unknown_error,"Unknown feature type: %d",ent->type);
 			break;
 		}
 	}
