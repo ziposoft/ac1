@@ -37,7 +37,7 @@ z_status zb_ds_text::open(bool create,bool writable)
 	size_t i;
 
 
-	if(_status!=status_closed)
+	if(_status>=status_opened_read)
 		return zs_already_open;
 
 	status=_dir.open(_name,create);
@@ -57,11 +57,12 @@ z_status zb_ds_text::open(bool create,bool writable)
 			zb_ds_table_txt(this,name);
 
 	}
-
+	/*
 	status=z_directory_change(_name,false);
 	if(status)
   		return Z_ERROR_MSG(zs_could_not_open_file,"can't change to directory");
 
+		*/
 	_status=status_opened_write;
 	 return zs_ok;
 }
@@ -69,7 +70,9 @@ z_status zb_ds_text::open(bool create,bool writable)
 z_status zb_ds_text::delete_datasource()															   
 {
 	z_status status=close();//close any handles
-	
+	if(z_file_exists(_fullpath)!=zs_ok)
+		return zs_ok;
+
 	if(status==zs_ok)
 		status=z_directory_delete_tree(_fullpath);
 
@@ -84,6 +87,7 @@ z_status zb_ds_text::delete_datasource()
 z_status zb_ds_text::close()
 {
 	//nothing to do?
+	_status=status_closed;
 	 return zs_ok;
 
 }
@@ -118,6 +122,7 @@ zb_ds_table_txt::zb_ds_table_txt():zb_ds_table(0,0)
 zb_ds_table_txt::zb_ds_table_txt(zb_ds_text* ds,ctext unique_id):zb_ds_table(ds,unique_id)
 {
 	_ds=ds;
+	
 	_current_row=0;
 	_current_column=0;
 	_dirty=false;
@@ -181,9 +186,13 @@ zb_ds_rec_ptr* zb_ds_table_txt::record_solo_new()
 }
 ctext zb_ds_table_txt::get_file_name()
 {
-	if(!_file_name)
-		_file_name=	_id+".csv";
-	return _file_name;
+	if(!_file_path)
+	{
+		_file_path=_ds->get_full_path();
+		_file_path << '/';
+		_file_path <<	_id <<".csv";
+	}
+	return _file_path;
 
 }
 z_status zb_ds_table_txt::close()

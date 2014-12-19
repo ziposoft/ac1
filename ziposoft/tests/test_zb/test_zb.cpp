@@ -57,18 +57,19 @@ ZP_MODULE_INCLUDE(  ZP_MOD(logger));
 
 z_status root::opends()
 {
-	zb_source* d=0;
-	if(ds.get(	 _param_db_name))
-	  return zs_ok;
+	zb_source* d=ds.get(	 _param_db_name);
+	if(!d)
+	{
 
-	z_string path;
-	z_filesys_getcwd(path);
-	path<<'/'<<	 _param_db_name;
-	z_status s=zb_datasource_create((type_ds_type)_param_db_type,path,d);
-	if(s)
-		return s;
-	ds<<d;
-	return zs_ok;
+		z_string path;
+		z_filesys_getcwd(path);
+		path<<'/'<<	 _param_db_name;
+		z_status s=zb_datasource_create((type_ds_type)_param_db_type,path,d);
+		if(s)
+			return s;
+		ds<<d;
+	}
+	return d->create_or_open();
 }
 #if 0
 z_status root::create()

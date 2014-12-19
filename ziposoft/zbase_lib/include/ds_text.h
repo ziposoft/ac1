@@ -16,7 +16,7 @@ ___________________________________________________________________________*/
 class zb_ds_table_txt  : public zb_ds_table	  ,public z_parse_csv
 {
 	z_file _file;
-	z_string _file_name;
+	z_string _file_path;
 	std::vector<zb_rec_ptr_txt*>   _data;
 	zb_rec_ptr_txt* _current_row;
 	int _current_column;
