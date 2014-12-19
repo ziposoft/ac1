@@ -334,8 +334,11 @@ z_status z_console:: ExecuteLine(ctext text)
 	{
 		return evaluate_feature(_temp,false);
 	}
-	
-	Z_ERROR_MSG(zs_feature_not_found,"\"%s\" not a feature of \"%s\"",_cmd_line_feature.c_str(),_path.c_str());
+	z_string current_obj= _path;
+	if(!current_obj)
+		current_obj=_temp._fact->get_name();
+
+	Z_ERROR_MSG(zs_feature_not_found,"\"%s\" not a feature of \"%s\"",_cmd_line_feature.c_str(),current_obj.c_str());
 	return zs_feature_not_found;
 }
 
@@ -451,7 +454,7 @@ z_status z_console::act_exec()
 			status=ExecuteLine(line);		
 		if(status)
 		{
-			zout.putf("Error in script \"%s\" line #%d.\n",script.c_str(),line_number);
+			Z_LOG_ERROR_MSG("Error in script \"%s\" line #%d: \"%s\"\n",script.c_str(),line_number,line.c_str());
 			break;
 		}
 		line_number++;

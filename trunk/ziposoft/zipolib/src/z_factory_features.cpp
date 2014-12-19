@@ -222,13 +222,10 @@ z_status zf_action::execute(z_file* f,zf_obj& obj)
 	{
 
 		size_t param_index=0;
-		while( 1)
+		while( param_index<_params.size())
 		{
 			z_string s;
-			if(param_index>=_params.size())
-			{
-				return Z_ERROR_MSG(zs_error,"Too many parameters\n");//???
-			}				
+			
 			zf_feature* param=_params[param_index];
 			status=param->load(parser,o,ZFF_PRM);
 			if(status)
