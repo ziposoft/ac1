@@ -1,6 +1,7 @@
 #ifndef terminal_h
 #define terminal_h
 #include "zipolib/include/zipo.h"
+#include "zipolib/include/z_dbg.h"
 
 
 #ifdef BUILD_VSTUDIO
@@ -57,7 +58,11 @@ struct key_def
 	ctext code;
 };
 
+/*
 
+ToDO - this is terrible clean this up
+
+*/
 
 class z_terminal 
 {
@@ -74,9 +79,9 @@ protected:
 	const key_def* _key_map;
 
 #ifdef BUILD_VSTUDIO
-	HANDLE hStdout, hStdin; 
-	HANDLE hConsoleOutput;
-	CONSOLE_SCREEN_BUFFER_INFO csbiInfo; 
+	HANDLE _hStdout, _hStdin; 
+	//HANDLE _hConsoleOutput;
+	CONSOLE_SCREEN_BUFFER_INFO _csbiInfo; 
 #else
 #ifdef UNIX
 	struct termios term_original;
@@ -94,12 +99,13 @@ public:
 	enum term_type { tt_vt100=0, tt_windows=1,tt_max };
 	char char_back;
 	bool debug;
-
+	bool _opened;
 	//Cursor 
 	U32 cur_x;
 	U32 cur_y;
 	char  BuffPeekChar(size_t index)
 	{
+		Z_ASSERT( _pBuffer);
 		size_t x=index+_buffNext;
 		if (x>=_buffSize)
 			x=x-_buffSize;
@@ -113,7 +119,10 @@ public:
 	}
 	void  BuffAddChar(char c)
 	{
+		Z_ASSERT( _pBuffer);
 		//zout.putf("%c %02x\r\n",c,c);
+		if(!  _pBuffer) 
+			return; //TODO
 		_pBuffer[_buffEnd]=c;
 		_buffEnd++;
 		if(_buffEnd >=_buffSize) _buffEnd=0;

@@ -44,6 +44,7 @@ public:
 	void out_dbg(z_logger_level lvl,z_file* f,ctext file,ctext func,int line,z_status status,ctext msg);
 	void out(z_logger_level lvl,z_file* f,z_status status,ctext msg);
 	void dump(z_logger_level lvl,bool debug);
+	void clear();
 	int get_log_count();
 	void set_capture_level(z_logger_level lvl)
 	{
@@ -53,12 +54,12 @@ public:
 
 };
 
-#define	ZT(...)   { get_logger().add_msg (z_logger_lvl_trace,__FILE__,__FUNCTION__,__LINE__,zs_ok, __VA_ARGS__);}
+#define	ZT(...)   { z_logger_get().add_msg (z_logger_lvl_trace,__FILE__,__FUNCTION__,__LINE__,zs_ok, __VA_ARGS__);}
 
 
 void z_logger_dump();
 
-z_logger& get_logger();
+z_logger& z_logger_get();
 #define ZT_ENABLE() 
 
 #define	ZTF

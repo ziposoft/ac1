@@ -87,8 +87,7 @@ z_status zb_ds_text::delete_datasource()
 z_status zb_ds_text::close()
 {
 	//nothing to do?
-	_status=status_closed;
-	 return zs_ok;
+	 return zb_source::close();
 
 }
 z_status zb_ds_text::_table_new(ctext ds_table_name,zb_ds_table*& tbl)
@@ -279,9 +278,16 @@ z_status zb_ds_table_txt::open(bool writable)
 {
 
 	_current_column=0;
-	if(_status!=status_closed)
-		return zs_already_open;
-
+	if((_status>=status_opened_read)&&(!writable))
+	{
+		return zs_ok;
+		//return zs_already_open; ??????
+	}
+	if((_status>status_opened_read)&&(writable))
+	{
+		return zs_ok;
+		//return zs_already_open; ??????
+	}
 	ctext flags="r";
 	/*
 	current we just read it all in then write it all out on commit
@@ -306,6 +312,8 @@ z_status zb_ds_table_txt::open(bool writable)
 
 	z_string data;
 	_file.read_all(data);
+	_data.clear();
+	get_desc().clear();
 	ParseBuffer(data.c_str(),data.size());
 	_file.close();
 	_status=(writable? status_opened_write:status_opened_read);

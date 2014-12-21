@@ -9,7 +9,7 @@ class root
 public:
 	root()
 	{
-		_p_logger=&get_logger();
+		_p_logger=&z_logger_get();
 		_param_db_type=0;
 
 
@@ -58,18 +58,17 @@ ZP_MODULE_INCLUDE(  ZP_MOD(logger));
 z_status root::opends()
 {
 	zb_source* d=ds.get(	 _param_db_name);
-	if(!d)
-	{
+	if(d)
+		return d->create_or_open();
 
-		z_string path;
-		z_filesys_getcwd(path);
-		path<<'/'<<	 _param_db_name;
-		z_status s=zb_datasource_create((type_ds_type)_param_db_type,path,d);
-		if(s)
-			return s;
+	z_string path;
+	z_filesys_getcwd(path);
+	path<<'/'<<	 _param_db_name;
+	z_status s=zb_datasource_create((type_ds_type)_param_db_type,path,d);
+	if(s)
+		return s;
 		ds<<d;
-	}
-	return d->create_or_open();
+	return s;
 }
 #if 0
 z_status root::create()

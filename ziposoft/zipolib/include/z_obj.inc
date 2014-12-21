@@ -67,8 +67,7 @@ ZO_OBJ_LIST;
 	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,&_gz_factory_##_BASE_,_PARSE_,Z_PARSE_NS(_CLASS_)::varlist_length,&Z_PARSE_NS(_CLASS_)::varlist[0] };   \
 	template <>  const z_factory_info& z_factory_T<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; }	  \
 	template <> z_factory_T<_CLASS_>&  z_factory_T<_CLASS_>::self=_gz_factory_##_CLASS_;\
-	template <>  _CLASS_* z_factory_T<_CLASS_>	::static_create_new_obj(){ return z_new _CLASS_();}; \
-	template <> void z_factory_T<_CLASS_>::add_features_recurse(){}
+	template <>  _CLASS_* z_factory_T<_CLASS_>	::static_create_new_obj(){ return z_new _CLASS_();}; 
 
 ZO_OBJ_LIST;
 
