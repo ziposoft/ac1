@@ -8,8 +8,8 @@
 ________________________________________________________________________*/
 
 
-#ifndef z_factory_dyn_h
-#define z_factory_dyn_h
+#ifndef z_factory_features_h
+#define z_factory_features_h
 
 
 
@@ -93,7 +93,7 @@ public:
 	void* get_memvar_ptr(void* obj,int* iter=0) ;
 	virtual zf_action* get_action(){return 0;}
    	virtual z_status set_from_value(zp_value* val,void *obj) {return Z_ERROR_NOT_IMPLEMENTED; 	}
-  	virtual z_status load(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper);
+  	virtual z_status load(zp_text_parser &parser,const zf_obj& o,zf_feature_flags oper);
 	/* 
 	evaluate 
 	evaluate a feature as part of a command line
@@ -109,7 +109,7 @@ public:
 		return Z_ERROR_NOT_IMPLEMENTED;
 	}
 
- 	virtual z_status evaluate1(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper,int index=-1) 
+ 	virtual z_status evaluate1(zp_text_parser &parser, const zf_obj& o,zf_feature_flags oper,int index=-1) 
 	{
 		return Z_ERROR_NOT_IMPLEMENTED;
 	}
@@ -128,9 +128,9 @@ public:
 	z_obj_vector_map<zf_feature> _params;
 	virtual zf_action* get_action(){return this;}
 	virtual void display(z_file& f,void* obj);
-	z_status execute(z_file* f,zf_obj& obj);
-  	virtual z_status load(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper) ;
- 	virtual z_status evaluate1(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper,int index=-1) ;
+	z_status execute(z_file* f,const zf_obj& obj);
+  	virtual z_status load(zp_text_parser &parser,const zf_obj& o,zf_feature_flags oper) ;
+ 	virtual z_status evaluate1(zp_text_parser &parser, const zf_obj& o,zf_feature_flags oper,int index=-1) ;
 	virtual zf_feature_type get_type() const { return zf_ft_act; }
 	virtual z_status evaluate(z_factory_controller& controller,zf_obj& o,zf_feature_flags oper) ;
 };
@@ -150,9 +150,9 @@ public:
 	virtual void display(z_file& f,void* obj);
 	virtual z_status set_from_value(zp_value* val,void *obj) ;
 
-  	//virtual z_status load(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper) ;
+  	//virtual z_status load(zp_text_parser &parser,const zf_obj& o,zf_feature_flags oper) ;
  	virtual z_status get_string_val(z_string& out, void* v,int index=-1);
- 	virtual z_status evaluate1(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper,int index=-1) ;
+ 	virtual z_status evaluate1(zp_text_parser &parser, const zf_obj& o,zf_feature_flags oper,int index=-1) ;
 	virtual zf_feature_type get_type() const { return zf_ft_var; }
 	virtual z_status evaluate(z_factory_controller& controller,zf_obj& o,zf_feature_flags oper) ;
 
@@ -167,9 +167,9 @@ public:
 	/*
 	virtual z_status set_from_value(zp_value* val,void *obj) ;
 
-  	virtual z_status load(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper) ;
+  	virtual z_status load(zp_text_parser &parser,const zf_obj& o,zf_feature_flags oper) ;
  	virtual z_status get_string_val(z_string& out, void* v,int index=-1);
- 	virtual z_status evaluate1(zp_text_parser &parser, zf_obj& o,int index=-1) ;
+ 	virtual z_status evaluate1(zp_text_parser &parser, const zf_obj& o,int index=-1) ;
 	*/
 	virtual zf_feature_type get_type() const { return zf_ft_obj_list; }
 	virtual z_status on_tab(z_console* console) ;

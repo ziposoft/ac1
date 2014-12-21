@@ -4,7 +4,7 @@
 
 /*===========================================================================
 
-	zb_ds_desc
+zb_ds_desc
 =============================================================================*/
 zb_ds_field* zb_ds_desc::get_ds_field(ctext name)
 {
@@ -14,7 +14,7 @@ zb_ds_field* zb_ds_desc::get_ds_field(ctext name)
 
 /*===========================================================================
 
-	zb_ds_field
+zb_ds_field
 =============================================================================*/
 z_status zb_ds_field::set_string(zb_ds_rec_ptr *rec,ctext s){ return Z_ERROR_NOT_IMPLEMENTED;}
 z_status zb_ds_field::get_string(zb_ds_rec_ptr *rec,z_string& s){ return Z_ERROR_NOT_IMPLEMENTED;}
@@ -35,27 +35,27 @@ zb_ds_field::zb_ds_field(	ctext id)
 
 
 /*____________________________________________________________________________
-	zb_ds_rec_ptr
+zb_ds_rec_ptr
 ____________________________________________________________________________*/
 
 
 /*____________________________________________________________________________
-	zb_ds_rec_ptr
+zb_ds_rec_ptr
 ____________________________________________________________________________*/
- zb_ds_rec_ptr::zb_ds_rec_ptr()
+zb_ds_rec_ptr::zb_ds_rec_ptr()
 {
 
 
 }
 void zb_ds_rec_ptr::set(zb_ds_table* rs,size_t index)
 {
-	  Z_ERROR_NOT_IMPLEMENTED;
+	Z_ERROR_NOT_IMPLEMENTED;
 
 }
 
 /*===========================================================================
 
-	zb_ds_table
+zb_ds_table
 =============================================================================*/
 zb_ds_table::zb_ds_table(zb_source* ds,ctext unique_id)
 {
@@ -72,34 +72,34 @@ zb_ds_table::zb_ds_table()
 	Z_ASSERT(0);
 }
 /*______________________________
-	zb_ds_table	Virtual funcs 
+zb_ds_table	Virtual funcs 
 _______________________________*/
 
 z_status zb_ds_table::record_add(zb_ds_rec_ptr* rec)
 {
-	 return Z_ERROR_NOT_IMPLEMENTED;
+	return Z_ERROR_NOT_IMPLEMENTED;
 }
 z_status zb_ds_table::open(bool writable)
 {
-	 return Z_ERROR_NOT_IMPLEMENTED;
+	return Z_ERROR_NOT_IMPLEMENTED;
 }
 
 size_t zb_ds_table::get_record_count()
 {
 	Z_ERROR_NOT_IMPLEMENTED;
-	 return 0;
+	return 0;
 }
 z_status zb_ds_table::get_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
 {
-	 return Z_ERROR_NOT_IMPLEMENTED;
+	return Z_ERROR_NOT_IMPLEMENTED;
 }
 z_status zb_ds_table::test_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
 {
-	 return Z_ERROR_NOT_IMPLEMENTED;
+	return Z_ERROR_NOT_IMPLEMENTED;
 }
 z_status zb_ds_table::delete_record_by_index(size_t index)
 {
-	 return Z_ERROR_NOT_IMPLEMENTED;
+	return Z_ERROR_NOT_IMPLEMENTED;
 }
 ctext zb_ds_table::get_map_key()
 {
@@ -115,15 +115,16 @@ z_status zb_ds_table::field_add(zb_ds_field* fld)
 
 
 	_ds_desc<<fld;
-	 return zs_ok;
+	return zs_ok;
 
 }
 
 /*______________________________
-	zb_ds_table	INTERFACE funcs 
+zb_ds_table	INTERFACE funcs 
 _______________________________*/
- z_status zb_ds_table::act_record_add()
- {
+z_status zb_ds_table::act_record_add()
+{
+
 	zb_ds_field* fld=0;
 	zb_ds_desc &desc=get_desc();
 	zb_ds_rec_ptr* pRec=0;
@@ -131,7 +132,7 @@ _______________________________*/
 	z_status status;
 	size_t count_fields=0;
 	status=open(true);
-	if(! status)
+	if(status)
 		return status;
 
 
@@ -148,13 +149,13 @@ _______________________________*/
 	}
 	status=record_add(pRec);
 	return status;
- }
+}
 
- z_status zb_ds_table::act_record_del()
- {
-	  return delete_record_by_index(_param_record_index);
- }
- z_status zb_ds_table::act_dump_records()
+z_status zb_ds_table::act_record_del()
+{
+	return delete_record_by_index(_param_record_index);
+}
+z_status zb_ds_table::act_dump_records()
 {
 	z_status status;
 	zb_ds_rec_ptr* pRec=0;
@@ -229,7 +230,7 @@ z_status zb_ds_table::act_add_field()
 
 /*__________________________________________________________________________
 
-	zb_source
+zb_source
 ____________________________________________________________________________*/
 
 zb_source::zb_source(ctext fullpath)
@@ -258,8 +259,22 @@ z_status zb_source::commit()
 
 	}
 	return zs_ok;
-
 }
+
+z_status zb_source::close()
+{
+	z_map_iter i;
+	zb_ds_table* t;
+	while(t=_ds_tables.get_next(i))
+	{
+		t->close();
+
+	}
+	_ds_tables.clear();
+	_status= status_closed;
+	return zs_ok;
+}
+
 z_status zb_source::create_or_open()
 {
 	z_status status=open(false,true);
@@ -298,7 +313,7 @@ z_status zb_source::ds_table_get(ctext ds_table_name,zb_ds_table*& tbl)
 	tbl=_ds_tables.get(ds_table_name);
 	if(!tbl)
 		return Z_ERROR(zs_not_found);
-	
+
 	return zs_success;
 };
 z_status zb_source::act_delete_datasource()
@@ -316,9 +331,9 @@ z_status zb_source::act_open()
 	/*
 	if(	_param_db_name=="")
 	{
-		_param_db_name=_name;
-		if(	_param_db_name=="")
-			Z_ERROR_MSG(zs_bad_parameter,"You must specify a DB name");
+	_param_db_name=_name;
+	if(	_param_db_name=="")
+	Z_ERROR_MSG(zs_bad_parameter,"You must specify a DB name");
 	}
 	return	 open(_param_db_name,true,true);
 	*/

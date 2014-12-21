@@ -6,21 +6,22 @@
 ZFACT(z_console)
 {
 	ZACT_X(act_up,"up",ZFF_ACT_DEF,"Go up a level");
-	ZACT_X(exit,"q",ZFF_ACT_DEF,"Quit/Exit");
+	ZACT_X(act_exit,"q",ZFF_ACT_DEF,"Quit/Exit");
 	ZACT_X(list_features,"ls",ZFF_ACT_DEF,"List features");
 	ZACT(list_features);
 	ZACT(dumpcfg);
 	ZACT(savecfg);
 	ZACT(help);
-	ZACT(exit);
+	ZACT(act_exit);
 	ZACT(run);
 	ZPROP_X(_dump_cmd_line,"dump_cmdline",ZFF_PROP,"Dump the parsed command line contents");
-	ZPROP_X(_path,"path",ZFF_PROP,"Current path");
+	ZPROP_X(_param_path,"path",ZFF_PROP,"Current path");
 	ZPROP_X(_history,"history",ZFF_PROP,"Command line history");
  	ZACT_XP(loadcfg,"loadcfg",ZFF_ACT_DEF,"Load Config File",1,
 		ZPARAM_X(_config_file,"file",ZFF_PARAM,"Filename of config load"));
-	ZACT_XP(act_exec,"exec",ZFF_ACT_DEF,"Execute a script",1,
-		ZPARAM_X(_script_file,"script",ZFF_PARAM,"Filename of script to run"));
+	ZACT_XP(act_exec,"exec",ZFF_ACT_DEF,"Execute a script",2,
+		ZPARAM_X(_script_file,"script",ZFF_PARAM,"Filename of script to run"),
+		ZPARAM_X(_param_script_step,"script_step",ZFF_PARAM,"Single step script"));
 
 }
 
@@ -30,16 +31,13 @@ ZFACT(z_console)
 z_console
 ________________________________________________________________________*/
 
-z_console::z_console()
+z_console::z_console()	  :  z_factory_controller(&z_factory_T<z_console>::self,this)
 {
-	_self._fact=&z_factory_T<z_console>::self;
-	_self._obj=this;
-	_selected= _self;
-	_root._fact=0;
-	_root._obj=0;
+
 	_config_file="console.cfg";
 	_dump_cmd_line=false;
 	z_filesys_getcwd(_startup_path);
+	_param_script_step=false;
 }
 void z_console::init(ctext appname)
 {
@@ -52,6 +50,10 @@ void z_console::init(ctext appname)
 
 
 
+}
+void z_console::get_current_path(z_string &path)
+{
+	 get_current_text_path_from_obj_path(path);
 }
 
 z_status  z_console::runapp(int argc, char* argv[],bool autoloadcfg)
@@ -67,19 +69,16 @@ z_status  z_console::runapp(int argc, char* argv[],bool autoloadcfg)
 	int i;
 	if(argc==1)
 	{
-		select_obj_from_path(_root,_path);
-		_selected=_temp;
-		_path=_temp_path;
-
-		
+		select_obj_from_path(_param_path);
 		run();
 	}
 	else
 	{
-		_path="";
+		_param_path="";
 		for(i=1;i<argc;i++)
 		{
 
+			z_logger_get().clear();
 			status=ExecuteLine(argv[i]);
 
 			if(status)
@@ -100,33 +99,13 @@ z_status  z_console::runapp(int argc, char* argv[],bool autoloadcfg)
 void z_console::OnDoubleBack()
 {
 	
-	size_t slash=_path.rfind('/');
-	if(slash==-1)
-		_path="/";
-	else
-		_path.resize(slash);
-
-	_selected=_root;
-	z_string temp=_path;
-	_path="";
-	select_obj_from_path(_root,temp);
-	_selected=_temp;
-	_path=_temp_path;
+	path_up();
 	zout << "\n";
 	put_prompt();
 
 
 }
-z_status z_console::select_obj_from_path(zf_obj& start,z_string& path)
-{
-
-	ExecuteLine(path);
-
-
-	return zs_ok;
-
-}
-
+ /*
 z_status z_console::get_feature_and_index()
 {
 	z_status status;	
@@ -154,19 +133,19 @@ z_status z_console::get_feature_and_index()
 
 
 	return zs_ok;
-}
+}		
 
 z_status z_console::select_obj()
 {
 	zf_feature *f;
 	f=_temp._fact->get_feature(_cmd_line_feature);
 	if(!f)
-		return zs_feature_not_found; //NOT necessarly an error
+		return zs_feature_not_found; //NOT necessarily an error
 	int index=-1;
 	return f->get_zf_obj(_temp,_cmd_line_feature_index,_temp);
 
-}
-
+}	*/
+#if 0
 z_status z_console:: EvaluatePath(ctext text)
 {
 	ZT("%s",text);
@@ -174,7 +153,6 @@ z_status z_console:: EvaluatePath(ctext text)
 	_cmd_line_feature.clear();
 	_cmd_line_feature_index.clear();
 	_tparser.set_source(text);
- 	_has_path=false;
 
 	_temp= _selected;
 	_temp_path=_path;
@@ -182,7 +160,6 @@ z_status z_console:: EvaluatePath(ctext text)
 	{
 		_temp=_root;
 		_temp_path="";
-		_has_path=true;
 	}
 	while (1)
 	{
@@ -209,7 +186,6 @@ z_status z_console:: EvaluatePath(ctext text)
 			*/
 			return zs_unparsed_data; 
 		}
-		_has_path=true;
 
 		_temp_path<<"/"<<_cmd_line_feature;
 		if(_cmd_line_feature_index)
@@ -232,21 +208,22 @@ z_status z_console:: EvaluatePath(ctext text)
 	//should never get here	
 	return status;
 }
-bool z_console::is_feature(zf_obj& o)
+#endif
+bool z_console::is_feature(const zf_obj& o,z_string& name)
 {
 	zf_feature *zff;
-	zff=o._fact->get_feature(_cmd_line_feature);
+	zff=o._fact->get_feature(name);
 	return (zff!=0);
 }
-z_status z_console::evaluate_feature(zf_obj& o,bool justatest)
+z_status z_console::evaluate_feature(const zf_obj& o,z_string& name,z_string& idx)
 {
 	zf_feature *zff;
-	zff=o._fact->get_feature(_cmd_line_feature);
+	zff=o._fact->get_feature(name);
 	if(!zff)
 		return zs_feature_not_found;
 	int index=-1;
-	if(_cmd_line_feature_index)
-		index=_cmd_line_feature_index.GetDecVal();
+	if(idx)
+		index=idx.GetDecVal();
 
 
 
@@ -260,34 +237,38 @@ void z_console:: OnTab()
 	if(!_tab_mode)
 	{
 		//This is just to find the target object.
-		z_status status=EvaluatePath(_buffer);
+		zf_obj selected=get_selected();
+		z_fact_obj_path obj_path;
+		z_string feature;
+		z_string feature_index;
+		z_status status=EvaluatePath(_buffer,selected,obj_path,feature,feature_index);
 		Z_ERROR_DBG(status);
 
-		if((status!=zs_unparsed_data) &&(status!=zs_ok)	   )
+		if((status!=zs_unparsed_data) &&(status!=zs_ok)	  &&(status!=zs_eof)	   )
 		{
-			//if we could not parse the line, then dont try to auto-tab
+			//if we could not parse the line, then don't try to auto-tab
 			return;
 		}
 
 
 		_auto_tab.clear();		
-		_temp._fact->get_list_features(_auto_tab,_temp._obj);
-		if(!_has_path)
+		selected._fact->get_list_features(_auto_tab,selected._obj);
+		if(obj_path.size()==0)	//only autotab the console features if there is no partial path on command line
 		{
-			_self._fact->get_list_features(_auto_tab,_self._obj);
+			get_self()._fact->get_list_features(_auto_tab,get_self()._obj);
 
 		}
 
 		_tab_mode_line_index=get_line_length();
 
 
-		if(_cmd_line_feature)
+		if(feature)
 		{
-			_tab_mode_line_index-=_cmd_line_feature.size();
+			_tab_mode_line_index-=feature.size();
 			size_t i=0;
 			while(i<_auto_tab.size())
 			{
-				if(_auto_tab[i].compare(0,_cmd_line_feature.size(),_cmd_line_feature))
+				if(_auto_tab[i].compare(0,feature.size(),feature))
 					_auto_tab.del(i);
 				else
 					i++;
@@ -313,11 +294,17 @@ void z_console:: OnTab()
 z_status z_console:: ExecuteLine(ctext text)
 {
 	ZT("%s",text);
-	z_status status=EvaluatePath(text);
+	_temp_selected_obj=get_selected();
+	z_logger_get().clear();
+	z_fact_obj_path obj_path=get_path();
+	z_string feature;
+	z_string feature_index;
+	z_status status=EvaluatePath(text,_temp_selected_obj,obj_path,feature,feature_index);
+
 	if((status==zs_ok)||(status==zs_eof)) //just a path change
 	{
-		_path=_temp_path;
-		_selected=_temp;
+		set_path(obj_path);
+		set_selected(_temp_selected_obj);
 		return zs_ok;
 	}
 	if(status!=zs_unparsed_data)
@@ -327,19 +314,22 @@ z_status z_console:: ExecuteLine(ctext text)
 	}
 
 	//if no path is specified, then try the built in commands
-	if(is_feature(_self))
+	if(is_feature(get_self(),feature))
 	{
-		return evaluate_feature(_self,false);
+		return evaluate_feature(get_self(),feature,feature_index);
 	}
-	if(is_feature(_temp))
+	if(is_feature(_temp_selected_obj,feature))
 	{
-		return evaluate_feature(_temp,false);
+		return evaluate_feature(_temp_selected_obj,feature,feature_index);
 	}
-	z_string current_obj= _path;
-	if(!current_obj)
-		current_obj=_temp._fact->get_name();
+	z_string text_path;
+	/*
+	if(obj_path.size())
+		obj_path.get_path_string( text_path);
+	else			*/
+		text_path=_temp_selected_obj._fact->get_name();
 
-	Z_ERROR_MSG(zs_feature_not_found,"\"%s\" not a feature of \"%s\"",_cmd_line_feature.c_str(),current_obj.c_str());
+	Z_ERROR_MSG(zs_feature_not_found,"\"%s\" not a feature of \"%s\"",feature.c_str(),text_path.c_str());
 	return zs_feature_not_found;
 }
 
@@ -353,37 +343,37 @@ z_status z_console::list_features()
 	zf_feature_list list;
 
 	zout.indent_inc();
-	_temp._fact->get_map_features(list,zf_ft_var,ZFF_LIST);
-	_temp._fact->get_map_features(list,zf_ft_obj_list,ZFF_LIST);
+	_temp_selected_obj._fact->get_map_features(list,zf_ft_var,ZFF_LIST);
+	_temp_selected_obj._fact->get_map_features(list,zf_ft_obj_list,ZFF_LIST);
 	zout << "\nVariables:\n";
 	while(p_feature=list.get_next(iter))
 	{
-		p_feature->display(	zout,	_temp._obj);
+		p_feature->display(	zout,	_temp_selected_obj._obj);
 	}
 	iter.reset();
 	list.clear();
-	_temp._fact->get_map_features(list,zf_ft_act,ZFF_LIST);
+	_temp_selected_obj._fact->get_map_features(list,zf_ft_act,ZFF_LIST);
 	zout << "\nActions:\n";
 	while(p_feature=list.get_next(iter))
 	{
-		p_feature->display(	zout,	_temp._obj);
+		p_feature->display(	zout,	_temp_selected_obj._obj);
 	}
 	list.clear();
 	iter.reset();
-	_temp._fact->get_map_features(list,zf_ft_obj,ZFF_LIST);
+	_temp_selected_obj._fact->get_map_features(list,zf_ft_obj,ZFF_LIST);
 	zout << "\nChild Objects:\n";
 	while(p_feature=list.get_next(iter))
 	{
-		p_feature->display(	zout,	_temp._obj);
+		p_feature->display(	zout,	_temp_selected_obj._obj);
 	}
 
 	zout << "\n";
-
+	zout.indent_dec();
 	return zs_ok;
 }
 z_status z_console::dumpcfg()
 {
- 	_temp._fact->dump_obj_static(zout,_temp._obj);
+ 	_temp_selected_obj._fact->dump_obj_static(zout,_temp_selected_obj._obj);
 	zout << "\n";
 
 	return zs_ok;
@@ -398,9 +388,9 @@ z_status z_console::get_config_file_path(z_string& path)
 }
 z_status z_console::act_up()
 {
-	OnDoubleBack();
+	path_up();
 
-
+	//OnDoubleBack();
 	return zs_ok;
 
 }
@@ -418,7 +408,7 @@ z_status z_console::loadcfg()
 	parser.set_source(data_in,data_in.size());
 
 
-	z_status status=_root._fact->load_obj_contents(parser,_root._obj,ZFF_LOAD);
+	z_status status=get_root()._fact->load_obj_contents(parser,get_root()._obj,ZFF_LOAD);
 	if(status!=zs_ok)
 	{
 		Z_ERROR_MSG(status,"Load config file failed!");
@@ -438,11 +428,12 @@ z_status z_console::savecfg()
 	z_string config_file_path;
 	get_config_file_path(config_file_path);
 	z_file f(config_file_path,"wb");
-	_root._fact->dump_obj_contents_static(f,_root._obj);
+	get_root()._fact->dump_obj_contents_static(f,get_root()._obj);
 	return zs_ok;
 }
 z_status z_console::act_exec()
 {
+	terminal_open();
 	//We have to be careful with act params on recursive functions
 	z_string script=_script_file;//This func can be called recursively!
 	if(!script)
@@ -460,10 +451,17 @@ z_status z_console::act_exec()
 			return zs_ok;
 		if(status==zs_ok)
 			status=ExecuteLine(line);		
+
 		if(status)
 		{
 			Z_LOG_ERROR_MSG("Error in script \"%s\" line #%d: \"%s\"\n",script.c_str(),line_number,line.c_str());
 			break;
+		}
+		if(_param_script_step)
+		{
+ 			zout.putf("[hit any key to continue]\n");
+			WaitForKey();
+
 		}
 		line_number++;
 
@@ -479,10 +477,10 @@ z_status z_console::act_exec()
 
 z_status z_console::help()
 {
-	_temp=_self;
+	_temp_selected_obj=get_self();
 	return list_features();
 }
-z_status z_console::exit()
+z_status z_console::act_exit()
 {
 	zout<< "exiting.\n";
 	_running=false;
@@ -681,7 +679,9 @@ z_status z_console_base::run()
 
 void z_console_base::put_prompt()
 {
-	zout  << "/"<<_path<<">";
+	z_string s;
+	get_current_path(s);
+	zout  <<s<<">";
 
 	//_obj_current->get_path(_path);
 	reset_line();
@@ -742,7 +742,7 @@ void z_console_base::OnEnter()
 				break;
 			}
 			//z_logger_dump();
-			if(get_logger().get_log_count()==0)
+			if(z_logger_get().get_log_count()==0)
 			{
 				Z_ERROR_MSG(result,"command failed: \"%s\"",zs_get_status_text(result));
 			}

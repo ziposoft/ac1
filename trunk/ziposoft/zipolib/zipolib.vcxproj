@@ -179,6 +179,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zipolib_cpp.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
+    <ClCompile Include="src\z_factory_controller.cpp" />
     <ClCompile Include="src\z_factory_dyn.cpp">
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipo_cpp.pch</PrecompiledHeaderOutputFile>
     </ClCompile>

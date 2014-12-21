@@ -48,9 +48,10 @@ protected:
     virtual void OnDoubleBack();
     virtual void put_prompt();
 public:
-	z_string  _path;
+	z_string  _param_path;
 	z_strlist _history;
 
+  	virtual void get_current_path(z_string &path)=0;
 
 	z_console_base();
 	z_status run();
@@ -73,52 +74,33 @@ public:
 	NEW METHOD
 */
 	virtual z_status ExecuteLine(ctext text);
-	virtual z_status EvaluatePath(ctext  text);
+	//virtual z_status EvaluatePath(ctext  text);
 	//virtual z_status EvaluateLine2(ctext  text);
-	z_string _cmd_line_feature;
-	z_string _cmd_line_feature_index;
-	bool _has_path;
-	z_status evaluate_feature(zf_obj& o,bool justatest);
-	bool is_feature(zf_obj& o);
-	z_status get_feature_and_index();
-	z_status select_obj();
+	//z_string _cmd_line_feature;
+	//z_string _cmd_line_feature_index;
+	z_status evaluate_feature(const zf_obj& o,z_string& name,z_string& idx);
+	bool is_feature(const zf_obj& o,z_string& name);
+	//z_status get_feature_and_index();
+	//z_status select_obj();
     virtual void OnTab();
 
-/*	
-	OLD METHOD
-*/
-#if OLD
-	virtual z_status ExecuteLine_old(ctext text);
-	virtual z_status EvaluateLine_old(ctext text);
-	z_status evaluate_feature_old(zf_obj& o);
- 	z_status select_obj_old(zp_feature* zpf);
 
-    virtual void OnTab_old();
-#endif
- 	z_status select_obj_from_path(zf_obj& start,z_string& path);
-	//void get_auto_complete_list(z_string& partial);
-
-
-
+	zf_obj _temp_selected_obj;
 
 	bool _has_feature;
 
 	void init(ctext appname);
 
 
-	template <class CLASS> void setroot(CLASS * obj)
-	{
-		_root._obj=obj;
-		_root._fact=&z_factory_T<CLASS>::self;
-		_selected= _root;
 
-	}
 
-	 z_status  runapp(int argc, char* argv[],bool loadcfg);
+	z_status  runapp(int argc, char* argv[],bool loadcfg);
+  	virtual void get_current_path(z_string &path);
 
 	//command line props
 	bool _dump_cmd_line;
 	z_string _script_file;
+	bool _param_script_step;
 	z_string _config_file;
 	z_string _startup_path;
 	z_status get_config_file_path(z_string& path);
@@ -131,7 +113,7 @@ public:
 	z_status act_exec();
 	z_status help();
 	z_status shell();
-	z_status exit();
+	z_status act_exit();
 	z_status act_up();
 	
 

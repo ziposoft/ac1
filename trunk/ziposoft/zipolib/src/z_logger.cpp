@@ -42,9 +42,9 @@ z_logger_msg::z_logger_msg(z_logger_level lvl,ctext file,ctext func,int line,z_s
 void z_logger_msg::dump(z_file *fp,z_logger_level lvl,bool debug)
 {
 	if(debug)
-	get_logger().out_dbg(_lvl,fp,_source_file, _source_function,_source_line,_status,_msg.c_str());
+	z_logger_get().out_dbg(_lvl,fp,_source_file, _source_function,_source_line,_status,_msg.c_str());
 	else
-	get_logger().out(_lvl,fp,_status,_msg.c_str());
+	z_logger_get().out(_lvl,fp,_status,_msg.c_str());
 
 }
 
@@ -112,7 +112,13 @@ int z_logger::get_log_count()
 	return _log.size();
 
 }
+void z_logger::clear()
+{
 
+	_log.clear();
+
+
+}
 void z_logger::dump(z_logger_level lvl,bool debug )
 {
 	size_t i;
@@ -126,10 +132,10 @@ void z_logger::dump(z_logger_level lvl,bool debug )
 }
 void z_logger_dump()
 {
-	get_logger().dump(z_logger_lvl_warning,false);
+	z_logger_get().dump(z_logger_lvl_warning,false);
 }
 
-z_logger& get_logger()
+z_logger& z_logger_get()
 {
 	static z_logger gz_logger;
 	return gz_logger;

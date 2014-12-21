@@ -232,7 +232,7 @@ public:
 	_________________________*/
 	virtual z_status check_exists(){ return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status open(bool create,bool writable){ return Z_ERROR_NOT_IMPLEMENTED;};
-	virtual z_status close(){ return Z_ERROR_NOT_IMPLEMENTED;};
+	virtual z_status close();
 	virtual z_status delete_datasource(){ return Z_ERROR_NOT_IMPLEMENTED;};
 
 

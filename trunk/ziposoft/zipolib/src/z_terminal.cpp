@@ -19,11 +19,12 @@ z_terminal::z_terminal()
 	_pBuffer=0;
 #ifdef WIN32
 	set_key_map(tt_windows);
-	hStdout=NULL;
-	hStdin=NULL;
+	_hStdout=NULL;
+	_hStdin=NULL;
 #else
 	set_key_map(tt_vt100);
 #endif
+	_opened=false;
 };
 
 size_t  z_terminal::BuffGetCount() 
@@ -36,10 +37,13 @@ size_t  z_terminal::BuffGetCount()
 }
 bool z_terminal::terminal_open()
 {
+	if(	_opened)
+		return true;	
 	debug=false;
 #ifdef WIN32
-	hStdin = GetStdHandle(STD_INPUT_HANDLE);
-	hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	_hStdin = GetStdHandle(STD_INPUT_HANDLE);
+	_hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 #endif
 #ifdef UNIX
 	if(tcgetattr(fileno(stdin), &term_original) < 0)
@@ -60,6 +64,7 @@ bool z_terminal::terminal_open()
 	_buffNext=0;
 	_buffEnd=0;
 	GetXY();
+	_opened=true;
 	return(0);
 
 }
@@ -74,7 +79,7 @@ void z_terminal::OutChar(char c)
 void z_terminal::Close()
 {
 
-
+	_opened=false;
 
 
 }
@@ -157,11 +162,11 @@ bool z_terminal::GetKey(enum_key& key,char &c)
 
 void z_terminal::GetXY()
 {
-	BOOL b=GetConsoleScreenBufferInfo(hStdout,&csbiInfo);
+	BOOL b=GetConsoleScreenBufferInfo(_hStdout,&_csbiInfo);
 	if(b)
 	{
-		cur_x=csbiInfo.dwCursorPosition.X;
-		cur_y=csbiInfo.dwCursorPosition.Y;
+		cur_x=_csbiInfo.dwCursorPosition.X;
+		cur_y=_csbiInfo.dwCursorPosition.Y;
 	}
 	else
 	{
@@ -174,7 +179,7 @@ void z_terminal::curGotoXY(U32 x,U32 y)
 	COORD coord;
 	coord.X=x;
 	coord.Y=y;
-	SetConsoleCursorPosition(hStdout,coord);
+	SetConsoleCursorPosition(_hStdout,coord);
 }
 void z_terminal::curLeft(U32 x)
 {

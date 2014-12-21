@@ -62,7 +62,7 @@ void zf_feature::dump(z_file& f,void* obj)
 	f <<'\n';
 }
 
- z_status zf_feature::load(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper) 
+ z_status zf_feature::load(zp_text_parser &parser,const zf_obj& o,zf_feature_flags oper) 
  {
 	void* ftr_ptr=0;
 	if(!(oper & _flags))
@@ -189,7 +189,7 @@ void zf_action::display(z_file& f,void* obj)
 
 	f <<")\n";
 }
-z_status zf_action::execute(z_file* f,zf_obj& obj)
+z_status zf_action::execute(z_file* f,const zf_obj& obj)
 {
 	z_string s;
 	if(f)
@@ -215,7 +215,7 @@ z_status zf_action::execute(z_file* f,zf_obj& obj)
 	z_status ret=obj._fact->execute_act_ptr	(obj._obj,_offset);
 	return ret;
 }
- z_status zf_action::load(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper) 
+ z_status zf_action::load(zp_text_parser &parser,const zf_obj& o,zf_feature_flags oper) 
  {
 	z_status status;
  	if(parser.test_char('(')==zs_ok)
@@ -243,7 +243,7 @@ z_status zf_action::execute(z_file* f,zf_obj& obj)
 	return zs_ok;//???
  }
 
- z_status zf_action::evaluate1(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper,int index)
+ z_status zf_action::evaluate1(zp_text_parser &parser, const zf_obj& o,zf_feature_flags oper,int index)
  {
 	z_status status=load(parser,o,oper);
 	if(status==zs_ok)				   
@@ -298,14 +298,14 @@ zf_prop::zf_prop(ctext id,ctext name,const zf_var_funcs_base* funcs,z_memptr off
 	return zs_ok;
  }
  /*
- z_status zf_prop::load(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper) 
+ z_status zf_prop::load(zp_text_parser &parser,const zf_obj& o,zf_feature_flags oper) 
  {
 	 if(!(oper & _flags)) return zs_skipped;
 	void* ftr_ptr=(char*)o._obj+_offset;
 	return df->load(parser,ftr_ptr,oper);
 
  }	*/
- z_status zf_prop::evaluate1(zp_text_parser &parser, zf_obj& o,zf_feature_flags oper,int index)
+ z_status zf_prop::evaluate1(zp_text_parser &parser, const zf_obj& o,zf_feature_flags oper,int index)
  {
 	z_status status;
 	if(parser.test_char('=')==zs_ok)

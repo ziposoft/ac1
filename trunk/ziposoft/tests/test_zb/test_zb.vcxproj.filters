@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="scripts">
+      <UniqueIdentifier>{30c0f001-74e6-4699-b4fc-2d90738afe98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -25,6 +28,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\zbase_test\debug.txt" />
-    <Text Include="..\..\zbase_test\scr_ds_test.txt" />
+    <Text Include="..\..\zbase_test\scripts\csv.txt">
+      <Filter>scripts</Filter>
+    </Text>
   </ItemGroup>
 </Project>

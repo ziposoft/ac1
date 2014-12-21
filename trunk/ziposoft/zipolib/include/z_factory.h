@@ -226,7 +226,7 @@ public:
 	{
 		//DYNAMIC
 		init_dynamic();
-		add_features_recurse();
+		add_features_recurse<C>(this);
 		
 		get_factories_dynamic().add(this);
 	}
@@ -248,7 +248,7 @@ public:
 	}
 
 	template <class OTHER > static void add_features(z_factory* factobj);
-	virtual void add_features_recurse();
+	template <class OTHER > static void add_features_recurse(z_factory* factobj);
 
 	virtual const z_factory_info& get_info() const;
 	virtual ctext get_type_info_name()const 
@@ -283,13 +283,13 @@ extern z_factory* _pgz_factory_none;
 #define ZFACT_PV(_CLASS_) __ZFACT(_CLASS_);\
 	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,0,0,0,0 };\
 	template <>  _CLASS_* z_factory_T<_CLASS_>	::static_create_new_obj(){ return 0;}; \
-	template <>  void z_factory_T<_CLASS_>	::add_features_recurse(){ add_features<_CLASS_>(this);};\
+	template <>  template <class OTHER > static void z_factory_T<_CLASS_>::add_features_recurse(z_factory* factobj){ add_features<OTHER>(factobj);};\
 	template <>  const z_factory_info& z_factory_T<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; } \
 	 template <> template <class OTHER >   void z_factory_T<_CLASS_>::add_features(z_factory* factobj)
 
 #define ZFACT(_CLASS_) __ZFACT(_CLASS_);\
 	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,0,0,0,0 };\
-	template <>  void z_factory_T<_CLASS_>	::add_features_recurse(){ add_features<_CLASS_>(this);};\
+	template <>  template <class OTHER > static void z_factory_T<_CLASS_>::add_features_recurse(z_factory* factobj){ add_features<OTHER>(factobj);};\
 	template <>  _CLASS_* z_factory_T<_CLASS_>	::static_create_new_obj(){ return z_new _CLASS_();}; \
 	template <>  const z_factory_info& z_factory_T<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; } \
 	 template <> template <class OTHER >   void z_factory_T<_CLASS_>::add_features(z_factory* factobj)
@@ -298,7 +298,7 @@ extern z_factory* _pgz_factory_none;
 	const z_factory_info 	ZFACT##_CLASS_##INFO={ #_CLASS_,&_gz_factory_##_BASECLASS_,0,0,0 };\
 	template <>  _CLASS_* z_factory_T<_CLASS_>	::static_create_new_obj(){ return z_new _CLASS_();}; \
 	template <>  const z_factory_info& z_factory_T<_CLASS_>::get_info() const{ return ZFACT##_CLASS_##INFO; } \
-	template <>  void z_factory_T<_CLASS_>	::add_features_recurse(){ z_factory_T<_BASECLASS_>::add_features<_CLASS_>(this);add_features<_CLASS_>(this);};\
+	template <>  template <class OTHER > static void z_factory_T<_CLASS_>::add_features_recurse(z_factory* factobj){ z_factory_T<_BASECLASS_>::add_features_recurse<OTHER>(factobj);add_features<OTHER>(factobj);};\
 	 template <> template <class OTHER > static void z_factory_T<_CLASS_>::add_features(z_factory* factobj)
 
 #include "zipolib/include/z_factory_features.h"

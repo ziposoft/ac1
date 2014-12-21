@@ -44,7 +44,7 @@ public:
 	virtual z_status act1()
 	{ 
 		printf("act1");
-		return 0;
+		return zs_ok;
 	};
 };
 
@@ -66,7 +66,7 @@ public:
 	virtual z_status act2()
 	{ 
 		printf("act2");
-		return 0;
+		return zs_ok;
 	};
 	int othercrap2()
 	{
@@ -76,7 +76,7 @@ public:
 
 };
 
-class C: public B
+class C: public B ,public D
 {
 public:
 	int _Cint;
@@ -96,6 +96,8 @@ ZFACT_V(B,A)
 };
 ZFACT_V(C,B)
 {
+	int i;
+	i=0;
 };
 
 ZFACT(test2)
@@ -112,6 +114,7 @@ ZFACT(test1)
 };
 
 
+C gRoot;
 	
 #ifdef BUILD_VX
 int ztest()
@@ -131,10 +134,9 @@ int main(int argc, char* argv[])
 {
 
 	//root o;
-	C o;
-	o.console.setroot(&o);
+	gRoot.console.setroot(&gRoot);
 
-	o.console.runapp(argc,argv,false);
+	gRoot.console.runapp(argc,argv,false);
 
 
 	return 0;

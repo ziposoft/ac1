@@ -31,7 +31,7 @@ class root
 public:
 	root()
 	{
-		_p_logger=&get_logger();
+		_p_logger=&z_logger_get();
 
 	}
 	z_string _param_path;
