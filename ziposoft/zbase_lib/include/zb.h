@@ -65,7 +65,7 @@ inline void z_obj_ptr_delete(z_refcount* p) ;
 //TODO - add Z_ASSERT to verify dynamic_cast passes
 #define Z_RECAST(_TYPE_,_VAL_) dynamic_cast<_TYPE_*>(_VAL_) 
 #else
-#define Z_RECAST(_TYPE_,_VAL_) static_cast<_TYPE_>(_VAL_)
+#define Z_RECAST(_TYPE_,_VAL_) static_cast<_TYPE_*>(_VAL_)
 
 #endif
 

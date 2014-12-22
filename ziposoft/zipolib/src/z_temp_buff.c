@@ -12,10 +12,7 @@
 #if 0  //TODO - performance
 static char buff[TEMP_BUFF_COUNT][TEMP_BUFF_SIZE];
 #endif
-#ifdef BUILD_VSTUDIO  
 
-#define Z_DEBUG_BREAK  __debugbreak();
-#endif
 int gz_temp_buff_outstanding=0;
 int gz_temp_buff_count=0;
 
