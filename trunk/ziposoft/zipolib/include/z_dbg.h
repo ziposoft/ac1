@@ -52,6 +52,7 @@ void z_debug_shutdown();
 
 #else//NO DEBUG
 
+#define Z_TODO
 #define Z_DEBUG_BREAK
 #define Z_ASSERT(_x_) 
 #define	DBG_OUT(_X_)

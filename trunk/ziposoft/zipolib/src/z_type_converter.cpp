@@ -191,13 +191,16 @@ bool z_convert(const z_string& s,U32 &i,ctext format)
 bool z_convert(const U32 &val, char* to,int size,ctext format)
 {
 
-	z_itobase2(to,val,10,size,' ',0);
+	_itoa_s(val,to,size,10);
+	//z_itobase2(to,val,10,size,' ',0);
 	return true;  
 }
 bool z_convert(const U32 &val,z_string &s,ctext format)
 {
     char buff[20];
-	z_itobase2(buff,val,10,19,' ',0);
+	//z_itobase2(buff,val,10,19,' ',0);
+	_itoa_s(val,buff,19,10);
+
     s=buff;
     return true;
 }
