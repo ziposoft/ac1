@@ -43,6 +43,7 @@ public:
 
 	virtual z_status get_name(z_string& s);
 
+	virtual z_status find_record_match(zb_ds_table* tbl,);
 
 };
 class zb_ds_desc : public z_obj_map<zb_ds_field>,public z_refcount
@@ -91,7 +92,7 @@ public:
 	virtual z_status record_add(zb_ds_rec_ptr* rec);
 	virtual z_status open(bool writable);
 	virtual size_t get_record_count();
-	virtual z_status test_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
+	virtual z_status get_record_by_key(zb_key key,zb_ds_rec_ptr** cursor);
 	virtual z_status get_record_by_index(size_t index,zb_ds_rec_ptr** cursor);
 	virtual z_status delete_record_by_index(size_t index);
 
@@ -120,11 +121,12 @@ public:
 	zb_ds_table Interface
 	______________________________________*/
 	bool auto_open;
-	z_string _param_new_field_name;
+	z_string _param_field_name;
 	z_strlist _param_new_data;
 	int _param_record_index;
 	int _param_new_field_type;
 	virtual z_status act_dump_records();
+	virtual z_status act_record_get();
 	virtual z_status act_record_del();
 	virtual z_status act_record_add();
 	virtual z_status act_add_field();

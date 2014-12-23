@@ -150,7 +150,11 @@ z_status zb_ds_table::act_record_add()
 	status=record_add(pRec);
 	return status;
 }
-
+z_status zb_ds_table::act_record_get()
+{
+	z_status status=
+	return delete_record_by_index(_param_record_index);
+}
 z_status zb_ds_table::act_record_del()
 {
 	return delete_record_by_index(_param_record_index);
@@ -211,7 +215,7 @@ z_status zb_ds_table::act_add_field()
 {
 	z_status status;
 	zb_ds_field* fld=0;
-	status= field_new((type_ds_field)_param_new_field_type,_param_new_field_name,fld);
+	status= field_new((type_ds_field)_param_new_field_type,_param_field_name,fld);
 	if(status!=zs_ok)
 		return status;
 

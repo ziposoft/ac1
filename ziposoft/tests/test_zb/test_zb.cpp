@@ -27,6 +27,7 @@ public:
 	int _param_test_size;
 	int _param_data_size;
 	z_status testsort();
+	z_status testsort2();
 };
 /*
 ZFACT(source)
@@ -47,6 +48,7 @@ ZFACT(root)
 	//ZOBJ_X(zbs,"db",ZFF_PROP,"database");
 	ZPOBJ(_p_logger,"log",ZFF_PROP,"Logger");
 	ZACT_XP(testsort,"testsort",ZFF_ACT_DEF,"testsort",0);
+	ZACT(testsort2);
 	ZACT_XP(opends,"open",ZFF_ACT_DEF,"open",2,
 		ZPARAM_X(_param_db_name,"name",ZFF_PARAM,"Name of new database"),
 		ZPARAM_X(_param_db_type,"type",ZFF_PARAM,"Type of new database")		);
@@ -93,6 +95,10 @@ z_status root::testsort()
 	char buf[13];
 	std::map<z_string,U32> map_sort;
 	std::vector<z_string> vect_data;
+	zout <<"reserving...\n";
+
+	vect_data.reserve(_param_test_size);
+
 	for (i = 0; i < _param_test_size; i++)
 	{
 		int len=rand()%10+1;
@@ -119,9 +125,46 @@ z_status root::testsort()
 	}
 	return zs_ok;
 
+}
 
+
+z_status root::testsort2()
+{
+	int i;
+	char buf[13];
+	z_stl_obj_map<U32> map_sort;
+	std::vector<z_string> vect_data;
+	for (i = 0; i < _param_test_size; i++)
+	{
+		int len=rand()%10+1;
+		int j;
+		for(j=0;j<len;j++)
+			buf[j]=get_rand_char();
+		buf[j]=0;
+
+		vect_data.push_back(buf);
+	}
+	zout <<"created...\n";
+	for (i = 0; i < _param_test_size; i++)
+	{
+
+		map_sort[vect_data[i].c_str()]=i;
+
+	}
+	i=0;
+	for (auto& x: map_sort)
+	{
+		zout << " [" <<x.first << ':' << x.second << "]\n";
+		if(i++>10)
+			break;
+	}
+	return zs_ok;
 
 }
+
+   
+
+
 int main(int argc, char* argv[])
 {
 
