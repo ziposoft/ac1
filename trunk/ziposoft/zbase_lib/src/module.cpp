@@ -12,7 +12,7 @@ ZFACT_PV(zb_ds_table)
 	ZACT_XP(act_dump_records,"dump",ZFF_ACT_DEF,"dump",0,0);
 	ZACT_XP(act_add_field,"addfield",ZFF_ACT_DEF,"Add field",2,
 		ZPARAM_X(_param_new_field_type,"new_field_type",ZFF_PARAM,"Type of new field"),
-		ZPARAM_X(_param_new_field_name,"new_field_name",ZFF_PARAM,"Name of new field")
+		ZPARAM_X(_param_field_name,"new_field_name",ZFF_PARAM,"Name of new field")
 		);
 	ZACT_XP(act_record_del,"del",ZFF_ACT_DEF,"Delete Record",1,
 		ZPARAM_X(_param_record_index,"record_index",ZFF_PARAM,"Index of record to delete")
