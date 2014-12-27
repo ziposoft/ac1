@@ -177,6 +177,8 @@
   <ItemGroup>
     <Text Include="..\..\zbase_test\debug.txt" />
     <Text Include="..\..\zbase_test\scripts\csv.txt" />
+    <Text Include="..\..\zbase_test\scripts\ds_test.txt" />
+    <Text Include="..\..\zbase_test\scripts\ham.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

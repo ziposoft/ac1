@@ -6,8 +6,8 @@
 class zb_datum: public z_refcount
 {
 public:
-	template <class _TYPE> z_status get<_TYPE>(_TYPE& data);
-	template <class _TYPE> z_status set<_TYPE>(_TYPE& data);
+	template <class _TYPE> z_status get(_TYPE& data);
+	template <class _TYPE> z_status set(_TYPE& data);
 
 };
 
