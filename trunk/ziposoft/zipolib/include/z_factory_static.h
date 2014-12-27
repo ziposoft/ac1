@@ -39,6 +39,7 @@ struct zp_module_entry
 	const int num_facts;
 };
 
+ZP_MODULE_DECLARE(container);
 
  #include "zipolib/include/z_factory_var_funcs.h"
 

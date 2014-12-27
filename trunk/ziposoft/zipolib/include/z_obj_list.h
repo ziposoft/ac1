@@ -34,6 +34,7 @@ public:
 class z_obj_list_base
 {
 public:
+	z_obj_list_base();
 	virtual void clear()=0;
 	virtual size_t size() const=0;
 	
@@ -44,7 +45,16 @@ public:
 	virtual void* get_next(z_obj_list_iter& i)=0;
 	virtual z_status get_next_key(z_obj_list_iter& i,z_string &s)=0;
 	
-
+	z_status act_clear()
+	{
+		clear();
+		return zs_ok;
+	}	
+	z_status act_test()
+	{
+		printf("hello?\n");
+		return zs_ok;
+	}
 
 };
 
@@ -254,6 +264,7 @@ public:
 		init_child(obj);
 		return *this;
 	}
+
 
 };
 

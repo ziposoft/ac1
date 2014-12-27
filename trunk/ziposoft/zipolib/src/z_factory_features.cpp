@@ -94,23 +94,9 @@ void zf_feature::display(z_file& f,void* obj)
 	 if(!df)
 		 return zs_no_match;
 
-
 	 char* membervar=(char*)parent._obj+_offset;
+	return  df->get_child_zobj(membervar,key,out);
 
-
-	void * subobj=df->get_sub_obj(membervar,key);
-	if(!subobj)
-	{
-		return zs_no_match; //not an object
-	}
-
-	z_factory* fact=df->get_fact_from_obj(subobj);
-	if(!fact)
-		return Z_ERROR_MSG(zs_item_not_found,"Object type not found");			
-	out._obj=subobj;
-	out._fact=fact;
-
-	return zs_ok;
  }
  /*________________________________________________________________________
 
@@ -270,7 +256,7 @@ void zf_child_obj::display(z_file& f,void* obj)
 {
 	char* pvar=(char*)obj+_offset;
 	f.indent();
-	z_factory* fact=df->get_fact_from_obj(pvar);
+	z_factory* fact=df->get_fact_from_child_vobj(pvar);
 
 	f<<fact->get_name()<<" " <<  get_name();
 
@@ -375,13 +361,13 @@ z_factory_dyn& z_factory::init_dynamic()
 		switch(type)
 		{
 		case zf_ft_act:
-			add_act(ent->name,ent->name,(z_memptr)ent->offset,0 /* flags! */,"?");
+			add_act(ent->name,ent->name,(z_memptr)ent->offset,ZFF_ACT_DEF /* flags! */,"?");
 			break;
 		case zf_ft_obj:
 		case zf_ft_param:
 		case zf_ft_var:
 		case zf_ft_obj_list:
-			add_prop(ent->name,ent->name,funcs,(z_memptr)ent->offset,0/* flags! */,"?");
+			add_prop(ent->name,ent->name,funcs,(z_memptr)ent->offset,ZFF_PROP/* flags! */,"?");
 			break;
 		default:
 			Z_ERROR_MSG(zs_unknown_error,"Unknown feature type: %d",ent->type);

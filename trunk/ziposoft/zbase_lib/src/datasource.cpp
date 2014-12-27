@@ -93,10 +93,11 @@ z_status zb_ds_table::get_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
 {
 	return Z_ERROR_NOT_IMPLEMENTED;
 }
+/*
 z_status zb_ds_table::test_record_by_index(size_t index,zb_ds_rec_ptr** cursor)
 {
 	return Z_ERROR_NOT_IMPLEMENTED;
-}
+}*/
 z_status zb_ds_table::delete_record_by_index(size_t index)
 {
 	return Z_ERROR_NOT_IMPLEMENTED;
@@ -152,7 +153,7 @@ z_status zb_ds_table::act_record_add()
 }
 z_status zb_ds_table::act_record_get()
 {
-	z_status status=
+	//z_status status=
 	return delete_record_by_index(_param_record_index);
 }
 z_status zb_ds_table::act_record_del()

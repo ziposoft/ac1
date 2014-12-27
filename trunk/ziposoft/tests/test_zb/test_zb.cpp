@@ -22,6 +22,7 @@ public:
 	z_logger* _p_logger;
 	z_obj_map<zb_source> ds;
 	z_status opends();
+	z_status act_ds_new();
 
 
 	int _param_test_size;
@@ -49,6 +50,7 @@ ZFACT(root)
 	ZPOBJ(_p_logger,"log",ZFF_PROP,"Logger");
 	ZACT_XP(testsort,"testsort",ZFF_ACT_DEF,"testsort",0);
 	ZACT(testsort2);
+	ZACT(act_ds_new);
 	ZACT_XP(opends,"open",ZFF_ACT_DEF,"open",2,
 		ZPARAM_X(_param_db_name,"name",ZFF_PARAM,"Name of new database"),
 		ZPARAM_X(_param_db_type,"type",ZFF_PARAM,"Type of new database")		);
@@ -62,10 +64,28 @@ ZFACT(root)
 };
 
 /* static modules */
-ZP_MODULE_INCLUDE(  ZP_MOD(logger));
+ZP_MODULE_INCLUDE(  ZP_MOD(logger), ZP_MOD(container) );
 /*  ZP_MOD(zipobase) ,*/
 
+z_status root::act_ds_new()
+{
+	zb_source* d=ds.get(	 _param_db_name);
+	if(d)
+	{
+		d->close();
+		ds.del(_param_db_name);
 
+	}
+
+	z_string path;
+	z_filesys_getcwd(path);
+	path<<'/'<<	 _param_db_name;
+	z_status s=zb_datasource_create((type_ds_type)_param_db_type,path,d);
+	if(s)
+		return s;
+	ds<<d;
+	return s;
+}
 z_status root::opends()
 {
 	zb_source* d=ds.get(	 _param_db_name);

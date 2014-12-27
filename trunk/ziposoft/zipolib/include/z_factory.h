@@ -46,7 +46,7 @@ class zp_text_parser;
 class zf_funcs_obj_list_base;
 
 class zf_feature;
-
+class zf_obj;
 class zf_var_funcs_base
 {
 public:
@@ -56,12 +56,13 @@ public:
 	virtual z_status set(ctext s, void* v,ctext format,int index=-1) const {return Z_ERROR_NOT_IMPLEMENTED;};
 	virtual z_status clear(void* v) const {return Z_ERROR_NOT_IMPLEMENTED;} 
 	virtual z_status add(void* list,void* obj) const {return Z_ERROR_NOT_IMPLEMENTED;} 
-	virtual void* get_sub_obj(void* list,ctext key) const { return 0;} 
+	virtual void* get_child_obj(void* list,ctext index) const { return 0;} 
+	virtual z_status get_child_zobj(void* vobj_in,ctext list_index,zf_obj &obj_out) const;
 	virtual size_t get_size(void* list) const { return 0;} 
 	virtual void* get_ptr(void* var,z_obj_list_iter& iter) const { return var;}  /*could be pointer to obj, or pointer to obj pointer */
 	//This is if the member var is an obj, pointer to obj, or obj list		
 	virtual void* create_obj(void* var,z_factory* fact) const { return 0;}  /*could be pointer to obj, or pointer to obj pointer */
-	virtual z_factory*  get_fact_from_obj(void* obj) const { return 0;}
+	virtual z_factory*  get_fact_from_child_vobj(void* obj) const { return 0;}
 	virtual z_status set_from_value(zp_value* val, void* var,int index=-1) const { return Z_ERROR_NOT_IMPLEMENTED;};
 
  	virtual z_status load(zp_text_parser &parser, void* v,zf_feature_flags oper) const {return Z_ERROR_NOT_IMPLEMENTED;}

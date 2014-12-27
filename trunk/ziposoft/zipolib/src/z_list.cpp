@@ -5,6 +5,10 @@
 
 
 
+z_obj_list_base::z_obj_list_base()
+{
+
+}
 
 
 

@@ -31,5 +31,11 @@
     <Text Include="..\..\zbase_test\scripts\csv.txt">
       <Filter>scripts</Filter>
     </Text>
+    <Text Include="..\..\zbase_test\scripts\ds_test.txt">
+      <Filter>scripts</Filter>
+    </Text>
+    <Text Include="..\..\zbase_test\scripts\ham.txt">
+      <Filter>scripts</Filter>
+    </Text>
   </ItemGroup>
 </Project>

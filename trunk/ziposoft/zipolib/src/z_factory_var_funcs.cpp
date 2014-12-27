@@ -26,6 +26,12 @@ z_status zf_var_funcs_base::dump(z_file& file, void* v) const
 		return Z_ERROR_MSG(status,"Expected '=' ");
 	return load( parser,v,oper);
 }
+z_status zf_var_funcs_base::get_child_zobj(void* vobj_in,ctext list_index,zf_obj &obj_out) const
+{
+
+	return zs_child_not_found;
+
+}
 
  /*________________________________________________________________________
 
@@ -50,7 +56,8 @@ ________________________________________________________________________*/
 
 template <class V> z_status zf_var_funcs<V>::dump(z_file& file, void* v) const {	zf_var_funcs_base::dump( file,  v) ; return zs_ok;  }
 template <class V> z_status zf_var_funcs<V>::add(void* list,void* obj) const {return Z_ERROR_NOT_IMPLEMENTED;}
-template <class V> void* zf_var_funcs<V>::get_sub_obj(void* list,ctext key) const {	return 0;}
+template <class V> z_status zf_var_funcs<V>::get_child_zobj(void* vobj_in,ctext list_index,zf_obj &obj_out) const {	return zs_child_not_found;}
+template <class V> void* zf_var_funcs<V>::get_child_obj(void* list,ctext index) const {	return 0;}
 template <class V> size_t zf_var_funcs<V>::get_size(void* list) const{	return 0;}
 template <class V> void* zf_var_funcs<V>::create_obj(void* list,z_factory* fact) const{	return 0;}
 template <class V> z_status zf_var_funcs<V>::get(z_string& s, void* v,ctext format,int index)	const{return Z_ERROR_NOT_IMPLEMENTED;}
@@ -290,15 +297,22 @@ template <> z_status zf_var_funcs<z_strlist>::set_from_value(zp_value* val, void
 zf_funcs_obj_base 
 ________________________________________________________________________*/
 
+z_status zf_funcs_obj_base::get_child_zobj(void* vobj_in,ctext list_index,zf_obj &obj_out) const
+{
+	obj_out._obj=get_child_obj(vobj_in,0);
+	obj_out._fact=get_fact_from_child_vobj(vobj_in);
+	return zs_ok;
+}
+
 z_status zf_funcs_obj_base::dump(z_file& file, void* memvar) const
 {
-	void* pObj=get_sub_obj(memvar,0); 
+	void* pObj=get_child_obj(memvar,0); 
 
 	if(pObj == 0)
 		file<< "NULL";
 	else
 	{
-		z_factory* fact=get_fact_from_obj(pObj);
+		z_factory* fact=get_fact_from_child_vobj(pObj);
 		Z_ASSERT(fact);
 		if(!fact)
 			return Z_ERROR(zs_not_found);//Z_ERROR
@@ -314,7 +328,7 @@ z_status zf_funcs_obj_base::load(zp_text_parser &parser, void* v,zf_feature_flag
 	void* pObj=0;
 	z_factory* factory=0;
 	if(!(oper&ZFF_SKIP))
-		pObj=get_sub_obj(v,0);
+		pObj=get_child_obj(v,0);
 
 	return zf_create_obj_from_text_stream_dyn(parser, factory,pObj,oper);;
 
@@ -395,8 +409,32 @@ z_status zf_funcs_obj_list_base::clear(void* v) const
 	 return zs_ok; 
 
 }
+z_status zf_funcs_obj_list_base::get_child_zobj(void* vobj_in,ctext list_index,zf_obj &obj_out) const
+{
+	z_obj_list_base* plist=get_list(vobj_in);
+	if(!plist)
+	{
+		return Z_ERROR(zs_bad_parameter);
+	}
+	if((list_index)&&strlen(list_index))
+	{
+		obj_out._obj= plist->get_void_by_key(list_index);
+		obj_out._fact= get_fact_from_child_vobj(obj_out._obj);
 
-void* zf_funcs_obj_list_base::get_sub_obj(void* v,ctext key) const
+
+	}
+	else
+	{
+		obj_out._obj= plist;
+		obj_out._fact= get_list_fact();
+
+	}
+	return zs_ok;
+
+
+}
+
+void* zf_funcs_obj_list_base::get_child_obj(void* v,ctext index) const
 {
 	z_obj_list_base* plist=get_list(v);
 	if(!plist)
@@ -404,8 +442,11 @@ void* zf_funcs_obj_list_base::get_sub_obj(void* v,ctext key) const
 		Z_ERROR(zs_bad_parameter);
 		return 0;
 	}
-
-	return plist->get_void_by_key(key);
+	if(index)
+	if(!strlen(index))
+		return (void*)plist;
+	void* item= plist->get_void_by_key(index);
+	return item;
 }
 
 void* zf_funcs_obj_list_base::get_ptr(void* v,z_obj_list_iter& iter ) const
@@ -436,7 +477,7 @@ z_status zf_funcs_obj_list_base::dump(z_file& f, void* v) const
 	void* p;
 	while((p=plist->get_next(iter)))
 	{
-		z_factory* fact=get_fact_from_obj(p);
+		z_factory* fact=get_fact_from_child_vobj(p);
 		if(!fact)
 		{
 			Z_ERROR_MSG(zs_unknown_error,"Could not get factory from object ");

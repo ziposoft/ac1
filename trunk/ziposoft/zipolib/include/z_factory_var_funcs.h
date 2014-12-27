@@ -81,7 +81,8 @@ public:
 	virtual z_status set(ctext s, void* v,ctext format,int index=-1) const;
 	virtual z_status clear(void* v) const;
 	virtual z_status add(void* list,void* obj) const ;
-	virtual void* get_sub_obj(void* list,ctext key) const;
+	virtual void* get_child_obj(void* list,ctext index) const;
+	virtual z_status get_child_zobj(void* vobj_in,ctext list_index,zf_obj &obj_out) const;
 	virtual size_t get_size(void* list) const;
 	virtual z_status dump(z_file& s, void* v) const;
 	virtual void* create_obj(void* var,z_factory* fact) const;
@@ -101,11 +102,17 @@ public:
 	virtual z_status clear(void* v) const;
 
 	virtual z_factory* get_list_obj_fact() const=0;
+	virtual z_factory* get_list_fact()	const
+	{
+		return &z_factory_T<z_obj_list_base>::self;
+	}
 	virtual z_obj_list_base* get_list(void * v) const=0;
 	z_status dump(z_file& f, void* v) const;
 	virtual void* get_ptr(void* v,z_obj_list_iter& iter ) const;
-	virtual void* get_sub_obj(void* list,ctext key) const; 
-  	virtual z_status load(zp_text_parser &parser, void* v,zf_feature_flags oper) const ;
+	virtual void* get_child_obj(void* list,ctext index) const; 
+	virtual z_status get_child_zobj(void* vobj_in,ctext list_index,zf_obj &obj_out) const;
+ 
+	virtual z_status load(zp_text_parser &parser, void* v,zf_feature_flags oper) const ;
 
 };
 
@@ -158,8 +165,9 @@ public:
 
 		return zs_ok;
 	}
-	virtual z_factory*  get_fact_from_obj(void* vobj) const 
+	virtual z_factory*  get_fact_from_child_vobj(void* vobj) const 
 	{ 
+
 		TYPE* pObj=reinterpret_cast<TYPE*>(vobj); 
 		if(!pObj) 
 		{
@@ -177,6 +185,8 @@ template <class TYPE >  class zp_var_funcs_list_vect  : public zf_funcs_obj_list
 		z_obj_vector<TYPE>* list= reinterpret_cast<z_obj_vector<TYPE>*>(v);
 		return list;
 	}
+
+
 };
 template <class TYPE >  class zp_var_funcs_list_map  : public zf_funcs_obj_list_base_t<TYPE>
 {
@@ -193,6 +203,7 @@ public:
   	virtual z_status load(zp_text_parser &parser, void* v,zf_feature_flags oper) const ;
 	virtual z_status dump(z_file& file, void* memvar) const;
 	virtual zf_feature* create_feature(ctext id,ctext name,z_memptr offset,zf_feature_flags flags,ctext desc) const;
+	virtual z_status get_child_zobj(void* vobj_in,ctext list_index,zf_obj &obj_out) const;
 
 };
 
@@ -217,13 +228,13 @@ public:
 		f->clear_all_vars(var); 
 		return var;
 	}
-	virtual void* get_sub_obj(void* var,ctext key) const { return  var;} 
+	virtual void* get_child_obj(void* var,ctext index) const { return  var;} 
 	virtual void* get_ptr(void* var,z_obj_list_iter& iter) const
 	{
 		return var;
 	}
 
-	virtual z_factory*  get_fact_from_obj(void* obj) const 
+	virtual z_factory*  get_fact_from_child_vobj(void* obj) const 
 	{ 
 		return &z_factory_T<CLASS>::self;
 	}
@@ -263,7 +274,7 @@ template <class CLASS >  class zp_child_pobj_funcs  : public zf_funcs_obj_base
 public:
 
 	virtual zf_feature_type get_type() const{ return zf_ft_obj; }
-	virtual z_factory*  get_fact_from_obj(void* pobj) const 
+	virtual z_factory*  get_fact_from_child_vobj(void* pobj) const 
 	{ 
 		return &z_factory_T<CLASS>::self;
 	}
@@ -274,7 +285,8 @@ public:
 		void** ppObj=reinterpret_cast<void**>(var); 
 		return *ppObj;
 	}
-	virtual void* get_sub_obj(void* var,ctext key) const 
+
+	virtual void* get_child_obj(void* var,ctext index) const 
 	{ 
 		void** ppObj=reinterpret_cast<void**>(var); 
 		return *ppObj;
@@ -320,7 +332,7 @@ public:
 template <class CLASS >  class zp_child_vobj_funcs  : public zp_child_pobj_funcs<CLASS>
 {
 public:
-	virtual z_factory*  get_fact_from_obj(void* vobj) const 
+	virtual z_factory*  get_fact_from_child_vobj(void* vobj) const 
 	{ 
 		CLASS* pObj=reinterpret_cast<CLASS*>(vobj); 
 		if(!pObj) 

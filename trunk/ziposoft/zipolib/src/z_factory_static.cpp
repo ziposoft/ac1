@@ -454,3 +454,12 @@ z_status zf_create_obj_from_text_stream_static(zp_text_parser &parser, z_factory
 	return zs_ok;
 
 }
+
+
+
+#define ZO_OBJ_LIST \
+	ZCLS_V(z_obj_list_base,none,"","",  ACT(act_test) ACT(act_clear) )
+
+
+#include "zipolib/include/z_obj.inc"
+ZP_MODULE_DEFINE(container);
