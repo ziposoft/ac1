@@ -54,6 +54,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "term", "tests\terminal\term.vcxproj", "{D5ED5AFF-697F-4D3D-942A-C1BE2A68D10D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8FC8CF9C-1240-433D-BCD0-5C82C616C16A}"
+	ProjectSection(SolutionItems) = preProject
+		TODO.txt = TODO.txt
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "acdiag", "acdiag\acdiag.vcxproj", "{D1F8647D-E988-494B-996E-6EC5F439631F}"
 	ProjectSection(ProjectDependencies) = postProject
