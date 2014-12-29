@@ -210,8 +210,15 @@ z_string operator+ (const z_string& a, const z_string& b)
 	return c;
 }
 
+/*
+This is an awful hack to increment the a filename like this:
 
+filename0
+filename1
+...
 
+etc.
+*/
 void z_string::increment_name()
 {
 	if(size()==0) 
@@ -240,4 +247,3 @@ void z_string::increment_name()
 	base_name<<value;
 	*this=base_name;
 }
-

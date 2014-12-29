@@ -93,39 +93,44 @@ void zp_text_parser::index_reset()
 {
 	_index_current=_start;
 }
+void zp_text_parser::set_option_count_lines()
+{
+	_options.count_lines=1;
 
-void zp_text_parser::set_ignore_whitespace()
+}
+void zp_text_parser::set_option_ignore_whitespace()
 {
 	_options.ignore_tabs=1;
 	_options.ignore_space=1;
 	_options.ignore_newline=1;
 
 }
-
+			  
 
 z_status zp_text_parser::advance(size_t count)
 {
 	if((!_index_current) ||	  ( _index_current+count>_end))
-		return check_status(zs_eof);
-	_index_current+=count;
+		return check_status(zs_eof);	
+	if(_options.count_lines==0)
+	{
+
+		_index_current+=count;
+		return zs_ok;
+	}
 
 
-	/* if we needed to count newlines. currently not:
+	/* if we needed to count newlines.*/
 
 	while(count)
 	{
-
-		if( _index_current+count>_end)
-			return check_status(zs_eof);
-		char c=*_index_current;
-		if(c=='\n')
+		if(*_index_current=='\n')
 		{
 			n_newlines++;
 		}
 		_index_current++;
 		count--;
 	}
-	*/
+	
 	return zs_ok;
 }
 

@@ -1,6 +1,4 @@
 
-
-
 #ifndef DS_HAMSTER_H
 #define DS_HAMSTER_H
 #include "zbase_lib/include/zb.h"
@@ -11,6 +9,7 @@
 #include "ham/hamsterdb.hpp"
 
 class zb_ds_ham; 
+
 
 
 /*___________________________________________________________________________
@@ -78,9 +77,10 @@ class zb_ds_ham_tbl : public zb_ds_table
 
 
 	zb_rec_ptr_ham* _current_row;
-	hamsterdb::env _env;
+	ham_env_t* _env;
 	z_string _file_name;
 	zb_ds_ham* _ham_ds;
+	z_string _file_path;
 
 public:
 	zb_ds_ham_tbl();
