@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-stylesheet type="text/xsl" href="zs_menu_test.xsl"?>
+
+<testpage  xmlns="http://ziposoft.com/ns" >
+<menu_file path="zs_menu_test.xml"></menu_file>	
+
+
+	
+</testpage>
+
+
+
