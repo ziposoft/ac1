@@ -1,0 +1,94 @@
+/*
+             Copyright 2007, ZipoSoft, Inc. (Acme Device Drivers, Inc.)                    
+                                                                         
+ This file is part of ZipoBase, from ZipoSoft. See ZipoBase.com for more infomation                                                                            
+                                                                             
+ THIS CODE IS PROVIDED "AS IS". ZIPOSOFT MAKES NO WARRANTIES, EXPRESSED,
+ IMPLIED OR OTHERWISE, REGARDING ITS ACCURACY, COMPLETENESS OR PERFORMANCE.   
+*/
+/* IE specific */
+
+/*
+a.tb_butt,a.tb_butt_hi
+{
+	text-align: center;
+	border: thin outset;
+}
+a.tb_butt_hi
+{
+	color: Blue;
+	background-color: White;
+}
+a.tb_butt
+{
+	color: White;
+}
+
+
+a.title
+{
+	
+}
+.int-body,.int-body2
+{
+	width: 100%;
+	background-color: Scrollbar;
+	border-top: solid 4px  #000080;
+	border-left: solid 1px  #000080;
+	border-right: outset thin Scrollbar;
+	border-bottom: outset thin  Scrollbar;
+}
+div.rounder,div.rounder_tab
+{
+	overflow:hidden;
+	display:block;
+	height:1px;
+	background-color:#000080;
+	border-bottom:solid 1px #000080;
+	border-top:solid 1px Scrollbar;
+	border-left:solid 1px Scrollbar;
+	border-right:solid 1px Scrollbar;
+	margin-left:1px;
+	margin-right:1px;
+}
+div.rounder_tab
+{
+	background-color:#707080;
+	border-bottom:solid 1px #707080;
+}
+td.titlebar,td.titlebar_app
+{
+	padding: 0px;
+	margin: 0px;
+	background-color:Transparent;
+	
+}
+td.tab,td.tab_hi
+{
+	background-color: Scrollbar;
+	color: #d0d0d0;
+	border-right:solid 1px #707080;
+
+	padding-right:2px;
+	padding-left:2px;
+	padding-bottom:0px;
+	border-bottom:solid 1px #707080;
+}
+
+table.tab
+{
+	background-color: #707080;
+
+}
+table.titlebar,table.titlebar_app
+{
+	background-color: #000080;
+	border:solid;
+	color: White;
+}
+a.title,a.tabtitle
+{
+	padding-left: 4px;
+}
+
+*/
