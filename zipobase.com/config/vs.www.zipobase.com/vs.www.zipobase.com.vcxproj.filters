@@ -13,5 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ziposoft">
+      <UniqueIdentifier>{d8267363-9f74-4dad-9744-3c6869187681}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ziposoft\index.html">
+      <Filter>ziposoft</Filter>
+    </None>
+    <None Include="..\..\ziposoft\ziposoft.css">
+      <Filter>ziposoft</Filter>
+    </None>
+    <None Include="..\..\zipobase.css" />
+    <None Include="..\..\index.html" />
   </ItemGroup>
 </Project>

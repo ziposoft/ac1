@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{AB35F386-93F6-4F48-B0C5-D112EA65DCCE}</ProjectGuid>
     <RootNamespace>vswwwzipobasecom</RootNamespace>
+    <ProjectName>zipobase.com</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -64,6 +65,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\..\index.html" />
+    <None Include="..\..\zipobase.css" />
+    <None Include="..\..\ziposoft\index.html" />
+    <None Include="..\..\ziposoft\ziposoft.css" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
