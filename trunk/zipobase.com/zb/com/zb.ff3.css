@@ -1,0 +1,78 @@
+/*
+             Copyright 2007, ZipoSoft, Inc. (Acme Device Drivers, Inc.)                    
+                                                                         
+ This file is part of ZipoBase, from ZipoSoft. See ZipoBase.com for more infomation                                                                            
+                                                                             
+ THIS CODE IS PROVIDED "AS IS". ZIPOSOFT MAKES NO WARRANTIES, EXPRESSED,
+ IMPLIED OR OTHERWISE, REGARDING ITS ACCURACY, COMPLETENESS OR PERFORMANCE.   
+*/
+/* Fifefox specific */
+
+/*
+
+a.tb_butt,a.tb_butt_hi
+{
+	text-align: center;
+	-moz-border-radius: 8px;
+	border: thin outset;
+	border-color: #000040;
+}
+a.tb_butt_hi
+{
+	color: Blue;
+	background-color: White;
+}
+a.tb_butt
+{
+	color: inherit;
+}
+
+
+td.tab,td.tab_hi
+{
+	background-color: #707080;
+	padding-top: 2px;
+	padding-bottom: 0px;
+	padding-left: 3px;
+	padding-right: 1px;
+	color: #d0d0d0;
+	border-right: none;
+	border-left:none;
+	border-top:none;
+	border-bottom:solid 1px lightgrey;
+}
+
+table.tab-bar
+{
+	border-collapse:separate;
+}
+.menu, .menusub
+{
+	border-collapse: separate;
+	-moz-border-radius: 15px;
+	clear: both;
+	background-color: #888;
+	color: White;
+	padding: 6px;
+	border-width: 1px;
+	border-color: #000080;
+	border-style: solid;
+	vertical-align: text-bottom;
+	cursor: pointer;
+	position: absolute;
+	display: none; 
+}
+.int-body,.int-body2
+{
+	width: 100%;
+	background-color: lightgrey;
+	border-top: solid 4px #000080;
+	border-left: solid thin  #000080;
+	border-right: solid thin  #000080;
+	border-bottom: solid thin  #000080;	
+}
+div.rounder
+{
+	display:none;
+}
+*/
