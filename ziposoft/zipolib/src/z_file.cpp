@@ -12,8 +12,11 @@ using namespace std;
 #include <sys/types.h>
 #include <sys/stat.h>
 #endif
+/*________________________________________________________________________
 
+								Globals
 
+________________________________________________________________________*/
 
 z_file& z_stdin_get()
 {
@@ -29,13 +32,11 @@ z_file& z_stdout_get()
 
 }
 
-void z_file::init()
-{
-	_file_handle=0;
-	_log_file_handle=0;
-	_max_line_length=0x1000;
-	_indent_depth=0;
-}
+/*________________________________________________________________________
+
+								z_file	 Init
+
+________________________________________________________________________*/
 
 z_file::z_file()
 {
@@ -49,17 +50,6 @@ z_file::z_file(ctext filename)
 z_file::~z_file()
 {
 	close();
-
-}
-
-z_file::z_file(size_t h)
-{
-	init();
-	_file_handle=h;
-}
-void z_file::set_handle(size_t h)
-{
-	_file_handle=h;
 }
 z_file::z_file(ctext filename,ctext mode)
 {
@@ -67,6 +57,47 @@ z_file::z_file(ctext filename,ctext mode)
 	_file_name=filename;
 	_file_handle=(size_t)(void*)fopen(filename,mode);
 }
+z_file::z_file(size_t h)
+{
+	init();
+	_file_handle=h;
+}
+void z_file::init()
+{
+	_file_handle=0;
+	_log_file_handle=0;
+	_max_line_length=0x1000;
+	_indent_depth=0;
+}
+void z_file::set_handle(size_t h)
+{
+	_file_handle=h;
+}
+
+/*________________________________________________________________________
+
+								z_file	 Info
+
+________________________________________________________________________*/
+
+bool z_file::get_file_size(size_t &size)//TODO more efficient
+{
+	if (_file_handle==0) return false;
+	::fseek((FILE*)_file_handle,0L,SEEK_END);
+	size=::ftell((FILE*)_file_handle);
+	::rewind((FILE*)_file_handle);
+	return true;
+}
+
+
+
+/*________________________________________________________________________
+
+								z_file	 Open/Close
+
+________________________________________________________________________*/
+
+
 z_status z_file::open(ctext filename,ctext mode)
 {
 	_file_name=filename;
@@ -85,14 +116,14 @@ void z_file::close()
 
 		}
 }
-bool z_file::get_file_size(size_t &size)//TODO more efficient
-{
-	if (_file_handle==0) return false;
-	::fseek((FILE*)_file_handle,0L,SEEK_END);
-	size=::ftell((FILE*)_file_handle);
-	::rewind((FILE*)_file_handle);
-	return true;
-}
+
+
+/*________________________________________________________________________
+
+								z_file	 Read
+
+________________________________________________________________________*/
+
 bool z_file::read_all(z_string & str)
 {
 	size_t size;
@@ -120,8 +151,6 @@ bool z_file::rewind()
 	::rewind((FILE*)_file_handle);
 	return true;
 }
-
-
 
 size_t z_file::getline(char* buff,size_t size)
 {
@@ -180,21 +209,22 @@ z_status z_file::getline(z_string& s)
 
 
 
-void z_file::start_log_to_file(ctext filename)
+
+
+/*________________________________________________________________________
+
+		z_file - Writing
+________________________________________________________________________*/
+void z_file::flush()
 {
-#if 0
-	_log_file_handle=(void*)(size_t)_open(filename,_O_CREAT | _O_TRUNC|_O_BINARY );
+    
+#ifdef BUILD_VSTUDIO
+    FlushFileBuffers(HANDLE(_file_handle));
 #else
-	_log_file_handle=(void*)fopen(filename,"ab");
+	Z_ASSERT(0);
 #endif
 }
-void z_file::stop_log_to_file()
-{
-	if(_log_file_handle)
-	fclose((FILE*)_log_file_handle);
-	_log_file_handle=0;
 
-}
 int z_file::write(const char* buf, size_t count )
 {
 	if(!_file_handle)
@@ -209,14 +239,7 @@ int z_file::write(const char* buf, size_t count )
 	}
 	return 0;
 }
-void z_file::eol()
-{
-#ifdef BUILD_VSTUDIO
-	write("\r\n",2);
-#else
-	write("\n",1);
-#endif
-}
+
 int z_file::putf(const char*  lpszFormat,  ...  )
 {
     int c;
@@ -229,14 +252,19 @@ int z_file::putf(const char*  lpszFormat,  ...  )
 	z_temp_buffer_release(tempbuf);
     return c;
 }
-
-void z_file::flush()
+void z_file::eol()
 {
-    
 #ifdef BUILD_VSTUDIO
-    FlushFileBuffers(HANDLE(_file_handle));
+	write("\r\n",2);
+#else
+	write("\n",1);
 #endif
 }
+/*________________________________________________________________________
+
+		z_file - Writing  String Output
+________________________________________________________________________*/
+
 void z_file::indent()
 {
 	int i=_indent_depth;
@@ -257,10 +285,41 @@ void z_file::indent_dec()
 	_indent_depth--;
 
 }
+
+/*________________________________________________________________________
+
+		z_file - Misc
+________________________________________________________________________*/
 z_status z_file::delete_file()
 {
 	close();
 	return z_file_delete(_file_name);
+}
+void z_file::start_log_to_file(ctext filename)
+{
+#if 0
+	_log_file_handle=(void*)(size_t)_open(filename,_O_CREAT | _O_TRUNC|_O_BINARY );
+#else
+	_log_file_handle=(void*)fopen(filename,"ab");
+#endif
+}
+void z_file::stop_log_to_file()
+{
+	if(_log_file_handle)
+	fclose((FILE*)_log_file_handle);
+	_log_file_handle=0;
+}
+
+
+z_status z_file::mmap_open(U8** map_ptr_out,bool readonly)
+{
+
+return Z_ERROR_NOT_IMPLEMENTED;
+}
+z_status z_file::mmap_close(U8* map_ptr)
+{
+return Z_ERROR_NOT_IMPLEMENTED;
+
 }
 
 
@@ -291,7 +350,11 @@ ctext GetSourceFileName(ctext fullpath)
 
 //TODO ! clean this unused stuff up
 
+/*________________________________________________________________________
 
+								z_debug
+
+________________________________________________________________________*/
 
 z_debug::z_debug()
 {
@@ -314,19 +377,17 @@ z_debug& z_debug_get()
 
 
 }
+/*________________________________________________________________________
 
+								z_file_string_buffer
 
-
+________________________________________________________________________*/
 
 z_file_string_buffer::z_file_string_buffer()
 {
-
-
 }
 z_file_string_buffer::~z_file_string_buffer()
 {
-
-
 }
 int z_file_string_buffer::write(const char* buf, size_t count )
 {
@@ -334,6 +395,14 @@ int z_file_string_buffer::write(const char* buf, size_t count )
 	return (int) count;
 }
 
+
+/*________________________________________________________________________
+
+								z_parse_csv
+
+________________________________________________________________________*/
+#define LIMIT_COL 10
+#define LIMIT_ROW 1000
 z_status z_csv_encode_string(z_string& output)
 {
 	//Z_ASSERT(0);//THIS doesnt work
@@ -350,14 +419,7 @@ z_status z_csv_encode_string(z_string& output)
 	output.append(1,'\"');
 
 	return zs_success;
-	
-
 }
-
-
-#define LIMIT_COL 10
-#define LIMIT_ROW 1000
-
 z_parse_csv::z_parse_csv()
 {
 	_column_idx=0;

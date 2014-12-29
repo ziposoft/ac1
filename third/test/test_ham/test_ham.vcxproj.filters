@@ -18,5 +18,8 @@
     <ClCompile Include="db6.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ham.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

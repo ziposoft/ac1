@@ -394,6 +394,29 @@ std::cout << "success!" << std::endl;
 return (0);
 }
 #endif
+/* static modules */
+ZP_MODULE_INCLUDE(  ZP_MOD(logger));
+
+int main(int argc, char* argv[])
+{
+
+
+	root o;
+	o.console.setroot(&o);
+	try {
+
+		o.console.runapp(argc,argv,true);
+	}
+
+	catch (hamsterdb::error &e) {
+		std::cerr << "run_demo() failed with unexpected error "
+			<< e.get_errno() << " ('"
+			<< e.get_string() << "')" << std::endl;
+		return (-1);
+	}
+	return 0;
+}
+
 
 int
 	main(int argc, char **argv)

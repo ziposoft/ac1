@@ -1,8 +1,10 @@
-//________________________________________________________________________/////////////////////////
-//
-// z_streams header
-//
-//________________________________________________________________________/////////////////////////
+/*________________________________________________________________________
+
+z_file.h
+
+________________________________________________________________________*/
+
+
 #ifndef z_file_header
 #define z_file_header
 #include "zipolib/include/zipo.h"
@@ -10,12 +12,13 @@
 
 #include "zipolib/include/z_temp_buff.h"
 #include "zipolib/include/z_type_converter.h"
-#ifndef BUILD_VSTUDIO
-#define	HANDLE size_t
-#endif
 
 
 
+/*________________________________________________________________________
+
+								z_file
+________________________________________________________________________*/
 class z_file
 {
 	size_t  _file_handle;	
@@ -35,7 +38,10 @@ public:
 		flag_open_always=0x040,	
 		flag_delete_on_close=0x080,	
 		flag_temporary=0x10000;	
-	
+	/*______________________________________
+
+				Init
+	  ______________________________________*/	
     z_file();
     z_file(size_t file_handle);
     z_file(ctext filename);
@@ -45,29 +51,48 @@ public:
 	void init();
 
 	void set_handle(size_t t);
+	/*______________________________________
 
+				Info
+	  ______________________________________*/	
+	bool get_file_size(size_t &size);
+	bool is_open() { return _file_handle!=0; }
+
+
+
+	/*______________________________________
+
+				Open/Close
+	  ______________________________________*/	
 	z_status open(ctext filename,ctext mode);
 	void close();
-	void flush();
-	//HANDLE  _file_handle_win32;
+	/*______________________________________
 
-	//operations
-	z_status delete_file();
-
-	//open/close
-	bool is_open() { return _file_handle!=0; }
+				Reading
+	  ______________________________________*/	
 	bool rewind();
-	bool get_file_size(size_t &size);
-    
-	virtual int  write(const char* buf, size_t count);
-
-	//input
 	char get(char& c);
 	size_t getline(char* buff,size_t size);
 	z_status  getline(z_string & str);
 	size_t read(char* buff,size_t size);
 	bool read_all(z_string & str);
 	bool read_all(char*& data,size_t& size);
+
+
+	/*______________________________________
+
+				Writing
+	  ______________________________________*/	
+	virtual int  write(const char* buf, size_t count);
+    virtual int putf(const char*  lpszFormat,  ...  );
+	void flush();
+
+ 	/*______________________________________
+
+				String Output
+	  ______________________________________*/	
+
+	//TODO - This is awful! Fix this
 	template <class TYPE>  z_file  &put(TYPE data)
 	{ 
 		char* tb=(char*)z_temp_buffer_get(0x100);
@@ -75,11 +100,8 @@ public:
 		write(tb,strlen(tb));
 		z_temp_buffer_release(tb);
 		return *this;
-	}	
-
-
-	void eol();
-	//virtual z_file  &operator <<  (cset d) { return *this; }
+	}		
+	
 	virtual z_file  &operator <<  (double x) { return put(x); }
     virtual z_file  &operator <<  (const char x)
 	{ 
@@ -100,18 +122,30 @@ public:
     virtual z_file  &operator <<  (I32 x){ return put(x); }
     virtual z_file  &operator <<  (U64 x){ return put(x); }
     virtual z_file  &operator <<  (U32 x){ return put(x); }
-
-    virtual int putf(const char*  lpszFormat,  ...  );
-
-	//duplicate log file
-	virtual void start_log_to_file(ctext filename);
-	virtual void stop_log_to_file();
 	void indent();
 	void indent_inc();
 	void indent_reset();
-	void indent_dec();
+	void indent_dec();	
+	void eol();
+	
+	/*______________________________________
+
+				Misc
+	  ______________________________________*/	
+	z_status delete_file();
+
+	z_status mmap_open(U8** map_ptr_out,bool readonly);
+	z_status mmap_close(U8* map_ptr);
+
+	virtual void start_log_to_file(ctext filename);
+	virtual void stop_log_to_file();
+
 
 };
+/*________________________________________________________________________
+
+								z_file_string_buffer
+________________________________________________________________________*/
 class z_file_string_buffer: public z_file
 {
 	z_string _buffer;
@@ -122,7 +156,10 @@ public:
 	z_string &get_buffer() { return _buffer;}
 };
 
-//ctext GetSourceFileName(ctext fullpath);
+/*________________________________________________________________________
+
+								z_debug
+________________________________________________________________________*/
 class z_debug: public z_file
 {
 public:
@@ -130,7 +167,10 @@ public:
     virtual ~z_debug();
 	virtual int  write(const char* buf, size_t count);
 };
+/*________________________________________________________________________
 
+								z_parse_csv
+________________________________________________________________________*/
 
 class z_parse_csv
 {
@@ -145,6 +185,7 @@ public:
 	size_t _i;
 	z_string _value;
 
+	virtual bool ParseFile(z_file& file);
 	virtual bool ParseBuffer(ctext buff,size_t size);
 	virtual bool ParseLine();
 	virtual bool ParseValue();
@@ -171,6 +212,10 @@ public:
 };
 z_status z_csv_encode_string(z_string& output);
 
+/*________________________________________________________________________
+
+								GLOBALS
+________________________________________________________________________*/
 z_debug& z_debug_get();
 z_file& z_stdout_get();
 #define zout z_stdout_get()

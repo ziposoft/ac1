@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zlibs", "zlibs", "{616AE2B8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zbase", "zbase", "{57DE92DE-CAEC-48D5-8E8E-40B00879C10C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dump", "..\third\metakit\dump\dump.vcxproj", "{C1FBFA01-75CF-4B32-9C48-4AC837766A26}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "metakit_dump", "..\third\metakit\dump\dump.vcxproj", "{C1FBFA01-75CF-4B32-9C48-4AC837766A26}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_make", "tests\test_make\test_make.vcxproj", "{B3DB7A00-6139-4D61-987B-CAD2F8D735B7}"
 EndProject
@@ -65,6 +65,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_ham", "..\third\test\test_ham\test_ham.vcxproj", "{46B9847B-D654-4B7C-A0AE-549EBF034F86}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_factory", "tests\test_factory\test_factory.vcxproj", "{759526BA-9CE8-4F7A-9E40-646B24454EE2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_xml", "tests\test_xml\test_xml.vcxproj", "{F062315A-90C8-4678-AFC2-907727EBC120}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -296,6 +298,18 @@ Global
 		{759526BA-9CE8-4F7A-9E40-646B24454EE2}.release_trace|Win32.Build.0 = Release|Win32
 		{759526BA-9CE8-4F7A-9E40-646B24454EE2}.Release|Win32.ActiveCfg = Release|Win32
 		{759526BA-9CE8-4F7A-9E40-646B24454EE2}.Release|Win32.Build.0 = Release|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.Debug_NoTrace|Win32.ActiveCfg = Debug_Trace|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.Debug_NoTrace|Win32.Build.0 = Debug_Trace|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.Debug_Trace|Win32.ActiveCfg = Debug_Trace|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.Debug_Trace|Win32.Build.0 = Debug_Trace|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.Debug|Win32.Build.0 = Debug|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.dll_release|Win32.ActiveCfg = Debug|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.dll_release|Win32.Build.0 = Debug|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.release_trace|Win32.ActiveCfg = Release|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.release_trace|Win32.Build.0 = Release|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.Release|Win32.ActiveCfg = Release|Win32
+		{F062315A-90C8-4678-AFC2-907727EBC120}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -315,6 +329,7 @@ Global
 		{C2395560-A407-4058-BC5A-DB6A8D29EF64} = {C3FB2FDE-B0F1-48DA-A487-7EAACACF4D26}
 		{46B9847B-D654-4B7C-A0AE-549EBF034F86} = {C3FB2FDE-B0F1-48DA-A487-7EAACACF4D26}
 		{759526BA-9CE8-4F7A-9E40-646B24454EE2} = {C3FB2FDE-B0F1-48DA-A487-7EAACACF4D26}
+		{F062315A-90C8-4678-AFC2-907727EBC120} = {C3FB2FDE-B0F1-48DA-A487-7EAACACF4D26}
 		{1A078EAB-0236-4FE7-8D01-6733C7EDBBD4} = {C1E23D21-20AD-446C-8831-1C806ED8AA82}
 		{C1FBFA01-75CF-4B32-9C48-4AC837766A26} = {C1E23D21-20AD-446C-8831-1C806ED8AA82}
 	EndGlobalSection
