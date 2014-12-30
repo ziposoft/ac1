@@ -26,6 +26,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
-    <None Include="..\..\Debug\console.cfg" />
   </ItemGroup>
 </Project>
