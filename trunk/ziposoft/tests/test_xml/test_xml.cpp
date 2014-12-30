@@ -16,62 +16,68 @@ class z_xml_item_list : public std::vector<z_xml_item*>
 public:
 
 } ;
+
+
+class z_xml_elm_type
+{
+public:
+	z_string _name;
+
+};
+
 class z_xml_parser
 {
 public:
-	virtual z_status parse(zp_text_parser &parser);
-	virtual z_status process_comment(zp_text_parser &parser);
-	virtual z_status process_element(zp_text_parser &parser);
-	virtual z_status process_cdata(zp_text_parser &parser);
-	virtual z_status process_data(zp_text_parser &parser);
+	z_obj_map<z_xml_elm_type> _elm_types;
+	zp_text_parser _p;
+	z_file _file;
+	virtual z_status parse();
+	virtual z_status process_comment();
+	virtual z_status process_element();
+	virtual z_status process_cdata();
+	virtual z_status process_data();
 
 };
 
 
 
-class z_xml_file
-{
-public:
- 	virtual z_status parse(zp_text_parser &parser);
 
 
-};	
-
-z_status z_xml_parser::parse(zp_text_parser &p)
+z_status z_xml_parser::parse()
 {
 	z_status status=zs_ok;
 	while(status==zs_ok)
 	{
-		p.skip_ws();
-		status=p.test_char(	'<');
+		_p.skip_ws();
+		status=_p.test_char(	'<');
 		if(status==zs_matched)
 		{
-	  		status=p.test_char(	'!');
+	  		status=_p.test_char(	'!');
 			if(status==zs_matched)
 			{
-				status=p.test_string("--");
+				status=_p.test_string("--");
 				if(status==zs_matched)
 				{
-					status=	process_comment(p);
+					status=	process_comment();
 					continue;
 				}
-				status=p.test_string("CDATA");
+				status=_p.test_string("CDATA");
  				if(status==zs_matched)
 				{
-					status=	process_cdata(p);
+					status=	process_cdata();
 					continue;
 				}
 			}
-			status=p.test_any_identifier();
+			status=_p.test_any_identifier();
 			if(status==zs_matched)
 			{
- 				status=	process_element(p);
+ 				status=	process_element();
 				continue;
 			}
 			break;
 		}
 		if(	status==zs_no_match)  
-			process_data(p);
+			process_data();
 
 	}
 	return status;
