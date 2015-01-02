@@ -26,5 +26,9 @@
     </None>
     <None Include="..\..\zipobase.css" />
     <None Include="..\..\index.html" />
+    <None Include="..\..\site_head.php" />
+    <None Include="..\..\ziposoft\site_head.php">
+      <Filter>ziposoft</Filter>
+    </None>
   </ItemGroup>
 </Project>

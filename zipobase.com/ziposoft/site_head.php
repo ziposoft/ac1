@@ -55,7 +55,7 @@ function setFlag( $name)
 }
 $g_admin=setFlag('admin');
 $g_debug=setFlag('debug');
-
+/*
 
 if($isPhone)
 {
@@ -67,4 +67,6 @@ else
     $header=$root.'/inc/header.p';
     $footer=$root.'/inc/footer.p';
 }
+
+*/
 ?>
