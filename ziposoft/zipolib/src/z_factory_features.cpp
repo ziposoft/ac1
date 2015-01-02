@@ -229,7 +229,7 @@ z_status zf_action::execute(z_file* f,const zf_obj& obj)
 	return zs_ok;//???
  }
 
- z_status zf_action::evaluate1(zp_text_parser &parser, const zf_obj& o,zf_feature_flags oper,int index)
+ z_status zf_action::evaluate_textp(zp_text_parser &parser, const zf_obj& o,zf_feature_flags oper,int index)
  {
 	z_status status=load(parser,o,oper);
 	if(status==zs_ok)				   
@@ -291,7 +291,7 @@ zf_prop::zf_prop(ctext id,ctext name,const zf_var_funcs_base* funcs,z_memptr off
 	return df->load(parser,ftr_ptr,oper);
 
  }	*/
- z_status zf_prop::evaluate1(zp_text_parser &parser, const zf_obj& o,zf_feature_flags oper,int index)
+ z_status zf_prop::evaluate_textp(zp_text_parser &parser, const zf_obj& o,zf_feature_flags oper,int index)
  {
 	z_status status;
 	if(parser.test_char('=')==zs_ok)

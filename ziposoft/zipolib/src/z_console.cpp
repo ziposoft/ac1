@@ -105,110 +105,7 @@ void z_console::OnDoubleBack()
 
 
 }
- /*
-z_status z_console::get_feature_and_index()
-{
-	z_status status;	
-	status=_tparser.test_any_identifier();
 
-	if(status) 
-	{
-		if(status==zs_no_match)
-		{
-			char c=_tparser.get_char_under_test();
-			return Z_ERROR_MSG(zs_parse_error,"Unexpected '%c'",c);
-		}
-		return status;//End of buffer
-	}
-	_tparser.get_match(_cmd_line_feature);
-	if(_tparser.test_char('[')==zs_ok)
-	{
-		status=_tparser.test_any_identifier();
-		_tparser.get_match(_cmd_line_feature_index);
-		if(_tparser.test_char(']'))
-		{
-			return Z_ERROR_MSG(zs_parse_error,"Expecting ']'");
-		}
-	}
-
-
-	return zs_ok;
-}		
-
-z_status z_console::select_obj()
-{
-	zf_feature *f;
-	f=_temp._fact->get_feature(_cmd_line_feature);
-	if(!f)
-		return zs_feature_not_found; //NOT necessarily an error
-	int index=-1;
-	return f->get_zf_obj(_temp,_cmd_line_feature_index,_temp);
-
-}	*/
-#if 0
-z_status z_console:: EvaluatePath(ctext text)
-{
-	ZT("%s",text);
-	z_status status=zs_ok;	
-	_cmd_line_feature.clear();
-	_cmd_line_feature_index.clear();
-	_tparser.set_source(text);
-
-	_temp= _selected;
-	_temp_path=_path;
-	if(_tparser.test_char('/')==zs_matched)
-	{
-		_temp=_root;
-		_temp_path="";
-	}
-	while (1)
-	{
-		//This just gets next word in path
-		status=get_feature_and_index();
-		if(status)
-		{
-			return status;
-		}
-		zf_feature *f;
-		f=_temp._fact->get_feature(_cmd_line_feature);
-		if(!f)
-		{
-			 /*
-			 not our feature. all we care about here is that it is not an
-			 object. deal with unknown features later*/
-			return zs_unparsed_data; //
-		}
-		status= f->get_zf_obj(_temp,_cmd_line_feature_index,_temp);
-		if(status)
-		{
-			/*It is our feature, but it is not an object
-			so we are done. 
-			*/
-			return zs_unparsed_data; 
-		}
-
-		_temp_path<<"/"<<_cmd_line_feature;
-		if(_cmd_line_feature_index)
-			_temp_path<<'['<<_cmd_line_feature_index<<']';
-		if(_tparser.eob())
-			return zs_ok;//we are done!
-
-		if(_tparser.test_char('/') && _tparser.test_char('.'))
-		{
-			//if it is not a path char, stop
-			return Z_ERROR_MSG(zs_parse_error,"Expected '.' or '/'\n");
-		}
-		_cmd_line_feature.clear();
-		_cmd_line_feature_index.clear();
-	}
-	/*
-	if(!_tparser.eob())
-		return Z_ERROR_DBG(zs_unparsed_data);
-		*/
-	//should never get here	
-	return status;
-}
-#endif
 bool z_console::is_feature(const zf_obj& o,z_string& name)
 {
 	zf_feature *zff;
@@ -227,7 +124,7 @@ z_status z_console::evaluate_feature(const zf_obj& o,z_string& name,z_string& id
 
 
 
-	return zff->evaluate1(_tparser,o,ZFF_LIST);
+	return zff->evaluate_textp(_tparser,o,ZFF_LIST);
 
 }
 
@@ -320,7 +217,12 @@ z_status z_console:: ExecuteLine(ctext text)
 	}
 	if(is_feature(_temp_selected_obj,feature))
 	{
-		return evaluate_feature(_temp_selected_obj,feature,feature_index);
+		z_time time;
+		z_set_start_time(&time);
+		status= evaluate_feature(_temp_selected_obj,feature,feature_index);
+		printf("\n%.3lf ms\n",z_get_elapsed_time_ms_fp( &time));
+		return status;
+
 	}
 	z_string text_path;
 	/*
