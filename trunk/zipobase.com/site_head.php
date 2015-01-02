@@ -57,6 +57,8 @@ $g_admin=setFlag('admin');
 $g_debug=setFlag('debug');
 
 
+/*
+
 if($isPhone)
 {
     $header=$root.'/inc/mheader.p';
@@ -67,4 +69,6 @@ else
     $header=$root.'/inc/header.p';
     $footer=$root.'/inc/footer.p';
 }
+
+*/
 ?>
