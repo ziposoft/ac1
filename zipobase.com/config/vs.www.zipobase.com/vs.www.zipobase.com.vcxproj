@@ -66,8 +66,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\..\index.html" />
+    <None Include="..\..\site_head.php" />
     <None Include="..\..\zipobase.css" />
     <None Include="..\..\ziposoft\index.html" />
+    <None Include="..\..\ziposoft\site_head.php" />
     <None Include="..\..\ziposoft\ziposoft.css" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
