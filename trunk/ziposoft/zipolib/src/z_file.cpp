@@ -533,6 +533,11 @@ bool z_parse_csv::ParseValue()
 
 
 
+bool z_parse_csv::ParseFile(z_file& file)
+{
+
+	return false;
+}
 
 bool z_parse_csv::ParseBuffer(ctext buff,size_t size)
 {
