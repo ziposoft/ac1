@@ -1,4 +1,4 @@
-/*!
+/*! 
  * pjscrape Copyright 2011 Nick Rabinowitz.
  * Licensed under the MIT License (see LICENSE.txt)
  */
@@ -20,7 +20,7 @@ phantom.injectJs('lib/md5.js');
 function fail(msg) {
     console.log('FATAL ERROR: ' + msg);
     phantom.exit(1);
-}
+};
 
 /**
  * @namespace
@@ -30,8 +30,8 @@ function fail(msg) {
 var pjs = (function(){
     var config = {
 			delayBetweenRuns: 0,
-            timeoutInterval: 100,
-            timeoutLimit: 3000,
+            timeoutInterval: 1000,
+            timeoutLimit: 20000,
             log: 'stdout',
             writer: 'stdout',
             format: 'json',
@@ -39,10 +39,10 @@ var pjs = (function(){
             outFile: 'pjscrape_out.txt',
             pageSettings: { }
         };
-
+        
     var suites = [];
-
-
+        
+        
     // utils
     function isFunction(f) {
         return typeof f === 'function';
@@ -72,15 +72,14 @@ var pjs = (function(){
                     if ( source[prop].constructor==Object ) {
                         obj[prop] = extend(obj[prop], source[prop]);
                     } else {
-                        if (source[prop] !== void 0) obj[prop] = source[prop];
-                    }
+                if (source[prop] !== void 0) obj[prop] = source[prop];
+            }
                 } catch(e) {
                     // Property in destination object not set; create it and set its value.
                     obj[prop] = source[prop];
                 }
             }
         });
-
         return obj;
     }
 
@@ -88,12 +87,12 @@ var pjs = (function(){
      * @name pjs.loggers
      * @namespace
      * Logger namespace. You can add new loggers here; new logger classes
-     * should probably extend pjs.loggers.base and redefine the
+     * should probably extend pjs.loggers.base and redefine the 
      * <code>log</code> method.
      * @example
         // create a new logger
         pjs.loggers.myLogger = function() {
-            return new pjs.loggers.base(function(msg) {
+            return new pjs.loggers.base(function(msg) { 
                 // do some special logging stuff
             });
         };
@@ -103,8 +102,8 @@ var pjs = (function(){
         });
      */
     var loggers = {
-
-        /**
+    
+        /** 
          * @name pjs.loggers.base
          * @class Abstract base logger class
          * @private
@@ -116,18 +115,18 @@ var pjs = (function(){
             log.alert = function(msg) { log.log('! ' + msg); };
             log.error = function(msg) { log.log('ERROR: ' + msg); };
         },
-
-        /**
+        
+        /** 
          * Log to config.logFile
          * @name pjs.loggers.file
          * @type Logger
          */
         file: function() {
-            return new loggers.base(function(msg) {
+            return new loggers.base(function(msg) { 
                 fs.write(config.logFile, msg + "\n", 'a');
             });
         },
-
+        
         /**
          * Disable logging
          * @name pjs.loggers.none
@@ -137,7 +136,7 @@ var pjs = (function(){
             return new loggers.base(function() {});
         }
     };
-
+        
     /**
      * Log to STDOUT
      * @name pjs.loggers.stdout
@@ -149,7 +148,7 @@ var pjs = (function(){
      * @name pjs.formatters
      * @namespace
      * Formatter namespace. You can add new formatters here; new formatter classes
-     * should have the properties start</code>, <code>end</code>, and
+     * should have the properties start</code>, <code>end</code>, and 
      * <code>delimiter</code>, and the method <code>format(item)</code>. You might
      * save some time by inheriting from formatters.raw or formatters.json.
      * @example
@@ -165,10 +164,10 @@ var pjs = (function(){
         });
      */
     var formatters = {
-
-        /**
+        
+        /** 
          * Raw formatter - just uses toString()
-         * @name pjs.formatters.raw
+         * @name pjs.formatters.raw 
          * @type Formatter
          */
         raw: function() {
@@ -178,10 +177,10 @@ var pjs = (function(){
                 return item.toString();
             };
         },
-
-        /**
+        
+        /** 
          * Format output as a JSON array
-         * @name pjs.formatters.json
+         * @name pjs.formatters.json 
          * @type Formatter
          */
         json: function() {
@@ -193,18 +192,18 @@ var pjs = (function(){
                 return JSON.stringify(item);
             };
         },
-
-        /**
-         * CSV formatter - takes arrays or objects, fields defined by
+        
+        /** 
+         * CSV formatter - takes arrays or objects, fields defined by 
          * config.csvFields or auto-generated based on first item
-         * @name pjs.formatters.csv
+         * @name pjs.formatters.csv 
          * @type Formatter
          */
         csv: function() {
             var f = this,
                 fields = config.csvFields,
                 makeRow = function(a) { return a.map(JSON.stringify).join(','); };
-
+                
             f.delimiter = "\r\n";
             f.start = fields ? makeRow(fields) + f.delimiter : '';
             f.end = '';
@@ -231,7 +230,7 @@ var pjs = (function(){
                         // too long?
                         .slice(0, fields.length)
                         // too short?
-                        .concat(item.length < fields.length ?
+                        .concat(item.length < fields.length ? 
                             new Array(fields.length - item.length) :
                             [])
                         // quote strings if necessary, etc
@@ -249,7 +248,7 @@ var pjs = (function(){
      * @name pjs.writers
      * @namespace
      * <p>Writer namespace. You can add new writers here; new writer classes
-     * should probably extend pjs.writers.base and redefine the
+     * should probably extend pjs.writers.base and redefine the 
      * <code>write</code> method.</p>
      * <p>Items returned by scrapers will be added to the output via
      * <code>Writer.add(item)</code>, which can take any type of object. If
@@ -269,7 +268,7 @@ var pjs = (function(){
         });
      */
     var writers = {
-        /**
+        /** 
          * @name pjs.writers.base
          * @class Abstract base writer class
          * @private
@@ -282,10 +281,10 @@ var pjs = (function(){
                 format = config.format || 'json',
                 firstWrite = true,
                 lastWrite = false;
-
+            
             // init formatter
             var formatter = new formatters[format]();
-
+            
             // write output
             var writeBatch = function(batch) {
                 log.msg('Writing ' + batch.length + ' items');
@@ -296,10 +295,10 @@ var pjs = (function(){
                 );
                 firstWrite = false;
             };
-
-            /**
+            
+            /** 
              * Add an item to be written to output
-             * @name pjs.writers.base#add
+             * @name pjs.writers.base#add 
              * @function
              * @param {Object|String|Array} Item to add
              */
@@ -315,41 +314,41 @@ var pjs = (function(){
                     }
                 }
             };
-
-            /**
+            
+            /** 
              * Finish up writing output
-             * @name pjs.writers.base#finish
+             * @name pjs.writers.base#finish 
              * @function
              */
             w.finish = function() {
                 lastWrite = true;
                 writeBatch(items);
             };
-
-            /**
+            
+            /** 
              * Get the number of items written to output
-             * @name pjs.writers.base#count
+             * @name pjs.writers.base#count 
              * @function
              * @return {Number}     Number of items written
              */
             w.count = function() {
                 return count;
             };
-
-            /**
+            
+            /** 
              * Write a string to output
-             * @name pjs.writers.base#write
+             * @name pjs.writers.base#write 
              * @function
              * @param {String} s    String to write
              */
-            w.write = function(s) {
+            w.write = function(s) { 
                 console.log(s);
             };
         },
-
-        /**
+        
+        /** 
          * Writes output to config.outFile
-         * @name pjs.writers.file
+         * @name pjs.writers.file 
          * @type Writer
          */
         file: function(log) {
@@ -357,18 +356,18 @@ var pjs = (function(){
             // clear file
             fs.write(config.outFile, '', 'w');
             // write method
-            w.write = function(s) {
+            w.write = function(s) { 
                 fs.write(config.outFile, s, 'a');
             };
             return w;
         },
-
-        /**
+        
+        /** 
          * Writes output to one file per item. Items may be provided
          * in the format <code>{ filename: "file.txt", content: "string" }</code>
          * if you'd like to specify the filename in the scraper. Otherwise,
          * files are written to config.outFile with serial numbering.
-         * @name pjs.writers.itemfile
+         * @name pjs.writers.itemfile 
          * @type Writer
          */
         itemfile: function(log) {
@@ -376,7 +375,7 @@ var pjs = (function(){
                 count = 0,
                 format = config.format || 'raw',
                 formatter = new formatters[format]();
-
+            
             w.add = function(items) {
                 // add to items
                 if (items) {
@@ -388,7 +387,7 @@ var pjs = (function(){
                         if (item.filename && item.content) {
                             filename = item.filename;
                             item = item.content;
-                        }
+                        } 
                         // otherwise add a serial number to config.outFile
                         else {
                             var fileparts = config.outFile.split('.'),
@@ -400,27 +399,27 @@ var pjs = (function(){
                     });
                 }
             };
-
+            
             w.finish = function() {};
-
+            
             w.count = function() {
                 return count;
             };
         }
     };
-
+        
     /**
      * Write output to STDOUT
      * @name pjs.writers.stdout
      * @type Writer
      */
     writers.stdout = writers.base;
-
+    
     /**
      * @name pjs.hashFunctions
      * @namespace
      * Hash function namespace. You can add new hash functions here; hash functions
-     * should take an item and return a unique (or unique-enough) string.
+     * should take an item and return a unique (or unique-enough) string. 
      * @example
         // create a new hash function
         pjs.hashFunctions.myHash = function(item) {
@@ -452,15 +451,15 @@ var pjs = (function(){
             return md5(JSON.stringify(item));
         }
     };
-
+     
 
     // suite runner
     var runner = (function() {
         var visited = {},
             itemHashes = {},
-            log,
+            log, 
             writer;
-
+        
         /**
          * @class
          * Singleton: Manage multiple suites
@@ -470,7 +469,7 @@ var pjs = (function(){
             var mgr = this,
                 complete,
                 suiteq = [];
-
+                
             // create a single WebPage object for reuse
             var page = require('webpage').create({
                 // set up console output
@@ -505,24 +504,24 @@ var pjs = (function(){
                         }, config.timeoutInterval);
                 }
             };
-
+            
             // add persistent state
             page.state = {};
 
             mgr.getPage = function() {
                 return page;
             };
-
+            
             // set the completion callback
             mgr.setComplete = function(cb) {
                 complete = cb;
             };
-
+            
             // add a ScraperSuite
             mgr.add = function(suite) {
                 suiteq.push(suite);
             };
-
+            
             // run the next ScraperSuite in the queue
             mgr.runNext = function() {
                 var suite = suiteq.shift();
@@ -530,7 +529,7 @@ var pjs = (function(){
                 else complete();
             };
         }();
-
+        
         /**
          * @class
          * Scraper suite class - represents a set of urls to scrape
@@ -561,9 +560,9 @@ var pjs = (function(){
             };
             s.depth = 0;
         };
-
+        
         ScraperSuite.prototype = {
-
+        
             /**
              * Add an item, checking for duplicates as necessary
              * @param {Object|Array} items      Item(s) to add
@@ -590,7 +589,7 @@ var pjs = (function(){
                 }
                 writer.add(items);
             },
-
+            
             /**
              * Run the suite, scraping each url
              * @private
@@ -638,7 +637,7 @@ var pjs = (function(){
                         } else {
                             // scrape this url
 							window.setTimeout(function() {
-								s.scrape(url, scrapers, complete);
+                            s.scrape(url, scrapers, complete);
 							},config.delayBetweenRuns);
                         }
                     } else {
@@ -648,7 +647,7 @@ var pjs = (function(){
                 log.msg(s.title + " starting");
                 runNext();
             },
-
+            
             /**
              * Scrape a single page.
              * @param {String} url          Url of page to scrape
@@ -660,7 +659,6 @@ var pjs = (function(){
                 var suite = this,
                     opts = suite.opts,
                     page = SuiteManager.getPage();
-
                 log.msg('Opening ' + url);
                 // set up callback to look for response codes
                 page.onResourceReceived = function(res) {
@@ -676,16 +674,16 @@ var pjs = (function(){
                         console.log('requested: ' + JSON.stringify(req, undefined, 4));
                     }
                 };
-
+                        
                 // set user defined pageSettings
                 page.settings = extend(page.settings, config.pageSettings);
-
+                
                 // run the scrape
                 page.open(url, function(status) {
                     // check for load errors
                     if (status != "success") {
                         log.error('Page did not load (status=' + status + '): ' + url);
-                        complete(false);
+                            complete(false);
                         return;
                     }
                     // look for 4xx or 5xx status codes
@@ -704,8 +702,8 @@ var pjs = (function(){
                     log.msg('Scraping ' + url);
                     // load jQuery
                     page.injectJs('client/jquery.js');
-                    page.evaluate(function() {
-                        window._pjs$ = jQuery.noConflict(true);
+                    page.evaluate(function() { 
+                        window._pjs$ = jQuery.noConflict(true); 
                     });
                     // load pjscrape client-side code
                     page.injectJs('client/pjscrape_client.js');
@@ -716,12 +714,12 @@ var pjs = (function(){
                     // reset the global jQuery vars
                     if (!opts.noConflict) {
                         page.evaluate(function() {
-                            window.$ = window.jQuery = window._pjs$;
+                            window.$ = window.jQuery = window._pjs$; 
                         });
                     }
                     // run scraper(s)
                     page.waitFor(opts.ready, function(page) {
-                        if (page.evaluate(opts.scrapable)) {
+                        if (page.evaluate(opts.scrapable,opts.context)) {
                             // load script(s) if necessary
                             if (opts.loadScript) {
                                 opts.loadScript.forEach(function(script) {
@@ -748,7 +746,7 @@ var pjs = (function(){
                                 scrapers.forEach(function(scraper) {
                                     if (isFunction(scraper)) {
                                         // standard scraper
-                                        suite.addItem(page.evaluate(scraper));
+                                        suite.addItem(page.evaluate(scraper,opts.context));
                                         checkComplete();
                                     } else if (typeof scraper == 'string') {
                                         // selector-only scraper
@@ -784,7 +782,7 @@ var pjs = (function(){
                 });
             }
         };
-
+        
         /**
          * Run the set of configured scraper suites.
          * @name pjs.init
@@ -794,12 +792,12 @@ var pjs = (function(){
             if (!suites.length) fail('No suites configured');
             if (!(config.log in loggers)) fail('Could not find logger: "' + config.log + '"');
             if (!(config.writer in writers)) fail('Could not find writer "' + config.writer + '"');
-
+            
             // init logger
             log = new loggers[config.log]();
             // init writer
             writer = new writers[config.writer](log);
-
+            
             // init suite manager
             SuiteManager.setComplete(function() {
                 // scrape complete
@@ -807,11 +805,10 @@ var pjs = (function(){
                 log.msg('Saved ' + writer.count() + ' items');
                 phantom.exit();
             });
-
             // make all suites
             suites.forEach(function(suite, i) {
                 SuiteManager.add(new ScraperSuite(
-                    suite.title || "Suite " + i,
+                    suite.title || "Suite " + i, 
                     arrify(suite.url || suite.urls),
                     suite
                 ));
@@ -819,7 +816,7 @@ var pjs = (function(){
             // start the suite manager
             SuiteManager.runNext();
         }
-
+        
         return {
             init: init
         };
@@ -856,7 +853,7 @@ var pjs = (function(){
          * @param {Object} suite    Scraper suite configuration object
          * @param {Object} [...]    More suite configuration objects
          */
-        addSuite: function() {
+        addSuite: function() { 
             suites = Array.prototype.concat.apply(suites, arguments);
         },
 
@@ -872,7 +869,7 @@ var pjs = (function(){
     };
 }());
 
-
+ 
 // make sure we have a config file
 if (!phantom.args.length) {
     // die
@@ -882,12 +879,12 @@ if (!phantom.args.length) {
     // load the config file(s)
     phantom.args.forEach(function(configFile) {
         if (configFile.indexOf(".js") !== -1) {
-            if (!phantom.injectJs(configFile)) {
-                fail('Config file not found: ' + configFile);
-            }
+        if (!phantom.injectJs(configFile)) {
+            fail('Config file not found: ' + configFile);
+        }
         }
     });
 }
-
 // start the scrape
 pjs.init();
+
