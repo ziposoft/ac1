@@ -30,7 +30,7 @@ function fail(msg) {
 var pjs = (function(){
     var config = {
 			delayBetweenRuns: 0,
-            timeoutInterval: 1000,
+            timeoutInterval: 100,
             timeoutLimit: 20000,
             log: 'stdout',
             writer: 'stdout',
@@ -869,7 +869,7 @@ var pjs = (function(){
     };
 }());
 
- 
+/*
 // make sure we have a config file
 if (!phantom.args.length) {
     // die
@@ -888,3 +888,4 @@ if (!phantom.args.length) {
 // start the scrape
 pjs.init();
 
+*/

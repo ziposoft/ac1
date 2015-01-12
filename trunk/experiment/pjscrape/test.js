@@ -1,3 +1,5 @@
+phantom.injectJs("pjscrape.js");
+
 var urlstart = 'http://onthemarksports.com/results/';
 
 var contextobj = {
@@ -83,4 +85,19 @@ pjs.addSuite({
 		return arr;
 	}
 });
+
+
+
+pjs.init();
+
+
+
 console.log(contextobj.x);
+
+
+
+
+
+
+
+
