@@ -1,4 +1,4 @@
-var acs = (function()
+var acs = function()
 {
 	var config =
 	{ 
@@ -41,4 +41,4 @@ var acs = (function()
 	// suites.push({url:url, scraper:scraper});
 	}
 	};
-}());
+}();

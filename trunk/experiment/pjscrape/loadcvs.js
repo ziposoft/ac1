@@ -6,7 +6,20 @@ if (system.args.length < 2) {
     console.log("Usage: readFile.js FILE");
     phantom.exit(1);
 }
-var runners = [];
+
+
+var runners = function () {
+	var list = [];
+	var loadfile = function(filename, list) 
+			{
+				
+				
+				
+				
+				
+				
+			}
+}
 var content = '',
     f = null,
     lines = null,
