@@ -8,21 +8,9 @@ if (system.args.length === 1) {
             console.log(i + ': ' + arg);
     });
 }
-phantom.exit(0);
 
 
 /*
- * AcScraper constructor
- */
-var AcScraper = function (urlstart) {
-	  this.firstName = firstName;
-	  console.log('Person instantiated');
-	};
-
-	var person1 = new Person('Alice');
-	var person2 = new Person('Bob');
-
-
 phantom.onError = function(msg, trace) {
   var msgStack = ['PHANTOM ERROR: ' + msg];
   if (trace && trace.length) {
@@ -34,78 +22,23 @@ phantom.onError = function(msg, trace) {
   console.error(msgStack.join('\n'));
   phantom.exit(1);
 };
-
-
-var page = require('webpage').create();
-//Calls to "callPhantom" within the page 'p' arrive here
-page.onCallback = function(msg) {
-    console.log(":"+msg);
-};
-
-
-//var url = 'http://onthemarksports.com/results/';
-var url = 'http://localhost/';
-//Calls to "callPhantom" within the page 'p' arrive here
-page.onCallback = function(msg) {
-    console.log(":"+msg);
-    
-};
-var context_obj= {
-		name : "fred",
-		set : function(val)
-		{
-			this.name = val;
-		}
-	};
-var fn_scrape = function(context) {
-	context.stuff="poo poo!"
-	window.callPhantom(context.stuff)
-	console.log(context);	
-
-	return document.title;
-} 
-var fn_test_ready =function(context) {
-	return true;
-} 
-page.open(url, function(status) 
-{
-	var context=Object();
-	context.stuff="shit";
-	
-	if (status != "success") {
-		var status="unknown";
-		if(page.resource)
-			status = page.resource.status;
-		console.log('Page did not load (status=' + status + '): ' + url);
-			complete();
-	        return;
-	    }
-	var js = page.evaluate(fn_scrape,context);
-	console.log(js);
-	console.log(context.stuff);	
-	complete();
-});
-
-
-
-var complete = function() {
-	console.log("done!");
-	phantom.exit();
-		
-};
-console.log("here!");
-
-
+*/
 
 
 function waitFor(testFx, onReady, timeOutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //< Default Max Timout is 3s
         start = new Date().getTime(),
-        condition = false,
-        interval = setInterval(function() {
-            if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) {
+        condition = false;
+	console.log("waitFor");    
+    var interval = setInterval(
+    	function()
+    	{
+    		console.log("interval");
+            if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) 
+            {
                 // If not time-out yet and condition not yet fulfilled
                 condition = (typeof(testFx) === "string" ? eval(testFx) : testFx()); //< defensive code
+                console.log("'condition="+condition);
             } else {
                 if(!condition) {
                     // If condition still not fulfilled (timeout but condition is 'false')
@@ -118,5 +51,69 @@ function waitFor(testFx, onReady, timeOutMillis) {
                     clearInterval(interval); //< Stop this interval
                 }
             }
-        }, 250); //< repeat check every 250ms
+        },
+        250); //< repeat check every 250ms
 };
+var page = require('webpage').create();
+page.onConsoleMessage = function(msg) {
+    console.log(msg);
+};
+page.injectJs('client/jquery.js');
+//var url = 'http://onthemarksports.com/results/';
+var url = 'http://localhost/test_site/ready.html';
+//Calls to "callPhantom" within the page 'p' arrive here
+page.onCallback = function(msg) {
+    console.log(":"+msg);
+    
+};
+
+var fn_scrape = function(context) {
+
+	window.callPhantom(context)
+	
+	var x;
+	
+	//x=$('li').first().text();
+	x=$("li").first().text();
+	return x;
+} 
+var fn_test_ready =function(context) {
+	window.callPhantom("fn_test_ready");
+	return $("li.right").length()>0;
+};
+page.open(url, function(status) 
+{
+	var context="context";
+	
+	if (status != "success") 
+	{
+		var status="unknown";
+		if(page.resource)
+			status = page.resource.status;
+		console.log('Page did not load (status=' + status + '): ' + url);
+			complete();
+	        return;
+	    }
+	
+	console.log("calling wait!");
+	waitFor(function() {
+         // Check in the page if a specific element is now visible
+         return page.evaluate(fn_test_ready,context);
+     }, function() {
+        console.log("READY!");
+     });        	
+	var js = page.evaluate(fn_scrape,context);
+	console.log(js);
+	complete();
+});
+
+
+
+var complete = function() {
+	console.log("done!");
+	phantom.exit();
+		
+};
+
+
+
