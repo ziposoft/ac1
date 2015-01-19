@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="lib/|tests/test_site/|client/|tests/" kind="src" path=""/>
+	<classpathentry excluding="lib/|client/|tests/|tests/test_site/" kind="src" path=""/>
 	<classpathentry kind="src" path="client"/>
 	<classpathentry kind="src" path="lib"/>
 	<classpathentry excluding="test_site/" kind="src" path="tests"/>

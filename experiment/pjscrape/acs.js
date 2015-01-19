@@ -42,3 +42,15 @@ var acs = function()
 	}
 	};
 }();
+
+/*
+* AcScraper constructor
+*/
+var AcScraper = function (urlstart) {
+	  this.firstName = firstName;
+	  console.log('Person instantiated');
+	};
+
+	var person1 = new Person('Alice');
+	var person2 = new Person('Bob');
+
