@@ -79,7 +79,7 @@ var fn_scrape = function(context) {
 } 
 var fn_test_ready =function(context) {
 	window.callPhantom("fn_test_ready");
-	return $("li.right").length()>0;
+	return $("li.right").length>0;
 };
 page.open(url, function(status) 
 {
