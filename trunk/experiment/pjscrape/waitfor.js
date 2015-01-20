@@ -33,9 +33,15 @@ function waitFor(testFx, onReady, timeOutMillis) {
         }, 250); //< repeat check every 250ms
 };
 
-
+function exit(code) {
+    if (page) page.close();
+    setTimeout(function(){ phantom.exit(code); }, 0);
+    phantom.onError = function(){};
+    throw new Error('');
+}
 var page = require('webpage').create();
-page.injectJs('client/jquery.js');
+
+	 
 // Open Twitter on 'sencha' profile and, onPageLoad, do...
 page.open("http://localhost/test_site/ready.html", function (status) {
     // Check for page load success
@@ -46,11 +52,12 @@ page.open("http://localhost/test_site/ready.html", function (status) {
         waitFor(function() {
             // Check in the page if a specific element is now visible
             return page.evaluate(function() {
-                return $("li.right").length()>0;
+            	// return $("li.right").is(":visible");
+                return ($("li.right").length>0);
             });
         }, function() {
            console.log("The sign-in dialog should be visible now.");
-           phantom.exit();
+           exit(0);
         });        
     }
 });
