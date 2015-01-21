@@ -35,7 +35,7 @@ var acs = function(name,url) {
 	
 	this._timer;
 	this._timer_start;
-	this._timer_timeout=6000;
+	this._timer_timeout=30000;
 	this._timer_interval=250;
 	this._context="context";
 	
@@ -54,12 +54,12 @@ acs.prototype = {
 	onComplete : function ()
 	{
 		this.p.close();
-		console.log("onComplete!");		
+		console.log(this.name + " completed!");		
 		
 	},		
 	onTestReady : function ()
 	{
-		console.log("calling evalTestReady...");
+		console.log(this.name +" loading...");
 		return this.p.evaluate(this.evalTestReady,this._context);
 	},		
 	onReady : function ()
@@ -70,11 +70,11 @@ acs.prototype = {
 	onTimeout : function ()
 	{
 		// If condition still not fulfilled (timeout but condition is 'false')
-		console.log("'waitFor()' timeout");
-		phantom.exit(1);
+		console.log(this.name + "'waitFor()' timeout");
+		//phantom.exit(1);
 	},	
 	waitInterval : function(s) {
-		console.log("interval");
+		
 		if(s.onTestReady())
 		{
 			clearInterval(s._timer); //< Stop this interval
@@ -91,8 +91,8 @@ acs.prototype = {
 	},
 	waitFor : function() {
 		this._timer_start = new Date().getTime();
-		console.log("waitFor");
-		this._timer = setInterval(this.waitInterval, 250,this); //< repeat check every 250ms
+		
+		this._timer = setInterval(this.waitInterval, 500,this); //< repeat check every 250ms
 	},
 	run : function() 
 	{
@@ -118,7 +118,7 @@ acs.prototype = {
 					window._pjs$ = jQuery.noConflict(true); 
 				    window.$ = window.jQuery =  _pjs$;
 				});*/
-			console.log("calling wait!");
+			//console.log("calling wait!");
 			s.waitFor(); 	
 		});	
 	}
