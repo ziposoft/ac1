@@ -29,7 +29,7 @@ function waitFor(testFx, onReady, timeOutMillis) {
         }, 250); //< repeat check every 250ms
 };
 
-function exit(code) {
+function phantom_exit(code) {
     if (page) page.close();
     setTimeout(function(){ phantom.exit(code); }, 0);
     phantom.onError = function(){};

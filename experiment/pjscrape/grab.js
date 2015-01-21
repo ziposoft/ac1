@@ -101,10 +101,12 @@ page.open(url, function(status)
          return page.evaluate(fn_test_ready,context);
      }, function() {
         console.log("READY!");
+    	var js = page.evaluate(fn_scrape,context);
+    	console.log(js);
+    	complete();
      });        	
-	var js = page.evaluate(fn_scrape,context);
-	console.log(js);
-	complete();
+
+	
 });
 
 
