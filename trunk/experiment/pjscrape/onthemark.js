@@ -4,7 +4,7 @@ phantom.injectJs('acs.js');
 function OnTheMarkRace(raceobj)
 {
 	this.race = raceobj;
-	acs.call(this, raceobj.url);
+	acs.call(this, raceobj.name,raceobj.url);
 };
 OnTheMarkRace.prototype = Object.create(acs.prototype); // See note below
 OnTheMarkRace.prototype.constructor = acs;
@@ -37,7 +37,7 @@ OnTheMarkRace.prototype.onReady = function()
 {
 	console.log(this.race.name + " READY!");
 	var results = this.p.evaluate(scrape_race_results);
-	console.log(JSON.stringify(results));
+	console.log(JSON.stringify(results[0]));
 	jQuery.each(results, function(i, val)
 	{
 		
@@ -50,7 +50,7 @@ OnTheMarkRace.prototype.onReady = function()
  */
 function OnTheMarkResultList()
 {
-	acs.call(this, 'http://onthemarksports.com/results/');
+	acs.call(this, "OnTheMarkSports Results List",'http://onthemarksports.com/results/');
 };
 OnTheMarkResultList.prototype = Object.create(acs.prototype); // See note below
 OnTheMarkResultList.prototype.constructor = acs;
@@ -68,7 +68,7 @@ var scrape_list_of_results = function()
 		console.log("table len="+table.length)
 		jQuery.each(table, function(i, val)
 		{
-			if (i < 2)
+			if (i < 20)
 			{
 				var r={};
 				r.date=val._aData[0];
