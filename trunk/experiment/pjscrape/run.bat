@@ -1,0 +1,1 @@
+phantomjs.exe --config=ph.cfg %1
