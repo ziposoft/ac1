@@ -1,18 +1,64 @@
-var fs = require('fs'),
-    system = require('system');
-phantom.injectJs('acutil.js');
 phantom.injectJs('acs.js');
 
-if (system.args.length === 1) {
-    console.log('no args');
-} else {
-    system.args.forEach(function (arg, i) {
-            console.log(i + ': ' + arg);
-    });
-}
 
 
 
+
+var scraper = new acs('http://onthemarksports.com/results/');
+
+
+
+scraper.evalTestReady=function(context) {
+	if($('#tablepress-5').length>0)
+	{
+		console.log("results list ready");
+		return true;
+	}
+	return false;
+};
+
+
+var fn_scrape = function(context) {
+
+	var urls = [];
+	try
+	{
+		var table = punchgs.com.greensock.TweenLite.selector.fn.dataTable.settings[0].aoData;
+		jQuery.each( table, function( i, val ) {
+			if(i<100)
+				{
+				var link = val._aData[1];
+				var address=link.split('"');
+				urls.push(address[1]);
+				}
+			
+		});
+		return urls;
+		
+		
+	
+	}
+	catch(e) {}
+	return null;
+} 
+scraper.onReady=function() {
+	var context="context";	
+    console.log("READY!");
+	var js = scraper.p.evaluate(fn_scrape,context);
+	console.log(js);
+};
+
+
+
+
+
+
+
+
+scraper.run();
+
+
+/*
 
 var scraper = new acs('http://localhost/test_site/ready.html');
 
@@ -35,7 +81,14 @@ scraper.onReady=function() {
 	console.log(js);
 };
 
-scraper.run();
 
+
+
+
+
+
+
+scraper.run();
+*/
 
 

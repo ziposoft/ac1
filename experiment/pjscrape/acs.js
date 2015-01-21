@@ -1,7 +1,26 @@
+var fs = require('fs'),
+    system = require('system');
+phantom.injectJs('acutil.js');
+phantom.injectJs('client/jquery.js');
+phantom.injectJs('runners.js');
+
+if (system.args.length === 1) {
+    console.log('no args');
+} else {
+    system.args.forEach(function (arg, i) {
+            console.log(i + ': ' + arg);
+    });
+}
+
 /*
- * acs constructor
+ 
+
+* 
+* 
+* acs constructor
  */
-var acs = function(url) {
+var acs = function(name,url) {
+	this.name=name;
 	this._url=url;
 	this.p = require('webpage').create();
 	this.p.onConsoleMessage = function(msg) {
@@ -16,7 +35,7 @@ var acs = function(url) {
 	
 	this._timer;
 	this._timer_start;
-	this._timer_timeout=3000;
+	this._timer_timeout=6000;
 	this._timer_interval=250;
 	this._context="context";
 	
@@ -35,11 +54,12 @@ acs.prototype = {
 	onComplete : function ()
 	{
 		this.p.close();
-		console.log("done!");		
-		phantom_exit();
+		console.log("onComplete!");		
+		
 	},		
 	onTestReady : function ()
 	{
+		console.log("calling evalTestReady...");
 		return this.p.evaluate(this.evalTestReady,this._context);
 	},		
 	onReady : function ()
@@ -91,6 +111,13 @@ acs.prototype = {
 			        return;
 			    }
 			
+				s.p.injectJs('client/jquery.js');
+				/*
+				s.p.evaluate(function() {
+					console.log(window.title);
+					window._pjs$ = jQuery.noConflict(true); 
+				    window.$ = window.jQuery =  _pjs$;
+				});*/
 			console.log("calling wait!");
 			s.waitFor(); 	
 		});	
