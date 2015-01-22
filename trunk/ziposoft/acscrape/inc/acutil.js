@@ -4,19 +4,34 @@ function subClass(base,subclass)
 	subclass.prototype.constructor = base;	
 }
 
-var fileBase = function()
+var acsFileBase = function()
 {
-
 }
-fileBase.prototype = 
+acsFileBase.prototype = 
 {
 	out : function(s)
 	{
+		
 		console.log(s);
 	}
 }
-var gConsole= new fileBase();
+var gConsole= new acsFileBase();
 
+var acsFile = function(name)
+{
+	this.handle= fs.open(name, "w");
+	acsFileBase.call(this);
+};
+subClass(acsFileBase,acsFile);
+acsFile.prototype.out=function(s)
+{
+	this.handle.writeLine(s);
+}
+acsFile.prototype.close=function()
+{
+	this.handle.flush();
+	this.handle.close();
+}
 function clone(obj) {
     if(obj == null || typeof(obj) != 'object')
         return obj;
