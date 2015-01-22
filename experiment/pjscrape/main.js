@@ -26,9 +26,9 @@ o.city="Cary";
 o.state="NC";
 
 var r=new race("jungle fuck");
-r.output(console.log)
+r.output(gConsole)
 r=o;
-r.output(console.log)
+r.output(gConsole)
 
 
 phantom_exit(0);

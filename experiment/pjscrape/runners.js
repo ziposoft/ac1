@@ -8,10 +8,10 @@ var race = function(name, date, url, city, state)
 }
 race.prototype = 
 {
-		output : function(fnout)
+		output : function(f)
 		{
-			fnout(this.name)
-			fnout(this.city+", "+this.state+"    "+this.date)
+			f.out(this.name)
+			f.out(this.city+", "+this.state+"    "+this.date)
 			
 			
 		}

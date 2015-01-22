@@ -1,3 +1,16 @@
+var fileBase = function()
+{
+
+}
+fileBase.prototype = 
+{
+	out : function(s)
+	{
+		console.log(s);
+	}
+}
+var gConsole= new fileBase();
+
 
 function isVar(vartype)
 {
@@ -28,15 +41,6 @@ function popByName(arr,name)
 	}
 	return null;
 }
-Object.prototype.removeItem = function (key) 
-{
-	   if (!this.hasOwnProperty(key))
-	      return
-	   if (isNaN(parseInt(key)) || !(this instanceof Array))
-	      delete this[key]
-	   else
-	      this.splice(key, 1)
-};
 
 
 
