@@ -25,12 +25,10 @@ o.date="12/5/2014";
 o.city="Cary";
 o.state="NC";
 
-var r=new race("jungle fuck");
-r.output(gConsole)
-r=o;
-r.output(gConsole)
-
-
+var f=new acsFile("output.txt")
+f.out("hello?")
+f.out("hello? too?")
+f.close();
 phantom_exit(0);
 /*
 

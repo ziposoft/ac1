@@ -108,7 +108,7 @@ function scrape_list_of_results()
 		console.log("table len=" + table.length)
 		_ac$.each(table, function(i, val)
 		{
-			if (i < 10)
+			if (i < 1000)
 			{
 				var r = {};
 				r.date = val._aData[0];
@@ -153,8 +153,10 @@ OnTheMarkResultList.prototype.onReady = function()
  */
 acsQue.onComplete = function()
 {
+	var f=new acsFile("output.txt")
 	console.log("DONE! Outputing...");
-	gRaceResults.output(gConsole)
+	gRaceResults.output(f)
+	f.close();
 }
 runners.loadfile("CGTC.csv");
 acsQue.add(new OnTheMarkResultList())

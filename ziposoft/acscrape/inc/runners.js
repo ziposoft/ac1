@@ -11,8 +11,13 @@ acsRace.prototype =
 {
 	output : function(f)
 	{
-		f.out(this.name)
-		f.out(this.city + ", " + this.state + "    " + this.date)
+		f.out("\n\n"+this.name)
+		f.out(this.city + ", " + this.state + "    " + this.date+"\n")
+		if(this.results.length==0)
+			{
+			
+			f.out("(no Godiva Runners Found)")
+			}
 		jQuery.each(this.results, function(i, val)
 		{
 			val.output(f);
