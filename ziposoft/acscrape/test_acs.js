@@ -116,7 +116,7 @@ function process_result()
 		});
 		return races;
 }
-function scrape_list_of_results()
+TestRaceList.prototype.evalScrape = function()
 {
 	// console.log("fn_scrape")
 	var races = [];
@@ -146,7 +146,7 @@ function scrape_list_of_results()
 	}
 	return null;
 }
-TestRaceList.prototype.evalTestReady = function()
+TestRaceList.prototype.evalScrapeTest = function()
 {
 	if (_ac$('#data').length > 0)
 	{
@@ -155,10 +155,10 @@ TestRaceList.prototype.evalTestReady = function()
 	}
 	return false;
 };
-TestRaceList.prototype.onReady = function()
+TestRaceList.prototype.processData = function()
 {
 	// console.log("READY!");
-	var racelist = this.p.evaluate(scrape_list_of_results);
+	//var racelist = this.p.evaluate(scrape_list_of_results);
 	jQuery.each(racelist, function(i, val)
 	{
 		acsQue.add(new OnTheMarkRace(val))

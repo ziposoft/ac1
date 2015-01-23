@@ -1,6 +1,17 @@
 phantom.injectJs('inc/acs.js');
 
 
+
+function test(x)
+{
+	x=5;
+
+}
+b={};
+test(b);
+console.log(b);
+
+phantom_exit(0);
 var raceday = new Date("12/7/2014");
 var bday = new Date("5/27/1970");
 
