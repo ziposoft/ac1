@@ -26,7 +26,8 @@ var acsQue =
 		{
 			this.mapRunning.push(s);
 			console.log('Running '+s.name);
-			s.run();
+			setTimeout(runScrape,500,s);
+			//runScrape(s);
 			return true;
 		}
 		return false;
@@ -64,7 +65,7 @@ var acsQue =
 			console.log('Queue empty, exiting');
 			this.onComplete();
 			
-			phantom_exit(0);
+			//phantom_exit(0);
 		}
 	},
 	onComplete : function()
@@ -98,7 +99,7 @@ var acs = function(name, url)
 	this._timer_timeout = 30000;
 	this._timer_interval = 250;
 	this._context = "context";
-	this.eval
+	
 };
 acs.prototype =
 {
@@ -111,6 +112,7 @@ acs.prototype =
 	onComplete : function()
 	{
 		this.p.close();
+		delete this.p;
 		//console.log(this.name + " completed!");
 		acsQue.done(this);
 	},
@@ -151,31 +153,33 @@ acs.prototype =
 		//console.log(this.name+" calling wait!");
 		this._timer_start = new Date().getTime();
 		this._timer = setInterval(this.waitInterval, 500, this); //< repeat check every 250ms
-	},
-	run : function()
-	{
-		var s = this;
-		s.p.open(s._url, function(status)
-		{
-			var context = "context";
-			if (status != "success")
-			{
-				var status = "unknown";
-				if (s.p.resource) status = s.p.resource.status;
-				console.log('Page did not load (status=' + status + '): ' + s._url);
-				s.onComplete();
-				return;
-			}
-			s.p.injectJs('inc/jquery.js');
-			//s.p.injectJs('inc/race.js');
-			
-			s.p.evaluate(function() {
-				
-				window._ac$ = jQuery.noConflict(true); 
-			    //window.$ = window.jQuery =  _pjs$;
-			});
-			//console.log("calling wait!");
-			s.waitFor();
-		});
 	}
+};
+
+function runScrape(s)
+{
+	
+	s.p.open(s._url, function(status)
+	{
+		var context = "context";
+		if (status != "success")
+		{
+			var status = "unknown";
+			if (s.p.resource) status = s.p.resource.status;
+			console.log('Page did not load (status=' + status + '): ' + s._url);
+			s.onComplete();
+			return;
+		}
+		s.p.injectJs('inc/jquery.js');
+		//s.p.injectJs('inc/race.js');
+		
+		s.p.evaluate(function() {
+			
+			window._ac$ = jQuery.noConflict(true); 
+		    //window.$ = window.jQuery =  _pjs$;
+		});
+		//console.log("calling wait!");
+		s.waitFor();
+	});
 }
+
