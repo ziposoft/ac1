@@ -1,4 +1,4 @@
-var gDebugLevel=0;
+var gDebugLevel=1;
 
 function debugOut(s)
 {

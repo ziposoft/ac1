@@ -25,161 +25,180 @@ var acsQue =
 		if (this.mapRunning.length < this.maxrun)
 		{
 			this.mapRunning.push(s);
-			console.log('Running '+s.name);
-			setTimeout(runScrape,500,s);
-			//runScrape(s);
+			console.log('Running ' + s.name);
+			//setTimeout(runScrape, 500, s);
+			acsScrapePage(s);
 			return true;
 		}
 		return false;
-
-	},	
+	},
 	add : function(s)
 	{
 		this.processed++;
 		if (!this.run(s))
 		{
 			this.mapPending.push(s);
-			console.log('Queueing '+s.name);
+			console.log('Queueing ' + s.name);
 		}
 	},
 	done : function(scraper)
 	{
-		var s = popByName(this.mapRunning,scraper.name);
+		var s = popByName(this.mapRunning, scraper.name);
 		if (!s)
-		{	
-			console.log('error '+s.name+'not running');
+		{
+			console.log('error ' + s.name + 'not running');
 			return;
 		}
-		
-		while(this.mapPending.length)
+		while (this.mapPending.length)
 		{
-			if (this.mapRunning.length >= this.maxrun)
-				break;
-			var next=this.mapPending.pop();
+			if (this.mapRunning.length >= this.maxrun) break;
+			var next = this.mapPending.pop();
 			this.run(next)
-
-		}		
-		if(this.mapRunning.length==0)
+		}
+		if (this.mapRunning.length == 0)
 		{
-			console.log('Processed '+this.processed);
+			console.log('Processed ' + this.processed);
 			console.log('Queue empty, exiting');
 			this.onComplete();
-			
-			//phantom_exit(0);
+			// phantom_exit(0);
 		}
 	},
 	onComplete : function()
 	{
 		console.log('COMPLETE!');
-		
 	}
 }
 /*
-
-
+ * 
+ * 
  * 
  * 
  * acs constructor
  */
 var acs = function(name, url)
 {
+	this.data={};
 	this.name = name;
 	this._url = url;
-	this.p = require('webpage').create();
-	this.p.onConsoleMessage = function(msg)
-	{
-		console.log(msg);
-	};
-	this.p.onCallback = function(msg)
-	{
-		console.log(":" + msg);
-	};
+
 	this._timer;
 	this._timer_start;
 	this._timer_timeout = 30000;
 	this._timer_interval = 250;
-	this._context = "context";
-	
+	this.context = "context";
 };
 acs.prototype =
 {
-	evalTestReady : function()
+	evalScrapeTest : function()
 	{
 		return true;
 	},
 	evalScrape : function()
-	{},
-	onComplete : function()
 	{
-		this.p.close();
-		delete this.p;
-		//console.log(this.name + " completed!");
+		return true;
+	},
+	onScapeComplete : function()
+	{
+		console.log("onScapeComplete");
 		acsQue.done(this);
 	},
-	onTestReady : function()
+	onScapeError: function(error)
 	{
-		//console.log(this.name + " loading...");
-		return this.p.evaluate(this.evalTestReady, this._context);
+		console.log("onScapeError");
+		acsQue.done(this);
 	},
-	onReady : function()
+	onScrapeTimeout : function()
 	{
-		console.log("'waitFor()' finished in " + (new Date().getTime() - this._timer_start) + "ms.");
+		console.log("onScrapeTimeout");
+		acsQue.done(this);
 	},
-	onTimeout : function()
+	processData : function()
 	{
-		// If condition still not fulfilled (timeout but condition is 'false')
-		console.log(this.name + "'waitFor()' timeout");
-		//phantom.exit(1);
+		console.log("processData");
 	},
-	waitInterval : function(s)
-	{
-		if (s.onTestReady())
-		{
-			clearInterval(s._timer); //< Stop this interval
-			if(s.onReady()) //return true, we are done
-				s.onComplete();
-			else
-				s.waitFor();
-		}
-		else if (new Date().getTime() - s._timer_start > s._timer_timeout)
-		{
-			clearInterval(s._timer); //< Stop this interval
-			s.onTimeout();
-			s.onComplete();
-		}
-	},
-	waitFor : function()
-	{
-		//console.log(this.name+" calling wait!");
-		this._timer_start = new Date().getTime();
-		this._timer = setInterval(this.waitInterval, 500, this); //< repeat check every 250ms
-	}
 };
-
-function runScrape(s)
+function waitFor(testReady, onReady, onTimeout, onComplete, timeOutMillis)
 {
-	
-	s.p.open(s._url, function(status)
+	var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000;
+	var start = new Date().getTime(), condition = false;
+	var interval = setInterval(function()
 	{
-		var context = "context";
-		if (status != "success")
+		if (testReady())
+		{
+			clearInterval(interval);
+			if (onReady())
+				onComplete();
+			else
+				{
+				debugOut("calling waitFor recursively")
+				waitFor(testReady, onReady, onTimeout, onComplete, timeOutMillis);
+				
+				}
+		}
+		else if ((new Date().getTime() - start > maxtimeOutMillis))
+		{
+			// If not time-out yet and condition not yet fulfilled
+			console.log("'waitFor()' timeout");
+			onTimeout();
+			clearInterval(interval); // < Stop this interval
+		}
+	}, 250); // < repeat check every 250ms
+};
+function acsScrapePage(s)
+{
+	var page = require('webpage').create();
+	page.onConsoleMessage = function(msg)
+	{
+		console.log(msg);
+	};
+	page.onCallback = function(msg)
+	{
+		console.log(":" + msg);
+	};
+	// Open Twitter on 'sencha' profile and, onPageLoad, do...
+	page.open(s._url, function(status)
+	{
+		console.log("page opened");
+		// Check for page load success
+		page.injectJs('inc/jquery.js');
+		page.evaluate(function()
+		{
+			window._ac$ = jQuery.noConflict(true);
+		});
+		if (status !== "success")
 		{
 			var status = "unknown";
-			if (s.p.resource) status = s.p.resource.status;
+			if (page.resource) status = page.resource.status;
 			console.log('Page did not load (status=' + status + '): ' + s._url);
-			s.onComplete();
-			return;
+			page.close();
+			delete page;			
+			s.onScapeError(status);
+			return false;
 		}
-		s.p.injectJs('inc/jquery.js');
-		//s.p.injectJs('inc/race.js');
+		waitFor(
+			function() // testReady
+			{
+				return page.evaluate(s.evalScrapeTest, s.context);
+			}, 
+			function() //onReady
+			{
+				return page.evaluate(s.evalScrape, s.context);
+			},
+			function() //onTimeout
+			{
+				page.close();
+				delete page;
+				s.onScrapeTimeout();
+			},
+			function() //onComplete
+			{
+				page.close();
+				delete page;
+				s.onScapeComplete();
+			}			
+		); //End waitFor
 		
-		s.p.evaluate(function() {
-			
-			window._ac$ = jQuery.noConflict(true); 
-		    //window.$ = window.jQuery =  _pjs$;
-		});
-		//console.log("calling wait!");
-		s.waitFor();
 	});
+	return true; //started OK
 }
 
