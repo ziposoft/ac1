@@ -98,7 +98,7 @@ var acs = function(name, url)
 	this._timer_timeout = 30000;
 	this._timer_interval = 250;
 	this._context = "context";
-	this.eval
+	
 };
 acs.prototype =
 {

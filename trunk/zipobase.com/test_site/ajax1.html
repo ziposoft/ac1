@@ -1,0 +1,61 @@
+
+<script type="text/javascript">
+	$(function()
+	{
+		$('#clkme').click(function()
+		{
+			window.setTimeout(function()
+			{
+				$('#ajax2').load('ajax2.html');
+			}, 1000)
+		});
+	})
+</script>
+<div>
+	<h1>Test Page: AJAX-loaded async UI</h1>
+
+	<div id="ajax2">
+	    <table>
+	           <tr>
+            <th>place</th>
+            <th>group</th>
+            <th>groupplace</th>
+            <th>name</th>
+            <th>city</th>
+            <th>state</th>
+            <th>time</th>
+
+        </tr> 
+        <tr>
+            <td>1</td>
+            <td>overall</td>
+            <td>1</td>
+            <td>Dooright, Dudley</td>
+            <td>Cary</td>
+            <td>Nc</td>
+            <td>16:12</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>overall</td>
+            <td>2</td>
+            <td>Francisco, Jorge</td>
+            <td>Cary</td>
+            <td>Nc</td>
+            <td>18:12</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>overall</td>
+            <td>3</td>
+            <td>Corriveau, Anthony</td>
+            <td>Cary</td>
+            <td>Nc</td>
+            <td>19:45</td>
+        </tr>
+    </table>
+		<a href="#" id="clkme">NextPage</a>
+	
+	
+	</div>
+</div>

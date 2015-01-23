@@ -28,42 +28,65 @@ function waitFor(testFx, onReady, timeOutMillis) {
             }
         }, 250); //< repeat check every 250ms
 };
-
 function phantom_exit(code) {
-    if (page) page.close();
+   // if (page) page.close();
     setTimeout(function(){ phantom.exit(code); }, 0);
     phantom.onError = function(){};
     throw new Error('');
 }
-var page = require('webpage').create();
 
-page.onConsoleMessage = function(msg) {
-    console.log(msg);
-};
-page.onCallback = function(msg) {
-    console.log(":"+msg);
-    
-};
 
 var fn_test_ready =function(context) {
-		return $("li.right").length>0;
+	return 1;
+		//return $("li.right").length>0;
 };
-	 
-// Open Twitter on 'sencha' profile and, onPageLoad, do...
-page.open("http://localhost/test_site/ready.html", function (status) {
-    // Check for page load success
-	var context="context";
-    if (status !== "success") {
-        console.log("Unable to access network");
-    } else {
-        // Wait for 'signin-dropdown' to be visible
-        waitFor(function() {
-            // Check in the page if a specific element is now visible
-            return page.evaluate(fn_test_ready,context);
-        }, function() {
-           console.log("The sign-in dialog should be visible now.");
-           exit(0);
-        });        
-    }
-});
+var count=200;
+function openpage()
+{
+	
+	var page = require('webpage').create();
+
+	page.onConsoleMessage = function(msg) {
+	    console.log(msg);
+	};
+	page.onCallback = function(msg) {
+	    console.log(":"+msg);
+	    
+	};	
+	// Open Twitter on 'sencha' profile and, onPageLoad, do...
+	page.open("http://massacremarathon.com/", function (status) {
+	    // Check for page load success
+		page.injectJs('client/jquery.js');
+		page.evaluate(function() {
+			window._ac$ = jQuery.noConflict(true); 
+		});		
+		console.log("page opened");
+		var context="context";
+	    if (status !== "success") {
+	        console.log("Unable to access network");
+	    } else {
+	        // Wait for 'signin-dropdown' to be visible
+	        waitFor(function() {
+	            // Check in the page if a specific element is now visible
+	            return page.evaluate(fn_test_ready,context);
+	        }, function() {
+	           console.log("The sign-in dialog should be visible now.");
+	           
+	           page.close();
+	           delete page;
+	           count--;
+	           if(count)
+	        	   setTimeout(openpage , 1000);
+	        	  
+	           else
+	        	   
+	        	   phantom_exit(0);
+	        });        
+	    }
+	});
+}
+setTimeout(openpage , 2000);
+setTimeout(openpage , 1100);
+setTimeout(openpage , 800);
+setTimeout(openpage , 500);
 
