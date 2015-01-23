@@ -1,9 +1,20 @@
+var gDebugLevel=0;
+
+function debugOut(s)
+{
+	if(gDebugLevel>0)
+		console.log(s);
+}
+
 function subClass(base,subclass)
 {
 	subclass.prototype = Object.create(base.prototype); 
 	subclass.prototype.constructor = base;	
 }
-
+/*
+ * 
+ *  class acsFileBase
+ */
 var acsFileBase = function()
 {
 }
@@ -32,6 +43,13 @@ acsFile.prototype.close=function()
 	this.handle.flush();
 	this.handle.close();
 }
+
+/*
+ * 
+ *  class acsFileBase
+ */
+
+
 function clone(obj) {
     if(obj == null || typeof(obj) != 'object')
         return obj;

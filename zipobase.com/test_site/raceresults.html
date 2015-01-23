@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html> 
+  <head>
+    <title>TEST</title>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        window.setTimeout(function() {
+            $('#ajax1').load('racelist.html');
+        }, 1000)
+    })
+    </script>
+  </head> 
+  <body>
+    <h1>Test RACE Results</h1>
+    
+    <div id="ajax1"></div>
+    <ul>
+    <li>Content wrong</li>
+    <li>Content42</li>
+</ul>
+  </body>
+</html>

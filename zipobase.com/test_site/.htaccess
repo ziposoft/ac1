@@ -1,0 +1,7 @@
+AddType text/xml .xml
+AddType text/xml .xsl
+Options Includes Indexes
+AddHandler server-parsed .html
+
+
+
