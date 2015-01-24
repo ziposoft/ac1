@@ -119,6 +119,8 @@ acs.prototype =
 	{
 		console.log("processData");
 	},
+	
+	
 };
 function waitFor(testReady, onReady, onTimeout, onComplete, timeOutMillis)
 {
