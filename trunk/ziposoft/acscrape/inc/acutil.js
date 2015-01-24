@@ -50,7 +50,7 @@ acsFile.prototype.close=function()
  */
 
 
-function clone(obj) {
+function ascClone(obj) {
     if(obj == null || typeof(obj) != 'object')
         return obj;
 
@@ -64,14 +64,14 @@ function clone(obj) {
     return temp;
 }
 
-function copyObj(fromObj,toObj) {
+function acsCopyObj(fromObj,toObj) {
     if(fromObj == null || typeof(fromObj) != 'object')
         return ;
 
   
     for(var key in fromObj) {
         if(fromObj.hasOwnProperty(key)) {
-        	toObj[key] = clone(fromObj[key]);
+        	toObj[key] = ascClone(fromObj[key]);
         }
     }
     return ;
@@ -82,8 +82,7 @@ return !( vartype === 'undefined');
 };
 function phantom_exit(code) {
     setTimeout(function(){ phantom.exit(code); }, 0);
-    phantom.onError = function(){};
-    throw new Error('');
+
 }
 function calcAge(dateString,bday) {
 	  var birthday = +new Date(bday);

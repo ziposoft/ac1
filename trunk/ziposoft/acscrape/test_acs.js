@@ -2,14 +2,14 @@ phantom.injectJs('inc/acs.js');
 function TestRace(raceobj)
 {
 	this.race = new acsRace();
-	copyObj(raceobj, this.race);
+	acsCopyObj(raceobj, this.race);
 	//this.race.output(gConsole);
 	gRaceResults.races.push(this.race);
 	acs.call(this, raceobj.name, raceobj.url);
 };
 subClass(acs,TestRace);
 
-TestRace.prototype.evalTestReady = function()
+TestRace.prototype.evalScrapeTest = function()
 {
 	if (_ac$('table.data').length)
 	{
@@ -18,7 +18,7 @@ TestRace.prototype.evalTestReady = function()
 	}
 	return false;
 };
-function scrape_race_results()
+TestRace.prototype.evalScrape = function()
 {
 	if (_ac$('table.data').length == 0) return null;
 	var arr = [];
@@ -48,10 +48,11 @@ function scrape_next_page()
 	clickElement(next[0]);
 	return true;
 }
-TestRace.prototype.onReady = function()
+TestRace.prototype.processData = function()
 {
-	//console.log(this.race.name + " READY!");
-	var results = this.p.evaluate(scrape_race_results);
+
+	try
+	{
 	//console.log(JSON.stringify(results[2]));
 	/*
 	 0= overall place
@@ -69,7 +70,7 @@ TestRace.prototype.onReady = function()
 	 */
 	var race = this.race;
 	//console.log(this.race.name  +" found " + results.length + " results")
-	jQuery.each(results, function(i, val)
+	jQuery.each(this.data, function(i, val)
 	{
 		if (val[3])
 		{
@@ -80,9 +81,14 @@ TestRace.prototype.onReady = function()
 
 		}
 	});
-	var next = this.p.evaluate(scrape_next_page);
-	if (!next) return true; //We are done
-	return false;
+	}
+	catch (e)
+	{
+		console.log(e);
+	}	
+	//var next = this.p.evaluate(scrape_next_page);
+	//if (!next) return true; //We are done
+	return true;
 };
 /*
  * OnTheMarkResultList
@@ -94,47 +100,20 @@ function TestRaceList()
 };
 subClass(acs,TestRaceList);
 
-/*
- * OnTheMarkResultList - Get the list of results
- * 
- */
 
-function process_result()
-{
-		_ac$.each(table, function(i, val)
-		{
-			if (i < 1000)
-			{
-				var r = {};
-				r.date = val._aData[0];
-				r.url = val._aData[1].split('"')[1];
-				r.name = val._aData[1].split('>')[1].split('<')[0];
-				r.city = val._aData[2];
-				r.state = val._aData[3];
-				races.push(r);
-			}
-		});
-		return races;
-}
 TestRaceList.prototype.evalScrape = function()
 {
-	// console.log("fn_scrape")
-	var races = [];
+	 console.log("fn_scrape")
 	try
 	{
 		
-		if (_ac$('table.data').length == 0) 
+		if (_ac$('#data').length == 0) 
 			return null;
-		var arr = [];
-		var arr = _ac$('table.data tr').map(function()
-		{
-			return [ _ac$('td', this).map(function()
-			{
-				var a = _ac$(this).text();
-				return a.trim();
-			}).toArray() ];
-		}).toArray();
-		return arr;	
+		var s= _ac$('table#data').html();
+		
+		
+		return s;
+		var races = [];
 		
 		//var table = punchgs.com.greensock.TweenLite.selector.fn.dataTable.settings[0].aoData;
 		//console.log("table len=" + table.length)
@@ -159,9 +138,35 @@ TestRaceList.prototype.processData = function()
 {
 	// console.log("READY!");
 	//var racelist = this.p.evaluate(scrape_list_of_results);
-	jQuery.each(racelist, function(i, val)
+	var data=jQuery(this.data);
+	var races = [];
+	jQuery('tr',data).each(function()
 	{
-		acsQue.add(new OnTheMarkRace(val))
+		
+		
+		var l=jQuery("td", this);
+		if(l.length<4)
+			return;
+		
+		var h=l.eq(1);
+		var href=jQuery("a", h).attr("href");			
+
+		var r = {};
+		r.date = l.eq(0).text();
+		//r.url = _ac.toFullUrl(href);
+		r.url = href;
+		r.name = h.text();
+		r.city = l.eq(2).text();
+		r.state = l.eq(3).text();
+		races.push(r);			
+	});
+
+	
+	acsQue.add(new TestRaceList());
+	return true;
+	jQuery.each(races, function(i, val)
+	{
+		acsQue.add(new TestRace(val))
 	});
 	return true; //We are done
 };
@@ -172,6 +177,9 @@ TestRaceList.prototype.processData = function()
  */
 acsQue.onComplete = function()
 {
+	gRaceResults.output(gConsole)
+
+	
 	var f=new acsFile("output.txt")
 	console.log("DONE! Outputing...");
 	gRaceResults.output(f)

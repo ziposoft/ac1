@@ -2,6 +2,17 @@ phantom.injectJs('inc/acs.js');
 
 
 
+
+var url="http://localhost/test_site/raceresults.html";
+
+var parts=url.split("://");
+if(parts.length)
+	{
+	
+	
+	}
+
+
 function test(x)
 {
 	x=5;
