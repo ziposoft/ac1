@@ -26,7 +26,7 @@ var acsQue =
 		{
 			this.mapRunning.push(s);
 			console.log('Running ' + s.name);
-			//setTimeout(runScrape, 500, s);
+			//setTimeout(acsScrapePage, 1000, s);
 			acsScrapePage(s);
 			return true;
 		}
@@ -80,7 +80,8 @@ var acs = function(name, url)
 	this.data={};
 	this.name = name;
 	this._url = url;
-
+	this.useJquery = true;
+	
 	this._timer;
 	this._timer_start;
 	this._timer_timeout = 30000;
@@ -99,17 +100,19 @@ acs.prototype =
 	},
 	onScapeComplete : function()
 	{
-		console.log("onScapeComplete");
+		console.log(this.name + " Complete");
+		//console.log(JSON.stringify(this.data));
+		this.processData();
 		acsQue.done(this);
 	},
 	onScapeError: function(error)
 	{
-		console.log("onScapeError");
+		console.log(this.name + " error");
 		acsQue.done(this);
 	},
 	onScrapeTimeout : function()
 	{
-		console.log("onScrapeTimeout");
+		console.log(this.name + " Timeout");
 		acsQue.done(this);
 	},
 	processData : function()
@@ -119,7 +122,7 @@ acs.prototype =
 };
 function waitFor(testReady, onReady, onTimeout, onComplete, timeOutMillis)
 {
-	var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000;
+	var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 15000;
 	var start = new Date().getTime(), condition = false;
 	var interval = setInterval(function()
 	{
@@ -142,7 +145,7 @@ function waitFor(testReady, onReady, onTimeout, onComplete, timeOutMillis)
 			onTimeout();
 			clearInterval(interval); // < Stop this interval
 		}
-	}, 250); // < repeat check every 250ms
+	}, 500); // < repeat check every 250ms
 };
 function acsScrapePage(s)
 {
@@ -158,13 +161,17 @@ function acsScrapePage(s)
 	// Open Twitter on 'sencha' profile and, onPageLoad, do...
 	page.open(s._url, function(status)
 	{
-		console.log("page opened");
 		// Check for page load success
-		page.injectJs('inc/jquery.js');
-		page.evaluate(function()
+		if(s.useJquery)
 		{
-			window._ac$ = jQuery.noConflict(true);
-		});
+			page.injectJs('inc/jquery.js');
+			page.evaluate(function()
+			{
+				window._ac$ = jQuery.noConflict(true);
+			});
+			page.injectJs('inc/acs_client.js');			
+		}
+		
 		if (status !== "success")
 		{
 			var status = "unknown";
@@ -182,7 +189,8 @@ function acsScrapePage(s)
 			}, 
 			function() //onReady
 			{
-				return page.evaluate(s.evalScrape, s.context);
+				s.data= page.evaluate(s.evalScrape, s.context);
+				return true;
 			},
 			function() //onTimeout
 			{

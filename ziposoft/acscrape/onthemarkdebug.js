@@ -11,28 +11,14 @@ subClass(acs,OnTheMarkRace);
 
 OnTheMarkRace.prototype.evalScrapeTest = function()
 {
-	if (_ac$('table.data').length)
-	{
-		// console.log("table.data ready");
-		return true;
-	}
-	return false;
+	return true;	
+
 };
 
 OnTheMarkRace.prototype.evalScrape = function()
 {
-	
-	if (_ac$('table.data').length == 0) return null;
-	var arr = [];
-	var arr = _ac$('table.data tr').map(function()
-	{
-		return [ _ac$('td', this).map(function()
-		{
-			var a = _ac$(this).text();
-			return a.trim();
-		}).toArray() ];
-	}).toArray();
-	return arr;
+	return null;
+
 }
 function scrape_next_page()
 {
@@ -93,6 +79,7 @@ OnTheMarkRace.prototype.processData = function()
 function OnTheMarkResultList()
 {
 	acs.call(this, "OnTheMarkSports Results List", 'http://onthemarksports.com/results/');
+	this.useJquery=true;
 };
 subClass(acs,OnTheMarkResultList);
 
@@ -131,6 +118,7 @@ OnTheMarkResultList.prototype.evalScrape = function()
 }
 OnTheMarkResultList.prototype.evalTestReady = function()
 {
+
 	if (_ac$('#tablepress-5').length > 0)
 	{
 		// console.log("results list ready");
@@ -140,6 +128,8 @@ OnTheMarkResultList.prototype.evalTestReady = function()
 };
 OnTheMarkResultList.prototype.processData = function()
 {
+	acsQue.add(new OnTheMarkResultList());
+	return false;
 	// console.log("READY!");
 	jQuery.each(this.data, function(i, val)
 	{
@@ -158,7 +148,6 @@ acsQue.onComplete = function()
 	console.log("DONE! Outputing...");
 	gRaceResults.output(f)
 	f.close();
-	phantom_exit();
 }
 runners.loadfile("CGTC.csv");
 acsQue.add(new OnTheMarkResultList())

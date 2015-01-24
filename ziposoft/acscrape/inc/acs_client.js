@@ -10,7 +10,7 @@
  * to scrapers as <code>_pjs</code> or <code>window._pjs</code>.
  * @name _pjs
  */
-window._acs = (function($) {
+window._ac = (function($) {
     
     // munge the location
     var loc = window.location,
@@ -126,13 +126,13 @@ window._acs = (function($) {
          */
         '$': $
     };
-}(_acs$));
+}(_ac$));
 
 // bind to .ready()
-window._acs.$(function() {
-    window._acs.ready = true;
+window._ac.$(function() {
+    window._ac.ready = true;
 });
 
 // for reasons I can't fathom, omitting this line throws an
 // error on pages with <input type="image">. Go figure.
-console.log('___ Client-side code initialized');
+console.log('');
