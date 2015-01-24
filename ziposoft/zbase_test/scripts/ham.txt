@@ -1,3 +1,0 @@
-ds.act_clear
-open('test',2)
-exec('scripts/ds_test.txt')

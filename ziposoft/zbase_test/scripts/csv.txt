@@ -1,2 +1,0 @@
-open('test',1)
-exec('scripts/ds_test.txt')

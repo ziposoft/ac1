@@ -1,3 +1,0 @@
-File mapping
-CSV loading by line
-fix type conversion stuff, in z_file too

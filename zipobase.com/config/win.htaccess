@@ -1,9 +1,0 @@
-AddType text/xml .xml
-AddType text/xml .xsl
-Options Includes
-AddHandler server-parsed .html
-
-
-
-
-AddHandler fcgid54-script html
