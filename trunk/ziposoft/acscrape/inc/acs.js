@@ -1,7 +1,8 @@
 var fs = require('fs'), system = require('system');
-phantom.injectJs('inc/acutil.js');
 phantom.injectJs('inc/jquery.js');
+phantom.injectJs('inc/acutil.js');
 phantom.injectJs('inc/runners.js');
+phantom.injectJs('inc/acs_shared.js');
 if (system.args.length === 1)
 {
 	console.log('no args');
@@ -251,7 +252,9 @@ acs.prototype =
 				{
 					window._ac$ = jQuery.noConflict(true);
 				});
+				s.p.injectJs('inc/acs_shared.js');
 				s.p.injectJs('inc/acs_client.js');
+
 			}
 			debugOut(s.name + " opened: " + s.url)
 			s.scrapeStartTimer();
