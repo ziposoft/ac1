@@ -1,17 +1,21 @@
 phantom.injectJs('inc/acs.js');
 
 
+var x=null;
+if(x)
+	console.log("x= something: "+x);
+
+x="";
+if(x)
+	console.log("x= : "+x);
 
 
-var url="http://localhost/test_site/raceresults.html";
 
-var parts=url.split("://");
-if(parts.length)
-	{
-	
-	
-	}
+console.log(JSON.stringify(urlSplit("http://localhost/test_site/raceresults.html")));
+console.log(JSON.stringify(urlSplit("https://localhost")));
+console.log(JSON.stringify(urlSplit("/test_site/raceresults.html")));
 
+phantom_exit(0);
 
 function test(x)
 {

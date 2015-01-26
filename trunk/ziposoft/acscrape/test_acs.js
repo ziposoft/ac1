@@ -11,12 +11,16 @@ subClass(acs,TestRace);
 
 TestRace.prototype.evalScrapeTest = function()
 {
+	if (_ac$('div#ajax1').length == 0)	
+		return 0;
+	
 	if (_ac$('table.data').length)
 	{
-		// console.log("table.data ready");
-		return true;
+		 console.log("table.data ready");
+		return 2;
 	}
-	return false;
+	 console.log("table.data not ready");
+	return 1;
 };
 TestRace.prototype.evalScrape = function()
 {
@@ -48,7 +52,7 @@ function scrape_next_page()
 	clickElement(next[0]);
 	return true;
 }
-TestRace.prototype.processData = function()
+TestRace.prototype.onProcessData = function()
 {
 
 	try
@@ -111,7 +115,6 @@ TestRaceList.prototype.evalScrape = function()
 			return null;
 		var s= _ac$('table#data').html();
 		
-		
 		return s;
 		var races = [];
 		
@@ -127,17 +130,20 @@ TestRaceList.prototype.evalScrape = function()
 }
 TestRaceList.prototype.evalScrapeTest = function()
 {
+	if (_ac$('div#ajax1').length == 0)	
+		return 0;
 	if (_ac$('#data').length > 0)
 	{
 		 console.log("results list ready");
-		return true;
+		return 2;
 	}
-	return false;
+	return 1;
 };
-TestRaceList.prototype.processData = function()
+TestRaceList.prototype.onProcessData = function()
 {
 	// console.log("READY!");
 	//var racelist = this.p.evaluate(scrape_list_of_results);
+	var s=this;
 	var data=jQuery(this.data);
 	var races = [];
 	jQuery('tr',data).each(function()
@@ -154,16 +160,13 @@ TestRaceList.prototype.processData = function()
 		var r = {};
 		r.date = l.eq(0).text();
 		//r.url = _ac.toFullUrl(href);
-		r.url = href;
+		r.url = s.makeFullUrl(href);
 		r.name = h.text();
 		r.city = l.eq(2).text();
 		r.state = l.eq(3).text();
 		races.push(r);			
 	});
 
-	
-	acsQue.add(new TestRaceList());
-	return true;
 	jQuery.each(races, function(i, val)
 	{
 		acsQue.add(new TestRace(val))

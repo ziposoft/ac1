@@ -133,6 +133,4 @@ window._ac.$(function() {
     window._ac.ready = true;
 });
 
-// for reasons I can't fathom, omitting this line throws an
-// error on pages with <input type="image">. Go figure.
-console.log('');
+
