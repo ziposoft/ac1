@@ -105,7 +105,35 @@ function popByName(arr,name)
 	return null;
 }
 
-
+function urlSplit(str)
+{
+	var r={
+			
+		protocol: "http",
+		host: "",
+		path: ""
+	}
+	var parts=str.split("://");
+	if(parts.length==2)
+	{
+		r.protocol=parts[0];
+		str=parts[1];
+		var i=str.indexOf('/');
+		if(i==-1)
+		{
+			r.host=str;
+			return r;
+		}
+		r.host=str.substring(0,i);
+		var n = str.lastIndexOf('/');
+		if(n==-1)
+			n=str.length;
+		r.path=str.substring(i,n);
+	}
+	else //It is relative URL
+		r.path=str;
+	return r;
+}
 
 String.prototype.capitalize = function() {
      this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
