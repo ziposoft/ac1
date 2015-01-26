@@ -132,5 +132,5 @@ window._ac = (function($) {
 window._ac.$(function() {
     window._ac.ready = true;
 });
-
+window._acs_result = new resultUrl();
 
