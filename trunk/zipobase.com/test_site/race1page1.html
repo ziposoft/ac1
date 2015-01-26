@@ -1,17 +1,5 @@
 
-<script type="text/javascript">
-	$(function()
-	{
-		$('#clkme').click(function()
-		{
-			window.setTimeout(function()
-			{
-				$('#ajax2').load('race1page2.html');
-			}, 1000)
-		});
-	})
-</script>
-<div>
+<div id="ajax2">
 	<h1>RACE1 </h1>
 
 	<div >
@@ -59,3 +47,16 @@
 	
 	</div>
 </div>
+
+<script type="text/javascript">
+	$(function()
+	{
+		$('#clkme').click(function()
+		{
+			window.setTimeout(function()
+			{
+				$('#ajax2').load('race1page2.html');
+			}, 1000)
+		});
+	})
+</script>
