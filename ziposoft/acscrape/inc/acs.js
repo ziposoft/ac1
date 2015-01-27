@@ -236,6 +236,17 @@ acs.prototype =
 	{
 		var s = this;
 		s.p = require('webpage').create();
+		s.p.onConsoleMessage = function(msg)
+		{
+			console.log(msg);
+		};
+		s.p.onCallback = function(msg)
+		{
+			console.log(":" + msg);
+		};
+		s.p.onResourceTimeout = function(request) {
+		    console.log('Response (#' + request.id + '): ' + JSON.stringify(request));
+		};	
 		s.p.open(s.url, function(status)
 		{
 			var context = "context";

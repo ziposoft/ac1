@@ -24,7 +24,7 @@ TestRace.prototype.evalScrapeTest = function()
 };
 TestRace.prototype.evalScrape = function()
 {
-	debugOut(_acs.status);
+	console.log("helloooo:"+_acs.status);
 	if (_ac$('table.data').length == 0) return null;
 	var arr = [];
 	var arr = _ac$('table.data tr').map(function()
