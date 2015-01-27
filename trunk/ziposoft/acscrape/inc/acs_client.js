@@ -131,6 +131,7 @@ window._ac = (function($) {
 // bind to .ready()
 window._ac.$(function() {
     window._ac.ready = true;
+    window._acs = new resultUrl(); 
 });
-window._acs_result = new resultUrl();
+
 

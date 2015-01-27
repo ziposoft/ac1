@@ -86,7 +86,8 @@ var acs = function(name, url)
 	this.url = url;
 	this.urlparts = urlSplit(url);
 	this.useJquery = true;
-	this.cacheData = true;
+	this.cacheLoad = false;
+	this.cacheSave = false;
 	this.p = null;
 	this.timer;
 	this.timer_start;
@@ -120,6 +121,7 @@ acs.prototype =
 	{
 		var cd = acsCacheDir + "/" + this.name;
 		this.dbg("START");
+		if(this.cacheLoad)
 		if (fs.isDirectory(cd))
 		{
 			if (fs.isFile(this.cacheFileName))
