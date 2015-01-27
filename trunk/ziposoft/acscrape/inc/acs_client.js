@@ -132,6 +132,7 @@ window._ac = (function($) {
 window._ac.$(function() {
     window._ac.ready = true;
     window._acs = new resultUrl(); 
+
 });
 
 
