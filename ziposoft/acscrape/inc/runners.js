@@ -1,3 +1,35 @@
+
+
+var acsColumns=
+{
+
+		'div pl': 'placeGroup',
+		'time': 'time',
+		'group': 'group',
+		'division': 'group',
+		'div': 'group',
+		'city': 'city',
+		'gender': 'gender',
+		'pl': 'placeOverall',
+		'place': 'placeOverall',		
+		'age': 'age',	
+		'name': 'nameFull',	
+		'first name': 'nameFirst',	
+		'last name': 'nameLast',	
+
+};
+var resultRow=function()
+{
+	this.last="";
+	this.first="";
+	this.raceage=0;
+	this.time="";
+	this.placeOverall=0;
+	this.placeGroup=0;
+	this.group="";
+
+}
+
 var acsRace = function(name, date, url, city, state)
 {
 	this.name = name;
@@ -144,7 +176,7 @@ var runners =
 		else
 			console.log("Error! Nothing found in: " + filename);
 	},
-	process : function(race, last, first, raceage, time, placeOverall, group, placeGroup)
+	process : function(race, resultrow)
 	{
 		for (var i = 0, len = this.list.length; i < len; i++)
 		{
@@ -170,3 +202,10 @@ var runners =
 		return;
 	}
 };
+
+function acsProcessRaceData(raceobj,htmldata)
+{
+	
+
+
+}

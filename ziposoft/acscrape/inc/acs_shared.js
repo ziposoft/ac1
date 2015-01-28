@@ -26,11 +26,10 @@ var resultEvent = function()
 	
 };
 
-var resultUrl = function()
+var resultPage = function()
 {
-	this.data = {
-			events:[]
-	};
-	this.status="more"; // fail, more,done
+	this.event="";
+	this.data = null;
+	this.status="Status not set"; //error message, more,done
 	
 };

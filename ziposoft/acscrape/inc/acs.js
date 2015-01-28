@@ -3,6 +3,9 @@ phantom.injectJs('inc/jquery.js');
 phantom.injectJs('inc/acutil.js');
 phantom.injectJs('inc/runners.js');
 phantom.injectJs('inc/acs_shared.js');
+
+
+var gAcsUseCache=true;
 if (system.args.length === 1)
 {
 	console.log('no args');
@@ -11,6 +14,9 @@ else
 {
 	system.args.forEach(function(arg, i)
 	{
+		if(arg=="refresh")
+			gAcsUseCache=false;
+			
 		console.log(i + ': ' + arg);
 	});
 }
@@ -68,26 +74,20 @@ var acsQue =
 		console.log('COMPLETE!');
 	}
 };
-const
-scrapeTestFail = 0;
-const
-scrapeTestNotReady = 1;
-const
-scrapeTestReady = 2;
-const
-acsCacheDir = "cache";
+
+var acsCacheDir = "cache";
 /*
  * acs constructor
  */
 var acs = function(name, url)
 {
-	this.data = {};
+	this.data = [];
 	this.name = name;
 	this.url = url;
 	this.urlparts = urlSplit(url);
 	this.useJquery = true;
-	this.cacheLoad = false;
-	this.cacheSave = false;
+	this.cacheLoad = gAcsUseCache;
+	this.cacheSave = true;
 	this.p = null;
 	this.timer;
 	this.timer_start;
@@ -134,6 +134,7 @@ acs.prototype =
 					if (this.data)
 					{
 						this.dbg("found cached data")
+						this.cacheSave=false;
 						this._processData();
 					}
 					return;						
@@ -172,15 +173,14 @@ acs.prototype =
 		this.scrapeEnd()
 		acsQue.done(this);
 	},
-	onProcessData : function()
+	processData : function(data)
 	{
 		this.dbg("onProcessData");
 	},
 	onScrape : function()
 	{
 		this.dbg("onScrape");
-		this.data = this.p.evaluate(this.evalScrape);
-		return true;
+		return  this.p.evaluate(this.evalScrape);
 	},
 	onScrapeTest : function()
 	{
@@ -189,8 +189,14 @@ acs.prototype =
 	_processData : function()
 	{
 		this.dbg("processData");
-		this.onProcessData();
-		fs.write(this.cacheFileName, JSON.stringify(this.data, null, '\t'));
+		if(this.cacheSave)
+			{
+			this.dbg("saving data to cache");
+			fs.write(this.cacheFileName, JSON.stringify(this.data, null, '\t'));			
+			}
+
+		for (var i = 0; i < this.data.length; i++) 
+			this.processData(this.data[i]);
 		acsQue.done(this);
 	},
 	scrapeEnd : function()
@@ -216,10 +222,14 @@ acs.prototype =
 		if (r == 0) s.onScapeError("Test Failed");
 		if (r == 2)
 		{
-			if (s.onScrape()) // return true, we are done
-				s.onScapeComplete();
-			else
-				s.scrapeStartTimer();
+			result=s.onScrape();
+			s.data.push(result);
+			if(result.status=='more')
+				return s.scrapeStartTimer();
+			if(result.status=='done')
+				return s.onScapeComplete();			
+			return s.onScapeError('Error on scrape:'+result.status);			
+
 		}
 	},
 	scrapeStartTimer : function()
