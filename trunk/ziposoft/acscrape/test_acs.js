@@ -16,45 +16,39 @@ TestRace.prototype.evalScrapeTest = function()
 	
 	if (_ac$('table.data').length)
 	{
-		 console.log("table.data ready");
+		// console.log("table.data ready");
 		return 2;
 	}
-	 console.log("table.data not ready");
+	// console.log("table.data not ready");
 	return 1;
 };
 TestRace.prototype.evalScrape = function()
 {
-	console.log("helloooo:"+_acs.status);
-	if (_ac$('table.data').length == 0) return null;
-	return _ac$('table.data').html();
-	var arr = [];
-	var arr = _ac$('table.data tr').map(function()
-	{
-		return [ _ac$('td', this).map(function()
+	result=new resultPage();
+	
+	//console.log("helloooo:"+_acs.status);
+	if (_ac$('table.data').length == 0) 
 		{
-			var a = _ac$(this).text();
-			return a.trim();
-		}).toArray() ];
-	}).toArray();
-	return arr;
+		result.status="error";
+		return result;
+		
+		}
+	result.data= _ac$('table.data').html();
+	var next = _ac$("a:contains('NextPage')");
+	if (next.length ) 
+		{
+		_ac$('table.data').attr('class', 'done');
+		clickElement(next[0]);
+		result.status="more";
+		}
+	else
+		result.status="done"
+		
+	return result;
+
 }
-function scrape_next_page()
-{
-	var clickElement = function(el)
-	{
-		var ev = document.createEvent("MouseEvent");
-		ev.initMouseEvent("click", true /* bubble */, true /* cancelable */, window, null, 0, 0, 0, 0, /* coordinates */
-		false, false, false, false, /* modifier keys */
-		0 /*left*/, null);
-		el.dispatchEvent(ev);
-	};
-	var next = _ac$("a:contains('>>')");
-	if (next.length == 0) return false;
-	//var url= $(next).attr('href');
-	clickElement(next[0]);
-	return true;
-}
-TestRace.prototype.onProcessData = function()
+
+TestRace.prototype.processData = function(result)
 {
 
 	try
@@ -72,18 +66,54 @@ TestRace.prototype.onProcessData = function()
 	 8=bib#
 	 9=time
 	  */ 
-	var data=jQuery(this.data); 
-	
+		
+	var data=jQuery(result.data); 
+	var columns={};
+
+	jQuery('th',data).each(function(i)
+	{
+		var t= $( this ).text();
+		console.log("column:"+t)
+		if(t in acsColumns){
+			columns[acsColumns[t]]=i;
+		    
+		}
+	});
+	console.log(JSON.stringify(columns));
+	var arr = [];
+	var arr = jQuery('tr',data).map(function()
+	{
+		return [ jQuery('td', this).map(function()
+		{
+			var a = jQuery(this).text();
+			return a.trim();
+		}).toArray() ];
+	}).toArray();
 	var race = this.race;
 	//console.log(this.race.name  +" found " + results.length + " results")
-	jQuery.each(data, function(i, val)
+	jQuery.each(arr, function(i, val)
 	{
-		if (val[3])
+		var firstname="";
+		var lastname="";
+		if('nameFull' in columns)
 		{
-			var names = val[3].split(',');
+			var names = val[columns.nameFull].split(',');
+			lastname=names[0];
+			firstname=names[1].trim();
+		}
+			
+		if (firstname && lastname)
+		{
+			
 			var age = val[4];
-			runners.process(race,names[0],
-					names[1].trim(), age,val[9],val[0],val[1],val[2])
+			runners.process(
+					race,lastname,
+					firstname,  
+					val[columns.age],
+					val[9],
+					val[0],
+					val[1],
+					val[2])
 
 		}
 	});
@@ -109,26 +139,26 @@ subClass(acs,TestRaceList);
 
 TestRaceList.prototype.evalScrape = function()
 {
-	 console.log("fn_scrape")
+	result=new resultPage();
 	try
 	{
 		
 		if (_ac$('#data').length == 0) 
-			return null;
-		var s= _ac$('table#data').html();
+			result.status="no #data found";
+		else
+			{
+			result.data= _ac$('table#data').html();
+			result.status="done";
+			
+			}
 		
-		return s;
-		var races = [];
-		
-		//var table = punchgs.com.greensock.TweenLite.selector.fn.dataTable.settings[0].aoData;
-		//console.log("table len=" + table.length)
 
 	}
 	catch (e)
 	{
 		console.log(e);
 	}
-	return null;
+	return result;
 }
 TestRaceList.prototype.evalScrapeTest = function()
 {
@@ -141,12 +171,12 @@ TestRaceList.prototype.evalScrapeTest = function()
 	}
 	return 1;
 };
-TestRaceList.prototype.onProcessData = function()
+TestRaceList.prototype.processData = function(result)
 {
 	// console.log("READY!");
 	//var racelist = this.p.evaluate(scrape_list_of_results);
 	var s=this;
-	var data=jQuery(this.data);
+	var data=jQuery(result.data);
 	var races = [];
 	jQuery('tr',data).each(function()
 	{
