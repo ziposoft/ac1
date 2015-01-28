@@ -26,6 +26,7 @@ TestRace.prototype.evalScrape = function()
 {
 	console.log("helloooo:"+_acs.status);
 	if (_ac$('table.data').length == 0) return null;
+	return _ac$('table.data').html();
 	var arr = [];
 	var arr = _ac$('table.data tr').map(function()
 	{
@@ -70,12 +71,12 @@ TestRace.prototype.onProcessData = function()
 	 7=gender
 	 8=bib#
 	 9=time
-	  
-	 
-	 */
+	  */ 
+	var data=jQuery(this.data); 
+	
 	var race = this.race;
 	//console.log(this.race.name  +" found " + results.length + " results")
-	jQuery.each(this.data, function(i, val)
+	jQuery.each(data, function(i, val)
 	{
 		if (val[3])
 		{
