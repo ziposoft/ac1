@@ -11,12 +11,15 @@ function OnTheMarkRace(raceobj)
 zipo.subClass(zipo.scrape.Page,OnTheMarkRace);
 OnTheMarkRace.prototype.evalScrapeTest = function()
 {
+	if(_ac$("a:contains('<< Back to Race List')").length==0)
+		return "NOT A RESULT PAGE";
+	
 	if (_ac$('table.data').length)
 	{
 		// console.log("table.data ready");
-		return 2;//ready
+		return "ready";//ready
 	}
-	return 1;//not ready
+	return "wait";//not ready
 };
 
 OnTheMarkRace.prototype.evalScrape = function()
@@ -56,14 +59,20 @@ OnTheMarkRace.prototype.processData = function(result)
 
 	jQuery('th',data).each(function(i)
 	{
-		var t= $( this ).text();
+		var t= $( this ).text().toLowerCase().trim();
 		//console.log("column:"+t)
-		if(t in zipo.running.columnAlias){
+		if(t in zipo.running.columnAlias)
+		{
 			ourcolumns[zipo.running.columnAlias[t]]=i;
 		    
 		}
+		else
+			{
+			zipo.dbgout(t+" is not a column!")
+			
+			}
 	});
-	//console.log(JSON.stringify(columns));
+	//console.log(JSON.stringify(ourcolumns));
 	var arr = [];
 	var arr = jQuery('tr',data).map(function()
 	{
@@ -82,7 +91,7 @@ OnTheMarkRace.prototype.processData = function(result)
 		
 		var rr=new zipo.running.Result();
 		rr.create(ourcolumns,val);
-		runners.process(race,rr);
+		zipo.running.runners.process(race,rr);
 	
 	});
 	}
@@ -143,9 +152,9 @@ OnTheMarkResultList.prototype.evalScrapeTest = function()
 	if (_ac$('#tablepress-5_wrapper').length > 0)
 	{
 		// console.log("results list ready");
-		return 2;//ready
+		return "ready";//ready
 	}
-	return 1;//not ready
+	return "wait";//not ready
 };
 OnTheMarkResultList.prototype.processData = function(result)
 {
@@ -156,7 +165,7 @@ OnTheMarkResultList.prototype.processData = function(result)
 		console.log("table len=" + data.length)
 		jQuery.each(data, function(i, val)
 		{
-			if (i < 100)
+			if (i < 300)
 			{
 				var r =  new zipo.running.Race();
 				r.date = val[0];

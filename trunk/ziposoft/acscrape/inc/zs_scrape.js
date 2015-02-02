@@ -3,6 +3,7 @@ zipo.scrape = (function(z)
 	var scrape=this;
 	scrape.cachedir="cache";
 	scrape.cacheuse=true;
+	scrape.runscrape=true;
 	
 	
 	
@@ -30,15 +31,16 @@ zipo.scrape = (function(z)
 			if (!this.run(s))
 			{
 				this.mapPending.push(s);
-				z.dbgout('Queueing ' + s.name);
+				z.trace(3,'Queueing ' + s.name);
 			}
 		},
 		done : function(scraper)
 		{
+			
 			var s = z.popByName(this.mapRunning, scraper.name);
 			if (!s)
 			{
-				console.log('error ' + scraper.name + 'not running');
+				z.errormsg('error ' + scraper.name + 'not running');
 				return;
 			}
 			while (this.mapPending.length)
@@ -47,14 +49,15 @@ zipo.scrape = (function(z)
 				var next = this.mapPending.pop();
 				this.run(next)
 			}
-			z.dbgout("Que=" + this.mapPending.length + " Running=" + this.mapRunning.length)
 			if (this.mapRunning.length == 0)
 			{
-				console.log('Processed ' + this.processed);
-				console.log('Queue empty, exiting');
+				z.trace(1,'Processed ' + this.processed);
+				z.trace(1,'Queue empty, exiting');
 				this.onComplete();
 				// phantom_exit(0);
 			}
+			z.trace(3,scraper.name + " done. Que=" + this.mapPending.length + " Running=" + this.mapRunning.length)
+			
 		},
 		onComplete : function()
 		{
@@ -68,7 +71,7 @@ zipo.scrape = (function(z)
 	
 	scrape.Page = function(name, url)
 	{
-		this.debug=3;
+		this.tracelvl=1;
 		this.data = [];
 		this.name = name;
 		this.url = url;
@@ -76,11 +79,11 @@ zipo.scrape = (function(z)
 		this.useJquery = true;
 		this.cacheLoad = scrape.cacheuse;
 		this.cacheSave = true;
-		this.runScrape = false;
+		this.runScrape = scrape.runscrape;
 		this.p = null;
 		this.timer;
 		this.timer_start;
-		this.timer_timeout = 9000;
+		this.timer_timeout = 12000;
 		this.timer_interval = 500;
 		this.context = {};
 		this.cacheFileName = scrape.cachedir + "/" + this.name + "/cache.txt";
@@ -88,9 +91,9 @@ zipo.scrape = (function(z)
 	};
 	scrape.Page.prototype =
 	{
-		dbg : function(s)
+		trace : function(lvl,s)
 		{
-			if(this.debug)
+			if(lvl<=this.tracelvl)
 				console.log(this.name + " " + s);
 		},
 		makeFullUrl : function(url)
@@ -111,7 +114,7 @@ zipo.scrape = (function(z)
 		start : function()
 		{
 			var cd = scrape.cachedir + "/" + this.name;
-			this.dbg("START");
+			this.trace(3,"START");
 			if (this.cacheLoad) if (fs.isDirectory(cd))
 			{
 				if (fs.isFile(this.cacheFileName))
@@ -124,7 +127,7 @@ zipo.scrape = (function(z)
 							this.data = JSON.parse(r);
 							if (this.data)
 							{
-								this.dbg("found cached data")
+								this.trace(2,"found cached data")
 								this.cacheSave = false;
 								this._processData();
 							}
@@ -148,7 +151,7 @@ zipo.scrape = (function(z)
 		},
 		onScapeComplete : function()
 		{
-			this.dbg("onScapeComplete");
+			this.trace(1,"scrape success!");
 			// console.log(JSON.stringify(this.data));
 			this.scrapeEnd()
 			fs.write(this.cacheFileName, JSON.stringify(this.data, null, '\t'));
@@ -156,28 +159,28 @@ zipo.scrape = (function(z)
 		},
 		onScapeError : function(error)
 		{
-			this.dbg("error:" + error);
+			this.trace(0,"error:" + error);
 			this.scrapeEnd()
 			scrape.que.done(this);
 		},
 		onScrapeTimeout : function()
 		{
-			this.dbg("Timeout");
+			this.trace(0,"Timeout");
 			this.scrapeEnd()
 			scrape.que.done(this);
 		},
 		processData : function(data)
 		{
-			this.dbg("onProcessData");
+			this.trace(3,"onProcessData");
 		},
 		onScrape : function()
 		{
-			this.dbg("onScrape");
+			this.trace(3,"onScrape");
 			result = this.p.evaluate(this.evalScrape);
 			this.data.push(result);
 			if (this.cacheSave)
 			{
-				this.dbg("saving data to cache");
+				this.trace(3,"saving temp data to cache");
 				fs.write(this.tempFileName, JSON.stringify(this.data, null, '\t'));
 			}
 			return result;
@@ -188,14 +191,15 @@ zipo.scrape = (function(z)
 		},
 		_processData : function()
 		{
-			this.dbg("processData");
+			this.trace(3,"processData");
 			for (var i = 0; i < this.data.length; i++)
 				this.processData(this.data[i]);
 			scrape.que.done(this);
+			
 		},
 		scrapeEnd : function()
 		{
-			this.dbg("scrapeEnd");
+			this.trace(3,"scrapeEnd");
 			if (this.p)
 			{
 				this.p.close();
@@ -205,26 +209,28 @@ zipo.scrape = (function(z)
 		},
 		scrapeTimerCallback : function(s)
 		{
-			s.dbg("TimerCallback");
+			s.trace(4,"TimerCallback");
 			r = s.onScrapeTest();
-			if (r == 1)
+			if (r == "wait")
 			{
 				if (new Date().getTime() - s.timer_start < s.timer_timeout) return;
 			}
 			clearInterval(s.timer); // < Stop this interval
-			if (r == 1) s.onScrapeTimeout();
-			if (r == 0) s.onScapeError("Test Failed");
-			if (r == 2)
+			if (r == "wait")
+				return s.onScrapeTimeout();
+			
+			if (r == "ready")
 			{
 				result = s.onScrape();
 				if (result.status == 'more') return s.scrapeStartTimer();
 				if (result.status == 'done') return s.onScapeComplete();
 				return s.onScapeError('Error on scrape:' + result.status);
 			}
+			s.onScapeError(r);
 		},
 		scrapeStartTimer : function()
 		{
-			this.dbg(" scrapeStartTimer");
+			this.trace(4," scrapeStartTimer");
 			this.timer_start = new Date().getTime();
 			this.timer = setInterval(this.scrapeTimerCallback, this.timer_interval, this); // <
 			// repeat
@@ -235,6 +241,7 @@ zipo.scrape = (function(z)
 		scrapeStart : function()
 		{
 			var s = this;
+			s.trace(3," scrapeStart");
 			s.p = require('webpage').create();
 			s.p.onConsoleMessage = function(msg)
 			{
@@ -248,9 +255,11 @@ zipo.scrape = (function(z)
 			{
 				console.log('Response (#' + request.id + '): ' + JSON.stringify(request));
 			};
+			s.trace(3,"calling upen...");
 			s.p.open(s.url, function(status)
 			{
 				var context = "context";
+				s.trace(3," opened: " + s.url)
 				if (status != "success")
 				{
 					var status = "unknown";
@@ -269,7 +278,7 @@ zipo.scrape = (function(z)
 					s.p.injectJs('inc/acs_shared.js');
 					s.p.injectJs('inc/acs_client.js');
 				}
-				s.dbg(" opened: " + s.url)
+				s.trace(3," opened: " + s.url+"success")
 				s.scrapeStartTimer();
 			});
 		}
