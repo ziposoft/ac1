@@ -7,14 +7,32 @@ String.prototype.capitalize = function() {
 var zipo = zipo || {};
 var zipo = (function(z)
 {
-//debug
-	z.debug_level=4;
+/*debug
+ 0=always 
+ 1=error
+ 2=warning
+ 3=
+ 
+ 
+ 
+ */	
+	
+	z.debug_level=0;
+	z.trace_lvl=1;
+	z.errormsg=function(s)
+	{
+		console.log(s);		
+	}	
 	z.dbgout=function(s)
 	{
 		if(z.debug_level>0)
 			console.log(s);		
 	}
-	
+	z.trace=function(lvl,s)
+	{
+		if(lvl<=z.trace_lvl)
+			console.log(s);		
+	}	
 //CLASSES
 	z.subClass = function(base,subclass)
 	{
@@ -74,6 +92,7 @@ var zipo = (function(z)
 			    var obj=new fn_obj();
 			    for(var i=0;i<numcol;i++)
 			    	obj[col[i]]=data[i];
+			    obj.init();
 			    output.push(obj);
 			}
 		}
@@ -103,7 +122,12 @@ var zipo = (function(z)
 		return null;
 	}
 
-	
+//MISC
+	z.calculateAge =function (dateString,bday) {
+		  var birthday = +new Date(bday);
+		  var date= new Date(dateString);
+		  return ~~(( date- birthday) / (31557600000));
+		}
 // STRINGS
 	z.capitalize=function (s)
 	{

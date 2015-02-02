@@ -18,6 +18,8 @@ else
 	{
 		if(arg=="refresh")
 			zipo.scrape.cacheuse=false;
+		if(arg=="noscrape")
+			zipo.scrape.runscrape=false;
 			
 		console.log(i + ': ' + arg);
 	});

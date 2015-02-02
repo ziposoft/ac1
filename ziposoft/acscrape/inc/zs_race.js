@@ -4,13 +4,18 @@ zipo.running = (function(z)
 
 	running.columnAlias =
 	{
+		'bib #' : 'bib',
 		'div pl' : 'placeGroup',
+		'chip time' : 'timechip',
 		'time' : 'time',
+		'gun time' : 'timegun',
 		'group' : 'group',
 		'division' : 'group',
 		'div' : 'group',
 		'city' : 'city',
+		'club' : 'club',
 		'state' : 'state',
+		'st' : 'state',
 		'gender' : 'gender',
 		'pl' : 'placeOverall',
 		'place' : 'placeOverall',
@@ -18,23 +23,28 @@ zipo.running = (function(z)
 		'name' : 'nameFull',
 		'first name' : 'nameFirst',
 		'last name' : 'nameLast',
+		
 	};
 	
 	
 	running.Result = function()
 	{
-		this.last = "";
-		this.first = "";
-		this.raceage = 0;
-		this.time = "";
+		this.last = "?";
+		this.first = "?";
+		this.ageCalc = 0;
+		this.time = "?";
 		this.placeOverall = 0;
 		this.placeGroup = 0;
-		this.group = "";
+		this.group = "?";
 		this.gender = "U";
-		this.age = 0;
+		this.ageResult = 0;
 	}
 	running.Result.prototype =
 	{
+		dbg : function()
+		{
+			z.dbgout(this.first + " " +this.last)
+		},			
 		create : function(columns, data)
 		{
 			for ( var i in columns)
@@ -80,8 +90,13 @@ zipo.running = (function(z)
 	{
 		output : function(f)
 		{
-			f.out("\n\n" + this.name)
-			f.out(this.city + ", " + this.state + "    " + this.date + "\n")
+			if(this.results.length==0)
+				{
+				//f.out(this.name+ " (no Godiva Runners Found)")
+				return;
+				}
+			f.out("\n"+ this.name)
+			f.out(this.city + ", " + this.state + "    " + this.date )
 			if (this.results.length == 0)
 			{
 				f.out("(no Godiva Runners Found)")
@@ -121,10 +136,18 @@ zipo.running = (function(z)
 			}
 			return true;
 		},
+		init : function()
+		{
+			this.first = z.capitalize(this.first);
+			this.last = z.capitalize(this.last);
+			this.state = z.capitalize(this.state);
+			this.city = z.capitalize(this.city);
+			
+		},
 		getAge : function(date)
 		{
 			// console.log("runner: "+ JSON.stringify(this))
-			return calcAge(date, this.dob);
+			return z.calculateAge(date, this.dob);
 			;
 		}
 	}
@@ -139,7 +162,7 @@ zipo.running = (function(z)
 	{
 		output : function(f)
 		{
-			var str = this.runner.first + " " + this.runner.last + "  " + this.rr.time;
+			var str ="\t"+ this.runner.first + " " + this.runner.last + "\t" + this.rr.time;
 			if (this.calcAge)
 			{
 				str += "(Age " + this.calcAge + " !=" + this.rr.age + ")";
@@ -159,24 +182,25 @@ zipo.running = (function(z)
 		},
 		process : function(race, rr)
 		{
+			//rr.dbg();
 			for (var i = 0, len = this.list.length; i < len; i++)
 			{
 				var runner = this.list[i];
+				
 				if (runner.match(rr.last, rr.first))
 				{
-					var result = new matchResult(race, runner, rr);
+					var matchresult = new matchResult(race, runner, rr);
 					if ((race.date) && (rr.age))
 					{
 						var calcAge = runner.getAge(race.date);
-						result.age = calcAge;
 						if (calcAge != rr.age)
 						{
-							result.calcAge = calcAge;
+							matchresult.calcAge = calcAge;
 							// console.log("----AGE DOES NOT MATCH: "+r.name+"
 							// shouldbe="+calcAge+ " is="+raceage)
 						}
 					}
-					race.results.push(result);
+					race.results.push(matchresult);
 					return;
 				}
 			}

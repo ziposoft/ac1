@@ -12,15 +12,15 @@ zipo.subClass(zipo.scrape.Page,TestRace);
 TestRace.prototype.evalScrapeTest = function()
 {
 	if (_ac$('div#ajax1').length == 0)	
-		return 0;
+		return "error";
 	
 	if (_ac$('table.data').length)
 	{
 		// console.log("table.data ready");
-		return 2;
+		return "ready";
 	}
 	// console.log("table.data not ready");
-	return 1;
+	return "wait";
 };
 TestRace.prototype.evalScrape = function()
 {
@@ -59,14 +59,14 @@ TestRace.prototype.processData = function(result)
 
 	jQuery('th',data).each(function(i)
 	{
-		var t= $( this ).text();
-		//console.log("column:"+t)
+		var t= $( this ).text().toLowerCase();;
+		console.log("column:"+t)
 		if(t in zipo.running.columnAlias){
 			columns[zipo.running.columnAlias[t]]=i;
 		    
 		}
 	});
-	//console.log(JSON.stringify(columns));
+	console.log(JSON.stringify(columns));
 	var arr = [];
 	var arr = jQuery('tr',data).map(function()
 	{
@@ -83,9 +83,9 @@ TestRace.prototype.processData = function(result)
 	jQuery.each(arr, function(i, val)
 	{
 		
-		var rr=new zipo.running.result();
+		var rr=new zipo.running.Result();
 		rr.create(columns,val);
-		runners.process(race,rr);
+		zipo.running.runners.process(race,rr);
 	
 	});
 	}
@@ -134,13 +134,13 @@ TestRaceList.prototype.evalScrape = function()
 TestRaceList.prototype.evalScrapeTest = function()
 {
 	if (_ac$('div#ajax1').length == 0)	
-		return 0;
+		return "error";
 	if (_ac$('#data').length > 0)
 	{
 		 console.log("results list ready");
-		return 2;
+		return "ready";
 	}
-	return 1;
+	return "wait";
 };
 TestRaceList.prototype.processData = function(result)
 {
