@@ -1,13 +1,13 @@
-phantom.injectJs('inc/acs.js');
+phantom.injectJs('inc/godiva.js');
 function TestRace(raceobj)
 {
-	this.race = new acsRace();
-	acsCopyObj(raceobj, this.race);
+	this.race = raceobj;
+
 	//this.race.output(gConsole);
-	gRaceResults.races.push(this.race);
-	acs.call(this, raceobj.name, raceobj.url);
+	zipo.running.races.list.push(this.race);
+	zipo.scrape.Page.call(this, raceobj.name, raceobj.url);
 };
-subClass(acs,TestRace);
+zipo.subClass(zipo.scrape.Page,TestRace);
 
 TestRace.prototype.evalScrapeTest = function()
 {
@@ -53,19 +53,6 @@ TestRace.prototype.processData = function(result)
 
 	try
 	{
-	//console.log(JSON.stringify(results[2]));
-	/*
-	 0= overall place
-	 1= Division
-	 2= Div Place
-	 3= name 
-	 4= age
-	 5=city
-	 6=st
-	 7=gender
-	 8=bib#
-	 9=time
-	  */ 
 		
 	var data=jQuery(result.data); 
 	var columns={};
@@ -73,13 +60,13 @@ TestRace.prototype.processData = function(result)
 	jQuery('th',data).each(function(i)
 	{
 		var t= $( this ).text();
-		console.log("column:"+t)
-		if(t in acsColumns){
-			columns[acsColumns[t]]=i;
+		//console.log("column:"+t)
+		if(t in zipo.running.columnAlias){
+			columns[zipo.running.columnAlias[t]]=i;
 		    
 		}
 	});
-	console.log(JSON.stringify(columns));
+	//console.log(JSON.stringify(columns));
 	var arr = [];
 	var arr = jQuery('tr',data).map(function()
 	{
@@ -89,33 +76,17 @@ TestRace.prototype.processData = function(result)
 			return a.trim();
 		}).toArray() ];
 	}).toArray();
+	
+
 	var race = this.race;
 	//console.log(this.race.name  +" found " + results.length + " results")
 	jQuery.each(arr, function(i, val)
 	{
-		var firstname="";
-		var lastname="";
-		if('nameFull' in columns)
-		{
-			var names = val[columns.nameFull].split(',');
-			lastname=names[0];
-			firstname=names[1].trim();
-		}
-			
-		if (firstname && lastname)
-		{
-			
-			var age = val[4];
-			runners.process(
-					race,lastname,
-					firstname,  
-					val[columns.age],
-					val[9],
-					val[0],
-					val[1],
-					val[2])
-
-		}
+		
+		var rr=new zipo.running.result();
+		rr.create(columns,val);
+		runners.process(race,rr);
+	
 	});
 	}
 	catch (e)
@@ -132,9 +103,9 @@ TestRace.prototype.processData = function(result)
  */
 function TestRaceList()
 {
-	acs.call(this, "Results List", 'http://localhost/test_site/raceresults.html');
+	zipo.scrape.Page.call(this, "Results List", 'http://localhost/test_site/raceresults.html');
 };
-subClass(acs,TestRaceList);
+zipo.subClass(zipo.scrape.Page,TestRaceList);
 
 
 TestRaceList.prototype.evalScrape = function()
@@ -156,7 +127,7 @@ TestRaceList.prototype.evalScrape = function()
 	}
 	catch (e)
 	{
-		console.log(e);
+		console.log("TestRaceList.prototype.evalScrape error:"+e);
 	}
 	return result;
 }
@@ -173,7 +144,6 @@ TestRaceList.prototype.evalScrapeTest = function()
 };
 TestRaceList.prototype.processData = function(result)
 {
-	// console.log("READY!");
 	//var racelist = this.p.evaluate(scrape_list_of_results);
 	var s=this;
 	var data=jQuery(result.data);
@@ -188,8 +158,8 @@ TestRaceList.prototype.processData = function(result)
 		
 		var h=l.eq(1);
 		var href=jQuery("a", h).attr("href");			
-
-		var r = {};
+		var r =  new zipo.running.Race();
+		
 		r.date = l.eq(0).text();
 		//r.url = _ac.toFullUrl(href);
 		r.url = s.makeFullUrl(href);
@@ -198,10 +168,9 @@ TestRaceList.prototype.processData = function(result)
 		r.state = l.eq(3).text();
 		races.push(r);			
 	});
-
 	jQuery.each(races, function(i, val)
 	{
-		acsQue.add(new TestRace(val))
+		zipo.scrape.que.add(new TestRace(val))
 	});
 	return true; //We are done
 };
@@ -210,16 +179,5 @@ TestRaceList.prototype.processData = function(result)
  * 
  * 
  */
-acsQue.onComplete = function()
-{
-	gRaceResults.output(gConsole)
 
-	
-	var f=new acsFile("output.txt")
-	console.log("DONE! Outputing...");
-	gRaceResults.output(f)
-	f.close();
-	phantom_exit();
-}
-runners.loadfile("CGTC.csv");
-acsQue.add(new TestRaceList())
+zipo.scrape.que.add(new TestRaceList())

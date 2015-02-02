@@ -79,6 +79,7 @@ var acsCacheDir = "cache";
 /*
  * acs constructor
  */
+
 var acs = function(name, url)
 {
 	this.data = [];

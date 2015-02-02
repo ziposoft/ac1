@@ -32,7 +32,7 @@ var acsFile = function(name)
 {
 	this.handle= fs.open(name, "w");
 	acsFileBase.call(this);
-};
+};;
 subClass(acsFileBase,acsFile);
 acsFile.prototype.out=function(s)
 {

@@ -1,7 +1,8 @@
-var zipo = zipo || {};
-var zipo = (function(z)
+zipo.running = (function(z)
 {
-	var acsColumns =
+	var running=this;
+
+	running.columnAlias =
 	{
 		'div pl' : 'placeGroup',
 		'time' : 'time',
@@ -18,7 +19,9 @@ var zipo = (function(z)
 		'first name' : 'nameFirst',
 		'last name' : 'nameLast',
 	};
-	var resultRow = function()
+	
+	
+	running.Result = function()
 	{
 		this.last = "";
 		this.first = "";
@@ -30,7 +33,7 @@ var zipo = (function(z)
 		this.gender = "U";
 		this.age = 0;
 	}
-	resultRow.prototype =
+	running.Result.prototype =
 	{
 		create : function(columns, data)
 		{
@@ -46,16 +49,34 @@ var zipo = (function(z)
 			}
 		}
 	};
-	var acsRace = function()
+	running.races =
 	{
-		this.name = name;
-		this.date = date;
-		this.url = url;
-		this.city = city;
-		this.state = state;
+		list : [],
+		output : function(f)
+		{
+			jQuery.each(this.list, function(i, val)
+			{
+				val.output(f);
+			});
+		}
+	}	
+	running.RaceEvent = function()
+	{
+		this.name = "";
+		this.distance = 0;
+
+	}	
+	running.Race = function()
+	{
+		this.name = "";
+		this.date = "";
+		this.url = "";
+		this.city = "";;
+		this.state = "";;
+		this.events = [];
 		this.results = [];
 	}
-	acsRace.prototype =
+	running.Race.prototype =
 	{
 		output : function(f)
 		{
@@ -71,28 +92,30 @@ var zipo = (function(z)
 			});
 		}
 	}
-	var runner = function(last, first, city, state, sex, dob, alias)
+	running.Runner = function()
 	{
-		this.first = capitalize(first);
-		this.last = capitalize(last);
-		this.state = capitalize(state);
-		this.city = capitalize(city);
-		this.sex = sex;
-		this.dob = dob;
-		this.alias = alias;
+		
+		this.first ="";// z.capitalize(first);
+		this.last  ="";// z.capitalize(last);
+		this.state  ="";// z.capitalize(state);
+		this.city  ="";// z.capitalize(city);
+		this.gender  ="U";// gender;
+		this.dob  ="";// dob;
+		this.alias  =[];//alias;
+		
 		// console.log(this.first+ " " +this.last)
 	}
-	runner.prototype =
+	running.Runner.prototype =
 	{
 		match : function(last, first)
 		{
 			if ((!last) || (!first)) return false;
 			// console.log("runner: "+ JSON.stringify(this))
-			last = capitalize(last);
+			last = z.capitalize(last);
 			if (this.last != last) return false;
 			if (first)
 			{
-				first = capitalize(first);
+				first = z.capitalize(first);
 				if (this.first == first) return true;
 				return false;
 			}
@@ -124,65 +147,15 @@ var zipo = (function(z)
 			f.out(str)
 		}
 	}
-	var gRaceResults =
-	{
-		byrace :
-		{
-			results : []
-		},
-		results : [],
-		races : [],
-		add : function(race, runner, placeOverall, placeGroup, time)
-		{
-			byrace[race.name].results.push()
-		},
-		output : function(f)
-		{
-			jQuery.each(this.races, function(i, val)
-			{
-				val.output(f);
-			});
-		}
-	}
-	var runners =
+
+	running.runners =
 	{
 		list : [],
 		loadfile : function(filename)
 		{
-			var content = '', f = null, lines = null, eol = system.os.name == 'windows' ? "\r\n" : "\n";
-			try
-			{
-				f = fs.open(filename, "r");
-				if (f)
-				{
-					console.log("successfully opened " + filename);
-				}
-				content = f.read();
-			}
-			catch (e)
-			{
-				console.log(e);
-			}
-			if (f) f.close();
-			if (content)
-			{
-				lines = content.split(eol);
-				for (var i = 0, len = lines.length; i < len; i++)
-				{
-					var col = [];
-					var line = lines[i].toLowerCase();
-					col = line.split(",");
-					col.forEach(function(val)
-					{
-						if (val) val.capitalize();
-					});
-					var r = new runner(col[0], col[1], col[2], col[3], col[4], col[5], col[6]);
-					this.list.push(r);
-				}
-				console.log("Found " + this.list.length + " runners");
-			}
-			else
-				console.log("Error! Nothing found in: " + filename);
+			
+			this.list=z.csv_load("CGTC.csv",z.running.Runner);
+			
 		},
 		process : function(race, rr)
 		{
@@ -210,8 +183,7 @@ var zipo = (function(z)
 			return;
 		}
 	};
-	function acsProcessRaceData(raceobj, htmldata)
-	{
-	}
-	return z;
+
+	return running;
 }(zipo));
+
