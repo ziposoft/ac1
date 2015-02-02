@@ -1,90 +1,98 @@
-phantom.injectJs('inc/acs.js');
+phantom.injectJs('inc/godiva.js');
 function OnTheMarkRace(raceobj)
 {
-	this.race = new acsRace();
-	acsCopyObj(raceobj, this.race);
-	//this.race.output(gConsole);
-	gRaceResults.races.push(this.race);
-	acs.call(this, raceobj.name, raceobj.url);
-};
-subClass(acs,OnTheMarkRace);
+	this.race = raceobj;
 
+	//this.race.output(gConsole);
+	zipo.running.races.list.push(this.race);
+	zipo.scrape.Page.call(this, raceobj.name, raceobj.url);
+};
+
+zipo.subClass(zipo.scrape.Page,OnTheMarkRace);
 OnTheMarkRace.prototype.evalScrapeTest = function()
 {
 	if (_ac$('table.data').length)
 	{
 		// console.log("table.data ready");
-		return true;
+		return 2;//ready
 	}
-	return false;
+	return 1;//not ready
 };
 
 OnTheMarkRace.prototype.evalScrape = function()
 {
+	result=new resultPage();
 	
-	if (_ac$('table.data').length == 0) return null;
-	var arr = [];
-	var arr = _ac$('table.data tr').map(function()
-	{
-		return [ _ac$('td', this).map(function()
+	//console.log("helloooo:"+_acs.status);
+	if (_ac$('table.data').length == 0) 
 		{
-			var a = _ac$(this).text();
+		result.status="error";
+		return result;
+		
+		}
+	result.data= _ac$('table.data').html();
+	var next = _ac$("a:contains('>>')");
+	if (next.length ) 
+		{
+		_ac$('table.data').attr('class', 'done');
+		clickElement(next[0]);
+		result.status="more";
+		}
+	else
+		result.status="done"
+		
+	return result;
+}
+
+OnTheMarkRace.prototype.processData = function(result)
+{
+
+	try
+	{
+		
+	var data=jQuery(result.data); 
+	var rawcolumns=[];
+	var ourcolumns={};
+
+	jQuery('th',data).each(function(i)
+	{
+		var t= $( this ).text();
+		//console.log("column:"+t)
+		if(t in zipo.running.columnAlias){
+			ourcolumns[zipo.running.columnAlias[t]]=i;
+		    
+		}
+	});
+	//console.log(JSON.stringify(columns));
+	var arr = [];
+	var arr = jQuery('tr',data).map(function()
+	{
+		return [ jQuery('td', this).map(function()
+		{
+			var a = jQuery(this).text();
 			return a.trim();
 		}).toArray() ];
 	}).toArray();
-	return arr;
-}
-function scrape_next_page()
-{
-	var clickElement = function(el)
-	{
-		var ev = document.createEvent("MouseEvent");
-		ev.initMouseEvent("click", true /* bubble */, true /* cancelable */, window, null, 0, 0, 0, 0, /* coordinates */
-		false, false, false, false, /* modifier keys */
-		0 /*left*/, null);
-		el.dispatchEvent(ev);
-	};
-	var next = _ac$("a:contains('>>')");
-	if (next.length == 0) return false;
-	//var url= $(next).attr('href');
-	clickElement(next[0]);
-	return true;
-}
-OnTheMarkRace.prototype.processData = function()
-{
-	//console.log(this.race.name + " READY!");
-	//console.log(JSON.stringify(results[2]));
-	/*
-	 0= overall place
-	 1= Division
-	 2= Div Place
-	 3= name 
-	 4= age
-	 5=city
-	 6=st
-	 7=gender
-	 8=bib#
-	 9=time
-	  
-	 
-	 */
+	
+
 	var race = this.race;
 	//console.log(this.race.name  +" found " + results.length + " results")
-	jQuery.each(this.data, function(i, val)
+	jQuery.each(arr, function(i, val)
 	{
-		if (val[3])
-		{
-			var names = val[3].split(',');
-			var age = val[4];
-			runners.process(race,names[0],
-					names[1].trim(), age,val[9],val[0],val[1],val[2])
-
-		}
-	});
+		
+		var rr=new zipo.running.Result();
+		rr.create(ourcolumns,val);
+		runners.process(race,rr);
 	
+	});
+	}
+	catch (e)
+	{
+		console.log(e);
+	}	
 	//var next = this.p.evaluate(scrape_next_page);
 	//if (!next) return true; //We are done
-	return false;
+	return true;
 };
 /*
  * OnTheMarkResultList
@@ -92,9 +100,10 @@ OnTheMarkRace.prototype.processData = function()
  */
 function OnTheMarkResultList()
 {
-	acs.call(this, "OnTheMarkSports Results List", 'http://onthemarksports.com/results/');
+	zipo.scrape.Page.call(this, "OnTheMarkSports Results List", 'http://onthemarksports.com/results/');
 };
-subClass(acs,OnTheMarkResultList);
+
+zipo.subClass(zipo.scrape.Page,OnTheMarkResultList);
 
 /*
  * OnTheMarkResultList - Get the list of results
@@ -102,49 +111,68 @@ subClass(acs,OnTheMarkResultList);
  */
 OnTheMarkResultList.prototype.evalScrape = function()
 {
-	// console.log("fn_scrape")
-	var races = [];
+	result=new resultPage();
 	try
 	{
-		var table = punchgs.com.greensock.TweenLite.selector.fn.dataTable.settings[0].aoData;
-		console.log("table len=" + table.length)
-		_ac$.each(table, function(i, val)
+		var data= punchgs.com.greensock.TweenLite.selector.fn.dataTable.settings[0].aoData;
+		
+		if (data.length == 0) 
+			result.status="no punchgs.com.greensock.TweenLite found";
+		else
 		{
-			if (i < 1000)
+			var arr=[];
+			jQuery.each(data, function(i, val)
 			{
-				var r = {};
-				r.date = val._aData[0];
-				r.url = val._aData[1].split('"')[1];
-				r.name = val._aData[1].split('>')[1].split('<')[0];
-				r.city = val._aData[2];
-				r.state = val._aData[3];
-				races.push(r);
+				arr.push(val._aData);
+			});
+			
+			result.data=JSON.stringify(arr);
+			result.status="done";
+			
 			}
-		});
-		return races;
 	}
 	catch (e)
 	{
 		console.log(e);
 	}
-	return null;
+	return result;	
+
 }
-OnTheMarkResultList.prototype.evalTestReady = function()
+OnTheMarkResultList.prototype.evalScrapeTest = function()
 {
-	if (_ac$('#tablepress-5').length > 0)
+	if (_ac$('#tablepress-5_wrapper').length > 0)
 	{
 		// console.log("results list ready");
-		return true;
+		return 2;//ready
 	}
-	return false;
+	return 1;//not ready
 };
-OnTheMarkResultList.prototype.processData = function()
+OnTheMarkResultList.prototype.processData = function(result)
 {
-	// console.log("READY!");
-	jQuery.each(this.data, function(i, val)
+	var s=this;
+	var data=JSON.parse(result.data);
+	try
 	{
-		acsQue.add(new OnTheMarkRace(val))
-	});
+		console.log("table len=" + data.length)
+		jQuery.each(data, function(i, val)
+		{
+			if (i < 100)
+			{
+				var r =  new zipo.running.Race();
+				r.date = val[0];
+				r.url = val[1].split('"')[1];
+				r.name = val[1].split('>')[1].split('<')[0];
+				r.city = val[2];
+				r.state = val[3];
+				zipo.scrape.que.add(new OnTheMarkRace(r))
+			}
+		});
+	}
+	catch (e)
+	{
+		console.log(e);
+		return false;
+	}
 	return true; //We are done
 };
 /*
@@ -152,13 +180,5 @@ OnTheMarkResultList.prototype.processData = function()
  * 
  * 
  */
-acsQue.onComplete = function()
-{
-	var f=new acsFile("output.txt")
-	console.log("DONE! Outputing...");
-	gRaceResults.output(f)
-	f.close();
-	phantom_exit();
-}
-runners.loadfile("CGTC.csv");
-acsQue.add(new OnTheMarkResultList())
+
+zipo.scrape.que.add(new OnTheMarkResultList())
