@@ -17,8 +17,8 @@ var zipo = (function(z)
  
  */	
 	
-	z.debug_level=0;
-	z.trace_lvl=1;
+	z.debug_level=1;
+	z.trace_lvl=5;
 	z.errormsg=function(s)
 	{
 		console.log(s);		
