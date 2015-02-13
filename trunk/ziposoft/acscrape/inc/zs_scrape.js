@@ -1,7 +1,8 @@
 zipo.scrape = (function(z)
 {
 	var scrape=this;
-	scrape.cachedir="cache";
+	scrape.appname="default";
+	scrape.cachedir="cache"+scrape.appname;
 	scrape.cacheuse=true;
 	scrape.runscrape=true;
 	
@@ -71,7 +72,7 @@ zipo.scrape = (function(z)
 	
 	scrape.Page = function(name, url)
 	{
-		this.tracelvl=1;
+		this.tracelvl=4;
 		this.data = [];
 		this.name = name;
 		this.url = url;
@@ -105,7 +106,7 @@ zipo.scrape = (function(z)
 		},
 		evalScrapeTest : function()
 		{
-			return true;
+			return "ready";
 		},
 		evalScrape : function()
 		{
