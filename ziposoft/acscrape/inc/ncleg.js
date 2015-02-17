@@ -26,12 +26,3 @@ else
 }
 
 
-zipo.scrape.que.onComplete = function()
-{
-
-	
-	var f=new zipo.File("output.txt")
-	console.log("DONE! Outputing...");
-	f.close();
-	phantom_exit();
-}

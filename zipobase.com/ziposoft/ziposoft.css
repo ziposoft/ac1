@@ -9,7 +9,7 @@ body {
     height:100%;
     background-color: blue;
 }
-div {
+div.center {
 	position: relative;
 	top: 50%;
 	transform: 			translateY(-50%);
@@ -17,6 +17,46 @@ div {
     color: white;
    
 }
+#info
+{
+	position:absolute;
+	left: 50%;
+	transform: 			translateX(-50%);
+ 	margin-left: auto;
+	margin-right: auto;	
+	
+}
+ul {
+    text-align:left;
+	
+	
+}
+a { color: white}
+#main {
+	display: block;
+
+/* for full page scrolling */
+	height: auto !important;
+	height: 100%;
+    margin:0;
+    padding:0;
+
+
+}
+#wrapper {
+	background-color: #fff;
+	width: 100%;
+	max-width: 1200px;
+
+	height:auto;
+	min-height: 100%;
+
+	margin-left: auto;
+	margin-right: auto;
+	padding-bottom: 30px;
+	
+}
+
 .fade3 {
     animation: fadein 3s;
  -webkit-animation: fadein 3s; /* Safari, Chrome and Opera > 12.1 */
@@ -26,6 +66,7 @@ div {
 .fade6 {
     animation: fadein 6s;
  -webkit-animation: fadein 6s; /* Safari, Chrome and Opera > 12.1 */
+ 
 
 }
 .z {

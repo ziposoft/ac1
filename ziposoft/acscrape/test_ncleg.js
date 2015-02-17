@@ -1,9 +1,24 @@
 phantom.injectJs('inc/ncleg.js');
+
+var members=[];
+zipo.scrape.que.onComplete = function()
+{
+	console.log("saving results..");
+	zipo.csv_save(members,"members.csv");
+
+	phantom_exit();
+}
+
+
+
 function Legger(chamber,name,url)
 {
 	this.chamber=chamber;
 	this.member_name=name;
 	
+	var uida=url.split('nUserID=');
+	
+	this.uid=uida[1];
 	zipo.scrape.Page.call(this, chamber+"-"+name, url);
 };
 zipo.subClass(zipo.scrape.Page, Legger);
@@ -12,11 +27,11 @@ Legger.prototype.evalScrape = function()
 	result = new resultPage();
 	try
 	{
-		if (_ac$('#titleMemberBio').length == 0)
+		if (_ac$('.memberTabBar').length == 0)
 			result.status = "no #data found";
 		else
 		{
-			result.data = _ac$('div#titleMemberBio').text();
+			result.data = _ac$('.memberTabBar').html();
 			result.status = "done";
 		}
 	}
@@ -30,15 +45,24 @@ Legger.prototype.processData = function(result)
 {
 	// var racelist = this.p.evaluate(scrape_list_of_results);
 	var s = this;
-	var data = result.data;
-	console.log(data)
+	var data = jQuery(result.data);
+	var member={};
+	member.email = $("a[href^='mailto:']",data).text();
+	var p=member.email.split('@')[0];
+	var aid=p.split('.');
+	member.key=aid[1]+'.'+aid[0];
+	member.uid=this.uid;
+	member.name=this.member_name;
+	member.chamber=this.chamber;
+	members.push(member);
+	
 	return true; // We are done
 };
 // LegList.prototype.evalScrapeTest = function() { return "ready";};
 function LegList(chamber,url)
 {
 	this.chamber=chamber;
-	zipo.scrape.Page.call(this, "LegList", url);
+	zipo.scrape.Page.call(this, "LegList-"+chamber, url);
 };
 zipo.subClass(zipo.scrape.Page, LegList);
 LegList.prototype.evalScrape = function()
@@ -74,6 +98,7 @@ LegList.prototype.processData = function(result)
 		jQuery("a[href^='/gascripts/members/viewMember.pl']", data).each(function()
 		{
 			var t = $(this).text();
+			t=t.replace(/\u00a0/g, " ");
 			var h=$(this).attr("href");	
 			var url=s.makeFullUrl(h);
 			var l=new Legger( s.chamber,t,url);
@@ -93,5 +118,11 @@ LegList.prototype.processData = function(result)
  * 
  */
 zipo.scrape.que.add(new LegList('House','http://www.ncleg.net/gascripts/members/memberListNoPic.pl?sChamber=House'))
+zipo.scrape.que.add(new LegList('Senate','http://www.ncleg.net/gascripts/members/memberListNoPic.pl?sChamber=Senate'))
+
+
+
+
+
 // zipo.scrape.que.add(new
 // Legger('http://www.ncleg.net/gascripts/members/viewMember.pl?sChamber=senate&nUserID=392'))
