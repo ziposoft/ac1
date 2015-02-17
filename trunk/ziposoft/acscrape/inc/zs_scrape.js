@@ -2,7 +2,7 @@ zipo.scrape = (function(z)
 {
 	var scrape=this;
 	scrape.appname="default";
-	scrape.cachedir="cache"+scrape.appname;
+
 	scrape.cacheuse=true;
 	scrape.runscrape=true;
 	
@@ -62,7 +62,8 @@ zipo.scrape = (function(z)
 		},
 		onComplete : function()
 		{
-			console.log('COMPLETE!');
+			console.log('default scrape.que.onComplete function');
+			phantom_exit();
 		}
 	};	
 	
@@ -72,7 +73,7 @@ zipo.scrape = (function(z)
 	
 	scrape.Page = function(name, url)
 	{
-		this.tracelvl=4;
+		this.tracelvl=2;
 		this.data = [];
 		this.name = name;
 		this.url = url;
@@ -87,8 +88,9 @@ zipo.scrape = (function(z)
 		this.timer_timeout = 12000;
 		this.timer_interval = 500;
 		this.context = {};
-		this.cacheFileName = scrape.cachedir + "/" + this.name + "/cache.txt";
-		this.tempFileName = scrape.cachedir + "/" + this.name + "/temp.txt";
+		this.cacheDir= "cache/"+ scrape.appname + "/"+ this.name;
+		this.cacheFileName = this.cacheDir + "/cache.txt";
+		this.tempFileName =this.cacheDir  + "/temp.txt";
 	};
 	scrape.Page.prototype =
 	{
@@ -101,7 +103,17 @@ zipo.scrape = (function(z)
 		{
 			s = z.urlSplit(url);
 			if (s.host) return url;
-			var full = this.urlparts.protocol + "://" + this.urlparts.host + this.urlparts.path + '/' + url;
+			var full;
+			if(url.charAt(0) == '/')
+				{
+				
+				
+				 full = this.urlparts.protocol + "://" + this.urlparts.host  + url;
+				
+				}
+			else
+				
+			 full = this.urlparts.protocol + "://" + this.urlparts.host + this.urlparts.path + '/' + url;
 			return full;
 		},
 		evalScrapeTest : function()
@@ -114,7 +126,7 @@ zipo.scrape = (function(z)
 		},
 		start : function()
 		{
-			var cd = scrape.cachedir + "/" + this.name;
+			var cd = this.cacheDir ;
 			this.trace(3,"START");
 			if (this.cacheLoad) if (fs.isDirectory(cd))
 			{

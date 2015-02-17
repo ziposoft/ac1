@@ -8,6 +8,14 @@ function phantom_exit(code) {
     setTimeout(function(){ phantom.exit(code); }, 0);
 }
 
+
+var arr=[];
+var obj={x:'fred',y:"3",z:"turkey tendon"}
+arr.push(obj)
+
+zipo.csv_save(arr,"out.txt")
+
+/*
 var runners=zipo.csv_load("CGTC.csv",zipo.running.Runner);
 
 console.log(runners.length)
@@ -15,7 +23,7 @@ console.log(runners.length)
 console.log(JSON.stringify(runners[0]))
 
 
-/*
+
 
 console.log(JSON.stringify(urlSplit("http://localhost/test_site/raceresults.html")));
 console.log(JSON.stringify(urlSplit("https://localhost")));
