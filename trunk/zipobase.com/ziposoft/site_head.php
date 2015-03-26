@@ -1,7 +1,7 @@
 <?php 
 $root = $root."/..";
 $current_url =$_SERVER['PHP_SELF'];
-$zs_foot_jsfile=["/inc/jquery.js","/ziposoft.js"];
+$zs_foot_jsfile=["/jquery.js","/ziposoft.js"];
 $zs_head_jsfile=array();
 $zs_foot_script=array();
 
