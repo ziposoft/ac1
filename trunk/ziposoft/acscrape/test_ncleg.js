@@ -92,17 +92,23 @@ LegList.prototype.processData = function(result)
 	try
 	{
 		var data = jQuery(result.data);
-		
-		
+		var count=2;
+		console.log("count:" + count);
+	
 		
 		jQuery("a[href^='/gascripts/members/viewMember.pl']", data).each(function()
 		{
+			if(count==0)
+				return;
+			count--;
+				
 			var t = $(this).text();
 			t=t.replace(/\u00a0/g, " ");
 			var h=$(this).attr("href");	
 			var url=s.makeFullUrl(h);
 			var l=new Legger( s.chamber,t,url);
 			zipo.scrape.que.add(l);
+
 		});
 	}
 	catch (e)
