@@ -335,6 +335,10 @@ z_status zp_text_parser::test_integer()
 {
 	return test_cset(*cset_integer);
 }
+z_status zp_text_parser::test_any_identifier_scoped()
+{
+	return test_cset(*cset_scoped_identchars);
+}
 z_status zp_text_parser::test_any_identifier()
 {
 	return test_cset(*cset_identchars);
@@ -491,7 +495,32 @@ z_status zp_text_parser::test_any_chars(size_t n)// #5
 	advance(n);
 	return zs_matched;
 }
+z_status zp_text_parser::test_end_string(const char* str)
+{
+	z_status status;
+	if((status=start_test())) return status;
+	int matched=0;
+	size_t match_len=strlen(str);
+	while(!eob())
+	{
+		size_t len=_end-get_index();
+		if (match_len> len) 
+			return zs_matched;
+		if(memcmp(str,get_index(),match_len)==0)
+		{
+			if(matched)
+			{
+				advance(match_len);//Skip end str
+				return zs_matched;
+			}
+			return zs_no_match;
 
+		}
+		matched++;
+		inc();
+	}
+	return zs_matched;
+}
 
 z_status zp_text_parser::test_not_string(const char* str,size_t match_len)
 {
