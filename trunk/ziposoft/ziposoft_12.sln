@@ -70,12 +70,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_factory", "tests\test_factory\test_factory.vcxproj", "{759526BA-9CE8-4F7A-9E40-646B24454EE2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_xml", "tests\test_xml\test_xml.vcxproj", "{F062315A-90C8-4678-AFC2-907727EBC120}"
+	ProjectSection(ProjectDependencies) = postProject
+		{547309F3-E79A-49EE-841B-684DB97F356A} = {547309F3-E79A-49EE-841B-684DB97F356A}
+	EndProjectSection
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_NoTrace|Win32 = Debug_NoTrace|Win32
 		Debug_Trace|Win32 = Debug_Trace|Win32
@@ -335,5 +334,9 @@ Global
 		{F062315A-90C8-4678-AFC2-907727EBC120} = {C3FB2FDE-B0F1-48DA-A487-7EAACACF4D26}
 		{1A078EAB-0236-4FE7-8D01-6733C7EDBBD4} = {C1E23D21-20AD-446C-8831-1C806ED8AA82}
 		{C1FBFA01-75CF-4B32-9C48-4AC837766A26} = {C1E23D21-20AD-446C-8831-1C806ED8AA82}
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

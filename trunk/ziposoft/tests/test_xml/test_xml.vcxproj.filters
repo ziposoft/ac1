@@ -27,4 +27,7 @@
   <ItemGroup>
     <None Include="Makefile" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="test.xml" />
+  </ItemGroup>
 </Project>

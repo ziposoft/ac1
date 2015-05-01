@@ -79,6 +79,7 @@ public:
 	z_status test_not_single_quoted_string(const void* dummy); //  ~>(char) 
 	z_status test_end_char(char c); //  ~>(char) 
 	z_status test_not_string(const char* str,size_t len);
+	z_status test_end_string(const char* str);
 	z_status test_string(const char* str,size_t len);
 	z_status test_string(const char* str);
 	z_status test_not_char(char c); //  ~^(char)  ~^\n
@@ -86,6 +87,7 @@ public:
 	z_status test_chars(const cset &set);
 	z_status test_identifier(const char* str);
 	z_status test_any_identifier();
+	z_status test_any_identifier_scoped();
 	z_status test_integer();
 	z_status test_file_path();
 	z_status test_code_string();
