@@ -63,12 +63,20 @@ template <class ITEM_CLASS > class z_obj_vector  : public z_obj_list_base
 protected:
 	std::vector<ITEM_CLASS*>  _vector;
 public:
-
+	virtual ~z_obj_vector()
+	{
+		//destroy();
+	}
 	virtual void* get_next(z_obj_list_iter &i)
 	{
 		void* v=get(i.vect);
 		i.vect++;
 		return v;
+	}
+	virtual z_status remove(size_t i)
+	{
+		_vector.erase(_vector.begin()+i);
+		return zs_ok;
 	}
 	virtual z_status get_next_key(z_obj_list_iter& iter,z_string &s)
 	{
@@ -90,6 +98,18 @@ public:
 		_vector.push_back(item);
 		return ;
 	}
+	void destroy()
+	{ 
+		size_t i;
+		for(i=0;i<size();i++)
+		{
+			ITEM_CLASS* item=get(i);
+			if(item)
+				delete item;
+		}
+		_vector.clear(); 
+	}
+
 	void clear()
 	{ 
 		_vector.clear(); 
@@ -161,6 +181,10 @@ public:
         return *this;
     };
 	*/
+	virtual ~z_obj_map()
+	{
+		//destroy();
+	}
 	virtual void* get_next(z_obj_list_iter& i)
 	{
 		return get_next(i.map);
@@ -182,7 +206,21 @@ public:
 		
 		return true;
 	}
+	void destroy()
+	{ 
+		z_map_iter iter;
+		ITEM_CLASS* item;
+		while(1)
+		{
+			item=get_next(iter);
+			if(item)
+				delete item;
+			else
+				break;
 
+		}
+		_map.clear(); 
+	}
 	void clear()
 	{ 
 		_map.clear(); 

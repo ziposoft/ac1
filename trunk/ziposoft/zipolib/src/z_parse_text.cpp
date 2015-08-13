@@ -593,7 +593,10 @@ void zp_text_parser::get_match(ctext& match_start,size_t& len)
 
 
 
-
+z_status zp_text_parser::ft_letters  (const void* dummy) 
+{
+	return test_cset(*cset_letters);
+}
 
 z_status zp_text_parser::ft_digits  (const void* dummy) 
 {

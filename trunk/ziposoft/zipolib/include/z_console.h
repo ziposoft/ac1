@@ -41,6 +41,7 @@ protected:
 	bool _running;
 
 	virtual z_status ExecuteLine(ctext text);
+	virtual void LogInput(ctext text){};
     virtual void OnEnter();
     virtual void OnTab();
     virtual void OnUp();
@@ -68,20 +69,16 @@ public:
 		_config_file<<".cfg";
 		loadcfg();
 	}
+	virtual ~z_console();
     virtual void OnDoubleBack();
-
+	z_file _exec_log;
 /*	
 	NEW METHOD
 */
 	virtual z_status ExecuteLine(ctext text);
-	//virtual z_status EvaluatePath(ctext  text);
-	//virtual z_status EvaluateLine2(ctext  text);
-	//z_string _cmd_line_feature;
-	//z_string _cmd_line_feature_index;
+	virtual void LogInput(ctext text);
 	z_status evaluate_feature(const zf_obj& o,z_string& name,z_string& idx);
 	bool is_feature(const zf_obj& o,z_string& name);
-	//z_status get_feature_and_index();
-	//z_status select_obj();
     virtual void OnTab();
 
 

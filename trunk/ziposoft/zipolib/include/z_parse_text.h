@@ -11,6 +11,7 @@ enum item_type {
 	item_invalid_type,
 	item_literal,
 	item_integer,
+	item_letters,
 	item_identifier,
 	item_whsp,
 	item_filepath,
@@ -101,6 +102,8 @@ public:
 	z_status ft_test_identifier(const void* str);
 	z_status ft_single_quoted_string(const void* dummy);
 	z_status ft_digits(const void* dummy);
+	z_status ft_letters(const void* dummy);
+	
 	z_status ft_file_path(const void* dummy);
 	virtual z_status ft_any_identifier(const void* dummy);
 	z_status ft_scoped_identchars(const void* dummy);

@@ -79,6 +79,12 @@ z_status z_filesys_setcwd(z_string& path)
 		return zs_could_not_open_dir;
 	return zs_ok;
 }
+ctext z_directory::get_path()
+{
+	return _path;
+
+}
+
 
 z_status z_directory::set_to_cwdir()
 {
@@ -93,7 +99,10 @@ z_status z_directory::open(ctext path,bool create)
 
 	status=z_dir_open(path,&_hDir); //current dir
 	if(status==zs_success)
+	{
+		_path=path;
 		return status;
+	}
 
 	if(create)
 	{
@@ -103,6 +112,7 @@ z_status z_directory::open(ctext path,bool create)
 		status=z_dir_open(path,&_hDir); //current dir
 		if(status==zs_success)
 			return status;
+		_path=path;
 	}
 	return Z_ERROR_MSG(zs_could_not_open_dir,"Could not open directory \"%s\"",path);
 

@@ -3,6 +3,49 @@
 #include "zipolib/include/z_factory_static.h"
 
 ZP_MODULE_DECLARE(parse);
+/*
+Stage Operators:
+	& = AMD
+	| = OR
+	: = Sequence
+	% = random stage
+
+Item Modifiers
+	+ = one or more
+	^ = NOT
+	* = zero or more
+	? = zero or one
+	{var} = Input Variable
+
+Items
+	'a'  = literal
+	^'a' = not literal
+Item Keyword
+	string = 
+	string_sq =
+	ident =
+	whsp = whitespcace 
+	scoped = 
+	toeob = 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
 
 
 class zp_parser;

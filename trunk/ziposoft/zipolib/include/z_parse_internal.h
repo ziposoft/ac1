@@ -111,6 +111,8 @@ public:
 	//void* get_next_child_obj();
 
 
+private:
+
 	zpi_context* _parent;
 	zpi_context* _child;
 	void* _obj;
@@ -125,7 +127,6 @@ public:
 	//U32 _variable_index;
 	//TODO these dont need to be in the context
 	z_string _member_var_name;
-	
 
 
 };
