@@ -178,37 +178,54 @@ void zf_action::display(z_file& f,void* obj)
 z_status zf_action::execute(z_file* f,const zf_obj& obj)
 {
 	z_string s;
-	if(f)
-	{
-		*f <<  get_name()<<'(';
-		size_t i;
+	z_string dbg;
+
+	dbg <<  get_name()<<'(';
+	size_t i;
 	
-		for(i=0;i<_params.size();i++)
-		{
+	for(i=0;i<_params.size();i++)
+	{
 
-			if(i)
-				*f <<',';
-			*f << _params[i]-> get_name();
-			*f << "=";
-			_params[i]->get_string_val(s,obj._obj);
-			*f<<s;
+		if(i)
+			dbg <<',';
+		dbg << _params[i]-> get_name();
+		dbg << "=";
+		_params[i]->get_string_val(s,obj._obj);
+		dbg<<s;
 
-		}
-
-		*f <<")\n";
 	}
 
+	dbg <<")\n";
+	ZT("%s\n",dbg.c_str());
 	z_status ret=obj._fact->execute_act_ptr	(obj._obj,_offset);
 	return ret;
 }
  z_status zf_action::load(zp_text_parser &parser,const zf_obj& o,zf_feature_flags oper) 
  {
 	z_status status;
- 	if(parser.test_char('(')==zs_ok)
+	z_string error_msg;
+	size_t num_params= _params.size();
+	parser.skip_ws();
+	bool parens=true;
+ 	status=parser.test_char('(');
+	
+	if(status==zs_eof)
+		return zs_ok;// no params
+	if(status==zs_no_match)
 	{
-
+		parens=false;
+		if(num_params==0)
+		{
+			error_msg<<"'"<< get_name()<<"' takes no parameters" ;
+			status=zs_bad_parameter;
+		}
+		else
+			status=zs_ok;
+	}
+	if(status==zs_ok)
+	{
 		size_t param_index=0;
-		while( param_index<_params.size())
+		while( param_index<num_params)
 		{
 			z_string s;
 			
@@ -218,15 +235,36 @@ z_status zf_action::execute(z_file* f,const zf_obj& obj)
 				break;
 			status=parser.test_char(',');
 			if(status)
+			{
+				status=zs_ok;//less params is ok
 				break;
+			}
 
 			param_index++;
 		}
-		if(parser.test_char(')'))
-			return Z_ERROR_MSG(zs_unknown_error,"Expected ')'\n");//???
-	}											   
-
-	return zs_ok;//???
+	}
+	if(!status)
+	{
+		parser.skip_ws();
+		if(parens)
+		{
+			status=parser.test_char(')');
+			if(status)
+				error_msg="Expected ')'.";
+		}
+		parser.skip_ws();
+	}
+	if(!status)
+	{
+		if(parser.eob()==false)
+		{
+			error_msg<<"Too many parameters for '" << get_name()<<"'";
+			status=zs_bad_parameter;
+		}
+		else
+			return zs_ok;
+	}
+	return Z_ERROR_MSG(status,error_msg);
  }
 
  z_status zf_action::evaluate_textp(zp_text_parser &parser, const zf_obj& o,zf_feature_flags oper,int index)

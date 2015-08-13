@@ -18,6 +18,7 @@ public:
 	z_status traverse_tree_recurse(z_directory_h dir); 
 	z_status  get_files_by_extension(ctext ext,z_strlist &str);
 	z_status  set_to_cwdir();
+	ctext get_path();
 	virtual void callback_file(ctext name,ctext fullpath) ;
 	virtual void callback_dir(ctext name,ctext fullpath) ;
 

@@ -39,15 +39,21 @@ z_console::z_console()	  :  z_factory_controller(&z_factory_T<z_console>::self,t
 	z_filesys_getcwd(_startup_path);
 	_param_script_step=false;
 }
+
+z_console::~z_console()
+{
+	_exec_log.close();
+}
 void z_console::init(ctext appname)
 {
 	z_string full= appname;
-	z_string name;
-	z_filesys_get_path_parts(full,0,&name,0);
+	z_string base_name;
+	z_filesys_get_path_parts(full,0,&base_name,0);
 
-	_config_file=z_get_filename_from_path(name);
-	_config_file+=".cfg";
-
+	_config_file=base_name+".cfg";
+	z_string rec_name=base_name+".rec";
+	
+	_exec_log.open(rec_name,"w");
 
 
 }
@@ -122,8 +128,6 @@ z_status z_console::evaluate_feature(const zf_obj& o,z_string& name,z_string& id
 	if(idx)
 		index=idx.GetDecVal();
 
-
-
 	return zff->evaluate_textp(_tparser,o,ZFF_LIST);
 
 }
@@ -188,9 +192,18 @@ void z_console:: OnTab()
 
 
 }
+
+void z_console::LogInput(ctext text)
+{
+	_exec_log<<text<<'\n';
+
+
+}
+
 z_status z_console:: ExecuteLine(ctext text)
 {
 	ZT("%s",text);
+
 	_temp_selected_obj=get_selected();
 	z_logger_get().clear();
 	z_fact_obj_path obj_path=get_path();
@@ -220,7 +233,7 @@ z_status z_console:: ExecuteLine(ctext text)
 		z_time time;
 		z_set_start_time(&time);
 		status= evaluate_feature(_temp_selected_obj,feature,feature_index);
-		printf("\n%.3lf ms\n",z_get_elapsed_time_ms_fp( &time));
+		ZT("\n%.3lf ms\n",z_get_elapsed_time_ms_fp( &time));
 		return status;
 
 	}
@@ -632,6 +645,7 @@ void z_console_base::OnEnter()
 	if(_buffer.size())
 	{
 		//parse_line(_buffer,_zc);
+		LogInput(_buffer);
 		result=ExecuteLine(_buffer);
 		if(result) 
 		{

@@ -39,6 +39,7 @@ keyword_item keyword_list[]={
 			FPO(ft_digits),
 			FPO(_f_create_string),
 			FPO(_f_output_string)},
+	{item_letters,		"letters",		"letters",				FPT(ft_test_identifier),(void*)"Az",	FPO(ft_letters),		FPO(_f_create_string),		FPO(_f_output_string)},
 	{item_quoted_double,	"string",	"quoted_double",	
 			FPT(ft_test_identifier),"string",		
 			FPO(_f_quoted_string_test),
@@ -56,9 +57,7 @@ keyword_item keyword_list[]={
 	{item_toeol,	"toeob",	"Find EOB",					FPT(ft_test_identifier),"toeol",		FPO(_f_test_to_eob),FPO(_f_create_string),FPO(_f_output_string)},
 	{item_whsp,	"whsp",	"White space",						FPT(ft_test_identifier),"whsp",			FPO(_f_test_whsp),FPO(_f_create_string),FPO(_f_output_string)},
 	//{item_sub_obj,	"sub_obj",	"sub object",	FPT(ft_any_identifier),"",FPO(_f_test_sub_obj),0,FPO(_f_output_sub_obj)}
-	{item_literal,	"not string",	"string literal",
-	FPT(test_not_single_quoted_string),0,
-	FPO(_f_not_test_string_literal),0,FPO(_f_output_string)},
+	{item_literal,	"not string",	"string literal",	FPT(test_not_single_quoted_string),0,	FPO(_f_not_test_string_literal),0,FPO(_f_output_string)},
 
 };
 #define keyword_list_count (sizeof(keyword_list)/sizeof(keyword_item))
