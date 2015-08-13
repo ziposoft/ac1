@@ -2,8 +2,32 @@
 void test_func_ptrs();
  void templates();
 ;
+
+class Xbase
+{
+public:
+	virtual bool foo()=0;
+
+
+
+};
+class Xdev : public Xbase
+{
+public:
+	virtual bool foo()
+	{
+		return true;
+	}
+
+
+
+};
+
 int main()
 {
+	Xdev x;
+	printf("%d\n",sizeof(x));
+
 	test_func_ptrs();
 
 

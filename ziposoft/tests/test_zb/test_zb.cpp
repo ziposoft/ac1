@@ -35,6 +35,7 @@ public:
 	z_status createvect();
 
 
+	z_status testmatch();
 	z_status testsort();
 	z_status testsort2();
 	z_status testsort3();
@@ -60,6 +61,7 @@ ZFACT(root)
 	ZACT_XP(testsort,"testsort",ZFF_ACT_DEF,"testsort",0);
 	ZACT(createvect);
 	ZACT(testsort2);
+	ZACT(testmatch);
 	ZACT(testsort3);
 	ZACT(act_ds_new);
 	ZACT_XP(opends,"open",ZFF_ACT_DEF,"open",2,
@@ -274,8 +276,12 @@ z_status root::testsort3()
 	return zs_ok;
 
 }
-   
+z_status root::testmatch()
+{
 
+
+
+}
 
 int main(int argc, char* argv[])
 {

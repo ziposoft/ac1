@@ -1,438 +1,291 @@
 // test_console.cpp : Defines the entry point for the console application.
 //
+#include "zipolib/include/z_console.h"
+#include "parse_xml.h"
+#include "zipolib/include/z_filesystem.h"
 
-#include "test_xml.h"
-#include "zipolib/include/z_factory_static.h"
 
-#include <vector>
-
-class z_xml_item
+/*
+class z_xml_activity : public z_xml_elm
 {
 public:
-	virtual  void output(z_file &outfile) {}
 
-} ;
-
-class z_xml_data: public z_xml_item
-{
-public:
-	z_xml_data()
-	{}
-
-	z_xml_data(ctext data)
-	{
-		_data=data;
-
-	}
-	z_string _data;
-	virtual  void output(z_file &outfile) 
-	{
-		outfile<<_data;
-	}
 
 };
-
-class z_xml_process_instruction: public z_xml_item
+class z_xml_activity_type : public z_xml_elm_type_T<z_xml_activity>
 {
 public:
-	z_xml_process_instruction(ctext contents)
-	{
-		_data=contents;
+	z_xml_activity_type() : 
+	z_obj_vector<z_xml_activity> _activities;
 
-	}
-	z_string _data;
-	virtual  void output(z_file &outfile) 
+	virtual void callback_new_elm(z_xml_activity* elm) 
 	{
-		outfile<<"<?";
-		outfile<<_data;
-		outfile<<"?>";
-	}
+		_activities<<elm;
+	};
+
 
 };
-class z_xml_item_list : public z_obj_vector<z_xml_item> 
-{
-public:
-	virtual void output(z_file &outfile);
+*/
 
-} ;
-void z_xml_item_list::output(z_file &o)
-{
-	size_t i;
-	for (i=0;i<size();i++)
-	{
-		get(i)->output(o);
-
-
-	}
-	
-
-
-}
-
-class z_xml_elm_type
-{
-public:
-	z_xml_elm_type(z_string& name) { _name=name; }
-	z_string _name;
-	ctext get_map_key() { return _name;}
-
-};
-class z_xml_attrib
-{
-public:
-	z_xml_attrib(ctext name,ctext val)
-	{
-		_name=name;
-		_val=val;
-	}
-	z_string _name;
-
-	z_string _val;
-	void output(z_file &o)
-	{
-		 
-		o<< _name << "=\"" << _val<<'\"';
-
-	}
-
-};
-class z_xml_elm : public z_xml_item
-{
-public:
-	z_xml_elm()
-	{
-		_parent=0;
-		_type=0;
-	}
-	z_xml_elm(z_xml_elm_type* type,z_xml_elm* parent)
-	{
-		_type=type;
-		_parent=parent;
-	}
-	z_xml_elm* _parent;
-	z_xml_elm_type* _type;
-	z_obj_vector<z_xml_attrib> _attribs;
-	z_xml_item_list _tree;
-
-	virtual void output(z_file &outfile);
-
-};
-void z_xml_elm::output(z_file &o)
-{
-	o.indent();
-	o<< '<'<< _type->_name;
-	//output attributes
-	size_t i;
-	for (i=0;i<_attribs.size();i++)
-	{
-		o<<" ";
-		_attribs.get(i)->output(o);
-		
-
-	}
-
-	if(_tree.size()==0)
-	{
-		o<<"/>";
-		//TODO pretty print
-
-		return;
-	}
-	o<<">";//TODO pretty print
-	//o.indent_inc();
-	_tree.output(o);
-	//o.indent_dec();
-	//o.indent();
-
-	o<<"</"<<_type->_name <<">";//TODO pretty print
-
-}
-class z_xml_parser : public z_xml_elm
-{
-public:
-	z_xml_parser()
-	{
-		_current_node=this;
-
-	}
-	z_obj_map<z_xml_elm_type> _elm_types;
-	zp_text_parser _p;
-	z_file _file;
-
-	z_xml_elm* _current_node;
-
-
-	void act_dump()
-	{
-		_tree.output(z_stdout_get());
-	}
-
-	virtual z_status parse_file(ctext filename);
-	virtual z_status parse();
-	virtual z_status process_comment();
-	virtual z_status process_element();
-	virtual z_status process_instruction();
-	virtual z_status process_element_end();
-	virtual z_status process_cdata();
-	virtual z_status process_data();
-
-};
-
-z_status z_xml_parser::process_instruction()
-{
-	z_status status;
-	status=_p.test_end_string("?>");
-	if(status==zs_matched)
-	{
-		return status;
-	}
-
-	return Z_ERROR_MSG(zs_syntax_error,"Error parsing process instruction");
-
-}
-z_status z_xml_parser::process_comment()
-{
-
-	return Z_ERROR_NOT_IMPLEMENTED;
-
-}
-z_status z_xml_parser::process_data()
-{
-	z_status status=_p.test_not_char('<');
-
-	if(status==zs_matched)
-	{
-		z_xml_data* d=new z_xml_data();
-
-		_p.get_match(d->_data);
-
-		_current_node->_tree << d;
-	}
-	return status;;
-
-}
-z_status z_xml_parser::process_cdata()
-{
-
-	return Z_ERROR_NOT_IMPLEMENTED;
-
-}
-z_status z_xml_parser::process_element_end()
-{
-	if(!_current_node)
-		return Z_ERROR(zs_internal_error);
-	if(!_current_node->_type)
-		return Z_ERROR_MSG(zs_syntax_error,"Unexpected end tag");
-	z_string &elm_name=_current_node->_type->_name;
-	z_status status=_p.test_identifier(elm_name);
-	if(status)
-	{
-		return Z_ERROR_MSG(zs_syntax_error,"Expected \"</%s>\" XML end tag",elm_name.c_str());
-	}
-	_p.skip_ws();
-	status=_p.test_char('>');
-	if(status==zs_ok)
-	{
-		_current_node=_current_node->_parent;
-
-		return zs_ok;
-	}
-
-	return status;
-
-
-}
-z_status z_xml_parser::process_element()
-{
-	z_status status=zs_ok;
-
-
-	z_string elm_name;
-	_p.get_match(elm_name);
-	z_xml_elm_type* elm_type=_elm_types.get(elm_name);
-	if(!elm_type)
-	{
-		elm_type= z_new z_xml_elm_type(elm_name);
-		_elm_types << elm_type;
-	}
-	z_xml_elm* elm = z_new z_xml_elm(elm_type,_current_node);
-	_current_node->_tree<< elm;
-	_current_node=elm;
-	while(1)
-	{
-		_p.skip_ws();
-		status=_p.test_string("/>");
-		if(status==zs_ok)
-		{
-			_current_node=_current_node->_parent;
-			Z_ASSERT(_current_node);
-			if(!_current_node)
-				return Z_ERROR_MSG(zs_syntax_error,"Unexpected XML element end tag");
-			//check valid node
-			return zs_ok;
-		}
-		
-		//process attributes
-		status=_p.test_any_identifier_scoped();
-		if(status==zs_ok)
-		{
-			z_string name,val;
-			_p.get_match(name);	
-			_p.skip_ws();
-			status=_p.test_char('=');
-			
-			if(status)
-			{
-				return Z_ERROR_MSG(zs_syntax_error,"Missing attribute value");
-			}
-			_p.skip_ws();
-
-			status=_p.test_code_string();
-			if(status)
-			if(status)
-			{
-				return Z_ERROR_MSG(zs_syntax_error,"Missing attribute value");
-			}			
-			_p.get_match(val);
-			z_xml_attrib* a=z_new z_xml_attrib(name,val);
-			_current_node->_attribs<<a;
-
-
-		}
-		status=_p.test_char('>');
-		if(status==zs_ok)
-			return zs_ok;
-
-
-
-	}
-
-
-	return Z_ERROR_NOT_IMPLEMENTED;
-
-}
-z_status z_xml_parser::parse_file(ctext filename)
-{
-	z_status st=_file.open( filename,"rb");
-	if(st)
-		return st;
-	char* data;
-	size_t size;
-	_file.read_all(data,size);//TODO make this mapping instead.
-	_p.set_source(data,size);
-	return parse();
-
-
-
-}
-
-
-
-z_status z_xml_parser::parse()
-{
-	z_status status=zs_ok;
-	while(status==zs_ok)
-	{
-		status=_p.test_char(	'<');
-		if(status==zs_matched)
-		{
-	  		status=_p.test_char(	'?');
-			if(status==zs_matched)
-			{
-				status=	process_instruction();
-				continue;
-			}
-			status=_p.test_char(	'/');
-			if(status==zs_matched)
-			{
-				status=	process_element_end();
-				continue;
-			}
-			status=_p.test_char(	'!');
-			if(status==zs_matched)
-			{
-				status=_p.test_string("--");
-				if(status==zs_matched)
-				{
-					status=	process_comment();
-					continue;
-				}
-				status=_p.test_string("CDATA");
- 				if(status==zs_matched)
-				{
-					status=	process_cdata();
-					continue;
-				}
-			}
-			status=_p.test_any_identifier();
-			if(status==zs_matched)
-			{
- 				status=	process_element();
-				continue;
-			}
-			break;
-		}
-		if(	status==zs_no_match)  
-			status=process_data();
-
-	}
-	if(status==zs_eof)
-		status=zs_ok;
-	if(status)
-	{
-		_p.print_context();
-	}
-	return status;
-}
-
+class z_map_elm : public z_stl_map<z_string,z_xml_elm*> {};
 class root
 {
 public:
 	root()
 	{
 		_p_logger=&z_logger_get();
+		_blank_xml_filename="blanktemplate.tcx";
 		_param_xml_filename="test.xml";
+		_csv_file_name="listing.csv";
 
-
+		_move_operation=false;
 	}
+	z_map_elm _activities_map;
+
+	bool _move_operation;
+	
+	z_string _csv_file_name;
+	z_string _blank_xml_filename;
 	z_console console;
 	z_logger* _p_logger;
 	z_string _param_xml_filename;
+	z_status act_dir();
+	z_status act_move();
 	z_status act_parse();
 	z_status act_dump();
-	z_status act_dump_types();
 	z_xml_parser _parser;
+	z_xml_parser _parser_new;
+
+	z_file _new_list_file;
+	z_xml_elm* _new_activities;
+	z_status parse_tcx(ctext name,z_file& fileout);
 };
+z_status root::act_move()
+{
+	z_status status;
+
+	
+	_activities_map.clear();
+
+	_move_operation=true;
+	_new_list_file.open("new_list.csv","w");
+	act_dir();
+
+	int year;
+	int month;
+
+	for(year=2005;year<2016;year++)
+	{
+		for(month=1;month<13;month++)
+		{
+			int num_matched=0;
+			z_string yearmonth;
+			z_string filename_tcx;
+			yearmonth.Format("%04d-%02d",year,month);
+			printf("processing %s\n",yearmonth.c_str());
+			filename_tcx<<yearmonth <<".tcx";
+
+
+			_parser_new.reset();
+			status= _parser_new.parse_file(_blank_xml_filename);
+			if(status)
+				return status;
+			z_xml_elm* elm=_parser_new._root_node;
+			if(!elm)
+				return Z_ERROR_MSG(zs_child_not_found,"no root node?");
+			_new_activities=elm->get_first_elm("Activities");
+			if(!_new_activities)
+				return Z_ERROR_MSG(zs_child_not_found,"Could not find _new_activities node");
+
+
+
+			z_xml_elm* node_activity;
+			z_string key;
+			z_map_elm::iter i_elm=_activities_map.begin();
+			while(_activities_map.get_next(i_elm,key,node_activity))
+			{
+				if(key.compare(0,7,yearmonth)==0)
+				{
+					num_matched++;
+					node_activity->move_to_new_parent(_new_activities);
+					_new_activities->add_child_item(new z_xml_data("\n"));
+				}
+			}
+
+			if(num_matched)
+			{
+
+
+				z_file newfile;
+				newfile.open(filename_tcx,"w");
+				_parser_new.output(newfile);
+			}
+		}
+	}
+	return zs_ok;
+}
+
+z_status root::parse_tcx(ctext filename,z_file& total_list)
+{
+	z_status status;
+
+//	z_xml_activity_type activites;
+
+	_parser.reset();
+
+	status= _parser.parse_file(filename);
+	if(status)
+		return status;
+
+	z_xml_elm* elm=_parser._root_node;
+	if(!elm)
+		return Z_ERROR_MSG(zs_child_not_found,"no root node?");
+	z_xml_elm* node_activities=elm->get_first_elm("Activities");
+	if(!node_activities)
+		return Z_ERROR_MSG(zs_child_not_found,"Could not find Activities node");
+
+
+	size_t cursor_activity=0;
+	while(1)
+	{
+		z_file_string_buffer csv_line;
+		z_string id;
+		z_string date;
+		z_string data;
+		z_string year;
+		z_string tod;
+		z_xml_elm* node_activity=node_activities->get_next_elm(cursor_activity,"Activity");
+		if(!node_activity)
+			break;
+		elm=node_activity->get_first_elm("Id");
+		if(!elm)
+			return Z_ERROR_MSG(zs_child_not_found,"Could not find Id node");
+		elm->get_data(id);
+		
+		tod.assign(id,11,8);
+		date=id;
+		date.resize(10);
+		year=date;
+		year.resize(4);
+
+		csv_line <<filename<<","<<id<<","<< node_activity->get_attrib("Sport") <<',';
+		csv_line << date ;
+		csv_line << ','<< tod ;
+		size_t cursor_lap=0;
+		int distance_meters=0;
+		int time_seconds=0;
+		double miles=0,pace=0,minutes=0;
+		int laps=0;
+		bool has_track=false;
+		while(1)
+		{
+			z_string data;
+			z_xml_elm* node_lap=node_activity->get_next_elm(cursor_lap,"Lap");
+			if(!node_lap)
+				break;
+			laps++;
+			z_xml_elm* dist=node_lap->get_first_elm("DistanceMeters");
+			if(!dist)
+			{
+				Z_ERROR_MSG(zs_child_not_found,"No distance in lap?");
+				break;
+			}
+			dist->get_data(data);
+			distance_meters+=data.GetDecVal();
+
+			z_xml_elm* node_time=node_lap->get_first_elm("TotalTimeSeconds");
+			if(!node_time)
+			{
+				Z_ERROR_MSG(zs_child_not_found,"No time in lap?");
+				break;
+			}
+			data="";
+			node_time->get_data(data);
+			time_seconds+=data.GetDecVal();
+			has_track=(node_lap->get_first_elm("Track")!=0);
+
+
+		}
+		miles=distance_meters;
+		miles=miles/1609;
+		minutes=time_seconds;
+		minutes=minutes/60;
+		if(miles)
+			pace=minutes/miles;
+		csv_line.putf(",%.2lf",miles);
+		csv_line.putf(",%.2lf",minutes);
+		csv_line.putf(",%.2lf",pace);
+		csv_line<<  (has_track? ",TRACK" : ",empty")<<"\n";
+		total_list << csv_line.get_buffer();
+		if(!_move_operation)
+			continue;
+
+		if(has_track)
+		{
+			if((miles>0.20))
+			{
+				if(_activities_map.exists(id)==false)
+				{
+					node_activity->move_to_new_parent(0);
+					_activities_map[id]=node_activity;
+					_new_list_file << csv_line.get_buffer();
+
+				}
+			}
+		}
+
+
+		
+
+	}
+    return status;
+
+}
 
 z_status root::act_parse()
 {
-	z_status status;
-	status= _parser.parse_file(_param_xml_filename);
-	 return status;
+	z_file csvfile(_csv_file_name,"w");
 
+	return parse_tcx(_param_xml_filename,csvfile);
 }
 z_status root::act_dump()
 {
-	z_status status;
-		_parser.dump();
-	 return status;
+	_parser.output(zout);
+	return zs_ok;
 }
-z_status root::act_dump_types()
+z_status root::act_dir()
 {
+	z_directory dir;
 	z_status status;
-		_parser.dump();
-	 return status;
+	z_strlist list;
+	dir.open("input");
+	z_file csvfile(_csv_file_name,"w");
+	//zout <<  dir.get_path();
+	dir.get_files_by_extension("tcx",list);
+	size_t i;
+	for (i=0;i<list.size();i++)
+	{
+		z_string path;
+		path= dir.get_path();
+		path<< "/" << list[i];
+		zout << "Parsing "<< path << "\n";
+		if(status= parse_tcx(path,csvfile))
+			break;
+	}
+	csvfile.close();
+	return status;
 }
 
 
 ZFACT(root)
 {
 	ZOBJ(console);
-	ZOBJ(_parser,"p",ZFF_PROP,"parser");
+	ZOBJ_X(_parser,"p",ZFF_PROP,"parser");
 	ZPOBJ(_p_logger,"log",ZFF_PROP,"Logger");
-	//ZPROP_X(_param_xml_filename,"filename",ZFF_PROP ,"  ") ;
-	ZACT_XP(act_dump_types,"types",ZFF_ACT_DEF,"types",0);
+	ZPROP_X(_csv_file_name,"csvfile",ZFF_PROP ,"  ") ;
+	ZACT_XP(act_move,"move",ZFF_ACT_DEF,"move",0);
 	ZACT_XP(act_dump,"dump",ZFF_ACT_DEF,"dump",0);
+	ZACT_XP(act_dir,"dir",ZFF_ACT_DEF,"dump",0);
 	ZACT_XP(act_parse,"parse",ZFF_ACT_DEF,"parse",1,
 		ZPARAM_X(_param_xml_filename,"filename",ZFF_PARAM,"Name of file"));
 
