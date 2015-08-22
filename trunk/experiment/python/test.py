@@ -1,8 +1,9 @@
 #!/Python27/python.exe
 
 # enable debugging
-import cgitb
-cgitb.enable()
+#import cgitb
+#cgitb.enable()
+import mysql.connector
 
 print "Content-Type: text/plain;charset=utf-8"
 print
@@ -41,7 +42,8 @@ class Employee(Base):
  
  
 from sqlalchemy import create_engine
-engine = create_engine('sqlite:///orm_in_detail.sqlite')
+#engine = create_engine('sqlite:///orm_in_detail.sqlite')
+engine = create_engine("mysql://freddbuser:dbpass@192.168.1.1/db1")
  
 from sqlalchemy.orm import sessionmaker
 session = sessionmaker()
