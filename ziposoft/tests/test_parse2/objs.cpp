@@ -14,6 +14,7 @@ public:
 };
 
  #define ZO_OBJ_LIST \
+   ZCLS(fileEnum,none,"fileEnum","{_root}ident:'-':{_num}int:'.':{_ext}ident",VAR(_root) VAR(_num) VAR(_ext)) \
 	ZCLS(testA,none,"cmdline","{_val}ident:'=':{i123}int",VAR(i123) VAR(_val)) \
 	ZCLS(testB,none,"cmdline","{_child}testA:{_exclam}?'!'",VAR(i222) VAR(_exclam)  POBJ(_child) )	\
 	ZCLS(testBadObj,none,"cmdline","bogusident",NOFTR)	\

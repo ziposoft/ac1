@@ -92,7 +92,22 @@ int run_help();
 //GLOBALS
 extern opt_func g_test_type_function_to_run;
 
-
+class fileEnum 
+{
+public:
+   fileEnum()
+   {
+      _num=0;
+   }
+	fileEnum(char* root)
+	{
+      _root=root;
+      _num=0;
+	}
+	z_string _root;
+	z_string _ext;
+   int _num;
+};
 class testA 
 {
 public:

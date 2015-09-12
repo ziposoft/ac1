@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zbase_lib", "zbase_lib\windows\zbase_lib.vcxproj", "{CDE73D09-C930-468C-B421-F1F2D017AB23}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vs.map", "..\zipobase.com\map\vs.map\vs.map.vcxproj", "{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C3FB2FDE-B0F1-48DA-A487-7EAACACF4D26}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_c", "tests\test_c\test_c.vcxproj", "{D576507B-50F0-4E89-A86E-BD436AED597F}"
@@ -98,18 +96,6 @@ Global
 		{CDE73D09-C930-468C-B421-F1F2D017AB23}.release_trace|Win32.Build.0 = release_trace|Win32
 		{CDE73D09-C930-468C-B421-F1F2D017AB23}.Release|Win32.ActiveCfg = Release|Win32
 		{CDE73D09-C930-468C-B421-F1F2D017AB23}.Release|Win32.Build.0 = Release|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.Debug_NoTrace|Win32.ActiveCfg = Debug_Trace|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.Debug_NoTrace|Win32.Build.0 = Debug_Trace|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.Debug_Trace|Win32.ActiveCfg = Debug_Trace|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.Debug_Trace|Win32.Build.0 = Debug_Trace|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.Debug|Win32.ActiveCfg = Debug|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.Debug|Win32.Build.0 = Debug|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.dll_release|Win32.ActiveCfg = Debug|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.dll_release|Win32.Build.0 = Debug|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.release_trace|Win32.ActiveCfg = Release|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.release_trace|Win32.Build.0 = Release|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.Release|Win32.ActiveCfg = Release|Win32
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20}.Release|Win32.Build.0 = Release|Win32
 		{D576507B-50F0-4E89-A86E-BD436AED597F}.Debug_NoTrace|Win32.ActiveCfg = Debug_NoTrace|Win32
 		{D576507B-50F0-4E89-A86E-BD436AED597F}.Debug_NoTrace|Win32.Build.0 = Debug_NoTrace|Win32
 		{D576507B-50F0-4E89-A86E-BD436AED597F}.Debug_Trace|Win32.ActiveCfg = Debug_Trace|Win32
@@ -331,7 +317,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8EF7A01B-75B6-42B7-9671-1ABEFD609C20} = {616AE2B8-05F0-4DAF-98B5-1D9B8CE5441C}
 		{CDE73D09-C930-468C-B421-F1F2D017AB23} = {616AE2B8-05F0-4DAF-98B5-1D9B8CE5441C}
 		{547309F3-E79A-49EE-841B-684DB97F356A} = {616AE2B8-05F0-4DAF-98B5-1D9B8CE5441C}
 		{D576507B-50F0-4E89-A86E-BD436AED597F} = {C3FB2FDE-B0F1-48DA-A487-7EAACACF4D26}

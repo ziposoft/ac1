@@ -1,9 +1,8 @@
-#include "zipolib_cpp_pch.h"
 
 #include "z_parse_internal.h"
 
 
-
+#if 0 
 
 /*________________________________________________________________
 
@@ -385,3 +384,4 @@ z_factory* zp_parser::find_item(ctext item_name,size_t len)
 	return zf_get_factory(s.c_str());
 }
 
+#endif

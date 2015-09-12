@@ -24,13 +24,16 @@
     <ClCompile Include="z_parse_objs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="z_parse_text.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="test_parse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="z_parse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arguments.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,10 +41,10 @@
     <ClInclude Include="z_parse_internal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="z_parse_text.h">
+    <ClInclude Include="z_parse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="z_parse.h">
+    <ClInclude Include="test_parse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

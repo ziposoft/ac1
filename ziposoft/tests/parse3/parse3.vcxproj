@@ -54,6 +54,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,17 +79,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="arguments.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="test_parse.cpp" />
     <ClCompile Include="z_parse.cpp" />
     <ClCompile Include="z_parse_internal.cpp" />
     <ClCompile Include="z_parse_misc.cpp" />
     <ClCompile Include="z_parse_objs.cpp" />
-    <ClCompile Include="z_parse_text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="test_parse.h" />
     <ClInclude Include="z_parse.h" />
     <ClInclude Include="z_parse_internal.h" />
-    <ClInclude Include="z_parse_text.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -111,7 +111,7 @@ public:
 	//void* get_next_child_obj();
 
 
-private:
+
 
 	zpi_context* _parent;
 	zpi_context* _child;
@@ -127,7 +127,7 @@ private:
 	//U32 _variable_index;
 	//TODO these dont need to be in the context
 	z_string _member_var_name;
-
+private:
 
 };
 
@@ -136,7 +136,6 @@ private:
 
 class zp_test_result
 {
-	//TODO HANLDE results more than 254
 	std::vector<U8> _test_results;
 	std::map<U32,U32> _test_results_ex;
 

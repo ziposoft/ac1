@@ -132,7 +132,7 @@ private:
 };
 
 
-
+#endif
 
 class zp_test_result
 {
@@ -156,7 +156,7 @@ public:
 #endif
 };
 
-#endif
+
 //________________________________________________________________
 //
 //zp_parser
@@ -171,7 +171,9 @@ class zp_parser : public zp_text_parser //, public zo_manipulator
 	ctext _furthest_obj;//TODO
 	ctext _furthest_tmpl;//TODO
 
-
+   zp_flags _flags;
+	zp_mode _mode;
+	z_string _member_var_name;
 
 	z_status _last_status;
 

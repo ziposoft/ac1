@@ -1,15 +1,20 @@
 #include "test_parse.h"
 
-
 //GLOBALS
 
-zp_obj* parse_root=0;
 ctext g_template=0;
 ctext g_expected_output=0;
 ctext g_expected_def_output=0;
 z_status g_expected_result=zs_ok;
 opt_func g_test_type_function_to_run=0;
 
+
+const st_test_tmpl_entry test_tmpl_list[]=
+{
+   	{"^'c':'c'","aaaaac",zs_matched,"c","c"},
+
+};
+const size_t test_tmpl_list_count=sizeof(test_tmpl_list)/sizeof(st_test_tmpl_entry);
 /*--------------------------------------------------------------
 
 	Test Types
@@ -18,12 +23,9 @@ opt_func g_test_type_function_to_run=0;
 
 int  run_test_only()
 {
-	if(parse_root)
-	{
-		delete parse_root;
-		parse_root=0;
-	}
+
 	z_status status=zs_no_match;
+   /*
 	p.set_source(g_arg_data_in);
 	if(g_template)
 		status=p.parse_template(parse_root,g_template);
@@ -36,25 +38,27 @@ int  run_test_only()
 			printf("ERROR! no object or template specified.\n");
 			return -1;
 		}
-	}
+	}*/
 
 
 
 	if(status!=g_expected_result)
 	{
 		printf("TEST FAILED!\n");
-		printf("result=%s\n",z_status_get_text(status));
-		printf("expected result=%s\n",z_status_get_text(g_expected_result));
-		p.report_error(status);
+		printf("result=%s\n",zs_get_status_text(status));
+		printf("expected result=%s\n",zs_get_status_text(g_expected_result));
+		//p.report_error(status);
 		return -1;
 	}
 	printf("TEST PASSED\n");
+
+   /*
 	if(g_arg_dump=="on")
 		if(parse_root)
 		{
-			p.dump_obj(&gz_out,parse_root);
+			p.dump_obj(&zout,parse_root);
 		}
-
+      */
 	return 0;
 }
 int run_test_create()
@@ -79,6 +83,7 @@ int run_test_create_output()
 int run_test_output()
 {
 	z_status status=zs_no_match;
+#if 0
 	z_file_string_buffer fp_output_buffer;
 	if(parse_root)
 	{
@@ -118,7 +123,7 @@ int run_test_output()
 			return 0;
 		}
 		printf("Output:\n");
-		gz_out<<fp_output_buffer.get_buffer()<<'\n';
+		zout<<fp_output_buffer.get_buffer()<<'\n';
 		return status;
 	}
 	/*
@@ -136,11 +141,14 @@ int run_test_output()
 		}
 	}
 	*/
+#endif
 	return 0;
 }
 int run_test_output_def()
 {
 	printf("OUTPUT DEFAULT:\n");
+
+#if 0
 	if(!g_template)
 	{
 		if(g_arg_obj)
@@ -173,7 +181,7 @@ int run_test_output_def()
 		}
 		printf("Default Output MATCHED.\n");
 	}
-
+#endif
 	return 0;
 }
 
@@ -182,20 +190,7 @@ int run_create_def_obj()
 {
 	printf("CREATE DEFAULT OBJECT\n");
 	z_status status=zs_no_match;
-	parse_root=0;
-	status=p.create_obj(g_arg_obj,parse_root);
-	if(status)
-	{
-		printf("Default create FAILED!\n");
-		p.report_error(status);
-		return -1;
-	}
 
-	if(parse_root)
-	{
-		return run_test_output();
-
-	}
 	
 	return -1;
 
@@ -206,45 +201,28 @@ int run_create_def_obj()
 	Main Operations
 
 --------------------------------------------------------------*/
-
-
-int run_parse_xml()
+int run_provided_template_test()
 {
+	//___________________________________________________________
+	//
+	//  
+	//___________________________________________________________
 
-	zp_xml_file xml_file;
-	z_status status=zs_no_match;
+	g_expected_output="";
+	g_expected_result=zs_matched;
+	g_template=g_arg_templ_in.c_str();
 
-	p.set_ignore_whitespace();
-
-	status=p.parse_obj(&xml_file,g_arg_data_in);
-
-
-
-
-	if(status!=g_expected_result)
-	{
-		printf("TEST FAILED!\n");
-		printf("result=%s\n",z_status_get_text(status));
-		printf("expected result=%s\n",z_status_get_text(g_expected_result));
-		p.report_error(status);
-		return -1;
-	}
-	printf("TEST PASSED\n");
-	if(g_arg_dump=="on")
-	{
-		printf("dumping...\n");
-			p.dump_obj(&gz_out,&xml_file);
-	}
+	(*g_test_type_function_to_run)();
 
 	return 0;
-	return -1;
 }
-
-int run_parse_obj()
+int  run_custom()
 {
-	if(g_test_type_function_to_run)
-		return (*g_test_type_function_to_run)();
-	return -1;
+	return 0;
+}
+int  run_dump_all()
+{
+	return 0;
 }
 
 int run_static_tests()
@@ -262,7 +240,7 @@ int run_static_tests()
 		U32 test_number=g_arg_test_num.GetDecVal();
 		if(test_number>=num_tests)
 		{
-			gz_out << "Invalid test number \""<<g_arg_test_num <<"\"";
+			zout << "Invalid test number \""<<g_arg_test_num <<"\"";
 			return -1;
 		}
 		start=end=test_number;
@@ -276,7 +254,7 @@ int run_static_tests()
 		printf("tmpl=%s, data=%s, expected result=%s\n",
 			entry.templ,
 			entry.input_data,
-			z_status_get_text(entry.expected_result)
+			zs_get_status_text(entry.expected_result)
 			);
 		g_arg_data_in=entry.input_data;
 		g_expected_output=entry.expected_output;

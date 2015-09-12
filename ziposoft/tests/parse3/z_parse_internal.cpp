@@ -104,7 +104,7 @@ z_status zp_parser::get_flags(zp_flags& flags)
 
 			if(tmpl.test_any_identifier()!=zs_matched) 
 				return check_status(zs_template_syntax_error);
-			tmpl.get_match( _ctx_current->_member_var_name);
+			tmpl.get_match( _member_var_name);
 			if(tmpl.current_ch()!='}')
 				return check_status(zs_template_syntax_error);
 			break;
@@ -502,19 +502,20 @@ z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 		U32 result_index_multi_success_mark=0;
 
 		U32 testnum=_test_result_current_index;
-		Z_ASSERT((_results));
+		//Z_ASSERT((_results));
 		_test_result_current_index++;
 		if(!mode.create)
 		{
 			U32 result=0;
 			U32 quanity_matched=0;
 			ZT("TEST#%d START>>",testnum);
-			_results->set_result(testnum,zp_result_unknown);
+			
+        /* _results->set_result(testnum,zp_result_unknown);
 			SANITY_CHECK(
 				_results->_test_result_tmpl[testnum]=tpl_start;
 				ctext sanity_check_data_index=0;
 				U32 sanity_check_loop_count=0;
-			);
+			);*/
 
 			bool satified=false;
 			while(1)
@@ -570,11 +571,12 @@ z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 			{
 				result=zp_result_eof;
 			}
+         /*
 			_results->set_result(testnum,result);
 			if(quanity_matched==0)
 			{
 				_test_result_current_index=(testnum+1);
-			}
+			}*/
 #ifdef DEBUG_RESULT
 			U32 i;
 			z_string debug_test_results;
@@ -597,6 +599,7 @@ z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 #endif
 			return status;
 		}
+      /*
 		else//if(mode.create)
 		{
 			U32 test_result=_results->get_result(testnum);
@@ -638,7 +641,7 @@ z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 				status=zs_eof;
 			ZT("<<EXIT#%d -%d:%s",testnum,status,zs_get_text(status));
 			return status;
-		}
+		}*/
 	}
 	return check_status(zs_internal_error);
 
@@ -695,6 +698,7 @@ z_status zp_parser::_f_ident_list_test(const void* dummy)
 		if(result)
 			return result;
 		result_total=zs_matched;
+      /*
 		if(_ctx_current->_mode.create)
 			if((_ctx_current->_flags.parent_data)&&(_ctx_current->_obj))
 			{
@@ -706,7 +710,7 @@ z_status zp_parser::_f_ident_list_test(const void* dummy)
 
 				if(i_result)
 					return result;
-			}
+			}*/
 
 		result=test_char(',');
 		if((result==zs_no_match)||(result==zs_eof))
@@ -725,7 +729,7 @@ z_status zp_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
 {
 	z_status result=zs_ok;
 	bool need_comma=false;
-
+   /*
 	if((_ctx_current->_obj)&&(flags.parent_data))
 	{
 		Z_ASSERT(0); //FIX THIS
@@ -744,7 +748,7 @@ z_status zp_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
 				need_comma=true;
 			}
 		}
-	}
+	}*/
 	if(result!=zs_end_of_list)
 		return result;
 	return zs_matched;
@@ -786,14 +790,11 @@ z_status zp_parser::_f_create_string(zp_flags flags,int type)
 	{
 		if(flags.parent_data)
 		{
-			if(_ctx_current->_obj)
-			{
 				z_string temp,unescaped;
 				temp.assign( match_start,match_len);
 				z_str_unescape(temp,unescaped);
-				status=_ctx_current->_obj_factory->set_var_as_string( _ctx_current->_obj,_ctx_current->_member_var_name,unescaped.c_str());
+				//status=_ctx_current->_obj_factory->set_var_as_string( _ctx_current->_obj,_ctx_current->_member_var_name,unescaped.c_str());
 				//status=feature_set_string(_ctx_current->_obj,_ctx_current->_member_var_name,match_start,match_len);
-			}
 		}
 		else
 		{
@@ -838,6 +839,7 @@ z_status zp_parser::_f_string_literal_create(zp_flags flags,int type)
 	z_status status=zs_ok;
 	if(flags.parent_data)
 	{
+      /*
 		if(_ctx_current->_obj)
 		{
 			bool* pVar=0;
@@ -845,7 +847,7 @@ z_status zp_parser::_f_string_literal_create(zp_flags flags,int type)
 				_ctx_current->_obj,_ctx_current->_member_var_name,(void**)&pVar,0);
 			if(pVar)
 				*pVar=true;
-		}
+		}*/
 	}
 	return status;
 }
@@ -869,6 +871,7 @@ z_status zp_parser::_f_string_literal_output(zp_flags flags,zp_mode mode)
 z_status zp_parser::_f_output_string(zp_flags flags,zp_mode mode)
 {
 	z_status status=zs_ok;
+   /*
 	if(_ctx_current->_obj)
 	{
 		if(flags.parent_data)
@@ -885,7 +888,7 @@ z_status zp_parser::_f_output_string(zp_flags flags,zp_mode mode)
 			return zs_no_match;
 		}
 
-	}
+	}*/
 	
 	if(flags.required || flags.create_default)
 		return zs_matched;
@@ -906,8 +909,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 	if(get_index()>_furthest_index)
 	{
 		_furthest_index=get_index();
-		if(_ctx_current->_obj_factory)
-			_furthest_obj=	_ctx_current->_obj_factory->get_name();
+		//if(_ctx_current->_obj_factory) 			_furthest_obj=	_ctx_current->_obj_factory->get_name();
 	//	_furthest_tmpl=	tmpl.;
 
 	}
@@ -929,8 +931,8 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 
 #endif
 	item_type match_type=item_invalid_type;
-	_ctx_current->_mode=mode;
-	_ctx_current->_flags=flags;
+	//_ctx_current->_mode=mode;
+	//_ctx_current->_flags=flags;
 	//----------------------------------------------
 	// Process subgroup
 	//
@@ -1021,6 +1023,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 				return check_status(zs_no_entry_for_item);
 			if(mode.create)
 			{
+            /*
 				if(flags.this_obj)
 				{
 					sub_obj=_ctx_current->_obj;	// what does this even mean? its for the @ operator 
@@ -1042,53 +1045,14 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 				ZT("created sub obj %s->%s %s:%p\n", _ctx_current->_obj_factory->get_name(),
 					_ctx_current->_member_var_name.c_str(),
 					fact_new_obj->get_name(),sub_obj);
+               */
 
 			}
 
 			if(mode.output)
 			{
 
-				if(flags.parent_data)
-				{
-					/*
-					if(flags.multi)
-					{
-						item_result=feature_objlist_get_next(_ctx_current->_obj,
-							_ctx_current->_member_var_name,(void**)&sub_obj);
-						if(item_result)
-							return zs_no_match;
-					}
-					else
-					{*/
-					_ctx_current->_obj_factory->get_child_obj_ptr(
-						_ctx_current->_obj,
-						_ctx_current->_member_var_name,
-						&sub_obj, 
-						_ctx_current->_output_obj_iter);
-					if(!sub_obj)
-						return zs_no_match;
-					
-				}
-				if((!sub_obj)&&(_ctx_current->_obj))
-				{
-					/*
-					void* obj=
-						_ctx_current->_obj->get_child_by_offset(
-						_ctx_current->_output_obj_iter,
-						context_get_current_template_parser().get_index_offset(),
-						0
-						);
 
-					sub_obj=dynamic_cast<void*>(obj);
-					*/
-				}
-				if(!sub_obj)
-				{
-					if(!(flags.required || flags.create_default))
-						return zs_skipped;
-					sub_obj=fact_new_obj->create_default_obj();
-				}
-				//Reset all of the member var iterators.
 
 
 			}
