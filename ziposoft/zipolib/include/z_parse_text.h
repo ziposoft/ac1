@@ -109,6 +109,7 @@ public:
 	z_status ft_scoped_identchars(const void* dummy);
 	z_status ft_to_eol(const void* dummy);
 	z_status ft_test_char(const void* c);
+	z_status ft_test_whsp(const void* dummy);
 	/*______________________________________
 
 				Index functions

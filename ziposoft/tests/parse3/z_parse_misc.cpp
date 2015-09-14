@@ -165,7 +165,7 @@ zp_parser::zp_parser()
 	_last_status=zs_ok;
 	_furthest_index=0;
 }
-zp_text_parser& zp_parser::context_get_current_template_parser()
+zp_text_parser& zp_parser::tmpl()
 {
 	return _ctx_current->_current_template_parser;
 }
@@ -187,7 +187,7 @@ z_status zp_parser::report_error()
 	}
 	else
 	printf("Error while parsing object type \"%s\"\n",_furthest_obj);
-	zp_text_parser& tmpl=context_get_current_template_parser();
+	zp_text_parser& tpl=tmpl();
 	//TODO it should report from the FARTHEST that we got
 	//printf("template=\n%s\n",t.get_buffer());
 	
@@ -231,7 +231,7 @@ z_status zp_parser::parse_obj_f(void* p_obj,z_factory* factory,ctext data,ctext 
 	{
 		ZT("==========ITEM[%s] MATCHED, CREATING=====\n",factory->get_name());
 		index_reset();
-		context_get_current_template_parser().index_reset();
+		tmpl().index_reset();
 		reset_results();
 		_last_status=_process_template(zp_mode_parse_create);
 	}
@@ -258,7 +258,7 @@ z_status zp_parser::parse_item(void*& p_item,
 	{
 		ZT("==========ITEM[%s] MATCHED, CREATING=====\n",item_entry_name);
 		index_reset();
-		context_get_current_template_parser().index_reset();
+		tmpl().index_reset();
 		reset_results();
 
 		status=_process_template(zp_mode_parse_create);
@@ -366,7 +366,7 @@ z_status zp_parser::parse_template(	ctext tmpl)
 
 		ZT("==========TEMPLATE[%s] MATCHED, CREATING=====\n",tmpl);
 		index_reset();
-		context_get_current_template_parser().index_reset();
+		tmpl().index_reset();
 		reset_results();
 		status=_process_template(zp_mode_parse_create);
 		Z_ASSERT(0); //p_item=obj;

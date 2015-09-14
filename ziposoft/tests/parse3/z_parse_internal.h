@@ -162,8 +162,12 @@ public:
 //zp_parser
 //________________________________________________________________
 
-class zp_parser : public zp_text_parser //, public zo_manipulator
+class zp_parser
 {
+
+	virtual zp_text_parser& tmpl()=0;
+	virtual zp_text_parser& data()=0;
+
 
 	U32 _test_result_current_index;
 
@@ -171,7 +175,7 @@ class zp_parser : public zp_text_parser //, public zo_manipulator
 	ctext _furthest_obj;//TODO
 	ctext _furthest_tmpl;//TODO
 
-   zp_flags _flags;
+    zp_flags _flags;
 	zp_mode _mode;
 	z_string _member_var_name;
 
@@ -201,38 +205,44 @@ class zp_parser : public zp_text_parser //, public zo_manipulator
 	z_status _process_sub_obj(ctext start, size_t len,zp_mode mode,zp_flags flags);
 	z_status _process_single_item(zp_mode mode,zp_flags flags);
 	z_status get_flags(zp_flags& flags);
-	zp_text_parser& context_get_current_template_parser();
 	void context_set_root(void* p_item,z_factory* ie, ctext parse_string);
 	void context_sub_item_push(void* obj,z_factory* ie);
 	void context_sub_group_push(void* obj);
 	void context_sub_item_pop();
    public:
 	//String literal
-	z_status _f_string_literal_output(zp_flags p1,zp_mode mode);
-	z_status _f_test_string_literal(const void* dummy);
-	z_status _f_string_literal_create(zp_flags p1,int type);
+	z_status _f_test_string_literal();
 
 	//NOT String literal
-	z_status _f_not_test_string_literal(const void* dummy);
+	z_status _f_not_test_string_literal();
 
 	//Simple strings
-	z_status _f_output_string(zp_flags p1,zp_mode mode);
-	z_status _f_test_ident(const void* dummy);
-	z_status _f_create_string(zp_flags p1,int type);
-	z_status _f_test_to_eob(const void* dummy);
-	z_status _f_test_whsp(const void* dummy);
-	z_status _f_test_path(const void* dummy);
+	z_status _f_test_ident();
+	z_status _f_test_to_eob();
+	z_status _f_test_whsp();
+	z_status _f_test_path();
+	z_status _f_digits();
+	z_status _f_letters();
+	z_status _f_scoped_identchars();
+
+
 
 	//ident list
-	z_status _f_ident_list_test(const void* dummy);
-	z_status _f_ident_list_create(zp_flags p1,int type);
-	z_status _f_ident_list_output(zp_flags p1,zp_mode mode);
+	z_status _f_ident_list_test();
+
 	//quoted strings
 
-	z_status _f_quoted_string_test(const void* dummy);
-	z_status _f_squoted_string_test(const void* dummy);
+	z_status _f_quoted_string_test();
+	z_status _f_squoted_string_test();
 
 
+	// OUTPUT and CREATE- shit we dont use anymore
+	z_status _f_string_literal_output(zp_flags p1,zp_mode mode);
+	z_status _f_string_literal_create(zp_flags p1,int type);
+	z_status _f_create_string(zp_flags p1,int type);
+	z_status _f_ident_list_create(zp_flags p1,int type);
+	z_status _f_output_string(zp_flags p1,zp_mode mode);
+	z_status _f_ident_list_output(zp_flags p1,zp_mode mode);
 public:
 
 	zp_parser();

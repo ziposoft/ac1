@@ -1,9 +1,9 @@
 #include "test_parse.h"
 
 
-z_string g_arg_operation="help";
+z_string g_arg_operation="static";
 z_string g_arg_test_num="all";
-z_string g_arg_test_type="all";
+z_string g_arg_test_type="test";
 z_string g_arg_templ_in="";
 z_string g_arg_data_in="";
 z_string g_arg_obj_type="";
