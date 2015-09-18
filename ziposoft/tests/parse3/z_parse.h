@@ -48,10 +48,10 @@ Item Keyword
 */
 
 
-class zp_parser;
+class z_zipex_base;
 class z_parser
 {
-	zp_parser* _p;
+	z_zipex_base* _p;
 public:
 	z_parser();
 	virtual ~z_parser();

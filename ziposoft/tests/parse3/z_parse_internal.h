@@ -132,7 +132,6 @@ private:
 };
 
 
-#endif
 
 class zp_test_result
 {
@@ -156,18 +155,18 @@ public:
 #endif
 };
 
+#endif
 
 //________________________________________________________________
 //
-//zp_parser
+//z_zipex_base
 //________________________________________________________________
 
-class zp_parser
+class z_zipex_base
 {
 
 	virtual zp_text_parser& tmpl()=0;
 	virtual zp_text_parser& data()=0;
-
 
 	U32 _test_result_current_index;
 
@@ -184,18 +183,11 @@ class zp_parser
 	z_file* _file_out;
 
 
-
-
 	z_status create_empty_item(void*& p_item_out,ctext item_entry_name);
 
 
-
-
-
-
-
 	//context
-	z_factory* find_item(ctext item_name,size_t len);
+	//z_factory* find_item(ctext item_name,size_t len);
 	z_status _process_stage(zp_mode mode ,zp_flags* pflags=0);
 	void reset_results();
 	z_status _process_template(zp_mode mode);
@@ -205,10 +197,12 @@ class zp_parser
 	z_status _process_sub_obj(ctext start, size_t len,zp_mode mode,zp_flags flags);
 	z_status _process_single_item(zp_mode mode,zp_flags flags);
 	z_status get_flags(zp_flags& flags);
+	/*
 	void context_set_root(void* p_item,z_factory* ie, ctext parse_string);
 	void context_sub_item_push(void* obj,z_factory* ie);
 	void context_sub_group_push(void* obj);
 	void context_sub_item_pop();
+	*/
    public:
 	//String literal
 	z_status _f_test_string_literal();
@@ -245,20 +239,48 @@ class zp_parser
 	z_status _f_ident_list_output(zp_flags p1,zp_mode mode);
 public:
 
-	zp_parser();
+	z_zipex_base();
  	z_status report_error();
+ 	z_status parse();
+
+	/*
  	z_status parse_template(ctext tmpl);
 	z_status parse_item(void*& p_item_out,ctext item_entry_name);
-	z_status output_obj(z_file* fp,z_factory* factory,void* obj);
 	z_status output_default_template(z_file* fp,ctext tmpl);
 	z_status create_obj(ctext item_entry_name,void* &p_item);
 	z_status parse_obj_f(void* p_obj,z_factory* factory,ctext data,ctext tmpl=0);
+	z_status output_obj(z_file* fp,z_factory* factory,void* obj);
+	*/
+};
+
+
+class z_zipex : public z_zipex_base
+{
+public:
+
+	zp_text_parser _templ;
+	zp_text_parser _data;
+	z_zipex()
+	{
+	}
+
+	z_zipex(ctext templ,ctext data)
+	{
+		_templ.set_source(templ);
+		_data.set_source(data);
+
+
+
+	}
+	virtual zp_text_parser& tmpl() { return _templ;}
+	virtual zp_text_parser& data() { return _data;}
+
+
+
 
 
 
 };
-
-
 
 
 #endif

@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClCompile Include="arguments.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="static_test_list.cpp" />
     <ClCompile Include="test_parse.cpp" />
     <ClCompile Include="z_parse.cpp" />
     <ClCompile Include="z_parse_internal.cpp" />

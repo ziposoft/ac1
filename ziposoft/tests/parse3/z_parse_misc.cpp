@@ -2,6 +2,40 @@
 #include "z_parse_internal.h"
 
 
+z_status z_zipex_base::report_error()
+{
+	z_logger_dump();
+	printf("status=%s\n",zs_get_status_text(_last_status));
+	if(_last_status==zs_ok)
+		return zs_ok;
+	zp_text_parser& tpl=tmpl();
+	//TODO it should report from the FARTHEST that we got
+	//printf("template=\n%s\n",t.get_buffer());
+	
+	if(_last_status)
+	{
+		//print_context();
+		//tmpl.print_context();
+		data().set_index(_furthest_index);
+		data().print_context();
+	}
+
+	if(_last_status==zs_no_entry_for_item)
+	{
+		z_string match;
+		tmpl().get_match(match);
+		printf("No entry found for item \"%s\"",match.c_str());
+
+	}
+	if(_last_status==zs_syntax_error)
+	{
+
+
+
+	}
+	return _last_status;
+}
+
 #if 0 
 
 /*________________________________________________________________
@@ -57,7 +91,7 @@ void zp_test_result::clear()
 {
 	return _test_results.resize(0);
 }
-void zp_parser::reset_results()
+void z_zipex_base::reset_results()
 {
 	if(!_results)
 		_results=new zp_test_result();
@@ -99,11 +133,11 @@ void* zpi_context::get_next_child_obj()
 
 //________________________________________________________________
 //
-//zp_parser
+//z_zipex_base
 //________________________________________________________________
 
 
-void zp_parser::context_set_root(void* p_obj,
+void z_zipex_base::context_set_root(void* p_obj,
 									 z_factory* ie,
 									 ctext parse_string
 									 )
@@ -121,7 +155,7 @@ void zp_parser::context_set_root(void* p_obj,
 	//_ctx_root._output_result_index=0;
 
 }
-void zp_parser::context_sub_item_push(void* obj,z_factory* ie)
+void z_zipex_base::context_sub_item_push(void* obj,z_factory* ie)
 {
 	//TODO need to change this so that we can remember where we failed
 	//and give an accurate parse error message
@@ -139,7 +173,7 @@ void zp_parser::context_sub_item_push(void* obj,z_factory* ie)
 	//ctx->_output_result_index=0;
 }
 
-void zp_parser::context_sub_item_pop()
+void z_zipex_base::context_sub_item_pop()
 {
 	if(_ctx_current->_parent)
 	{
@@ -152,74 +186,21 @@ void zp_parser::context_sub_item_pop()
 
 //________________________________________________________________
 //
-//zp_parser
+//z_zipex_base
 //________________________________________________________________
 
 
-zp_parser::zp_parser()
-{
-//	_item_table=0;
-//	_item_table_size=0;
-	_results=0;
-	_ctx_current=0;
-	_last_status=zs_ok;
-	_furthest_index=0;
-}
-zp_text_parser& zp_parser::tmpl()
+
+zp_text_parser& z_zipex_base::tmpl()
 {
 	return _ctx_current->_current_template_parser;
 }
 
 
-z_status zp_parser::report_error()
-{
-	z_string data;
-	z_logger_dump();
-	printf("status=%s\n",zs_get_status_text(_last_status));
-	if(!_ctx_current) 
-		return _last_status;
-	if(_last_status==zs_ok)
-		return zs_ok;
-	if(_ctx_current->_obj_factory==0)
-	{
-		printf("No factory\n");
-
-	}
-	else
-	printf("Error while parsing object type \"%s\"\n",_furthest_obj);
-	zp_text_parser& tpl=tmpl();
-	//TODO it should report from the FARTHEST that we got
-	//printf("template=\n%s\n",t.get_buffer());
-	
-	if(_last_status)
-	{
-		//print_context();
-		//tmpl.print_context();
-
-		_index_under_test=_furthest_index;
-		print_context();
-	}
-
-	if(_last_status==zs_no_entry_for_item)
-	{
-		z_string match;
-		tmpl.get_match(match);
-		printf("No entry found for item \"%s\"",match.c_str());
-
-	}
-	if(_last_status==zs_syntax_error)
-	{
 
 
 
-	}
-	return _last_status;
-}
-
-
-
-
-z_status zp_parser::parse_obj_f(void* p_obj,z_factory* factory,ctext data,ctext tmpl)
+z_status z_zipex_base::parse_obj_f(void* p_obj,z_factory* factory,ctext data,ctext tmpl)
 {
 	Z_ASSERT(p_obj);
 	set_source(data,strlen(data));
@@ -238,7 +219,7 @@ z_status zp_parser::parse_obj_f(void* p_obj,z_factory* factory,ctext data,ctext 
 	return _last_status;
 }
 
-z_status zp_parser::parse_item(void*& p_item,
+z_status z_zipex_base::parse_item(void*& p_item,
 									ctext item_entry_name
 									)
 {
@@ -267,7 +248,7 @@ z_status zp_parser::parse_item(void*& p_item,
 	}
 	return status;
 }
-z_status zp_parser::create_obj(ctext item_entry_name,void* &p_obj)
+z_status z_zipex_base::create_obj(ctext item_entry_name,void* &p_obj)
 {
 
 	//ZTF;
@@ -281,7 +262,7 @@ z_status zp_parser::create_obj(ctext item_entry_name,void* &p_obj)
 
 }
 
-z_status zp_parser::output_obj(z_file* fp,z_factory* factory,void* obj)
+z_status z_zipex_base::output_obj(z_file* fp,z_factory* factory,void* obj)
 {
 	if(!factory)
 		return zs_bad_parameter;
@@ -304,7 +285,7 @@ z_status zp_parser::output_obj(z_file* fp,z_factory* factory,void* obj)
 
 
 
-z_status zp_parser::create_empty_item(void*& p_item,
+z_status z_zipex_base::create_empty_item(void*& p_item,
 										   ctext item_entry_name
 										   )
 {
@@ -323,7 +304,7 @@ z_status zp_parser::create_empty_item(void*& p_item,
 	return status;
 }
 
-z_status zp_parser::output_default_template(z_file* fp,ctext tmpl)
+z_status z_zipex_base::output_default_template(z_file* fp,ctext tmpl)
 {
 	z_status status;
 	//_append_mode=false;
@@ -344,7 +325,7 @@ z_status zp_parser::output_default_template(z_file* fp,ctext tmpl)
 }
 
 
-z_status zp_parser::parse_template(	ctext tmpl)
+z_status z_zipex_base::parse_template(	ctext tmpl)
 {
 	z_status status;
 	//_append_mode=false;
@@ -376,7 +357,7 @@ z_status zp_parser::parse_template(	ctext tmpl)
 }
 
 //item table
-z_factory* zp_parser::find_item(ctext item_name,size_t len)
+z_factory* z_zipex_base::find_item(ctext item_name,size_t len)
 {
 	z_string s;
 	s.assign( item_name,len);

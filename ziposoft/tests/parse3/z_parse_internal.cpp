@@ -8,11 +8,11 @@
 #endif  
 
 
-typedef z_status (zp_parser::*type_obj_parser_fp)(ctext p1);
-typedef z_status (zp_parser::*type_obj_parser_fp_test)();
-typedef z_status (zp_parser::*type_obj_parser_fp_flags)(zp_flags p1);
-typedef z_status (zp_parser::*type_obj_parser_fp_create)(zp_flags p1,int type);
-typedef z_status (zp_parser::*type_obj_parser_fp_output)(zp_flags p1,zp_mode mode);
+typedef z_status (z_zipex_base::*type_obj_parser_fp)(ctext p1);
+typedef z_status (z_zipex_base::*type_obj_parser_fp_test)();
+typedef z_status (z_zipex_base::*type_obj_parser_fp_flags)(zp_flags p1);
+typedef z_status (z_zipex_base::*type_obj_parser_fp_create)(zp_flags p1,int type);
+typedef z_status (z_zipex_base::*type_obj_parser_fp_output)(zp_flags p1,zp_mode mode);
 
 
 struct keyword_item
@@ -29,7 +29,7 @@ struct keyword_item
 };
 
 #define FPT(_X_) &zp_text_parser::_X_
-#define FPO(_X_) &zp_parser::_X_
+#define FPO(_X_) &z_zipex_base::_X_
 
 keyword_item keyword_list[]={
 	{item_literal,		"literal",	"string literal",		
@@ -65,7 +65,20 @@ keyword_item keyword_list[]={
 };
 #define keyword_list_count (sizeof(keyword_list)/sizeof(keyword_item))
 
-z_status zp_parser::get_flags(zp_flags& flags)
+
+
+z_zipex_base::z_zipex_base()
+{
+//	_item_table=0;
+//	_item_table_size=0;
+	_flags.as_u32=0;
+	_mode=zp_mode_parse_input;
+	_last_status=zs_ok;
+	_furthest_index=0;
+}
+
+
+z_status z_zipex_base::get_flags(zp_flags& flags)
 {
 	//zp_flags& flags=_ctx_current->_flags;
 	zp_text_parser& tpl=tmpl();
@@ -136,7 +149,7 @@ z_status zp_parser::get_flags(zp_flags& flags)
 
 }
 
-z_status zp_parser::_process_template(zp_mode mode)
+z_status z_zipex_base::_process_template(zp_mode mode)
 {
 	zp_flags flags;
 	flags.as_u32=0;
@@ -154,7 +167,7 @@ z_status zp_parser::_process_template(zp_mode mode)
 
 }
 
-z_status zp_parser::_process_group(zp_flags flags,zp_mode mode)
+z_status z_zipex_base::_process_group(zp_flags flags,zp_mode mode)
 {
 	//ZTF;
 	zp_group_type group_type=zp_group_single;
@@ -417,7 +430,7 @@ struct item_process
 
 };
 
-z_status zp_parser::test_white_space(zp_mode mode)
+z_status z_zipex_base::test_white_space(zp_mode mode)
 {
 	z_status status=data().test_cset(*cset_white_space);
 	if (status==zs_matched)
@@ -438,7 +451,7 @@ z_status zp_parser::test_white_space(zp_mode mode)
 	}
 	return status;
 }
-z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
+z_status z_zipex_base::_process_stage(zp_mode mode,zp_flags* pflags)
 {
 	//ZTF;
 	z_status status;
@@ -648,8 +661,8 @@ z_status zp_parser::_process_stage(zp_mode mode,zp_flags* pflags)
 
 }
 
-
-z_status zp_parser::_process_sub_item(void* sub_obj,
+/*
+z_status z_zipex_base::_process_sub_item(void* sub_obj,
 										  z_factory* ie,
 										  zp_mode mode,zp_flags flags)
 {
@@ -682,10 +695,10 @@ z_status zp_parser::_process_sub_item(void* sub_obj,
 
 }
 
+*/
 
 
-
-z_status zp_parser::_f_ident_list_test()
+z_status z_zipex_base::_f_ident_list_test()
 {
 	z_status result; 
 	z_status result_total=zs_no_match; 
@@ -721,12 +734,12 @@ z_status zp_parser::_f_ident_list_test()
 	}
 }
 
-z_status zp_parser::_f_ident_list_create(zp_flags flags,int type)
+z_status z_zipex_base::_f_ident_list_create(zp_flags flags,int type)
 {
 	return zs_matched;
 
 }
-z_status zp_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
+z_status z_zipex_base::_f_ident_list_output(zp_flags flags,zp_mode mode)
 {
 	z_status result=zs_ok;
 	bool need_comma=false;
@@ -754,46 +767,46 @@ z_status zp_parser::_f_ident_list_output(zp_flags flags,zp_mode mode)
 		return result;
 	return zs_matched;
 }
-z_status zp_parser::_f_squoted_string_test()
+z_status z_zipex_base::_f_squoted_string_test()
 {
 	return data().test_single_quoted_string();
 }
-z_status zp_parser::_f_digits()
+z_status z_zipex_base::_f_digits()
 {
 	return data().ft_digits(0);
 }
-z_status zp_parser::_f_letters()
+z_status z_zipex_base::_f_letters()
 {
 	return data().ft_letters(0);
 }
-z_status zp_parser::_f_scoped_identchars()
+z_status z_zipex_base::_f_scoped_identchars()
 {
 	return data().ft_scoped_identchars(0);
 }
 
-z_status zp_parser::_f_quoted_string_test()
+z_status z_zipex_base::_f_quoted_string_test()
 {
 	return data().test_code_string();
 }
-z_status zp_parser::_f_test_ident()
+z_status z_zipex_base::_f_test_ident()
 {
 	return data().test_any_identifier();
 }
-z_status zp_parser::_f_test_whsp()
+z_status z_zipex_base::_f_test_whsp()
 {
 	return data().test_cset(*cset_white_space);
 }
-z_status zp_parser::_f_test_path()
+z_status z_zipex_base::_f_test_path()
 {
 	return data().test_cset(*cset_path_string);
 
 }
-z_status zp_parser::_f_test_to_eob()
+z_status z_zipex_base::_f_test_to_eob()
 {
 	return data().test_to_eob();
 }
 
-z_status zp_parser::_f_create_string(zp_flags flags,int type)
+z_status z_zipex_base::_f_create_string(zp_flags flags,int type)
 {
 	z_status status=zs_matched;
 	ctext match_start=0;
@@ -826,7 +839,7 @@ z_status zp_parser::_f_create_string(zp_flags flags,int type)
 	return status;
 }
 
-z_status zp_parser::_f_test_string_literal()
+z_status z_zipex_base::_f_test_string_literal()
 {
 	z_status status=zs_no_match;
 	ctext match_start=0;
@@ -835,7 +848,7 @@ z_status zp_parser::_f_test_string_literal()
 	status= data().test_string(match_start,match_len);
 	return status;
 }
-z_status zp_parser::_f_not_test_string_literal()
+z_status z_zipex_base::_f_not_test_string_literal()
 {
 	//TODO!!!
 	z_status status=zs_no_match;
@@ -846,7 +859,7 @@ z_status zp_parser::_f_not_test_string_literal()
 	return status;
 }
 
-z_status zp_parser::_f_string_literal_create(zp_flags flags,int type)
+z_status z_zipex_base::_f_string_literal_create(zp_flags flags,int type)
 {
 	z_status status=zs_ok;
 	if(flags.parent_data)
@@ -863,7 +876,7 @@ z_status zp_parser::_f_string_literal_create(zp_flags flags,int type)
 	}
 	return status;
 }
-z_status zp_parser::_f_string_literal_output(zp_flags flags,zp_mode mode)
+z_status z_zipex_base::_f_string_literal_output(zp_flags flags,zp_mode mode)
 {
 	z_status status=zs_ok;
 	ctext match_start=0;
@@ -879,7 +892,7 @@ z_status zp_parser::_f_string_literal_output(zp_flags flags,zp_mode mode)
 #endif
 	return status;
 }
-z_status zp_parser::_f_output_string(zp_flags flags,zp_mode mode)
+z_status z_zipex_base::_f_output_string(zp_flags flags,zp_mode mode)
 {
 	z_status status=zs_ok;
    /*
@@ -907,7 +920,7 @@ z_status zp_parser::_f_output_string(zp_flags flags,zp_mode mode)
 	return zs_no_match;
 }
 
-z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
+z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 {
 	//ZTF;
 	z_status item_result=zs_template_syntax_error;
@@ -1029,9 +1042,9 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 			if(mode.skip_test)
 				return zs_skipped;
 			tpl.get_match(match_start,match_len);
-			z_factory* fact_new_obj=find_item(match_start,match_len);
-			if(fact_new_obj==0)
-				return data().check_status(zs_no_entry_for_item);
+
+			// This is a keyword we do not recognize
+			return data().check_status(zs_no_entry_for_item);
 			if(mode.create)
 			{
             /*
@@ -1067,7 +1080,7 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 
 
 			}
-			item_result= _process_sub_item(sub_obj,fact_new_obj,mode,flags);
+			//item_result= _process_sub_item(sub_obj,fact_new_obj,mode,flags);
 			if(mode.create)
 			{
 				if(item_result==zs_matched)
@@ -1095,3 +1108,10 @@ z_status zp_parser::_process_single_item(zp_mode mode,zp_flags flags)
 	//	return result;
 }
 
+z_status z_zipex_base::parse()
+{
+	z_status status;
+
+	status=_process_template(zp_mode_parse_input);
+	return status;
+}

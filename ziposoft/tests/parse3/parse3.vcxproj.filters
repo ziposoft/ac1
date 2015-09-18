@@ -36,6 +36,9 @@
     <ClCompile Include="arguments.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="static_test_list.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="z_parse_internal.h">

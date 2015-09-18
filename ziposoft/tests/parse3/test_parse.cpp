@@ -1,4 +1,5 @@
 #include "test_parse.h"
+#include "z_parse_internal.h"
 
 //GLOBALS
 
@@ -8,13 +9,18 @@ ctext g_expected_def_output=0;
 z_status g_expected_result=zs_ok;
 opt_func g_test_type_function_to_run=0;
 
-
+/*
 const st_test_tmpl_entry test_tmpl_list[]=
 {
+	{"'a'","a",zs_matched,"a","a","simple string literal match"},
+	{"'a'","b",zs_no_match,"a","a","simple string literal match"},
    	{"^'c':'c'","aaaaac",zs_matched,"c","c"},
+	{"badkeyword","a",zs_no_entry_for_item,"",""},
 
 };
 const size_t test_tmpl_list_count=sizeof(test_tmpl_list)/sizeof(st_test_tmpl_entry);
+
+*/
 /*--------------------------------------------------------------
 
 	Test Types
@@ -25,20 +31,17 @@ int  run_test_only()
 {
 
 	z_status status=zs_no_match;
-   /*
-	p.set_source(g_arg_data_in);
+
+	z_zipex zipex(g_template,g_arg_data_in);
+
+
 	if(g_template)
-		status=p.parse_template(parse_root,g_template);
+		status=zipex.parse();
 	else
 	{
-		if(g_arg_obj)
-			status=p.parse_item(parse_root,g_arg_obj);
-		else
-		{
 			printf("ERROR! no object or template specified.\n");
 			return -1;
-		}
-	}*/
+	}
 
 
 
@@ -47,18 +50,11 @@ int  run_test_only()
 		printf("TEST FAILED!\n");
 		printf("result=%s\n",zs_get_status_text(status));
 		printf("expected result=%s\n",zs_get_status_text(g_expected_result));
-		//p.report_error(status);
+		zipex.report_error();
 		return -1;
 	}
 	printf("TEST PASSED\n");
 
-   /*
-	if(g_arg_dump=="on")
-		if(parse_root)
-		{
-			p.dump_obj(&zout,parse_root);
-		}
-      */
 	return 0;
 }
 int run_test_create()

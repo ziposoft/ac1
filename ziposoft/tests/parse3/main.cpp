@@ -1,6 +1,7 @@
 #include "test_parse.h"
 #include "zipolib/include/z_dbg.h"
 #include "zipolib/include/z_parse_text.h"
+#include "z_parse_internal.h"
 
 
 z_string g_file_buffer;
@@ -13,7 +14,9 @@ int main(int argc, char** argv)
 	ZT_ENABLE();
 
 
-
+	z_zipex x;
+	zout << sizeof(x);
+	
 
 
 	//z_trace_enable();
