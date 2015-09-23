@@ -79,6 +79,7 @@ void z_zipex_base::reset()
 	_mode=zp_mode_parse_input;
 	_last_status=zs_ok;
 	_furthest_index=0;
+   _result_index=0;
 
 }
 
@@ -898,21 +899,34 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 		match_start=data().get_index();
 		if(mode.output)
 		{
-			if(!(flags.required || flags.create_default))
-				mode.skip_test=1;
+			mode.skip_test=1;
 		}
 		result=_process_group(flags,mode);
 		if(result>zs_fatal_error)
 			return result;
 		if(tpl.test_char(')')!=zs_matched)
 			return zs_tmpl_expected_closing_parenthesis;
+
+		if(mode.output)
+		{
+         z_zipex_result& r=_matches[_result_index];
+         if(r._index <_groupnum)
+         {
+            if(_result_index<(_matches.size()-1))
+               _result_index++;
+            r=_matches[_result_index];
+         }
+         if(r._index ==_groupnum)
+         {
+            *_file_out<<r._data;
+         }
+			//f(!(flags.required || flags.create_default))
+		}
+      else
 		if(result==zs_matched)
 		{
 
-			z_string m;
-			m.assign(match_start,data().get_index()-match_start);
-			_matches.back()._index=_groupnum;
-			_matches.emplace()._data=_groupnum;
+         _matches.emplace_back(_groupnum,match_start,data().get_index()-match_start);
 			_groupnum--;
 		}
 		return result;
@@ -1063,11 +1077,12 @@ z_status z_zipex_base::parse()
 	status=_process_template(zp_mode_parse_input);
 	return status;
 }
-bool z_zipex_base::get_group(size_t i,const z_string &s)
+bool z_zipex_base::get_group(size_t i, z_string &s)
 {
 	if(i>=_matches.size())
 		return false;
-	return _matches[i];
+   s=_matches[i]._data;
+	return true;
 
 }
 
@@ -1075,6 +1090,6 @@ ctext z_zipex_base::get_group(size_t i)
 {
 	if(i>=_matches.size())
 		return 0;
-	return _matches[i];
+	return _matches[i]._data;
 
 }

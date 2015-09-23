@@ -181,7 +181,8 @@ class z_zipex_base
 	virtual void reset_streams()=0;
 
 	ctext _furthest_index;//TODO
-	int _groupnum=0;
+	int _groupnum;
+   int _result_index;
     zp_flags _flags;
 	zp_mode _mode;
 	z_string _member_var_name;
@@ -253,7 +254,7 @@ public:
  	z_status output(z_file* fp);
 	int get_group_count() {  return _matches.size(); }
 	ctext get_group(size_t i);
-	bool get_group(size_t i,const z_string &s);
+	bool get_group(size_t i, z_string &s);
 	void reset();
 
 	/*
