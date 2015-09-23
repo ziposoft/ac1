@@ -61,7 +61,7 @@ z_status z_filesys_get_path_parts(z_string& fullpath,z_string* path_out,z_string
 
 z_status z_filesys_getcwd(z_string& path)
 {
-	char* current_dir=new char[128];
+	char* current_dir=z_new char[128];
 	if(z_filesys_get_current_dir(current_dir,128))
 	{
 		return Z_ERROR_MSG(zs_unknown_error,"Could not get current directory");

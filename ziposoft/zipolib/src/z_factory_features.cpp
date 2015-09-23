@@ -379,7 +379,7 @@ z_factory_dyn& z_factory::init_dynamic()
 	if(_dynamic)
 		return *_dynamic;
 
-	_dynamic=new z_factory_dyn();
+	_dynamic=z_new z_factory_dyn();
 	if(get_static_feature_count()==0)
 		return *_dynamic;
 

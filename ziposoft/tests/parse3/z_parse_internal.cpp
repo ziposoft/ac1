@@ -2,7 +2,7 @@
 
 
 #include "z_parse_internal.h"
-#if 1
+#if 0
 #undef	ZT
 #define	ZT(...)
 #endif  
@@ -69,14 +69,18 @@ keyword_item keyword_list[]={
 
 z_zipex_base::z_zipex_base()
 {
-//	_item_table=0;
-//	_item_table_size=0;
+	reset();
+}
+void z_zipex_base::reset()
+{
+	reset_streams();
 	_flags.as_u32=0;
+	_groupnum=0;
 	_mode=zp_mode_parse_input;
 	_last_status=zs_ok;
 	_furthest_index=0;
-}
 
+}
 
 z_status z_zipex_base::get_flags(zp_flags& flags)
 {
@@ -152,6 +156,7 @@ z_status z_zipex_base::get_flags(zp_flags& flags)
 z_status z_zipex_base::_process_template(zp_mode mode)
 {
 	zp_flags flags;
+	reset();
 	flags.as_u32=0;
 	flags.required=1;
 	z_status s= _process_group(flags,mode);
@@ -442,7 +447,7 @@ z_status z_zipex_base::test_white_space(zp_mode mode)
 		if(mode.create)
 		{
 			/*
-			zp_text* item=new zp_text("ws");
+			zp_text* item=z_new zp_text("ws");
 			item->set_text(match,len);
 			_ctx_current->_obj->add_child(item);
 			*/
@@ -513,24 +518,14 @@ z_status z_zipex_base::_process_stage(zp_mode mode,zp_flags* pflags)
 
 	if(mode.input_text)
 	{
-		U32 result_index_multi_success_mark=0;
-
-		U32 testnum=_test_result_current_index;
 		//Z_ASSERT((_results));
-		_test_result_current_index++;
 		if(!mode.create)
 		{
 			U32 result=0;
 			U32 quanity_matched=0;
-			ZT("TEST#%d START>>",testnum);
+			static U32 test_num=0;
+			ZT("TEST# %d START>>",++test_num);
 			
-        /* _results->set_result(testnum,zp_result_unknown);
-			SANITY_CHECK(
-				_results->_test_result_tmpl[testnum]=tpl_start;
-				ctext sanity_check_data_index=0;
-				U32 sanity_check_loop_count=0;
-			);*/
-
 			bool satified=false;
 			while(1)
 			{
@@ -560,7 +555,6 @@ z_status z_zipex_base::_process_stage(zp_mode mode,zp_flags* pflags)
 						if(!data().eob()) 
 						{
 							tpl.set_index(tpl_start);
-							result_index_multi_success_mark=_test_result_current_index;
 							continue;
 						}
 						ZT("eob, but satisfied");
@@ -570,10 +564,7 @@ z_status z_zipex_base::_process_stage(zp_mode mode,zp_flags* pflags)
 					status=zs_matched;
 				if((status==zs_no_match)||(status==zs_eof))
 				{
-					if(flags.multi)
-					{
-						_test_result_current_index=(result_index_multi_success_mark);
-					}
+
 					data().set_index(data_start);
 					if(satified) 
 						status=zs_matched;
@@ -585,32 +576,7 @@ z_status z_zipex_base::_process_stage(zp_mode mode,zp_flags* pflags)
 			{
 				result=zp_result_eof;
 			}
-         /*
-			_results->set_result(testnum,result);
-			if(quanity_matched==0)
-			{
-				_test_result_current_index=(testnum+1);
-			}*/
-#ifdef DEBUG_RESULT
-			U32 i;
-			z_string debug_test_results;
-			debug_test_results<<"TEST#"<<testnum<<'('<<zs_get_text(status)<<"):";
-			//debug_test_results<<'='<<quanity_matched<< ':';
-			for(i=0;i<_results->get_result_count();i++)
-			{
-				U32 result=(U32)_results->get_result(i);
-				if(result==zp_result_unknown)
-					debug_test_results<<'?';
-				else
-					if(result==zp_result_eof)
-						debug_test_results<<'e';
-					else
-						debug_test_results<<result;
-				debug_test_results<<' ';
-			}
-
-			ZT("%s",debug_test_results.c_str());
-#endif
+			ZT("<<TEST# %d =%s",test_num--,zs_get_status_text(status));
 			return status;
 		}
       /*
@@ -661,41 +627,6 @@ z_status z_zipex_base::_process_stage(zp_mode mode,zp_flags* pflags)
 
 }
 
-/*
-z_status z_zipex_base::_process_sub_item(void* sub_obj,
-										  z_factory* ie,
-										  zp_mode mode,zp_flags flags)
-{
-	//ZTF;
-	context_sub_item_push(sub_obj,ie);
-#ifdef DEBUG
-	z_string raw;
-	data().debug(raw);
-	ZT("%c %s[%s]-> %s",(mode.create?'C':'T'),
-		ie->get_name()
-		,ie->get_parse_string(),raw.c_str());
-
-#endif
-	U32 ng=mode.nested_group;
-	mode.nested_group=0;
-
-
-	
-	z_status status=_process_group(flags,mode);
-	mode.nested_group=ng;
-
-	ZT("<- %s=%s",ie->get_name(),zs_get_text(status));
-
-	if(status>zs_internal_error)
-		return status;
-	context_sub_item_pop();
-
-	return status;
-
-
-}
-
-*/
 
 
 z_status z_zipex_base::_f_ident_list_test()
@@ -827,7 +758,7 @@ z_status z_zipex_base::_f_create_string(zp_flags flags,int type)
 		{
 			/*
 			zp_text* item=0;
-			item=new zp_text();
+			item=z_new zp_text();
 			item->_type=type;
 			_ctx_current->_obj->add_child(item);
 			item->set_text(match_start,match_len);
@@ -933,8 +864,6 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 	if(data().get_index()>_furthest_index)
 	{
 		_furthest_index=data().get_index();
-		//if(_ctx_current->_obj_factory) 			_furthest_obj=	_ctx_current->_obj_factory->get_name();
-	//	_furthest_tmpl=	tpl.;
 
 	}
 #if DEBUG
@@ -964,7 +893,9 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 	if(tpl.test_char('(')==zs_matched)
 	{
 		z_status result;
+		_groupnum++;
 		mode.nested_group=1;
+		match_start=data().get_index();
 		if(mode.output)
 		{
 			if(!(flags.required || flags.create_default))
@@ -975,7 +906,15 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 			return result;
 		if(tpl.test_char(')')!=zs_matched)
 			return zs_tmpl_expected_closing_parenthesis;
+		if(result==zs_matched)
+		{
 
+			z_string m;
+			m.assign(match_start,data().get_index()-match_start);
+			_matches.back()._index=_groupnum;
+			_matches.emplace()._data=_groupnum;
+			_groupnum--;
+		}
 		return result;
 	}
 
@@ -1107,11 +1046,35 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 	return data().check_status(item_result);
 	//	return result;
 }
+z_status z_zipex_base::output(z_file* fp)
+{
+	z_status status;
+	_file_out=fp;
+
+	status=_process_template(zp_mode_output_obj);
+	return status;
+}
+
 
 z_status z_zipex_base::parse()
 {
 	z_status status;
-
+	_matches.clear();
 	status=_process_template(zp_mode_parse_input);
 	return status;
+}
+bool z_zipex_base::get_group(size_t i,const z_string &s)
+{
+	if(i>=_matches.size())
+		return false;
+	return _matches[i];
+
+}
+
+ctext z_zipex_base::get_group(size_t i)
+{
+	if(i>=_matches.size())
+		return 0;
+	return _matches[i];
+
 }

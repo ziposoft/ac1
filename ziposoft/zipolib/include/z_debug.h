@@ -9,8 +9,6 @@ ________________________________________________________________________*/
 #define z_debug_h
 
 
-#define z_new new
-#define z_delete delete 
 
 
 #endif

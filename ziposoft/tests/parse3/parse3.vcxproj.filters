@@ -44,9 +44,6 @@
     <ClInclude Include="z_parse_internal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="z_parse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="test_parse.h">
       <Filter>Header Files</Filter>
     </ClInclude>

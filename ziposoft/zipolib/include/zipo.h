@@ -55,7 +55,7 @@ typedef char const *STRPTR;
 #define U64_MAX (LLCONST(18446744073709551615u))
 
 
-
+#define z_new new
 
 
 
@@ -123,20 +123,23 @@ ________________________________________________________________________*/
 
 	#ifdef _DEBUG
 		#define DEBUG 1
-
+		#define DEBUG_MEM 1
 	#endif
     #define WIN32_LEAN_AND_MEAN
     #define _CRT_SECURE_NO_DEPRECATE 1
     #define _CRT_NONSTDC_NO_DEPRECATE 1
+
+
     #ifdef DEBUG_MEM
         #include <stdlib.h>/* have to put this here or you get compile errors*/
         #define _CRTDBG_MAP_ALLOC
 	   #define DEBUG_CLIENTBLOCK   new( _CLIENT_BLOCK, __FILE__, __LINE__)
 
         #include <crtdbg.h>
-		#undef znew
-		#define znew DEBUG_CLIENTBLOCK
+		#undef z_new
+		#define z_new DEBUG_CLIENTBLOCK
 	#else
+
     #endif
     #include "Windows_zipo.h"
 	#include  <direct.h>

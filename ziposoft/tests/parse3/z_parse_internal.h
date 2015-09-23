@@ -161,23 +161,31 @@ public:
 //
 //z_zipex_base
 //________________________________________________________________
+class z_zipex_result
+{
+public:
+	z_zipex_result(int index,ctext data,int len)
+	{
+		_data.assign(data,len);
+		_index=index;
+	}
+	z_string _data;
+	int _index;
 
+};
 class z_zipex_base
 {
 
 	virtual zp_text_parser& tmpl()=0;
 	virtual zp_text_parser& data()=0;
-
-	U32 _test_result_current_index;
+	virtual void reset_streams()=0;
 
 	ctext _furthest_index;//TODO
-	ctext _furthest_obj;//TODO
-	ctext _furthest_tmpl;//TODO
-
+	int _groupnum=0;
     zp_flags _flags;
 	zp_mode _mode;
 	z_string _member_var_name;
-
+	std::vector<z_zipex_result> _matches;
 	z_status _last_status;
 
 	z_file* _file_out;
@@ -203,7 +211,7 @@ class z_zipex_base
 	void context_sub_group_push(void* obj);
 	void context_sub_item_pop();
 	*/
-   public:
+	public:
 	//String literal
 	z_status _f_test_string_literal();
 
@@ -242,6 +250,11 @@ public:
 	z_zipex_base();
  	z_status report_error();
  	z_status parse();
+ 	z_status output(z_file* fp);
+	int get_group_count() {  return _matches.size(); }
+	ctext get_group(size_t i);
+	bool get_group(size_t i,const z_string &s);
+	void reset();
 
 	/*
  	z_status parse_template(ctext tmpl);
@@ -276,7 +289,13 @@ public:
 	virtual zp_text_parser& data() { return _data;}
 
 
+	virtual void reset_streams()
+	{
+		_templ.index_reset();
+		_data.index_reset();
+		
 
+	}
 
 
 

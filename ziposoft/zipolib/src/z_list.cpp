@@ -74,7 +74,7 @@ int z_parse_url_query(ctext buff,size_t len,z_strmap& vars)
 	size_t iCoded=0;
 	int num=0;
 	size_t iNew=0;
-	newstr=new char [len+1];
+	newstr=z_new char [len+1];
 	char *pVarStart=newstr;
 	char *pValStart=0;
 	bool add_var=false;

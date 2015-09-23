@@ -426,7 +426,7 @@ z_status zp_parser::test_white_space(zp_mode mode)
 		if(mode.create)
 		{
 			/*
-			zp_text* item=new zp_text("ws");
+			zp_text* item=z_new zp_text("ws");
 			item->set_text(match,len);
 			_ctx_current->_obj->add_child(item);
 			*/
@@ -797,7 +797,7 @@ z_status zp_parser::_f_create_string(zp_flags flags,int type)
 		{
 			/*
 			zp_text* item=0;
-			item=new zp_text();
+			item=z_new zp_text();
 			item->_type=type;
 			_ctx_current->_obj->add_child(item);
 			item->set_text(match_start,match_len);

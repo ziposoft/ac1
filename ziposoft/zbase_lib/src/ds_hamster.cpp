@@ -80,7 +80,7 @@ z_status zb_ds_ham::open(bool create,bool writable)
 		z_string name;
 		z_filesys_get_path_parts(list[i],0,&name,0);
 
-		_ds_tables << new 
+		_ds_tables << z_new 
 			zb_ds_ham_tbl(this,name);
 
 	}

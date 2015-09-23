@@ -102,7 +102,7 @@ z_status z_logger::add_msg(z_logger_level lvl,ctext file,ctext func,int line,z_s
 
 	out_dbg(lvl,&z_debug_get(),file,func,line,status,buff);
 	if(lvl<=_log_level)
-		_log << new z_logger_msg(lvl, file, func, line, status, buff);
+		_log << z_new z_logger_msg(lvl, file, func, line, status, buff);
 	if(buff)
 		z_temp_buffer_release(buff);
 	return status;

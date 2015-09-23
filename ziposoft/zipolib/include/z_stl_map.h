@@ -152,7 +152,7 @@ public:
 	bool add(ctext key_in,ITEM_CLASS* item)
 	{
 		size_t len=strlen(key_in);
-		char* s=new char[len+1];
+		char* s=z_new char[len+1];
 		
 		strncpy(s,key_in,len);
 		s[len]=0;

@@ -16,10 +16,10 @@ z_status zb_datasource_new(type_ds_type type,ctext path,zb_source* &ds)
 	switch(type)
 	{
 		case type_ds_csv:
-			ds=new zb_ds_text(path);
+			ds=z_new zb_ds_text(path);
 			break;
  		case type_ds_hamster:
-			ds=new zb_ds_ham(path);
+			ds=z_new zb_ds_ham(path);
 			break;
 		default:
 			return Z_ERROR_NOT_IMPLEMENTED;

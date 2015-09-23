@@ -60,7 +60,7 @@ bool z_terminal::terminal_open()
 	char_back=term_no_wait.c_cc[VERASE];
 #endif
 	_buffSize=0x40;
-	_pBuffer=new char[_buffSize];
+	_pBuffer=z_new char[_buffSize];
 	_buffNext=0;
 	_buffEnd=0;
 	GetXY();

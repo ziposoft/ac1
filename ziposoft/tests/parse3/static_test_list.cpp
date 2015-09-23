@@ -9,17 +9,23 @@ TODO AND Groups with multi/optional stages
 */
 const st_test_tmpl_entry test_tmpl_list[]=
 {
+	{"('a')",		"a",	zs_matched,			1,	"a",	0,		0,		0	},
+	{"'a'",			"a",	zs_matched,			0,	0,		0,		0,		0	},
+	{"*('a')",		"aaa",	zs_matched,			3,	"a",	"a",	"a",	0	},
+	{"*('a'|'c')",	"aca",	zs_matched,			3,	"a",	"c",	"a",	0	},
+	{"+('a'|'c')",	"aca",	zs_matched,			3,	"a",	"c",	"a",	0	},
+	{"(Az):(int):'.':(ident)",	"fred001.ext",	zs_matched,			3,	"fred",	"001",	"ext",	0	},
+
+	{"((Az):'!')|((Az):'+')",	"a+",	zs_matched,		1,	"a",	"c",	"a",	0	},
+
 //problems
+#if 0
 	{"^'c':'c'","aaaaac",zs_matched,"c","c"},
 	{"*(^'c'):'c'","aaaaac",zs_matched,"c","c"},
 	{"*(^'c'|'b'):'c'","aaaaac",zs_matched,"c","c"},
 
 	{"*('a'|' ')",
-	"aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa "
-	"aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa "
-	"aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa "
-	
-	
+	"aaaaaaaaaaaaaa "
 	,zs_matched,"",""},
 
 	//strings
@@ -144,6 +150,7 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*'a'&'b'","aba",zs_matched,"b","b"},
 
 	*/
+#endif
 };
 
 

@@ -39,9 +39,9 @@ int main()
 
 int templ_test()
 {
-	A* a=new B<char>();
+	A* a=z_new B<char>();
 	a->func2(3);
-	a=new B<bool>();
+	a=z_new B<bool>();
 	a->func2(3);
 
 	return 0;

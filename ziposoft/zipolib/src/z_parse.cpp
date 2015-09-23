@@ -5,7 +5,7 @@
 
 z_parser::z_parser()
 {
-	_p=new zp_parser();
+	_p=z_new zp_parser();
 }
 z_parser::~z_parser()
 {

@@ -14,7 +14,7 @@
 			z_string arg_temp;
 			arg_temp << file;
 			argc=arg_temp.GetDecVal();
-			argv=(char**)malloc(argc*sizeof(char*));
+			argv=(char**)z_new char*[argc];
 			
 			int i;
 			for (i=0;i<argc;i++)
@@ -22,7 +22,7 @@
 				z_string arg_temp;
 				arg_temp << file;
 				argv[i]=
-					(char*)malloc(arg_temp.size());
+					(char*)z_new char[arg_temp.size()];
 				strcpy(argv[i],arg_temp.c_str());
 			}
 		}

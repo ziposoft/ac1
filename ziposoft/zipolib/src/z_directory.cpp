@@ -79,7 +79,7 @@ U8* z_file_open_and_read(utf8 in_filepath,unsigned long *bytesread  )
 	memset(&sa,0,sizeof(SECURITY_ATTRIBUTES));
 	if(handle==INVALID_HANDLE_VALUE) return 0;
 	size=GetFileSize(handle,NULL);
-	data=(U8*)malloc (size+1);
+	data=(U8*)z_new U8[size+1];
 	if(ReadFile(handle,data,size,bytesread,NULL)) return data;
 	return 0;
 
@@ -262,11 +262,11 @@ z_status z_dir_open(utf8 name,z_directory_h* h)
 		return zs_could_not_open_dir;
 	}
 
-	zdir=(_z_directory*)malloc(sizeof(_z_directory));
+	zdir=(_z_directory*)z_new _z_directory;
 	_snwprintf_s( wc_path, MAX_PATH/2, MAX_PATH, L"%S//*", name);
 	zdir->handleDirectory=0;
 	zdir->wc_path=wc_path;
-	zdir->path=(char*)malloc(MAX_PATH);
+	zdir->path=(char*)z_new char[MAX_PATH];
 
 	*h=(z_directory_h)zdir;
 	return zs_ok;

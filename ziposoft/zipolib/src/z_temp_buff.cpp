@@ -1,4 +1,4 @@
-#include "zipo.h"
+#include "zipolib_cpp_pch.h"
 #include "z_temp_buff.h"
 #include "z_dbg.h"
 
@@ -20,7 +20,7 @@ char* z_temp_buffer_get(size_t size)
 {
 	gz_temp_buff_outstanding++;
 	gz_temp_buff_count++;
-	return (char*)malloc(size);
+	return (char*)z_new char[size];
 #if 0  //TODO - performance
 	index++;
 	if(index>TEMP_BUFF_COUNT)
@@ -49,7 +49,7 @@ char* z_temp_buffer_get(size_t size)
 int  z_temp_buffer_release(char* ptr)
 {
 	gz_temp_buff_outstanding--;
-	free(ptr);
+	delete ptr;
 #if 0  //TODO - performance
 	if(count<0)
 	{

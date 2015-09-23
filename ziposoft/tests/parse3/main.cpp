@@ -124,16 +124,24 @@ int main(int argc, char** argv)
 	//
 	//execute operation 
 	//___________________________________________________________
-
+	int ret;
 	opt=get_option(arg_list[0],g_arg_operation);
 	if(!opt)
 	{
-		return run_help();
+		ret= run_help();
 	}
-	opt_func fp=opt->pfunc;
-	if(fp)
-		return (*fp)();
-	zout << "No action for "<< g_arg_operation << "\n";
-	return 0;
+	else
+	{
+		opt_func fp=opt->pfunc;
+		if(fp)
+		{
+			ret= (*fp)();
+		}
+		else
+		zout << "No action for "<< g_arg_operation << "\n";
+	}
+	//char* ax=z_new char[4];
+	_CrtDumpMemoryLeaks();
+	return ret;
 
 }

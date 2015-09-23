@@ -94,7 +94,7 @@ void zp_test_result::clear()
 void z_zipex_base::reset_results()
 {
 	if(!_results)
-		_results=new zp_test_result();
+		_results=z_new zp_test_result();
 	_test_result_current_index=0;
 }
 
@@ -342,7 +342,7 @@ z_status z_zipex_base::parse_template(	ctext tmpl)
 	/*
 	if(status==zs_matched)
 	{
-		Z_ASSERT(0); //void* obj=new void_generic(tmpl);
+		Z_ASSERT(0); //void* obj=z_new void_generic(tmpl);
 		Z_ASSERT(0); //context_set_root(obj,0,0);
 
 		ZT("==========TEMPLATE[%s] MATCHED, CREATING=====\n",tmpl);

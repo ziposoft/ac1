@@ -61,13 +61,13 @@ void zp_text_parser::set_source(const char* code,size_t len)
 	}
 	if(!cset_letters)
 	{
-		cset_white_space=new cset(" \t\r\n");
-		cset_letters=new cset("_A-Za-z");
-		cset_digits=new cset("0-9");
-		cset_integer=new cset('-' + *cset_digits);
-		cset_identchars=new cset(*cset_letters + *cset_digits);
-		cset_scoped_identchars=new cset(*cset_letters + *cset_digits+':');
-		cset_path_string=new cset(*cset_letters + *cset_digits+"\\/.:"+'-');
+		cset_white_space=z_new cset(" \t\r\n");
+		cset_letters=z_new cset("_A-Za-z");
+		cset_digits=z_new cset("0-9");
+		cset_integer=z_new cset('-' + *cset_digits);
+		cset_identchars=z_new cset(*cset_letters + *cset_digits);
+		cset_scoped_identchars=z_new cset(*cset_letters + *cset_digits+':');
+		cset_path_string=z_new cset(*cset_letters + *cset_digits+"\\/.:"+'-');
 	}
 	set_index(code);
 	_start=	code;

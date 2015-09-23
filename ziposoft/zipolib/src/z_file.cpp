@@ -129,10 +129,11 @@ bool z_file::read_all(z_string & str)
 	size_t size;
 	if(!get_file_size(size)) 
 		return false;
-	char* buff=(char*)malloc(size+1);
+	char* buff=z_new char [size+1];
 	read(buff,size);
 	buff[size]=0;
 	str=buff;
+	delete buff; // TODO - MUST be a better way to do this
 
 	return true;
 }
@@ -140,7 +141,7 @@ bool z_file::read_all(char* & data,size_t& size)
 {
 	if(!get_file_size(size)) 
 		return false;
-	data=(char*)malloc(size+1);
+	data=(char*)z_new char [size+1];
 	read(data,size);
 	data[size]=0;
 	return true;

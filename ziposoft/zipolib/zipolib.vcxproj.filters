@@ -162,13 +162,7 @@
     <ClCompile Include="src\z_debug.c">
       <Filter>c</Filter>
     </ClCompile>
-    <ClCompile Include="src\z_os_specific.c">
-      <Filter>c</Filter>
-    </ClCompile>
     <ClCompile Include="src\z_str.c">
-      <Filter>c</Filter>
-    </ClCompile>
-    <ClCompile Include="src\z_temp_buff.c">
       <Filter>c</Filter>
     </ClCompile>
     <ClCompile Include="src\z_file.cpp">
@@ -254,6 +248,12 @@
     </ClCompile>
     <ClCompile Include="src\z_factory_controller.cpp">
       <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_os_specific.cpp">
+      <Filter>c</Filter>
+    </ClCompile>
+    <ClCompile Include="src\z_temp_buff.cpp">
+      <Filter>c</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

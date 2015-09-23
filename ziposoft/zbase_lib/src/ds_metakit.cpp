@@ -342,7 +342,7 @@ z_status zb_ds_table_mk::get_record_by_index(size_t index,zb_ds_rec_ptr** cursor
 
 	zb_rec_ptr_mk* r=dynamic_cast<zb_rec_ptr_mk*>(*cursor);
 	if(r==0)
-		r=new zb_rec_ptr_mk(false);
+		r=z_new zb_rec_ptr_mk(false);
 	r->set(this,index);
 	*cursor=r;
 	//r->get_row_ref()=_mk_view[index];
@@ -365,7 +365,7 @@ z_status zb_ds_table_mk::test_record_by_index(size_t index,zb_ds_rec_ptr** curso
 	//Apparently dynamic_cast is slow. change to static for release build
 	zb_rec_ptr_mk* r=dynamic_cast<zb_rec_ptr_mk*>(*cursor);
 	if(r==0)
-		r=new zb_rec_ptr_mk(false);
+		r=z_new zb_rec_ptr_mk(false);
 	r->set(this,index);
 	rr=r->get_row_ref();
 	

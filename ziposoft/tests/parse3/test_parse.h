@@ -20,22 +20,20 @@ int run_dump_all();
 int run_provided_template_test();
 
 
-struct st_test_obj_entry
-{
-	ctext item_name;
-	ctext input_data;
-	z_status expected_result;
-};
 
-
+#define NUM_RESULTS 4
 struct st_test_tmpl_entry
 {
 	ctext templ;
 	ctext input_data;
 	z_status expected_result;
+	int num_results;
+	ctext result[NUM_RESULTS];
+	/*
 	ctext expected_output; //NOT the same as input_data!
 	ctext expected_default_output;
 	ctext desc;
+	*/
 };
 extern const st_test_tmpl_entry test_tmpl_list[];
 extern const size_t test_tmpl_list_count;

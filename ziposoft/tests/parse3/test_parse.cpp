@@ -12,10 +12,10 @@ opt_func g_test_type_function_to_run=0;
 /*
 const st_test_tmpl_entry test_tmpl_list[]=
 {
-	{"'a'","a",zs_matched,"a","a","simple string literal match"},
-	{"'a'","b",zs_no_match,"a","a","simple string literal match"},
-   	{"^'c':'c'","aaaaac",zs_matched,"c","c"},
-	{"badkeyword","a",zs_no_entry_for_item,"",""},
+{"'a'","a",zs_matched,"a","a","simple string literal match"},
+{"'a'","b",zs_no_match,"a","a","simple string literal match"},
+{"^'c':'c'","aaaaac",zs_matched,"c","c"},
+{"badkeyword","a",zs_no_entry_for_item,"",""},
 
 };
 const size_t test_tmpl_list_count=sizeof(test_tmpl_list)/sizeof(st_test_tmpl_entry);
@@ -23,7 +23,7 @@ const size_t test_tmpl_list_count=sizeof(test_tmpl_list)/sizeof(st_test_tmpl_ent
 */
 /*--------------------------------------------------------------
 
-	Test Types
+Test Types
 
 --------------------------------------------------------------*/
 
@@ -39,8 +39,8 @@ int  run_test_only()
 		status=zipex.parse();
 	else
 	{
-			printf("ERROR! no object or template specified.\n");
-			return -1;
+		printf("ERROR! no object or template specified.\n");
+		return -1;
 	}
 
 
@@ -74,7 +74,7 @@ int run_test_create_output()
 	if(val==-1)
 		return val;
 	return run_test_output();
-	
+
 }
 int run_test_output()
 {
@@ -125,16 +125,16 @@ int run_test_output()
 	/*
 	if(g_expected_output)
 	{
-		if(strlen(g_expected_output)==0)
-		{
-			printf("No object, no expected output. PASS.\n");
-			return 0;
-		}
-		else
-		{
-			printf("No object, but expected output. FAIL.\n");
-			return -1;
-		}
+	if(strlen(g_expected_output)==0)
+	{
+	printf("No object, no expected output. PASS.\n");
+	return 0;
+	}
+	else
+	{
+	printf("No object, but expected output. FAIL.\n");
+	return -1;
+	}
 	}
 	*/
 #endif
@@ -187,14 +187,14 @@ int run_create_def_obj()
 	printf("CREATE DEFAULT OBJECT\n");
 	z_status status=zs_no_match;
 
-	
+
 	return -1;
 
 }
 
 /*--------------------------------------------------------------
 
-	Main Operations
+Main Operations
 
 --------------------------------------------------------------*/
 int run_provided_template_test()
@@ -214,6 +214,16 @@ int run_provided_template_test()
 }
 int  run_custom()
 {
+
+	z_zipex zipex("(Az):(int):'.':(ident)",	"fred001.ext");
+
+
+
+	zipex.parse();
+	zipex.output(&zout);
+
+
+
 	return 0;
 }
 int  run_dump_all()
@@ -246,22 +256,56 @@ int run_static_tests()
 	for(test_num=start;test_num<=end;test_num++)
 	{
 		const st_test_tmpl_entry& entry=test_tmpl_list[test_num];
-		printf("TEST #%d: %s\n",test_num,(entry.desc?entry.desc:""));
+		printf("TEST #%d: %s\n",test_num,"");
 		printf("tmpl=%s, data=%s, expected result=%s\n",
 			entry.templ,
 			entry.input_data,
 			zs_get_status_text(entry.expected_result)
 			);
-		g_arg_data_in=entry.input_data;
-		g_expected_output=entry.expected_output;
-		g_expected_result=entry.expected_result;
-		g_expected_def_output=entry.expected_default_output;
-		g_template=entry.templ;
 
-		if((*g_test_type_function_to_run)())
-			break;
+		z_zipex zipex(entry.templ,entry.input_data);	
+		z_status status=zs_no_match;
+		status=zipex.parse();
+		
+		size_t i;
+		size_t count=zipex.get_group_count();
+		for(i=0;i<count;i++)
+		{
+			z_string s=zipex.get_group(i);
+			printf("[%s]",s.c_str());
+			if(i< entry.num_results)
+			{
+				if(s!=entry.result[i])
+				{
+					printf("!=%s ",entry.result[i]);
+				}
+				
+			}
+
+		}
+
+
+
+		if(status!=entry.expected_result)
+		{
+			printf("TEST FAILED!\n");
+			printf("result=%s\n",zs_get_status_text(status));
+			printf("expected result=%s\n",zs_get_status_text(entry.expected_result));
+			zipex.report_error();
+			return -1;
+		}
+		if(count != entry.num_results)
+		{
+			printf("ERROR expected count=%d actual=%d\n",zipex.get_group_count(),entry.num_results);
+			return -1;
+		}
+
+		printf("TEST PASSED\n");
+
+
 	}
 	//if(test_num==num_tests) printf("ALL TESTS PASSED.\n");
 
 	return 0;
 }
+	
