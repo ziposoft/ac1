@@ -56,6 +56,7 @@ typedef char const *STRPTR;
 
 
 #define z_new new
+#define z_delete delete
 
 
 

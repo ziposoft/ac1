@@ -32,11 +32,11 @@ int  run_test_only()
 
 	z_status status=zs_no_match;
 
-	z_zipex zipex(g_template,g_arg_data_in);
+	z_zipex zipex(g_template);
 
 
 	if(g_template)
-		status=zipex.parse();
+		status=zipex.parse(g_arg_data_in);
 	else
 	{
 		printf("ERROR! no object or template specified.\n");
@@ -215,14 +215,32 @@ int run_provided_template_test()
 int  run_custom()
 {
 
-	z_zipex zipex("(Az):(int):'.':(ident)",	"fred001.ext");
+//	z_zipex zipex("(Az):(int):'.':(ident)",	"fred001.ext");
+
+	z_zipex zipex("?('a':(int)):'b':(int)");
 
 
+	zipex.parse("b45");
+   int i;
+	size_t count=zipex.get_group_count();
+	for(i=0;i<count;i++)
+	{
+		z_string s=zipex.get_group(i);
+		printf("[%s]\n",s.c_str());
 
-	zipex.parse();
+	}
 	zipex.output(&zout);
 
 
+	zipex.parse("a19b45");
+   count=zipex.get_group_count();
+	for(i=0;i<count;i++)
+	{
+		z_string s=zipex.get_group(i);
+		printf("[%s]\n",s.c_str());
+
+	}
+	zipex.output(&zout);
 
 	return 0;
 }
@@ -263,9 +281,9 @@ int run_static_tests()
 			zs_get_status_text(entry.expected_result)
 			);
 
-		z_zipex zipex(entry.templ,entry.input_data);	
+		z_zipex zipex(entry.templ);	
 		z_status status=zs_no_match;
-		status=zipex.parse();
+		status=zipex.parse(entry.input_data);
 		
 		size_t i;
 		size_t count=zipex.get_group_count();

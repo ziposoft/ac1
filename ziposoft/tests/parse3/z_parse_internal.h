@@ -250,7 +250,7 @@ public:
 
 	z_zipex_base();
  	z_status report_error();
- 	z_status parse();
+ 	z_status _parse();
  	z_status output(z_file* fp);
 	int get_group_count() {  return _matches.size(); }
 	ctext get_group(size_t i);
@@ -277,15 +277,21 @@ public:
 	z_zipex()
 	{
 	}
-
+	z_zipex(ctext templ)
+	{
+		_templ.set_source(templ);
+	}
 	z_zipex(ctext templ,ctext data)
 	{
 		_templ.set_source(templ);
 		_data.set_source(data);
-
-
-
 	}
+ 	z_status parse(ctext data)
+   {
+		_data.set_source(data);
+      return _parse();
+   }
+
 	virtual zp_text_parser& tmpl() { return _templ;}
 	virtual zp_text_parser& data() { return _data;}
 
@@ -298,7 +304,44 @@ public:
 
 	}
 
+};
 
+
+class z_zipex : public z_zipex_base
+{
+public:
+
+	zp_text_parser _templ;
+	zp_text_parser _data;
+	z_zipex()
+	{
+	}
+	z_zipex(ctext templ)
+	{
+		_templ.set_source(templ);
+	}
+	z_zipex(ctext templ,ctext data)
+	{
+		_templ.set_source(templ);
+		_data.set_source(data);
+	}
+ 	z_status parse(ctext data)
+   {
+		_data.set_source(data);
+      return _parse();
+   }
+
+	virtual zp_text_parser& tmpl() { return _templ;}
+	virtual zp_text_parser& data() { return _data;}
+
+
+	virtual void reset_streams()
+	{
+		_templ.index_reset();
+		_data.index_reset();
+		
+
+	}
 
 };
 

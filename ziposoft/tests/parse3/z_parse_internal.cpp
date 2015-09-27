@@ -69,7 +69,12 @@ keyword_item keyword_list[]={
 
 z_zipex_base::z_zipex_base()
 {
-	reset();
+	_flags.as_u32=0;
+	_groupnum=0;
+	_mode=zp_mode_parse_input;
+	_last_status=zs_ok;
+	_furthest_index=0;
+   _result_index=0;
 }
 void z_zipex_base::reset()
 {
@@ -423,18 +428,7 @@ z_status z_zipex_base::_process_group(zp_flags flags,zp_mode mode)
 
 
 
-struct item_process
-{
-	item_type type;
-	ctext name;
-	ctext desc;
-	type_txt_parser_fp _f_identify;
-	ctext param;
-	type_obj_parser_fp _f_test;
-	type_obj_parser_fp _f_create;
-	type_obj_parser_fp _f_output;
 
-};
 
 z_status z_zipex_base::test_white_space(zp_mode mode)
 {
@@ -927,7 +921,7 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 		{
 
          _matches.emplace_back(_groupnum,match_start,data().get_index()-match_start);
-			_groupnum--;
+			//_groupnum--;
 		}
 		return result;
 	}
@@ -1070,7 +1064,7 @@ z_status z_zipex_base::output(z_file* fp)
 }
 
 
-z_status z_zipex_base::parse()
+z_status z_zipex_base::_parse()
 {
 	z_status status;
 	_matches.clear();
