@@ -23,8 +23,6 @@ struct keyword_item
 	type_txt_parser_fp _f_identify;
 	const void* param;
 	type_obj_parser_fp_test _f_test;
-	type_obj_parser_fp_create _f_create;
-	type_obj_parser_fp_output _f_output;
 
 };
 
@@ -33,34 +31,28 @@ struct keyword_item
 
 keyword_item keyword_list[]={
 	{item_literal,		"literal",	"string literal",		
-			FPT(ft_single_quoted_string),0,			
-			FPO(_f_test_string_literal),
-			FPO(_f_string_literal_create),
-			FPO(_f_string_literal_output)},
+	FPT(ft_single_quoted_string),0,			
+	FPO(_f_test_string_literal),
+	},
 	{item_integer,		"int",		"integer",				
-			FPT(ft_test_identifier),(void*)"int",	
-			FPO(_f_digits),
-			FPO(_f_create_string),
-			FPO(_f_output_string)},
-	{item_letters,		"letters",		"letters",				FPT(ft_test_identifier),(void*)"Az",	FPO(_f_letters),		FPO(_f_create_string),		FPO(_f_output_string)},
+	FPT(ft_test_identifier),(void*)"int",	
+	FPO(_f_digits),
+	},
+	{item_letters,		"letters",		"letters",				FPT(ft_test_identifier),(void*)"Az",	FPO(_f_letters)},
 	{item_quoted_double,	"string",	"quoted_double",	
-			FPT(ft_test_identifier),"string",		
-			FPO(_f_quoted_string_test),
-			FPO(_f_create_string),
-			FPO(_f_output_string)},
+	FPT(ft_test_identifier),"string",		
+	FPO(_f_quoted_string_test)},
 	{item_quoted_single,	"string_sq",	"quoted_single",
-			FPT(ft_test_identifier),"string_sq",	
-			FPO(_f_squoted_string_test),
-			FPO(_f_create_string),
-			FPO(_f_output_string)},
-	{item_filepath,"item_filepath",	"identifier",			FPT(ft_test_identifier),"filepath",0,	FPO(_f_create_string),FPO(_f_output_string)},
-	{item_identifier,"ident",	"identifier",				FPT(ft_test_identifier),"ident",		FPO(_f_test_ident),FPO(_f_create_string),FPO(_f_output_string)},
-	{item_identifier,"identlist",	"identifier",			FPT(ft_test_identifier),"identlist",	FPO(_f_ident_list_test),FPO(_f_ident_list_create),FPO(_f_ident_list_output)},
-	{item_scoped,	"scoped",	"scoped",					FPT(ft_test_identifier),"scoped",		FPO(_f_scoped_identchars),FPO(_f_create_string),FPO(_f_output_string)},
-	{item_toeol,	"toeob",	"Find EOB",					FPT(ft_test_identifier),"toeol",		FPO(_f_test_to_eob),FPO(_f_create_string),FPO(_f_output_string)},
-	{item_whsp,	"whsp",	"White space",						FPT(ft_test_identifier),"whsp",			FPO(_f_test_whsp),FPO(_f_create_string),FPO(_f_output_string)},
+	FPT(ft_test_identifier),"string_sq",	
+	FPO(_f_squoted_string_test)},
+	{item_filepath,"item_filepath",	"identifier",			FPT(ft_test_identifier),"filepath",0},
+	{item_identifier,"ident",	"identifier",				FPT(ft_test_identifier),"ident",		FPO(_f_test_ident)},
+	{item_identifier,"identlist",	"identifier",			FPT(ft_test_identifier),"identlist",	FPO(_f_ident_list_test)},
+	{item_scoped,	"scoped",	"scoped",					FPT(ft_test_identifier),"scoped",		FPO(_f_scoped_identchars)},
+	{item_toeol,	"toeob",	"Find EOB",					FPT(ft_test_identifier),"toeol",		FPO(_f_test_to_eob)},
+	{item_whsp,	"whsp",	"White space",						FPT(ft_test_identifier),"whsp",			FPO(_f_test_whsp)},
 	//{item_sub_obj,	"sub_obj",	"sub object",	FPT(ft_any_identifier),"",FPO(_f_test_sub_obj),0,FPO(_f_output_sub_obj)}
-	{item_literal,	"not string",	"string literal",	FPT(test_not_single_quoted_string),0,	FPO(_f_not_test_string_literal),0,FPO(_f_output_string)},
+	{item_literal,	"not string",	"string literal",	FPT(test_not_single_quoted_string),0,	FPO(_f_not_test_string_literal)},
 
 };
 #define keyword_list_count (sizeof(keyword_list)/sizeof(keyword_item))
@@ -71,20 +63,25 @@ z_zipex_base::z_zipex_base()
 {
 	_flags.as_u32=0;
 	_groupnum=0;
-	_mode=zp_mode_parse_input;
+	_mode.nested_group=0;
+	_mode.skip_test=0;
 	_last_status=zs_ok;
 	_furthest_index=0;
-   _result_index=0;
+	_result_index=0;
+
+	_err_msg="";
 }
 void z_zipex_base::reset()
 {
 	reset_streams();
 	_flags.as_u32=0;
 	_groupnum=0;
-	_mode=zp_mode_parse_input;
+	_mode.nested_group=0;
+	_mode.skip_test=0;
 	_last_status=zs_ok;
 	_furthest_index=0;
-   _result_index=0;
+	_result_index=0;
+	_err_msg="";
 
 }
 
@@ -101,7 +98,7 @@ z_status z_zipex_base::get_flags(zp_flags& flags)
 		c=tpl.current_ch();
 		if(tpl.eob())
 		{
-			return data().check_status(zs_template_syntax_error);
+			return return_error(zs_template_syntax_error,"Unexpected end of template");
 		}
 		switch(c)
 		{
@@ -111,14 +108,14 @@ z_status z_zipex_base::get_flags(zp_flags& flags)
 			flags.create_default=1;
 			flags.required=0;
 			break;
-			
+
 		case '%':
 			flags.random=1;
 			flags.required=0;
 			flags.multi=1;
 
 			break;
-			
+
 		case '@':
 			flags.this_obj=1;
 			break;
@@ -127,10 +124,10 @@ z_status z_zipex_base::get_flags(zp_flags& flags)
 			flags.parent_data=1;
 
 			if(tpl.test_any_identifier()!=zs_matched) 
-				return data().check_status(zs_template_syntax_error);
+				return return_error(zs_template_syntax_error,"Expected label");
 			tpl.get_match( _member_var_name);
 			if(tpl.current_ch()!='}')
-				return data().check_status(zs_template_syntax_error);
+				return return_error(zs_template_syntax_error,"Expected curly brace");
 			break;
 
 
@@ -159,11 +156,14 @@ z_status z_zipex_base::get_flags(zp_flags& flags)
 
 }
 
-z_status z_zipex_base::_process_template(zp_mode mode)
+z_status z_zipex_base::_process_template()
 {
 	zp_flags flags;
+	zp_mode mode;
 	reset();
 	flags.as_u32=0;
+	mode.as_u32=0;
+
 	flags.required=1;
 	z_status s= _process_group(flags,mode);
 	if(s) 
@@ -214,19 +214,9 @@ z_status z_zipex_base::_process_group(zp_flags flags,zp_mode mode)
 		{
 			if(and_group_bitmask_done&stage_bit_mask)
 				local_mode.skip_test=1;
-			if(mode.output)
-				if(and_group_bitmask_satisfied&stage_bit_mask)
-					local_mode.skip_test=1;
 
 		}
-		/*
-		if((mode.output)&&(tpl_random))
-		{
-			tpl.set_index(tpl_random);
-			zp_flags dummy_flags;
-			status=_process_stage(local_mode,&dummy_flags);
-			tpl.set_index(stage_start);
-		}*/
+
 
 		status=_process_stage(local_mode,&stage_flags);
 		if(status>zs_fatal_error)
@@ -281,14 +271,12 @@ z_status z_zipex_base::_process_group(zp_flags flags,zp_mode mode)
 						group_type=(zp_group_type)next_char;
 						if(group_type==zp_group_stage)
 							group_status=zs_matched;
-						if(group_type==zp_group_or)
-							mode.or_group=1;
 
 					}
 					if(next_char!=group_type)
 					{
 						Z_ERROR_MSG(zs_template_syntax_error,"Mixed group types!");
-						return data().check_status(zs_template_syntax_error);
+						return return_error(zs_template_syntax_error,"Mixed group types");
 					}
 					tpl.inc(); //Advance
 					break;
@@ -297,7 +285,7 @@ z_status z_zipex_base::_process_group(zp_flags flags,zp_mode mode)
 				end_of_group=true;
 				break;
 			default:
-				return data().check_status(zs_template_syntax_error);
+				return return_error(zs_template_syntax_error,"Invalid template character");
 			}
 		}
 		//--------------------------------------
@@ -329,7 +317,7 @@ z_status z_zipex_base::_process_group(zp_flags flags,zp_mode mode)
 					break;
 				default:
 					return  status;
-					
+
 				}
 			}
 			break;
@@ -363,9 +351,9 @@ z_status z_zipex_base::_process_group(zp_flags flags,zp_mode mode)
 			{
 				// AND groups have to match all stages, BUT
 				// in any order, so if any match, the template gets reset and scans again
-				
+
 				local_mode=mode;
-				
+
 				switch(status)
 				{
 				case zs_matched:
@@ -379,7 +367,7 @@ z_status z_zipex_base::_process_group(zp_flags flags,zp_mode mode)
 				case zs_no_match:
 					if((stage_flags.required)&&
 						(!(and_group_bitmask_satisfied&stage_bit_mask)))
-							satisfied=false;
+						satisfied=false;
 					break;
 
 				case zs_skipped: 
@@ -407,7 +395,7 @@ z_status z_zipex_base::_process_group(zp_flags flags,zp_mode mode)
 						break;
 					}
 					group_status=zs_no_match;
-					
+
 					break;
 				}
 			}
@@ -439,15 +427,6 @@ z_status z_zipex_base::test_white_space(zp_mode mode)
 		size_t len;
 		data().get_match(match,len);
 
-		if(mode.create)
-		{
-			/*
-			zp_text* item=z_new zp_text("ws");
-			item->set_text(match,len);
-			_ctx_current->_obj->add_child(item);
-			*/
-			ZT("adding whitespace");
-		}
 	}
 	return status;
 }
@@ -462,7 +441,7 @@ z_status z_zipex_base::_process_stage(zp_mode mode,zp_flags* pflags)
 
 	if(pflags) 
 		*pflags=flags; //return flags to caller
-	
+
 	zp_text_parser& tpl=tmpl();
 	ctext tpl_start=tpl.get_index();
 
@@ -474,151 +453,64 @@ z_status z_zipex_base::_process_stage(zp_mode mode,zp_flags* pflags)
 
 	}
 
-	if(mode.output)
+	U32 result=0;
+	U32 quanity_matched=0;
+	static U32 test_num=0;
+	ZT("TEST# %d START>>",++test_num);
+
+	bool satified=false;
+	while(1)
 	{
-		int sanity_check_count=0;
-
-		bool satified=false;
-		while(1)
+		ctext data_start=data().get_index();
+		SANITY_CHECK(
 		{
-			Z_ASSERT(sanity_check_count++<100);
-			ctext data_start=data().get_index();
-			if(satified)
-				flags.required=0;
+			sanity_check_loop_count++;
+			//Is this a reasonable assumption?
+			Z_ASSERT((sanity_check_loop_count<0x100000));
 
-			status=_process_single_item(mode,flags);
-			if(status==zs_matched)
+			if(sanity_check_data_index)
 			{
-				if(flags.multi)
+				//We should always be advancing the data stream
+				Z_ASSERT((data_start!=sanity_check_data_index));
+			}
+			sanity_check_data_index=data_start;
+		});
+
+		status=_process_single_item(mode,flags);
+		if(status==zs_matched)
+		{
+
+			quanity_matched++;
+			if(flags.multi)
+			{
+				satified=true;
+				if(!data().eob()) 
 				{
 					tpl.set_index(tpl_start);
-					satified=true;
 					continue;
-				}		
-			}
-			if(status==zs_skipped)
+				}
+				ZT("eob, but satisfied");
+			}		
+		}
+		if(status==zs_skipped)
+			status=zs_matched;
+		if((status==zs_no_match)||(status==zs_eof))
+		{
+
+			data().set_index(data_start);
+			if(satified) 
 				status=zs_matched;
-			if((status==zs_no_match)||(status==zs_eof))
-			{
-				if(satified) 
-					status=zs_matched;
-			}
-			break;
 		}
-		return status;
-	
-	}//End of output
-
-
-
-	if(mode.input_text)
-	{
-		//Z_ASSERT((_results));
-		if(!mode.create)
-		{
-			U32 result=0;
-			U32 quanity_matched=0;
-			static U32 test_num=0;
-			ZT("TEST# %d START>>",++test_num);
-			
-			bool satified=false;
-			while(1)
-			{
-				ctext data_start=data().get_index();
-				SANITY_CHECK(
-				{
-					sanity_check_loop_count++;
-					//Is this a reasonable assumption?
-					Z_ASSERT((sanity_check_loop_count<0x100000));
-
-					if(sanity_check_data_index)
-					{
-						//We should always be advancing the data stream
-						Z_ASSERT((data_start!=sanity_check_data_index));
-					}
-					sanity_check_data_index=data_start;
-				});
-
-				status=_process_single_item(mode,flags);
-				if(status==zs_matched)
-				{
-
-					quanity_matched++;
-					if(flags.multi)
-					{
-						satified=true;
-						if(!data().eob()) 
-						{
-							tpl.set_index(tpl_start);
-							continue;
-						}
-						ZT("eob, but satisfied");
-					}		
-				}
-				if(status==zs_skipped)
-					status=zs_matched;
-				if((status==zs_no_match)||(status==zs_eof))
-				{
-
-					data().set_index(data_start);
-					if(satified) 
-						status=zs_matched;
-				}
-				break;
-			}
-			result=quanity_matched;
-			if((quanity_matched==0)&&(status==zs_eof))
-			{
-				result=zp_result_eof;
-			}
-			ZT("<<TEST# %d =%s",test_num--,zs_get_status_text(status));
-			return status;
-		}
-      /*
-		else//if(mode.create)
-		{
-			U32 test_result=_results->get_result(testnum);
-			U32 iterations=1;
-
-			//quanity_matched=_results->get_result(testnum);
-			
-
-			SANITY_CHECK(
-			ctext tmpl_check=_results->_test_result_tmpl[testnum];
-			Z_ASSERT((tmpl_check==tpl_start ));
-			)
-
-			ZT("CREATE#%d[%d] START>>",testnum,test_result);
-
-			if((test_result==zp_result_no_match)
-			   ||(test_result==zp_result_eof))
-			{
-				mode.skip_test=1;
-			}			
-			else
-				iterations=test_result;
-
-			while(iterations--)
-			{
-				ctext data_start=get_index();
-
-				status=_process_single_item(mode,flags);
-				if(status>zs_fatal_error)
-					return status;
-				if(iterations)
-				{
-					tpl.set_index(tpl_start);
-				}
-			}
-			if(test_result==zp_result_no_match)
-				status=zs_no_match;
-			if(test_result==zp_result_eof)
-				status=zs_eof;
-			ZT("<<EXIT#%d -%d:%s",testnum,status,zs_get_text(status));
-			return status;
-		}*/
+		break;
 	}
-	return data().check_status(zs_internal_error);
+	result=quanity_matched;
+	if((quanity_matched==0)&&(status==zs_eof))
+	{
+		result=-1; // ?????????
+	}
+	ZT("<<TEST# %d =%s",test_num--,zs_get_status_text(status));
+	return status;
+
 
 }
 
@@ -638,19 +530,6 @@ z_status z_zipex_base::_f_ident_list_test()
 		if(result)
 			return result;
 		result_total=zs_matched;
-      /*
-		if(_ctx_current->_mode.create)
-			if((_ctx_current->_flags.parent_data)&&(_ctx_current->_obj))
-			{
-				ctext match;
-				size_t match_len;
-				get_match(match,match_len);
-				Z_ASSERT(0); //ADD STRING?
-				z_status i_result=zs_ok;//feature_set_string(_ctx_current->_obj,_ctx_current->_member_var_name,match,match_len);
-
-				if(i_result)
-					return result;
-			}*/
 
 		result=data().test_char(',');
 		if((result==zs_no_match)||(result==zs_eof))
@@ -660,39 +539,6 @@ z_status z_zipex_base::_f_ident_list_test()
 	}
 }
 
-z_status z_zipex_base::_f_ident_list_create(zp_flags flags,int type)
-{
-	return zs_matched;
-
-}
-z_status z_zipex_base::_f_ident_list_output(zp_flags flags,zp_mode mode)
-{
-	z_status result=zs_ok;
-	bool need_comma=false;
-   /*
-	if((_ctx_current->_obj)&&(flags.parent_data))
-	{
-		Z_ASSERT(0); //FIX THIS
-		//feature_reset_iter(_ctx_current->_obj,_ctx_current->_member_var_name);
-		while(result==zs_ok)
-		{
-			ctext s="";
-			Z_ASSERT(0); //get STRING by index?
-			result=zs_ok;//feature_get_string(_ctx_current->_obj,_ctx_current->_member_var_name,s);
-			if(result==zs_ok)
-			{
-				if(need_comma)
-					*_file_out<<',';
-
-				*_file_out<<s;
-				need_comma=true;
-			}
-		}
-	}*/
-	if(result!=zs_end_of_list)
-		return result;
-	return zs_matched;
-}
 z_status z_zipex_base::_f_squoted_string_test()
 {
 	return data().test_single_quoted_string();
@@ -731,7 +577,7 @@ z_status z_zipex_base::_f_test_to_eob()
 {
 	return data().test_to_eob();
 }
-
+#if 0 
 z_status z_zipex_base::_f_create_string(zp_flags flags,int type)
 {
 	z_status status=zs_matched;
@@ -743,11 +589,11 @@ z_status z_zipex_base::_f_create_string(zp_flags flags,int type)
 	{
 		if(flags.parent_data)
 		{
-				z_string temp,unescaped;
-				temp.assign( match_start,match_len);
-				z_str_unescape(temp,unescaped);
-				//status=_ctx_current->_obj_factory->set_var_as_string( _ctx_current->_obj,_ctx_current->_member_var_name,unescaped.c_str());
-				//status=feature_set_string(_ctx_current->_obj,_ctx_current->_member_var_name,match_start,match_len);
+			z_string temp,unescaped;
+			temp.assign( match_start,match_len);
+			z_str_unescape(temp,unescaped);
+			//status=_ctx_current->_obj_factory->set_var_as_string( _ctx_current->_obj,_ctx_current->_member_var_name,unescaped.c_str());
+			//status=feature_set_string(_ctx_current->_obj,_ctx_current->_member_var_name,match_start,match_len);
 		}
 		else
 		{
@@ -758,13 +604,13 @@ z_status z_zipex_base::_f_create_string(zp_flags flags,int type)
 			_ctx_current->_obj->add_child(item);
 			item->set_text(match_start,match_len);
 			item->_templ_offset=
-				tmpl().get_index_offset();
-				*/
+			tmpl().get_index_offset();
+			*/
 		}
 	}
 	return status;
 }
-
+#endif
 z_status z_zipex_base::_f_test_string_literal()
 {
 	z_status status=zs_no_match;
@@ -785,66 +631,6 @@ z_status z_zipex_base::_f_not_test_string_literal()
 	return status;
 }
 
-z_status z_zipex_base::_f_string_literal_create(zp_flags flags,int type)
-{
-	z_status status=zs_ok;
-	if(flags.parent_data)
-	{
-      /*
-		if(_ctx_current->_obj)
-		{
-			bool* pVar=0;
-			_ctx_current->_obj_factory->get_var_ptr(
-				_ctx_current->_obj,_ctx_current->_member_var_name,(void**)&pVar,0);
-			if(pVar)
-				*pVar=true;
-		}*/
-	}
-	return status;
-}
-z_status z_zipex_base::_f_string_literal_output(zp_flags flags,zp_mode mode)
-{
-	z_status status=zs_ok;
-	ctext match_start=0;
-	size_t match_len=0;
-	if(!(flags.required || flags.create_default))
-		return zs_no_match;
-	tmpl().get_match(match_start,match_len);
-	_file_out->write(match_start,match_len);
-#if DEBUG
-	z_string dbgout;
-	dbgout.assign(match_start,match_len);
-	//ZT("OUT: %s",dbgout.c_str()));
-#endif
-	return status;
-}
-z_status z_zipex_base::_f_output_string(zp_flags flags,zp_mode mode)
-{
-	z_status status=zs_ok;
-   /*
-	if(_ctx_current->_obj)
-	{
-		if(flags.parent_data)
-		{
-			z_string val;
-			_ctx_current->_obj_factory->get_var_as_string(
-				_ctx_current->_obj,_ctx_current->_member_var_name,val);
-			if(status==zs_ok)
-			{
-				*_file_out<<val;
-				return zs_matched;
-			}
-			//Z_ASSERT((0));
-			return zs_no_match;
-		}
-
-	}*/
-	
-	if(flags.required || flags.create_default)
-		return zs_matched;
-
-	return zs_no_match;
-}
 
 z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 {
@@ -855,7 +641,7 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 	ctext match_start=0;
 	size_t match_len=0;
 	size_t template_offset=tpl.get_index_offset();
-	
+
 	if(data().get_index()>_furthest_index)
 	{
 		_furthest_index=data().get_index();
@@ -869,7 +655,6 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 	data().debug(debug_data);
 	tpl.debug(debug_temp);
 	if(mode.skip_test) debug_mode<<"skip ";
-	if(mode.create) debug_mode<<"create ";
 
 	//if(mode.create_empty) debug_mode<<"create_empty ";
 	if(mode.nested_group) debug_mode<<"nested_group ";
@@ -879,8 +664,6 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 
 #endif
 	item_type match_type=item_invalid_type;
-	//_ctx_current->_mode=mode;
-	//_ctx_current->_flags=flags;
 	//----------------------------------------------
 	// Process subgroup
 	//
@@ -888,41 +671,18 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 	if(tpl.test_char('(')==zs_matched)
 	{
 		z_status result;
+		mark_group_start();
 		_groupnum++;
 		mode.nested_group=1;
 		match_start=data().get_index();
-		if(mode.output)
-		{
-			mode.skip_test=1;
-		}
 		result=_process_group(flags,mode);
+
+		mark_group_end(result);
 		if(result>zs_fatal_error)
 			return result;
 		if(tpl.test_char(')')!=zs_matched)
 			return zs_tmpl_expected_closing_parenthesis;
 
-		if(mode.output)
-		{
-         z_zipex_result& r=_matches[_result_index];
-         if(r._index <_groupnum)
-         {
-            if(_result_index<(_matches.size()-1))
-               _result_index++;
-            r=_matches[_result_index];
-         }
-         if(r._index ==_groupnum)
-         {
-            *_file_out<<r._data;
-         }
-			//f(!(flags.required || flags.create_default))
-		}
-      else
-		if(result==zs_matched)
-		{
-
-         _matches.emplace_back(_groupnum,match_start,data().get_index()-match_start);
-			//_groupnum--;
-		}
 		return result;
 	}
 
@@ -947,37 +707,23 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 			item_result= zs_skipped;
 			break;
 		}
-		if(mode.input_text)
-		{
-			Z_ASSERT((ip._f_test));
-			item_result=(this->*(ip._f_test))();
-		}
+		Z_ASSERT((ip._f_test));
+		item_result=(this->*(ip._f_test))();
+
 		if(item_result==zs_matched)
 		{
 			//----------------------------------------------
 			// Create String
 			//
 			//----------------------------------------------
-			if(mode.create)
-			{
-				if(ip._f_create)
-					item_result=(this->*(ip._f_create))(flags,list_item);
+			mark_create_string();
+		}
 
-			}
-		}
-		//----------------------------------------------
-		// Process Output for strings
-		//
-		//----------------------------------------------
-		if(mode.output)
-		{
-			if(ip._f_output)
-					item_result=(this->*(ip._f_output))(flags,mode);
-		}
+
 		break;
 	}
 	//----------------------------------------------
-	// Process Subobj
+	// Unkown keyword
 	//
 	//----------------------------------------------
 	if(identify_result==zs_no_match)
@@ -991,99 +737,24 @@ z_status z_zipex_base::_process_single_item(zp_mode mode,zp_flags flags)
 			tpl.get_match(match_start,match_len);
 
 			// This is a keyword we do not recognize
-			return data().check_status(zs_no_entry_for_item);
-			if(mode.create)
-			{
-            /*
-				if(flags.this_obj)
-				{
-					sub_obj=_ctx_current->_obj;	// what does this even mean? its for the @ operator 
-				}
-				else
-				{
-					if(flags.parent_data)
-					{
-						status=_ctx_current->_obj_factory->create_child(_ctx_current->_obj,
-							_ctx_current->_member_var_name,fact_new_obj,
-							&sub_obj);
-						if(status)
-						{
-							return Z_ERROR_MSG(zs_cannot_create_virtual_obj,"Cannot assign \"%s\" to \"%s\"\n",fact_new_obj->get_name(),_ctx_current->_member_var_name.c_str());
+			return return_error(zs_no_entry_for_item,"Unknown template keyword");
 
-						}
-					}
-				}
-				ZT("created sub obj %s->%s %s:%p\n", _ctx_current->_obj_factory->get_name(),
-					_ctx_current->_member_var_name.c_str(),
-					fact_new_obj->get_name(),sub_obj);
-               */
-
-			}
-
-			if(mode.output)
-			{
-
-
-
-
-			}
-			//item_result= _process_sub_item(sub_obj,fact_new_obj,mode,flags);
-			if(mode.create)
-			{
-				if(item_result==zs_matched)
-				{
-					if(flags.parent_data)
-					{
-						
-						//ASSIGNMENT of child object? 
-						/*
-						item_result=feature_objlist_add(_ctx_current->_obj,	_ctx_current->_member_var_name,sub_obj);
-						if(item_result)
-							return data().check_status(item_result);
-							*/
-
-					}
-					else
-					{
-							//_ctx_current->_obj->add_child(sub_obj);
-					}
-				}
-			}
 		}
+		else
+			return return_error(zs_template_syntax_error,"Unexpected template character");
 	}
-	return data().check_status(item_result);
+	return relay_error(item_result);
 	//	return result;
 }
 z_status z_zipex_base::output(z_file* fp)
 {
-	z_status status;
-	_file_out=fp;
-
-	status=_process_template(zp_mode_output_obj);
-	return status;
+	return zs_operation_not_supported;
 }
 
 
 z_status z_zipex_base::_parse()
 {
 	z_status status;
-	_matches.clear();
-	status=_process_template(zp_mode_parse_input);
+	status=_process_template();
 	return status;
-}
-bool z_zipex_base::get_group(size_t i, z_string &s)
-{
-	if(i>=_matches.size())
-		return false;
-   s=_matches[i]._data;
-	return true;
-
-}
-
-ctext z_zipex_base::get_group(size_t i)
-{
-	if(i>=_matches.size())
-		return 0;
-	return _matches[i]._data;
-
 }

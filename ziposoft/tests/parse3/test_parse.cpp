@@ -218,7 +218,7 @@ int  run_custom()
 //	z_zipex zipex("(Az):(int):'.':(ident)",	"fred001.ext");
 
 	z_zipex zipex("?('a':(int)):'b':(int)");
-
+#if 0
 
 	zipex.parse("b45");
    int i;
@@ -240,6 +240,7 @@ int  run_custom()
 		printf("[%s]\n",s.c_str());
 
 	}
+#endif
 	zipex.output(&zout);
 
 	return 0;
@@ -284,6 +285,15 @@ int run_static_tests()
 		z_zipex zipex(entry.templ);	
 		z_status status=zs_no_match;
 		status=zipex.parse(entry.input_data);
+		if(status!=entry.expected_result)
+		{
+			printf("TEST FAILED!\n");
+			printf("result=%s\n",zs_get_status_text(status));
+			printf("expected result=%s\n",zs_get_status_text(entry.expected_result));
+			zipex.report_error();
+			return -1;
+		}
+#if 0
 		
 		size_t i;
 		size_t count=zipex.get_group_count();
@@ -304,19 +314,13 @@ int run_static_tests()
 
 
 
-		if(status!=entry.expected_result)
-		{
-			printf("TEST FAILED!\n");
-			printf("result=%s\n",zs_get_status_text(status));
-			printf("expected result=%s\n",zs_get_status_text(entry.expected_result));
-			zipex.report_error();
-			return -1;
-		}
+
 		if(count != entry.num_results)
 		{
 			printf("ERROR expected count=%d actual=%d\n",zipex.get_group_count(),entry.num_results);
 			return -1;
 		}
+#endif
 
 		printf("TEST PASSED\n");
 

@@ -14,9 +14,10 @@ const st_test_tmpl_entry test_tmpl_list[]=
 	{"*('a')",		"aaa",	zs_matched,			3,	"a",	"a",	"a",	0	},
 	{"*('a'|'c')",	"aca",	zs_matched,			3,	"a",	"c",	"a",	0	},
 	{"+('a'|'c')",	"aca",	zs_matched,			3,	"a",	"c",	"a",	0	},
-	{"(Az):(int):'.':(ident)",	"fred001.ext",	zs_matched,			3,	"fred",	"001",	"ext",	0	},
+	{"{1}Az:int:'.':ident",	"fred001.ext",	zs_matched,			3,	"fred",	"001",	"ext",	0	},
 
 	{"((Az):'!')|((Az):'+')",	"a+",	zs_matched,		1,	"a",	"c",	"a",	0	},
+	{"([Az]:'!')|(Az:'+')",	"a+",	zs_matched,		1,	"a",	"c",	"a",	0	},
 
 //problems
 #if 0
