@@ -85,7 +85,7 @@ zipo.scrape = (function(z)
 		this.p = null;
 		this.timer;
 		this.timer_start;
-		this.timer_timeout = 12000;
+		this.timer_timeout = 20000;
 		this.timer_interval = 500;
 		this.context = {};
 		this.cacheDir= "cache/"+ scrape.appname + "/"+ this.name;

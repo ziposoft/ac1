@@ -13,7 +13,7 @@ var zipo = (function(z)
 	 * 
 	 */
 	z.debug_level = 1;
-	z.trace_lvl = 1;
+	z.trace_lvl = 3;
 	z.errormsg = function(s)
 	{
 		console.log(s);
@@ -59,6 +59,9 @@ var zipo = (function(z)
 	z.File.prototype.out = function(s)
 	{
 		this.handle.writeLine(s);
+	}
+	z.File.prototype.flush = function () {
+	    this.handle.flush();
 	}
 	z.File.prototype.close = function()
 	{

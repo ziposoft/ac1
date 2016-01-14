@@ -8,8 +8,9 @@ zipo.running = (function(z)
 		'div pl' : 'placeGroup',
 		'chip time' : 'timechip',
 		'time' : 'time',
-		'gun time' : 'timegun',
-		'group' : 'group',
+		'gun time': 'timegun',
+		'finish time': 'timegun',
+		'group': 'group',
 		'division' : 'group',
 		'div' : 'group',
 		'city' : 'city',
@@ -22,8 +23,14 @@ zipo.running = (function(z)
 		'age' : 'age',
 		'name' : 'nameFull',
 		'first name' : 'nameFirst',
-		'last name' : 'nameLast',
-		
+		'last name': 'nameLast',
+		'bike': 'bike',
+		't1': 't1',
+		't2': 't2',
+		'run': 'run',
+		'swim': 'swim',
+		'halfway split': 'split',
+		'2nd half split': 'split',
 	};
 	
 	
@@ -70,11 +77,11 @@ zipo.running = (function(z)
 			});
 		}
 	}	
-	running.RaceEvent = function()
+	running.RaceEvent = function(name)
 	{
-		this.name = "";
+	    this.name = name;
 		this.distance = 0;
-
+		this.results = [];
 	}	
 	running.Race = function()
 	{
@@ -83,28 +90,35 @@ zipo.running = (function(z)
 		this.url = "";
 		this.city = "";;
 		this.state = "";;
-		this.events = [];
-		this.results = [];
+		this.events = {}
+
 	}
 	running.Race.prototype =
 	{
 		output : function(f)
 		{
-			if(this.results.length==0)
+		    var totalresults=0;
+		    for (var key in this.events) {
+		        totalresults += this.events[key].results.length;
+		    }
+		    if (totalresults == 0)
 				{
 				//f.out(this.name+ " (no Godiva Runners Found)")
 				return;
 				}
 			f.out("\n"+ this.name)
-			f.out(this.city + ", " + this.state + "    " + this.date )
-			if (this.results.length == 0)
-			{
-				f.out("(no Godiva Runners Found)")
+			f.out(this.city + ", " + this.state + "    " + (this.date.getMonth() + 1) + '/' + this.date.getDate() + '/' + this.date.getFullYear())
+
+			for (var key in this.events) {
+			    var event = this.events[key];
+			    
+			    if (event.results.length) {
+			        f.out("\n" + key)
+			        jQuery.each(event.results, function (i, val) {
+			            val.output(f);
+			        });
+			    }
 			}
-			jQuery.each(this.results, function(i, val)
-			{
-				val.output(f);
-			});
 		}
 	}
 	running.Runner = function()
@@ -162,7 +176,11 @@ zipo.running = (function(z)
 	{
 		output : function(f)
 		{
-			var str ="\t"+ this.runner.first + " " + this.runner.last + "\t" + this.rr.time;
+		    var place = "";
+		    if (this.rr.placeGroup < 4)
+		        place = "\t" + this.rr.placeGroup + " " + this.rr.group;
+
+		    var str = "\t" + this.runner.first + " " + this.runner.last + "\t" + this.rr.time + place;
 			if (this.calcAge)
 			{
 				str += "(Age " + this.calcAge + " !=" + this.rr.age + ")";
@@ -180,8 +198,16 @@ zipo.running = (function(z)
 			this.list=z.csv_load("CGTC.csv",z.running.Runner);
 			
 		},
-		process : function(race, rr)
+		process: function (race, rr, eventname)
 		{
+		    var event;
+		    if (eventname in race.events) {
+		        event = race.events[eventname];
+		    }
+		    else {
+		        event = new running.RaceEvent( eventname);
+		        race.events[eventname] = event;
+		    }
 			//rr.dbg();
 			for (var i = 0, len = this.list.length; i < len; i++)
 			{
@@ -200,11 +226,11 @@ zipo.running = (function(z)
 							// shouldbe="+calcAge+ " is="+raceage)
 						}
 					}
-					race.results.push(matchresult);
-					return;
+					event.results.push(matchresult);
+					return matchresult;
 				}
 			}
-			return;
+			return false;
 		}
 	};
 
