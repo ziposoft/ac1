@@ -322,7 +322,7 @@ OnTheMarkResultList.prototype.processData = function(result)
 				if (
                    // (name.indexOf("Crystal Coast") > -1) 
                     // (name == "Raven Rock Trail Race")
-				    (r.date.getFullYear() > 2014)
+				    (r.date.getFullYear() > 2015)
                     )
                     {
 				    console.log(r.datestr + " " + r.name);
