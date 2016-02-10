@@ -5,7 +5,7 @@
    zipo.h
 
 \*_______________________________________________________________________*/
-#include "zipolib/include/zipolib_cpp_pch.h"
+#include "zipolib/include/zipolib_pch.h"
 #include "zipolib/include/z_debug.h"
 #include "zipolib/include/z_error.h"
 #include "zipolib/include/z_string.h"

@@ -109,9 +109,6 @@
     <ClInclude Include="include\z_parse.h">
       <Filter>parse</Filter>
     </ClInclude>
-    <ClInclude Include="include\zipolib_cpp_pch.h">
-      <Filter>pch</Filter>
-    </ClInclude>
     <ClInclude Include="include\z_error.h">
       <Filter>cpp</Filter>
     </ClInclude>
@@ -141,6 +138,9 @@
     </ClInclude>
     <ClInclude Include="include\z_factory_controller.h">
       <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zipolib_pch.h">
+      <Filter>pch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -216,12 +216,6 @@
     <ClCompile Include="src\z_parse_objs.cpp">
       <Filter>parse</Filter>
     </ClCompile>
-    <ClCompile Include="src\pch.c">
-      <Filter>pch</Filter>
-    </ClCompile>
-    <ClCompile Include="src\pch_cpp.cpp">
-      <Filter>pch</Filter>
-    </ClCompile>
     <ClCompile Include="src\z_parse_internal.cpp">
       <Filter>parse</Filter>
     </ClCompile>
@@ -254,6 +248,9 @@
     </ClCompile>
     <ClCompile Include="src\z_temp_buff.cpp">
       <Filter>c</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch.cpp">
+      <Filter>pch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

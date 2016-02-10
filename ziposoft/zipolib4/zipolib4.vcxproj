@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{547309F3-E79A-49EE-841B-684DB97F356A}</ProjectGuid>
+    <ProjectGuid>{8CE4CA01-F708-4BF2-A473-0B720A7A960E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>zipolib_c</RootNamespace>
   </PropertyGroup>
@@ -89,7 +89,7 @@
     <ClInclude Include="include\Windows_zipo.h" />
     <ClInclude Include="include\zipo.h" />
     <ClInclude Include="include\zipolib_cpp.h" />
-    <ClInclude Include="include\zipolib_cpp_pch.h" />
+    <ClInclude Include="include\zipolib_pch.h" />
     <ClInclude Include="include\z_factory_controller.h" />
     <ClInclude Include="include\z_factory_features.h" />
     <ClInclude Include="include\z_factory_static.h" />
@@ -124,12 +124,7 @@
     <ClInclude Include="include\z_util.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\pch.c">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipo.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipo_c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="src\pch_cpp.cpp">
+    <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipolib_cpp_pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipo_cpp.pch</PrecompiledHeaderOutputFile>

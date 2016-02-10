@@ -1,4 +1,4 @@
-#include "zipolib_cpp_pch.h"
+#include "zipolib_pch.h"
 
 #include "zipolib/include/z_factory.h"
 #include "zipolib/include/z_parse.h"

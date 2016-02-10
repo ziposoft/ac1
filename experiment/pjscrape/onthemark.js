@@ -61,7 +61,7 @@ var scrape_next_page = function()
 
 OnTheMarkRace.prototype.onReady = function()
 {
-	//console.log(this.race.name + " READY!");
+	console.log(this.race.name + " READY!");
 	var results = this.p.evaluate(scrape_race_results);
 	 console.log(JSON.stringify(results[2]));
 	/*
@@ -109,7 +109,7 @@ OnTheMarkRace.prototype.onReady = function()
  */
 function OnTheMarkResultList()
 {
-	acs.call(this, "OnTheMarkSports Results List", 'http://onthemarksports.com/results/');
+	acs.call(this, "OnTheMarkSports Results List", '');
 };
 OnTheMarkResultList.prototype = Object.create(acs.prototype); // See note
 // below
@@ -128,7 +128,7 @@ var scrape_list_of_results = function()
 		console.log("table len=" + table.length)
 		jQuery.each(table, function(i, val)
 		{
-			if (i < 1)
+			if (i < 2)
 			{
 				var r = {};
 				r.date = val._aData[0];

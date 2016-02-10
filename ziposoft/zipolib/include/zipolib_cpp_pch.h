@@ -1,5 +1,5 @@
-#ifndef zipolib_cpp_pch_h
-#define zipolib_cpp_pch_h
+#ifndef zipolib_pch_h
+#define zipolib_pch_h
 /*_______________________________________________________________________*\
 
    zipo.h

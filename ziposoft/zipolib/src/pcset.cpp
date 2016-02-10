@@ -10,7 +10,7 @@
  *
  */
 
-#include "zipolib_cpp_pch.h"
+#include "zipolib_pch.h"
 
 #include "zipolib/include/ptypes_cset.h"
 
